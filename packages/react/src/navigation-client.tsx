@@ -7,12 +7,13 @@ import {Tabs as BaseTabs} from "@base-ui/react/tabs";
 import {useDirection} from "@base-ui/react/direction-provider";
 import {Autocomplete as BaseAutocomplete} from "@base-ui/react/autocomplete";
 import {Dialog as BaseDialog} from "@base-ui/react/dialog";
+import {Popover as BasePopover} from "@base-ui/react/popover";
 import {useValorResponsivo} from "./responsivo-runtime.js";
 import {type Responsive} from "./pure.js";
 import {cx, fundirRender, useAureaStrings, usePortalContainer} from "./internal.js";
 import {Kbd} from "./markup.js";
 import {Icon, type IconName} from "./system.js";
-import {Button} from "./actions.js";
+import {Button, IconButton, type IconButtonProps} from "./actions.js";
 import {Badge, Spinner} from "./feedback.js";
 import {SearchField} from "./inputs.js";
 // `overlays` PASSOU A VIR ANTES de `navigation` no DAG (18/08/2026, MAP.md §DAG). Ele só
@@ -327,25 +328,45 @@ export function TreeView({items,defaultExpandedIds,onSelect,onExpand,selectedId,
 // TECLADO: não há padrão APG para navegação de site — o que existe é link em `<nav>`, ordem de
 // Tab nativa e `aria-current="page"` no atual. Roving tabindex aqui seria copiar o TreeView
 // para um lugar onde ele atrapalha: numa lateral o usuário ESPERA tabular item a item.
-export interface SidebarItem{id:string;label:ReactNode;href?:string;icon?:IconName;badge?:ReactNode;onClick?:()=>void;items?:SidebarItem[];
+export interface SidebarItem{id:string;label:ReactNode;href?:string;icon?:IconName;badge?:ReactNode;onClick?:()=>void;items?:SidebarEntry[];
   /** O link do roteador do app (M-01): `<Link href="/relatorios" />`. Recebe a pele, o estado de página atual e o conteúdo do item. */
-  render?:ReactElement}
+  render?:ReactElement;
+  /** A foto ou o logotipo do item (4-E — o time, a pessoa): toma o lugar do `icon`, no mesmo formato da `NavList`. Recolhida, ele
+   *  fica na trilha, e não um vão. */
+  avatar?:{src?:string;fallback?:ReactNode};
+  /** A ação do item ou do grupo (4-D — o "⋯", o "+"): um `IconButton` pequeno. Mora AO LADO do item, nunca dentro do link (botão
+   *  dentro de link não é HTML válido, e o leitor de tela perde um dos dois). Recolhida, some, como na referência. */
+  action?:ReactNode;
+  /** Só no GRUPO (item com `items` e sem destino): o nome vira um botão que dobra a lista (4-D). */
+  collapsible?:boolean;
+  /** Com `collapsible`: o grupo começa aberto. Padrão: aberto. */
+  defaultOpen?:boolean}
+/** A lista da lateral: os itens e, entre eles, `"separator"` — a divisória entre seções (4-E). Sem linha (ADR-0072): é um vão.
+ *  A lista se parte nela em duas, como os grupos da referência, que se separam fora da lista. */
+export type SidebarEntry=SidebarItem|"separator";
 type SidebarCtx={baseId:string;current?:string;collapsed?:boolean};
-function sidebarList(items:SidebarItem[],ctx:SidebarCtx,sub?:boolean,labelledBy?:string):ReactElement{
-return <ul className={cx("sidebar-list",sub&&"sidebar-sub")} aria-labelledby={labelledBy}>
-{items.map(it=>{
+// A DIVISÓRIA PARTE A LISTA (4-E, 25/10/2026). Na referência ela mora ENTRE grupos, fora das listas — então aqui cada trecho
+// entre duas divisórias é uma lista própria, e a divisória é um vão entre elas. Um `<li>` vazio de papel apagado no meio da
+// lista confundiria a conta de itens do leitor de tela ("3 de 9").
+function sidebarList(entradas:SidebarEntry[],ctx:SidebarCtx,sub?:boolean,labelledBy?:string):ReactElement{
+const trechos:SidebarItem[][]=[[]];
+for(const e of entradas)e==="separator"?trechos.push([]):trechos[trechos.length-1].push(e);
+const listas=trechos.filter(t=>t.length>0);
+const ul=(itens:SidebarItem[],k:number)=><ul key={k} className={cx("sidebar-list",sub&&"sidebar-sub")} aria-labelledby={labelledBy}>
+{itens.map(it=>sidebarEntry(it,ctx))}
+</ul>;
+return listas.length<2?ul(listas[0]??[],0):<>{listas.map((t,k)=><React.Fragment key={k}>{k>0&&<div className="sidebar-separator" aria-hidden="true"/>}{ul(t,k)}</React.Fragment>)}</>;
+}
+function sidebarEntry(it:SidebarItem,ctx:SidebarCtx):ReactElement{
 const lid=ctx.baseId+it.id;
 const filhos=it.items?.length?it.items:undefined;
 // Rótulo escondido vira `.sr-only` em vez de sumir do DOM: na lateral recolhida o item
 // continua tendo nome para quem usa leitor de tela. Ícone sozinho não nomeia nada.
 const oculto=(no:ReactNode)=>ctx.collapsed?<span className="sr-only">{no}</span>:no;
-if(filhos&&!it.href&&!it.onClick&&!it.render)return <li key={it.id}>
-<p id={lid} className={cx("sidebar-group-label",ctx.collapsed&&"sr-only")}>{it.label}</p>
-{sidebarList(filhos,ctx,false,lid)}
-</li>;
+if(filhos&&!it.href&&!it.onClick&&!it.render)return <SidebarGroup key={it.id} item={it} filhos={filhos} lid={lid} ctx={ctx}/>;
 const ativo=it.id===ctx.current;
-// O item escolhido desenha o ícone CHEIO (ADR-0053).
-const miolo=<>{it.icon&&<Icon name={it.icon} weight={ativo?"fill":undefined}/>}<span className={cx("sidebar-label",ctx.collapsed&&"sr-only")}>{it.label}</span>{it.badge!=null&&oculto(it.badge)}</>;
+// O item escolhido desenha o ícone CHEIO (ADR-0053). Com `avatar`, a foto toma o lugar do ícone (4-E).
+const miolo=<>{it.avatar?<Avatar src={it.avatar.src} fallback={it.avatar.fallback} className="sidebar-avatar"/>:it.icon&&<Icon name={it.icon} weight={ativo?"fill":undefined}/>}<span className={cx("sidebar-label",ctx.collapsed&&"sr-only")}>{it.label}</span>{it.badge!=null&&oculto(it.badge)}</>;
 const alvo=it.render
 ?fundirRender(it.render,{id:lid,className:"sidebar-item","aria-current":ativo?"page":undefined,onClick:it.onClick,children:miolo},"a")
 :it.href
@@ -356,13 +377,32 @@ const alvo=it.render
 // isso com tooltip no botão de navegação dela, e é o que falta para um trilho de ícone não virar adivinhação.
 // Só quando recolhida: com o rótulo visível ao lado, o tooltip repetiria o que já está na tela.
 // `side="right"` porque a lateral encosta na borda esquerda — para cima o balão sairia do trilho.
-return <li key={it.id}>
+// A SUBLISTA SOME NA TRILHA (2-A, o achado 13 do item 106): recolhido, o subitem sem ícone virava um botão vazio. A
+// referência esconde a sublista quando a lateral recolhe; o item pai continua, com o nome na dica.
+const acao=it.action!=null&&!ctx.collapsed;
+return <li key={it.id} className={cx(acao&&"sidebar-item-with-action")}>
 {ctx.collapsed?<Tooltip content={it.label} side="right">{alvo}</Tooltip>:alvo}
-{filhos&&sidebarList(filhos,ctx,true,lid)}
+{acao&&<span className="sidebar-item-action">{it.action}</span>}
+{filhos&&!ctx.collapsed&&sidebarList(filhos,ctx,true,lid)}
 </li>;
-})}
-</ul>;
 }
+// O GRUPO QUE DOBRA (4-D, 25/10/2026). O nome do grupo vira o botão de abrir e fechar — o padrão de divulgação (o mesmo
+// do `Collapsible`): `aria-expanded` no botão e `aria-controls` na lista, que fica no DOM com `hidden` quando fechada. A
+// seta aponta para baixo aberto e para o fim da linha fechado, como a do grupo que dobra da referência principal. A ação do grupo (o "+") fica ao lado do nome. Recolhida, o
+// nome vai para o leitor de tela e a lista aparece inteira, como o grupo de sempre: na trilha não há onde dobrar.
+function SidebarGroup({item,filhos,lid,ctx}:{item:SidebarItem;filhos:SidebarEntry[];lid:string;ctx:SidebarCtx}){
+const [aberto,setAberto]=React.useState(item.defaultOpen??true);
+const direita=useDirection()==="rtl";
+const dobra=!!item.collapsible&&!ctx.collapsed;
+const acao=item.action!=null&&!ctx.collapsed;
+const nome=dobra
+?<button id={lid} type="button" className="sidebar-group-label sidebar-group-toggle" aria-expanded={aberto} aria-controls={lid+"-lista"} onClick={()=>setAberto(v=>!v)}><span>{item.label}</span><Icon name={aberto?"caret-down":direita?"caret-left":"caret-right"} size="sm" className="sidebar-group-caret"/></button>
+:<p id={lid} className={cx("sidebar-group-label",ctx.collapsed&&"sr-only")}>{item.label}</p>;
+const lista=sidebarList(filhos,ctx,false,lid);
+return <li>
+{acao||dobra?<div className="sidebar-group-head">{nome}{acao&&<span className="sidebar-group-action">{item.action}</span>}</div>:nome}
+{dobra?<div id={lid+"-lista"} hidden={!aberto}>{lista}</div>:lista}
+</li>}
 // `variant` entrou em 18/08/2026, e nasceu com o PADRÃO TROCADO: a lateral virou rente para todo
 // mundo. O Victor separou as duas coisas em 20/08/2026 — a exceção que ele abriu é para a lateral
 // PODER ser rente, não para a Aurea deixar de flutuar: "o nosso vai ser tudo flutuante mas isso
@@ -403,31 +443,168 @@ export type SidebarPlacement="left"|"right";
 // `Sidebar.Nav`, `Sidebar.Show`) sabem se a lateral está recolhida por este contexto, interno: o estado de recolher
 // com gancho, para o app, é o 4-B.
 const SidebarContext=React.createContext<{collapsed:boolean;current?:string}>({collapsed:false});
-export function Sidebar({items,current,collapsed,variant="floating",placement="left",scrollbar="hover",label,header,footer,children,className,onClick,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items?:SidebarItem[];current?:string;collapsed?:boolean;variant?:SidebarVariant;placement?:SidebarPlacement;scrollbar?:SidebarScrollbar;label?:string;
+// OS JEITOS DE RECOLHER (4-A, as quinze laterais). `icon`, o padrão: a trilha de ícones de sempre. `capsule`: a trilha com o
+// canto de cápsula (as 3, 5, 9, 10 e 14 das quinze). `offcanvas`: recolhida, a lateral sai da tela no computador (as 2 e 4) —
+// o nome da referência, que tem os mesmos `icon` e `offcanvas`.
+export type SidebarCollapsible="icon"|"capsule"|"offcanvas";
+// O ITEM ATUAL (4-H, o item 101 — o Victor, 21/10/2026: "Manter 1, e criar tambem 2, 3, 4, 5 como alternativas"). `brand`, o
+// padrão de hoje: no claro, o botão primário; no escuro, a cápsula com a letra amarela e o fio. `segment`: a cápsula da aba
+// escolhida (`--segment` + `--shadow-sm`, ADR-0059), a letra na cor do texto, sem fio — o item atual da documentação da
+// referência. `segment-dot` e `segment-line`: a mesma, com o ponto amarelo antes do nome ou o fio amarelo embaixo. `subtle`:
+// só o cinza, sem cor de marca.
+export type SidebarIndicator="brand"|"segment"|"segment-dot"|"segment-line"|"subtle";
+// O ESTADO DA LATERAL FORA DO `AppShell` (4-B, 25/10/2026). A referência põe o estado num provedor (aberta ou recolhida,
+// controlado ou não), com um gancho e o atalho Ctrl+B (Cmd+B no Mac). Aqui é a parte `Sidebar.Provider`, e o `AppShell` a
+// usa por dentro: o `Sidebar.Toggle` e o `useSidebar` funcionam nos dois.
+export interface SidebarState{
+  /** Recolhida agora. */
+  collapsed:boolean;
+  setCollapsed:(collapsed:boolean)=>void;
+  toggle:()=>void;
+  /** O jeito de recolher que o provedor passa à lateral. */
+  collapsible:SidebarCollapsible;
+  /** O `id` da lateral: o botão de recolher aponta para ela (`aria-controls`). */
+  id:string}
+const SidebarStateContext=React.createContext<SidebarState|null>(null);
+/** O estado da lateral: dentro de um `Sidebar.Provider` ou de um `AppShell` com `sidebarCollapsible`. Fora deles, `null`. */
+export function useSidebar():SidebarState|null{return React.useContext(SidebarStateContext)}
+// O ATALHO, como o da referência: Ctrl+B, e Cmd+B no Mac. A DIVERGÊNCIA, com o motivo: na referência ele vale até dentro de um
+// campo, e rouba o negrito de quem escreve num editor; aqui ele não age onde se digita.
+const ONDE_SE_DIGITA="input,textarea,select,[contenteditable]:not([contenteditable=false])";
+function SidebarProvider({collapsed,defaultCollapsed=false,onCollapsedChange,collapsible="icon",shortcut=true,id,children}:{
+  /** Recolhida (controlado). */
+  collapsed?:boolean;defaultCollapsed?:boolean;onCollapsedChange?:(collapsed:boolean)=>void;
+  /** O jeito de recolher (4-A). Padrão: `icon`, a trilha. */
+  collapsible?:SidebarCollapsible;
+  /** O atalho Ctrl+B (Cmd+B no Mac). Padrão: ligado, como na referência. */
+  shortcut?:boolean;
+  /** O `id` da lateral. Sem ele, um gerado. */
+  id?:string;children?:ReactNode}){
+const [interno,setInterno]=React.useState(defaultCollapsed);
+const controlado=collapsed!==undefined;
+const valor=controlado?!!collapsed:interno;
+const gerado=React.useId();
+const aviso=useRef(onCollapsedChange);aviso.current=onCollapsedChange;
+const setCollapsed=React.useCallback((v:boolean)=>{if(!controlado)setInterno(v);aviso.current?.(v)},[controlado]);
+const toggle=React.useCallback(()=>setCollapsed(!valor),[setCollapsed,valor]);
+const alternar=useRef(toggle);alternar.current=toggle;
+React.useEffect(()=>{
+  if(!shortcut||typeof window==="undefined")return;
+  const f=(e:KeyboardEvent)=>{
+    if(e.defaultPrevented||e.altKey||e.shiftKey||!(e.ctrlKey||e.metaKey)||e.key.toLowerCase()!=="b")return;
+    if((e.target as Element|null)?.closest?.(ONDE_SE_DIGITA))return;
+    e.preventDefault();alternar.current();
+  };
+  window.addEventListener("keydown",f);
+  return()=>window.removeEventListener("keydown",f);
+},[shortcut]);
+const estado=React.useMemo(()=>({collapsed:valor,setCollapsed,toggle,collapsible,id:id??"aurea-sidebar"+gerado.replace(/:/g,"")}),[valor,setCollapsed,toggle,collapsible,id,gerado]);
+return <SidebarStateContext.Provider value={estado}>{children}</SidebarStateContext.Provider>}
+// O BOTÃO DE RECOLHER EM QUALQUER LUGAR (4-B). `icon`: o botão de ícone das quinze (o desenho de lateral, sem fundo) — ao lado
+// do título (1 e 12) ou dentro da lateral, ao lado da marca (13 a 15). `item`: uma linha da lista, "Recolher o menu", no pé da
+// lateral (a 11). Fora de um provedor, não desenha nada.
+// O `variant` aqui é o jeito do botão ("icon" ou "item"); a aparência é sempre a do botão fantasma, como o das quinze.
+function SidebarToggle({variant="icon",className,onClick,...props}:Omit<IconButtonProps,"icon"|"label"|"variant"|"children">&{variant?:"icon"|"item"}){
+const estado=React.useContext(SidebarStateContext);
+const {collapsed}=React.useContext(SidebarContext);
+const s=useAureaStrings();
+if(!estado)return null;
+const rotulo=estado.collapsed?s.sidebarExpand:s.sidebarCollapse;
+const comum={"aria-expanded":!estado.collapsed,"aria-controls":estado.id,onClick:(e:React.MouseEvent<HTMLButtonElement>)=>{onClick?.(e);if(!e.defaultPrevented)estado.toggle()}};
+if(variant==="item"){
+  // A linha é um botão do HTML: o que só o `IconButton` entende (tamanho, aparência, ocupado) não passa para ele.
+  const {size:_t,appearance:_a,tone:_o,loading:_l,leadingIcon:_li,trailingIcon:_ti,href:_h,fullWidth:_f,quiet:_q,grow:_g,render:_r,target:_tg,rel:_rl,download:_d,pressed:_p,share:_s,kbd:_k,...html}=props;
+  const linha=<button type="button" {...html} {...comum} className={cx("sidebar-item","sidebar-toggle-item",className)}><Icon name="sidebar-simple"/><span className={cx("sidebar-label",collapsed&&"sr-only")}>{rotulo}</span></button>;
+  return collapsed?<Tooltip content={rotulo} side="right">{linha}</Tooltip>:linha;
+}
+return <IconButton {...props} {...comum} className={cx("sidebar-collapse-trigger",className)} icon="sidebar-simple" label={rotulo}/>}
+// A TRILHA DAS SEÇÕES E O PAINEL (4-F e 4-G, 25/10/2026 — as 6 e 7 das quinze). Com `panel`, os itens do primeiro nível são
+// SEÇÕES: a trilha mostra o ícone de cada uma, e a lista da seção mora num painel. `docked` (a 6): o painel fica ao lado da
+// trilha, e recolher a lateral esconde só o painel. `overlay` (a 7): o painel abre POR CIMA, ao lado do ícone, numa janelinha
+// que segura o foco e fecha com o Esc ou com um clique fora (a janelinha da Aurea, o motor dela). A referência faz a 6 com duas
+// laterais lado a lado (a trilha que escolhe e a lista da escolhida); a 7 não tem nela — vem da bancada das quinze.
+// A seção da página atual leva `aria-current="true"` (a "atual de um conjunto"), e não `page`: ela não é a página.
+const contem=(it:SidebarItem,id?:string):boolean=>!!id&&(it.id===id||!!it.items?.some(f=>f!=="separator"&&contem(f,id)));
+function SidebarSectionButton({sec,ctx,aberta,painelId,onEscolher,recolhida}:{sec:SidebarItem;ctx:SidebarCtx;aberta:boolean;painelId:string;onEscolher:()=>void;recolhida:boolean}){
+return <Tooltip content={sec.label} side="right"><button type="button" className="sidebar-item" aria-current={contem(sec,ctx.current)?"true":undefined} aria-expanded={!recolhida&&aberta} aria-controls={painelId} onClick={onEscolher}>
+{sec.avatar?<Avatar src={sec.avatar.src} fallback={sec.avatar.fallback} className="sidebar-avatar"/>:sec.icon&&<Icon name={sec.icon} weight={contem(sec,ctx.current)?"fill":undefined}/>}<span className="sidebar-label sr-only">{sec.label}</span></button></Tooltip>}
+function SidebarSectionFlyout({sec,ctx}:{sec:SidebarItem;ctx:SidebarCtx}){
+const portal=usePortalContainer();
+const atual=contem(sec,ctx.current);
+const tituloId=ctx.baseId+sec.id+"-titulo";
+return <BasePopover.Root>
+<Tooltip content={sec.label} side="right"><BasePopover.Trigger render={<button type="button" className="sidebar-item" aria-current={atual?"true":undefined}/>}>
+{sec.avatar?<Avatar src={sec.avatar.src} fallback={sec.avatar.fallback} className="sidebar-avatar"/>:sec.icon&&<Icon name={sec.icon} weight={atual?"fill":undefined}/>}<span className="sidebar-label sr-only">{sec.label}</span></BasePopover.Trigger></Tooltip>
+<BasePopover.Portal container={portal}><BasePopover.Positioner className="positioner" side="right" align="start" sideOffset={8}><BasePopover.Popup className="popover sidebar-flyout" aria-labelledby={tituloId}>
+<p id={tituloId} className="sidebar-panel-title">{sec.label}</p>
+<nav className="sidebar-nav" aria-labelledby={tituloId}>{sidebarList(sec.items??[],{...ctx,collapsed:false})}</nav>
+</BasePopover.Popup></BasePopover.Positioner></BasePopover.Portal>
+</BasePopover.Root>}
+export function Sidebar({items,current,collapsed,collapsible,indicator="brand",panel,variant="floating",placement="left",scrollbar="hover",label,header,footer,children,className,onClick,id,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items?:SidebarEntry[];current?:string;collapsed?:boolean;variant?:SidebarVariant;placement?:SidebarPlacement;scrollbar?:SidebarScrollbar;label?:string;
+  /** O jeito de recolher (4-A): `icon` (a trilha, o padrão), `capsule` (a trilha em cápsula) ou `offcanvas` (sai da tela).
+   *  Dentro de um `Sidebar.Provider`, vem dele. */
+  collapsible?:SidebarCollapsible;
+  /** O desenho do item atual (4-H): `brand` (o de hoje), `segment`, `segment-dot`, `segment-line` ou `subtle`. */
+  indicator?:SidebarIndicator;
+  /** A trilha das seções com o painel (4-F e 4-G): os itens do primeiro nível viram seções, e a lista da seção mora num
+   *  painel — `docked`, ao lado da trilha (recolher esconde só o painel), ou `overlay`, por cima, ao lado do ícone. */
+  panel?:"docked"|"overlay";
   /** O topo fixo (4-C): a marca do app (`Sidebar.Brand`), a busca. Não rola com a lista. */
   header?:ReactNode;
   /** O pé fixo (4-C): a pessoa e o sair (`Sidebar.User`), a lista curta (`Sidebar.Nav`), o cartão de destaque. Não rola com a lista. */
   footer?:ReactNode}){
 const s=useAureaStrings();
 const baseId=React.useId();
-const lista=items&&items.length>0&&<nav className="sidebar-nav" aria-label={label??s.sidebarLabel}>{sidebarList(items,{baseId,current,collapsed})}</nav>;
+// Dentro de um provedor, a lateral segue o estado dele; a prop escrita ganha (quem escreveu as duas quis a prop).
+const estado=React.useContext(SidebarStateContext);
+const recolhida=collapsed??estado?.collapsed??false;
+const forma=collapsible??estado?.collapsible??"icon";
+const lista=items&&items.length>0&&<nav className="sidebar-nav" aria-label={label??s.sidebarLabel}>{sidebarList(items,{baseId,current,collapsed:recolhida})}</nav>;
 const partes=header!=null||footer!=null;
-const contexto=React.useMemo(()=>({collapsed:!!collapsed,current}),[collapsed,current]);
-return <aside className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,collapsed&&"sidebar-collapsed",placement==="right"&&"sidebar-right",scrollbar==="visible"&&"sidebar-scrollbar-visible",partes&&"sidebar-with-parts",className)} data-placement={placement} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
+const contexto=React.useMemo(()=>({collapsed:recolhida,current}),[recolhida,current]);
+const secoes=panel?(items??[]).filter((it):it is SidebarItem=>it!=="separator"):[];
+const [escolhida,setEscolhida]=React.useState<string|undefined>(()=>secoes.find(x=>contem(x,current))?.id??secoes[0]?.id);
+const naTrilha=React.useMemo(()=>({collapsed:true,current}),[current]);
+if(panel){
+  const secao=secoes.find(x=>x.id===escolhida)??secoes[0];
+  const painelId=baseId.replace(/:/g,"")+"-painel";
+  const ctxTrilha={baseId,current,collapsed:true};
+  const trilha=<nav className="sidebar-nav" aria-label={label??s.sidebarLabel}><ul className="sidebar-list">{secoes.map(sec=><li key={sec.id}>{panel==="overlay"
+    ?<SidebarSectionFlyout sec={sec} ctx={ctxTrilha}/>
+    :<SidebarSectionButton sec={sec} ctx={ctxTrilha} aberta={sec.id===secao?.id} painelId={painelId} recolhida={recolhida} onEscolher={()=>{setEscolhida(sec.id);if(recolhida)estado?.setCollapsed(false)}}/>}</li>)}</ul></nav>;
+  return <aside id={id??estado?.id} className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,`sidebar-panel-${panel}`,recolhida&&"sidebar-collapsed",indicator!=="brand"&&`sidebar-indicator-${indicator}`,placement==="right"&&"sidebar-right",scrollbar==="visible"&&"sidebar-scrollbar-visible",className)} data-placement={placement} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
+  <div className="sidebar-rail-box"><SidebarContext.Provider value={naTrilha}>{header!=null&&<div className="sidebar-header">{header}</div>}<div className="sidebar-body">{trilha}{children}</div>{footer!=null&&<div className="sidebar-footer">{footer}</div>}</SidebarContext.Provider></div>
+  {panel==="docked"&&secao&&<div className="sidebar-panel" id={painelId} hidden={recolhida}><p className="sidebar-panel-title" id={painelId+"-titulo"}>{secao.label}</p><nav className="sidebar-nav" aria-labelledby={painelId+"-titulo"}>{sidebarList(secao.items??[],{baseId,current,collapsed:false})}</nav></div>}
+  </aside>;
+}
+return <aside id={id??estado?.id} className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,recolhida&&"sidebar-collapsed",forma!=="icon"&&`sidebar-collapse-${forma}`,indicator!=="brand"&&`sidebar-indicator-${indicator}`,placement==="right"&&"sidebar-right",scrollbar==="visible"&&"sidebar-scrollbar-visible",partes&&"sidebar-with-parts",className)} data-placement={placement} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
 <SidebarContext.Provider value={contexto}>
 {partes
 ?<>{header!=null&&<div className="sidebar-header">{header}</div>}<div className="sidebar-body">{lista}{children}</div>{footer!=null&&<div className="sidebar-footer">{footer}</div>}</>
 :<>{lista}{children}</>}
 </SidebarContext.Provider>
 </aside>}
+// As partes moram LOGO DEPOIS da lateral (as funções sobem no módulo): assim a leitura do check 46 alcança, a partir da
+// `Sidebar`, os ícones fixos delas — o `sidebar-simple` do `Sidebar.Toggle` ficava sem ficha que o alcançasse.
+Sidebar.Brand=SidebarBrand;
+Sidebar.User=SidebarUser;
+Sidebar.Nav=SidebarNav;
+Sidebar.Show=SidebarShow;
+Sidebar.Provider=SidebarProvider;
+Sidebar.Toggle=SidebarToggle;
 /** A marca do app no topo da lateral: o `logo` (a letra, o desenho, a imagem), o nome e o subtítulo. `variant="tile"` (o
  *  padrão, a 11 das quinze) põe o logo num quadrinho na cor primária; `plain` (da 8 à 10) é o desenho solto e o nome
  *  grande. Recolhida, fica só o logo. */
-function SidebarBrand({logo,name,description,variant="tile",className,...props}:Omit<HTMLAttributes<HTMLDivElement>,"children">&{logo:ReactNode;name:ReactNode;description?:ReactNode;variant?:"tile"|"plain"}){
+// `action` (o bloco 2, 0.44.0): o botão de recolher ao lado da marca, dentro da lateral (as 13, 14 e 15 das quinze) — o mesmo
+// lugar que a `Sidebar.User` dá ao "sair". Recolhida, ele desce para baixo do logo.
+function SidebarBrand({logo,name,description,variant="tile",action,className,...props}:Omit<HTMLAttributes<HTMLDivElement>,"children">&{logo:ReactNode;name:ReactNode;description?:ReactNode;variant?:"tile"|"plain";
+  /** Uma ação ao lado da marca: o `Sidebar.Toggle`. Recolhida, ela desce para baixo do logo. */
+  action?:ReactNode}){
 const {collapsed}=React.useContext(SidebarContext);
-return <div className={cx("sidebar-brand",variant==="plain"&&"sidebar-brand-plain",className)} {...props}>
+return <div className={cx("sidebar-brand",variant==="plain"&&"sidebar-brand-plain",action!=null&&"sidebar-brand-with-action",className)} {...props}>
 <span className="sidebar-brand-logo" aria-hidden="true">{logo}</span>
 <span className={cx("sidebar-brand-text",collapsed&&"sr-only")}><strong className="sidebar-brand-name">{name}</strong>{description!=null&&<span className="sidebar-brand-description">{description}</span>}</span>
+{action}
 </div>}
 /** A pessoa no pé da lateral, numa caixinha: a foto (`avatar`), o nome, o papel e a ação (o sair). Recolhida, a foto e a ação, empilhadas. */
 function SidebarUser({avatar,name,description,action,className,...props}:Omit<HTMLAttributes<HTMLDivElement>,"children">&{avatar:ReactNode;name:ReactNode;description?:ReactNode;action?:ReactNode}){
@@ -438,7 +615,7 @@ return <div className={cx("sidebar-user",className)} {...props}>
 {action}
 </div>}
 /** Uma segunda lista com a pele da lateral (a do pé: Suporte, Ajustes). `label` é obrigatório: duas listas com o mesmo nome confundem o leitor de tela. */
-function SidebarNav({items,current,label,className,...props}:Omit<HTMLAttributes<HTMLElement>,"children">&{items:SidebarItem[];current?:string;label:string}){
+function SidebarNav({items,current,label,className,...props}:Omit<HTMLAttributes<HTMLElement>,"children">&{items:SidebarEntry[];current?:string;label:string}){
 const ctx=React.useContext(SidebarContext);
 const baseId=React.useId();
 return <nav className={cx("sidebar-nav",className)} aria-label={label} {...props}>{sidebarList(items,{baseId,current:current??ctx.current,collapsed:ctx.collapsed})}</nav>}
@@ -446,10 +623,6 @@ return <nav className={cx("sidebar-nav",className)} aria-label={label} {...props
 function SidebarShow({when,children}:{when:"expanded"|"collapsed";children?:ReactNode}){
 const {collapsed}=React.useContext(SidebarContext);
 return (when==="collapsed")===collapsed?<>{children}</>:null}
-Sidebar.Brand=SidebarBrand;
-Sidebar.User=SidebarUser;
-Sidebar.Nav=SidebarNav;
-Sidebar.Show=SidebarShow;
 // ── NAVEGAÇÃO INFERIOR ────────────────────────────────────────────────────────────────
 // A lacuna ESTRUTURAL medida no `CONSUMIDOR-1.md` §4.1: `Topbar` e `Sidebar` são
 // vocabulário de DESKTOP, e aplicativo não navega assim.
@@ -506,13 +679,15 @@ export type BottomNavVariantLegacy="flat"|"surface"|"pill"|"dock";
 export type BottomNavVariantAny=BottomNavVariant|BottomNavVariantLegacy;
 const LEGADO:Record<BottomNavVariantLegacy,[BottomNavVariant,BottomNavIndicator]>={
 flat:["edge","none"],surface:["floating","circle"],pill:["floating","pill"],dock:["floating","circle"]};
-export function BottomNav({items,current,variant="floating",indicator="none",width="full",label,className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items:SidebarItem[];current?:string;variant?:BottomNavVariantAny;indicator?:BottomNavIndicator;width?:BottomNavWidth;label?:string}){
+export function BottomNav({items,current,variant="floating",indicator="none",width="full",label,className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items:SidebarEntry[];current?:string;variant?:BottomNavVariantAny;indicator?:BottomNavIndicator;width?:BottomNavWidth;label?:string}){
 const s=useAureaStrings();
 const [layout,marca0]=variant in LEGADO?LEGADO[variant as BottomNavVariantLegacy]:[variant as BottomNavVariant,indicator];
 // O indicador explícito ganha do que o nome legado implica: quem escreveu os dois quis os dois.
 const ind=indicator!=="none"?indicator:marca0;
 return <nav className={cx("bottom-nav",layout==="edge"&&"bottom-nav-edge",layout!=="edge"&&width==="content"&&"bottom-nav-content",`bottom-nav-ind-${ind}`,className)} aria-label={label??s.bottomNavLabel} {...props}>
-{items.map(it=>{
+{/* A divisória da lateral (4-E) não existe na barra de baixo: a mesma lista serve às duas, e aqui ela é ignorada,
+ como a sublista. */}
+{items.filter((it):it is SidebarItem=>it!=="separator").map(it=>{
 const ativo=it.id===current;
 // O CONTADOR PENDURA NO ÍCONE, e é por isso que existe esta caixa. Pendurado no ITEM (a
 // primeira versão), `50%` cai no meio do RÓTULO quando o item é linha — o Victor viu o número

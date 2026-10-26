@@ -28,7 +28,7 @@
   },
   "packages": {
     "@aurea-uds/contracts": {
-      "version": "0.43.0",
+      "version": "0.44.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -38,7 +38,7 @@
       ]
     },
     "@aurea-uds/core": {
-      "version": "0.43.0",
+      "version": "0.44.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -48,7 +48,7 @@
       ]
     },
     "@aurea-uds/fonts": {
-      "version": "0.43.0",
+      "version": "0.44.0",
       "license": "OFL-1.1",
       "dependencies": [],
       "optionalPeers": [],
@@ -58,7 +58,7 @@
       ]
     },
     "@aurea-uds/icons": {
-      "version": "0.43.0",
+      "version": "0.44.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -68,7 +68,7 @@
       ]
     },
     "@aurea-uds/native": {
-      "version": "0.43.0",
+      "version": "0.44.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@aurea-uds/tokens"
@@ -87,7 +87,7 @@
       ]
     },
     "@aurea-uds/react": {
-      "version": "0.43.0",
+      "version": "0.44.0",
       "license": "Apache-2.0",
       "dependencies": [
         "@base-ui/react"
@@ -139,7 +139,7 @@
       ]
     },
     "@aurea-uds/tokens": {
-      "version": "0.43.0",
+      "version": "0.44.0",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -306,6 +306,7 @@
     "useDensity",
     "usePortalContainer",
     "useReorder",
+    "useSidebar",
     "useSpriteUrl",
     "useTheme",
     "useToast",
@@ -315,18 +316,18 @@
     "componentes": 138,
     "fichas": 138,
     "fichas_so_nativo": 12,
-    "hooks": 9,
-    "paginas_total": 580,
+    "hooks": 10,
+    "paginas_total": 588,
     "paginas": {
-      "component": 226,
-      "pattern": 226,
+      "component": 227,
+      "pattern": 232,
       "block": 15,
       "recipe": 23,
-      "doc": 79,
+      "doc": 80,
       "area": 11
     },
     "conteudo_rico": 44,
-    "starters": 103,
+    "starters": 104,
     "receitas_com_preview": 23,
     "patterns_content": 80,
     "blocks_content": 2,
@@ -334,20 +335,20 @@
     "props": 150,
     "variants": 30,
     "sizes": 36,
-    "states": 134,
+    "states": 135,
     "tokens_ficha": 139,
-    "apg": 155,
+    "apg": 156,
     "maturidade": {
       "Deprecated": 1,
-      "Ready": 48,
+      "Ready": 49,
       "Stable": 110
     },
-    "testes_unit": 2218,
-    "componentes_citados_no_teste": 157,
-    "specs_visuais": 63,
+    "testes_unit": 2235,
+    "componentes_citados_no_teste": 158,
+    "specs_visuais": 64,
     "baselines": 48,
     "baselines_linux": 24,
-    "classes_core": 996,
+    "classes_core": 1017,
     "token_declaracoes": 488,
     "token_nomes": 235,
     "token_usados": 185,
@@ -355,6 +356,6 @@
   },
   "gates": {
     "validate": 47,
-    "playwrightSpecs": 63
+    "playwrightSpecs": 64
   }
 }

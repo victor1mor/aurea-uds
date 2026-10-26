@@ -148,6 +148,11 @@ function AbreCasca() {
         h("button", {className: "menu-item", type: "button", onClick: fecha}, "Toggle theme"))));
 }
 // Os três ganchos que mexem na PÁGINA (tema, densidade, aviso): o exemplo vivo mexe nesta página, como no app.
+function UsaLateral() {
+  const lateral = A.useSidebar();
+  if (!lateral) return null;
+  return h(A.Button, {onClick: lateral.toggle}, lateral.collapsed ? "Show the sidebar" : "Hide the sidebar");
+}
 function UsaTema() {
   const {theme, toggleTheme} = A.useTheme();
   return h(A.IconButton, {icon: theme === "light" ? "moon" : "sun",
@@ -1663,6 +1668,24 @@ export function Actions() {
 // E lido por quem monta um popup próprio, para cair no mesmo lugar:
 const container = usePortalContainer();`,
     render: () => h("p", {className: "muted"}, "Sem valor, todo popup monta no document.body."),
+  },
+  // O ESTADO DA LATERAL (o bloco 2, 0.44.0): o gancho dentro de um `Sidebar.Provider`. A prévia mostra o estado e o muda.
+  useSidebar: {
+    code: `function FocusMode() {
+  const sidebar = useSidebar();
+  if (!sidebar) return null;
+  return (
+    <Button onClick={sidebar.toggle}>
+      {sidebar.collapsed ? "Show the sidebar" : "Hide the sidebar"}
+    </Button>
+  );
+}
+
+<Sidebar.Provider>
+  <FocusMode />
+</Sidebar.Provider>`,
+    note: "The state lives in Sidebar.Provider (or in an AppShell with sidebarCollapsible). Ctrl+B toggles it too, except while you type in a field.",
+    render: () => h(A.Sidebar.Provider, {shortcut: false}, h(UsaLateral)),
   },
   useReorder: {
     code: `const {itens, aoSoltar, propsDoItem} = useReorder(lista, setLista);

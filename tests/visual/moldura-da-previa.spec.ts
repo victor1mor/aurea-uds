@@ -40,11 +40,12 @@ test("toda moldura acende sem erro, e o botão de recolher a lateral responde", 
     if (!(await botao.count())) continue;
     comBotao++;
     const largura = () => page.locator(".sidebar").first().evaluate((e) => Math.round(e.getBoundingClientRect().width));
-    const aberta = await largura();
+    // O botão MUDA a lateral e o segundo clique a devolve — para os dois lados: um padrão começa aberto, outro recolhido.
+    const antes = await largura();
     await botao.click();
-    await expect.poll(largura, {message: `${f}: recolher`}).toBeLessThan(aberta);
+    await expect.poll(largura, {message: `${f}: o botão muda a lateral`}).not.toBe(antes);
     await botao.click();
-    await expect.poll(largura, {message: `${f}: abrir de novo`}).toBe(aberta);
+    await expect.poll(largura, {message: `${f}: o segundo clique a devolve`}).toBe(antes);
   }
   expect(erros).toEqual([]);
   expect(comBotao, "as molduras com o botão de recolher (os dois padrões da lateral que recolhe)").toBeGreaterThanOrEqual(2);

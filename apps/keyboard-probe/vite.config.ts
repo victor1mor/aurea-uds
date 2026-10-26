@@ -11,6 +11,7 @@ export default defineConfig({
   // 04/10/2026 (Lote H), o da conversa, da galeria e da árvore (`lote-h.html`); desde 10/10/2026
   // (ADR-0064), o do mapa de rede (`rede.html`); e desde a rodada 2 (ADR-0065), o do mapa que se arruma
   // (`rede2.html`); e desde 17/10/2026 (MNT-27), o das faixas (`rede4.html`); e desde 19/10/2026 (lote U), o do aviso de
-  // cookies, da abertura e do Chip (`lote-u.html`); e desde 21/10/2026 (MNT-31), o da legenda e do minimapa (`rede5.html`).
-  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html", rede3: "rede3.html", rede4: "rede4.html", rede5: "rede5.html", "lote-u": "lote-u.html"}}},
+  // cookies, da abertura e do Chip (`lote-u.html`); e desde 21/10/2026 (MNT-31), o da legenda e do minimapa (`rede5.html`);
+  // e desde 25/10/2026 (o bloco 2), o da lateral: as quinze laterais, o item atual e a lateral solta (`lateral.html`).
+  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html", rede3: "rede3.html", rede4: "rede4.html", rede5: "rede5.html", "lote-u": "lote-u.html", lateral: "lateral.html"}}},
 });

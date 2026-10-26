@@ -2606,7 +2606,7 @@ asideVariant="flush" glues the right column to the edge of the window, like the 
 |---|---|---|---|
 | `brand` | `ReactNode` | — | Logotype and product name. Lives in the topbar, beside the navigation toggle. With layout="sidebar" it lives at the top of the sidebar instead (a Sidebar.Brand fits there). |
 | `navigation` | `ReactNode` | — | The sidebar content, usually a <nav>. The shell never invents one, so the landmark and its label are yours. |
-| `navItems` | `SidebarItem[]` | — | The sidebar list, handed to the Sidebar the shell already creates — same shape as Sidebar items. Use this instead of passing a second <Sidebar> as navigation: that nests two panels, two borders and two 22px radii, and the inner one clips its text. When navigation is also given, the list comes first. |
+| `navItems` | `SidebarEntry[]` | — | The sidebar list, handed to the Sidebar the shell already creates — same shape as Sidebar items. Use this instead of passing a second <Sidebar> as navigation: that nests two panels, two borders and two 22px radii, and the inner one clips its text. When navigation is also given, the list comes first. |
 | `currentNavId` | `string` | — | The id of the current item in navItems. Marked with aria-current="page" and the selected skin. |
 | `navLabel` | `string` | — | Accessible name of the <nav> built from navItems. Falls back to the sidebarLabel string. |
 | `topbar` | `ReactNode` | — | What sits in the topbar next to the brand: sections, search, actions. |
@@ -2616,7 +2616,11 @@ asideVariant="flush" glues the right column to the edge of the window, like the 
 | `sidebarFooter` | `ReactNode` | — | The fixed bottom of the sidebar (Sidebar footer): the person and the sign-out (Sidebar.User), a short list (Sidebar.Nav). Only the list in the middle scrolls. Works in every layout. |
 | `AppShell.SidebarToggle` | `component` | — | The collapse button of layout="sidebar": the bare icon button with the sidebar glyph, placed 12 from the page title. With a topbar the shell puts it first in the bar; without one, place it beside your own title. It renders nothing without sidebarCollapsible, and hides below 1024, where the drawer button opens the sidebar. |
 | `sidebarCollapsed` | `boolean` | false | Narrows the sidebar panel to --sidebar-rail. A floating panel keeps its two outer margins in the grid track; flush uses the token as the raw track width. Controlled by you, like the palette's open: the shell does not decide when to collapse. Without sidebarCollapsible it draws no button; with it, the button calls onSidebarCollapsedChange and you decide. Below 1024px the drawer is never a rail, controlled or not: collapsed inside the drawer it was a column of unnamed icons. |
-| `sidebarCollapsible` | `boolean` | false | Draws the collapse button at the top of the junction between the sidebar and the content — centred on the gap, level with the first item, sticky with the sidebar — and turns the sidebar into the rail on its own between 1024 and 1279px. Off by default: without it the shell is exactly the one before, and an app that already drives sidebarCollapsed with its own button does not get a second one. Behaviour read from the sidebar that one of the references uses (the main reference library has no app frame). |
+| `sidebarCollapsible` | `boolean \| "icon" \| "capsule" \| "offcanvas"` | false | Draws the collapse button at the top of the junction between the sidebar and the content — centred on the gap, level with the first item, sticky with the sidebar — and turns the sidebar into the rail on its own between 1024 and 1279px. Off by default: without it the shell is exactly the one before, and an app that already drives sidebarCollapsed with its own button does not get a second one. Behaviour read from the sidebar that one of the references uses (the main reference library has no app frame). It also names HOW the sidebar collapses: true or "icon" (the rail), "capsule" (the rail with the capsule radius) or "offcanvas" (the sidebar leaves the screen and the track goes to zero). The shell then puts the sidebar in a Sidebar.Provider, so Sidebar.Toggle and useSidebar work anywhere inside it. |
+| `sidebarToggle` | `"edge" \| "none"` | edge | Where the shell puts its collapse button. edge: at the seam between the sidebar and the content (in layout="sidebar", at the start of the content bar). none: the shell puts none, and the app places Sidebar.Toggle where it wants — inside the sidebar next to the brand, or as a row at the bottom. |
+| `sidebarShortcut` | `boolean` | true | Ctrl+B (Cmd+B on a Mac) collapses and expands the sidebar; below 1024 it opens and closes the drawer. On with sidebarCollapsible, as in the reference. It does not act while the person is typing in a field. |
+| `sidebarIndicator` | `"brand" \| "segment" \| "segment-dot" \| "segment-line" \| "subtle"` | brand | How the current item of the sidebar is drawn — the indicator of the Sidebar: brand (the default), segment, segment-dot, segment-line or subtle. |
+| `sidebarPanel` | `"docked" \| "overlay"` | — | Sections with a panel — the panel of the Sidebar: the first level of navItems becomes sections. docked puts the list beside the rail (collapsing hides the list); overlay opens it over the page. |
 | `defaultSidebarCollapsed` | `boolean` | — | Starts collapsed without controlling it. The person's choice holds until the window crosses 1280px; then the width decides again. |
 | `onSidebarCollapsedChange` | `(collapsed: boolean) => void` | — | Called on every change — the button, or the width crossing 1280px. Keeping the preference is the app's job, as before. |
 | `children` | `ReactNode` | — | Page content. Rendered inside the <main> the shell owns. |
@@ -8997,6 +9001,10 @@ import {Sidebar} from "@aurea-uds/react";
 
 - No roving tabindex: site navigation has no APG pattern, and in a sidebar people expect Tab to walk the items one by one.
 
+- Three ways to collapse (collapsible): the icon rail, the rail as a capsule, and off the screen. Outside the AppShell, Sidebar.Provider keeps the state, Sidebar.Toggle collapses it from anywhere, useSidebar reads it, and Ctrl+B (Cmd+B on a Mac) toggles it — except while you type in a field.
+
+- Groups that fold (collapsible), an action beside a group or an item (action), a gap between sections ("separator"), a photo in place of the icon (avatar), sections with a panel (panel) and five ways to draw the current item (indicator).
+
 ## Examples
 
 ### Groups and one level of nesting
@@ -9121,14 +9129,106 @@ By default the scrollbar is light and hidden at rest, and comes back with the po
 <Sidebar scrollbar="visible" label="Components" current="button" items={items} />
 ```
 
+### The current item, five ways
+
+indicator sets how the item you are on is drawn. brand is the default. segment is the capsule of the selected tab, with the text colour and no line; segment-dot and segment-line add a yellow dot or the yellow line; subtle is the grey alone.
+
+```tsx
+<Sidebar indicator="brand" label="Brand" current="button" items={items} />
+<Sidebar indicator="segment" label="Segment" current="button" items={items} />
+<Sidebar indicator="segment-dot" label="Segment with a dot" current="button" items={items} />
+<Sidebar indicator="segment-line" label="Segment with a line" current="button" items={items} />
+<Sidebar indicator="subtle" label="Subtle" current="button" items={items} />
+```
+
+### Collapsed into a capsule
+
+collapsible="capsule": the rail of icons keeps the control radius instead of the card radius. In the AppShell it is sidebarCollapsible="capsule".
+
+```tsx
+<Sidebar collapsed collapsible="capsule" label="Components" current="button" items={items} />
+```
+
+### Off the screen, with its own state
+
+Outside the AppShell, Sidebar.Provider keeps the state, and Sidebar.Toggle collapses it from anywhere: here beside the title, and as a row at the bottom of the sidebar. collapsible="offcanvas" takes the sidebar off the screen. Ctrl+B (Cmd+B on a Mac) toggles it too, except while you type in a field.
+
+```tsx
+<Sidebar.Provider collapsible="offcanvas">
+  <Sidebar label="Components" current="button" items={items}
+    footer={<Sidebar.Toggle variant="item" />} />
+  <main>
+    <Sidebar.Toggle />
+  </main>
+</Sidebar.Provider>
+```
+
+### Sections with a panel beside the rail
+
+panel="docked": the first level of items becomes sections, shown as a rail of icons, and the list of the chosen section sits in a panel beside it. Collapsed, only the rail stays.
+
+```tsx
+<Sidebar panel="docked" label="Sections" current="orders" items={[
+  {id: "home", label: "Home", icon: "house", items: [
+    {id: "overview", label: "Overview", icon: "squares-four", href: "/"},
+    {id: "orders", label: "Orders", icon: "receipt", href: "/orders"},
+  ]},
+  {id: "dashboard", label: "Dashboard", icon: "chart-bar", items: [
+    {id: "analytics", label: "Analytics", icon: "chart-line", href: "/analytics"},
+  ]},
+]} />
+```
+
+### Sections in a panel over the page
+
+panel="overlay": the rail stays narrow, and the list of a section opens over the page, next to its icon. Focus moves into the list, and Escape or a click outside closes it.
+
+```tsx
+<Sidebar panel="overlay" label="Sections" current="orders" items={sections} />
+```
+
+### Groups that fold, with actions
+
+A group with collapsible folds its list: the name becomes a button with aria-expanded. action puts a small button beside the group ("+") or beside an item ("⋯") — next to the link, never inside it.
+
+```tsx
+<Sidebar label="Files" current="store" items={[
+  {id: "file", label: "File", collapsible: true,
+    action: <IconButton icon="plus" label="Add to File" size="xs" />, items: [
+    {id: "store", label: "Store", icon: "storefront", href: "/store",
+      action: <IconButton icon="dots-three" label="Store options" size="xs" />},
+    {id: "company", label: "Company", icon: "buildings", href: "/company"},
+  ]},
+  {id: "archive", label: "Archive", collapsible: true, defaultOpen: false, items: [
+    {id: "old", label: "Old projects", icon: "archive", href: "/old"},
+  ]},
+]} />
+```
+
+### Separators and avatars
+
+The string "separator" between items splits the list with a gap — no line. avatar puts a photo or a team logo in place of the icon, and it stays on the rail when the sidebar collapses.
+
+```tsx
+<Sidebar label="Teams" current="catalog" items={[
+  {id: "home", label: "Home", icon: "house", href: "/"},
+  "separator",
+  {id: "catalog", label: "Catalog", avatar: {fallback: "CA"}, href: "/catalog", badge: <Kbd>⌘1</Kbd>},
+  {id: "warpspeed", label: "Warpspeed", avatar: {fallback: "WA"}, href: "/warpspeed", badge: <Kbd>⌘2</Kbd>},
+]} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `SidebarItem[]` | — | The navigation, as data. One shape covers grouping and nesting: an item with `items` and no href is a group heading; with an href it is a parent that also has a sublist. Each item is {id, label, href?, icon?, badge?, onClick?, items?}. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. |
+| `items` | `SidebarEntry[]` | — | The navigation, as data. One shape covers grouping and nesting: an item with `items` and no href is a group heading; with an href it is a parent that also has a sublist. Each item is {id, label, href?, icon?, badge?, onClick?, items?}. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. An item also takes avatar ({src?, fallback?}, a photo or a team logo in place of the icon — it stays on the rail), action (a small IconButton such as "⋯" or "+", rendered NEXT TO the link, never inside it; hidden on the rail, as in the reference) and, on a group heading, collapsible and defaultOpen (the heading becomes a disclosure button with aria-expanded). The string "separator" between items splits the list in two with a gap — no line (ADR-0072). On the rail, sublists are hidden, as the reference does: a sub-item without an icon used to become an empty button there. |
 | `variant` | `"floating" \| "flush" \| "plain"` | floating | floating is the default and it is what this design system looks like: the panel detaches from the edges, takes the card radius and a border all the way around. flush is the ONE exception this system makes to that rule, and it is opt-in: the sidebar sits against the edges, takes the full height and is separated from the content by a single rule instead of a gap. That is what four shipping admin panels do — the reference library's own dashboard among the ones measured. Aurea's own pages stay floating; flush is there for the applications that want it. plain is the sidebar with NO box — no fill, no line, no shadow — in the floating one's place and height: the items sit loose on the page, like a documentation page's "On this page" column. The 1px border stays, transparent, so switching variants moves nothing. |
 | `current` | `string` | — | The id of the item you are on. It gets aria-current="page", which is also what the skin paints — one source for both, so they cannot drift apart. |
 | `collapsed` | `boolean` | false | Icon rail. Labels stay in the DOM as screen-reader-only text, and the panel narrows to --sidebar-rail. In AppShell, a floating rail keeps its outer margins in the grid track; flush uses the token as the raw track width. Controlled by you: the sidebar never decides on its own when to collapse. |
+| `collapsible` | `"icon" \| "capsule" \| "offcanvas"` | icon | How the sidebar looks when collapsed. icon is the rail of icons (the default, as before). capsule is the same rail with the control radius (a capsule) instead of the card radius. offcanvas takes the sidebar off the screen on the desktop — the name the reference uses. Inside Sidebar.Provider it comes from the provider. |
+| `indicator` | `"brand" \| "segment" \| "segment-dot" \| "segment-line" \| "subtle"` | brand | How the current item is drawn. brand is today's: in the light theme, the primary button; in the dark one, the grey capsule with the yellow text and the line. segment is the capsule of the selected tab (--segment + --shadow-sm), the text in the text colour and regular weight, with no line — the current item of the reference's documentation. segment-dot adds a yellow dot before the name; segment-line adds the yellow line underneath. subtle is the grey alone (the same grey as hover: only the text weight and the filled icon set the current item apart). |
+| `panel` | `"docked" \| "overlay"` | — | Sections with a panel. The first level of items becomes sections: the rail shows one icon per section, and the list of the chosen section lives in a panel. docked puts the panel beside the rail (collapsing hides only the panel); overlay opens it over the page, next to the icon, in a popover that takes focus and closes with Escape or a click outside. The section that contains the current page gets aria-current="true". |
 | `label` | `string` | "Sidebar" | Accessible name of the <nav> that `items` renders. Two navigation landmarks with the same name fail axe, so name it when a page has more than one. |
 | `children` | `ReactNode` | — | Escape hatch, not legacy: when the list comes from a router or a CMS, pass your own markup and the <nav> and its label are yours. Rendered after `items` when both are given. |
 | `header` | `ReactNode` | — | The fixed top of the sidebar: the app brand (Sidebar.Brand), a search. It does not scroll with the list. With header or footer, only the middle (the list and children) scrolls. |
@@ -9137,6 +9237,8 @@ By default the scrollbar is light and hidden at rest, and comes back with the po
 | `Sidebar.User` | `component` | — | The person at the bottom, in a box of the text colour at 6%: avatar, name, description and an action (sign out). Collapsed, the avatar and the action stack in the centre of the rail, without the box; the name stays for screen readers. |
 | `Sidebar.Nav` | `component` | — | A second list with the sidebar skin (Support, Settings). label is required: two navigation landmarks with the same name fail axe. It follows the sidebar's collapsed state and current item. |
 | `Sidebar.Show` | `component` | — | Content shown only while the sidebar is expanded (when="expanded": the search field, a highlight card) or only while it is collapsed (when="collapsed": the search button). |
+| `Sidebar.Provider` | `component` | — | The sidebar state outside AppShell (collapsed or not, controlled with collapsed and onCollapsedChange, or not with defaultCollapsed), the collapse style (collapsible) and the Ctrl+B shortcut (Cmd+B on a Mac; shortcut, on by default, as in the reference). The shortcut does not act while the person is typing in a field — the one divergence from the reference, which steals the bold of an editor. Every Sidebar inside follows it, and Sidebar.Toggle and useSidebar read it. AppShell uses the same provider inside, when sidebarCollapsible is set. |
+| `Sidebar.Toggle` | `component` | — | The collapse button, anywhere under a provider: next to the page title, inside the sidebar next to the brand, or as a row at the bottom (variant="item", "Collapse sidebar"). It carries aria-expanded and aria-controls pointing to the sidebar. Outside a provider it renders nothing. |
 | `placement` | `left \| right` | left | Which side the sidebar lives on. On the right, the flush variant's line moves to the inner side. It is the AppShell's aside column. |
 | `scrollbar` | `hover \| visible` | hover | hover is a light scrollbar that is invisible at rest and comes back with the pointer over the sidebar, with keyboard focus inside it, and always on a screen without hover (touch). It stays native and keeps its width, so nothing jumps when it shows. visible keeps the bar on screen all the time, for whoever needs it. |
 </page>
@@ -10951,6 +11053,34 @@ const {itens, aoSoltar, propsDoItem} = useReorder(lista, setLista);
 ```
 </page>
 
+<page url="https://aureauds.dev/usesidebar.html">
+# useSidebar
+
+The sidebar state — collapsed, setCollapsed, toggle — inside Sidebar.Provider or an AppShell with sidebarCollapsible.
+
+## Usage
+
+```tsx
+import {useSidebar} from "@aurea-uds/react";
+```
+
+```tsx
+function FocusMode() {
+  const sidebar = useSidebar();
+  if (!sidebar) return null;
+  return (
+    <Button onClick={sidebar.toggle}>
+      {sidebar.collapsed ? "Show the sidebar" : "Hide the sidebar"}
+    </Button>
+  );
+}
+
+<Sidebar.Provider>
+  <FocusMode />
+</Sidebar.Provider>
+```
+</page>
+
 <page url="https://aureauds.dev/usespriteurl.html">
 # useSpriteUrl
 
@@ -11312,6 +11442,188 @@ import {AppShell, Sidebar, SearchField} from "@aurea-uds/react";
 >
   <h1>Reports</h1>
 </AppShell>
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-appshell-the-sidebar-that-becomes-a-capsule.html">
+# The sidebar that becomes a capsule
+
+`sidebarCollapsible="capsule"`: collapsed, the floating sidebar keeps its rail of icons with the control radius — a capsule — instead of the card radius. The button at the seam collapses and expands it, and so does Ctrl+B (Cmd+B on a Mac).
+
+## Usage
+
+```tsx
+import {AppShell, Sidebar} from "@aurea-uds/react";
+```
+
+```tsx
+<AppShell
+  layout="sidebar"
+  sidebarCollapsible="capsule"
+  defaultSidebarCollapsed
+  brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" />}
+  navItems={items}
+  currentNavId="tasks"
+>
+  <div style={{display: "flex", alignItems: "center", gap: "var(--space-3)"}}>
+    <AppShell.SidebarToggle />
+    <h1>Tasks</h1>
+  </div>
+</AppShell>
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-appshell-the-sidebar-that-leaves-the-screen.html">
+# The sidebar that leaves the screen
+
+`sidebarCollapsible="offcanvas"`: collapsed, the sidebar leaves the screen and the content takes the whole width. The button beside the title brings it back. It is the reference's off-canvas mode.
+
+## Usage
+
+```tsx
+import {AppShell, Sidebar} from "@aurea-uds/react";
+```
+
+```tsx
+<AppShell
+  layout="sidebar"
+  sidebarVariant="flush"
+  sidebarCollapsible="offcanvas"
+  brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" />}
+  navItems={items}
+  currentNavId="docs"
+>
+  <div style={{display: "flex", alignItems: "center", gap: "var(--space-3)"}}>
+    <AppShell.SidebarToggle />
+    <h1>Docs</h1>
+  </div>
+</AppShell>
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-appshell-the-collapse-button-inside-the-sidebar.html">
+# The collapse button inside the sidebar
+
+`sidebarToggle="none"` keeps the shell from placing its own button, and the app puts `Sidebar.Toggle` where it wants — here, as the `action` of the brand at the top of the sidebar. Collapsed, the button moves under the logo.
+
+## Usage
+
+```tsx
+import {AppShell, Sidebar} from "@aurea-uds/react";
+```
+
+```tsx
+<AppShell
+  layout="sidebar"
+  sidebarVariant="flush"
+  sidebarCollapsible="icon"
+  sidebarToggle="none"
+  brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" action={<Sidebar.Toggle />} />}
+  navItems={items}
+  currentNavId="schedule"
+>
+  <h1>Schedule</h1>
+</AppShell>
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-appshell-sections-with-the-list-beside-them.html">
+# Sections with the list beside them
+
+`sidebarPanel="docked"`: the first level of `navItems` becomes sections — a rail of icons — and the list of the chosen section sits in a panel beside it. Collapsing hides the panel and keeps the rail.
+
+## Usage
+
+```tsx
+import {AppShell, Sidebar, Badge} from "@aurea-uds/react";
+```
+
+```tsx
+<AppShell
+  layout="sidebar"
+  sidebarCollapsible
+  sidebarPanel="docked"
+  brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" />}
+  navItems={[
+    {id: "home", label: "Home", icon: "house", items: [
+      {id: "overview", label: "Overview", icon: "squares-four", href: "/"},
+      {id: "orders", label: "Orders", icon: "receipt", href: "/orders"},
+    ]},
+    {id: "dashboard", label: "Dashboard", icon: "chart-bar", items: [
+      {id: "analytics", label: "Analytics", icon: "chart-line", href: "/analytics"},
+    ]},
+  ]}
+  currentNavId="orders"
+>
+  <h1>Orders</h1>
+</AppShell>
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-appshell-sections-with-the-list-over-the-page.html">
+# Sections with the list over the page
+
+`sidebarPanel="overlay"`: the rail of sections stays narrow, and the list of a section opens over the page, next to its icon. Focus moves into the list, and Escape or a click outside closes it.
+
+## Usage
+
+```tsx
+import {AppShell, Sidebar, Badge} from "@aurea-uds/react";
+```
+
+```tsx
+<AppShell
+  layout="sidebar"
+  sidebarPanel="overlay"
+  brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" />}
+  navItems={sections}
+  currentNavId="orders"
+>
+  <h1>Orders</h1>
+</AppShell>
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-appshell-the-current-item-of-the-sidebar-five-ways.html">
+# The current item of the sidebar, five ways
+
+`sidebarIndicator` sets how the item you are on is drawn: `brand` (the default), `segment` (the capsule of the selected tab, with no line), `segment-dot`, `segment-line` and `subtle`. Switch them here, on the real shell.
+
+## Usage
+
+```tsx
+import {AppShell, Sidebar, RadioGroup} from "@aurea-uds/react";
+```
+
+```tsx
+const ways = [
+  {label: "Brand", sidebarIndicator: "brand"},
+  {label: "Segment", sidebarIndicator: "segment"},
+  {label: "Dot", sidebarIndicator: "segment-dot"},
+  {label: "Line", sidebarIndicator: "segment-line"},
+  {label: "Subtle", sidebarIndicator: "subtle"},
+] as const;
+
+function Shell() {
+  const [way, setWay] = useState<(typeof ways)[number]>(ways[1]);
+  return (
+    <AppShell
+      layout="sidebar"
+      sidebarIndicator={way.sidebarIndicator}
+      brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" />}
+      navItems={items}
+      currentNavId="tasks"
+    >
+      <h1>Tasks</h1>
+      <RadioGroup label="The current item" orientation="horizontal" value={way.sidebarIndicator}
+        onValueChange={(v) => setWay(ways.find((w) => w.sidebarIndicator === v)!)}>
+        {ways.map((w) => <Radio key={w.sidebarIndicator} value={w.sidebarIndicator} label={w.label} />)}
+      </RadioGroup>
+    </AppShell>
+  );
+}
+
+<Shell />
 ```
 </page>
 
@@ -16875,6 +17187,58 @@ import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
   <LogStream lines={tail} />
   <Button variant="outline">Pause live tail</Button>
 </Card>
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-44-0.html">
+# v0.44.0
+
+The whole sidebar — three ways to collapse, its state outside the AppShell with Ctrl+B, groups that fold, actions, separators, avatars, sections with a panel and five ways to draw the current item.
+
+The sidebar gets everything that was missing: three ways to collapse, its own state outside the `AppShell` (with a hook and the Ctrl+B shortcut), groups that fold, an action beside a group or an item, a gap between sections, a photo in place of the icon, sections with a panel and five ways to draw the current item. The defaults do not change, except two measurements: the text of a sidebar item now starts 4 further in, aligned with the line under the selected item, and a sidebar outside the `AppShell` now runs from the top of the window to the bottom. Read the Breaking changes section if your code reads the items of a sidebar.
+
+## New
+
+- **`Sidebar collapsible`** (`icon`, `capsule`, `offcanvas`): how the sidebar looks when collapsed. `icon` is the rail of icons, as before; `capsule` is the same rail with the capsule radius; `offcanvas` takes the sidebar off the screen. On the `AppShell`, `sidebarCollapsible` now takes the same names as well as `true`.
+- **`Sidebar.Provider`, `Sidebar.Toggle` and `useSidebar`**: the sidebar state outside the `AppShell` — collapsed or not, controlled or not — and a collapse button that works anywhere under the provider: beside the page title, inside the sidebar, or as a row at the bottom (`Sidebar.Toggle variant="item"`). The `AppShell` uses the same provider, so `Sidebar.Toggle` and `useSidebar` work inside it too. `useSidebar` returns `null` outside a provider.
+- **Ctrl+B (Cmd+B on a Mac) collapses and expands the sidebar**, under a `Sidebar.Provider` and in an `AppShell` with `sidebarCollapsible`; below 1024 it opens and closes the drawer. It does not act while you type in a field. Turn it off with `shortcut={false}` on the provider or `sidebarShortcut={false}` on the `AppShell`.
+- **`AppShell sidebarToggle`** (`edge`, `none`): with `none`, the shell does not place its own collapse button, and you place `Sidebar.Toggle` where you want.
+- **`Sidebar.Brand action`**: an action beside the brand — the collapse button inside the sidebar. Collapsed, it moves under the logo.
+- **On a sidebar item: `avatar`**, a photo or a team logo in place of the icon, which stays on the rail; **`action`**, a small button beside the item or the group, next to the link and never inside it, hidden on the rail; and, on a group, **`collapsible` and `defaultOpen`**: the group name becomes a button that folds its list.
+- **`"separator"` in the list of a sidebar** splits it in two with a gap, without a line.
+- **`Sidebar panel`** (`docked`, `overlay`), and **`AppShell sidebarPanel`**: the first level of items becomes sections on a rail, and the list of the chosen section lives in a panel — beside the rail, or over the page next to its icon. The section of the current page carries `aria-current="true"`.
+- **`Sidebar indicator`** (`brand`, `segment`, `segment-dot`, `segment-line`, `subtle`), and **`AppShell sidebarIndicator`**: how the current item is drawn. `brand` is the default and does not change.
+
+## Changed
+
+- **The text of a sidebar item starts 16 from the edge of the item, where the line under the selected item starts** (it was 12, with the line at 15). The group headings and the brand move with it. In the documentation layout of the `AppShell` the text stays where it was, and the line moves from 15 to 16.
+- **A sidebar outside the `AppShell` runs from the top of the window to the bottom**, with its own margin. It used to keep room for a top bar that was not there. If your page has its own bar above the sidebar, set its height in `--sidebar-offset`.
+- **On the rail, a collapsed sidebar hides the sublists.** A sub-item without an icon used to become an empty button there. The parent item stays, with its name in the tooltip.
+- **`BottomNav` accepts the same list as the sidebar with `"separator"` in it**, and ignores the separators.
+
+## The documentation site
+
+- **The sidebar page** shows every new option alive: the current item five ways, the capsule, the sidebar that leaves the screen with its own state, the sections with a panel beside the rail and over the page, the groups that fold with actions, the separators and the avatars.
+- **Six new `AppShell` patterns**: the sidebar that becomes a capsule, the sidebar that leaves the screen, the collapse button inside the sidebar, sections with the list beside them or over the page, and the current item five ways, with a switch to try them.
+- **A page for `useSidebar`**, among the hooks.
+- **Every whole-page preview is alive**, including the `AppShell` patterns: the collapse buttons respond.
+
+## Breaking changes
+
+- **The type of `SidebarItem.items` is now `SidebarEntry[]`**, which includes the string `"separator"`. If your code reads `item.items` and treats every entry as an item, check for `"separator"` first. Passing lists does not change: a list without separators is still valid.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.44.0 @aurea-uds/core@0.44.0 @aurea-uds/fonts@0.44.0 @aurea-uds/icons@0.44.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.44.0
 ```
 </page>
 

@@ -11,8 +11,44 @@
 // `.doc-nav` é a pele de navegação do próprio catálogo, não do sistema — link de navegação
 // lateral ainda não é componente da Aurea (achado A8). O `code` mostra o <nav> puro porque é o
 // que o consumidor tem hoje; o `render` veste para não reprovar contraste sobre a lateral.
-import {createElement as h} from "react";
+import {createElement as h, useState} from "react";
 import * as A from "../../../../packages/react/dist/index.js";
+
+// As listas dos padrões do bloco 2 (0.44.0): os itens de uma lateral e as seções da trilha com o painel.
+const ITENS = [
+  {id: "home", label: "Home", icon: "house", href: "#"},
+  {id: "tasks", label: "Tasks", icon: "check-square", href: "#"},
+  {id: "docs", label: "Docs", icon: "file-text", href: "#"},
+  {id: "schedule", label: "Schedule", icon: "calendar", href: "#"},
+];
+const SECOES = [
+  {id: "s-home", label: "Home", icon: "house", items: [
+    {id: "overview", label: "Overview", icon: "squares-four", href: "#"},
+    {id: "orders", label: "Orders", icon: "receipt", href: "#"},
+    {id: "inbox", label: "Inbox", icon: "tray", href: "#", badge: h(A.Badge, null, "4")},
+  ]},
+  {id: "s-dash", label: "Dashboard", icon: "chart-bar", items: [
+    {id: "d-overview", label: "Overview", icon: "squares-four", href: "#"},
+    {id: "analytics", label: "Analytics", icon: "chart-line", href: "#"},
+  ]},
+];
+// O item atual da lateral nos cinco jeitos (o `sidebarIndicator`, a D4 da bancada do bloco 2): a mesma lateral, e uma chave
+// no conteúdo que troca o jeito, ao vivo.
+const JEITOS = [
+  {value: "brand", label: "Brand"}, {value: "segment", label: "Segment"}, {value: "segment-dot", label: "Dot"},
+  {value: "segment-line", label: "Line"}, {value: "subtle", label: "Subtle"},
+];
+function CincoJeitos() {
+  const [jeito, setJeito] = useState("segment");
+  return h(A.AppShell, {layout: "sidebar", sidebarIndicator: jeito,
+    brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme"}),
+    navItems: ITENS, currentNavId: "tasks",
+  }, h("h1", null, "Tasks"), h(A.RadioGroup, {label: "The current item", orientation: "horizontal", value: jeito, onValueChange: setJeito},
+    ...JEITOS.map((j) => h(A.Radio, {key: j.value, value: j.value, label: j.label}))));
+}
+// O título da página com o botão de recolher ao lado (`AppShell.SidebarToggle`), como nas quinze.
+const titulo = (texto) => h("div", {style: {display: "flex", alignItems: "center", gap: "var(--space-3)"}},
+  h(A.AppShell.SidebarToggle, null), h("h1", {style: {margin: 0}}, texto));
 
 const nav = (...itens) => h("nav", {className: "doc-nav", "aria-label": "Sections"},
   ...itens.map(([rotulo, atual]) => h("a", {key: rotulo, href: "#",
@@ -169,5 +205,179 @@ export default [
         {id: "exports", label: "Exports", icon: "export", href: "#"}],
       currentNavId: "reports",
     }, h("h1", null, "Reports"), h("p", {className: "muted"}, "Six months of runs, by outcome.")),
+  },
+  // O BLOCO 2 (0.44.0): as quinze laterais aprovadas pelo Victor em 21/10/2026, cada arranjo novo numa página — os jeitos de
+  // recolher (cápsula e fora da tela), o botão dentro da lateral e a trilha das seções com o painel.
+  {
+    variant: "Capsule",
+    name: "The sidebar that becomes a capsule",
+    description: "`sidebarCollapsible=\"capsule\"`: collapsed, the floating sidebar keeps its rail of icons with the control radius — a capsule — instead of the card radius. The button at the seam collapses and expands it, and so does Ctrl+B (Cmd+B on a Mac).",
+    uses: ["AppShell", "Sidebar"],
+    embed: true,
+    layoutProprio: true,
+    tituloProprio: true,
+    code: `<AppShell
+  layout="sidebar"
+  sidebarCollapsible="capsule"
+  defaultSidebarCollapsed
+  brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" />}
+  navItems={items}
+  currentNavId="tasks"
+>
+  <div style={{display: "flex", alignItems: "center", gap: "var(--space-3)"}}>
+    <AppShell.SidebarToggle />
+    <h1>Tasks</h1>
+  </div>
+</AppShell>`,
+    render: () => h(A.AppShell, {
+      layout: "sidebar", sidebarCollapsible: "capsule", defaultSidebarCollapsed: true,
+      brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme"}),
+      navItems: ITENS, currentNavId: "tasks",
+    }, titulo("Tasks"), h("p", {className: "muted"}, "Three tasks are due this week.")),
+  },
+  {
+    variant: "Off-canvas",
+    name: "The sidebar that leaves the screen",
+    description: "`sidebarCollapsible=\"offcanvas\"`: collapsed, the sidebar leaves the screen and the content takes the whole width. The button beside the title brings it back. It is the reference's off-canvas mode.",
+    uses: ["AppShell", "Sidebar"],
+    embed: true,
+    layoutProprio: true,
+    tituloProprio: true,
+    code: `<AppShell
+  layout="sidebar"
+  sidebarVariant="flush"
+  sidebarCollapsible="offcanvas"
+  brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" />}
+  navItems={items}
+  currentNavId="docs"
+>
+  <div style={{display: "flex", alignItems: "center", gap: "var(--space-3)"}}>
+    <AppShell.SidebarToggle />
+    <h1>Docs</h1>
+  </div>
+</AppShell>`,
+    render: () => h(A.AppShell, {
+      layout: "sidebar", sidebarVariant: "flush", sidebarCollapsible: "offcanvas",
+      brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme"}),
+      navItems: ITENS, currentNavId: "docs",
+    }, titulo("Docs"), h("p", {className: "muted"}, "Press the button beside the title to hide and bring back the sidebar.")),
+  },
+  {
+    variant: "Button inside",
+    name: "The collapse button inside the sidebar",
+    description: "`sidebarToggle=\"none\"` keeps the shell from placing its own button, and the app puts `Sidebar.Toggle` where it wants — here, as the `action` of the brand at the top of the sidebar. Collapsed, the button moves under the logo.",
+    uses: ["AppShell", "Sidebar"],
+    embed: true,
+    layoutProprio: true,
+    tituloProprio: true,
+    code: `<AppShell
+  layout="sidebar"
+  sidebarVariant="flush"
+  sidebarCollapsible="icon"
+  sidebarToggle="none"
+  brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" action={<Sidebar.Toggle />} />}
+  navItems={items}
+  currentNavId="schedule"
+>
+  <h1>Schedule</h1>
+</AppShell>`,
+    render: () => h(A.AppShell, {
+      layout: "sidebar", sidebarVariant: "flush", sidebarCollapsible: "icon", sidebarToggle: "none",
+      brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme", action: h(A.Sidebar.Toggle, null)}),
+      navItems: ITENS, currentNavId: "schedule",
+    }, h("h1", null, "Schedule"), h("p", {className: "muted"}, "The button lives in the sidebar, next to the brand.")),
+  },
+  {
+    variant: "Sections, docked",
+    name: "Sections with the list beside them",
+    description: "`sidebarPanel=\"docked\"`: the first level of `navItems` becomes sections — a rail of icons — and the list of the chosen section sits in a panel beside it. Collapsing hides the panel and keeps the rail.",
+    uses: ["AppShell", "Sidebar", "Badge"],
+    embed: true,
+    layoutProprio: true,
+    tituloProprio: true,
+    code: `<AppShell
+  layout="sidebar"
+  sidebarCollapsible
+  sidebarPanel="docked"
+  brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" />}
+  navItems={[
+    {id: "home", label: "Home", icon: "house", items: [
+      {id: "overview", label: "Overview", icon: "squares-four", href: "/"},
+      {id: "orders", label: "Orders", icon: "receipt", href: "/orders"},
+    ]},
+    {id: "dashboard", label: "Dashboard", icon: "chart-bar", items: [
+      {id: "analytics", label: "Analytics", icon: "chart-line", href: "/analytics"},
+    ]},
+  ]}
+  currentNavId="orders"
+>
+  <h1>Orders</h1>
+</AppShell>`,
+    render: () => h(A.AppShell, {
+      layout: "sidebar", sidebarCollapsible: true, sidebarPanel: "docked",
+      brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme"}),
+      navItems: SECOES, currentNavId: "orders",
+    }, titulo("Orders"), h("p", {className: "muted"}, "Pick a section on the rail: its list opens beside it.")),
+  },
+  {
+    variant: "Sections, overlay",
+    name: "Sections with the list over the page",
+    description: "`sidebarPanel=\"overlay\"`: the rail of sections stays narrow, and the list of a section opens over the page, next to its icon. Focus moves into the list, and Escape or a click outside closes it.",
+    uses: ["AppShell", "Sidebar", "Badge"],
+    embed: true,
+    layoutProprio: true,
+    tituloProprio: true,
+    code: `<AppShell
+  layout="sidebar"
+  sidebarPanel="overlay"
+  brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" />}
+  navItems={sections}
+  currentNavId="orders"
+>
+  <h1>Orders</h1>
+</AppShell>`,
+    render: () => h(A.AppShell, {
+      layout: "sidebar", sidebarPanel: "overlay",
+      brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme"}),
+      navItems: SECOES, currentNavId: "orders",
+    }, h("h1", null, "Orders"), h("p", {className: "muted"}, "Press an icon on the rail: its list opens over the page.")),
+  },
+  {
+    variant: "Current item",
+    name: "The current item of the sidebar, five ways",
+    description: "`sidebarIndicator` sets how the item you are on is drawn: `brand` (the default), `segment` (the capsule of the selected tab, with no line), `segment-dot`, `segment-line` and `subtle`. Switch them here, on the real shell.",
+    uses: ["AppShell", "Sidebar", "RadioGroup"],
+    embed: true,
+    layoutProprio: true,
+    tituloProprio: true,
+    code: `const ways = [
+  {label: "Brand", sidebarIndicator: "brand"},
+  {label: "Segment", sidebarIndicator: "segment"},
+  {label: "Dot", sidebarIndicator: "segment-dot"},
+  {label: "Line", sidebarIndicator: "segment-line"},
+  {label: "Subtle", sidebarIndicator: "subtle"},
+] as const;
+
+function Shell() {
+  const [way, setWay] = useState<(typeof ways)[number]>(ways[1]);
+  return (
+    <AppShell
+      layout="sidebar"
+      sidebarIndicator={way.sidebarIndicator}
+      brand={<Sidebar.Brand variant="plain" logo={<Icon name="cube" />} name="Acme" />}
+      navItems={items}
+      currentNavId="tasks"
+    >
+      <h1>Tasks</h1>
+      <RadioGroup label="The current item" orientation="horizontal" value={way.sidebarIndicator}
+        onValueChange={(v) => setWay(ways.find((w) => w.sidebarIndicator === v)!)}>
+        {ways.map((w) => <Radio key={w.sidebarIndicator} value={w.sidebarIndicator} label={w.label} />)}
+      </RadioGroup>
+    </AppShell>
+  );
+}
+
+<Shell />`,
+    render: () => h(CincoJeitos),
   },
 ];

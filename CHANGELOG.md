@@ -152,6 +152,70 @@ como deveria funcionar"*.
 
 ---
 
+## [0.44.0] — 2026-10-26
+
+⏳ **Ainda não publicada.** O bloco 2 do plano único, **a lateral inteira**
+([ADR-0082](decisions/0082-a-lateral-inteira.md)): o que faltava das quinze laterais aprovadas pelo Victor em 21/10/2026, as
+alternativas do item atual e o 2-A. Na bancada, com as quinze rodando: *"Aprovo as quinze e as quatro decisões como
+propostas."* Só a web — o nativo não tem `Sidebar`.
+
+### ⚠ Pode quebrar a compilação
+
+- **O tipo do `items` do `SidebarItem` passa a ser `SidebarEntry[]`**, que inclui a palavra `"separator"`. Quem lê
+  `item.items` e trata toda entrada como item precisa olhar a divisória antes. Passar listas não muda: lista sem divisória
+  continua válida.
+
+### Acrescentado
+
+- **`Sidebar` `collapsible`** (`icon`, `capsule`, `offcanvas`): o jeito de recolher — a trilha de sempre, a trilha em
+  cápsula, ou fora da tela. No `AppShell`, o `sidebarCollapsible` aceita os mesmos nomes, além do `true`.
+- **`Sidebar.Provider`, `Sidebar.Toggle` e `useSidebar`**: o estado da lateral fora do `AppShell` (controlado ou não) e o
+  botão de recolher em qualquer lugar — ao lado do título, dentro da lateral, ou no pé como linha (`variant="item"`). O
+  `AppShell` usa o mesmo provedor por dentro. O `useSidebar` devolve `null` fora de um provedor.
+- **O Ctrl+B (Cmd+B no Mac)** recolhe e abre a lateral, sob um `Sidebar.Provider` e no `AppShell` com `sidebarCollapsible`;
+  abaixo de 1024, abre e fecha a gaveta. Não age onde se digita (a divergência da referência, decidida pelo Victor).
+  Desliga com `shortcut={false}` ou `sidebarShortcut={false}`.
+- **`AppShell` `sidebarToggle`** (`edge`, `none`) e **`sidebarPanel`**, **`sidebarIndicator`**, que repassam à lateral.
+- **`Sidebar.Brand` `action`**: o botão de recolher ao lado da marca; recolhida, ele desce para baixo do logo.
+- **No item da `Sidebar`:** `avatar` (a foto no lugar do ícone, que fica na trilha), `action` (o botão pequeno ao lado do
+  item ou do grupo, fora do link; some na trilha) e, no grupo, `collapsible` e `defaultOpen` (o nome vira o botão que
+  dobra a lista, com `aria-expanded`).
+- **`"separator"` na lista da `Sidebar`**: parte a lista em duas, com um vão de 16 — sem linha (ADR-0072).
+- **`Sidebar` `panel`** (`docked`, `overlay`): a trilha das seções com a lista da seção escolhida num painel, ao lado ou
+  por cima (numa janelinha que segura o foco e fecha com o Esc). A seção da página atual leva `aria-current="true"`.
+- **`Sidebar` `indicator`** (`brand`, `segment`, `segment-dot`, `segment-line`, `subtle`): o desenho do item atual. O
+  `brand`, o de hoje, continua o padrão.
+
+### Mudado
+
+- **O texto do item da `Sidebar` começa a 16 da borda dele, onde começa o fio do escolhido** (era 12, e o fio a 15). O
+  título do grupo e a marca acompanham (`--sidebar-item-x`). No arranjo de documentação do `AppShell`, o texto fica onde
+  estava, e o fio passa de 15 a 16.
+- **A `Sidebar` fora do `AppShell` vai do topo da janela até embaixo**, com a margem dela. Ela reservava a altura de uma
+  barra de cima que não existia. O app com uma barra própria em cima dela diz a altura em `--sidebar-offset`.
+- **Recolhida, a `Sidebar` esconde a sublista** (o achado 13 do item 106): o subitem sem ícone virava um botão vazio na
+  trilha. O item pai continua, com o nome na dica.
+- **A `BottomNav` aceita a lista da lateral com `"separator"`** e ignora a divisória.
+
+### O site
+
+- **A página da lateral** mostra toda opção nova viva: o item atual nos cinco jeitos, a cápsula, a lateral que sai da tela
+  com o estado próprio, as seções com o painel ao lado e por cima, o grupo que dobra com as ações, a divisória e o avatar.
+- **Seis padrões novos do `AppShell`**: a lateral que vira cápsula, a que sai da tela, o botão dentro da lateral, as
+  seções com a lista ao lado ou por cima, e o item atual nos cinco jeitos, com uma chave que troca ao vivo.
+- **A página do `useSidebar`**, entre os ganchos.
+
+### Para quem cuida do repositório
+
+- **O banco da lateral** (`apps/keyboard-probe/lateral.html`): as quinze laterais, o item atual, o fio e a lateral solta,
+  com as peças de verdade — `?v=1` a `?v=15`, `indicador`, `fio`, `solta`. Quem mede é o
+  `tests/visual/lateral-bloco-2.spec.ts` (com o CSS da 0.43.0, reprovam 6 de 9); o que o React desenha, o
+  `tests/unit/lateral-bloco-2.test.tsx` (com o código da 0.43.0, reprovam 16 de 17).
+- **O teste achou, antes de sair:** na lateral rente que sai da tela, a regra da trilha da rente recolhida vinha depois na
+  folha e deixava a coluna em 68. A regra nova repete o `.sidebar` para ganhar.
+
+---
+
 ## [0.43.0] — 2026-10-25
 
 ✅ **Publicada em 25/10/2026, entre 17:23 e 17:29 (Brasília, medido no npm)**, pelo terminal do Victor, da junção do pedido

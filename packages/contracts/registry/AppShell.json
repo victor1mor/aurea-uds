@@ -28,7 +28,7 @@
     },
     {
       "name": "navItems",
-      "type": "SidebarItem[]",
+      "type": "SidebarEntry[]",
       "description": "The sidebar list, handed to the Sidebar the shell already creates — same shape as Sidebar items. Use this instead of passing a second <Sidebar> as navigation: that nests two panels, two borders and two 22px radii, and the inner one clips its text. When navigation is also given, the list comes first."
     },
     {
@@ -84,9 +84,33 @@
     },
     {
       "name": "sidebarCollapsible",
-      "type": "boolean",
+      "type": "boolean | \"icon\" | \"capsule\" | \"offcanvas\"",
       "default": "false",
-      "description": "Draws the collapse button at the top of the junction between the sidebar and the content — centred on the gap, level with the first item, sticky with the sidebar — and turns the sidebar into the rail on its own between 1024 and 1279px. Off by default: without it the shell is exactly the one before, and an app that already drives sidebarCollapsed with its own button does not get a second one. Behaviour read from the sidebar that one of the references uses (the main reference library has no app frame)."
+      "description": "Draws the collapse button at the top of the junction between the sidebar and the content — centred on the gap, level with the first item, sticky with the sidebar — and turns the sidebar into the rail on its own between 1024 and 1279px. Off by default: without it the shell is exactly the one before, and an app that already drives sidebarCollapsed with its own button does not get a second one. Behaviour read from the sidebar that one of the references uses (the main reference library has no app frame). It also names HOW the sidebar collapses: true or \"icon\" (the rail), \"capsule\" (the rail with the capsule radius) or \"offcanvas\" (the sidebar leaves the screen and the track goes to zero). The shell then puts the sidebar in a Sidebar.Provider, so Sidebar.Toggle and useSidebar work anywhere inside it."
+    },
+    {
+      "name": "sidebarToggle",
+      "type": "\"edge\" | \"none\"",
+      "default": "edge",
+      "description": "Where the shell puts its collapse button. edge: at the seam between the sidebar and the content (in layout=\"sidebar\", at the start of the content bar). none: the shell puts none, and the app places Sidebar.Toggle where it wants — inside the sidebar next to the brand, or as a row at the bottom."
+    },
+    {
+      "name": "sidebarShortcut",
+      "type": "boolean",
+      "default": "true",
+      "description": "Ctrl+B (Cmd+B on a Mac) collapses and expands the sidebar; below 1024 it opens and closes the drawer. On with sidebarCollapsible, as in the reference. It does not act while the person is typing in a field."
+    },
+    {
+      "name": "sidebarIndicator",
+      "type": "\"brand\" | \"segment\" | \"segment-dot\" | \"segment-line\" | \"subtle\"",
+      "default": "brand",
+      "description": "How the current item of the sidebar is drawn — the indicator of the Sidebar: brand (the default), segment, segment-dot, segment-line or subtle."
+    },
+    {
+      "name": "sidebarPanel",
+      "type": "\"docked\" | \"overlay\"",
+      "default": "—",
+      "description": "Sections with a panel — the panel of the Sidebar: the first level of navItems becomes sections. docked puts the list beside the rail (collapsing hides the list); overlay opens it over the page."
     },
     {
       "name": "defaultSidebarCollapsed",
@@ -181,6 +205,7 @@
   "a11y": {
     "role": null,
     "keyboard": [
+      "Ctrl+B",
       "Enter",
       "Escape",
       "Tab"
@@ -196,8 +221,7 @@
       "caret-left",
       "caret-right",
       "list",
-      "list-bullets",
-      "sidebar-simple"
+      "list-bullets"
     ]
   },
   "related": {
@@ -205,7 +229,8 @@
       "Card",
       "Sidebar",
       "Toolbar",
-      "Topbar"
+      "Topbar",
+      "useSidebar"
     ],
     "patterns": []
   },
@@ -239,6 +264,26 @@
       "app",
       "docs",
       "sidebar"
+    ],
+    "sidebarCollapsible": [
+      "icon",
+      "capsule",
+      "offcanvas"
+    ],
+    "sidebarToggle": [
+      "edge",
+      "none"
+    ],
+    "sidebarPanel": [
+      "docked",
+      "overlay"
+    ],
+    "sidebarIndicator": [
+      "brand",
+      "segment",
+      "segment-dot",
+      "segment-line",
+      "subtle"
     ]
   }
 }

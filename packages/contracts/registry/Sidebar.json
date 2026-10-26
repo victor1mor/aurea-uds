@@ -25,20 +25,31 @@
   ],
   "tokens": [
     "--control-h-md",
+    "--control-h-sm",
+    "--control-h-xs",
     "--foreground",
     "--overlay",
+    "--popover",
+    "--primary",
     "--radius-card",
     "--radius-control",
+    "--radius-full",
     "--secondary",
+    "--segment",
+    "--shadow-sm",
     "--sidebar",
+    "--sidebar-accent",
     "--sidebar-border",
     "--sidebar-foreground",
+    "--sidebar-primary",
     "--sidebar-rail",
+    "--sidebar-width",
     "--space-1",
     "--space-2",
     "--space-3",
     "--space-4",
     "--space-5",
+    "--space-6",
     "--subtle-foreground",
     "--text-sm",
     "--text-xs",
@@ -48,25 +59,34 @@
   ],
   "a11y": {
     "role": "complementary",
-    "apg": "No APG pattern covers site navigation, and that absence is the decision: the practice adopted is native links inside a <nav>, natural Tab order, and aria-current=\"page\" on the current item. A roving tabindex (the TreeView pattern) is deliberately NOT used — in a sidebar people expect Tab to walk the items one by one. The landmark comes from the element: <aside> is complementary and the <nav> is nested inside it, never around it. As a drawer it is the native popover, so Escape, click-outside and focus return come from the browser.",
+    "apg": "No APG pattern covers site navigation, and that absence is the decision: the practice adopted is native links inside a <nav>, natural Tab order, and aria-current=\"page\" on the current item. A roving tabindex (the TreeView pattern) is deliberately NOT used — in a sidebar people expect Tab to walk the items one by one. The landmark comes from the element: <aside> is complementary and the <nav> is nested inside it, never around it. As a drawer it is the native popover, so Escape, click-outside and focus return come from the browser. A collapsible group heading is the disclosure pattern (a button with aria-expanded and aria-controls; the list stays in the DOM with hidden), the overlay panel is a popover that takes focus and returns it, and Ctrl+B (Cmd+B) toggles the sidebar under a provider, except while typing in a field.",
     "keyboard": [
-      "Tab",
-      "Shift+Tab",
+      "Ctrl+B",
       "Enter",
+      "Escape",
+      "Shift+Tab",
       "Space",
-      "Escape"
+      "Tab"
     ],
-    "keyboardNote": "Measured in a browser on 27/08/2026. Space was delivered and not declared — the items are real <button>s, so the platform gives Enter and Space. Escape is declared and inert here: it closes the drawer, and the bank mounts the expanded sidebar, where there is nothing to close."
+    "keyboardNote": "Measured in a browser on 27/08/2026. Space was delivered and not declared — the items are real <button>s, so the platform gives Enter and Space. Escape is declared and inert here: it closes the drawer, and the bank mounts the expanded sidebar, where there is nothing to close. Measured in a browser on 26/10/2026 (apps/keyboard-probe/lateral.html + tests/visual/lateral-bloco-2.spec.ts, Chromium): Ctrl+B collapses and expands the sidebar and does nothing while focus is in a text field; in the overlay panel, focus moves into the list on open and Escape closes it and returns focus to the section button."
   },
   "dependencies": {
     "engine": null,
-    "icons": []
+    "icons": [
+      "caret-down",
+      "caret-left",
+      "caret-right",
+      "sidebar-simple"
+    ]
   },
   "related": {
     "components": [
       "AppShell",
+      "Avatar",
+      "Popover",
       "Topbar",
-      "TreeView"
+      "TreeView",
+      "useSidebar"
     ],
     "patterns": []
   },
@@ -76,9 +96,9 @@
   "props": [
     {
       "name": "items",
-      "type": "SidebarItem[]",
+      "type": "SidebarEntry[]",
       "default": "—",
-      "description": "The navigation, as data. One shape covers grouping and nesting: an item with `items` and no href is a group heading; with an href it is a parent that also has a sublist. Each item is {id, label, href?, icon?, badge?, onClick?, items?}. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content."
+      "description": "The navigation, as data. One shape covers grouping and nesting: an item with `items` and no href is a group heading; with an href it is a parent that also has a sublist. Each item is {id, label, href?, icon?, badge?, onClick?, items?}. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. An item also takes avatar ({src?, fallback?}, a photo or a team logo in place of the icon — it stays on the rail), action (a small IconButton such as \"⋯\" or \"+\", rendered NEXT TO the link, never inside it; hidden on the rail, as in the reference) and, on a group heading, collapsible and defaultOpen (the heading becomes a disclosure button with aria-expanded). The string \"separator\" between items splits the list in two with a gap — no line (ADR-0072). On the rail, sublists are hidden, as the reference does: a sub-item without an icon used to become an empty button there."
     },
     {
       "name": "variant",
@@ -97,6 +117,24 @@
       "type": "boolean",
       "default": "false",
       "description": "Icon rail. Labels stay in the DOM as screen-reader-only text, and the panel narrows to --sidebar-rail. In AppShell, a floating rail keeps its outer margins in the grid track; flush uses the token as the raw track width. Controlled by you: the sidebar never decides on its own when to collapse."
+    },
+    {
+      "name": "collapsible",
+      "type": "\"icon\" | \"capsule\" | \"offcanvas\"",
+      "default": "icon",
+      "description": "How the sidebar looks when collapsed. icon is the rail of icons (the default, as before). capsule is the same rail with the control radius (a capsule) instead of the card radius. offcanvas takes the sidebar off the screen on the desktop — the name the reference uses. Inside Sidebar.Provider it comes from the provider."
+    },
+    {
+      "name": "indicator",
+      "type": "\"brand\" | \"segment\" | \"segment-dot\" | \"segment-line\" | \"subtle\"",
+      "default": "brand",
+      "description": "How the current item is drawn. brand is today's: in the light theme, the primary button; in the dark one, the grey capsule with the yellow text and the line. segment is the capsule of the selected tab (--segment + --shadow-sm), the text in the text colour and regular weight, with no line — the current item of the reference's documentation. segment-dot adds a yellow dot before the name; segment-line adds the yellow line underneath. subtle is the grey alone (the same grey as hover: only the text weight and the filled icon set the current item apart)."
+    },
+    {
+      "name": "panel",
+      "type": "\"docked\" | \"overlay\"",
+      "default": "—",
+      "description": "Sections with a panel. The first level of items becomes sections: the rail shows one icon per section, and the list of the chosen section lives in a panel. docked puts the panel beside the rail (collapsing hides only the panel); overlay opens it over the page, next to the icon, in a popover that takes focus and closes with Escape or a click outside. The section that contains the current page gets aria-current=\"true\"."
     },
     {
       "name": "label",
@@ -147,6 +185,18 @@
       "description": "Content shown only while the sidebar is expanded (when=\"expanded\": the search field, a highlight card) or only while it is collapsed (when=\"collapsed\": the search button)."
     },
     {
+      "name": "Sidebar.Provider",
+      "type": "component",
+      "default": "—",
+      "description": "The sidebar state outside AppShell (collapsed or not, controlled with collapsed and onCollapsedChange, or not with defaultCollapsed), the collapse style (collapsible) and the Ctrl+B shortcut (Cmd+B on a Mac; shortcut, on by default, as in the reference). The shortcut does not act while the person is typing in a field — the one divergence from the reference, which steals the bold of an editor. Every Sidebar inside follows it, and Sidebar.Toggle and useSidebar read it. AppShell uses the same provider inside, when sidebarCollapsible is set."
+    },
+    {
+      "name": "Sidebar.Toggle",
+      "type": "component",
+      "default": "—",
+      "description": "The collapse button, anywhere under a provider: next to the page title, inside the sidebar next to the brand, or as a row at the bottom (variant=\"item\", \"Collapse sidebar\"). It carries aria-expanded and aria-controls pointing to the sidebar. Outside a provider it renders nothing."
+    },
+    {
       "name": "placement",
       "type": "left | right",
       "default": "left",
@@ -171,6 +221,22 @@
     "scrollbar": [
       "hover",
       "visible"
+    ],
+    "collapsible": [
+      "icon",
+      "capsule",
+      "offcanvas"
+    ],
+    "indicator": [
+      "brand",
+      "segment",
+      "segment-dot",
+      "segment-line",
+      "subtle"
+    ],
+    "panel": [
+      "docked",
+      "overlay"
     ]
   }
 }

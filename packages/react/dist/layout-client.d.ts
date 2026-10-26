@@ -1,12 +1,12 @@
 import React, { type HTMLAttributes, type RefAttributes, type ReactNode } from "react";
 import { type Orientation, type Responsive } from "./pure.js";
 import { type IconButtonProps } from "./actions.js";
-import { type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarItem } from "./navigation.js";
-declare function AppShellSidebarToggle({ className, ...props }: Omit<IconButtonProps, "icon" | "label" | "onClick">): React.JSX.Element | null;
-export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+import { type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarEntry, type SidebarCollapsible, type SidebarIndicator } from "./navigation.js";
+declare function AppShellSidebarToggle(props: Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant">): React.JSX.Element;
+export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, sidebarToggle, sidebarShortcut, sidebarIndicator, sidebarPanel, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     brand: ReactNode;
     navigation?: ReactNode;
-    navItems?: SidebarItem[];
+    navItems?: SidebarEntry[];
     currentNavId?: string;
     navLabel?: string;
     topbar?: ReactNode;
@@ -44,8 +44,22 @@ export declare function AppShell({ brand, navigation, navItems, currentNavId, na
     asideVariant?: SidebarVariant;
     /** A lateral em trilha de ícones. Controlado: quem passa decide (e o `onSidebarCollapsedChange` avisa). */
     sidebarCollapsed?: boolean;
-    /** AN-01: o botão de recolher na junção do menu com o conteúdo, e a trilha sozinha entre 1024 e 1279 de largura. */
-    sidebarCollapsible?: boolean;
+    /** AN-01: o botão de recolher na junção do menu com o conteúdo, e a trilha sozinha entre 1024 e 1279 de largura.
+     *  Desde o bloco 2 (4-A), também o JEITO de recolher: `true` ou `"icon"` (a trilha), `"capsule"` (a trilha em cápsula) ou
+     *  `"offcanvas"` (a lateral sai da tela). */
+    sidebarCollapsible?: boolean | SidebarCollapsible;
+    /** 4-B: onde o shell põe o botão de recolher. `"edge"` (o padrão): na junção da lateral com o conteúdo (no
+     *  `layout="sidebar"`, no começo da barra do conteúdo). `"none"`: o shell não põe nenhum, e o app põe o `Sidebar.Toggle`
+     *  onde quiser — dentro da lateral, ao lado da marca, ou no pé, como linha (`variant="item"`). */
+    sidebarToggle?: "edge" | "none";
+    /** 4-B: o atalho Ctrl+B (Cmd+B no Mac), que recolhe e abre a lateral (abaixo de 1024, abre e fecha a gaveta). Padrão:
+     *  ligado, com `sidebarCollapsible`. Não age quando a pessoa está digitando num campo. */
+    sidebarShortcut?: boolean;
+    /** 4-H: o desenho do item atual da lateral (o `indicator` da `Sidebar`). */
+    sidebarIndicator?: SidebarIndicator;
+    /** 4-F e 4-G: a trilha das seções com o painel (o `panel` da `Sidebar`) — os itens do primeiro nível de `navItems` viram
+     *  seções. `docked`: o painel ao lado (recolher esconde o painel); `overlay`: o painel abre por cima. */
+    sidebarPanel?: "docked" | "overlay";
     /** AN-01: começa recolhida, sem controlar. A escolha vale até a janela cruzar 1280. */
     defaultSidebarCollapsed?: boolean;
     /** AN-01: avisa cada troca — pelo botão, ou pela largura cruzando 1280. Guardar a preferência é do app. */

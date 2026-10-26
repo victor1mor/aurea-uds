@@ -8,11 +8,12 @@ import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import { useDirection } from "@base-ui/react/direction-provider";
 import { Autocomplete as BaseAutocomplete } from "@base-ui/react/autocomplete";
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
+import { Popover as BasePopover } from "@base-ui/react/popover";
 import { useValorResponsivo } from "./responsivo-runtime.js";
 import { cx, fundirRender, useAureaStrings, usePortalContainer } from "./internal.js";
 import { Kbd } from "./markup.js";
 import { Icon } from "./system.js";
-import { Button } from "./actions.js";
+import { Button, IconButton } from "./actions.js";
 import { Badge, Spinner } from "./feedback.js";
 import { SearchField } from "./inputs.js";
 // `overlays` PASSOU A VIR ANTES de `navigation` no DAG (18/08/2026, MAP.md §DAG). Ele só
@@ -219,30 +220,57 @@ export function TreeView({ items, defaultExpandedIds, onSelect, onExpand, select
         }) }));
     return renderNodes(items, 1);
 }
-function sidebarList(items, ctx, sub, labelledBy) {
-    return _jsx("ul", { className: cx("sidebar-list", sub && "sidebar-sub"), "aria-labelledby": labelledBy, children: items.map(it => {
-            const lid = ctx.baseId + it.id;
-            const filhos = it.items?.length ? it.items : undefined;
-            // Rótulo escondido vira `.sr-only` em vez de sumir do DOM: na lateral recolhida o item
-            // continua tendo nome para quem usa leitor de tela. Ícone sozinho não nomeia nada.
-            const oculto = (no) => ctx.collapsed ? _jsx("span", { className: "sr-only", children: no }) : no;
-            if (filhos && !it.href && !it.onClick && !it.render)
-                return _jsxs("li", { children: [_jsx("p", { id: lid, className: cx("sidebar-group-label", ctx.collapsed && "sr-only"), children: it.label }), sidebarList(filhos, ctx, false, lid)] }, it.id);
-            const ativo = it.id === ctx.current;
-            // O item escolhido desenha o ícone CHEIO (ADR-0053).
-            const miolo = _jsxs(_Fragment, { children: [it.icon && _jsx(Icon, { name: it.icon, weight: ativo ? "fill" : undefined }), _jsx("span", { className: cx("sidebar-label", ctx.collapsed && "sr-only"), children: it.label }), it.badge != null && oculto(it.badge)] });
-            const alvo = it.render
-                ? fundirRender(it.render, { id: lid, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, "a")
-                : it.href
-                    ? _jsx("a", { id: lid, href: it.href, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo })
-                    : _jsx("button", { id: lid, type: "button", className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo });
-            // NO TRILHO O NOME SÓ EXISTE NO TOOLTIP. Recolhida, a lateral manda o rótulo para `.sr-only`: quem
-            // usa leitor de tela continua ouvindo, e quem ENXERGA fica com um ícone mudo. A referência resolve
-            // isso com tooltip no botão de navegação dela, e é o que falta para um trilho de ícone não virar adivinhação.
-            // Só quando recolhida: com o rótulo visível ao lado, o tooltip repetiria o que já está na tela.
-            // `side="right"` porque a lateral encosta na borda esquerda — para cima o balão sairia do trilho.
-            return _jsxs("li", { children: [ctx.collapsed ? _jsx(Tooltip, { content: it.label, side: "right", children: alvo }) : alvo, filhos && sidebarList(filhos, ctx, true, lid)] }, it.id);
-        }) });
+// A DIVISÓRIA PARTE A LISTA (4-E, 25/10/2026). Na referência ela mora ENTRE grupos, fora das listas — então aqui cada trecho
+// entre duas divisórias é uma lista própria, e a divisória é um vão entre elas. Um `<li>` vazio de papel apagado no meio da
+// lista confundiria a conta de itens do leitor de tela ("3 de 9").
+function sidebarList(entradas, ctx, sub, labelledBy) {
+    const trechos = [[]];
+    for (const e of entradas)
+        e === "separator" ? trechos.push([]) : trechos[trechos.length - 1].push(e);
+    const listas = trechos.filter(t => t.length > 0);
+    const ul = (itens, k) => _jsx("ul", { className: cx("sidebar-list", sub && "sidebar-sub"), "aria-labelledby": labelledBy, children: itens.map(it => sidebarEntry(it, ctx)) }, k);
+    return listas.length < 2 ? ul(listas[0] ?? [], 0) : _jsx(_Fragment, { children: listas.map((t, k) => _jsxs(React.Fragment, { children: [k > 0 && _jsx("div", { className: "sidebar-separator", "aria-hidden": "true" }), ul(t, k)] }, k)) });
+}
+function sidebarEntry(it, ctx) {
+    const lid = ctx.baseId + it.id;
+    const filhos = it.items?.length ? it.items : undefined;
+    // Rótulo escondido vira `.sr-only` em vez de sumir do DOM: na lateral recolhida o item
+    // continua tendo nome para quem usa leitor de tela. Ícone sozinho não nomeia nada.
+    const oculto = (no) => ctx.collapsed ? _jsx("span", { className: "sr-only", children: no }) : no;
+    if (filhos && !it.href && !it.onClick && !it.render)
+        return _jsx(SidebarGroup, { item: it, filhos: filhos, lid: lid, ctx: ctx }, it.id);
+    const ativo = it.id === ctx.current;
+    // O item escolhido desenha o ícone CHEIO (ADR-0053). Com `avatar`, a foto toma o lugar do ícone (4-E).
+    const miolo = _jsxs(_Fragment, { children: [it.avatar ? _jsx(Avatar, { src: it.avatar.src, fallback: it.avatar.fallback, className: "sidebar-avatar" }) : it.icon && _jsx(Icon, { name: it.icon, weight: ativo ? "fill" : undefined }), _jsx("span", { className: cx("sidebar-label", ctx.collapsed && "sr-only"), children: it.label }), it.badge != null && oculto(it.badge)] });
+    const alvo = it.render
+        ? fundirRender(it.render, { id: lid, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, "a")
+        : it.href
+            ? _jsx("a", { id: lid, href: it.href, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo })
+            : _jsx("button", { id: lid, type: "button", className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo });
+    // NO TRILHO O NOME SÓ EXISTE NO TOOLTIP. Recolhida, a lateral manda o rótulo para `.sr-only`: quem
+    // usa leitor de tela continua ouvindo, e quem ENXERGA fica com um ícone mudo. A referência resolve
+    // isso com tooltip no botão de navegação dela, e é o que falta para um trilho de ícone não virar adivinhação.
+    // Só quando recolhida: com o rótulo visível ao lado, o tooltip repetiria o que já está na tela.
+    // `side="right"` porque a lateral encosta na borda esquerda — para cima o balão sairia do trilho.
+    // A SUBLISTA SOME NA TRILHA (2-A, o achado 13 do item 106): recolhido, o subitem sem ícone virava um botão vazio. A
+    // referência esconde a sublista quando a lateral recolhe; o item pai continua, com o nome na dica.
+    const acao = it.action != null && !ctx.collapsed;
+    return _jsxs("li", { className: cx(acao && "sidebar-item-with-action"), children: [ctx.collapsed ? _jsx(Tooltip, { content: it.label, side: "right", children: alvo }) : alvo, acao && _jsx("span", { className: "sidebar-item-action", children: it.action }), filhos && !ctx.collapsed && sidebarList(filhos, ctx, true, lid)] }, it.id);
+}
+// O GRUPO QUE DOBRA (4-D, 25/10/2026). O nome do grupo vira o botão de abrir e fechar — o padrão de divulgação (o mesmo
+// do `Collapsible`): `aria-expanded` no botão e `aria-controls` na lista, que fica no DOM com `hidden` quando fechada. A
+// seta aponta para baixo aberto e para o fim da linha fechado, como a do grupo que dobra da referência principal. A ação do grupo (o "+") fica ao lado do nome. Recolhida, o
+// nome vai para o leitor de tela e a lista aparece inteira, como o grupo de sempre: na trilha não há onde dobrar.
+function SidebarGroup({ item, filhos, lid, ctx }) {
+    const [aberto, setAberto] = React.useState(item.defaultOpen ?? true);
+    const direita = useDirection() === "rtl";
+    const dobra = !!item.collapsible && !ctx.collapsed;
+    const acao = item.action != null && !ctx.collapsed;
+    const nome = dobra
+        ? _jsxs("button", { id: lid, type: "button", className: "sidebar-group-label sidebar-group-toggle", "aria-expanded": aberto, "aria-controls": lid + "-lista", onClick: () => setAberto(v => !v), children: [_jsx("span", { children: item.label }), _jsx(Icon, { name: aberto ? "caret-down" : direita ? "caret-left" : "caret-right", size: "sm", className: "sidebar-group-caret" })] })
+        : _jsx("p", { id: lid, className: cx("sidebar-group-label", ctx.collapsed && "sr-only"), children: item.label });
+    const lista = sidebarList(filhos, ctx, false, lid);
+    return _jsxs("li", { children: [acao || dobra ? _jsxs("div", { className: "sidebar-group-head", children: [nome, acao && _jsx("span", { className: "sidebar-group-action", children: item.action })] }) : nome, dobra ? _jsx("div", { id: lid + "-lista", hidden: !aberto, children: lista }) : lista] });
 }
 // A GAVETA FECHA AO ESCOLHER (A-06, 23/09/2026). Abaixo de lg a lateral do `AppShell` é popover,
 // e a biblioteca a abria e NUNCA a fechava por código: `hidePopover` tinha zero ocorrências. O
@@ -271,22 +299,121 @@ function fecharGavetaAoEscolher(e) {
 // `Sidebar.Nav`, `Sidebar.Show`) sabem se a lateral está recolhida por este contexto, interno: o estado de recolher
 // com gancho, para o app, é o 4-B.
 const SidebarContext = React.createContext({ collapsed: false });
-export function Sidebar({ items, current, collapsed, variant = "floating", placement = "left", scrollbar = "hover", label, header, footer, children, className, onClick, ...props }) {
+const SidebarStateContext = React.createContext(null);
+/** O estado da lateral: dentro de um `Sidebar.Provider` ou de um `AppShell` com `sidebarCollapsible`. Fora deles, `null`. */
+export function useSidebar() { return React.useContext(SidebarStateContext); }
+// O ATALHO, como o da referência: Ctrl+B, e Cmd+B no Mac. A DIVERGÊNCIA, com o motivo: na referência ele vale até dentro de um
+// campo, e rouba o negrito de quem escreve num editor; aqui ele não age onde se digita.
+const ONDE_SE_DIGITA = "input,textarea,select,[contenteditable]:not([contenteditable=false])";
+function SidebarProvider({ collapsed, defaultCollapsed = false, onCollapsedChange, collapsible = "icon", shortcut = true, id, children }) {
+    const [interno, setInterno] = React.useState(defaultCollapsed);
+    const controlado = collapsed !== undefined;
+    const valor = controlado ? !!collapsed : interno;
+    const gerado = React.useId();
+    const aviso = useRef(onCollapsedChange);
+    aviso.current = onCollapsedChange;
+    const setCollapsed = React.useCallback((v) => { if (!controlado)
+        setInterno(v); aviso.current?.(v); }, [controlado]);
+    const toggle = React.useCallback(() => setCollapsed(!valor), [setCollapsed, valor]);
+    const alternar = useRef(toggle);
+    alternar.current = toggle;
+    React.useEffect(() => {
+        if (!shortcut || typeof window === "undefined")
+            return;
+        const f = (e) => {
+            if (e.defaultPrevented || e.altKey || e.shiftKey || !(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== "b")
+                return;
+            if (e.target?.closest?.(ONDE_SE_DIGITA))
+                return;
+            e.preventDefault();
+            alternar.current();
+        };
+        window.addEventListener("keydown", f);
+        return () => window.removeEventListener("keydown", f);
+    }, [shortcut]);
+    const estado = React.useMemo(() => ({ collapsed: valor, setCollapsed, toggle, collapsible, id: id ?? "aurea-sidebar" + gerado.replace(/:/g, "") }), [valor, setCollapsed, toggle, collapsible, id, gerado]);
+    return _jsx(SidebarStateContext.Provider, { value: estado, children: children });
+}
+// O BOTÃO DE RECOLHER EM QUALQUER LUGAR (4-B). `icon`: o botão de ícone das quinze (o desenho de lateral, sem fundo) — ao lado
+// do título (1 e 12) ou dentro da lateral, ao lado da marca (13 a 15). `item`: uma linha da lista, "Recolher o menu", no pé da
+// lateral (a 11). Fora de um provedor, não desenha nada.
+// O `variant` aqui é o jeito do botão ("icon" ou "item"); a aparência é sempre a do botão fantasma, como o das quinze.
+function SidebarToggle({ variant = "icon", className, onClick, ...props }) {
+    const estado = React.useContext(SidebarStateContext);
+    const { collapsed } = React.useContext(SidebarContext);
+    const s = useAureaStrings();
+    if (!estado)
+        return null;
+    const rotulo = estado.collapsed ? s.sidebarExpand : s.sidebarCollapse;
+    const comum = { "aria-expanded": !estado.collapsed, "aria-controls": estado.id, onClick: (e) => { onClick?.(e); if (!e.defaultPrevented)
+            estado.toggle(); } };
+    if (variant === "item") {
+        // A linha é um botão do HTML: o que só o `IconButton` entende (tamanho, aparência, ocupado) não passa para ele.
+        const { size: _t, appearance: _a, tone: _o, loading: _l, leadingIcon: _li, trailingIcon: _ti, href: _h, fullWidth: _f, quiet: _q, grow: _g, render: _r, target: _tg, rel: _rl, download: _d, pressed: _p, share: _s, kbd: _k, ...html } = props;
+        const linha = _jsxs("button", { type: "button", ...html, ...comum, className: cx("sidebar-item", "sidebar-toggle-item", className), children: [_jsx(Icon, { name: "sidebar-simple" }), _jsx("span", { className: cx("sidebar-label", collapsed && "sr-only"), children: rotulo })] });
+        return collapsed ? _jsx(Tooltip, { content: rotulo, side: "right", children: linha }) : linha;
+    }
+    return _jsx(IconButton, { ...props, ...comum, className: cx("sidebar-collapse-trigger", className), icon: "sidebar-simple", label: rotulo });
+}
+// A TRILHA DAS SEÇÕES E O PAINEL (4-F e 4-G, 25/10/2026 — as 6 e 7 das quinze). Com `panel`, os itens do primeiro nível são
+// SEÇÕES: a trilha mostra o ícone de cada uma, e a lista da seção mora num painel. `docked` (a 6): o painel fica ao lado da
+// trilha, e recolher a lateral esconde só o painel. `overlay` (a 7): o painel abre POR CIMA, ao lado do ícone, numa janelinha
+// que segura o foco e fecha com o Esc ou com um clique fora (a janelinha da Aurea, o motor dela). A referência faz a 6 com duas
+// laterais lado a lado (a trilha que escolhe e a lista da escolhida); a 7 não tem nela — vem da bancada das quinze.
+// A seção da página atual leva `aria-current="true"` (a "atual de um conjunto"), e não `page`: ela não é a página.
+const contem = (it, id) => !!id && (it.id === id || !!it.items?.some(f => f !== "separator" && contem(f, id)));
+function SidebarSectionButton({ sec, ctx, aberta, painelId, onEscolher, recolhida }) {
+    return _jsx(Tooltip, { content: sec.label, side: "right", children: _jsxs("button", { type: "button", className: "sidebar-item", "aria-current": contem(sec, ctx.current) ? "true" : undefined, "aria-expanded": !recolhida && aberta, "aria-controls": painelId, onClick: onEscolher, children: [sec.avatar ? _jsx(Avatar, { src: sec.avatar.src, fallback: sec.avatar.fallback, className: "sidebar-avatar" }) : sec.icon && _jsx(Icon, { name: sec.icon, weight: contem(sec, ctx.current) ? "fill" : undefined }), _jsx("span", { className: "sidebar-label sr-only", children: sec.label })] }) });
+}
+function SidebarSectionFlyout({ sec, ctx }) {
+    const portal = usePortalContainer();
+    const atual = contem(sec, ctx.current);
+    const tituloId = ctx.baseId + sec.id + "-titulo";
+    return _jsxs(BasePopover.Root, { children: [_jsx(Tooltip, { content: sec.label, side: "right", children: _jsxs(BasePopover.Trigger, { render: _jsx("button", { type: "button", className: "sidebar-item", "aria-current": atual ? "true" : undefined }), children: [sec.avatar ? _jsx(Avatar, { src: sec.avatar.src, fallback: sec.avatar.fallback, className: "sidebar-avatar" }) : sec.icon && _jsx(Icon, { name: sec.icon, weight: atual ? "fill" : undefined }), _jsx("span", { className: "sidebar-label sr-only", children: sec.label })] }) }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { className: "positioner", side: "right", align: "start", sideOffset: 8, children: _jsxs(BasePopover.Popup, { className: "popover sidebar-flyout", "aria-labelledby": tituloId, children: [_jsx("p", { id: tituloId, className: "sidebar-panel-title", children: sec.label }), _jsx("nav", { className: "sidebar-nav", "aria-labelledby": tituloId, children: sidebarList(sec.items ?? [], { ...ctx, collapsed: false }) })] }) }) })] });
+}
+export function Sidebar({ items, current, collapsed, collapsible, indicator = "brand", panel, variant = "floating", placement = "left", scrollbar = "hover", label, header, footer, children, className, onClick, id, ...props }) {
     const s = useAureaStrings();
     const baseId = React.useId();
-    const lista = items && items.length > 0 && _jsx("nav", { className: "sidebar-nav", "aria-label": label ?? s.sidebarLabel, children: sidebarList(items, { baseId, current, collapsed }) });
+    // Dentro de um provedor, a lateral segue o estado dele; a prop escrita ganha (quem escreveu as duas quis a prop).
+    const estado = React.useContext(SidebarStateContext);
+    const recolhida = collapsed ?? estado?.collapsed ?? false;
+    const forma = collapsible ?? estado?.collapsible ?? "icon";
+    const lista = items && items.length > 0 && _jsx("nav", { className: "sidebar-nav", "aria-label": label ?? s.sidebarLabel, children: sidebarList(items, { baseId, current, collapsed: recolhida }) });
     const partes = header != null || footer != null;
-    const contexto = React.useMemo(() => ({ collapsed: !!collapsed, current }), [collapsed, current]);
-    return _jsx("aside", { className: cx("sidebar", variant !== "floating" && `sidebar-${variant}`, collapsed && "sidebar-collapsed", placement === "right" && "sidebar-right", scrollbar === "visible" && "sidebar-scrollbar-visible", partes && "sidebar-with-parts", className), "data-placement": placement, onClick: e => { onClick?.(e); fecharGavetaAoEscolher(e); }, ...props, children: _jsx(SidebarContext.Provider, { value: contexto, children: partes
+    const contexto = React.useMemo(() => ({ collapsed: recolhida, current }), [recolhida, current]);
+    const secoes = panel ? (items ?? []).filter((it) => it !== "separator") : [];
+    const [escolhida, setEscolhida] = React.useState(() => secoes.find(x => contem(x, current))?.id ?? secoes[0]?.id);
+    const naTrilha = React.useMemo(() => ({ collapsed: true, current }), [current]);
+    if (panel) {
+        const secao = secoes.find(x => x.id === escolhida) ?? secoes[0];
+        const painelId = baseId.replace(/:/g, "") + "-painel";
+        const ctxTrilha = { baseId, current, collapsed: true };
+        const trilha = _jsx("nav", { className: "sidebar-nav", "aria-label": label ?? s.sidebarLabel, children: _jsx("ul", { className: "sidebar-list", children: secoes.map(sec => _jsx("li", { children: panel === "overlay"
+                        ? _jsx(SidebarSectionFlyout, { sec: sec, ctx: ctxTrilha })
+                        : _jsx(SidebarSectionButton, { sec: sec, ctx: ctxTrilha, aberta: sec.id === secao?.id, painelId: painelId, recolhida: recolhida, onEscolher: () => { setEscolhida(sec.id); if (recolhida)
+                                estado?.setCollapsed(false); } }) }, sec.id)) }) });
+        return _jsxs("aside", { id: id ?? estado?.id, className: cx("sidebar", variant !== "floating" && `sidebar-${variant}`, `sidebar-panel-${panel}`, recolhida && "sidebar-collapsed", indicator !== "brand" && `sidebar-indicator-${indicator}`, placement === "right" && "sidebar-right", scrollbar === "visible" && "sidebar-scrollbar-visible", className), "data-placement": placement, onClick: e => { onClick?.(e); fecharGavetaAoEscolher(e); }, ...props, children: [_jsx("div", { className: "sidebar-rail-box", children: _jsxs(SidebarContext.Provider, { value: naTrilha, children: [header != null && _jsx("div", { className: "sidebar-header", children: header }), _jsxs("div", { className: "sidebar-body", children: [trilha, children] }), footer != null && _jsx("div", { className: "sidebar-footer", children: footer })] }) }), panel === "docked" && secao && _jsxs("div", { className: "sidebar-panel", id: painelId, hidden: recolhida, children: [_jsx("p", { className: "sidebar-panel-title", id: painelId + "-titulo", children: secao.label }), _jsx("nav", { className: "sidebar-nav", "aria-labelledby": painelId + "-titulo", children: sidebarList(secao.items ?? [], { baseId, current, collapsed: false }) })] })] });
+    }
+    return _jsx("aside", { id: id ?? estado?.id, className: cx("sidebar", variant !== "floating" && `sidebar-${variant}`, recolhida && "sidebar-collapsed", forma !== "icon" && `sidebar-collapse-${forma}`, indicator !== "brand" && `sidebar-indicator-${indicator}`, placement === "right" && "sidebar-right", scrollbar === "visible" && "sidebar-scrollbar-visible", partes && "sidebar-with-parts", className), "data-placement": placement, onClick: e => { onClick?.(e); fecharGavetaAoEscolher(e); }, ...props, children: _jsx(SidebarContext.Provider, { value: contexto, children: partes
                 ? _jsxs(_Fragment, { children: [header != null && _jsx("div", { className: "sidebar-header", children: header }), _jsxs("div", { className: "sidebar-body", children: [lista, children] }), footer != null && _jsx("div", { className: "sidebar-footer", children: footer })] })
                 : _jsxs(_Fragment, { children: [lista, children] }) }) });
 }
+// As partes moram LOGO DEPOIS da lateral (as funções sobem no módulo): assim a leitura do check 46 alcança, a partir da
+// `Sidebar`, os ícones fixos delas — o `sidebar-simple` do `Sidebar.Toggle` ficava sem ficha que o alcançasse.
+Sidebar.Brand = SidebarBrand;
+Sidebar.User = SidebarUser;
+Sidebar.Nav = SidebarNav;
+Sidebar.Show = SidebarShow;
+Sidebar.Provider = SidebarProvider;
+Sidebar.Toggle = SidebarToggle;
 /** A marca do app no topo da lateral: o `logo` (a letra, o desenho, a imagem), o nome e o subtítulo. `variant="tile"` (o
  *  padrão, a 11 das quinze) põe o logo num quadrinho na cor primária; `plain` (da 8 à 10) é o desenho solto e o nome
  *  grande. Recolhida, fica só o logo. */
-function SidebarBrand({ logo, name, description, variant = "tile", className, ...props }) {
+// `action` (o bloco 2, 0.44.0): o botão de recolher ao lado da marca, dentro da lateral (as 13, 14 e 15 das quinze) — o mesmo
+// lugar que a `Sidebar.User` dá ao "sair". Recolhida, ele desce para baixo do logo.
+function SidebarBrand({ logo, name, description, variant = "tile", action, className, ...props }) {
     const { collapsed } = React.useContext(SidebarContext);
-    return _jsxs("div", { className: cx("sidebar-brand", variant === "plain" && "sidebar-brand-plain", className), ...props, children: [_jsx("span", { className: "sidebar-brand-logo", "aria-hidden": "true", children: logo }), _jsxs("span", { className: cx("sidebar-brand-text", collapsed && "sr-only"), children: [_jsx("strong", { className: "sidebar-brand-name", children: name }), description != null && _jsx("span", { className: "sidebar-brand-description", children: description })] })] });
+    return _jsxs("div", { className: cx("sidebar-brand", variant === "plain" && "sidebar-brand-plain", action != null && "sidebar-brand-with-action", className), ...props, children: [_jsx("span", { className: "sidebar-brand-logo", "aria-hidden": "true", children: logo }), _jsxs("span", { className: cx("sidebar-brand-text", collapsed && "sr-only"), children: [_jsx("strong", { className: "sidebar-brand-name", children: name }), description != null && _jsx("span", { className: "sidebar-brand-description", children: description })] }), action] });
 }
 /** A pessoa no pé da lateral, numa caixinha: a foto (`avatar`), o nome, o papel e a ação (o sair). Recolhida, a foto e a ação, empilhadas. */
 function SidebarUser({ avatar, name, description, action, className, ...props }) {
@@ -304,10 +431,6 @@ function SidebarShow({ when, children }) {
     const { collapsed } = React.useContext(SidebarContext);
     return (when === "collapsed") === collapsed ? _jsx(_Fragment, { children: children }) : null;
 }
-Sidebar.Brand = SidebarBrand;
-Sidebar.User = SidebarUser;
-Sidebar.Nav = SidebarNav;
-Sidebar.Show = SidebarShow;
 const LEGADO = {
     flat: ["edge", "none"], surface: ["floating", "circle"], pill: ["floating", "pill"], dock: ["floating", "circle"]
 };
@@ -316,7 +439,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
     const [layout, marca0] = variant in LEGADO ? LEGADO[variant] : [variant, indicator];
     // O indicador explícito ganha do que o nome legado implica: quem escreveu os dois quis os dois.
     const ind = indicator !== "none" ? indicator : marca0;
-    return _jsx("nav", { className: cx("bottom-nav", layout === "edge" && "bottom-nav-edge", layout !== "edge" && width === "content" && "bottom-nav-content", `bottom-nav-ind-${ind}`, className), "aria-label": label ?? s.bottomNavLabel, ...props, children: items.map(it => {
+    return _jsx("nav", { className: cx("bottom-nav", layout === "edge" && "bottom-nav-edge", layout !== "edge" && width === "content" && "bottom-nav-content", `bottom-nav-ind-${ind}`, className), "aria-label": label ?? s.bottomNavLabel, ...props, children: items.filter((it) => it !== "separator").map(it => {
             const ativo = it.id === current;
             // O CONTADOR PENDURA NO ÍCONE, e é por isso que existe esta caixa. Pendurado no ITEM (a
             // primeira versão), `50%` cai no meio do RÓTULO quando o item é linha — o Victor viu o número

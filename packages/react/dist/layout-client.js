@@ -3,7 +3,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
-import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Separator as BaseSeparator } from "@base-ui/react/separator";
 import { useDirection } from "@base-ui/react/direction-provider";
 import { cx, useAureaStrings } from "./internal.js";
@@ -160,22 +160,24 @@ function useLargura(query) {
 // aprovado"*). No `layout="sidebar"` ele substitui a bolinha da junção: com a barra no conteúdo, o shell o põe no começo
 // dela; sem barra, o app o põe ao lado do próprio título (`AppShell.SidebarToggle`). Abaixo de 1024 ele some — ali a
 // lateral é gaveta, e quem abre é o botão da gaveta.
-const ShellToggleContext = React.createContext(null);
-function AppShellSidebarToggle({ className, ...props }) {
-    const c = React.useContext(ShellToggleContext);
-    if (!c)
-        return null;
-    return _jsx(IconButton, { className: cx("sidebar-collapse-trigger", className), icon: "sidebar-simple", label: c.rotulo, "aria-expanded": !c.efetiva, "aria-controls": SHELL_NAV_ID, onClick: c.alternar, ...props });
+// Desde o bloco 2 (4-B, 25/10/2026), é o `Sidebar.Toggle`: o shell põe a lateral num `Sidebar.Provider`, e o botão lê o estado
+// dele — o mesmo botão serve ao lado do título, dentro da lateral (ao lado da marca) e no pé, como linha.
+function ProvedorDaLateral({ ligado, children, ...p }) {
+    return ligado ? _jsx(Sidebar.Provider, { id: SHELL_NAV_ID, ...p, children: children }) : _jsx(_Fragment, { children: children });
 }
-export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant = "floating", topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, layout = "app", sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant = "surface", aside, asideLabel, asideVariant, children, className, ...props }) {
+function AppShellSidebarToggle(props) { return _jsx(Sidebar.Toggle, { ...props }); }
+export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant = "floating", topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, layout = "app", sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, sidebarToggle = "edge", sidebarShortcut = true, sidebarIndicator, sidebarPanel, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant = "surface", aside, asideLabel, asideVariant, children, className, ...props }) {
     const s = useAureaStrings();
     const docs = layout === "docs", lateral = layout === "sidebar";
     useGavetaFechaNoDesktop(docs);
     const controlado = sidebarCollapsed !== undefined;
+    // O jeito de recolher (4-A): `true` é a trilha de sempre.
+    const forma = sidebarCollapsible === true ? "icon" : sidebarCollapsible || undefined;
+    const recolhe = !!forma;
     // `null` = ninguém escolheu, e vale a largura.
     const [escolha, setEscolha] = useState(defaultSidebarCollapsed ?? null);
     const media = useLargura(MEDIA_MEDIA), estreita = useLargura(MEDIA_ESTREITA);
-    const recolhida = controlado ? !!sidebarCollapsed : (escolha ?? (!!sidebarCollapsible && media));
+    const recolhida = controlado ? !!sidebarCollapsed : (escolha ?? (recolhe && media));
     // NA GAVETA A LATERAL NUNCA É TRILHA. Abaixo de 1024 ela abre por cima de tudo, com espaço para o
     // nome; recolhida ali, era uma gaveta de ícones sem nome — também para quem já passava
     // `sidebarCollapsed` (medido em 03/10/2026, na mesma conferência).
@@ -185,16 +187,29 @@ export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, 
     // Cruzar 1280 é mudar de contexto: a escolha da pessoa sai e a largura volta a mandar. Pelo
     // evento do navegador, e não comparando desenhos, para a hidratação não contar como cruzamento.
     useEffect(() => {
-        if (!sidebarCollapsible || typeof window === "undefined" || typeof window.matchMedia !== "function")
+        if (!recolhe || typeof window === "undefined" || typeof window.matchMedia !== "function")
             return;
         const mq = window.matchMedia(MEDIA_MEDIA);
         const aoCruzar = (e) => { if (!controlado)
             setEscolha(null); aviso.current?.(e.matches); };
         mq.addEventListener?.("change", aoCruzar);
         return () => mq.removeEventListener?.("change", aoCruzar);
-    }, [sidebarCollapsible, controlado]);
-    const alternar = () => { const nova = !recolhida; if (!controlado)
-        setEscolha(nova); onSidebarCollapsedChange?.(nova); };
+    }, [recolhe, controlado]);
+    // QUEM MUDA O ESTADO: o botão da junção, o `Sidebar.Toggle` em qualquer lugar e o Ctrl+B passam todos por aqui (4-B).
+    // Abaixo de 1024 a lateral é a gaveta: recolher ali é abrir ou fechar a gaveta, como o "mobile" da referência.
+    const definir = (nova) => {
+        if (estreita) {
+            try {
+                document.getElementById(SHELL_NAV_ID)?.togglePopover();
+            }
+            catch { /* motor sem popover */ }
+            return;
+        }
+        if (!controlado)
+            setEscolha(nova);
+        onSidebarCollapsedChange?.(nova);
+    };
+    const alternar = () => definir(!recolhida);
     const rotulo = efetiva ? s.sidebarExpand : s.sidebarCollapse;
     // A seta aponta para onde a lateral vai: recolher é para o começo da linha, abrir é para o fim. Na
     // escrita da direita para a esquerda o começo é a direita — pela direção do provedor, e não por
@@ -208,9 +223,9 @@ export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, 
     // No arranjo, o topo é o pequeno (`size="sm"`), e o botão também: com o tamanho de sempre ele ficava 4 maior que os
     // vizinhos e fora da linha deles (medido a 375, sem toque; com toque, todos sobem para 44).
     const botaoDaGaveta = _jsx(IconButton, { className: "nav-toggle", icon: "list", label: s.navigationToggle, popoverTarget: SHELL_NAV_ID, ...(docs ? { size: "sm" } : {}) });
-    return _jsx("div", { className: cx("app-shell", layout === "docs" && "app-shell-docs", lateral && "app-shell-lateral", !lateral && topbarVariant === "flush" && "app-shell-flush", sidebarCollapsible && "app-shell-collapsible", aside != null && "app-shell-with-aside", className), ...props, children: _jsxs(ShellToggleContext.Provider, { value: sidebarCollapsible ? { alternar, efetiva, rotulo } : null, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), !lateral && _jsxs(Header, { variant: topbarVariant, divider: topbarDivider, tabs: topbarTabs, currentTab: topbarCurrentTab, tabsLabel: topbarTabsLabel, tabsEnd: topbarTabsEnd, ...(docs ? { maxWidth: "docs", size: "sm" } : {}), brand: docs ? brand : _jsxs(_Fragment, { children: [botaoDaGaveta, brand] }), children: [topbar, docs && botaoDaGaveta] }), sidebarCollapsible && !lateral && _jsx("div", { className: "sidebar-toggle-slot", children: _jsx(Tooltip, { content: rotulo, side: "right", children: _jsx(IconButton, { className: "sidebar-toggle", size: "xs", icon: paraOComeco === direita ? "caret-right" : "caret-left", label: rotulo, "aria-expanded": !efetiva, "aria-controls": SHELL_NAV_ID, onClick: alternar }) }) }), _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, scrollbar: sidebarScrollbar, collapsed: efetiva, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, header: lateral ? brand : undefined, footer: sidebarFooter, children: navigation }), docs && aside != null && _jsx("div", { className: "docs-toc-bar", children: _jsxs("button", { type: "button", className: "docs-toc-toggle", popoverTarget: SHELL_TOC_ID, children: [_jsx(Icon, { name: "list-bullets" }), _jsx("span", { className: "docs-toc-current", "data-toc-current": "", children: asideLabel ?? s.tocLabel }), _jsx(Icon, { name: "caret-down" })] }) }), lateral
+    return _jsx("div", { className: cx("app-shell", layout === "docs" && "app-shell-docs", lateral && "app-shell-lateral", !lateral && topbarVariant === "flush" && "app-shell-flush", recolhe && "app-shell-collapsible", aside != null && "app-shell-with-aside", className), ...props, children: _jsxs(ProvedorDaLateral, { ligado: recolhe, collapsed: efetiva, onCollapsedChange: definir, collapsible: forma, shortcut: sidebarShortcut, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), !lateral && _jsxs(Header, { variant: topbarVariant, divider: topbarDivider, tabs: topbarTabs, currentTab: topbarCurrentTab, tabsLabel: topbarTabsLabel, tabsEnd: topbarTabsEnd, ...(docs ? { maxWidth: "docs", size: "sm" } : {}), brand: docs ? brand : _jsxs(_Fragment, { children: [botaoDaGaveta, brand] }), children: [topbar, docs && botaoDaGaveta] }), recolhe && !lateral && sidebarToggle !== "none" && _jsx("div", { className: "sidebar-toggle-slot", children: _jsx(Tooltip, { content: rotulo, side: "right", children: _jsx(IconButton, { className: "sidebar-toggle", size: "xs", icon: paraOComeco === direita ? "caret-right" : "caret-left", label: rotulo, "aria-expanded": !efetiva, "aria-controls": SHELL_NAV_ID, onClick: alternar }) }) }), _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, scrollbar: sidebarScrollbar, collapsed: efetiva, collapsible: forma, indicator: sidebarIndicator, panel: sidebarPanel, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, header: lateral ? brand : undefined, footer: sidebarFooter, children: navigation }), docs && aside != null && _jsx("div", { className: "docs-toc-bar", children: _jsxs("button", { type: "button", className: "docs-toc-toggle", popoverTarget: SHELL_TOC_ID, children: [_jsx(Icon, { name: "list-bullets" }), _jsx("span", { className: "docs-toc-current", "data-toc-current": "", children: asideLabel ?? s.tocLabel }), _jsx(Icon, { name: "caret-down" })] }) }), lateral
                     ? _jsxs("div", { className: "app-shell-column", children: [topbar != null
-                                ? _jsx(Header, { variant: "flush", size: "sm", divider: topbarDivider, brand: _jsxs(_Fragment, { children: [botaoDaGaveta, _jsx(AppShellSidebarToggle, {})] }), children: topbar })
+                                ? _jsx(Header, { variant: "flush", size: "sm", divider: topbarDivider, brand: _jsxs(_Fragment, { children: [botaoDaGaveta, sidebarToggle !== "none" && _jsx(AppShellSidebarToggle, {})] }), children: topbar })
                                 : _jsxs("div", { className: "app-shell-narrow-bar", children: [botaoDaGaveta, brand] }), _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children })] })
                     : _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children }), aside != null && _jsx(Sidebar, { placement: "right", variant: asideVariant ?? sidebarVariant, className: "app-shell-aside", "aria-label": asideLabel ?? s.tocLabel, ...(docs ? { id: SHELL_TOC_ID, popover: "auto", onToggle: focoDaGaveta } : {}), children: aside })] }) });
 }

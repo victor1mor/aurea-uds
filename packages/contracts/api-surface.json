@@ -5,9 +5,9 @@
   "totals": {
     "modulos": 40,
     "componentes": 145,
-    "hooks": 9,
-    "aliasesLiterais": 112,
-    "propsDistintas": 383
+    "hooks": 10,
+    "aliasesLiterais": 114,
+    "propsDistintas": 387
   },
   "aliases": {
     "ButtonVariant": {
@@ -2473,6 +2473,11 @@
         "compact"
       ]
     },
+    "SidebarEntry": {
+      "module": "navigation-client",
+      "raw": "SidebarItem | \"separator\"",
+      "union": null
+    },
     "SidebarVariant": {
       "module": "navigation-client",
       "raw": "\"floating\" | \"flush\" | \"plain\"",
@@ -2496,6 +2501,26 @@
       "union": [
         "left",
         "right"
+      ]
+    },
+    "SidebarCollapsible": {
+      "module": "navigation-client",
+      "raw": "\"icon\" | \"capsule\" | \"offcanvas\"",
+      "union": [
+        "icon",
+        "capsule",
+        "offcanvas"
+      ]
+    },
+    "SidebarIndicator": {
+      "module": "navigation-client",
+      "raw": "\"brand\" | \"segment\" | \"segment-dot\" | \"segment-line\" | \"subtle\"",
+      "union": [
+        "brand",
+        "segment",
+        "segment-dot",
+        "segment-line",
+        "subtle"
       ]
     },
     "BottomNavVariant": {
@@ -7340,7 +7365,7 @@
             {
               "name": "navItems",
               "optional": true,
-              "type": "SidebarItem[]",
+              "type": "SidebarEntry[]",
               "values": null
             },
             {
@@ -7466,8 +7491,44 @@
             {
               "name": "sidebarCollapsible",
               "optional": true,
+              "type": "boolean | SidebarCollapsible",
+              "values": null
+            },
+            {
+              "name": "sidebarToggle",
+              "optional": true,
+              "type": "\"edge\" | \"none\"",
+              "values": [
+                "edge",
+                "none"
+              ]
+            },
+            {
+              "name": "sidebarShortcut",
+              "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "sidebarIndicator",
+              "optional": true,
+              "type": "SidebarIndicator",
+              "values": [
+                "brand",
+                "segment",
+                "segment-dot",
+                "segment-line",
+                "subtle"
+              ]
+            },
+            {
+              "name": "sidebarPanel",
+              "optional": true,
+              "type": "\"docked\" | \"overlay\"",
+              "values": [
+                "docked",
+                "overlay"
+              ]
             },
             {
               "name": "defaultSidebarCollapsed",
@@ -9614,7 +9675,7 @@
             {
               "name": "items",
               "optional": false,
-              "type": "SidebarItem[]",
+              "type": "SidebarEntry[]",
               "values": null
             },
             {
@@ -9860,7 +9921,7 @@
             {
               "name": "items",
               "optional": true,
-              "type": "SidebarItem[]",
+              "type": "SidebarEntry[]",
               "values": null
             },
             {
@@ -9908,6 +9969,37 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "collapsible",
+              "optional": true,
+              "type": "SidebarCollapsible",
+              "values": [
+                "icon",
+                "capsule",
+                "offcanvas"
+              ]
+            },
+            {
+              "name": "indicator",
+              "optional": true,
+              "type": "SidebarIndicator",
+              "values": [
+                "brand",
+                "segment",
+                "segment-dot",
+                "segment-line",
+                "subtle"
+              ]
+            },
+            {
+              "name": "panel",
+              "optional": true,
+              "type": "\"docked\" | \"overlay\"",
+              "values": [
+                "docked",
+                "overlay"
+              ]
             },
             {
               "name": "header",
@@ -10093,7 +10185,9 @@
           ]
         }
       ],
-      "hooks": [],
+      "hooks": [
+        "useSidebar"
+      ],
       "clientDirective": false
     },
     "navigation": {
