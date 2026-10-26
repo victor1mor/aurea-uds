@@ -1126,7 +1126,12 @@ img,svg { display:block; }
 .sidebar-list { display:flex; flex-direction:column; gap:var(--space-1); margin:0; padding:0; list-style:none; }
 /* `width:100%` + `font:inherit` + `border:0`: o item também é <button> quando não navega, e
    sem isto o botão vem com a caixa do navegador e quebra a fila. */
-.sidebar-item { display:flex; align-items:center; gap:var(--space-2); width:100%; min-height:var(--control-h-md); padding:var(--space-1) var(--space-3); border:0; border-radius:calc(var(--radius-card) - var(--space-1)); background:transparent; color:var(--sidebar-foreground); font:inherit; font-size:var(--text-sm); text-align:start; text-decoration:none; cursor:pointer; }
+/* 2-A (o item 102, 25/10/2026): o texto do item começa a `--sidebar-item-x` da borda dele, e o fio do item escolhido começa
+   no mesmo ponto. Era 12 o texto e 15 o fio (um número cru): o Victor viu que não começavam juntos. Com 16 (`--space-4`) os
+   dois começam onde a curva da cápsula já acabou (a 16 da borda o fundo fica 0,11 px acima da base) — a 12 o fio sairia da
+   curva. O título do grupo, a marca e o título do painel seguem o mesmo recuo, para a coluna continuar uma só. */
+.sidebar { --sidebar-item-x:var(--space-4); }
+.sidebar-item { display:flex; align-items:center; gap:var(--space-2); width:100%; min-height:var(--control-h-md); padding:var(--space-1) var(--sidebar-item-x, var(--space-3)); border:0; border-radius:calc(var(--radius-card) - var(--space-1)); background:transparent; color:var(--sidebar-foreground); font:inherit; font-size:var(--text-sm); text-align:start; text-decoration:none; cursor:pointer; }
 .sidebar-item .icon { flex:none; opacity:.8; }
 /* min-width:0 é o que deixa o ellipsis funcionar dentro do flex; sem ele o nome longo empurra
    o acessório para fora da caixa em vez de cortar. */
@@ -1169,7 +1174,7 @@ img,svg { display:block; }
 /* O título de grupo da lateral é o da referência (ADR-0067, decisão do Victor de 13/10/2026: "igual ao dela"):
    letra 14, peso médio, SEM maiúsculas, na cor do texto da lateral — mais forte que o item, que é
    esmaecido; 16 antes do grupo. Era 12, em maiúsculas espaçadas, esmaecido. */
-.sidebar-group-label { margin:var(--space-4) var(--space-3) var(--space-1); color:var(--sidebar-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); }
+.sidebar-group-label { margin:var(--space-4) var(--sidebar-item-x, var(--space-3)) var(--space-1); color:var(--sidebar-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); }
 .sidebar-sub { padding-inline-start:var(--space-5); }
 /* RECOLHIDA — a lateral vira trilho de ícones. O rótulo NÃO some do DOM: o React troca a
    classe dele por `.sr-only`, então quem usa leitor de tela continua ouvindo o nome. Ícone
@@ -1195,7 +1200,7 @@ img,svg { display:block; }
 .sidebar-body { flex:1 1 auto; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:var(--space-1); }
 .sidebar-footer { gap:var(--space-3); padding-block-start:var(--space-3); }
 /* A marca do app: o quadrinho na cor primária, com a letra na fonte de título, o nome e o subtítulo. */
-.sidebar-brand { display:flex; align-items:center; gap:var(--space-3); min-width:0; padding:var(--space-2) var(--space-3); }
+.sidebar-brand { display:flex; align-items:center; gap:var(--space-3); min-width:0; padding:var(--space-2) var(--sidebar-item-x, var(--space-3)); }
 .sidebar-brand-logo { display:grid; place-items:center; flex:none; inline-size:var(--control-h-md); block-size:var(--control-h-md); overflow:hidden; border-radius:var(--radius-lg); background:var(--primary); color:var(--primary-foreground); font-family:var(--font-heading); font-weight:var(--weight-bold); }
 /* `plain` (da 8 à 10 das quinze): o desenho solto, sem o quadrinho, e o nome na fonte e no tamanho de título. */
 .sidebar-brand-plain { gap:var(--space-2); }
@@ -1209,7 +1214,68 @@ img,svg { display:block; }
 /* Recolhida: a marca vira só o quadrinho, e a pessoa, a foto e a ação empilhadas, sem a caixinha. Os nomes vão para o
    leitor de tela (o React troca a classe por `.sr-only`, como o rótulo do item). */
 .sidebar-collapsed .sidebar-brand { justify-content:center; padding-inline:0; }
+/* A marca com a ação (0.44.0): o botão de recolher ao lado do nome; recolhida, ele desce para baixo do logo. */
+.sidebar-collapsed .sidebar-brand-with-action { flex-direction:column; gap:var(--space-2); }
 .sidebar-collapsed .sidebar-user { flex-direction:column; padding-inline:0; background:transparent; }
+/* O BLOCO 2 DA LATERAL (25/10/2026) — o que faltava das quinze laterais que o Victor aprovou em 21/10/2026 (item 107), como
+   variação: o padrão de hoje não muda. A referência principal não tem lateral; a anatomia e o comportamento são os da
+   segunda da fila (o provedor, o atalho, os jeitos de recolher, a ação do grupo e do item), com a aparência da Aurea.
+   4-E — a foto do item (o time, a pessoa) no lugar do ícone: 24, o degrau que cabe na linha de 36 com folga. */
+.sidebar-item > .sidebar-avatar { --step-avatar:var(--space-6); --step-avatar-fs:var(--text-xs); flex:none; }
+/* 4-E — a divisória entre seções: um vão, sem linha (ADR-0072). Ela parte a lista em duas; o vão soma 16 aos 4 de sempre. */
+.sidebar-separator { flex:none; block-size:var(--space-4); }
+/* 4-D — a ação do item ("⋯"): fora do link, presa à ponta da linha, no meio da altura dela. O texto do item para antes dela. */
+.sidebar-item-with-action { position:relative; }
+.sidebar-item-with-action > .sidebar-item { padding-inline-end:calc(var(--control-h-sm) + var(--space-2)); }
+.sidebar-item-action { position:absolute; inset-block-start:0; inset-inline-end:var(--space-1); display:flex; align-items:center; block-size:var(--control-h-md); }
+/* 4-D — o grupo que dobra e a ação do grupo ("+"): o nome e a ação numa fila, com a margem que o nome tinha sozinho. */
+.sidebar-group-head { display:flex; align-items:center; gap:var(--space-1); margin:var(--space-4) var(--space-1) var(--space-1) var(--sidebar-item-x, var(--space-3)); }
+.sidebar-group-head > .sidebar-group-label { flex:1; min-width:0; margin:0; }
+.sidebar-group-toggle { display:flex; align-items:center; gap:var(--space-1); min-block-size:var(--control-h-xs); padding:0; border:0; border-radius:var(--radius-control); background:transparent; font:inherit; font-size:var(--text-sm); font-weight:var(--weight-medium); text-align:start; cursor:pointer; }
+.sidebar-group-toggle > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.sidebar-group-caret { flex:none; opacity:.8; }
+.sidebar-group-action { display:flex; align-items:center; gap:var(--space-1); flex:none; }
+/* 4-A — A LATERAL SOLTA vai do topo da janela até embaixo, como a da referência: fora do `AppShell` não há barra de cima
+   para reservar (o item 106 mediu: solta, a lateral ficava 56 mais baixa e mais curta, e o app tinha de zerar o
+   `--topbar-height` à mão). O app que põe uma barra própria em cima dela diz a altura em `--sidebar-offset`. */
+.sidebar:not(.app-shell > *) { --shell-top:calc(var(--sidebar-offset, 0px) + var(--space-4)); }
+.sidebar-flush:not(.app-shell > *) { --shell-top:var(--sidebar-offset, 0px); }
+/* 4-A — a trilha em cápsula: recolhida, o canto é o do controle, e não o do cartão. */
+.sidebar-collapse-capsule.sidebar-collapsed { border-radius:var(--radius-control); }
+/* 4-A — a que sai da tela: recolhida, ela some, e a trilha do shell vai a zero. O botão da junção fica dentro da tela, a 16
+   da borda (ele ficaria cortado ao meio na borda da janela). */
+.sidebar-collapse-offcanvas.sidebar-collapsed { display:none; }
+/* `.sidebar` repetido na regra de propósito: a da rente recolhida (`.app-shell:has(> .sidebar-collapsed.sidebar-flush)`) vem
+   depois na folha, com a mesma força, e deixava a trilha em 68 na rente que sai da tela (o teste do bloco 2 achou). */
+.app-shell:has(> .sidebar.sidebar-collapsed.sidebar-collapse-offcanvas) { --sidebar-track:0px; }
+.app-shell-collapsible:has(> .sidebar.sidebar-collapsed.sidebar-collapse-offcanvas) > .sidebar-toggle-slot { --toggle-x:calc(var(--space-4) + var(--control-h-xs) / 2); }
+/* 4-H — o item atual nas alternativas do item 101. Todas tiram o fio da casa (o `segment-line` o põe de volta, no amarelo).
+   `segment`: a cápsula da aba escolhida (ADR-0059), a letra na cor do texto e o peso normal, como a referência. Os tokens
+   são os da PÁGINA (`--segment` e `--foreground`), aos pares: sob uma marca de lateral escura, a cápsula clara continua
+   legível com a letra dela. */
+.sidebar[class*="sidebar-indicator-"] .sidebar-item[aria-current]::after { display:none; }
+:is(.sidebar-indicator-segment,.sidebar-indicator-segment-dot,.sidebar-indicator-segment-line) .sidebar-item[aria-current] { --sidebar-primary:var(--foreground); --primary-emphasis:var(--foreground); background:var(--segment); box-shadow:var(--shadow-sm); color:var(--foreground); font-weight:var(--weight-regular); }
+.sidebar-indicator-segment-dot .sidebar-item[aria-current] > .sidebar-label::before { content:""; display:inline-block; inline-size:var(--space-2); block-size:var(--space-2); margin-inline-end:var(--space-2); border-radius:var(--radius-full); background:var(--primary); vertical-align:middle; }
+.sidebar.sidebar-indicator-segment-line .sidebar-item[aria-current]::after { display:block; background:var(--primary); }
+/* `subtle`: só o cinza da lateral e a letra cheia dela, sem cor de marca. ⚠ É o mesmo cinza do ponteiro em cima (o item 101
+   anotou): o item atual só se distingue pela letra e pelo ícone cheio. */
+.sidebar-indicator-subtle .sidebar-item[aria-current] { --sidebar-primary:var(--sidebar-foreground); --primary-emphasis:var(--sidebar-foreground); background:var(--sidebar-accent); color:var(--sidebar-foreground); }
+/* 4-F e 4-G — a trilha das seções e o painel. A lateral vira uma fila de duas caixas: a trilha, em cápsula (a 6 e a 7 das
+   quinze), e o painel ao lado, um cartão da largura da lateral. As duas pintam a cor da lateral; a caixa de fora some. */
+.sidebar[class*="sidebar-panel-"] { flex-direction:row; align-items:stretch; gap:var(--space-2); padding:0; overflow:visible; border-width:0; border-radius:0; background:transparent; }
+.sidebar-rail-box { display:flex; flex-direction:column; gap:var(--space-1); flex:none; inline-size:var(--sidebar-rail); min-block-size:0; padding:var(--space-1) var(--space-2); overflow:hidden auto; border-radius:var(--radius-control); background:var(--sidebar); }
+.sidebar-rail-box .sidebar-item { justify-content:center; width:var(--control-h-md); padding-inline:0; margin-inline:auto; }
+.sidebar-rail-box .sidebar-item[aria-expanded="true"]:not([aria-current]) { background:var(--sidebar-accent); color:var(--sidebar-foreground); }
+/* O painel ENCOLHE quando falta lugar (a 320, ou na gaveta do celular, de 296): a trilha fica, e ele toma o resto, até a largura
+   da lateral. Fixo em 264, a trilha e ele (340) passavam da gaveta e da tela — a varredura do site achou a 320. */
+.sidebar-panel { display:flex; flex-direction:column; gap:var(--space-1); flex:0 1 var(--sidebar-width); min-inline-size:0; min-block-size:0; padding:var(--space-1); overflow:auto; border-radius:var(--radius-card); background:var(--sidebar); color:var(--sidebar-foreground); }
+.sidebar-panel[hidden] { display:none; }
+.sidebar-panel-title { margin:var(--space-2) var(--sidebar-item-x, var(--space-3)) var(--space-1); font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); line-height:var(--leading-tight); }
+.app-shell:has(> .sidebar-panel-docked) { --sidebar-track:calc(var(--sidebar-rail) + var(--space-2) + var(--sidebar-width) + var(--space-4)*2); }
+.app-shell:has(> .sidebar-panel-docked.sidebar-collapsed), .app-shell:has(> .sidebar-panel-overlay) { --sidebar-track:calc(var(--sidebar-rail) + var(--space-4)*2); }
+/* O painel por cima (4-G): a janelinha da Aurea, da largura da lateral, com a pele da lista dela. Os tokens da lateral passam a
+   ser os da janelinha: sob uma marca de lateral escura, a janelinha é clara, e a letra da lateral sumiria nela. */
+.popover.sidebar-flyout { --sidebar-item-x:var(--space-4); --sidebar-foreground:var(--popover-foreground); --sidebar-accent:var(--fill-1); --sidebar-primary:var(--primary-emphasis); inline-size:var(--sidebar-width); max-inline-size:calc(100vw - var(--space-8)); padding:var(--space-1); gap:var(--space-1); }
 /* Estas regras tocam `.app-shell` porque a coluna do grid é do shell: a
    lateral não consegue encolher a própria trilha. `--sidebar-rail` continua sendo a largura
    do PAINEL; a flutuante soma as margens na trilha, a rente usa o token cru.
@@ -2449,13 +2515,14 @@ img,svg { display:block; }
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { content:""; position:absolute; inset-inline:15px; bottom:0; height:2px; border-radius:var(--radius-full); background:color-mix(in oklab, var(--primary) 75%, transparent); }
 /* e o fio do ativo da lateral segue a marca DELA, pelo mesmo motivo da regra de cor acima. */
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { background:var(--sidebar-current-line, color-mix(in oklab, var(--sidebar-primary) 75%, transparent)); }
+.sidebar-item[aria-current]::after { inset-inline:var(--sidebar-item-x, var(--space-4)); }
 /* ADR-0076 (20/10/2026), o Victor olhando a bancada: "não quero ele azul, não pode ser na cor do botão?". No claro da Aurea
    padrão, o item atual da lateral é o botão primário: o fundo amarelo e a letra cinza-escura dele (8,13:1). O fundo já
    marca o estado, e o fio de baixo some (`--sidebar-current-line` transparente: regra no `::after` não aceitaria a guarda
    de tema no fim). Só sem `data-brand` (a `lory` tem a lateral dela) e só no claro (no escuro, a letra amarela continua).
    Sobre o amarelo, a letra de destaque de DENTRO do item (o selo primário de contagem, um ícone de destaque) é a tinta do
    botão: o azul sobre o amarelo mede 3,49:1 — o axe da varredura achou, no "12" do exemplo da `Sidebar`. */
-[data-theme="light"] :is(.sidebar-item[aria-current],.doc-nav a.active):not(:where([data-brand],[data-brand] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --sidebar-current-line:transparent; --primary-emphasis:var(--primary-foreground); --sidebar-primary:var(--primary-foreground); background:var(--primary); color:var(--primary-foreground); }
+[data-theme="light"] :is(.sidebar-item[aria-current],.doc-nav a.active):not(:where([data-brand],[data-brand] *,.sidebar[class*="sidebar-indicator-"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --sidebar-current-line:transparent; --primary-emphasis:var(--primary-foreground); --sidebar-primary:var(--primary-foreground); background:var(--primary); color:var(--primary-foreground); }
 [data-theme="light"] .is-selected:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
 [data-theme="light"] .btn[aria-pressed="true"]:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .segmented :is(button,a).active:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
   { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }

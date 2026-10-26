@@ -1,6 +1,7 @@
 import React, { type HTMLAttributes, type RefAttributes, type ReactNode, type ReactElement } from "react";
 import { type Responsive } from "./pure.js";
 import { type IconName } from "./system.js";
+import { type IconButtonProps } from "./actions.js";
 export type StepState = "default" | "active" | "done" | "error";
 export interface StepItem {
     label: ReactNode;
@@ -91,21 +92,75 @@ export interface SidebarItem {
     icon?: IconName;
     badge?: ReactNode;
     onClick?: () => void;
-    items?: SidebarItem[];
+    items?: SidebarEntry[];
     /** O link do roteador do app (M-01): `<Link href="/relatorios" />`. Recebe a pele, o estado de página atual e o conteúdo do item. */
     render?: ReactElement;
+    /** A foto ou o logotipo do item (4-E — o time, a pessoa): toma o lugar do `icon`, no mesmo formato da `NavList`. Recolhida, ele
+     *  fica na trilha, e não um vão. */
+    avatar?: {
+        src?: string;
+        fallback?: ReactNode;
+    };
+    /** A ação do item ou do grupo (4-D — o "⋯", o "+"): um `IconButton` pequeno. Mora AO LADO do item, nunca dentro do link (botão
+     *  dentro de link não é HTML válido, e o leitor de tela perde um dos dois). Recolhida, some, como na referência. */
+    action?: ReactNode;
+    /** Só no GRUPO (item com `items` e sem destino): o nome vira um botão que dobra a lista (4-D). */
+    collapsible?: boolean;
+    /** Com `collapsible`: o grupo começa aberto. Padrão: aberto. */
+    defaultOpen?: boolean;
 }
+/** A lista da lateral: os itens e, entre eles, `"separator"` — a divisória entre seções (4-E). Sem linha (ADR-0072): é um vão.
+ *  A lista se parte nela em duas, como os grupos da referência, que se separam fora da lista. */
+export type SidebarEntry = SidebarItem | "separator";
 export type SidebarVariant = "floating" | "flush" | "plain";
 export type SidebarScrollbar = "hover" | "visible";
 export type SidebarPlacement = "left" | "right";
-export declare function Sidebar({ items, current, collapsed, variant, placement, scrollbar, label, header, footer, children, className, onClick, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
-    items?: SidebarItem[];
+export type SidebarCollapsible = "icon" | "capsule" | "offcanvas";
+export type SidebarIndicator = "brand" | "segment" | "segment-dot" | "segment-line" | "subtle";
+export interface SidebarState {
+    /** Recolhida agora. */
+    collapsed: boolean;
+    setCollapsed: (collapsed: boolean) => void;
+    toggle: () => void;
+    /** O jeito de recolher que o provedor passa à lateral. */
+    collapsible: SidebarCollapsible;
+    /** O `id` da lateral: o botão de recolher aponta para ela (`aria-controls`). */
+    id: string;
+}
+/** O estado da lateral: dentro de um `Sidebar.Provider` ou de um `AppShell` com `sidebarCollapsible`. Fora deles, `null`. */
+export declare function useSidebar(): SidebarState | null;
+declare function SidebarProvider({ collapsed, defaultCollapsed, onCollapsedChange, collapsible, shortcut, id, children }: {
+    /** Recolhida (controlado). */
+    collapsed?: boolean;
+    defaultCollapsed?: boolean;
+    onCollapsedChange?: (collapsed: boolean) => void;
+    /** O jeito de recolher (4-A). Padrão: `icon`, a trilha. */
+    collapsible?: SidebarCollapsible;
+    /** O atalho Ctrl+B (Cmd+B no Mac). Padrão: ligado, como na referência. */
+    shortcut?: boolean;
+    /** O `id` da lateral. Sem ele, um gerado. */
+    id?: string;
+    children?: ReactNode;
+}): React.JSX.Element;
+declare function SidebarToggle({ variant, className, onClick, ...props }: Omit<IconButtonProps, "icon" | "label" | "variant" | "children"> & {
+    variant?: "icon" | "item";
+}): React.JSX.Element | null;
+export declare function Sidebar({ items, current, collapsed, collapsible, indicator, panel, variant, placement, scrollbar, label, header, footer, children, className, onClick, id, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
+    items?: SidebarEntry[];
     current?: string;
     collapsed?: boolean;
     variant?: SidebarVariant;
     placement?: SidebarPlacement;
     scrollbar?: SidebarScrollbar;
     label?: string;
+    /** O jeito de recolher (4-A): `icon` (a trilha, o padrão), `capsule` (a trilha em cápsula) ou `offcanvas` (sai da tela).
+     *  Dentro de um `Sidebar.Provider`, vem dele. */
+    collapsible?: SidebarCollapsible;
+    /** O desenho do item atual (4-H): `brand` (o de hoje), `segment`, `segment-dot`, `segment-line` ou `subtle`. */
+    indicator?: SidebarIndicator;
+    /** A trilha das seções com o painel (4-F e 4-G): os itens do primeiro nível viram seções, e a lista da seção mora num
+     *  painel — `docked`, ao lado da trilha (recolher esconde só o painel), ou `overlay`, por cima, ao lado do ícone. */
+    panel?: "docked" | "overlay";
     /** O topo fixo (4-C): a marca do app (`Sidebar.Brand`), a busca. Não rola com a lista. */
     header?: ReactNode;
     /** O pé fixo (4-C): a pessoa e o sair (`Sidebar.User`), a lista curta (`Sidebar.Nav`), o cartão de destaque. Não rola com a lista. */
@@ -116,15 +171,19 @@ export declare namespace Sidebar {
     export { SidebarUser as User };
     export { SidebarNav as Nav };
     export { SidebarShow as Show };
+    export { SidebarProvider as Provider };
+    export { SidebarToggle as Toggle };
 }
 /** A marca do app no topo da lateral: o `logo` (a letra, o desenho, a imagem), o nome e o subtítulo. `variant="tile"` (o
  *  padrão, a 11 das quinze) põe o logo num quadrinho na cor primária; `plain` (da 8 à 10) é o desenho solto e o nome
  *  grande. Recolhida, fica só o logo. */
-declare function SidebarBrand({ logo, name, description, variant, className, ...props }: Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
+declare function SidebarBrand({ logo, name, description, variant, action, className, ...props }: Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
     logo: ReactNode;
     name: ReactNode;
     description?: ReactNode;
     variant?: "tile" | "plain";
+    /** Uma ação ao lado da marca: o `Sidebar.Toggle`. Recolhida, ela desce para baixo do logo. */
+    action?: ReactNode;
 }): React.JSX.Element;
 /** A pessoa no pé da lateral, numa caixinha: a foto (`avatar`), o nome, o papel e a ação (o sair). Recolhida, a foto e a ação, empilhadas. */
 declare function SidebarUser({ avatar, name, description, action, className, ...props }: Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
@@ -135,7 +194,7 @@ declare function SidebarUser({ avatar, name, description, action, className, ...
 }): React.JSX.Element;
 /** Uma segunda lista com a pele da lateral (a do pé: Suporte, Ajustes). `label` é obrigatório: duas listas com o mesmo nome confundem o leitor de tela. */
 declare function SidebarNav({ items, current, label, className, ...props }: Omit<HTMLAttributes<HTMLElement>, "children"> & {
-    items: SidebarItem[];
+    items: SidebarEntry[];
     current?: string;
     label: string;
 }): React.JSX.Element;
@@ -151,7 +210,7 @@ export type BottomNavWidth = "full" | "content";
 export type BottomNavVariantLegacy = "flat" | "surface" | "pill" | "dock";
 export type BottomNavVariantAny = BottomNavVariant | BottomNavVariantLegacy;
 export declare function BottomNav({ items, current, variant, indicator, width, label, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
-    items: SidebarItem[];
+    items: SidebarEntry[];
     current?: string;
     variant?: BottomNavVariantAny;
     indicator?: BottomNavIndicator;

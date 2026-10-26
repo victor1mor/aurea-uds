@@ -49,7 +49,9 @@ const medir = (p: Page, id: string) => p.evaluate((id) => {
 test("4-C · a variação 11: as medidas da bancada das quinze", async ({page: p, baseURL}) => {
   await abrir(p, baseURL);
   const m = await medir(p, "onze");
-  expect(m.logo, JSON.stringify(m)).toMatchObject({x: 16, y: 20, w: 36, h: 36});
+  // x 20 desde a 0.44.0 (ADR-0082, a D1): a marca acompanha o recuo do texto do item (16 + o recheio de 4 da caixa), no
+  // prumo do ícone do item. Era 16.
+  expect(m.logo, JSON.stringify(m)).toMatchObject({x: 20, y: 20, w: 36, h: 36});
   expect(m.item!.y, "o primeiro item, 56 abaixo do topo do quadrinho").toBe(76);
   expect(m.pessoa, JSON.stringify(m)).toMatchObject({x: 4, h: 56, deBaixo: 12});
   expect(m.foto, JSON.stringify(m)).toMatchObject({x: 16, w: 40, h: 40});

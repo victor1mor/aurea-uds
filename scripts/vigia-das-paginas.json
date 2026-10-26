@@ -19,7 +19,7 @@
     "css:--ease-*": "839701adee489551"
   },
   "colors": {
-    "css:--primary*": "f5cbf06ae535c324",
+    "css:--primary*": "b707702f098f34ab",
     "css:--secondary*": "5c9b59970be239e4",
     "css:--card*": "918b2fb908c9dfca",
     "css:--fill-*": "a2658d78c94cba5c",
@@ -35,7 +35,7 @@
   "composition": {
     "ts:Card": "8db73ade7d093995",
     "ts:Header": "646693ff53f98171",
-    "ts:AppShell": "7c88fb2b01dd16a2",
+    "ts:AppShell": "687af64e34104192",
     "ts:RadioGroup": "4e594ff9064d0a23"
   },
   "dark-mode": {
@@ -93,7 +93,7 @@
     "pkg:core": "d3ffb7033c64dc05"
   },
   "theming": {
-    "css:--primary*": "f5cbf06ae535c324",
+    "css:--primary*": "b707702f098f34ab",
     "css:--card*": "918b2fb908c9dfca",
     "css:--success*": "f07ef43f82cc2564",
     "css:--fill-2-solid": "61c7a75d0c5263b7",

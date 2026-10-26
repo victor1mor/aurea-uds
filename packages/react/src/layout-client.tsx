@@ -12,7 +12,7 @@ import {ESCALA} from "./escala.js";
 import {IconButton, type IconButtonProps} from "./actions.js";
 import {Tooltip} from "./overlays.js";
 import {Icon} from "./system.js";
-import {Sidebar, Header, type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarItem} from "./navigation.js";
+import {Sidebar, Header, type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarEntry, type SidebarCollapsible, type SidebarIndicator} from "./navigation.js";
 
 // ── Auxiliar de topo: mora ANTES do primeiro export, e a posição é obrigatória ───────────────
 // O check 22 mede o corpo de um componente do `export` dele até o PRÓXIMO export — fatia longa
@@ -151,13 +151,12 @@ function useLargura(query:string){
 // aprovado"*). No `layout="sidebar"` ele substitui a bolinha da junção: com a barra no conteúdo, o shell o põe no começo
 // dela; sem barra, o app o põe ao lado do próprio título (`AppShell.SidebarToggle`). Abaixo de 1024 ele some — ali a
 // lateral é gaveta, e quem abre é o botão da gaveta.
-const ShellToggleContext=React.createContext<{alternar:()=>void;efetiva:boolean;rotulo:string}|null>(null);
-function AppShellSidebarToggle({className,...props}:Omit<IconButtonProps,"icon"|"label"|"onClick">){
-  const c=React.useContext(ShellToggleContext);
-  if(!c)return null;
-  return <IconButton className={cx("sidebar-collapse-trigger",className)} icon="sidebar-simple" label={c.rotulo} aria-expanded={!c.efetiva} aria-controls={SHELL_NAV_ID} onClick={c.alternar} {...props}/>;
-}
-export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar,topbarVariant="floating",topbarDivider,topbarTabs,topbarCurrentTab,topbarTabsLabel,topbarTabsEnd,layout="app",sidebarVariant,sidebarScrollbar,sidebarFooter,sidebarCollapsed,sidebarCollapsible,defaultSidebarCollapsed,onSidebarCollapsedChange,contentVariant="surface",aside,asideLabel,asideVariant,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{brand:ReactNode;navigation?:ReactNode;navItems?:SidebarItem[];currentNavId?:string;navLabel?:string;topbar?:ReactNode;topbarVariant?:Exclude<HeaderVariant,"pill">;topbarDivider?:boolean;sidebarVariant?:SidebarVariant;
+// Desde o bloco 2 (4-B, 25/10/2026), é o `Sidebar.Toggle`: o shell põe a lateral num `Sidebar.Provider`, e o botão lê o estado
+// dele — o mesmo botão serve ao lado do título, dentro da lateral (ao lado da marca) e no pé, como linha.
+function ProvedorDaLateral({ligado,children,...p}:{ligado:boolean;collapsed:boolean;onCollapsedChange:(v:boolean)=>void;collapsible?:SidebarCollapsible;shortcut:boolean;children?:ReactNode}){
+  return ligado?<Sidebar.Provider id={SHELL_NAV_ID} {...p}>{children}</Sidebar.Provider>:<>{children}</>}
+function AppShellSidebarToggle(props:Omit<IconButtonProps,"icon"|"label"|"onClick"|"variant">){return <Sidebar.Toggle {...props}/>}
+export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar,topbarVariant="floating",topbarDivider,topbarTabs,topbarCurrentTab,topbarTabsLabel,topbarTabsEnd,layout="app",sidebarVariant,sidebarScrollbar,sidebarFooter,sidebarCollapsed,sidebarCollapsible,sidebarToggle="edge",sidebarShortcut=true,sidebarIndicator,sidebarPanel,defaultSidebarCollapsed,onSidebarCollapsedChange,contentVariant="surface",aside,asideLabel,asideVariant,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{brand:ReactNode;navigation?:ReactNode;navItems?:SidebarEntry[];currentNavId?:string;navLabel?:string;topbar?:ReactNode;topbarVariant?:Exclude<HeaderVariant,"pill">;topbarDivider?:boolean;sidebarVariant?:SidebarVariant;
   /** O arranjo (lote T, 17/10/2026): `"app"` (o padrão, o de sempre) ou `"docs"`, o da documentação da referência — um
    *  bloco CENTRALIZADO de 1400 com a lateral de 220, o texto e o índice de 268 (de 1280 para cima), a barra de cima de 56
    *  com a linha das áreas (`topbarTabs`) embaixo. A lateral fica onde a variante dela mandar (`plain`: sem caixa).
@@ -189,18 +188,35 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
   asideVariant?:SidebarVariant;
   /** A lateral em trilha de ícones. Controlado: quem passa decide (e o `onSidebarCollapsedChange` avisa). */
   sidebarCollapsed?:boolean;
-  /** AN-01: o botão de recolher na junção do menu com o conteúdo, e a trilha sozinha entre 1024 e 1279 de largura. */
-  sidebarCollapsible?:boolean;
+  /** AN-01: o botão de recolher na junção do menu com o conteúdo, e a trilha sozinha entre 1024 e 1279 de largura.
+   *  Desde o bloco 2 (4-A), também o JEITO de recolher: `true` ou `"icon"` (a trilha), `"capsule"` (a trilha em cápsula) ou
+   *  `"offcanvas"` (a lateral sai da tela). */
+  sidebarCollapsible?:boolean|SidebarCollapsible;
+  /** 4-B: onde o shell põe o botão de recolher. `"edge"` (o padrão): na junção da lateral com o conteúdo (no
+   *  `layout="sidebar"`, no começo da barra do conteúdo). `"none"`: o shell não põe nenhum, e o app põe o `Sidebar.Toggle`
+   *  onde quiser — dentro da lateral, ao lado da marca, ou no pé, como linha (`variant="item"`). */
+  sidebarToggle?:"edge"|"none";
+  /** 4-B: o atalho Ctrl+B (Cmd+B no Mac), que recolhe e abre a lateral (abaixo de 1024, abre e fecha a gaveta). Padrão:
+   *  ligado, com `sidebarCollapsible`. Não age quando a pessoa está digitando num campo. */
+  sidebarShortcut?:boolean;
+  /** 4-H: o desenho do item atual da lateral (o `indicator` da `Sidebar`). */
+  sidebarIndicator?:SidebarIndicator;
+  /** 4-F e 4-G: a trilha das seções com o painel (o `panel` da `Sidebar`) — os itens do primeiro nível de `navItems` viram
+   *  seções. `docked`: o painel ao lado (recolher esconde o painel); `overlay`: o painel abre por cima. */
+  sidebarPanel?:"docked"|"overlay";
   /** AN-01: começa recolhida, sem controlar. A escolha vale até a janela cruzar 1280. */
   defaultSidebarCollapsed?:boolean;
   /** AN-01: avisa cada troca — pelo botão, ou pela largura cruzando 1280. Guardar a preferência é do app. */
   onSidebarCollapsedChange?:(collapsed:boolean)=>void;
   contentVariant?:"surface"|"plain"}){const s=useAureaStrings();const docs=layout==="docs",lateral=layout==="sidebar";useGavetaFechaNoDesktop(docs);
   const controlado=sidebarCollapsed!==undefined;
+  // O jeito de recolher (4-A): `true` é a trilha de sempre.
+  const forma:SidebarCollapsible|undefined=sidebarCollapsible===true?"icon":sidebarCollapsible||undefined;
+  const recolhe=!!forma;
   // `null` = ninguém escolheu, e vale a largura.
   const [escolha,setEscolha]=useState<boolean|null>(defaultSidebarCollapsed??null);
   const media=useLargura(MEDIA_MEDIA), estreita=useLargura(MEDIA_ESTREITA);
-  const recolhida=controlado?!!sidebarCollapsed:(escolha??(!!sidebarCollapsible&&media));
+  const recolhida=controlado?!!sidebarCollapsed:(escolha??(recolhe&&media));
   // NA GAVETA A LATERAL NUNCA É TRILHA. Abaixo de 1024 ela abre por cima de tudo, com espaço para o
   // nome; recolhida ali, era uma gaveta de ícones sem nome — também para quem já passava
   // `sidebarCollapsed` (medido em 03/10/2026, na mesma conferência).
@@ -209,13 +225,18 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
   // Cruzar 1280 é mudar de contexto: a escolha da pessoa sai e a largura volta a mandar. Pelo
   // evento do navegador, e não comparando desenhos, para a hidratação não contar como cruzamento.
   useEffect(()=>{
-    if(!sidebarCollapsible||typeof window==="undefined"||typeof window.matchMedia!=="function")return;
+    if(!recolhe||typeof window==="undefined"||typeof window.matchMedia!=="function")return;
     const mq=window.matchMedia(MEDIA_MEDIA);
     const aoCruzar=(e:{matches:boolean})=>{if(!controlado)setEscolha(null);aviso.current?.(e.matches)};
     mq.addEventListener?.("change",aoCruzar);
     return ()=>mq.removeEventListener?.("change",aoCruzar);
-  },[sidebarCollapsible,controlado]);
-  const alternar=()=>{const nova=!recolhida;if(!controlado)setEscolha(nova);onSidebarCollapsedChange?.(nova)};
+  },[recolhe,controlado]);
+  // QUEM MUDA O ESTADO: o botão da junção, o `Sidebar.Toggle` em qualquer lugar e o Ctrl+B passam todos por aqui (4-B).
+  // Abaixo de 1024 a lateral é a gaveta: recolher ali é abrir ou fechar a gaveta, como o "mobile" da referência.
+  const definir=(nova:boolean)=>{
+    if(estreita){try{document.getElementById(SHELL_NAV_ID)?.togglePopover()}catch{/* motor sem popover */}return}
+    if(!controlado)setEscolha(nova);onSidebarCollapsedChange?.(nova)};
+  const alternar=()=>definir(!recolhida);
   const rotulo=efetiva?s.sidebarExpand:s.sidebarCollapse;
   // A seta aponta para onde a lateral vai: recolher é para o começo da linha, abrir é para o fim. Na
   // escrita da direita para a esquerda o começo é a direita — pela direção do provedor, e não por
@@ -229,18 +250,18 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
   // No arranjo, o topo é o pequeno (`size="sm"`), e o botão também: com o tamanho de sempre ele ficava 4 maior que os
   // vizinhos e fora da linha deles (medido a 375, sem toque; com toque, todos sobem para 44).
   const botaoDaGaveta=<IconButton className="nav-toggle" icon="list" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID} {...(docs?{size:"sm" as const}:{})}/>;
-  return <div className={cx("app-shell",layout==="docs"&&"app-shell-docs",lateral&&"app-shell-lateral",!lateral&&topbarVariant==="flush"&&"app-shell-flush",sidebarCollapsible&&"app-shell-collapsible",aside!=null&&"app-shell-with-aside",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
+  return <div className={cx("app-shell",layout==="docs"&&"app-shell-docs",lateral&&"app-shell-lateral",!lateral&&topbarVariant==="flush"&&"app-shell-flush",recolhe&&"app-shell-collapsible",aside!=null&&"app-shell-with-aside",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
     quando este arquivo entrou da `main`; quem denunciou foi o gate da fronteira do core, com
     `.skip-link` no CSS sem ninguém a emitir.
     É requisito de acessibilidade, não enfeite (WCAG 2.4.1, "pular blocos"): sem ele, quem navega
     por teclado atravessa a barra e a lateral inteiras antes de chegar ao conteúdo, em TODA página.
     O `<main>` ganha `id` e `tabIndex={-1}` porque um alvo de âncora que não é focável recebe a
     rolagem e não o FOCO — o leitor de tela continuaria lendo de onde estava. */}
-<ShellToggleContext.Provider value={sidebarCollapsible?{alternar,efetiva,rotulo}:null}><a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a>{!lateral&&<Header variant={topbarVariant} divider={topbarDivider} tabs={topbarTabs} currentTab={topbarCurrentTab} tabsLabel={topbarTabsLabel} tabsEnd={topbarTabsEnd} {...(docs?{maxWidth:"docs" as const,size:"sm" as const}:{})} brand={docs?brand:<>{botaoDaGaveta}{brand}</>}>{topbar}{docs&&botaoDaGaveta}</Header>}{sidebarCollapsible&&!lateral&&<div className="sidebar-toggle-slot"><Tooltip content={rotulo} side="right"><IconButton className="sidebar-toggle" size="xs" icon={paraOComeco===direita?"caret-right":"caret-left"} label={rotulo} aria-expanded={!efetiva} aria-controls={SHELL_NAV_ID} onClick={alternar}/></Tooltip></div>}<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} scrollbar={sidebarScrollbar} collapsed={efetiva} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta} header={lateral?brand:undefined} footer={sidebarFooter}>{navigation}</Sidebar>{docs&&aside!=null&&<div className="docs-toc-bar"><button type="button" className="docs-toc-toggle" popoverTarget={SHELL_TOC_ID}><Icon name="list-bullets"/><span className="docs-toc-current" data-toc-current="">{asideLabel??s.tocLabel}</span><Icon name="caret-down"/></button></div>}{lateral
+<ProvedorDaLateral ligado={recolhe} collapsed={efetiva} onCollapsedChange={definir} collapsible={forma} shortcut={sidebarShortcut}><a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a>{!lateral&&<Header variant={topbarVariant} divider={topbarDivider} tabs={topbarTabs} currentTab={topbarCurrentTab} tabsLabel={topbarTabsLabel} tabsEnd={topbarTabsEnd} {...(docs?{maxWidth:"docs" as const,size:"sm" as const}:{})} brand={docs?brand:<>{botaoDaGaveta}{brand}</>}>{topbar}{docs&&botaoDaGaveta}</Header>}{recolhe&&!lateral&&sidebarToggle!=="none"&&<div className="sidebar-toggle-slot"><Tooltip content={rotulo} side="right"><IconButton className="sidebar-toggle" size="xs" icon={paraOComeco===direita?"caret-right":"caret-left"} label={rotulo} aria-expanded={!efetiva} aria-controls={SHELL_NAV_ID} onClick={alternar}/></Tooltip></div>}<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} scrollbar={sidebarScrollbar} collapsed={efetiva} collapsible={forma} indicator={sidebarIndicator} panel={sidebarPanel} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta} header={lateral?brand:undefined} footer={sidebarFooter}>{navigation}</Sidebar>{docs&&aside!=null&&<div className="docs-toc-bar"><button type="button" className="docs-toc-toggle" popoverTarget={SHELL_TOC_ID}><Icon name="list-bullets"/><span className="docs-toc-current" data-toc-current="">{asideLabel??s.tocLabel}</span><Icon name="caret-down"/></button></div>}{lateral
 ?<div className="app-shell-column">{topbar!=null
-  ?<Header variant="flush" size="sm" divider={topbarDivider} brand={<>{botaoDaGaveta}<AppShellSidebarToggle/></>}>{topbar}</Header>
+  ?<Header variant="flush" size="sm" divider={topbarDivider} brand={<>{botaoDaGaveta}{sidebarToggle!=="none"&&<AppShellSidebarToggle/>}</>}>{topbar}</Header>
   :<div className="app-shell-narrow-bar">{botaoDaGaveta}{brand}</div>}{<main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main>}</div>
-:<main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main>}{aside!=null&&<Sidebar placement="right" variant={asideVariant??sidebarVariant} className="app-shell-aside" aria-label={asideLabel??s.tocLabel} {...(docs?{id:SHELL_TOC_ID,popover:"auto" as const,onToggle:focoDaGaveta}:{})}>{aside}</Sidebar>}</ShellToggleContext.Provider></div>}
+:<main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main>}{aside!=null&&<Sidebar placement="right" variant={asideVariant??sidebarVariant} className="app-shell-aside" aria-label={asideLabel??s.tocLabel} {...(docs?{id:SHELL_TOC_ID,popover:"auto" as const,onToggle:focoDaGaveta}:{})}>{aside}</Sidebar>}</ProvedorDaLateral></div>}
 AppShell.SidebarToggle=AppShellSidebarToggle;
 
 // ── Separator ────────────────────────────────────────────────────────────────────────────────

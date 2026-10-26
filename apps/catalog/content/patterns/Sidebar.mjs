@@ -37,6 +37,9 @@ export default [
       // vira complementary aninhado — o axe reprovou em 22/08/2026. Num app de verdade ele é
       // filho do AppShell e o landmark está certo, que é o que o `code` mostra.
       role: "presentation",
+      // A ALTURA DO CONTEÚDO, só na prévia (0.44.0): solta, a lateral vai do topo até embaixo da janela (ADR-0082, a D2), e
+      // aqui ela mora numa caixa centrada com folga — a altura da janela passaria da caixa.
+      style: {position: "static", height: "auto"},
       label: "Main", current: "runs", items: [
         {id: "overview", label: "Overview", icon: "squares-four", href: "#"},
         {id: "runs", label: "Runs", icon: "play", href: "#"},

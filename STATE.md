@@ -15,10 +15,10 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 |---|---|
 | Componentes exportados por `@aurea-uds/react` | 138 |
 | Fichas de registry | 138 |
-| Hooks públicos com ficha | 9 |
-| Maturidade declarada nas fichas | Deprecated 1 · Ready 48 · Stable 110 |
+| Hooks públicos com ficha | 10 |
+| Maturidade declarada nas fichas | Deprecated 1 · Ready 49 · Stable 110 |
 | Receitas de arquétipo (`patterns/*.md`) | 23 |
-| Classes declaradas no CSS do core | 996 |
+| Classes declaradas no CSS do core | 1017 |
 
 ## Tokens
 
@@ -33,13 +33,13 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 
 | Tipo de página | Quantidade |
 |---|---|
-| Componente | 226 |
-| Pattern | 226 |
+| Componente | 227 |
+| Pattern | 232 |
 | Block | 15 |
 | Recipe | 23 |
-| Documentação | 79 |
+| Documentação | 80 |
 | Índice de área | 11 |
-| **Total** | **580** |
+| **Total** | **588** |
 
 ## Cobertura das fichas
 
@@ -48,31 +48,31 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | `props` (contrato de API publicado) | 150 de 138 |
 | `variants` | 30 de 138 |
 | `sizes` | 36 de 138 |
-| `states` | 134 de 138 |
+| `states` | 135 de 138 |
 | `tokens` | 139 de 138 |
-| `a11y.apg` | 155 de 138 |
+| `a11y.apg` | 156 de 138 |
 
 ## Conteúdo do catálogo
 
 | Origem | Arquivos |
 |---|---|
 | Componentes com conteúdo próprio | 44 de 138 |
-| Componentes com starter (preview + código mínimos) | 103 de 138 |
+| Componentes com starter (preview + código mínimos) | 104 de 138 |
 | Patterns com conteúdo | 80 |
 | Blocks com conteúdo | 2 |
 | Receitas com preview | 23 de 23 |
 
 Todo item tem preview e código — é o núcleo do modelo de página decidido na
-[ADR-0001](decisions/0001-modelo-de-pagina-do-catalogo.md). Os 103 componentes de
+[ADR-0001](decisions/0001-modelo-de-pagina-do-catalogo.md). Os 104 componentes de
 starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O contrato de API está publicado nas 138: o achado **M8** fechou na Parte E do [`PLANO-1.0.md`](PLANO-1.0.md).
 
 ## Garantias automáticas
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 2218 |
-| Componentes citados nos testes unitários | 157 de 138 |
-| Specs de navegador (Playwright) | 63 |
+| Chamadas de `test()` nos testes unitários | 2235 |
+| Componentes citados nos testes unitários | 158 de 138 |
+| Specs de navegador (Playwright) | 64 |
 | Baselines de screenshot no repositório | 48 |
 | Baselines `-linux.png` (o que a CI compara) | 24 |
 

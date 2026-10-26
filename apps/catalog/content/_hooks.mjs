@@ -48,6 +48,37 @@ export default () => <AureaProvider><SaveButton/></AureaProvider>;`,
     ],
   },
   {
+    name: "useSidebar",
+    source: "packages/react/src/navigation-client.tsx",
+    lede: "Reads and changes the sidebar state — collapsed or not — from anywhere inside Sidebar.Provider, or inside an "
+      + "AppShell with sidebarCollapsible, which uses the same provider.",
+    signature: `const sidebar = useSidebar();   // null outside a provider
+
+sidebar.collapsed            // boolean
+sidebar.setCollapsed(true)
+sidebar.toggle()
+sidebar.collapsible          // "icon" | "capsule" | "offcanvas"
+sidebar.id                   // the sidebar's id, for aria-controls`,
+    example: `import {Sidebar, Button, useSidebar} from "@aurea-uds/react";
+
+function FocusMode() {
+  const sidebar = useSidebar();
+  if (!sidebar) return null;
+  return <Button onClick={() => sidebar.setCollapsed(true)}>Focus mode</Button>;
+}
+
+export default () => (
+  <Sidebar.Provider>
+    <Sidebar label="Sections" items={items} />
+    <main><FocusMode /></main>
+  </Sidebar.Provider>
+);`,
+    notes: [
+      ["null outside a provider, not an error", "The reference throws when its hook is called outside its provider. Here a piece that reads the state can live outside one and simply draw nothing — the same rule as Sidebar.Toggle."],
+      ["The shortcut reads the same state", "Ctrl+B (Cmd+B on a Mac) toggles the sidebar from anywhere on the page, except while the person types in a field. Turn it off with shortcut={false} on the provider, or sidebarShortcut={false} on the AppShell."],
+    ],
+  },
+  {
     name: "useAureaTheme",
     source: "packages/react/src/system.tsx",
     lede: "Reads and sets the two axes Aurea puts on <html>: theme and density. It exists because "

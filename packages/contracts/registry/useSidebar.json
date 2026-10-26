@@ -1,0 +1,42 @@
+{
+  "name": "useSidebar",
+  "kind": "hook",
+  "category": "Navigation",
+  "layer": "Composite",
+  "maturity": "Ready",
+  "summary": "The sidebar state — collapsed, setCollapsed, toggle — inside Sidebar.Provider or an AppShell with sidebarCollapsible.",
+  "icon": "sidebar-simple",
+  "platforms": {
+    "web": "stable",
+    "native": "n-a"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "collapsed"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": "none",
+    "apg": "n-a",
+    "keyboard": [
+      "Ctrl+B"
+    ],
+    "nota": "O estado da lateral (4-B, o bloco 2): dentro de um Sidebar.Provider ou de um AppShell com sidebarCollapsible; fora deles, null (a referência lança erro — aqui a peça que o lê pode morar fora sem quebrar). O botão de recolher (Sidebar.Toggle) e o atalho Ctrl+B leem o mesmo estado.",
+    "keyboardNote": "Measured in a browser on 26/10/2026 (apps/keyboard-probe/lateral.html + tests/visual/lateral-bloco-2.spec.ts, Chromium): Ctrl+B collapses and expands the sidebar and does nothing while focus is in a text field; in the overlay panel, focus moves into the list on open and Escape closes it and returns focus to the section button."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "Sidebar",
+      "AppShell"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/navigation-client.tsx#useSidebar"
+  }
+}
