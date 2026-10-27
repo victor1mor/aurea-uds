@@ -10,6 +10,8 @@ import {readFileSync, writeFileSync, existsSync} from "node:fs";
 // A referência (`lory-0.44.0.json`) foi gravada com a folha da 0.44.0 no lugar da de hoje, pelo MESMO código abaixo:
 //   LORY_GRAVAR=<caminho do aurea.css da 0.44.0> npx playwright test tests/visual/lory-congelada.spec.ts --project=chromium
 // Só cor e enfeite entram na comparação, não medida: um lote que mude o espaço de uma peça não mexe aqui.
+// A exceção: o desenho da LINHA DO TEMPO (os `::before`), que o conserto de 27/10/2026 refez em todas as marcas — o defeito
+// era geral (o Victor). A cor da linha da lory é provada no `paleta-passo-a.spec.ts`.
 // Provado contra o defeito (27/10/2026): sem o congelamento dos tokens da lory, reprova (a tinta e a letra do aviso); sem
 // a exclusão nas regras novas, reprova (o link, o campo, o botão ligado, a linha do tempo).
 const APP = "/apps/keyboard-probe/out/paleta.html";
@@ -40,6 +42,7 @@ async function fotografar(p: Page, tema: string): Promise<Foto> {
       const linha: Record<string, string> = {};
       for (const prop of PROPS) linha[prop] = cs.getPropertyValue(prop);
       for (const pseudo of ["::before", "::after"]) {
+        if (el.closest(".timeline")) continue;
         const ps = getComputedStyle(el, pseudo);
         if (ps.content && ps.content !== "none" && ps.content !== "normal") {
           for (const prop of PSEUDO) linha[`${pseudo} ${prop}`] = ps.getPropertyValue(prop);

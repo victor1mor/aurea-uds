@@ -137,6 +137,23 @@ test("a linha do tempo: o trilho por baixo dos pontos, em trechos, e nada depois
   expect(cor).toBe(await token(p, "var(--input)"));
 });
 
+test("a linha do tempo da lory também passa por baixo dos pontos, com a cor de linha dela", async ({page: p}) => {
+  // O conserto é de todas as marcas (o Victor, 27/10/2026: o defeito "não tinha só na lory, no tema padrão da Aurea
+  // também"); a cor da linha dela continua a de antes, `--border`.
+  for (const tema of ["light", "dark"] as const) {
+    await p.setViewportSize({width: 1280, height: 900});
+    await p.goto(`${APP}?tema=${tema}&marca=lory`, {waitUntil: "networkidle"});
+    const m = await p.locator(".timeline").first().evaluate((lista) => {
+      const itens = Array.from(lista.children) as HTMLElement[];
+      return {unico: getComputedStyle(lista, "::before").content, ultimo: getComputedStyle(itens.at(-1)!, "::before").content,
+        primeiro: getComputedStyle(itens[0], "::before").content, ponto: getComputedStyle(itens[0].querySelector(".timeline-dot")!).zIndex};
+    });
+    expect([m.unico, m.ultimo, m.ponto], tema).toEqual(["none", "none", "1"]);
+    expect(m.primeiro, tema).not.toBe("none");
+    expect(await corDe(p, ".timeline > li", "background-color", "::before"), tema).toBe(await token(p, "var(--border)"));
+  }
+});
+
 test("a cor que já reprovava: a célula de atenção do painel, no claro, mede 3:1 na página", async ({page: p}) => {
   await abrir(p, "light");
   expect(await estilo(p, "saude-atencao", "background-color")).toBe(await token(p, "#d07612"));

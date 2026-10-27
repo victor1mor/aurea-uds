@@ -3719,14 +3719,21 @@ button.tag-main { cursor:pointer; }
    alinham por construção em vez de por número copiado. Saem junto os 24px de recuo e os 7px
    do trilho — dois px crus a menos na catraca do check 12. */
 .timeline { position:relative; display:flex; flex-direction:column; gap:var(--space-5); margin:0; padding:0; list-style:none; }
-.timeline:before { content:""; position:absolute; inset-inline-start:calc(var(--space-3) / 2); inset-block:var(--space-2); width:1px; background:var(--border); }
-.timeline > li { display:flex; align-items:flex-start; gap:var(--space-3); }
+/* O TRILHO POR BAIXO DOS PONTOS (ADR-0083, 27/10/2026, em todas as marcas — o Victor: o defeito "não tinha só na lory, no
+   tema padrão da Aurea também"). Era um `::before` da lista inteira, posicionado, e o ponto não: o navegador pinta o
+   posicionado por cima, e a linha passava por CIMA da bolinha; e ia até o fim da lista, sobrando depois do último ponto.
+   Agora cada item desenha o trecho até o ponto seguinte, centrado no ponto, e o ponto fica por cima. A cor é a da linha
+   (`--border`); a paleta da 1.0 a troca por `--input`, mais adiante, fora da lory. */
+.timeline > li { position:relative; display:flex; align-items:flex-start; gap:var(--space-3); }
+.timeline > li:not(:last-child)::before { content:""; position:absolute; inset-inline-start:calc(var(--space-3) / 2 - var(--border-width) / 2);
+  inset-block-start:calc(var(--space-1) + var(--space-3)); inset-block-end:calc(-1 * (var(--space-5) + var(--space-1)));
+  inline-size:var(--border-width); background:var(--border); }
 /* A coluna de conteúdo é uma PILHA, e não por estética: sem isso o item empilhava quando
    tinha descrição (o <p> é bloco) e colava título e horário na mesma linha quando não tinha —
    "Shipped14:20". Geometria de componente não depende do conteúdo (achados A2/A3). */
 .timeline > li > div { display:flex; flex-direction:column; gap:var(--space-05); min-width:0; }
 .timeline > li > div > p { margin:0; }
-.timeline-dot { flex:none; width:var(--space-3); height:var(--space-3); border-radius:var(--radius-full); margin-block-start:var(--space-1); background:var(--primary); box-shadow:none; }
+.timeline-dot { position:relative; z-index:1; flex:none; width:var(--space-3); height:var(--space-3); border-radius:var(--radius-full); margin-block-start:var(--space-1); background:var(--primary); box-shadow:none; }
 /* ACCORDION (0.32.0) — o da referência, com o realce em CÁPSULA (decisão do Victor, 11/10/2026). Sem
    caixa em volta: um fio de 1 entre os itens, nenhum depois do último. A pergunta: 16 de todos os
    lados, 14 peso médio, a seta de 16 no FIM (esmaecida), que vira −180° ao abrir — o marcador do
@@ -5532,17 +5539,9 @@ button.graph-node-body { cursor:pointer; }
     outline-color:var(--focus-strong); }
 }
 
-/* A LINHA DO TEMPO: o trilho era o `::before` da lista, posicionado, e o ponto não — o navegador pinta o posicionado
-   por cima, e a linha passava por CIMA da bolinha; e ia até o fim da lista, sobrando depois do último ponto (achado na
-   bancada de 26/10/2026). Agora cada item desenha o trecho até o ponto seguinte, e o ponto fica por cima. O trilho passa
-   de `--border` para `--input`: na página do Zinco profundo, o `--border` quase não aparecia. */
-.timeline:where(:not([data-brand="lory"],[data-brand="lory"] *))::before { content:none; }
-.timeline > li:where(:not([data-brand="lory"],[data-brand="lory"] *)) { position:relative; }
-.timeline > li:not(:last-child):where(:not([data-brand="lory"],[data-brand="lory"] *))::before {
-  content:""; position:absolute; inset-inline-start:calc(var(--space-3) / 2 - var(--border-width) / 2);
-  inset-block-start:calc(var(--space-1) + var(--space-3)); inset-block-end:calc(-1 * (var(--space-5) + var(--space-1)));
-  inline-size:var(--border-width); background:var(--input); }
-.timeline-dot:where(:not([data-brand="lory"],[data-brand="lory"] *)) { position:relative; z-index:1; }
+/* A LINHA DO TEMPO: o trilho por baixo dos pontos é conserto de todas as marcas (na regra da linha do tempo, acima). Aqui
+   só a cor: de `--border` para `--input` — na página do Zinco profundo, o `--border` quase não aparecia. */
+.timeline > li:not(:last-child):where(:not([data-brand="lory"],[data-brand="lory"] *))::before { background:var(--input); }
 
 /* >>> camada responsiva — GERADA por scripts/build-responsive-layer.mjs <<< */
 /* As variáveis de passo NÃO HERDAM. Ver o comentário de VARIAVEIS no gerador: um ícone dentro

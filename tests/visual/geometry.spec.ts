@@ -252,9 +252,20 @@ for (const theme of ["dark", "light"] as const) {
         .toBe(campo ? "0px" : "2px");
       if (campo) expect(v.borda, `o campo em foco não desenha borda: ${JSON.stringify(v)}`).toBe("rgba(0, 0, 0, 0)");
     }
-    // uma cor só, e é a do token
-    const cores = [...new Set(vistos.map(v => v.cor))];
-    expect(cores.length, `mais de uma cor de foco: ${JSON.stringify(cores)}`).toBe(1);
+    // uma cor só para o resto, e é a do token. ADR-0083 (decisão do Victor na bancada de 27/10/2026, "1 C Amarelo"): no
+    // CLARO, o foco dos CAMPOS é o amarelo da marca — uma exceção consciente (1,75:1 na página) —, e só os campos.
+    const ehCampo = (v: {alvo: string}) => /^(input|select|textarea)\./.test(v.alvo);
+    const doResto = [...new Set(vistos.filter(v => !ehCampo(v)).map(v => v.cor))];
+    expect(doResto.length, `mais de uma cor de foco fora dos campos: ${JSON.stringify(doResto)}`).toBe(1);
+    const dosCampos = [...new Set(vistos.filter(ehCampo).map(v => v.cor))];
+    expect(dosCampos.length, "a amostra tem campo").toBe(1);
+    if (theme === "light") {
+      const amarelo = await p.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--primary").trim());
+      expect(dosCampos[0], "no claro, o foco do campo é o amarelo").toBe(amarelo);
+      expect(doResto[0], "e o do resto não").not.toBe(amarelo);
+    } else {
+      expect(dosCampos[0], "no escuro, o foco do campo é o mesmo do resto").toBe(doResto[0]);
+    }
   });
 }
 

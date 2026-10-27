@@ -63,8 +63,9 @@
    do `Switch` e a alça do `Slider` (o token novo `--control-thumb`), o visto do `Checkbox` e o ponto do rádio.
 5. **O foco:** o `--focus` do claro é o bronze `#BD7000` (3,83:1 no branco; o amarelo dava 1,91:1). O grafite
    (`--focus-strong`) continua o foco da maioria das peças. **O foco dos campos é o amarelo**, uma linha só, nos dois
-   temas — com 1,75:1 na página e 1,91:1 no cartão, abaixo dos 3:1; o Victor decide na bancada do passo A (*"acho que vou
-   aprovar mesmo reprovando"*).
+   temas — com 1,75:1 na página e 1,91:1 no cartão, abaixo dos 3:1. **Decidido na bancada do passo A** (27/10/2026,
+   olhando o amarelo e o grafite lado a lado): *"1 C Amarelo (a proposta: 1,75:1 na página)"* — exceção consciente; com
+   "aumentar contraste", o foco do campo volta ao grafite.
 6. **O campo do claro é branco com a sombra fina em todo lugar** — também dentro das superfícies brancas (reverte o item 2
    da ADR-0078). No escuro, nada muda.
 7. **"Aumentar contraste" do sistema** (`prefers-contrast: more` na web; o iOS e o Android no nativo): o campo ganha o
@@ -81,7 +82,10 @@
     azuis com 3:1 ou mais nos dois temas; a célula de "atenção" do painel, no claro, `#D07612` (o `--warning-500` do claro,
     o único uso dele).
 12. **A `lory` fica 100% como é hoje** (o Victor, 26/10/2026), inclusive os pontos que já reprovam nela: os tokens dela são
-    congelados na fonte, e toda regra nova leva `:where(:not([data-brand="lory"],[data-brand="lory"] *))`.
+    congelados na fonte, e toda regra nova leva `:where(:not([data-brand="lory"],[data-brand="lory"] *))`. **A exceção é o
+    conserto da linha do tempo**, que não é cor: o defeito era geral (o Victor, na bancada de 27/10/2026: *"não tinha errado
+    de passar por cima só na lory, no tema padrão da Aurea também"*). Na lory, a linha passa por baixo dos pontos e para no
+    último, com a cor de linha dela (`--border`).
 
 ## O que ela substitui
 
@@ -121,13 +125,15 @@
 ## As consequências, com os custos
 
 - **Quase todas as fotos mudam de cor**, nos dois temas.
-- **As exceções conscientes**, registradas: o foco amarelo dos campos no claro (1,75:1, à espera da bancada); as marcas
+- **As exceções conscientes**, registradas: o foco amarelo dos campos no claro (1,75:1 na página, decidido na bancada de
+  27/10/2026); as marcas
   brancas dentro do amarelo (1,91:1 — o estado se lê pelo controle cheio contra o vazio; com "aumentar contraste", viram a
   tinta). O campo sem linha continua abaixo dos 3:1 no visual padrão (1,09:1), como na referência.
 - **No nativo, o link não tem a variação sublinhada no claro** (não existe prop para pedir); fica para quando for pedida.
 - **A `lory` guarda os pontos que já reprovam nela** (a letra branca do botão primário no laranja, 3,08:1; o item atual da
   lateral, 2,59:1; o segmento aceso do escuro, 3,93:1) — decisão do Victor; o item do bloco 3 que os consertaria cai.
-- **O conserto da linha do tempo não vale na `lory`**, porque nenhuma regra nova vale nela — pergunta levada à bancada.
+- **O conserto da linha do tempo vale também na `lory`** (a decisão de 27/10/2026, acima): o teste da lory deixa de
+  comparar o desenho da linha do tempo, e o `paleta-passo-a.spec.ts` prova a cor dela.
 
 ## Revisão
 
