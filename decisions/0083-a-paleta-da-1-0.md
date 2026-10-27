@@ -41,7 +41,11 @@
 ## A regra (o passo A)
 
 1. **A base Zinco profundo** (substitui os neutros da ADR-0061): claro — página `#F5F5F5`, cartão branco, texto
-   `#09090B`, secundário `#EBEBED`, texto de apoio `#686871`; escuro — página `#09090B`, cartão `#18181B`, texto `#FAFAFA`,
+   `#09090B`, secundário `#EBEBED`, texto de apoio **`#5E5E65`** (a proposta dizia `#686871`, que mede **3,88:1** sobre o
+   fundo de 10% dos blocos — código, registro, área de soltar, os da ADR-0072 — dentro da caixa de prévia, fora das 78
+   combinações dela: o texto mais escuro, `#09090B`, escurece os fundos feitos dele. O `#5E5E65` é o zinco mais claro que
+   passa em todo fundo medido — 4,52 ali, 4,60 no nó do mapa, 6,43 no branco —, quase o cinza da 0.44.0, `#616161`. Achado
+   pela varredura do axe em 27/10/2026; a escolha vai à bancada); escuro — página `#09090B`, cartão `#18181B`, texto `#FAFAFA`,
    secundário `#27272A`, texto de apoio `#A1A1AA`. **O cartão do escuro não tem linha** (o Victor, 26/10/2026: *"sem
    bordas"* — a ADR-0072 continua).
 2. **No claro, o amarelo nunca é letra.** O destaque (`--primary-emphasis`) e o link (`--link`) são o grafite do texto; o

@@ -943,8 +943,8 @@ export const themes = {
       "oklch": null
     },
     "mutedForeground": {
-      "hex": "#686871",
-      "p3": "color(display-p3 0.4078 0.4078 0.4431)",
+      "hex": "#5e5e65",
+      "p3": "color(display-p3 0.3686 0.3686 0.3961)",
       "oklch": null
     },
     "accent": {
@@ -1018,9 +1018,9 @@ export const themes = {
       "oklch": null
     },
     "sidebarPrimary": {
-      "hex": "#f0b100",
-      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
-      "oklch": "oklch(0.795 0.184 86.047)"
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
+      "oklch": null
     },
     "sidebarPrimaryForeground": {
       "hex": "#18181b",
@@ -1078,13 +1078,13 @@ export const themes = {
       "oklch": null
     },
     "subtleForeground": {
-      "hex": "#686871",
-      "p3": "color(display-p3 0.4078 0.4078 0.4431)",
+      "hex": "#5e5e65",
+      "p3": "color(display-p3 0.3686 0.3686 0.3961)",
       "oklch": null
     },
     "borderStrong": {
-      "hex": "#686871",
-      "p3": "color(display-p3 0.4078 0.4078 0.4431)",
+      "hex": "#5e5e65",
+      "p3": "color(display-p3 0.3686 0.3686 0.3961)",
       "oklch": null
     },
     "fieldBg": {
@@ -1363,8 +1363,8 @@ export const themes = {
       "oklch": null
     },
     "textMuted": {
-      "hex": "#686871",
-      "p3": "color(display-p3 0.4078 0.4078 0.4431)",
+      "hex": "#5e5e65",
+      "p3": "color(display-p3 0.3686 0.3686 0.3961)",
       "oklch": null
     },
     "oracle500": {

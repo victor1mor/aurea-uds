@@ -2755,7 +2755,8 @@ for (const theme of ["dark", "light"] as const) {
     // 0.32.0, passo 6 — as medidas da referência, lidas no CSS publicado dela.
     const p6 = e.passo6;
     expect(p6.link.cor, "Link: a cor de link").toBe(p6.link.linkToken);
-    expect([p6.link.peso, p6.link.sublinhado], "peso médio, sem sublinhado parado").toEqual(["500", "none"]);
+    // Desde a ADR-0083 (26/10/2026) o `Link` é sublinhado PARADO — o link se separa do texto por mais que a cor (WCAG 1.4.1).
+    expect([p6.link.peso, p6.link.sublinhado], "peso médio, sublinhado parado").toEqual(["500", "underline"]);
     expect(p6.link.setaMascara, "a seta do external é desenho por máscara").toBe(true);
     expect(p6.link.seta, "a seta tem 0,75 da letra").toBeGreaterThan(8);
     expect([p6.amostra.md, p6.amostra.xl], "ColorSwatch: 32 e 40").toEqual([32, 40]);

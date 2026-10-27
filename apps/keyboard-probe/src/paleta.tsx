@@ -2,7 +2,8 @@
 // família, como a bancada da proposta do Victor (ações, seleção, navegação, campos, links, avisos e dados). O tema vem de
 // `?tema=dark`; a marca, de `?marca=lory` (ela tem de sair IGUAL à 0.44.0).
 // Só para a bancada humana: `?foco=grafite` mostra o foco dos campos no grafite (a alternativa à decisão "c"), e
-// `?contraste=simulado` liga as regras do "aumentar contraste" sem mexer no sistema. Os testes usam a preferência de
+// `?contraste=simulado` liga as regras do "aumentar contraste" sem mexer no sistema; `?apoio=proposta` mostra o texto de
+// apoio da proposta (#686871) no lugar do #616168. Os testes usam a preferência de
 // verdade (o Playwright emula `prefers-contrast: more`).
 //
 // Como os outros bancos, este não afirma nada: monta. Quem afirma é `tests/visual/paleta-passo-a.spec.ts` e
@@ -70,11 +71,13 @@ function Bancada() {
       .bench-paleta { display:grid; gap:var(--space-6); padding:var(--space-6); max-width:72rem; margin:0 auto; }
       .bench-familia h2 { margin:0 0 var(--space-3); font-size:var(--text-sm); color:var(--muted-foreground); text-transform:uppercase; letter-spacing:var(--tracking-wide); }
       .bench-pecas { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-4); }
-      .bench-campos { display:grid; grid-template-columns:repeat(auto-fit, minmax(12rem, 1fr)); gap:var(--space-3); flex:1 1 100%; }
+      .bench-campos { display:grid; grid-template-columns:repeat(auto-fit, minmax(12rem, 1fr)); align-items:start; gap:var(--space-3); flex:1 1 100%; }
       .bench-graficos { display:flex; gap:var(--space-2); }
       .bench-graficos span { inline-size:var(--space-10); block-size:var(--space-10); border-radius:var(--radius-sm); }
       .bench-barra { position:relative; inline-size:22rem; }
       .bench-barra .bottom-nav { position:static; }
+      ${q.get("apoio") === "proposta" ? `
+      [data-theme="light"] { --muted-foreground:#686871; --subtle-foreground:#686871; --border-strong:#686871; }` : ""}
       ${q.get("foco") === "grafite" ? `
       [data-theme="light"] :is(.input,.textarea,.select):focus-visible, [data-theme="light"] :is(.input-group,.combobox-multi):focus-within { outline-color:var(--focus-strong) !important; }` : ""}
     `}</style>

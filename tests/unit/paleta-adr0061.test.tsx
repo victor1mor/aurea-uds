@@ -30,7 +30,7 @@ const valor = (b: string, nome: string) => b.match(new RegExp(`--${nome}:([^;]+)
 const CLARO: Record<string, string> = {
   // os neutros do Zinco profundo (ADR-0083)
   background: "#f5f5f5", foreground: "#09090b", card: "#ffffff", border: "#e4e4e7",
-  "muted-foreground": "#686871", "border-strong": "#686871",
+  "muted-foreground": "#5e5e65", "border-strong": "#5e5e65",
   success: "#107c10", "success-400": "#0e700e", "success-bg": "#f1faf1",
   warning: "#f7630c", "warning-400": "#8a3707", "warning-bg": "#fff9f5",
   destructive: "#c50f1f", "danger-400": "#b10e1c", "danger-bg": "#fdf3f4",

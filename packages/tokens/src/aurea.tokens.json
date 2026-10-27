@@ -2470,14 +2470,15 @@
       },
       "muted-foreground": {
         "$type": "color",
+        "$description": "O texto de apoio do claro: #5E5E65, o zinco mais claro que passa 4,5:1 em todo fundo medido (ADR-0083). A proposta da paleta dizia #686871, escolhido contra o campo branco (5,52) e o secundário (4,63); medido em 27/10/2026 pela varredura do axe, ele dá 3,88:1 sobre o fundo de 10% dos blocos (código, registro, área de soltar — ADR-0072) dentro da caixa de prévia, porque o texto mais escuro (#09090B) escurece os fundos feitos dele. O #5E5E65 dá 4,52 ali, 4,60 no nó do mapa, 6,43 no branco — e quase o cinza da 0.44.0 (#616161). A decisão vai à bancada do passo A.",
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.40784,
-            0.40784,
-            0.44314
+            0.36863,
+            0.36863,
+            0.39608
           ],
-          "hex": "#686871"
+          "hex": "#5e5e65"
         }
       },
       "accent": {
@@ -2635,7 +2636,7 @@
       "sidebar-primary": {
         "$type": "color",
         "$description": "The accent INSIDE the sidebar. No claro da marca padrão é o amarelo (ADR-0083, 26/10/2026): o item atual é o botão primário (fundo amarelo, letra na tinta), e o fio do item atual sai amarelo; com o destaque grafite, o grafite viraria letra sobre grafite. Cada marca publica o seu.",
-        "$value": "{primary}"
+        "$value": "{primary-emphasis}"
       },
       "sidebar-primary-foreground": {
         "$type": "color",
@@ -2727,11 +2728,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.40784,
-            0.40784,
-            0.44314
+            0.36863,
+            0.36863,
+            0.39608
           ],
-          "hex": "#686871"
+          "hex": "#5e5e65"
         }
       },
       "border-strong": {
@@ -2739,11 +2740,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.40784,
-            0.40784,
-            0.44314
+            0.36863,
+            0.36863,
+            0.39608
           ],
-          "hex": "#686871"
+          "hex": "#5e5e65"
         }
       },
       "field-bg": {
