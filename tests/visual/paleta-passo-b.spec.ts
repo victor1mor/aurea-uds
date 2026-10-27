@@ -201,3 +201,17 @@ test("o botão ligado cinza ganha o contorno de 3:1 com \"aumentar contraste\" �
     await ctx.close();
   }
 });
+
+// A BARRA NA MESMA ALTURA NO CELULAR (27/10/2026, ADR-0084): as nove barras do nativo, rodando pelo `react-native-web` na
+// página do site, medem o mesmo. Era 61 nos redondos e na cápsula e 57 no `circle-bold`, contra 53 nos outros.
+test("a barra de baixo do celular: os nove formatos na mesma altura", async ({page: p}) => {
+  await p.goto("/apps/catalog/native-bottomnav.html", {waitUntil: "networkidle"});
+  await p.waitForSelector('[aria-label="Main menu, circle-bold"]');
+  const alturas = await p.evaluate((formas) => Object.fromEntries(formas.map((f) => {
+    const el = document.querySelector(`[aria-label="Main menu, ${f}"]`);
+    return [f, el ? Math.round(el.getBoundingClientRect().height * 10) / 10 : -1];
+  })), FORMAS);
+  const doNone = alturas.none;
+  expect(doNone).toBeGreaterThan(0);
+  for (const f of FORMAS) expect(Math.abs(alturas[f] - doNone), `${f}: ${alturas[f]} contra ${doNone} no none`).toBeLessThanOrEqual(0.5);
+});

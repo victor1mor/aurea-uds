@@ -468,9 +468,14 @@ test("BottomNav: a altura de referência, o nome inteiro e colado no ícone", as
     {id: "ajustes", label: "Ajustes", icon: "gear", href: "#"}, {id: "perfil", label: "Perfil", icon: "user", href: "#"}];
   // E o nome COLADO no ícone (03/10/2026, *"o texto pode ficar mais próximo do ícone"*): o topo
   // da caixa do nome é o fim da caixa do ícone, sem vão. No `circle-bold` a moldura tem a altura
-  // do ícone (o círculo é o disco), e a barra fica em 58.
+  // do ícone (o círculo é o disco).
+  // A MESMA ALTURA EM TODOS OS FORMATOS (27/10/2026, o Victor: *"quero todos da mesma altura do none, subtle, pill,
+  // expand"*, e a forma *"B: o círculo e a cápsula com 28"* — ADR-0084). Era um TETO por formato (62 nos redondos e na
+  // cápsula, 58 no `circle-bold`); agora as nove são IGUAIS à do `none`, e o teto é 54. O círculo e a cápsula de 28
+  // passam 2 por fora da caixa: o desenho entra 2 na linha do nome (`VAO`), e o nome continua no mesmo lugar.
   const ALTURA: Record<string, number> = {none: 54, subtle: 54, pill: 54, expand: 54,
-    circle: 62, "circle-raised": 62, "circle-outline": 62, "circle-bold": 58, capsule: 62};
+    circle: 54, "circle-raised": 54, "circle-outline": 54, "circle-bold": 54, capsule: 54};
+  const VAO: Record<string, number> = {circle: -2, "circle-raised": -2, "circle-outline": -2, capsule: -2};
   const barras = Object.keys(ALTURA).map((indicator) => `<div data-ind="${indicator}">${
     renderToStaticMarkup(el(A.AureaProvider, {spriteUrl: ""}, el(A.BottomNav, {
       indicator, width: "content", current: "ajustes", label: "Menu", items: itens})))}</div>`).join("");
@@ -493,10 +498,12 @@ test("BottomNav: a altura de referência, o nome inteiro e colado no ícone", as
       cortados: nomes.filter((n) => n.scrollHeight > n.clientHeight).map((n) => n.textContent),
       vaos: (c as HTMLElement).dataset.ind === "expand" ? [] : vaos};
   }));
+  const doNone = medidas.find((m) => m.ind === "none")!.altura;
   const errados = medidas.flatMap((m) => [
     ...(m.altura > ALTURA[m.ind] + 0.5 ? [`${m.ind}: ${m.altura.toFixed(1)} de altura, o teto é ${ALTURA[m.ind]}`] : []),
+    ...(Math.abs(m.altura - doNone) > 0.5 ? [`${m.ind}: ${m.altura.toFixed(1)} de altura, o none tem ${doNone.toFixed(1)} — a altura tem de ser a mesma`] : []),
     ...(m.cortados.length ? [`${m.ind}: o nome não cabe em pé (${m.cortados.join(", ")})`] : []),
-    ...(m.vaos.some((v) => Math.abs(v) > 0.5) ? [`${m.ind}: vão entre o ícone e o nome (${m.vaos.map((v) => v.toFixed(1)).join(", ")})`] : []),
+    ...(m.vaos.some((v) => Math.abs(v - (VAO[m.ind] ?? 0)) > 0.5) ? [`${m.ind}: vão entre o ícone e o nome (${m.vaos.map((v) => v.toFixed(1)).join(", ")}), o certo é ${VAO[m.ind] ?? 0}`] : []),
   ]);
   expect(errados, errados.join("\n")).toEqual([]);
 });

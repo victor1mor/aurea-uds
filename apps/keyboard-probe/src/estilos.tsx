@@ -20,6 +20,7 @@ const marca = q.get("marca");
 if (marca) document.documentElement.setAttribute("data-brand", marca);
 const SPRITE = new URL("../../../packages/icons/dist/aurea-icons.svg", location.href).href;
 
+
 const LIGADO: TogglePressedStyle[] = ["brand", "neutral", "contrast"];
 const SEGMENTO: SegmentedControlSelectedStyle[] = ["current", "neutral", "contrast", "brand", "ring", "dot"];
 const LINHA: TimelineVariant[] = ["default", "ring", "latest", "time", "contrast"];
@@ -57,7 +58,10 @@ function Bancada() {
   const [forma, setForma] = useState<BottomNavIndicator>((q.get("ind") as BottomNavIndicator) ?? "capsule");
   const [lugar, setLugar] = useState<"floating" | "edge">(q.get("var") === "edge" ? "edge" : "floating");
   const [periodo, setPeriodo] = useState("week");
+  // `?so=barra` (só na bancada): só a barra de baixo, para comparar as alturas lado a lado.
+  const so = q.get("so");
   return <main style={{display: "grid", gap: "var(--space-8)", padding: "var(--space-6)"}}>
+    {so !== "barra" && <>
     <section style={{display: "grid", gap: "var(--space-3)"}}>
       <h2>The pressed button — pressedStyle</h2>
       {LIGADO.map((v) => <div key={v} data-prova={`ligado-${v}`} style={{display: "flex", flexWrap: "wrap", gap: "var(--space-3)", alignItems: "center"}}>
@@ -86,6 +90,7 @@ function Bancada() {
         </div>)}
       </div>
     </section>
+    </>}
     <section style={{display: "grid", gap: "var(--space-3)"}}>
       <h2>The current item of the bottom bar — currentStyle</h2>
       <div style={{display: "flex", flexWrap: "wrap", gap: "var(--space-3)", alignItems: "center"}}>

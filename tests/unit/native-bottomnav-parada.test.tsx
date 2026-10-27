@@ -106,12 +106,14 @@ describe("BottomNav · expand: os botões andam, a barra não", () => {
   });
 });
 
-describe("BottomNav · capsule: a cápsula de 56 × 32 em todos os itens, pintada só no escolhido", () => {
-  it("a moldura de todos tem 56 × 32, e só a do escolhido é amarela", () => {
+// ~~56 × 32~~ → 56 × 28 desde 27/10/2026 (a barra na mesma altura em todos os formatos — ADR-0084, *"B: o círculo e a
+// cápsula com 28"*). O contador continua no canto do ÍCONE: (56 − 28) / 2 para dentro.
+describe("BottomNav · capsule: a cápsula de 56 × 28 em todos os itens, pintada só no escolhido", () => {
+  it("a moldura de todos tem 56 × 28, e só a do escolhido é amarela", () => {
     __limpar();
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="b" indicator="capsule" /></AureaProvider>);
     const molduras = __instancias("View").map((p) => StyleSheet.flatten(p.style) ?? {})
-      .filter((e) => e.width === 56 && e.height === 32);
+      .filter((e) => e.width === 56 && e.height === t.size.iconLg + t.size.space1);
     expect(molduras).toHaveLength(3);
     expect(molduras.map((e) => e.backgroundColor)).toEqual([undefined, t.color.primary, undefined]);
   });
@@ -120,7 +122,7 @@ describe("BottomNav · capsule: a cápsula de 56 × 32 em todos os itens, pintad
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" indicator="capsule" /></AureaProvider>);
     const contador = __instancias("View").map((p) => StyleSheet.flatten(p.style) ?? {})
       .find((e) => e.position === "absolute" && e.top === -t.size.space05)!;
-    expect(contador.right).toBe((56 - 32) / 2 - t.size.space05);
+    expect(contador.right).toBe((56 - (t.size.iconLg + t.size.space1)) / 2 - t.size.space05);
   });
 });
 
@@ -148,12 +150,13 @@ describe("BottomNav · a altura de referência", () => {
       expect(e.paddingVertical).toBe(t.size.space05);
     }
   });
-  it("o disco do circle-bold: space1 em volta, sem vão entre o ícone e o nome", () => {
+  // ~~space1 em volta~~ → space05 em cima e embaixo, e sem a altura mínima (27/10/2026, a barra na mesma altura — ADR-0084).
+  it("o disco do circle-bold: space05 em cima e embaixo, space1 dos lados, sem vão entre o ícone e o nome", () => {
     __limpar();
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" indicator="circle-bold" /></AureaProvider>);
     const discos = __instancias("View").map((p) => (StyleSheet.flatten(p.style as never) ?? {}) as Record<string, number>)
       .filter((e) => e.width === 56 && e.borderRadius === t.size.radiusFull);
     expect(discos).toHaveLength(3);
-    for (const d of discos) expect([d.paddingVertical, d.paddingHorizontal, d.gap]).toEqual([t.size.space1, t.size.space1, 0]);
+    for (const d of discos) expect([d.paddingVertical, d.paddingHorizontal, d.gap, d.minHeight]).toEqual([t.size.space05, t.size.space1, 0, undefined]);
   });
 });

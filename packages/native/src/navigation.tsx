@@ -152,7 +152,11 @@ const folha = criarFolha((t: AureaTokens) => ({
   // guias de barra de abas do iOS) diz o mesmo: canto superior do ÍCONE, nunca sobre o texto.
   marca: {position: "relative", alignItems: "center", justifyContent: "center",
           width: 32, height: 32, ...canto(t.size.radiusControl)},
-  marcaRedonda: {...canto(t.size.radiusFull)},
+  // A BARRA NA MESMA ALTURA EM TODOS OS FORMATOS (27/10/2026, o Victor: *"B: o círculo e a cápsula com 28, e todas as
+  // barras na altura de 54"* — ADR-0084): o círculo tinha 32 em volta do ícone de 24, e a barra ficava mais alta. Agora tem
+  // 28 (`iconLg` + `space1`) e passa 2 por fora da caixa em cima e embaixo (a margem negativa), como na web.
+  marcaRedonda: {width: t.size.iconLg + t.size.space1, height: t.size.iconLg + t.size.space1,
+                 marginVertical: -t.size.space05, ...canto(t.size.radiusFull)},
   contador: {position: "absolute", top: -t.size.space05, right: -t.size.space05},
 
   // ── A BARRA FICA PARADA QUANDO SE TROCA DE ABA — pedido do Victor, 03/10/2026 ──────────────
@@ -172,16 +176,18 @@ const folha = criarFolha((t: AureaTokens) => ({
   // (56 × 48).
   disco: {
     alignItems: "center", justifyContent: "center", gap: 0,
-    width: 56, minHeight: t.size.controlHLg, ...canto(t.size.radiusFull),
-    paddingHorizontal: t.size.space1, paddingVertical: t.size.space1,
+    // Sem a altura mínima, e com `space05` em cima e embaixo (27/10/2026, a barra na mesma altura — `marcaRedonda`): 56 × 44.
+    width: 56, ...canto(t.size.radiusFull),
+    paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
   },
   // `capsule` (a "A" da bancada, de uma referência de mercado): a moldura do ícone vira a cápsula
   // de 56 × 32 do indicador ativo dela — os mesmos `--bottomnav-bold` e `--bottomnav-ring` do
   // `aurea.css`, em todos os itens. O rótulo fica embaixo, fora dela.
-  marcaCapsula: {width: 56, height: 32, ...canto(t.size.radiusFull)},
+  // 56 × 28 desde 27/10/2026 (a barra na mesma altura — `marcaRedonda`), passando 2 por fora da caixa.
+  marcaCapsula: {width: 56, height: t.size.iconLg + t.size.space1, marginVertical: -t.size.space05, ...canto(t.size.radiusFull)},
   // O contador fica no canto do ÍCONE, e não da cápsula: sem a cápsula pintada (item não
   // escolhido) ele ficaria solto, longe do sino. São os (56 − 32) / 2 a mais para dentro.
-  contadorCapsula: {right: (56 - 32) / 2 - t.size.space05},
+  contadorCapsula: {right: (56 - (t.size.iconLg + t.size.space1)) / 2 - t.size.space05},
   // No `content` o item tem a largura da cápsula mais o recheio de sempre (`space1`), e não o
   // `space3` do `aba_content`: com ele cada item teria 80 e a barra, 340.
   aba_capsula_content: {paddingHorizontal: t.size.space1},

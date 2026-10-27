@@ -852,7 +852,7 @@ img,svg { display:block; }
    sistema faziam a pilula crescer para baixo e a barriga dela ficava atras dos botoes. A borda de
    baixo agora fica `--space-4` acima da area do sistema, em qualquer aparelho.
    A variante `edge` reverte isto mais abaixo, e la o recheio e' o certo. */
-.bottom-nav { --bottomnav-ring:2rem; --bottomnav-surface:var(--card); position:sticky; bottom:0; z-index:var(--z-sticky); display:flex; gap:var(--space-1); margin:var(--space-4); margin-bottom:calc(var(--space-4) + env(safe-area-inset-bottom)); padding:var(--space-1); border:1px solid transparent; border-radius:var(--radius-control); background:var(--card); color:var(--card-foreground); box-shadow:var(--shadow-md); }
+.bottom-nav { --bottomnav-ring:calc(var(--icon-lg) + var(--space-1)); --bottomnav-surface:var(--card); position:sticky; bottom:0; z-index:var(--z-sticky); display:flex; gap:var(--space-1); margin:var(--space-4); margin-bottom:calc(var(--space-4) + env(safe-area-inset-bottom)); padding:var(--space-1); border:1px solid transparent; border-radius:var(--radius-control); background:var(--card); color:var(--card-foreground); box-shadow:var(--shadow-md); }
 /* `--control-h-lg` e não `--control-h-md`: alvo de toque. O md dá 36px em comfortable e
    o alvo confortável de dedo é maior — com o recuo, o item renderiza acima de 44px. */
 .bottom-nav-item { flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--space-05); min-height:var(--control-h-lg); padding:var(--space-1); border:0; border-radius:var(--radius-control); background:transparent; color:var(--muted-foreground); font:inherit; font-size:var(--text-xs); text-align:center; text-decoration:none; cursor:pointer; }
@@ -888,7 +888,7 @@ img,svg { display:block; }
    O ALVO DE TOQUE não é este número e continua sendo o `min-height` do item: `--control-h-lg`
    entrega 42px em comfortable e 48 em spacious, contra os 44pt mínimos das diretrizes do iOS e
    os 48dp da mesma referência. A moldura é a caixa do DESENHO; o alvo é o item inteiro. */
-.bottom-nav-mark { position:relative; flex:none; display:inline-flex; align-items:center; justify-content:center; width:var(--bottomnav-ring); height:var(--bottomnav-ring); border-radius:var(--radius-control); }
+.bottom-nav-mark { position:relative; flex:none; display:inline-flex; align-items:center; justify-content:center; width:var(--space-8); height:var(--bottomnav-ring); border-radius:var(--radius-control); }
 /* A BARRA MAIS BAIXA — pedido do Victor, 30/09/2026, aprovado pela imagem: *"ele é muito largo, e
    é assim por conta da distância entre o ícone em cima e o texto embaixo"*. A moldura de 32 só
    serve aos quatro indicadores REDONDOS, em que ela vira o círculo. Nos outros três ela era folga
@@ -899,7 +899,14 @@ img,svg { display:block; }
    nativo (`navigation.tsx`). ~~A folga de 4dp da referência entre o indicador e o rótulo~~ vale só para
    os redondos agora. */
 .bottom-nav-mark { height:var(--icon-lg); }
-.bottom-nav-ind-circle .bottom-nav-mark, .bottom-nav-ind-circle-raised .bottom-nav-mark, .bottom-nav-ind-circle-outline .bottom-nav-mark { height:var(--bottomnav-ring); }
+/* A BARRA NA MESMA ALTURA EM TODOS OS FORMATOS — pedido do Victor, 27/10/2026 (*"todos esses tem a altura maior que o
+   restante ... quero todos da mesma altura do none, subtle, pill, expand"*), e a forma escolhida na bancada, entre duas
+   rodando: *"B: o círculo e a cápsula com 28"* (ADR-0084). O círculo e a cápsula tinham 32 em volta do ícone de 24, e a
+   barra media 62 (o `circle-bold`, 58) contra 54 nos outros. Agora são 28 (`--bottomnav-ring`), e passam 2 por fora da
+   caixa em cima e embaixo (a margem negativa): o item fica com a altura do ícone, como nos outros. A largura das molduras
+   que não são redondas continua 32 (`--space-8`): é ela que dá o canto ao contador. Igual no `navigation.tsx`. */
+.bottom-nav-ind-circle .bottom-nav-mark, .bottom-nav-ind-circle-raised .bottom-nav-mark, .bottom-nav-ind-circle-outline .bottom-nav-mark {
+  width:var(--bottomnav-ring); height:var(--bottomnav-ring); margin-block:calc((var(--icon-lg) - var(--bottomnav-ring)) / 2); }
 /* `inline-flex` no envoltório: como `<span>` solto ele é caixa de LINHA, e mede a entrelinha do
    item (18px) em vez do contador que carrega (16px). A diferença não aparece na tela — aparece
    na medição, e medição errada é o que faz a razão parecer 0,75 quando é 0,67. */
@@ -1023,7 +1030,9 @@ img,svg { display:block; }
    em todos os itens, e o recheio passa do item para ele: o item mede o mesmo escolhido ou não, e a
    altura da barra não muda. O mesmo no `navigation.tsx`. */
 .bottom-nav.bottom-nav-ind-circle-bold .bottom-nav-item { padding:0; }
-.bottom-nav-disc { display:flex; flex-direction:column; align-items:center; justify-content:center; inline-size:var(--bottomnav-bold,3.5rem); max-inline-size:100%; min-height:var(--control-h-lg); padding:var(--space-1); border-radius:var(--radius-full); }
+/* O disco perdeu a altura mínima e o recheio de cima e de baixo caiu para `--space-05` (27/10/2026, a barra na mesma
+   altura — acima): 56 × 44, e a barra fica em 54 como as outras. Era 56 × 48. */
+.bottom-nav-disc { display:flex; flex-direction:column; align-items:center; justify-content:center; inline-size:var(--bottomnav-bold,3.5rem); max-inline-size:100%; padding:var(--space-05) var(--space-1); border-radius:var(--radius-full); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] { color:var(--primary-mark); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .bottom-nav-disc { background:var(--primary); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .icon { opacity:1; }
@@ -1042,7 +1051,8 @@ img,svg { display:block; }
    O contador fica no canto do ÍCONE, e não da cápsula: sem a cápsula pintada ele ficaria solto,
    longe do sino. São os (56 − 32) / 2 a mais para dentro. E ele INVERTE sobre o amarelo, pela
    mesma razão medida do `circle-bold`, logo acima. */
-.bottom-nav-ind-capsule .bottom-nav-mark { width:var(--bottomnav-bold,3.5rem); height:var(--bottomnav-ring); border-radius:var(--radius-full); }
+/* 56 × 28 desde 27/10/2026 (a barra na mesma altura, acima): como o círculo, ela passa 2 por fora da caixa. */
+.bottom-nav-ind-capsule .bottom-nav-mark { width:var(--bottomnav-bold,3.5rem); height:var(--bottomnav-ring); margin-block:calc((var(--icon-lg) - var(--bottomnav-ring)) / 2); border-radius:var(--radius-full); }
 .bottom-nav-ind-capsule .bottom-nav-badge { inset-inline-end:calc((var(--bottomnav-bold,3.5rem) - var(--bottomnav-ring)) / 2 - var(--space-05)); }
 .bottom-nav-ind-capsule .bottom-nav-item[aria-current] .bottom-nav-mark { background:var(--primary); color:var(--primary-mark); }
 .bottom-nav-ind-capsule .bottom-nav-item[aria-current] .icon { opacity:1; }

@@ -54,6 +54,23 @@
    o Victor aprovou cada um pelo nome (26/10/2026, depois da ADR-0072). Só existe quando o app escolhe o estilo; é sempre
    uma sombra por dentro (`inset`), nunca borda — a peça não muda de medida.
 
+## A barra na mesma altura
+
+Na bancada do passo B, o Victor viu que a barra de baixo era mais alta em cinco formatos: *"todos esses tem a altura
+maior que o restante não esta padronizado quero todos da mesma altura do none, subtle pill expand"* (27/10/2026). Medido:
+54 no `none`, no `subtle`, no `pill` e no `expand`; 62 no `circle`, no `circle-raised`, no `circle-outline` e no
+`capsule` (o círculo e a cápsula tinham 32 em volta do ícone de 24, e empurravam o nome); 58 no `circle-bold` (o disco
+tinha altura mínima de 48). Duas formas rodando lado a lado com a de hoje; a escolhida: *"B: o círculo e a cápsula com
+28, e todas as barras na altura de 54."*
+
+- O círculo e a cápsula têm **28** (`--bottomnav-ring` = `--icon-lg` + `--space-1`; no nativo, `iconLg` + `space1`) e
+  passam 2 por fora da caixa em cima e embaixo — o desenho entra 2 na linha do nome, e o nome fica no mesmo lugar.
+- O disco do `circle-bold` perde a altura mínima: 56 × 44.
+- A largura da moldura dos formatos que não são redondos continua 32 (`--space-8`): é ela que dá o canto ao contador.
+- Muda as alturas da [ADR-0055](0055-a-barra-de-baixo-fica-parada-e-mais-baixa.md). Quem cobra: o `geometry.spec` (as nove
+  barras iguais à do `none`), o `native-bottomnav-baixa` e o `native-bottomnav-parada` (o 28, a margem e o disco), e o
+  `paleta-passo-b.spec` (as nove barras do celular, rodando no navegador).
+
 ## As medidas
 
 As da proposta, escritas com os tokens: o aro de 1,5 é `1.5 × --border-width` (2 no ponto da linha do tempo); o ponto do
