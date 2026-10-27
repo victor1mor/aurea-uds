@@ -6,8 +6,8 @@
     "modulos": 40,
     "componentes": 145,
     "hooks": 10,
-    "aliasesLiterais": 114,
-    "propsDistintas": 387
+    "aliasesLiterais": 118,
+    "propsDistintas": 390
   },
   "aliases": {
     "ButtonVariant": {
@@ -72,6 +72,15 @@
       "union": [
         "default",
         "ghost"
+      ]
+    },
+    "TogglePressedStyle": {
+      "module": "actions",
+      "raw": "\"neutral\" | \"contrast\" | \"brand\"",
+      "union": [
+        "neutral",
+        "contrast",
+        "brand"
       ]
     },
     "ToggleProps": {
@@ -2019,6 +2028,18 @@
         "vertical"
       ]
     },
+    "SegmentedControlSelectedStyle": {
+      "module": "inputs-client",
+      "raw": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\"",
+      "union": [
+        "current",
+        "neutral",
+        "contrast",
+        "brand",
+        "ring",
+        "dot"
+      ]
+    },
     "SeparatorSpacing": {
       "module": "layout-client",
       "raw": "\"none\" | \"tight\" | \"normal\" | \"loose\"",
@@ -2217,6 +2238,17 @@
       "union": [
         "card",
         "plain"
+      ]
+    },
+    "TimelineVariant": {
+      "module": "markup",
+      "raw": "\"default\" | \"ring\" | \"latest\" | \"time\" | \"contrast\"",
+      "union": [
+        "default",
+        "ring",
+        "latest",
+        "time",
+        "contrast"
       ]
     },
     "TypographyType": {
@@ -2552,6 +2584,25 @@
       "union": [
         "full",
         "content"
+      ]
+    },
+    "BottomNavCurrentStyle": {
+      "module": "navigation-client",
+      "raw": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"plain\" | \"brand-white\" | \"white-ring\" | \"brand-gradient\" | \"bar-ink\" | \"bar-ring\" | \"bar-plain\" | \"bar-light\"",
+      "union": [
+        "current",
+        "neutral",
+        "contrast",
+        "brand",
+        "ring",
+        "plain",
+        "brand-white",
+        "white-ring",
+        "brand-gradient",
+        "bar-ink",
+        "bar-ring",
+        "bar-plain",
+        "bar-light"
       ]
     },
     "BottomNavVariantLegacy": {
@@ -3266,6 +3317,16 @@
               ]
             },
             {
+              "name": "pressedStyle",
+              "optional": true,
+              "type": "TogglePressedStyle",
+              "values": [
+                "neutral",
+                "contrast",
+                "brand"
+              ]
+            },
+            {
               "name": "children",
               "optional": false,
               "type": "ToggleChildren | never",
@@ -3362,6 +3423,16 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "pressedStyle",
+              "optional": true,
+              "type": "TogglePressedStyle",
+              "values": [
+                "neutral",
+                "contrast",
+                "brand"
+              ]
             }
           ]
         },
@@ -3384,6 +3455,16 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "pressedStyle",
+              "optional": true,
+              "type": "TogglePressedStyle",
+              "values": [
+                "neutral",
+                "contrast",
+                "brand"
+              ]
             }
           ]
         },
@@ -3529,6 +3610,16 @@
               "optional": true,
               "type": "string | readonly string[]",
               "values": null
+            },
+            {
+              "name": "pressedStyle",
+              "optional": true,
+              "type": "TogglePressedStyle",
+              "values": [
+                "neutral",
+                "contrast",
+                "brand"
+              ]
             }
           ]
         },
@@ -7003,6 +7094,19 @@
                 "sm",
                 "md"
               ]
+            },
+            {
+              "name": "selectedStyle",
+              "optional": true,
+              "type": "SegmentedControlSelectedStyle",
+              "values": [
+                "current",
+                "neutral",
+                "contrast",
+                "brand",
+                "ring",
+                "dot"
+              ]
             }
           ]
         },
@@ -9288,6 +9392,18 @@
               "optional": false,
               "type": "Array<{ title: ReactNode; description?: ReactNode; time?: ReactNode; }>",
               "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "TimelineVariant",
+              "values": [
+                "default",
+                "ring",
+                "latest",
+                "time",
+                "contrast"
+              ]
             }
           ]
         },
@@ -9727,6 +9843,26 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "currentStyle",
+              "optional": true,
+              "type": "BottomNavCurrentStyle",
+              "values": [
+                "current",
+                "neutral",
+                "contrast",
+                "brand",
+                "ring",
+                "plain",
+                "brand-white",
+                "white-ring",
+                "brand-gradient",
+                "bar-ink",
+                "bar-ring",
+                "bar-plain",
+                "bar-light"
+              ]
             }
           ]
         },

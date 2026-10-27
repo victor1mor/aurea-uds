@@ -206,16 +206,18 @@ declare function SidebarShow({ when, children }: {
 export type BottomNavVariant = "floating" | "edge";
 export type BottomNavIndicator = "none" | "subtle" | "pill" | "circle" | "circle-raised" | "circle-bold" | "circle-outline" | "capsule" | "expand";
 export type BottomNavWidth = "full" | "content";
+export type BottomNavCurrentStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "plain" | "brand-white" | "white-ring" | "brand-gradient" | "bar-ink" | "bar-ring" | "bar-plain" | "bar-light";
 /** @deprecated Os quatro nomes de 17/08/2026. Use `variant` + `indicator`. */
 export type BottomNavVariantLegacy = "flat" | "surface" | "pill" | "dock";
 export type BottomNavVariantAny = BottomNavVariant | BottomNavVariantLegacy;
-export declare function BottomNav({ items, current, variant, indicator, width, label, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
+export declare function BottomNav({ items, current, variant, indicator, width, label, currentStyle, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
     items: SidebarEntry[];
     current?: string;
     variant?: BottomNavVariantAny;
     indicator?: BottomNavIndicator;
     width?: BottomNavWidth;
     label?: string;
+    currentStyle?: BottomNavCurrentStyle;
 }): React.JSX.Element;
 export interface NavListIndicator {
     icon: IconName;

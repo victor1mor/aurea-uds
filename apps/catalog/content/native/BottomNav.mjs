@@ -44,6 +44,7 @@ export default {
     variant: "Where the bar sits: floating is a pill over the screen, out of the flow, with the system's bottom gap kept outside it; edge lies against the bottom edge and stays in the flow.",
     indicator: "The shape that marks the current tab; the meaning never changes with the shape. Every indicator except expand keeps every label visible, and no measure depends on which tab is current, so the bar never moves.",
     label: "The bar's name for the screen reader. Defaults to the phrase in the strings table.",
+    currentStyle: "The COLOUR of the current tab (ADR-0084); indicator picks the shape. The same thirteen as on the web; brand-white fails WCAG (1.91:1), and brand-gradient is solid yellow on a React Native without gradients.",
   },
   examples: [
     {
@@ -64,5 +65,9 @@ export default {
       valores: ["full", "content"], estilo: coluna,
       codigo: v => `<BottomNav width="${v}" indicator="pill" current={tab} items={items} />`,
       peca: v => h(Tela, {width: v, indicator: "pill", nome: `Main menu, ${v}`})}),
+    cada({titulo: "The colour of the current tab", descricao: "currentStyle (ADR-0084), here on the capsule — the same thirteen as on the web.",
+      valores: ["current", "neutral", "contrast", "brand", "ring", "plain", "brand-white", "white-ring", "brand-gradient", "bar-ink", "bar-ring", "bar-plain", "bar-light"], estilo: coluna,
+      codigo: v => `<BottomNav currentStyle="${v}" current={tab} items={items} />`,
+      peca: v => h(Tela, {currentStyle: v, nome: `Main menu, ${v}`})}),
   ],
 };

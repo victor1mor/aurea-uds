@@ -730,48 +730,12 @@ export function OTPField({ length, value, defaultValue, onValueChange, mask, dis
     const s = useAureaStrings();
     return _jsx(BaseOTPField.Root, { id: id, length: length, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), mask: mask, disabled: disabled, required: required, role: "group", "aria-label": label, className: cx("otp-field", className), children: Array.from({ length }, (_, i) => _jsxs(React.Fragment, { children: [_jsx(BaseOTPField.Input, { render: _jsx("input", { "aria-label": `${s.otpDigit} ${i + 1}` }), className: cx("input otp-slot", variant === "secondary" && "input-secondary") }), groupSize && groupSize > 0 && (i + 1) % groupSize === 0 && i < length - 1 ? _jsx(BaseOTPField.Separator, { className: "otp-separator" }) : null] }, i)) });
 }
-// SegmentedControl — achado M20, fechado na Parte C do PLANO-1.0 em 07/08/2026.
-//
-// O DEFEITO: era `role="group"` com N botões de `aria-pressed`. Isso descreve N alternâncias
-// INDEPENDENTES — cada botão anuncia "pressionado/não pressionado", nada diz que só um pode
-// valer, e nunca se ouve "1 de 2". Para escolha única entre poucas opções o padrão APG é
-// `radiogroup`, e a diferença é o que o leitor de tela consegue prometer.
-// A troca mudou a semântica de um componente publicado, então foi registrada: ADR-0016.
-//
-// O MOTOR ENTREGA, ENTÃO NÃO ESCREVEMOS (BUILDING.md §1). O `RadioGroup` do Base UI 1.6 traz o
-// padrão inteiro: roving tabindex, setas que movem E selecionam, Home/End, e `aria-checked`.
-// Escrever isso à mão seria reimplementar um composite que já está testado.
-//
-// `render={<button type="button"/>}` não é enfeite, e a medição de 07/08 é que disse: o
-// `Radio.Root` renderiza um `<span>` por padrão, e a pele da Aurea é `.segmented button`. Sem
-// isso o componente perderia a pele inteira — e o check 18 não veria, porque ele olha CLASSE.
-// O motor também emite um `<input type="radio">` escondido por item (para envio de formulário);
-// ele é `position:fixed` e `aria-hidden`, então não entra no flex nem na árvore de acessibilidade.
-//
-// E `nativeButton` é o par obrigatório do `render` acima — medido em 11/08/2026. O `Radio.Root`
-// declara `nativeButton = false` por padrão (é o valor certo para o `<span>` que ele renderiza
-// sozinho), e o `useButton` do motor CONFERE isso no DOM montado, dentro de um efeito: sem esta
-// palavra sai um `console.error` do Base UI a cada montagem de CLIENTE. Não no catálogo, que é
-// HTML estático — no console de quem INSTALA.
-// O DOM foi medido nos dois lados antes da troca. O `role="button"` que a mensagem ameaça NÃO
-// aparecia (o `role="radio"` do motor já vencia a fusão); o que muda de fato é o `<input>`
-// escondido perder o `id`, que migra para este botão — e migra para o lado certo, porque o botão
-// é o rádio e o input é `aria-hidden`. Comportamento idêntico: Enter não seleciona, Espaço
-// seleciona, a seta move E seleciona. O que sai é a camada sintética que o motor punha por cima
-// da ativação nativa do `<button>`.
-//
-// `fullWidth` (A5, 06/10/2026): o mesmo nome e o mesmo desenho do nativo — o controle ocupa a
-// linha e cada segmento CRESCE a partir do rótulo, sem encolher abaixo dele. É como o grupo
-// de botões alternáveis da referência ocupa a linha.
-// NAVEGAÇÃO (bloco 1, o 5-A — 23/10/2026): com `href` em TODOS os itens, a cápsula é um <nav> de links — o atual leva
-// `aria-current="page"` —, e não um grupo de escolha: ir para outra página é navegação, e o leitor de tela tem de ouvir
-// "link", não "opção". É a chave Web | Native do site. `size="sm"`: a cápsula baixa da referência (abas de 24).
-export function SegmentedControl({ items, value, onChange, label, fullWidth, size = "md" }) {
+export function SegmentedControl({ items, value, onChange, label, fullWidth, size = "md", selectedStyle }) {
     const s = useAureaStrings();
     const classe = cx("segmented", fullWidth && "segmented-full", size === "sm" && "segmented-sm");
     if (items.length > 0 && items.every(i => i.href != null))
-        return _jsx("nav", { className: classe, "aria-label": label ?? s.optionsLabel, children: items.map(i => _jsx("a", { href: i.href, className: i.value === value ? "active" : undefined, "aria-current": i.value === value ? "page" : undefined, children: i.label }, i.value)) });
-    return _jsx(BaseRadioGroup, { className: classe, "aria-label": label ?? s.optionsLabel, value: value, onValueChange: v => onChange?.(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: i.label }, i.value)) });
+        return _jsx("nav", { className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, children: items.map(i => _jsx("a", { href: i.href, className: i.value === value ? "active" : undefined, "aria-current": i.value === value ? "page" : undefined, children: i.label }, i.value)) });
+    return _jsx(BaseRadioGroup, { className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, value: value, onValueChange: v => onChange?.(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: i.label }, i.value)) });
 }
 const ehAgrupado = (items) => items != null && items.length > 0 && typeof items[0] === "object" && items[0] != null && "items" in items[0];
 // UM renderizador e UMA lista para os dois combobox: duas cópias da mesma árvore é como a

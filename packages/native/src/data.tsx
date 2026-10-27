@@ -59,7 +59,7 @@ import {
   type StyleProp, type ViewStyle,
 } from "react-native";
 import type {AureaBadgeCategory, AureaBadgeTone} from "./display.js";
-import {canto, criarFolha} from "./estilos.js";
+import {aroDoEstilo, canto, criarFolha, marcaDoEstilo, peleDoPonto} from "./estilos.js";
 import type {AureaIcon} from "./icon.js";
 import {IconeEmMoldura} from "./moldura.js";
 import {Text} from "./text.js";
@@ -169,8 +169,18 @@ export type AureaTimelineItem = {
   between?: React.ReactNode;
 };
 
+/** Os cinco estilos da linha do tempo (ADR-0084), os mesmos da web. */
+export type AureaTimelineVariant = "default" | "ring" | "latest" | "time" | "contrast";
+
 export interface TimelineProps extends Virtualizavel {
   items: readonly AureaTimelineItem[];
+  /**
+   * O estilo (ADR-0084, 27/10/2026), os cinco aprovados pelo Victor em 26/10/2026: `default` (o ponto amarelo cheio — o
+   * padrão), `ring` (o ponto vazado com o aro amarelo), `latest` (os pontos na cor fraca e só o último no amarelo, com
+   * halo), `time` (a hora numa coluna à esquerda, alinhada à direita; o trilho anda junto com o ponto) e `contrast` (os
+   * pontos na cor do texto). O item com `icon` continua com a moldura dele em todos.
+   */
+  variant?: AureaTimelineVariant;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
@@ -192,13 +202,26 @@ export interface TimelineProps extends Virtualizavel {
  * colavam na mesma linha — *"Shipped14:20"* (aurea.css:1240). Geometria de componente não muda
  * com o conteúdo.
  */
-export function Timeline({items, virtualized = false, style, testID}: TimelineProps) {
+export function Timeline({items, variant, virtualized = false, style, testID}: TimelineProps) {
   const t = useAureaTokens();
   const s = folha(t);
   // A coluna do marcador tem a largura da moldura quando ALGUM item tem ícone: senão os títulos
   // ficariam em colunas diferentes conforme o item. O trilho vai ao centro dela.
   const comMoldura = items.some((i) => i.icon != null);
   const marcador = comMoldura ? t.size.space10 : t.size.space3;
+  // O `time` (ADR-0084): a hora numa coluna de 52 (`space12` + `space1`, a mesma da web) à esquerda do ponto; o ponto, o
+  // trilho e o texto "entre" andam junto com ela.
+  const colunaDaHora = variant === "time" ? t.size.space12 + t.size.space1 : 0;
+  const recuo = colunaDaHora ? colunaDaHora + t.size.space3 : 0;
+  // A pele do ponto (ADR-0084): o `ring` vazado com o aro por dentro (sem a borda transparente do halo antigo, para o aro
+  // ficar no tamanho do ponto, como na web), o halo de 4 do último no `latest`, e a cor do `contrast`.
+  const peleDoPontoEm = (n: number) => {
+    const pp = peleDoPonto(t, variant, n === items.length - 1);
+    if (pp == null) return null;
+    return [{backgroundColor: pp.fundo},
+      pp.aro ? {borderWidth: 0, boxShadow: [aroDoEstilo(t, pp.aro, 2)]} : null,
+      pp.halo ? {boxShadow: [{offsetX: 0, offsetY: 0, blurRadius: 0, spreadDistance: t.size.space1, color: pp.halo}]} : null];
+  };
 
   const desenhar = React.useCallback((item: AureaTimelineItem, n: number) => {
     const titulo = typeof item.title === "string"
@@ -206,10 +229,10 @@ export function Timeline({items, virtualized = false, style, testID}: TimelinePr
     const ponto = item.icon != null
       ? <IconeEmMoldura icon={item.icon} tone={item.tone} moldura={t.size.space10}
                         glifo={t.size.iconMd} sobre={t.color.surface1} />
-      : comMoldura ? <View style={s.colunaDoPonto}><View style={s.ponto} /></View>
-      : <View style={s.ponto} />;
+      : comMoldura ? <View style={s.colunaDoPonto}><View style={[s.ponto, peleDoPontoEm(n)]} /></View>
+      : <View style={[s.ponto, peleDoPontoEm(n)]} />;
     const entre = item.between != null && n < items.length - 1 ? (
-      <View style={[s.entre, {paddingLeft: marcador + t.size.space3}]}>
+      <View style={[s.entre, {paddingLeft: recuo + marcador + t.size.space3}]}>
         {typeof item.between === "string"
           ? <Text size="xs" tone="muted">{item.between}</Text> : item.between}
       </View>
@@ -218,6 +241,15 @@ export function Timeline({items, virtualized = false, style, testID}: TimelinePr
     return (
       <View role="listitem" style={s.itemDaTrilha}>
         <View style={s.evento}>
+          {colunaDaHora ? (
+            <View style={{width: colunaDaHora, flexGrow: 0, flexShrink: 0}}>
+              {item.time != null
+                ? (typeof item.time === "string"
+                    ? <Text size="xs" tone="muted" style={{textAlign: "right", fontVariant: ["tabular-nums"]}}>{item.time}</Text>
+                    : item.time)
+                : null}
+            </View>
+          ) : null}
           {ponto}
           <View style={s.colunaDoEvento}>
             {item.trailing != null ? (
@@ -231,7 +263,7 @@ export function Timeline({items, virtualized = false, style, testID}: TimelinePr
               ? (typeof item.description === "string"
                   ? <Text size="sm" tone="muted">{item.description}</Text> : item.description)
               : null}
-            {item.time != null
+            {item.time != null && !colunaDaHora
               ? (typeof item.time === "string"
                   ? <Text size="xs" tone="muted">{item.time}</Text> : item.time)
               : null}
@@ -240,7 +272,7 @@ export function Timeline({items, virtualized = false, style, testID}: TimelinePr
         {entre}
       </View>
     );
-  }, [s, t, comMoldura, marcador, items.length]);
+  }, [s, t, comMoldura, marcador, items.length, colunaDaHora, recuo, variant]);
 
   if (virtualized) {
     return (
@@ -261,8 +293,8 @@ export function Timeline({items, virtualized = false, style, testID}: TimelinePr
   }
 
   return (
-    <View accessibilityRole="list" style={[s.trilha, style]} testID={testID}>
-      {items.length > 0 ? <View style={[s.trilho, comMoldura && {left: marcador / 2}]} /> : null}
+    <View accessibilityRole="list" style={[s.trilha, style]} testID={testID} {...marcaDoEstilo("timelineStyle", variant)}>
+      {items.length > 0 ? <View style={[s.trilho, {left: recuo + marcador / 2}]} /> : null}
       {items.map((item, n) => <React.Fragment key={n}>{desenhar(item, n)}</React.Fragment>)}
     </View>
   );

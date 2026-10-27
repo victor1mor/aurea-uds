@@ -3,7 +3,7 @@ import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAnotarBottomNav } from "./barranav.js";
 import { Avatar, Badge } from "./display.js";
-import { canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca } from "./estilos.js";
+import { canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca, aroDoEstilo, fundoDaPele, marcaDoEstilo, peleDoAtual } from "./estilos.js";
 import { NaSuperficie } from "./superficie.js";
 import { Icon } from "./icon.js";
 import { Card } from "./layout.js";
@@ -331,7 +331,7 @@ const folha = criarFolha((t) => ({
  * usa `Screen` (uma fileira de botões presa no pé, por exemplo), o número está em
  * `useBottomNavSpace()`. Fora de um provedor os dois valem zero, e nada muda.
  */
-export function BottomNav({ items, current, variant = "floating", indicator = "capsule", width = "full", label, style, ...rest }) {
+export function BottomNav({ items, current, variant = "floating", indicator = "capsule", width = "full", label, currentStyle, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();
@@ -343,12 +343,18 @@ export function BottomNav({ items, current, variant = "floating", indicator = "c
     const anotar = useAnotarBottomNav();
     const flutua = variant !== "edge";
     const justa = flutua && width === "content";
+    // O passo B (ADR-0084): a pele do item atual, ou `null` no padrão. `naBarra`: a barra inteira amarela, com todos os
+    // ícones e nomes na tinta — sem transparência, que sobre o amarelo vira marrom.
+    const pele = peleDoAtual(t, currentStyle);
+    const naBarra = !!pele?.barra;
+    const pinta = (p) => [fundoDaPele(p), p.aro ? { boxShadow: [aroDoEstilo(t, p.aro)] } : null];
     return (_jsx(View, { accessibilityLabel: label ?? strings.bottomNavLabel, 
         // 🔴 A BARRA CONTA A PRÓPRIA ALTURA — é o que permite o `Screen` reservar o fim da rolagem
         // sem o app calcular nada. A conta é a pílula (o que o layout mede) mais as DUAS margens
         // mais a folga do sistema; `edge` conta zero, porque ela fica no fluxo e já encurta a tela.
         onLayout: anotar == null ? undefined : (e) => anotar(flutua ? e.nativeEvent.layout.height + t.size.space4 * 2 + inset.bottom : 0), style: [
             s.barra, flutua ? [s.barra_flutuante, justa ? s.barra_content : s.barra_cheia] : s.barra_edge,
+            naBarra && { backgroundColor: t.color.primary },
             // 🔴 NO `floating` A FOLGA DO SISTEMA VAI POR FORA — conserto de 19/09/2026, visto em
             // aparelho Samsung com os três botões (|||, ○, <).
             //
@@ -365,17 +371,23 @@ export function BottomNav({ items, current, variant = "floating", indicator = "c
                 // faixa de fundo entre a barra e o pé da tela. `max` e não soma, como sempre foi.
                 : { paddingBottom: Math.max(t.size.space1, inset.bottom) },
             style,
-        ], ...rest, children: items.map((it) => {
+        ], ...marcaDoEstilo("currentStyle", currentStyle), ...rest, children: items.map((it) => {
             const ativo = it.id === current;
-            const corDoTexto = !ativo ? t.color.mutedForeground
-                : indicator === "none" ? t.color.primaryEmphasis
-                    : indicator === "circle-bold" || indicator === "expand" ? t.color.primaryMark
-                        : indicator === "subtle" || indicator === "pill" ? t.color.primaryEmphasis
-                            : redondo ? t.color.primaryEmphasis
-                                : t.color.foreground;
+            // Com um estilo do passo B (fora do `none`), a forma escolhida recebe a pele; o nome que fica FORA dela (embaixo
+            // da moldura, nos redondos e no `capsule`) vai na cor do texto — ou na tinta, na barra amarela.
+            const pintaPele = ativo && pele != null && indicator !== "none";
+            const nomeForaDaForma = (redondo && !disco) || capsula;
+            const corDoTexto = !ativo ? (naBarra ? t.color.primaryForeground : t.color.mutedForeground)
+                : pintaPele ? (nomeForaDaForma ? (naBarra ? t.color.primaryForeground : t.color.foreground) : pele.letra)
+                    : naBarra ? t.color.primaryForeground
+                        : indicator === "none" ? t.color.primaryEmphasis
+                            : indicator === "circle-bold" || indicator === "expand" ? t.color.primaryMark
+                                : indicator === "subtle" || indicator === "pill" ? t.color.primaryEmphasis
+                                    : redondo ? t.color.primaryEmphasis
+                                        : t.color.foreground;
             // Na `capsule` o ícone está SOBRE o amarelo e o rótulo não: cada um tem a sua cor. Sobre o
             // amarelo, a marca (`primaryMark`): a tinta escura desde a ADR-0083 (26/10/2026); era o marrom (17/10/2026).
-            const corDoIcone = ativo && capsula ? t.color.primaryMark : corDoTexto;
+            const corDoIcone = pintaPele ? pele.letra : ativo && capsula ? t.color.primaryMark : corDoTexto;
             // No `expand` o nome só aparece no escolhido; nos outros ele vira o nome do item para o
             // leitor de tela (o texto simples) ou fica na árvore sem ocupar lugar (o que não é texto).
             const nomeVisivel = !expande || ativo;
@@ -403,16 +415,17 @@ export function BottomNav({ items, current, variant = "floating", indicator = "c
                     // ela fica da altura do ícone, e o nome encosta nele.
                     s.marca, redondo && !disco ? s.marcaRedonda : { height: t.size.iconLg },
                     capsula && s.marcaCapsula, expande && s.marcaExpande,
-                    ativo && indicator === "circle" && { backgroundColor: comOpacidade(t.color.primary, 0.14) },
-                    ativo && indicator === "circle-raised" && {
+                    ativo && !pintaPele && indicator === "circle" && { backgroundColor: comOpacidade(t.color.primary, 0.14) },
+                    ativo && !pintaPele && indicator === "circle-raised" && {
                         backgroundColor: t.color.popover, boxShadow: [t.shadow.shadowMd],
                     },
-                    ativo && indicator === "circle-outline" && {
+                    ativo && !pintaPele && indicator === "circle-outline" && {
                         borderWidth: t.size.borderWidth, borderColor: "transparent",
                         // O fundo sai do AMARELO (ADR-0083): do destaque, no claro, sairia cinza — o destaque é o grafite.
                         backgroundColor: comOpacidade(t.color.primary, 0.10),
                     },
-                    ativo && capsula && { backgroundColor: t.color.primary },
+                    ativo && !pintaPele && capsula && { backgroundColor: t.color.primary },
+                    pintaPele && nomeForaDaForma && pinta(pele),
                 ], children: [it.icon && _jsx(Icon, { name: it.icon, size: "lg", color: corDoIcone, weight: ativo ? "fill" : undefined }), it.badge != null && it.badge !== false && (_jsx(View, { style: [s.contador, capsula && s.contadorCapsula], children: typeof it.badge === "number"
                             ? _jsx(Badge, { tone: "danger", emphasis: "solid", size: "xs", count: it.badge })
                             : _jsx(Badge, { tone: "danger", emphasis: "solid", size: "xs", dot: true }) }))] }));
@@ -429,7 +442,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "c
                     // nativo, que sobe para 14 (ADR-0050) com linha de 21: era o que mais engrossava a
                     // barra. A linha é o tamanho mais `space1`, como na web: com a entrelinha justa (14,4)
                     // a perna do "j" passava da caixa. No `expand` o nome vai ao lado do ícone, em 14.
-                    ? _jsx(Text, { type: expande ? "body-sm" : "body-xs", weight: 500, numberOfLines: 1, style: [{ color: corDoTexto, lineHeight: (expande ? t.size.textSm : t.size.textXs) + t.size.space1 },
+                    ? _jsx(Text, { type: expande ? "body-sm" : "body-xs", weight: ativo && pele?.negrito ? 600 : 500, numberOfLines: 1, style: [{ color: corDoTexto, lineHeight: (expande ? t.size.textSm : t.size.textXs) + t.size.space1 },
                             expande && { flexShrink: 1 }], children: it.label })
                     : null)
                 : (nomeVisivel ? it.label : _jsx(View, { style: s.rotuloEscondido, children: it.label }));
@@ -438,7 +451,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "c
                 accessibilityRole: "link", accessibilityLabel: !nomeVisivel && typeof it.label === "string" ? it.label : undefined, ...estadoAcessivel({ selected: ativo, disabled: !!it.disabled }, "link"), style: [
                     s.aba, justa && s.aba_content,
                     indicator === "subtle" && { ...canto(t.size.radiusCard - t.size.space1) },
-                    ativo && (indicator === "subtle" || indicator === "pill")
+                    ativo && !pintaPele && (indicator === "subtle" || indicator === "pill")
                         && { backgroundColor: comOpacidade(t.color.primary, 0.12) },
                     disco && s.aba_disco,
                     capsula && justa && s.aba_capsula_content,
@@ -450,10 +463,12 @@ export function BottomNav({ items, current, variant = "floating", indicator = "c
                     expande && s.aba_expande,
                     expande && !ativo && justa && s.aba_expande_outro_content,
                     expande && ativo && s.aba_expande_escolhido,
+                    pintaPele && (indicator === "subtle" || indicator === "pill" || expande) && pinta(pele),
                 ], children: disco
                     // O disco do `circle-bold`: 56 de largura em todos os itens, amarelo só no escolhido.
                     // É o `.bottom-nav-disc` da web.
-                    ? _jsxs(View, { collapsable: false, style: [s.disco, ativo && { backgroundColor: t.color.primary }], children: [marca, rotulo] })
+                    ? _jsxs(View, { collapsable: false, style: [s.disco, ativo && !pintaPele && { backgroundColor: t.color.primary },
+                            pintaPele && pinta(pele)], children: [marca, rotulo] })
                     : _jsxs(_Fragment, { children: [marca, rotulo] }) }, it.id));
         }) }));
 }

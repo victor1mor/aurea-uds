@@ -159,6 +159,26 @@ flat, surface, pill and dock still work and map onto the pair: flat is edge with
 <BottomNav variant="dock" label="Garage dock" current={route} items={items} />
 ```
 
+### The colour of the current item
+
+currentStyle (ADR-0084) — indicator picks the shape, currentStyle the colour; here on the capsule. current (the default), neutral, contrast, brand, ring, plain; with yellow and white: brand-white (it fails WCAG — white on the yellow measures 1.91:1), white-ring and brand-gradient; and the whole bar in yellow: bar-ink, bar-ring, bar-plain and bar-light. Floating and edge bars alike.
+
+```tsx
+<BottomNav indicator="capsule" currentStyle="current" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="neutral" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="contrast" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="brand" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="ring" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="plain" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="brand-white" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="white-ring" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="brand-gradient" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="bar-ink" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="bar-ring" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="bar-plain" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="bar-light" label="Garage" current={route} items={items} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -169,3 +189,4 @@ flat, surface, pill and dock still work and map onto the pair: flat is edge with
 | `indicator` | `"none" \| "subtle" \| "pill" \| "circle" \| "circle-raised" \| "circle-bold" \| "circle-outline" \| "capsule" \| "expand"` | "none" | The SHAPE that marks the current item. The meaning never changes with the shape: current is always the brand gold. `none` marks by colour alone; `subtle` and `pill` wrap icon and label in a tinted container and differ only in radius; `circle`, `circle-raised` and `circle-outline` wrap only the icon, by fill, by elevation or by a ring; `circle-bold` is a solid disc around icon and label, the only one that flips the whole foreground; `capsule` is the 56 × 32 active indicator of the design reference, behind the icon; `expand` draws only icons and grows the current item into a gold capsule with its label — the others keep theirs for the screen reader. Every other indicator keeps every label visible. No measure depends on which item is current, so the bar never moves (ADR-0055). |
 | `width` | `"full" \| "content"` | "full" | How wide the floating pill is. `full` spans the screen minus the margin, as it always has; `content` sizes the pill to its items and centres it. Items then measure their own content instead of sharing the width equally, with the item's own touch target (--control-h-lg) as the minimum. Ignored on `edge`, which sits against the screen edge and stays full width. |
 | `label` | `string` | "Main" | Accessible name of the <nav>. Two navigation landmarks with the same name fail axe, and a page with a bottom bar usually has a Topbar or Sidebar too — name it. |
+| `currentStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "plain" \| "brand-white" \| "white-ring" \| "brand-gradient" \| "bar-ink" \| "bar-ring" \| "bar-plain" \| "bar-light"` | "current" | The COLOUR of the current item (ADR-0084) — indicator picks the shape, currentStyle the colour. current (the default), neutral (grey), contrast (graphite), brand (solid yellow), ring (a yellow ring, no fill), plain (only the filled icon and a semibold label); brand-white (yellow with white — it FAILS WCAG: white on the yellow measures 1.91:1, chosen knowing it), white-ring (white with a yellow ring, ink inside) and brand-gradient (a yellow gradient — the one gradient in a navigation component; on React Native without gradients, solid yellow); and the whole bar in yellow, with every icon and label in ink: bar-ink, bar-ring, bar-plain and bar-light. The colour goes where the shape paints: the item in pill, subtle and expand; the icon frame in circle, circle-outline, circle-raised and capsule; the disc in circle-bold. The none indicator has no fill and does not change. Floating and edge bars alike. Written as data-current-style; the same attribute on a container sets it for every bar inside. Web and React Native. |

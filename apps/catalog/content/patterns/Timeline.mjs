@@ -64,4 +64,17 @@ export default [
         {title: "Reminder sent", time: "22 Aug", description: "Automatic, 9 days before due."},
         {title: "Paid", time: "28 Aug", description: "Bank transfer · € 1,240.00"}]}))),
   },
+  {
+    variant: "Default",
+    name: "Five styles",
+    description: "variant (ADR-0084), all on the rail that runs under the dots and stops at the last one: default (the solid yellow dot), ring (a hollow dot with a yellow ring), latest (muted dots, only the last one yellow with a halo), time (the time in a column on the left) and contrast (dots in the text colour).",
+    uses: ["Timeline"],
+    code: ["default", "ring", "latest", "time", "contrast"].map(v => `<Timeline variant="${v}" items={events} />`).join("\n"),
+    render: () => h("div", {style: {...cheio, display: "grid", gap: "var(--space-6)"}},
+      ...["default", "ring", "latest", "time", "contrast"].map(v => h("div", {key: v}, h("p", {className: "muted", style: {margin: "0 0 var(--space-2)"}}, v),
+        h(A.Timeline, {variant: v, items: [
+          {title: "Created", time: "09:02", description: "Drafted by Writer."},
+          {title: "Reviewed", time: "10:41", description: "Two comments resolved."},
+          {title: "Published", time: "11:15"}]})))),
+  },
 ];

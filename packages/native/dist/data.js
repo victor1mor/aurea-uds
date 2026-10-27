@@ -56,7 +56,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //   .table th         :1185           `subtle-foreground`, fundo `surface-2`, textXs, CAIXA ALTA
 import * as React from "react";
 import { FlatList, Pressable, View, useWindowDimensions, } from "react-native";
-import { canto, criarFolha } from "./estilos.js";
+import { aroDoEstilo, canto, criarFolha, marcaDoEstilo, peleDoPonto } from "./estilos.js";
 import { IconeEmMoldura } from "./moldura.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
@@ -130,32 +130,50 @@ const EMPILHA_ABAIXO_DE = 640;
  * colavam na mesma linha — *"Shipped14:20"* (aurea.css:1240). Geometria de componente não muda
  * com o conteúdo.
  */
-export function Timeline({ items, virtualized = false, style, testID }) {
+export function Timeline({ items, variant, virtualized = false, style, testID }) {
     const t = useAureaTokens();
     const s = folha(t);
     // A coluna do marcador tem a largura da moldura quando ALGUM item tem ícone: senão os títulos
     // ficariam em colunas diferentes conforme o item. O trilho vai ao centro dela.
     const comMoldura = items.some((i) => i.icon != null);
     const marcador = comMoldura ? t.size.space10 : t.size.space3;
+    // O `time` (ADR-0084): a hora numa coluna de 52 (`space12` + `space1`, a mesma da web) à esquerda do ponto; o ponto, o
+    // trilho e o texto "entre" andam junto com ela.
+    const colunaDaHora = variant === "time" ? t.size.space12 + t.size.space1 : 0;
+    const recuo = colunaDaHora ? colunaDaHora + t.size.space3 : 0;
+    // A pele do ponto (ADR-0084): o `ring` vazado com o aro por dentro (sem a borda transparente do halo antigo, para o aro
+    // ficar no tamanho do ponto, como na web), o halo de 4 do último no `latest`, e a cor do `contrast`.
+    const peleDoPontoEm = (n) => {
+        const pp = peleDoPonto(t, variant, n === items.length - 1);
+        if (pp == null)
+            return null;
+        return [{ backgroundColor: pp.fundo },
+            pp.aro ? { borderWidth: 0, boxShadow: [aroDoEstilo(t, pp.aro, 2)] } : null,
+            pp.halo ? { boxShadow: [{ offsetX: 0, offsetY: 0, blurRadius: 0, spreadDistance: t.size.space1, color: pp.halo }] } : null];
+    };
     const desenhar = React.useCallback((item, n) => {
         const titulo = typeof item.title === "string"
             ? _jsx(Text, { size: "md", weight: 600, style: s.tituloQueEncolhe, children: item.title }) : item.title;
         const ponto = item.icon != null
             ? _jsx(IconeEmMoldura, { icon: item.icon, tone: item.tone, moldura: t.size.space10, glifo: t.size.iconMd, sobre: t.color.surface1 })
-            : comMoldura ? _jsx(View, { style: s.colunaDoPonto, children: _jsx(View, { style: s.ponto }) })
-                : _jsx(View, { style: s.ponto });
-        const entre = item.between != null && n < items.length - 1 ? (_jsx(View, { style: [s.entre, { paddingLeft: marcador + t.size.space3 }], children: typeof item.between === "string"
+            : comMoldura ? _jsx(View, { style: s.colunaDoPonto, children: _jsx(View, { style: [s.ponto, peleDoPontoEm(n)] }) })
+                : _jsx(View, { style: [s.ponto, peleDoPontoEm(n)] });
+        const entre = item.between != null && n < items.length - 1 ? (_jsx(View, { style: [s.entre, { paddingLeft: recuo + marcador + t.size.space3 }], children: typeof item.between === "string"
                 ? _jsx(Text, { size: "xs", tone: "muted", children: item.between }) : item.between })) : null;
         // O evento e o texto "entre" ele e o próximo são UM item da lista; o vão entre os dois é o mesmo da trilha.
-        return (_jsxs(View, { role: "listitem", style: s.itemDaTrilha, children: [_jsxs(View, { style: s.evento, children: [ponto, _jsxs(View, { style: s.colunaDoEvento, children: [item.trailing != null ? (_jsxs(View, { style: s.linhaDoTitulo, children: [titulo, typeof item.trailing === "string"
+        return (_jsxs(View, { role: "listitem", style: s.itemDaTrilha, children: [_jsxs(View, { style: s.evento, children: [colunaDaHora ? (_jsx(View, { style: { width: colunaDaHora, flexGrow: 0, flexShrink: 0 }, children: item.time != null
+                                ? (typeof item.time === "string"
+                                    ? _jsx(Text, { size: "xs", tone: "muted", style: { textAlign: "right", fontVariant: ["tabular-nums"] }, children: item.time })
+                                    : item.time)
+                                : null })) : null, ponto, _jsxs(View, { style: s.colunaDoEvento, children: [item.trailing != null ? (_jsxs(View, { style: s.linhaDoTitulo, children: [titulo, typeof item.trailing === "string"
                                             ? _jsx(Text, { size: "md", weight: 600, children: item.trailing }) : item.trailing] })) : titulo, item.description != null
                                     ? (typeof item.description === "string"
                                         ? _jsx(Text, { size: "sm", tone: "muted", children: item.description }) : item.description)
-                                    : null, item.time != null
+                                    : null, item.time != null && !colunaDaHora
                                     ? (typeof item.time === "string"
                                         ? _jsx(Text, { size: "xs", tone: "muted", children: item.time }) : item.time)
                                     : null] })] }), entre] }));
-    }, [s, t, comMoldura, marcador, items.length]);
+    }, [s, t, comMoldura, marcador, items.length, colunaDaHora, recuo, variant]);
     if (virtualized) {
         return (_jsx(FlatList, { accessibilityRole: "list", data: items, keyExtractor: (_, n) => String(n), 
             // O `between` mora dentro da célula, então leva o mesmo vão que o separador dá entre elas.
@@ -166,7 +184,7 @@ export function Timeline({ items, virtualized = false, style, testID }) {
             // conforme se rola. Os pontos continuam, e são eles que marcam os eventos.
             style: style, testID: testID }));
     }
-    return (_jsxs(View, { accessibilityRole: "list", style: [s.trilha, style], testID: testID, children: [items.length > 0 ? _jsx(View, { style: [s.trilho, comMoldura && { left: marcador / 2 }] }) : null, items.map((item, n) => _jsx(React.Fragment, { children: desenhar(item, n) }, n))] }));
+    return (_jsxs(View, { accessibilityRole: "list", style: [s.trilha, style], testID: testID, ...marcaDoEstilo("timelineStyle", variant), children: [items.length > 0 ? _jsx(View, { style: [s.trilho, { left: recuo + marcador / 2 }] }) : null, items.map((item, n) => _jsx(React.Fragment, { children: desenhar(item, n) }, n))] }));
 }
 /**
  * Os pares termo → valor.

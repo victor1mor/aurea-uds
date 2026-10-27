@@ -1,5 +1,6 @@
 import {createElement as h, useState} from "react";
 import {BottomNav, Badge} from "../../../packages/react/dist/index.js";
+import {cada} from "./_eixos.mjs";
 
 // Caixa de recorte: a barra é `sticky` e mede a largura do que a contém. Numa demo larga ela
 // vira uma fileira esticada e deixa de parecer o que é. A caixa dá a largura de um telefone;
@@ -222,5 +223,12 @@ export default {
       render: () => h("div", {style: {display: "grid", gap: "var(--space-4)"}},
         ...LEGADO.map(([v, rotulo]) => h(Barra, {key: v, variant: v, label: rotulo, inicial: "fuel"}))),
     },
+    {...cada({titulo: "The colour of the current item", descricao: "currentStyle (ADR-0084) — indicator picks the shape, "
+      + "currentStyle the colour; here on the capsule. current (the default), neutral, contrast, brand, ring, plain; with "
+      + "yellow and white: brand-white (it fails WCAG — white on the yellow measures 1.91:1), white-ring and brand-gradient; "
+      + "and the whole bar in yellow: bar-ink, bar-ring, bar-plain and bar-light. Floating and edge bars alike.",
+      valores: ["current", "neutral", "contrast", "brand", "ring", "plain", "brand-white", "white-ring", "brand-gradient", "bar-ink", "bar-ring", "bar-plain", "bar-light"], coluna: true,
+      codigo: v => `<BottomNav indicator="capsule" currentStyle="${v}" label="Garage" current={route} items={items} />`,
+      peca: v => demo({indicator: "capsule", currentStyle: v, label: `Garage ${v}`, inicial: "fuel"})}), embed: true},
   ],
 };

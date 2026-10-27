@@ -3340,6 +3340,26 @@ flat, surface, pill and dock still work and map onto the pair: flat is edge with
 <BottomNav variant="dock" label="Garage dock" current={route} items={items} />
 ```
 
+### The colour of the current item
+
+currentStyle (ADR-0084) — indicator picks the shape, currentStyle the colour; here on the capsule. current (the default), neutral, contrast, brand, ring, plain; with yellow and white: brand-white (it fails WCAG — white on the yellow measures 1.91:1), white-ring and brand-gradient; and the whole bar in yellow: bar-ink, bar-ring, bar-plain and bar-light. Floating and edge bars alike.
+
+```tsx
+<BottomNav indicator="capsule" currentStyle="current" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="neutral" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="contrast" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="brand" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="ring" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="plain" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="brand-white" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="white-ring" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="brand-gradient" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="bar-ink" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="bar-ring" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="bar-plain" label="Garage" current={route} items={items} />
+<BottomNav indicator="capsule" currentStyle="bar-light" label="Garage" current={route} items={items} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -3350,6 +3370,7 @@ flat, surface, pill and dock still work and map onto the pair: flat is edge with
 | `indicator` | `"none" \| "subtle" \| "pill" \| "circle" \| "circle-raised" \| "circle-bold" \| "circle-outline" \| "capsule" \| "expand"` | "none" | The SHAPE that marks the current item. The meaning never changes with the shape: current is always the brand gold. `none` marks by colour alone; `subtle` and `pill` wrap icon and label in a tinted container and differ only in radius; `circle`, `circle-raised` and `circle-outline` wrap only the icon, by fill, by elevation or by a ring; `circle-bold` is a solid disc around icon and label, the only one that flips the whole foreground; `capsule` is the 56 × 32 active indicator of the design reference, behind the icon; `expand` draws only icons and grows the current item into a gold capsule with its label — the others keep theirs for the screen reader. Every other indicator keeps every label visible. No measure depends on which item is current, so the bar never moves (ADR-0055). |
 | `width` | `"full" \| "content"` | "full" | How wide the floating pill is. `full` spans the screen minus the margin, as it always has; `content` sizes the pill to its items and centres it. Items then measure their own content instead of sharing the width equally, with the item's own touch target (--control-h-lg) as the minimum. Ignored on `edge`, which sits against the screen edge and stays full width. |
 | `label` | `string` | "Main" | Accessible name of the <nav>. Two navigation landmarks with the same name fail axe, and a page with a bottom bar usually has a Topbar or Sidebar too — name it. |
+| `currentStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "plain" \| "brand-white" \| "white-ring" \| "brand-gradient" \| "bar-ink" \| "bar-ring" \| "bar-plain" \| "bar-light"` | "current" | The COLOUR of the current item (ADR-0084) — indicator picks the shape, currentStyle the colour. current (the default), neutral (grey), contrast (graphite), brand (solid yellow), ring (a yellow ring, no fill), plain (only the filled icon and a semibold label); brand-white (yellow with white — it FAILS WCAG: white on the yellow measures 1.91:1, chosen knowing it), white-ring (white with a yellow ring, ink inside) and brand-gradient (a yellow gradient — the one gradient in a navigation component; on React Native without gradients, solid yellow); and the whole bar in yellow, with every icon and label in ink: bar-ink, bar-ring, bar-plain and bar-light. The colour goes where the shape paints: the item in pill, subtle and expand; the icon frame in circle, circle-outline, circle-raised and capsule; the disc in circle-bold. The none indicator has no fill and does not change. Floating and edge bars alike. Written as data-current-style; the same attribute on a container sets it for every bar inside. Web and React Native. |
 </page>
 
 <page url="https://aureauds.dev/breadcrumb.html">
@@ -8802,6 +8823,19 @@ With href on every item it is a <nav> of links: going to another page is navigat
 ]} />
 ```
 
+### The colour of the selected segment
+
+selectedStyle (ADR-0084): current — the raised capsule with the yellow line, the default — neutral, contrast (graphite), brand (yellow), ring (a yellow ring) and dot (a yellow dot before the label; its place is kept in every segment, so the width does not jump).
+
+```tsx
+<SegmentedControl selectedStyle="current" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl selectedStyle="neutral" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl selectedStyle="contrast" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl selectedStyle="brand" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl selectedStyle="ring" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl selectedStyle="dot" label="View" value={view} onChange={setView} items={views} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -8812,6 +8846,7 @@ With href on every item it is a <nav> of links: going to another page is navigat
 | `label` | `string` | — | Accessible name of the set. |
 | `fullWidth` | `boolean` | false | Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control scrolls, as without the prop. The name the reference library gives this prop on its toggle-button group; the same prop on native. |
 | `size` | `"sm" \| "md"` | md | sm is the low capsule of the reference's documentation switch: 24 tabs, 14 text. |
+| `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot"` | "current" | The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |
 </page>
 
 <page url="https://aureauds.dev/select.html">
@@ -10284,6 +10319,7 @@ import {Timeline} from "@aurea-uds/react";
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `items` | `Array<{title: ReactNode; description?: ReactNode; time?: ReactNode}>` | — | The events, rendered as an <ol> because the order IS the information. `time` is a node, so an absolute date and a relative one are equally welcome. |
+| `variant` | `"default" \| "ring" \| "latest" \| "time" \| "contrast"` | "default" | The style (ADR-0084), all on the fixed rail that runs under the dots and stops at the last one: default (the solid yellow dot), ring (a hollow dot with a yellow ring), latest (muted dots, only the last one yellow with a halo), time (the time in a column on the left, right-aligned; the rail moves with the dot) or contrast (dots in the text colour). Written as data-timeline-style. Web and React Native; on React Native an item with an icon keeps its frame in every style. |
 </page>
 
 <page url="https://aureauds.dev/toggle.html">
@@ -10342,6 +10378,16 @@ The button scale — sm, md and lg — so a toggle sits level with the controls 
 <Toggle size="lg">Large</Toggle>
 ```
 
+### The colour of the on state
+
+pressedStyle (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Each button below is pressed.
+
+```tsx
+<Toggle icon="text-b" label="Bold" defaultPressed pressedStyle="brand" />
+<Toggle icon="text-b" label="Bold" defaultPressed pressedStyle="neutral" />
+<Toggle icon="text-b" label="Bold" defaultPressed pressedStyle="contrast" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -10357,6 +10403,7 @@ The button scale — sm, md and lg — so a toggle sits level with the controls 
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `value` | `string` | — | What identifies this toggle inside a ToggleGroup — without it the group cannot tell which button changed. Standalone, it makes no difference. |
 | `variant` | `default \| ghost` | default | default has the neutral fill; ghost has none. Pressed uses Aurea's selected language on both. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. |
 </page>
 
 <page url="https://aureauds.dev/togglegroup.html">
@@ -10435,6 +10482,7 @@ The size reaches every toggle in the group.
 | `size` | `sm \| md \| lg` | — | The size of every toggle inside; a toggle may set its own. |
 | `fullWidth` | `boolean` | false | Fills the parent's width, and the toggles share it equally. |
 | `detached` | `boolean` | false | Loose toggles with a 4 gap, instead of joined in one capsule. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. For every toggle inside; each may set its own. |
 </page>
 
 <page url="https://aureauds.dev/toolbar.html">
@@ -10508,6 +10556,25 @@ Unavailable but still counted: it keeps its place in the roving order, so the se
 </Toolbar>
 ```
 
+### The colour of the on state
+
+pressedStyle on the toolbar colours every pressed button inside (ADR-0084): brand — the default — neutral or contrast. A button's own pressedStyle wins.
+
+```tsx
+<Toolbar label="Format" pressedStyle="brand">
+  <ToolbarButton pressed>Bold</ToolbarButton>
+  <ToolbarButton>Italic</ToolbarButton>
+</Toolbar>
+<Toolbar label="Format" pressedStyle="neutral">
+  <ToolbarButton pressed>Bold</ToolbarButton>
+  <ToolbarButton>Italic</ToolbarButton>
+</Toolbar>
+<Toolbar label="Format" pressedStyle="contrast">
+  <ToolbarButton pressed>Bold</ToolbarButton>
+  <ToolbarButton>Italic</ToolbarButton>
+</Toolbar>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -10516,6 +10583,7 @@ Unavailable but still counted: it keeps its place in the roving order, so the se
 | `label` | `string` | Toolbar | Accessible name of the toolbar. Two toolbars on a page must not share one. |
 | `children` | `ReactNode` | — | ToolbarButton, ToolbarGroup and ToolbarSeparator. |
 | `className` | `string` | — | Extra classes on the surface. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. For every pressed ToolbarButton inside; each may set its own. |
 </page>
 
 <page url="https://aureauds.dev/toolbarbutton.html">
@@ -10636,6 +10704,16 @@ The size step shared with Button.
 </Toolbar>
 ```
 
+### The colour of the on state
+
+pressedStyle (ADR-0084), when the button is pressed: brand — the default — neutral or contrast.
+
+```tsx
+<ToolbarButton pressed pressedStyle="brand">Bold</ToolbarButton>
+<ToolbarButton pressed pressedStyle="neutral">Bold</ToolbarButton>
+<ToolbarButton pressed pressedStyle="contrast">Bold</ToolbarButton>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -10658,6 +10736,7 @@ The size step shared with Button.
 | `download` | `boolean \| string` | — | Link attribute, only with `href`. |
 | `render` | `ReactElement` | — | Inherited from Button: the element that renders the button — the router's link, for example — receiving the Aurea skin and the content. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller — the Button's quiet. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. |
 </page>
 
 <page url="https://aureauds.dev/toolbargroup.html">
@@ -15672,6 +15751,26 @@ import {Card, Timeline} from "@aurea-uds/react";
 ```
 </page>
 
+<page url="https://aureauds.dev/pattern-timeline-five-styles.html">
+# Five styles
+
+variant (ADR-0084), all on the rail that runs under the dots and stops at the last one: default (the solid yellow dot), ring (a hollow dot with a yellow ring), latest (muted dots, only the last one yellow with a halo), time (the time in a column on the left) and contrast (dots in the text colour).
+
+## Usage
+
+```tsx
+import {Timeline} from "@aurea-uds/react";
+```
+
+```tsx
+<Timeline variant="default" items={events} />
+<Timeline variant="ring" items={events} />
+<Timeline variant="latest" items={events} />
+<Timeline variant="time" items={events} />
+<Timeline variant="contrast" items={events} />
+```
+</page>
+
 <page url="https://aureauds.dev/pattern-toggle-a-button-that-stays-pressed.html">
 # A button that stays pressed
 
@@ -15705,6 +15804,33 @@ import {ToggleGroup, Toggle} from "@aurea-uds/react";
   <Toggle value="left" icon="text-align-left" label="Align left" />
   <Toggle value="center" icon="text-align-center" label="Center" />
   <Toggle value="right" icon="text-align-right" label="Align right" />
+</ToggleGroup>
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-togglegroup-the-colour-of-the-on-state.html">
+# The colour of the on state
+
+pressedStyle on the group colours every pressed toggle inside (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted).
+
+## Usage
+
+```tsx
+import {ToggleGroup, Toggle} from "@aurea-uds/react";
+```
+
+```tsx
+<ToggleGroup label="Alignment" defaultValue={["left"]} pressedStyle="brand">
+  <Toggle value="left" icon="text-align-left" label="Align left" />
+  <Toggle value="center" icon="text-align-center" label="Center" />
+</ToggleGroup>
+<ToggleGroup label="Alignment" defaultValue={["left"]} pressedStyle="neutral">
+  <Toggle value="left" icon="text-align-left" label="Align left" />
+  <Toggle value="center" icon="text-align-center" label="Center" />
+</ToggleGroup>
+<ToggleGroup label="Alignment" defaultValue={["left"]} pressedStyle="contrast">
+  <Toggle value="left" icon="text-align-left" label="Align left" />
+  <Toggle value="center" icon="text-align-center" label="Center" />
 </ToggleGroup>
 ```
 </page>

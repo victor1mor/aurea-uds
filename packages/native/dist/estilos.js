@@ -136,6 +136,75 @@ export const corDoEscolhido = (t) => t.theme === "light" ? t.color.foreground : 
  * jeito da referência (80/150, decisão de 24/10/2026), que dava um marrom.
  */
 export const letraDoAmarelo = (t) => t.theme === "light" ? t.color.primaryEmphasis : t.color.primary;
+// ── AS CORES, passo B — os estilos novos (ADR-0084, 27/10/2026) ──────────────────────────────────────────────────────
+// Os mesmos estilos da web (`aurea.css`, a seção do passo B), escritos com os tokens: as cores saem do tema, e não de hex
+// na mão. Cada função devolve a pele de um estilo, ou `null` no padrão (a peça desenha o que sempre desenhou).
+/**
+ * O ARO dos estilos de aro (o segmento `ring`, o item `ring`, o `white-ring` e o `bar-ring` da barra de baixo, e o ponto
+ * `ring` da linha do tempo): 1,5 da largura de borda (2 no ponto), na cor pedida — uma SOMBRA POR DENTRO, como o
+ * `inset 0 0 0 …` da web, e não borda: no React Native a borda ocupa lugar e a peça mudaria de medida ao ser escolhida. A
+ * sombra por dentro existe desde a 0.76 (a versão mínima do pacote), e o `react-native-web` a traduz.
+ * É linha, e por isso exceção nomeada à ADR-0072 (pela ADR-0084): o aro é o desenho que dá nome ao estilo, e só existe
+ * quando o app o escolhe. Quem cobra que ele não escape daqui: `sem-linha.test.tsx`.
+ */
+export const aroDoEstilo = (t, cor, vezes = 1.5) => ({ offsetX: 0, offsetY: 0, blurRadius: 0, spreadDistance: vezes * t.size.borderWidth, color: cor, inset: true });
+/**
+ * A MARCA do estilo escolhido, para o navegador (`react-native-web`): o `dataSet` vira o mesmo atributo da web
+ * (`data-current-style`, `data-segment-style`, `data-timeline-style`), e a varredura do site reconhece o estilo de aro como
+ * na web. No aparelho o `dataSet` não existe e é ignorado — como a marca do cartão de contorno (`layout.tsx`).
+ */
+export const marcaDoEstilo = (nome, valor) => valor ? { dataSet: { [nome]: valor } } : {};
+export const peleDoSegmento = (t, estilo) => {
+    const neutra = { fundo: t.color.segment, letra: t.color.foreground, sombra: true, aro: null, ponto: false };
+    switch (estilo) {
+        case "neutral": return neutra;
+        case "contrast": return { fundo: t.color.foreground, letra: t.color.background, sombra: false, aro: null, ponto: false };
+        case "brand": return { fundo: t.color.primary, letra: t.color.primaryForeground, sombra: false, aro: null, ponto: false };
+        case "ring": return { ...neutra, aro: t.color.primary };
+        case "dot": return { ...neutra, ponto: true };
+        default: return null;
+    }
+};
+export const peleDoAtual = (t, estilo) => {
+    const p = (fundo, letra, extra = {}) => ({ fundo, letra, aro: null, degrade: null, negrito: false, barra: false, ...extra });
+    const nada = "transparent";
+    switch (estilo) {
+        case "neutral": return p(t.color.secondary, t.color.foreground);
+        case "contrast": return p(t.color.foreground, t.color.background);
+        case "brand": return p(t.color.primary, t.color.primaryForeground);
+        case "ring": return p(nada, t.color.foreground, { aro: t.color.primary });
+        case "plain": return p(nada, t.color.foreground, { negrito: true });
+        case "brand-white": return p(t.color.primary, t.color.white);
+        case "white-ring": return p(t.color.white, t.color.brandYellowInk, { aro: t.color.primary });
+        case "brand-gradient": return p(t.color.primary, t.color.primaryForeground, { degrade: misturaNoOklab(t.color.primary, t.color.white, 0.3) });
+        case "bar-ink": return p(t.color.primaryForeground, t.color.primary, { barra: true });
+        case "bar-ring": return p(nada, t.color.primaryForeground, { aro: t.color.primaryForeground, barra: true });
+        case "bar-plain": return p(nada, t.color.primaryForeground, { negrito: true, barra: true });
+        case "bar-light": return p(misturaNoOklab(t.color.primary, t.color.white, 0.45), t.color.brandYellowInk, { barra: true });
+        default: return null;
+    }
+};
+/**
+ * O fundo de uma pele: a cor sólida e, no `brand-gradient`, o degradê por cima — `backgroundImage` no RN que já o tem
+ * estável e `experimental_backgroundImage` nas versões de 0.76 em diante; onde nenhum existe, fica o amarelo cheio.
+ * A SEGUNDA exceção à ADR-0007 (pela ADR-0084): só aqui, e só neste estilo.
+ */
+export const fundoDaPele = (pele) => {
+    if (!pele.degrade)
+        return { backgroundColor: pele.fundo };
+    const degrade = `linear-gradient(135deg, ${pele.fundo} 20%, ${pele.degrade})`;
+    return { backgroundColor: pele.fundo, backgroundImage: degrade, experimental_backgroundImage: degrade };
+};
+export const peleDoPonto = (t, estilo, ultimo) => {
+    switch (estilo) {
+        case "ring": return { fundo: "transparent", aro: t.color.primary, halo: null };
+        case "latest": return ultimo
+            ? { fundo: t.color.primary, aro: null, halo: comOpacidade(t.color.primary, 0.28) }
+            : { fundo: t.color.mutedForeground, aro: null, halo: null };
+        case "contrast": return { fundo: t.color.foreground, aro: null, halo: null };
+        default: return null;
+    }
+};
 /**
  * 🍎 O CANTO DO iOS — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
  *

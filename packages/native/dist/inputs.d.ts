@@ -374,7 +374,16 @@ export interface SegmentedControlProps extends ViewProps {
      * rola, como sem a prop. Com `fullWidth`, o `justify` não tem efeito.
      */
     fullWidth?: boolean;
+    /**
+     * A cor do segmento aceso (ADR-0084, 27/10/2026), em seis estilos aprovados pelo Victor em 26/10/2026, os mesmos da web:
+     * `current` (a cápsula amarela de sempre — o padrão), `neutral` (a cápsula branca com sombra), `contrast` (o grafite),
+     * `brand` (o amarelo), `ring` (a cápsula neutra com o aro amarelo) e `dot` (a cápsula neutra com o ponto amarelo antes
+     * do nome — o lugar do ponto fica reservado em todos, para a largura não pular quando a escolha muda).
+     */
+    selectedStyle?: AureaSegmentedControlSelectedStyle;
 }
+/** Os seis estilos do segmento aceso (ADR-0084). */
+export type AureaSegmentedControlSelectedStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "dot";
 /**
  * Um de poucos, lado a lado.
  *
@@ -383,7 +392,7 @@ export interface SegmentedControlProps extends ViewProps {
  * há teclado aqui**, então o que resta é o que já se faz à mão: papel de grupo de rádio, um
  * `radio` por segmento, e o estado `selected` em quem está escolhido.
  */
-export declare function SegmentedControl({ items, value, onChange, label, disabled, justify, fullWidth, style, ...rest }: SegmentedControlProps): React.JSX.Element;
+export declare function SegmentedControl({ items, value, onChange, label, disabled, justify, fullWidth, selectedStyle, style, ...rest }: SegmentedControlProps): React.JSX.Element;
 /**
  * O indicador da opção escolhida, nas listas do `Select` e do `Combobox` (0.32.0): o da referência
  * — a caixa de 20 com o `check` de 16 — e o mesmo glifo da coluna `.combobox-check` da web. A cor

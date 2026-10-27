@@ -126,7 +126,7 @@ export function KPI({ label, value, trend, direction, tone, directionLabel, vari
         : _jsx(Card, { className: cx("kpi", className), ...props, children: miolo });
 }
 export function DataList({ items }) { return _jsx("dl", { className: "data-list", children: items.map((i, n) => _jsxs(React.Fragment, { children: [_jsx("dt", { children: i.term }), _jsx("dd", { children: i.value })] }, n)) }); }
-export function Timeline({ items }) { return _jsx("ol", { className: "timeline", children: items.map((i, n) => _jsxs("li", { children: [_jsx("span", { className: "timeline-dot" }), _jsxs("div", { children: [_jsx("strong", { children: i.title }), i.description && _jsx("p", { children: i.description }), i.time && _jsx("small", { className: "muted", children: i.time })] })] }, n)) }); }
+export function Timeline({ items, variant }) { return _jsx("ol", { className: "timeline", "data-timeline-style": variant, children: items.map((i, n) => _jsxs("li", { children: [_jsx("span", { className: "timeline-dot" }), _jsxs("div", { children: [_jsx("strong", { children: i.title }), i.description && _jsx("p", { children: i.description }), i.time && _jsx("small", { className: "muted", children: i.time })] })] }, n)) }); }
 // Prose (item L5): UMA LINHA, e é para ser mesmo — quem transforma Markdown em elementos é o
 // consumidor. A trava do item é no CSS, escopada em `.prose`, e há prova dela no `skin.spec`.
 // Segurança, porque é o caminho de uso mais provável: quem entrega HTML de terceiro por

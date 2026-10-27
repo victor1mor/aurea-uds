@@ -68,6 +68,25 @@ Unavailable but still counted: it keeps its place in the roving order, so the se
 </Toolbar>
 ```
 
+### The colour of the on state
+
+pressedStyle on the toolbar colours every pressed button inside (ADR-0084): brand — the default — neutral or contrast. A button's own pressedStyle wins.
+
+```tsx
+<Toolbar label="Format" pressedStyle="brand">
+  <ToolbarButton pressed>Bold</ToolbarButton>
+  <ToolbarButton>Italic</ToolbarButton>
+</Toolbar>
+<Toolbar label="Format" pressedStyle="neutral">
+  <ToolbarButton pressed>Bold</ToolbarButton>
+  <ToolbarButton>Italic</ToolbarButton>
+</Toolbar>
+<Toolbar label="Format" pressedStyle="contrast">
+  <ToolbarButton pressed>Bold</ToolbarButton>
+  <ToolbarButton>Italic</ToolbarButton>
+</Toolbar>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -76,3 +95,4 @@ Unavailable but still counted: it keeps its place in the roving order, so the se
 | `label` | `string` | Toolbar | Accessible name of the toolbar. Two toolbars on a page must not share one. |
 | `children` | `ReactNode` | — | ToolbarButton, ToolbarGroup and ToolbarSeparator. |
 | `className` | `string` | — | Extra classes on the surface. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. For every pressed ToolbarButton inside; each may set its own. |

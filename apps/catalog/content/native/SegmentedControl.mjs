@@ -24,6 +24,7 @@ export default {
   api: {
     disabled: "Dims the whole control; no segment takes the touch. Without it, the Field's.",
     justify: "Where the control sits in the row when it fits: start, center or end. When it does not fit, it scrolls from the start. No effect with fullWidth.",
+    selectedStyle: "The colour of the selected segment (ADR-0084): current — the yellow capsule, the default — neutral (the white capsule with a shadow), contrast (graphite), brand (yellow), ring (a yellow ring) and dot (a yellow dot before the label).",
   },
   examples: [
     {
@@ -52,5 +53,9 @@ export default {
       code: `<SegmentedControl disabled label="Period" items={periods} value="week" />`,
       render: () => h(SegmentedControl, {disabled: true, label: "Period", items: PERIODOS, value: "week"}),
     },
+    cada({titulo: "The colour of the selected segment", descricao: "selectedStyle (ADR-0084), the same six as on the web.",
+      valores: ["current", "neutral", "contrast", "brand", "ring", "dot"], estilo: larga,
+      codigo: v => `<SegmentedControl selectedStyle="${v}" label="Period" items={periods} value={period} onChange={setPeriod} />`,
+      peca: v => h(Segmentos, {selectedStyle: v, label: `Period, ${v}`})}),
   ],
 };

@@ -317,10 +317,10 @@
     "fichas": 138,
     "fichas_so_nativo": 12,
     "hooks": 10,
-    "paginas_total": 589,
+    "paginas_total": 591,
     "paginas": {
       "component": 227,
-      "pattern": 232,
+      "pattern": 234,
       "block": 15,
       "recipe": 23,
       "doc": 81,
@@ -333,7 +333,7 @@
     "blocks_content": 2,
     "receitas": 23,
     "props": 150,
-    "variants": 30,
+    "variants": 31,
     "sizes": 36,
     "states": 135,
     "tokens_ficha": 139,
@@ -343,9 +343,9 @@
       "Ready": 49,
       "Stable": 110
     },
-    "testes_unit": 2250,
+    "testes_unit": 2273,
     "componentes_citados_no_teste": 158,
-    "specs_visuais": 66,
+    "specs_visuais": 67,
     "baselines": 48,
     "baselines_linux": 24,
     "classes_core": 1017,
@@ -356,6 +356,6 @@
   },
   "gates": {
     "validate": 47,
-    "playwrightSpecs": 66
+    "playwrightSpecs": 67
   }
 }

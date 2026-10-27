@@ -514,8 +514,26 @@ _sem_gradiente = ["packages/core/dist/aurea.css", "packages/core/src/aurea.css",
                   "apps/catalog/assets/catalog.css", "scripts/build-catalog.mjs",
                   "scripts/page-model.mjs"]
 _sem_gradiente += [str(f.relative_to(root)) for f in sorted((root / "apps/catalog/content").rglob("*.mjs"))]
+# A SEGUNDA EXCEÇÃO (ADR-0084, 27/10/2026, do Victor: "Abrimos uma segunda exceção (se não não conseguimos virar UDS de
+# verdade)"): o estilo H da barra de baixo, `data-current-style="brand-gradient"` — o item atual em degradê, só quando o
+# app escolhe. Ela vale SÓ dentro da regra cujo seletor é o desse estilo, e só no CSS do core: o mesmo `gradient(` em
+# qualquer outra regra, ou em outro arquivo, reprova.
+def _gradiente_fora_da_excecao(texto):
+    limpo = re.sub(r"/\*.*?\*/", "", texto, flags=re.S)
+    for m in re.finditer(r"gradient\(", limpo):
+        abre = limpo.rfind("{", 0, m.start())
+        antes = max(limpo.rfind("}", 0, abre), limpo.rfind("{", 0, abre - 1))
+        seletor = limpo[antes + 1:abre]
+        if 'data-current-style="brand-gradient"' not in seletor:
+            return True
+    return False
 for rel in _sem_gradiente:
-    if "gradient(" in (root / rel).read_text(encoding="utf-8"):
+    _txt4 = (root / rel).read_text(encoding="utf-8")
+    # O `catalog.css` é a CÓPIA do CSS do core que o site carrega (CLAUDE.md, a regra da 0.32.0): a mesma exceção vale nele.
+    if rel in ("packages/core/dist/aurea.css", "packages/core/src/aurea.css", "apps/catalog/assets/catalog.css"):
+        if _gradiente_fora_da_excecao(_txt4):
+            errors.append(f"{rel}: contém gradient() fora da regra do brand-gradient (a exceção da ADR-0084)")
+    elif "gradient(" in _txt4:
         errors.append(f"{rel}: contém gradient()")
 # A QUARTA porta, fechada em 13/10/2026 (ADR-0069): o código dos componentes. Até ali o check olhava só o CSS e
 # o catálogo, e um gradiente posto pelo React (estilo em linha, variável de CSS) passaria calado. A ADR-0069 abre
@@ -2545,6 +2563,12 @@ NAO_E_ESTADO = {
     # O jeito do link (ADR-0083, 27/10/2026): `data-link="underline"` pede o sublinhado no lugar do marca-texto, no próprio
     # link, num contêiner ou no `<html>` — um MODO de leitura escolhido por quem escreve a página, como o tema.
     "link": "é o JEITO do link (`data-link=\"underline\"`, ADR-0083), modo escolhido pela página, não estado",
+    # Os estilos novos do passo B (ADR-0084, 27/10/2026): a COR que o app escolhe para o ligado, o segmento aceso, a linha
+    # do tempo e o item atual da barra de baixo — na peça, num contêiner ou no `<html>`, como o tema. Escolha, não estado.
+    "pressed-style": "é o ESTILO do botão ligado que o app escolhe (`pressedStyle`, ADR-0084), não estado",
+    "segment-style": "é o ESTILO do segmento aceso que o app escolhe (`selectedStyle`, ADR-0084), não estado",
+    "timeline-style": "é o ESTILO da linha do tempo que o app escolhe (`variant`, ADR-0084), não estado",
+    "current-style": "é a COR do item atual da barra de baixo que o app escolhe (`currentStyle`, ADR-0084), não estado",
 }
 _css_sem_comentario = re.sub(r"/\*.*?\*/", "", core_src, flags=re.S)
 _pintados = {m for m in re.findall(r"\[data-([a-z-]+)", _css_sem_comentario)}

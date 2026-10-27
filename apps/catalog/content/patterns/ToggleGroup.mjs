@@ -20,4 +20,18 @@ export default [
       h(A.Toggle, {value: "center", icon: "text-align-center", label: "Center"}),
       h(A.Toggle, {value: "right", icon: "text-align-right", label: "Align right"})),
   },
+  {
+    variant: "Formatting",
+    name: "The colour of the on state",
+    description: "pressedStyle on the group colours every pressed toggle inside (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted).",
+    uses: ["ToggleGroup", "Toggle"],
+    code: ["brand", "neutral", "contrast"].map(v => `<ToggleGroup label="Alignment" defaultValue={["left"]} pressedStyle="${v}">
+  <Toggle value="left" icon="text-align-left" label="Align left" />
+  <Toggle value="center" icon="text-align-center" label="Center" />
+</ToggleGroup>`).join("\n"),
+    render: () => h("div", {style: {display: "grid", gap: "var(--space-3)", justifyItems: "start"}},
+      ...["brand", "neutral", "contrast"].map(v => h(A.ToggleGroup, {key: v, label: `Alignment, ${v}`, defaultValue: ["left"], pressedStyle: v},
+        h(A.Toggle, {value: "left", icon: "text-align-left", label: "Align left"}),
+        h(A.Toggle, {value: "center", icon: "text-align-center", label: "Center"})))),
+  },
 ];

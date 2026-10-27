@@ -45,7 +45,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, focoDoCampo, marcaDoControle } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, focoDoCampo, marcaDoControle, aroDoEstilo, peleDoSegmento, marcaDoEstilo } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
 import { useMaisContraste } from "./contraste.js";
 import { FilaRolante } from "./rolagem.js";
@@ -145,6 +145,10 @@ const folha = criarFolha((t) => ({
     // sombra pequena (ADR-0059) e o fio amarelo, com o nome na mistura marrom da web.~~ É um `Pressable`, que existe desde a
     // montagem: a regra do canto no Android (`native-capsula-android.test.tsx`) não o pega.
     segmentoAtivo: { backgroundColor: t.color.primary },
+    // O `dot` (ADR-0084): o ponto de 6 (`space1` + `space05`) antes do nome, a 8 dele (`space2`) — na web a proposta dizia 7.
+    segmentoComPonto: { flexDirection: "row", alignItems: "center", gap: t.size.space2 },
+    pontoDoSegmento: { width: t.size.space1 + t.size.space05, height: t.size.space1 + t.size.space05,
+        ...canto(t.size.radiusFull), backgroundColor: "transparent" },
     formulario: { gap: t.size.space5 },
     // A folha do `Select`: no RN não existe `<select>`, então a lista é um `Modal` — que é
     // exatamente o "motor novo sobre `Modal`" que a §5.2.4 previu.
@@ -587,35 +591,39 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
  * há teclado aqui**, então o que resta é o que já se faz à mão: papel de grupo de rádio, um
  * `radio` por segmento, e o estado `selected` em quem está escolhido.
  */
-export function SegmentedControl({ items, value, onChange, label, disabled, justify, fullWidth, style, ...rest }) {
+export function SegmentedControl({ items, value, onChange, label, disabled, justify, fullWidth, selectedStyle, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
+    const pele = peleDoSegmento(t, selectedStyle);
     const campo = useCampo();
     const inativo = disabled ?? campo?.disabled;
-    return (_jsx(FilaRolante, { justify: justify, fill: fullWidth, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label ?? campo?.label, style: [s.segmentada, fullWidth && s.segmentadaCheia, inativo && s.desabilitado, style], ...rest, children: items.map((it) => {
+    return (_jsx(FilaRolante, { justify: justify, fill: fullWidth, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label ?? campo?.label, style: [s.segmentada, fullWidth && s.segmentadaCheia, inativo && s.desabilitado, style], ...marcaDoEstilo("segmentStyle", selectedStyle), ...rest, children: items.map((it) => {
                 const ativo = it.value === value;
-                return (_jsx(Pressable, { onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: ativo, disabled: !!inativo }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, fullWidth && s.segmentoCheio, ativo && s.segmentoAtivo], children: typeof it.label === "string"
-                        ? _jsx(Text, { size: "sm", weight: ativo ? 600 : 400, 
-                            // 🔴 ERA `foreground`, E ISSO QUEBRAVA A LINGUAGEM DE SELECIONADO.
-                            // Achado pelo consumidor em 17/09/2026. A web pinta o escolhido com a
-                            // MARCA (`aurea.css:937-938`), e o comentário de cima daquela regra diz
-                            // que nav ativo, aba ativa, item de lista e botão ligado mostram o mesmo
-                            // sinal — ordem do Victor, 24/07. O `SegmentedControl` daqui discordava
-                            // da web **e do `BottomNav` deste mesmo pacote**, que já usa este token.
-                            //
-                            // ⚠ **`primaryEmphasis` e NÃO `primary`, e a razão está no CSS:** *"sem
-                            // fundo, a marca vira TEXTO, e o amarelo puro"* não se lê no claro
-                            // (`aurea.css:358`). É a mesma lição que a `0.8.3` pagou no `Button`.
-                            // No escuro os dois valem o mesmo amarelo; no claro este aprofunda.
-                            //
-                            // ~~⚠ Uma divergência declarada: o token, e não a mistura da web.~~ → A COR
-                            // DA WEB (bloco 1, 23/10/2026): desde a ADR-0076 o token é o AZUL no claro,
-                            // e o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web não é
-                            // azul?"*). ~~A aba escolhida é a mistura da web, `corDoEscolhido`.~~ → Desde
-                            // 24/10/2026 a cápsula escolhida é o amarelo do botão (ver `segmentoAtivo`), e
-                            // o nome vai na tinta do botão.
-                            style: { color: ativo ? t.color.primaryForeground : t.color.mutedForeground }, children: it.label })
-                        : it.label }, it.value));
+                return (_jsxs(Pressable, { onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: ativo, disabled: !!inativo }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, fullWidth && s.segmentoCheio, ativo && s.segmentoAtivo,
+                        ativo && pele && { backgroundColor: pele.fundo,
+                            boxShadow: [...(pele.aro ? [aroDoEstilo(t, pele.aro)] : []), ...(pele.sombra ? t.shadowLayers.shadowSm : [])] },
+                        pele?.ponto && s.segmentoComPonto], children: [pele?.ponto && _jsx(View, { collapsable: false, style: [s.pontoDoSegmento, ativo && { backgroundColor: t.color.primary }] }), typeof it.label === "string"
+                            ? _jsx(Text, { size: "sm", weight: ativo ? 600 : 400, 
+                                // 🔴 ERA `foreground`, E ISSO QUEBRAVA A LINGUAGEM DE SELECIONADO.
+                                // Achado pelo consumidor em 17/09/2026. A web pinta o escolhido com a
+                                // MARCA (`aurea.css:937-938`), e o comentário de cima daquela regra diz
+                                // que nav ativo, aba ativa, item de lista e botão ligado mostram o mesmo
+                                // sinal — ordem do Victor, 24/07. O `SegmentedControl` daqui discordava
+                                // da web **e do `BottomNav` deste mesmo pacote**, que já usa este token.
+                                //
+                                // ⚠ **`primaryEmphasis` e NÃO `primary`, e a razão está no CSS:** *"sem
+                                // fundo, a marca vira TEXTO, e o amarelo puro"* não se lê no claro
+                                // (`aurea.css:358`). É a mesma lição que a `0.8.3` pagou no `Button`.
+                                // No escuro os dois valem o mesmo amarelo; no claro este aprofunda.
+                                //
+                                // ~~⚠ Uma divergência declarada: o token, e não a mistura da web.~~ → A COR
+                                // DA WEB (bloco 1, 23/10/2026): desde a ADR-0076 o token é o AZUL no claro,
+                                // e o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web não é
+                                // azul?"*). ~~A aba escolhida é a mistura da web, `corDoEscolhido`.~~ → Desde
+                                // 24/10/2026 a cápsula escolhida é o amarelo do botão (ver `segmentoAtivo`), e
+                                // o nome vai na tinta do botão.
+                                style: { color: ativo ? (pele?.letra ?? t.color.primaryForeground) : t.color.mutedForeground }, children: it.label })
+                            : it.label] }, it.value));
             }) }) }));
 }
 // ─────────────────────────────────────────────────────────────────────────────────────────────

@@ -196,12 +196,14 @@ export declare function DataList({ items }: {
         value: ReactNode;
     }>;
 }): React.JSX.Element;
-export declare function Timeline({ items }: {
+export type TimelineVariant = "default" | "ring" | "latest" | "time" | "contrast";
+export declare function Timeline({ items, variant }: {
     items: Array<{
         title: ReactNode;
         description?: ReactNode;
         time?: ReactNode;
     }>;
+    variant?: TimelineVariant;
 }): React.JSX.Element;
 export declare function Prose({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
 export type TypographyType = "body" | "body-sm" | "body-xs" | "code" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";

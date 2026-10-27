@@ -434,12 +434,12 @@ function SidebarShow({ when, children }) {
 const LEGADO = {
     flat: ["edge", "none"], surface: ["floating", "circle"], pill: ["floating", "pill"], dock: ["floating", "circle"]
 };
-export function BottomNav({ items, current, variant = "floating", indicator = "none", width = "full", label, className, ...props }) {
+export function BottomNav({ items, current, variant = "floating", indicator = "none", width = "full", label, currentStyle, className, ...props }) {
     const s = useAureaStrings();
     const [layout, marca0] = variant in LEGADO ? LEGADO[variant] : [variant, indicator];
     // O indicador explícito ganha do que o nome legado implica: quem escreveu os dois quis os dois.
     const ind = indicator !== "none" ? indicator : marca0;
-    return _jsx("nav", { className: cx("bottom-nav", layout === "edge" && "bottom-nav-edge", layout !== "edge" && width === "content" && "bottom-nav-content", `bottom-nav-ind-${ind}`, className), "aria-label": label ?? s.bottomNavLabel, ...props, children: items.filter((it) => it !== "separator").map(it => {
+    return _jsx("nav", { className: cx("bottom-nav", layout === "edge" && "bottom-nav-edge", layout !== "edge" && width === "content" && "bottom-nav-content", `bottom-nav-ind-${ind}`, className), "data-current-style": currentStyle, "aria-label": label ?? s.bottomNavLabel, ...props, children: items.filter((it) => it !== "separator").map(it => {
             const ativo = it.id === current;
             // O CONTADOR PENDURA NO ÍCONE, e é por isso que existe esta caixa. Pendurado no ITEM (a
             // primeira versão), `50%` cai no meio do RÓTULO quando o item é linha — o Victor viu o número

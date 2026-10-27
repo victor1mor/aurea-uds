@@ -73,3 +73,4 @@ The size reaches every toggle in the group.
 | `size` | `sm \| md \| lg` | — | The size of every toggle inside; a toggle may set its own. |
 | `fullWidth` | `boolean` | false | Fills the parent's width, and the toggles share it equally. |
 | `detached` | `boolean` | false | Loose toggles with a 4 gap, instead of joined in one capsule. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. For every toggle inside; each may set its own. |

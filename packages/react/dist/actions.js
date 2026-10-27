@@ -205,7 +205,7 @@ function temConteudoVisivel(children) {
 // entre os estados**. Se o texto vira "Mute"/"Unmute" ou "Play"/"Pause", não é toggle — é
 // botão de ação, porque quem lê tela ouve o rótulo NOVO e o estado ao mesmo tempo e não sabe
 // se o botão descreve o que é ou o que fará.
-export function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size: sizePedido, disabled, id, className, children, variant = "default" }) {
+export function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size: sizePedido, disabled, id, className, children, variant = "default", pressedStyle }) {
     const grupo = React.useContext(GrupoDeBotoesContext);
     const size = sizePedido ?? grupo?.size;
     // O tipo barra o consumidor TypeScript; este aviso barra o de JavaScript, que não tem tipo nenhum.
@@ -222,7 +222,7 @@ export function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, 
     // sem `size` saía a classe `btn-undefined` (medido no catálogo, nos três botões do `ToggleGroup`); com
     // valor responsivo sairia `btn-[object Object]`.
     const tamanho = ehResponsivo(size) ? classesResponsivas("size", size) : ((valorBase(size) ?? "md") !== "md" && `btn-${valorBase(size)}`);
-    return _jsxs(BaseToggle, { id: id, value: value, disabled: disabled, pressed: pressed, defaultPressed: defaultPressed, onPressedChange: soOValor(onPressedChange), "aria-label": textoVisivel ? undefined : (rotuloVisivel ? label : undefined), className: cx("btn", variant === "ghost" ? "btn-ghost" : "btn-tertiary", tamanho, !textoVisivel && "btn-icon", "toggle", className), children: [icon && _jsx(Icon, { name: icon }), children] });
+    return _jsxs(BaseToggle, { id: id, value: value, disabled: disabled, pressed: pressed, defaultPressed: defaultPressed, onPressedChange: soOValor(onPressedChange), "aria-label": textoVisivel ? undefined : (rotuloVisivel ? label : undefined), "data-pressed-style": pressedStyle, className: cx("btn", variant === "ghost" ? "btn-ghost" : "btn-tertiary", tamanho, !textoVisivel && "btn-icon", "toggle", className), children: [icon && _jsx(Icon, { name: icon }), children] });
 }
 // default ghost (não secondary): um ícone-ação solto — hambúrguer, tema, fechar — é sem
 // caixa por convenção (pedido do Victor: hambúrguer sem borda). Quem quer a caixa passa
@@ -266,18 +266,19 @@ export function ButtonGroup({ label, orientation, variant, size, fullWidth, disa
 // atributo publicado. Nada de o CSS decidir a orientação por breakpoint enquanto o atributo
 // diz outra coisa — seriam duas fontes de verdade e uma janela em que visual e comportamento
 // divergem. Ver `decisions/0047-css-first-para-apresentacao-runtime-para-semantica.md`.
-export function Toolbar({ orientation, label, className, ...props }) {
+// `pressedStyle` (ADR-0084): a cor do ligado de todos os botões de dentro; cada um pode trocar a sua.
+export function Toolbar({ orientation, label, className, pressedStyle, ...props }) {
     const s = useAureaStrings();
     const ancora = useRef(null);
     const resolvida = useValorResponsivo(orientation, "horizontal", ancora);
-    return _jsx(BaseToolbar.Root, { ref: ancora, orientation: resolvida, "aria-label": label ?? s.toolbarLabel, className: cx("toolbar", className), ...props });
+    return _jsx(BaseToolbar.Root, { ref: ancora, orientation: resolvida, "aria-label": label ?? s.toolbarLabel, "data-pressed-style": pressedStyle, className: cx("toolbar", className), ...props });
 }
 export function ToolbarGroup({ label, className, ...props }) { return _jsx(BaseToolbar.Group, { "aria-label": label, className: cx("toolbar-group", className), ...props }); }
 export function ToolbarSeparator({ className, ...props }) { return _jsx(BaseToolbar.Separator, { className: cx("toolbar-sep", className), ...props }); }
-export const ToolbarButton = forwardRef(function ToolbarButton({ variant = "ghost", ...props }, ref) { return _jsx(BaseToolbar.Button, { ref: ref, disabled: props.disabled, render: _jsx(Button, { variant: variant, ...props }) }); });
-export function ToggleGroup({ value, defaultValue, onValueChange, multiple, orientation, disabled, label, className, children, size, fullWidth, detached }) {
+export const ToolbarButton = forwardRef(function ToolbarButton({ variant = "ghost", pressedStyle, ...props }, ref) { return _jsx(BaseToolbar.Button, { ref: ref, disabled: props.disabled, render: _jsx(Button, { variant: variant, "data-pressed-style": pressedStyle, ...props }) }); });
+export function ToggleGroup({ value, defaultValue, onValueChange, multiple, orientation, disabled, label, className, children, size, fullWidth, detached, pressedStyle }) {
     const ancora = useRef(null);
     const resolvida = useValorResponsivo(orientation, "horizontal", ancora);
     const grupo = React.useMemo(() => ({ size }), [size]);
-    return _jsx(GrupoDeBotoesContext.Provider, { value: grupo, children: _jsx(BaseToggleGroup, { ref: ancora, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), multiple: multiple, orientation: resolvida, disabled: disabled, "aria-label": label, className: cx("toggle-group", detached && "toggle-group-detached", fullWidth && "toggle-group-full", className), children: children }) });
+    return _jsx(GrupoDeBotoesContext.Provider, { value: grupo, children: _jsx(BaseToggleGroup, { ref: ancora, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), multiple: multiple, orientation: resolvida, disabled: disabled, "aria-label": label, "data-pressed-style": pressedStyle, className: cx("toggle-group", detached && "toggle-group-detached", fullWidth && "toggle-group-full", className), children: children }) });
 }

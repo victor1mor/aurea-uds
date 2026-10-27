@@ -23,9 +23,9 @@ export { defaultStrings, ptBR, gravidadeDoEstado, AUREA_UNIVERSAL_STATES } from 
 export type { AureaStrings, AureaUniversalState } from "./strings.js";
 export { useReduceMotion } from "./movimento.js";
 export { BottomNav, Header, Topbar, NavList, Stepper, Tabs } from "./navigation.js";
-export type { BottomNavProps, HeaderProps, TopbarProps, NavListProps, StepperProps, AureaNavItem, AureaNavListItem, AureaNavListIndicator, AureaStepItem, AureaStepState, AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaHeaderVariant, AureaHeaderInset, AureaTopbarVariant, AureaTopbarInset, TabsProps, AureaTabItem, AureaTabsVariant, AureaTabsPanel, } from "./navigation.js";
+export type { BottomNavProps, HeaderProps, TopbarProps, NavListProps, StepperProps, AureaNavItem, AureaNavListItem, AureaNavListIndicator, AureaStepItem, AureaStepState, AureaBottomNavVariant, AureaBottomNavIndicator, AureaBottomNavWidth, AureaBottomNavCurrentStyle, AureaHeaderVariant, AureaHeaderInset, AureaTopbarVariant, AureaTopbarInset, TabsProps, AureaTabItem, AureaTabsVariant, AureaTabsPanel, } from "./navigation.js";
 export { Field, Label, Input, Textarea, Select, Switch, Checkbox, Radio, RadioGroup, SegmentedControl, Form, KeyboardAvoiding, useCampo, } from "./inputs.js";
-export type { FieldProps, LabelProps, InputProps, TextareaProps, SelectProps, SwitchProps, CheckboxProps, RadioProps, RadioGroupProps, RadioGroupItemProps, AureaRadioIndicatorPlacement, AureaRadioGroupVariant, SegmentedControlProps, FormProps, KeyboardAvoidingProps, AureaFieldSize, } from "./inputs.js";
+export type { FieldProps, LabelProps, InputProps, TextareaProps, SelectProps, SwitchProps, CheckboxProps, RadioProps, RadioGroupProps, RadioGroupItemProps, AureaRadioIndicatorPlacement, AureaRadioGroupVariant, SegmentedControlProps, AureaSegmentedControlSelectedStyle, FormProps, KeyboardAvoidingProps, AureaFieldSize, } from "./inputs.js";
 export { InputGroup, InputGroupAddon, PasswordField, useGrupoDeCampo } from "./inputs.js";
 export type { InputGroupProps, InputGroupAddonProps, PasswordFieldProps } from "./inputs.js";
 export { Dialog, ConfirmDialog, Drawer, BottomSheet } from "./overlays.js";
@@ -33,7 +33,7 @@ export type { DialogProps, ConfirmDialogProps, DrawerProps, BottomSheetProps, Au
 export { ToastHost, Toast, useToast } from "./toast.js";
 export type { ToastHostProps, AureaToast, AureaToastInput, AureaToastManager, AureaToastType, } from "./toast.js";
 export { Timeline, DataList, Table } from "./data.js";
-export type { TimelineProps, DataListProps, TableProps, AureaColumn, AureaTimelineItem, AureaDataListItem, } from "./data.js";
+export type { TimelineProps, AureaTimelineVariant, DataListProps, TableProps, AureaColumn, AureaTimelineItem, AureaDataListItem, } from "./data.js";
 export { Chart, ChartLegend } from "./chart.js";
 export type { ChartProps, ChartLegendProps, AureaSeries, AureaChartMark } from "./chart.js";
 export { Combobox, SearchField } from "./busca.js";

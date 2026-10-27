@@ -670,6 +670,12 @@ export type BottomNavIndicator="none"|"subtle"|"pill"|"circle"|"circle-raised"|"
 // largo"*). `content` põe a pílula do tamanho das abas, no centro. Vale só quando a barra flutua:
 // a `edge` encosta na borda e continua da largura da tela.
 export type BottomNavWidth="full"|"content";
+// A COR DO ITEM ATUAL é o quarto eixo (ADR-0084, 27/10/2026): o `indicator` escolhe a FORMA, o `currentStyle` a COR.
+// Treze estilos aprovados pelo Victor em 26/10/2026, todos na barra flutuante e na fixa: `current` (o de sempre, o padrão),
+// `neutral`, `contrast`, `brand`, `ring`, `plain`; com amarelo e branco, `brand-white` (reprova a WCAG: o branco no amarelo
+// mede 1,91:1 — aprovado sabendo disso), `white-ring` e `brand-gradient` (o degradê, a segunda exceção à ADR-0007); e a
+// barra inteira amarela, `bar-ink`, `bar-ring`, `bar-plain` e `bar-light`. Vai como `data-current-style`.
+export type BottomNavCurrentStyle="current"|"neutral"|"contrast"|"brand"|"ring"|"plain"|"brand-white"|"white-ring"|"brand-gradient"|"bar-ink"|"bar-ring"|"bar-plain"|"bar-light";
 /** @deprecated Os quatro nomes de 17/08/2026. Use `variant` + `indicator`. */
 export type BottomNavVariantLegacy="flat"|"surface"|"pill"|"dock";
 // UM nome para a união dos dois, e não é cosmética: o extrator da superfície resolve alias em
@@ -679,12 +685,12 @@ export type BottomNavVariantLegacy="flat"|"surface"|"pill"|"dock";
 export type BottomNavVariantAny=BottomNavVariant|BottomNavVariantLegacy;
 const LEGADO:Record<BottomNavVariantLegacy,[BottomNavVariant,BottomNavIndicator]>={
 flat:["edge","none"],surface:["floating","circle"],pill:["floating","pill"],dock:["floating","circle"]};
-export function BottomNav({items,current,variant="floating",indicator="none",width="full",label,className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items:SidebarEntry[];current?:string;variant?:BottomNavVariantAny;indicator?:BottomNavIndicator;width?:BottomNavWidth;label?:string}){
+export function BottomNav({items,current,variant="floating",indicator="none",width="full",label,currentStyle,className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items:SidebarEntry[];current?:string;variant?:BottomNavVariantAny;indicator?:BottomNavIndicator;width?:BottomNavWidth;label?:string;currentStyle?:BottomNavCurrentStyle}){
 const s=useAureaStrings();
 const [layout,marca0]=variant in LEGADO?LEGADO[variant as BottomNavVariantLegacy]:[variant as BottomNavVariant,indicator];
 // O indicador explícito ganha do que o nome legado implica: quem escreveu os dois quis os dois.
 const ind=indicator!=="none"?indicator:marca0;
-return <nav className={cx("bottom-nav",layout==="edge"&&"bottom-nav-edge",layout!=="edge"&&width==="content"&&"bottom-nav-content",`bottom-nav-ind-${ind}`,className)} aria-label={label??s.bottomNavLabel} {...props}>
+return <nav className={cx("bottom-nav",layout==="edge"&&"bottom-nav-edge",layout!=="edge"&&width==="content"&&"bottom-nav-content",`bottom-nav-ind-${ind}`,className)} data-current-style={currentStyle} aria-label={label??s.bottomNavLabel} {...props}>
 {/* A divisória da lateral (4-E) não existe na barra de baixo: a mesma lista serve às duas, e aqui ela é ignorada,
  como a sublista. */}
 {items.filter((it):it is SidebarItem=>it!=="separator").map(it=>{

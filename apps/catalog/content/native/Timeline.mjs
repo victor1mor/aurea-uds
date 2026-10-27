@@ -1,6 +1,7 @@
 // O Timeline do nativo no site (bloco 1, o grupo 1 — 23/10/2026): a sequência do que aconteceu. Os itens são dados.
 import {createElement as h} from "react";
 import {Badge, Timeline} from "../../../../packages/native/dist/index.js";
+import {cada} from "../_eixos.mjs";
 
 const largura = {width: "min(28rem, 100%)"};
 const TONS = ["neutral", "primary", "info", "success", "warning", "danger"];
@@ -9,6 +10,7 @@ export default {
   install: 'import {Timeline} from "@aurea-uds/native";',
   api: {
     items: "The events, in order: {title, description?, time?, icon?, tone?, trailing?, between?}. On native it is a list for the screen reader, with no \"1 of 40\" on each event: the time of each one is what tells the order.",
+    variant: "The style (ADR-0084), the same five as on the web: default (the solid yellow dot), ring (a hollow dot with a yellow ring), latest (only the last one yellow, with a halo), time (the time in a column on the left) and contrast (dots in the text colour). An item with an icon keeps its frame.",
     style: "Added to the list's box.",
     testID: "The id for tests.",
   },
@@ -46,5 +48,12 @@ ${TONS.map((v) => `  {title: "tone ${v}", icon: "info", tone: "${v}"},`).join("\
 ]} />`,
       render: () => h("div", {style: largura}, h(Timeline, {items: TONS.map((v) => ({title: `tone ${v}`, icon: "info", tone: v}))})),
     },
+    cada({titulo: "Variants", descricao: "The five styles of the web.",
+      valores: ["default", "ring", "latest", "time", "contrast"], estilo: {display: "grid", gap: "var(--space-6)", width: "min(28rem, 100%)"},
+      codigo: v => `<Timeline variant="${v}" items={events} />`,
+      peca: v => h(Timeline, {variant: v, items: [
+        {title: "Order placed", description: "Paid by card", time: "09:12"},
+        {title: "Shipped", time: "14:20"},
+        {title: "Delivered", time: "10:05"}]})}),
   ],
 };
