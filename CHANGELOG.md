@@ -17,6 +17,14 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.45.0 (27/10/2026)
+
+- **A 0.45.0 publicada entre 16:20 e 16:28 de 27/10/2026** (Brasília, medido no npm; o `tokens` às 16:20 e o `native`,
+  o último a aparecer no registro, às 16:28): o `released-surface.json` do commit do publish (`3d5db12d`) — nenhum nome
+  novo e nenhuma frase nova, nem na web nem no nativo. O CHANGELOG ([0.45.0] publicada) e o CLAUDE.md (a linha na tabela
+  e o item 43).
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.44.0 (27/10/2026)
 
 - **A 0.44.0 publicada entre 19:50 e 19:55 de 26/10/2026** (Brasília, medido no npm; o `contracts` às 19:52 e o `native`,
@@ -161,7 +169,8 @@ como deveria funcionar"*.
 
 ## [0.45.0] — 2026-10-27
 
-⏳ **Ainda não publicada.** As cores, passo A — **a paleta da 1.0** ([ADR-0083](decisions/0083-a-paleta-da-1-0.md)): a
+✅ **Publicada em 27/10/2026, entre 16:20 e 16:28 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+#100.** As cores, passo A — **a paleta da 1.0** ([ADR-0083](decisions/0083-a-paleta-da-1-0.md)): a
 proposta de cores que o Victor preparou componente a componente e aprovou família por família (25 e 26/10/2026), e as
 quatro decisões da bancada do passo A (27/10/2026): o foco dos campos no amarelo (*"1 C Amarelo"*), o texto de apoio
 `#5E5E65` (*"Aprovo o #5E5E65 no texto de apoio."*), o conserto da linha do tempo em todas as marcas e o cartão do escuro
