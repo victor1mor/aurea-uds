@@ -3310,7 +3310,7 @@
       },
       "link-underline": {
         "$type": "color",
-        "$description": "O sublinhado do link, nos dois temas: o amarelo da marca (ADR-0083, 26/10/2026). No claro é a variação (class=\"link-underline\" ou data-link=\"underline\"); no escuro, o único jeito.",
+        "$description": "O sublinhado do link, nos dois temas: o amarelo da marca (ADR-0083, 26/10/2026). No claro é a variação (data-link=\"underline\", no link ou num contêiner); no escuro, o único jeito.",
         "$value": "{primary}"
       },
       "control-thumb": {

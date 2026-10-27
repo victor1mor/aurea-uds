@@ -159,6 +159,86 @@ como deveria funcionar"*.
 
 ---
 
+## [0.45.0] — 2026-10-27
+
+⏳ **Ainda não publicada.** As cores, passo A — **a paleta da 1.0** ([ADR-0083](decisions/0083-a-paleta-da-1-0.md)): a
+proposta de cores que o Victor preparou componente a componente e aprovou família por família (25 e 26/10/2026), e as
+quatro decisões da bancada do passo A (27/10/2026): o foco dos campos no amarelo (*"1 C Amarelo"*), o texto de apoio
+`#5E5E65` (*"Aprovo o #5E5E65 no texto de apoio."*), o conserto da linha do tempo em todas as marcas e o cartão do escuro
+sem borda. Web e nativo. A marca `lory` fica como era.
+
+### ⚠ Muda a aparência
+
+- **Os dois temas mudam de cor** — os neutros, o destaque do claro, o link, as marcas dos controles, o botão ligado, os
+  gráficos. Nada muda de medida nem de nome; quem pinta com os tokens recebe as cores novas sozinho.
+- **Mudam os valores de tokens publicados**: no claro, `--primary-emphasis`, `--link` e `--link-hover` passam a ser a cor
+  do texto (eram o azul `--brand-blue`), e o `--focus` passa ao bronze `#BD7000`; nos dois temas, a tinta
+  `--brand-yellow-ink` passa a `#18181B` (era `#242424`), o `--primary-mark` passa à tinta (era o marrom), o
+  `--control-selected-foreground` passa ao branco, o `--warning-foreground` passa à tinta, e os `--chart-1` a `--chart-5`
+  ganham cinco degraus azuis novos. Os neutros: ver "Mudado".
+
+### Acrescentado
+
+- **Quatro tokens:** `--input-strong` (o contorno de 3:1 dos campos, só com "aumentar contraste"), `--link-mark` (a faixa do
+  marca-texto), `--link-underline` (o sublinhado do link) e `--control-thumb` (a bolinha do `Switch` e a alça do `Slider`).
+- **"Aumentar contraste" do sistema** (`prefers-contrast: more` na web; "Aumentar contraste" no iOS e "Texto de alto
+  contraste" no Android, no nativo): o campo ganha o contorno de 3:1, as marcas dentro dos controles voltam à tinta e o
+  foco do campo volta ao grafite. É a única linha que essa preferência acende (a segunda exceção à ADR-0072).
+- **O link com marca-texto:** no claro, o link é a cor do texto com a faixa amarela atrás da metade de baixo das letras,
+  que cobre a palavra inteira no ponteiro; a variação, o sublinhado amarelo, se pede com `data-link="underline"` no próprio
+  link, num contêiner ou no `<html>`. No escuro, o link é o amarelo sublinhado. Vale para o link sem classe, para o
+  `Link` e para o texto no tom `link` (no nativo, `Text tone="link"`). A navegação fica de fora: a trilha, os links dentro
+  de `<nav>` e o segmento que é link.
+
+### Mudado
+
+- **A base Zinco profundo** (substitui os neutros da ADR-0061): claro — página `#F5F5F5`, cartão branco, texto
+  `#09090B`, secundário `#EBEBED`, texto de apoio `#5E5E65`; escuro — página `#09090B`, cartão `#18181B` sem borda, texto
+  `#FAFAFA`, secundário `#27272A`, texto de apoio `#A1A1AA`.
+- **No claro, o amarelo nunca é letra:** o destaque e o link são a cor do texto; o escolhido (a aba, o segmento aceso, o
+  item de navegação atual, o `.eyebrow`) tem a letra do texto, com o fio amarelo de baixo; no nativo, o mesmo no
+  escolhido e no `Text tone="primary"`. Era a mistura do amarelo com o texto (um marrom) ou o azul.
+- **Sobre o amarelo, a tinta `#18181B`**, e nada de marrom: a letra do botão primário, o ícone da barra de baixo cheia, o
+  play do `MediaEmbed`. **Dentro dos controles, as marcas são brancas**: a bolinha do `Switch`, a alça do `Slider`, o visto
+  do `Checkbox` e o ponto do rádio.
+- **O foco:** o `--focus` do claro é o bronze `#BD7000` (3,83:1 no branco); o grafite continua o foco da maioria das peças;
+  **o foco dos campos é o amarelo**, uma linha só, nos dois temas — no claro, 1,75:1 na página, uma exceção consciente.
+- **O campo do claro é branco com a sombra fina em todo lugar**, também dentro do cartão, da janela e do menu (era o cinza
+  ali — ADR-0078, item 2). No escuro, nada muda. No nativo, o mesmo.
+- **O botão ligado** (`Toggle`, `ToggleGroup`, `ToolbarButton`) é amarelo cheio com a letra do botão primário, sem o fio de
+  baixo e sem o fundo "clarinho".
+- **A linha do tempo** (`Timeline`): o trilho passa por baixo dos pontos e para no último — antes passava por cima da
+  bolinha e sobrava depois do último ponto. Em todas as marcas. Fora da `lory`, o trilho é o `--input`.
+- **O `Link` é sublinhado parado.**
+- **A letra do aviso cheio** é a tinta (4,67:1 no ponteiro; era 4,09:1); **os gráficos** passam a 3:1 ou mais nos dois temas;
+  **a célula de "atenção"** do painel de saúde, no claro, é `#D07612` (o `--warning-500` do claro).
+- **`--brand-yellow-foreground` e `--brand-yellow-text` ficam obsoletos** (sem uso); saem na 1.0.
+
+### A marca `lory`
+
+- **Fica como era**, por decisão do Victor: os tokens dela foram congelados, e nenhuma regra nova a alcança. A única mudança
+  nela é o conserto da linha do tempo, que era defeito em todas as marcas.
+
+### O site
+
+- **O site inteiro com a paleta nova**, nos dois temas: os links no meio do texto com marca-texto, a navegação sem.
+
+### Para quem cuida do repositório
+
+- **O gerador de tokens** escreve o hex de oito dígitos para cor sRGB com transparência no nativo (era `rgba()`, que o
+  pacote não aceita — o `native-lote0.test.tsx` cobra).
+- **O banco da paleta** (`apps/keyboard-probe/paleta.html`): as peças que a paleta toca, família por família, no claro, no
+  escuro e na `lory`. Quem mede: `tests/visual/paleta-passo-a.spec.ts` (com o CSS da 0.44.0, reprovam todos menos o
+  primeiro) e `tests/visual/lory-congelada.spec.ts` (a cor de cada elemento da `lory`, contra a 0.44.0; sem o congelamento
+  ou sem a exclusão nas regras, reprova); o que o código promete, `tests/unit/paleta-passo-a.test.tsx` (com a fonte, o
+  core e o nativo da 0.44.0, reprovam os 14).
+- **O "sem linha" ganhou a exceção do "aumentar contraste"**, provada nos dois sentidos (`tests/unit/sem-linha.test.tsx`).
+- **O que a suíte inteira achou, antes de sair:** o texto de apoio da proposta (`#686871`) dava 3,88:1 sobre os fundos de
+  10% dos blocos — o axe achou mais de vinte lugares; o `--sidebar-primary` no amarelo daria 1,60:1 como letra; e, na
+  bancada da proposta, o botão ligado saía com a letra marrom e o fio, porque as regras de antes eram mais fortes.
+
+---
+
 ## [0.44.0] — 2026-10-26
 
 ✅ **Publicada em 26/10/2026, entre 19:50 e 19:55 (Brasília, medido no npm), pelo terminal do Victor, da

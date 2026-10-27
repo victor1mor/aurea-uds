@@ -71,7 +71,7 @@ In Aurea every color, radius, font size and space comes from a token. The tokens
 Two rules of the system apply to your CSS as well:
 
 - **No gradients.** Aurea uses flat color only.
-- **No lines.** Components draw no visible border; the `outline` card and the `Header` divider are the only lines. A piece that needs to stand out from the page gets a translucent fill (`--fill-1`, `--fill-2`, `--fill-3`) instead of an outline; in the light theme, a field on the page is white with a soft shadow instead (`--field-fill`, `--field-lift`). The focus ring stays.
+- **No lines.** Components draw no visible border; the `outline` card and the `Header` divider are the only lines — and the 3:1 outline of fields, which appears only when the system asks for more contrast (`prefers-contrast: more`). A piece that needs to stand out from the page gets a translucent fill (`--fill-1`, `--fill-2`, `--fill-3`) instead of an outline; in the light theme, a field is white with a soft shadow instead, everywhere (`--field-fill`, `--field-lift`). The focus ring stays.
 
 All tokens, with their values in each theme, are on the [Tokens](./tokens.html) page. To change the tokens themselves, see [Theming](./docs-theming.html).
 

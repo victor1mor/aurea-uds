@@ -607,19 +607,22 @@ The accent is the brand yellow, `oklch(0.795 0.184 86.047)`. It is the same in b
 | Token | Use |
 |---|---|
 | `--primary` | The yellow fill: the primary button, the brand card, full bars |
-| `--primary-foreground` | Text and icons on the yellow. Dark gray in both themes |
+| `--primary-foreground` | Text and icons on the yellow. The ink `#18181B` in both themes |
 | `--primary-hover` | The yellow fill under the pointer |
 | `--primary-active` | The yellow fill while pressed |
-| `--primary-emphasis` | Yellow used as text or icon: the current item, the primary badge |
+| `--primary-emphasis` | The accent used as text or icon: the text color in the light theme, the yellow in the dark theme |
 | `--primary-outline` | Yellow used as a stroke or a thin mark |
-| `--primary-mark` | The small brown mark on the yellow: the switch knob, the slider thumb center |
-| `--link` | Link text |
+| `--primary-mark` | A mark drawn on the yellow that is not a label: the icon of a filled bottom bar, the play button. The ink |
+| `--link` | Link text: the text color in the light theme, the yellow in the dark theme |
 | `--link-hover` | Link text under the pointer |
+| `--link-mark` | The yellow highlight behind a link in the light theme. Transparent in the dark theme |
+| `--link-underline` | The yellow underline of a link |
 | `--control-selected` | A checked checkbox, radio, switch or slider |
-| `--control-selected-foreground` | The check mark on a checked control |
+| `--control-selected-foreground` | The white tick on a checked checkbox |
+| `--control-thumb` | The white knob of a switch and handle of a slider |
 | `--control-selected-dot` | The white dot of a checked radio |
 
-In the light theme, emphasis text and links use the brand blue (`#0246f1`), which measures 5.59:1 to 6.67:1 on the light backgrounds. The yellow stays the brand: fills, checked controls, and emphasis in the dark theme.
+In the light theme the yellow is never used as text. Emphasis text and links are the text color, and a link stands apart from the text around it with a yellow highlight behind its letters — or a yellow underline, with `data-link="underline"` on the link or on a container. The yellow stays the brand: fills, lines, highlights, checked controls, and emphasis in the dark theme. Inside a checked control the marks are white; when the system asks for more contrast, they turn to the ink.
 
 ## Neutrals
 
@@ -637,7 +640,7 @@ Neutrals are the grays that fill quiet controls and hover states.
 
 ## Fills
 
-Aurea draws no borders around components. A piece that needs to stand apart from what is behind it gets a fill instead. The fills are the text color at a low opacity, so they show on any background. In the light theme, fields on the page are the exception: they are white, with a soft shadow, and keep the fill only inside a white surface.
+Aurea draws no borders around components. A piece that needs to stand apart from what is behind it gets a fill instead. The fills are the text color at a low opacity, so they show on any background. In the light theme, fields are the exception: they are white, with a soft shadow, everywhere — inside cards and dialogs too.
 
 | Token | Use |
 |---|---|
@@ -662,7 +665,7 @@ There are four status colors: success, warning, danger and info. Each one has th
 | Soft background | `--success-bg` | `--warning-bg` | `--danger-bg` | `--info-bg` |
 
 - The full fill is the **same color in both themes**. A solid success button looks the same in light and dark.
-- Text on the warning fill is dark gray. Text on the other three fills is white.
+- Text on the warning fill is the ink. Text on the other three fills is white.
 - Text, icons and progress bars on the page use the `-400` role. Each theme sets it so it reads on its own surfaces.
 - **Never paint text with a full fill color.** In the dark theme, the fills used as text fall below 4.5:1.
 
@@ -702,7 +705,7 @@ Surfaces float over the page: cards, dialogs, menus, panels.
 
 ## Form field
 
-Fields (input, textarea, select, number field) are filled with `--fill-2`. They have no border.
+Fields (input, textarea, select, number field) have no border. In the light theme they are white with a soft shadow; in the dark theme they are filled with `--fill-2`. When the system asks for more contrast (`prefers-contrast: more`), they get a 3:1 outline, `--input-strong`.
 
 An invalid field turns its fill to `--danger-bg`, and its focus ring to `--danger-400`. No red line is drawn.
 
@@ -737,6 +740,7 @@ The [Badge](./badge.html) takes them as `variant` on the web and as `tone` in Re
 | Token | Use |
 |---|---|
 | `--focus-strong` | The focus ring. The yellow in the dark theme, the text color in the light theme |
+| `--focus` | The focus of the brand: the bronze `#BD7000` in the light theme. Fields use the yellow for their focus |
 | `--selection` | Selected text |
 | `--overlay` | The veil behind dialogs and drawers |
 | `--chart-1` to `--chart-5` | The chart scale. In the default brand, five steps of one blue |
@@ -748,8 +752,8 @@ Primitives are the raw values behind the roles. They are the same in both themes
 | Token | Value |
 |---|---|
 | `--brand-yellow` | `oklch(0.795 0.184 86.047)` |
-| `--brand-yellow-ink` | `#242424`, the text on the yellow |
-| `--brand-yellow-foreground` | `oklch(0.421 0.095 57.708)`, the brown mark on the yellow |
+| `--brand-yellow-ink` | `#18181B`, the ink on the yellow |
+| `--brand-yellow-foreground` | `oklch(0.421 0.095 57.708)`. Deprecated: no longer used, leaves in 1.0 |
 | `--white` | `oklch(1 0 0)` |
 | `--black` | `oklch(0 0 0)` |
 
@@ -799,14 +803,14 @@ The main roles, side by side.
 
 | Token | Light | Dark |
 |---|---|---|
-| `--background` | `#f5f5f5` | `#1f1f1f` |
-| `--foreground` | `#242424` | `#ffffff` |
-| `--card` | `#ffffff` | `#292929` |
-| `--secondary` | `#ebebeb` | `#333333` |
-| `--muted-foreground` | `#616161` | `#adadad` |
-| `--border` | `#e0e0e0` | `#525252` |
+| `--background` | `#f5f5f5` | `#09090b` |
+| `--foreground` | `#09090b` | `#fafafa` |
+| `--card` | `#ffffff` | `#18181b` |
+| `--secondary` | `#ebebed` | `#27272a` |
+| `--muted-foreground` | `#5e5e65` | `#a1a1aa` |
+| `--border` | `#e4e4e7` | `#2f2f35` |
 | `--primary` | the brand yellow | the brand yellow |
-| `--primary-foreground` | `#242424` | `#242424` |
+| `--primary-foreground` | `#18181b` | `#18181b` |
 | `--success` | `#107c10` | `#107c10` |
 | `--success-400` | `#0e700e` | `#54b054` |
 | `--warning` | `#f7630c` | `#f7630c` |
@@ -1277,7 +1281,7 @@ In Aurea every color, radius, font size and space comes from a token. The tokens
 Two rules of the system apply to your CSS as well:
 
 - **No gradients.** Aurea uses flat color only.
-- **No lines.** Components draw no visible border; the `outline` card and the `Header` divider are the only lines. A piece that needs to stand out from the page gets a translucent fill (`--fill-1`, `--fill-2`, `--fill-3`) instead of an outline; in the light theme, a field on the page is white with a soft shadow instead (`--field-fill`, `--field-lift`). The focus ring stays.
+- **No lines.** Components draw no visible border; the `outline` card and the `Header` divider are the only lines — and the 3:1 outline of fields, which appears only when the system asks for more contrast (`prefers-contrast: more`). A piece that needs to stand out from the page gets a translucent fill (`--fill-1`, `--fill-2`, `--fill-3`) instead of an outline; in the light theme, a field is white with a soft shadow instead, everywhere (`--field-fill`, `--field-lift`). The focus ring stays.
 
 All tokens, with their values in each theme, are on the [Tokens](./tokens.html) page. To change the tokens themselves, see [Theming](./docs-theming.html).
 
@@ -17187,6 +17191,60 @@ import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
   <LogStream lines={tail} />
   <Button variant="outline">Pause live tail</Button>
 </Card>
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-45-0.html">
+# v0.45.0
+
+The 1.0 palette — zinc neutrals, a graphite accent in light mode, highlighted links, white marks inside controls, white fields everywhere and support for the system's "increase contrast".
+
+The colours of both themes change. The brand yellow stays the same, in both themes; what changes is everything around it. In light mode the yellow is never used for text any more: it is a fill, a line, an underline or a highlight, and accent text is the colour of the text. Nothing changes size or name — if you paint with the tokens, you get the new colours on your own. Read "Look and feel" first if you set colours by hand.
+
+## Look and feel
+
+- **The light and dark themes change colour**: the neutrals, the accent in light mode, links, the marks inside controls, the pressed button and the charts. Measurements and names stay the same.
+- **Published token values change.** In light mode, `--primary-emphasis`, `--link` and `--link-hover` are now the text colour (they were the brand blue), and `--focus` is the bronze `#BD7000`. In both themes, `--brand-yellow-ink` is now `#18181B` (it was `#242424`), `--primary-mark` is the ink (it was brown), `--control-selected-foreground` is white, `--warning-foreground` is the ink, and `--chart-1` to `--chart-5` are five new blue steps.
+
+## New
+
+- **Four tokens:** `--input-strong` (the 3:1 outline of fields, only when the system asks for more contrast), `--link-mark` (the highlight behind a link), `--link-underline` (the link underline) and `--control-thumb` (the knob of the `Switch` and the handle of the `Slider`).
+- **The system's "increase contrast"** — `prefers-contrast: more` on the web; "Increase Contrast" on iOS and "High contrast text" on Android in React Native. Fields get a 3:1 outline, the marks inside controls turn to the ink, and the field focus turns graphite. It is the only line this preference draws.
+- **Highlighted links.** In light mode a link is the text colour with a yellow highlight behind the lower half of the letters, which covers the whole word on hover. For the underlined variation, put `data-link="underline"` on the link, on a container or on `<html>`. In dark mode a link is yellow and underlined. This applies to a link without a class, to `Link` and to text in the `link` tone (`Text tone="link"` in React Native). Navigation is left out: breadcrumbs, links inside a `<nav>` and segments that are links.
+
+## Changed
+
+- **Zinc neutrals.** Light: page `#F5F5F5`, white cards, text `#09090B`, secondary `#EBEBED`, muted text `#5E5E65`. Dark: page `#09090B`, cards `#18181B` with no border, text `#FAFAFA`, secondary `#27272A`, muted text `#A1A1AA`.
+- **In light mode the yellow is never text.** Accent text and links are the text colour; the selected item — a tab, a lit segment, the current navigation item, `.eyebrow` — has text-coloured lettering with the yellow line underneath. In React Native, the same for the selected item and for `Text tone="primary"`.
+- **On the yellow, the ink `#18181B`** — the label of the primary button, the icon of a filled bottom bar, the play button of `MediaEmbed`. Inside controls the marks are white: the knob of the `Switch`, the handle of the `Slider`, the tick of the `Checkbox` and the dot of the radio.
+- **Focus.** In light mode `--focus` is the bronze `#BD7000`; most components keep the graphite focus; fields get a single yellow focus line in both themes.
+- **In light mode a field is white with the thin shadow everywhere**, inside cards, dialogs and menus too (it used to be grey there). Dark mode does not change. React Native does the same.
+- **The pressed button** (`Toggle`, `ToggleGroup`, `ToolbarButton`) is solid yellow with the label of the primary button, without the line underneath and without the pale fill.
+- **`Timeline`**: the line now runs under the dots and stops at the last one. It used to run over the dots and past the last one.
+- **`Link` is underlined at rest.**
+- **The filled warning button** has ink lettering (4.67:1 on hover); **charts** reach 3:1 or more in both themes; **the "attention" cell** of the health panel is `#D07612` in light mode.
+- **`--brand-yellow-foreground` and `--brand-yellow-text` are deprecated** (unused) and leave in 1.0.
+
+## The `lory` brand
+
+- **It keeps its colours.** The only change in it is the `Timeline` fix.
+
+## The documentation site
+
+- **The whole site uses the new palette**, in both themes: links in running text get the highlight, navigation does not.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.45.0 @aurea-uds/core@0.45.0 @aurea-uds/fonts@0.45.0 @aurea-uds/icons@0.45.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.45.0
 ```
 </page>
 

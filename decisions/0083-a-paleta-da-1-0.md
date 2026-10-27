@@ -53,7 +53,8 @@
    marca deixa de ser destaque e link (continua como cor auxiliar).
 3. **O link** separa-se do texto por mais que a cor (WCAG 1.4.1): no claro, o **marca-texto** é o padrão — a faixa
    amarela a 45% atrás da metade de baixo das letras, a palavra inteira no ponteiro (14,79:1) —, e o grafite com o
-   **sublinhado** amarelo é a variação (`class="link-underline"`, ou `data-link="underline"` num contêiner); no escuro, o
+   **sublinhado** amarelo é a variação (`data-link="underline"`, no próprio link, num contêiner ou no `<html>` — a
+   proposta oferecia também uma classe, que o core não aceita sem componente que a produza); no escuro, o
    amarelo sublinhado, sem faixa (amarelo sobre quase preto vira marrom). Vale para o link sem classe, para o `Link` e para
    o texto no tom link. **A navegação fica de fora**: a trilha (como a proposta pediu) e, pelo mesmo motivo, todo link
    dentro de `<nav>` e o segmento que é link (medido acima). No nativo, o `Text tone="link"`: a faixa num trecho de texto de

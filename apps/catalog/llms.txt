@@ -454,6 +454,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.45.0](https://aureauds.dev/release-v0-45-0.md): The 1.0 palette — zinc neutrals, a graphite accent in light mode, highlighted links, white marks inside controls, white fields everywhere and support for the system's "increase contrast".
 - [v0.44.0](https://aureauds.dev/release-v0-44-0.md): The whole sidebar — three ways to collapse, its state outside the AppShell with Ctrl+B, groups that fold, actions, separators, avatars, sections with a panel and five ways to draw the current item.
 - [v0.43.0](https://aureauds.dev/release-v0-43-0.md): React Native on the site, with a page for every component; yellow selected states and fixes in React Native; tabs in CodeBlock.
 - [v0.42.0](https://aureauds.dev/release-v0-42-0.md): AppShell with the sidebar from top to bottom.

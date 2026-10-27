@@ -5494,12 +5494,12 @@ button.graph-node-body { cursor:pointer; }
    14,79:1); no ponteiro, ela cobre a palavra inteira. É um sublinhado grosso que sobe para trás das letras, e não um
    fundo: assim acompanha só o texto, mesmo quando o elemento ocupa a linha inteira ou o link quebra em várias linhas.
    As medidas são PROPORÇÕES DA LETRA (em), medidas na bancada de 26/10/2026, e crescem com ela; provadas nos três
-   navegadores em 27/10/2026. A variação (o sublinhado) se pede com `class="link-underline"` num link, ou com
-   `data-link="underline"` num contêiner ou no `<html>`. */
-[data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not(.link-underline,[data-link="underline"] *):where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+   navegadores em 27/10/2026. A variação (o sublinhado) se pede com `data-link="underline"` no próprio link, num
+   contêiner ou no `<html>` — um atributo, e não uma classe: o core só tem classe que um componente produz. */
+[data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not([data-link="underline"],[data-link="underline"] *):where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   text-decoration-color:var(--link-mark); text-decoration-thickness:.5em; text-underline-offset:-.32em; text-decoration-skip-ink:none;
   transition:text-decoration-thickness var(--duration-fast) var(--ease-standard),text-underline-offset var(--duration-fast) var(--ease-standard); }
-[data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not(.link-underline,[data-link="underline"] *):hover:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+[data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not([data-link="underline"],[data-link="underline"] *):hover:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   text-decoration-thickness:1.25em; text-underline-offset:-1.02em; }
 @media (prefers-reduced-motion:reduce) {
   [data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { transition:none; }

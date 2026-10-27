@@ -19,15 +19,15 @@
     "css:--ease-*": "839701adee489551"
   },
   "colors": {
-    "css:--primary*": "b707702f098f34ab",
-    "css:--secondary*": "5c9b59970be239e4",
-    "css:--card*": "918b2fb908c9dfca",
+    "css:--primary*": "2b5323c777e6a893",
+    "css:--secondary*": "4338264ad91206f0",
+    "css:--card*": "e4782bea7c2659ff",
     "css:--fill-*": "a2658d78c94cba5c",
-    "css:--foreground": "102af43cdf0c196f",
-    "css:--muted-foreground": "90f5bb699ee0007d",
-    "css:--accent*": "25336f7b2ff8e660",
+    "css:--foreground": "783a22ac3ade5f11",
+    "css:--muted-foreground": "0a6ef1fb1808685d",
+    "css:--accent*": "727699519bf10ab7",
     "css:--success*": "f07ef43f82cc2564",
-    "css:--warning*": "af6be4baa006f3ac",
+    "css:--warning*": "6f5bfd6534a3fb02",
     "css:--destructive*": "13880dda5981589a",
     "css:--info*": "92ece3151e0bba36",
     "css:--danger-*": "52f064fa71c0a64f"
@@ -89,12 +89,12 @@
   "showcase": {},
   "styling": {
     "css:--fill-*": "a2658d78c94cba5c",
-    "css:--field-*": "3bd2d31ca3c2c43a",
+    "css:--field-*": "1d08dd4b126d525e",
     "pkg:core": "d3ffb7033c64dc05"
   },
   "theming": {
-    "css:--primary*": "b707702f098f34ab",
-    "css:--card*": "918b2fb908c9dfca",
+    "css:--primary*": "2b5323c777e6a893",
+    "css:--card*": "e4782bea7c2659ff",
     "css:--success*": "f07ef43f82cc2564",
     "css:--fill-2-solid": "61c7a75d0c5263b7",
     "pkg:tokens": "68e6f15e59bde3d7",
