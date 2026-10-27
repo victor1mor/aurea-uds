@@ -205,7 +205,7 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 [STATE.md](STATE.md).
 
 <!-- state:begin -->
-591 páginas geradas — 227 de componente, 234 de padrão, 15 de bloco, 23 de receita, 81 de documentação e 11 índices de área — a partir de 138 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 104 trazem um starter — o preview real e o código, ainda sem exemplos extras. 150 componentes publicam a tabela de props.
+592 páginas geradas — 227 de componente, 234 de padrão, 15 de bloco, 23 de receita, 82 de documentação e 11 índices de área — a partir de 138 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 104 trazem um starter — o preview real e o código, ainda sem exemplos extras. 150 componentes publicam a tabela de props.
 <!-- state:end -->
 
 ## Como o repositório se organiza

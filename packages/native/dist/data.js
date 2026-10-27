@@ -69,7 +69,9 @@ const folha = criarFolha((t) => ({
         // A MEIO DIÂMETRO do ponto, derivado do mesmo token — igual ao CSS, que faz
         // `calc(var(--space-3) / 2)`. Número copiado desalinha no dia em que o token muda.
         left: t.size.space3 / 2,
-        width: t.size.borderWidth, backgroundColor: t.color.border,
+        // O trilho no `input` (27/10/2026, o Victor: *"com a linha da linha do tempo do celular escurecida junto"*), como a
+        // web desde a 0.45.0 (ADR-0083): o `border` (#E4E4E7) quase não aparecia no branco nem na página #F5F5F5.
+        width: t.size.borderWidth, backgroundColor: t.color.input,
     },
     evento: { flexDirection: "row", alignItems: "flex-start", gap: t.size.space3 },
     ponto: {

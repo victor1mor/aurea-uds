@@ -1,7 +1,9 @@
 # ADR-0084 — Os estilos novos (passo B): o botão ligado, o segmento, a barra de baixo e a linha do tempo, e as duas exceções
 
 - **Data:** 26/10/2026 (os estilos aprovados) · 27/10/2026 (o passo B construído)
-- **Estado:** proposta · na branch `claude/cores-b`, para a `0.46.0` — web e nativo. Espera a bancada do Victor.
+- **Estado:** aceita · na branch `claude/cores-b`, para a `0.46.0` — web e nativo. Aprovada na bancada (27/10/2026):
+  *"Aprovo o passo B e os cinco pontos como estão: os aros como exceção, o vão de 8 no ponto, a lory de fora, o F
+  reprovando e o segmento do celular amarelo."*
 - **Origem:** a proposta de cores do Victor (25 e 26/10/2026, a mesma da [ADR-0083](0083-a-paleta-da-1-0.md)), regras 2.8,
   2.9, 2.11, 2.11b, 2.12 e 2.13: *"todos para construir"*. A ordem: *"Aprovo a ordem"* (26/10/2026), e o H: *"O estilo H da
   barra de baixo é um degradê. Abrimos uma segunda exceção (se não não conseguimos virar UDS de verdade)"*. O passo B:

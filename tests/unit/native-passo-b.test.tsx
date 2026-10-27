@@ -96,4 +96,10 @@ describe("as peças pintam o lugar certo", () => {
     const trilho = __instancias("View").map(plano).find((s) => s.position === "absolute" && s.width === claro.size.borderWidth);
     expect(trilho?.left).toBe(claro.size.space12 + claro.size.space1 + claro.size.space3 + claro.size.space3 / 2);
   });
+  it("o trilho da linha do tempo é o `input` (o `border` quase não aparecia), como na web", () => {
+    render(<Envolve><Timeline items={[{title: "A"}, {title: "B"}]} /></Envolve>);
+    const trilho = __instancias("View").map(plano).find((s) => s.position === "absolute" && s.width === claro.size.borderWidth);
+    expect(trilho?.backgroundColor).toBe(claro.color.input);
+    expect(claro.color.input).not.toBe(claro.color.border);
+  });
 });

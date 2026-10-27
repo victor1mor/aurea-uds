@@ -838,7 +838,10 @@ no git.
   (`--success`, `--info`, `--warning`, `--destructive`) é a MESMA cor nos dois temas; letra, ícone,
   borda e barra sobre a tela usam o par `-400`. ⚠ Nunca pintar letra com a cor de fundo de estado:
   `paleta-adr0061.test.tsx` reprova.
-- Sem gradientes (nem funcionais).
+- Sem gradientes (nem funcionais) — com DUAS exceções estreitas, cada uma cobrada pelo check 4: pintar as cores que se
+  escolhem ([ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md), só no `color.ts`) e o item
+  atual da barra de baixo no estilo `brand-gradient` (o H — decisão do Victor, 26/10/2026, *"se não não conseguimos virar UDS
+  de verdade"*; [ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md), só na regra dele e só quando o app escolhe).
 - **Sem linha** (decisão do Victor, 16/10/2026, [ADR-0072](decisions/0072-sem-linha.md)): nenhuma peça desenha
   borda — a cor de toda borda é transparente (a espessura fica, nenhuma medida muda), e o anel fino de `box-shadow`
   não entra. O que só a linha separava do fundo ganha FUNDO translúcido da cor do texto (`--fill-1` 6%, `--fill-2`
@@ -847,7 +850,9 @@ no git.
   borda). As DUAS linhas: a do cartão de contorno, clara (o texto a 10%), e a de ponta a ponta embaixo das áreas do
   site (`Header` com `tabs` e `divider`, decisão do Victor de 17/10/2026, ADR-0072 item 9) — e a que SÓ o "aumentar
   contraste" do sistema acende: o contorno de 3:1 dos campos (`--input-strong`, ADR-0083), uma exceção nomeada na trava,
-  presa ao `@media (prefers-contrast:more)`. Quem cobra: `tests/unit/sem-linha.test.tsx`
+  presa ao `@media (prefers-contrast:more)` (e o do botão ligado cinza, ADR-0084). E os AROS dos estilos de aro, que o app
+  escolhe (o segmento `ring`, o item `ring`, `white-ring` e `bar-ring` da barra de baixo, o ponto `ring` da linha do tempo —
+  ADR-0084): sempre sombra por dentro, nunca borda, e só quando escolhidos. Quem cobra: `tests/unit/sem-linha.test.tsx`
   (o código, em todo estado) e a varredura "nenhuma peça desenha linha" (toda página, dois temas, três navegadores).
   **O CAMPO NO CLARO É BRANCO COM SOMBRA** (decisão do Victor, 22/10/2026, *"gostei Branco + sombra"*,
   [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)): solto na página, a cor do cartão e o `--shadow-sm`
