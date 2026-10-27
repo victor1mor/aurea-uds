@@ -51,9 +51,12 @@ const px = (page: import("@playwright/test").Page, sel: string, prop: string) =>
 // e é nele que o gate encosta: `inset-inline-start` no pseudo-elemento.
 // A guarda contra teste vazio é a mesma dos outros três daqui: exige valor real antes de
 // comparar, senão a regra pode sumir e os dois lados vêm "auto" empatados.
+// Na 0.45.0 (ADR-0083) o trilho saiu do `.timeline::before`, que passava por cima dos pontos e
+// sobrava depois do último, e passou ao `::before` de cada item menos o último — por isso o
+// teste mede o primeiro item. A guarda pegou a mudança: com o seletor antigo, `left` vinha "auto".
 test("espelha o eixo inline em RTL", async ({page}) => {
   const trilho = () => page.evaluate(() => {
-    const cs = getComputedStyle(document.querySelector(".timeline")!, "::before");
+    const cs = getComputedStyle(document.querySelector(".timeline > li:not(:last-child)")!, "::before");
     return {left: cs.left, right: cs.right};
   });
   await load(page, "ltr");
@@ -63,7 +66,7 @@ test("espelha o eixo inline em RTL", async ({page}) => {
 
   // `right` de elemento posicionado vem resolvido em px, nunca "auto" — então a prova é o
   // PAR: o que era a distância da esquerda em LTR vira a distância da direita em RTL.
-  expect(ltr.left, ".timeline::before sem left — a regra do trilho existe?").toMatch(/^\d/);
+  expect(ltr.left, "o trilho do item sem left — a regra do trilho existe?").toMatch(/^\d/);
   expect(rtl.right, "em RTL o trilho troca de lado").toBe(ltr.left);
   expect(rtl.left, "em RTL o trilho não pode ficar também na esquerda").not.toBe(ltr.left);
 });
