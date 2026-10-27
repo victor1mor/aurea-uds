@@ -195,6 +195,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.41.0` | A lateral com o topo e o pé fixos: `header` e `footer` no `Sidebar`, e as partes `Sidebar.Brand`, `Sidebar.User`, `Sidebar.Nav` e `Sidebar.Show` — o 4-C das quinze laterais ([ADR-0079](decisions/0079-a-lateral-com-topo-e-pe-fixos.md)), pedido #94. **Publicada em 23/10/2026** (entre 14:44 e 14:50, Brasília, medido no npm), pelo terminal do Victor |
 | `0.42.0` | A lateral até o topo: `AppShell layout="sidebar"` (a lateral do alto até embaixo, com a marca nela, e a barra de cima só sobre o conteúdo, quando o app passa `topbar`), `AppShell.SidebarToggle` e `sidebarFooter` — o MNT-34 ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)), pedido #95. **Publicada em 25/10/2026** (entre 08:32 e 08:39, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #96 (a auditoria de volta ao verde) |
 | `0.43.0` | O bloco 1, o catálogo fiel: toda peça com página e toda variação num exemplo vivo, o nativo no site (a chave Web \| Native e as 79 páginas do nativo), quatro travas novas na CI, `CodeBlock tabs`, `SegmentedControl` com `size` e `href`, as fichas das peças só do nativo e as decisões da bancada ([ADR-0081](decisions/0081-a-bancada-do-bloco-1.md)) — pedido #97. **Publicada em 25/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor |
+| `0.44.0` | O bloco 2, a lateral inteira: `Sidebar` com `collapsible`, `indicator` e `panel`, `Sidebar.Provider`, `Sidebar.Toggle` e `useSidebar` (o Ctrl+B), no item `avatar`, `action`, o grupo que dobra e o `"separator"`, o texto e o fio a 16 e a lateral solta do topo até embaixo ([ADR-0082](decisions/0082-a-lateral-inteira.md)) — pedido #99. **Publicada em 26/10/2026** (entre 19:50 e 19:55, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -632,6 +633,24 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    trabalho de página entristeceu o Victor: mudança de peça é pergunta à parte, desenhada, com "pode" antes.
    **Publicada em 25/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
    #97. O registro entrou no lote seguinte (o bloco 2).
+
+42. **`0.44.0`, o bloco 2 do plano único — a lateral inteira, feito em 26/10/2026** ([ADR-0082](decisions/0082-a-lateral-inteira.md))
+   — o que faltava das quinze laterais aprovadas em 21/10 (4-A, 4-B, 4-D a 4-H) e o 2-A: `Sidebar` com `collapsible`
+   (`icon`, `capsule`, `offcanvas`), `indicator` (cinco jeitos do item atual) e `panel` (`docked`, `overlay`);
+   `Sidebar.Provider`, `Sidebar.Toggle` e `useSidebar`, com o Ctrl+B que não age onde se digita; no item, `avatar`,
+   `action`, o grupo que dobra e o `"separator"`; o texto e o fio a 16 (`--sidebar-item-x`); a lateral solta do topo até
+   embaixo; o `AppShell` com o mesmo provedor e seis padrões novos no site. Aprovada na bancada com as quinze rodando
+   (*"Aprovo as quinze e as quatro decisões como propostas"*). ⚠ **As lições:** (1) o teste de navegador achou um defeito
+   antes de sair (na lateral rente que sai da tela, a coluna ficava em 68: a regra da rente recolhida vinha depois na
+   folha); (2) a suíte inteira do Chromium achou sete pontos que os testes do lote não pegavam (o nome das cinco laterais
+   do exemplo, a chave que estourava a 200%, a prévia mais alta que a caixa, o teste que supunha a lateral aberta, o logo a
+   20, a página que rolava de lado a 320 e o painel com 262) — e os dois testes que tinham reprovado só rodaram de novo
+   DEPOIS do commit, antes do envio: o que reprovou roda de novo depois do conserto, antes do commit; (3) o validador achou
+   sete acertos de ficha (o check 46 só alcança as partes `Sidebar.X = …` escritas logo depois da função; o check 47 não
+   aceita número de versão no texto da ficha; a nota de teclado só onde o teclado foi medido); (4) a bancada se entrega pelo
+   endereço COMPLETO da página — o Victor abriu a raiz do servidor e viu uma lista de pastas (*"cade?"*).
+   **Publicada em 26/10/2026** (entre 19:50 e 19:55, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+   #99. O registro entrou no lote seguinte (as cores, passo A).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

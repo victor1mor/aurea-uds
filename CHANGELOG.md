@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.44.0 (27/10/2026)
+
+- **A 0.44.0 publicada entre 19:50 e 19:55 de 26/10/2026** (Brasília, medido no npm; o `contracts` às 19:52 e o `native`,
+  o último, às 19:55): o `released-surface.json` do commit do publish (`8e6ad892`) — entra 1 nome, o `useSidebar`; nenhuma
+  frase nova. O CHANGELOG ([0.44.0] publicada) e o CLAUDE.md (a linha na tabela e o item 42).
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.43.0 (25/10/2026)
 
 - **A 0.43.0 publicada entre 17:23 e 17:29 de 25/10/2026** (Brasília, medido no npm): o `released-surface.json` do
@@ -154,7 +161,8 @@ como deveria funcionar"*.
 
 ## [0.44.0] — 2026-10-26
 
-⏳ **Ainda não publicada.** O bloco 2 do plano único, **a lateral inteira**
+✅ **Publicada em 26/10/2026, entre 19:50 e 19:55 (Brasília, medido no npm), pelo terminal do Victor, da
+junção do pedido #99.** O bloco 2 do plano único, **a lateral inteira**
 ([ADR-0082](decisions/0082-a-lateral-inteira.md)): o que faltava das quinze laterais aprovadas pelo Victor em 21/10/2026, as
 alternativas do item atual e o 2-A. Na bancada, com as quinze rodando: *"Aprovo as quinze e as quatro decisões como
 propostas."* Só a web — o nativo não tem `Sidebar`.
