@@ -260,7 +260,16 @@ for (const theme of ["dark", "light"] as const) {
     const dosCampos = [...new Set(vistos.filter(ehCampo).map(v => v.cor))];
     expect(dosCampos.length, "a amostra tem campo").toBe(1);
     if (theme === "light") {
-      const amarelo = await p.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--primary").trim());
+      // O amarelo passa pelo MESMO caminho da cor do foco (o `outlineColor` calculado), e não pelo texto do token: o WebKit
+      // escreve a cor calculada com outra precisão ("86.046997" contra o "86.047" do token) — a CI da 0.45.0 reprovou assim.
+      const amarelo = await p.evaluate(() => {
+        const prova = document.createElement("i");
+        prova.style.outline = "2px solid var(--primary)";
+        document.body.append(prova);
+        const cor = getComputedStyle(prova).outlineColor;
+        prova.remove();
+        return cor;
+      });
       expect(dosCampos[0], "no claro, o foco do campo é o amarelo").toBe(amarelo);
       expect(doResto[0], "e o do resto não").not.toBe(amarelo);
     } else {
