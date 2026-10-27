@@ -374,7 +374,7 @@ export function BottomNav({ items, current, variant = "floating", indicator = "c
                             : redondo ? t.color.primaryEmphasis
                                 : t.color.foreground;
             // Na `capsule` o ícone está SOBRE o amarelo e o rótulo não: cada um tem a sua cor. Sobre o
-            // amarelo, a marca marrom (`primaryMark`), e não a tinta escura (decisão do Victor, 17/10/2026).
+            // amarelo, a marca (`primaryMark`): a tinta escura desde a ADR-0083 (26/10/2026); era o marrom (17/10/2026).
             const corDoIcone = ativo && capsula ? t.color.primaryMark : corDoTexto;
             // No `expand` o nome só aparece no escolhido; nos outros ele vira o nome do item para o
             // leitor de tela (o texto simples) ou fica na árvore sem ocupar lugar (o que não é texto).
@@ -409,7 +409,8 @@ export function BottomNav({ items, current, variant = "floating", indicator = "c
                     },
                     ativo && indicator === "circle-outline" && {
                         borderWidth: t.size.borderWidth, borderColor: "transparent",
-                        backgroundColor: comOpacidade(t.color.primaryEmphasis, 0.10),
+                        // O fundo sai do AMARELO (ADR-0083): do destaque, no claro, sairia cinza — o destaque é o grafite.
+                        backgroundColor: comOpacidade(t.color.primary, 0.10),
                     },
                     ativo && capsula && { backgroundColor: t.color.primary },
                 ], children: [it.icon && _jsx(Icon, { name: it.icon, size: "lg", color: corDoIcone, weight: ativo ? "fill" : undefined }), it.badge != null && it.badge !== false && (_jsx(View, { style: [s.contador, capsula && s.contadorCapsula], children: typeof it.badge === "number"

@@ -236,11 +236,19 @@ describe("B2 · `Tabs` — trocar de painel, não trocar de página", () => {
   // ⚠ A aba escolhida NÃO usa a marca — e isso é de propósito. O `.tab.active` da web é
   // `--foreground` e DESLIGA o fio que o `.segmented` recebe (`aurea.css:1128`). São dois sinais
   // para duas coisas. Este teste existe para ninguém "harmonizar" os dois depois.
+  // Desde a ADR-0083 (26/10/2026) o destaque do claro é o grafite — a cor do texto —, então o claro não distingue mais
+  // nada pelo `primaryEmphasis`: a prova passa a ser contra o amarelo e o azul de verdade, e no ESCURO, onde o destaque
+  // é o amarelo.
   it("a aba escolhida NÃO usa a cor da marca — ao contrário do `SegmentedControl`", () => {
     render(<Envolve><Tabs tabs={ABAS} value="r" /></Envolve>);
     const cores = __instancias("Text").map((p) => StyleSheet.flatten(p.style)?.color);
     expect(cores).toContain(claro.color.foreground);
-    expect(cores).not.toContain(claro.color.primaryEmphasis);
+    expect(cores).not.toContain(claro.color.primary);
+    expect(cores).not.toContain(claro.color.brandBlue);
+    render(<EnvolveEscuro><Tabs tabs={ABAS} value="r" /></EnvolveEscuro>);
+    const noEscuro = __instancias("Text").map((p) => StyleSheet.flatten(p.style)?.color);
+    expect(noEscuro).toContain(escuro.color.foreground);
+    expect(noEscuro).not.toContain(escuro.color.primaryEmphasis);
   });
 
   it("a fila rola na horizontal — quatro rótulos não cabem num telefone", () => {
@@ -442,11 +450,14 @@ describe("a tinta da marca alcança CONTORNO e GLIFO, não só letra", () => {
     expect(e.color).toBe(escuro.color.primaryForeground);
   });
 
+  // O fundo "de sempre" do campo dentro de um cartão branco, no claro, é o BRANCO com a sombra fina desde a ADR-0083
+  // (26/10/2026); era o cinza (`foreground` a 10%, ADR-0078).
   it("FORA do cartão nada muda — o campo continua com o fundo de sempre", () => {
     render(<Envolve><Card><NumberField value={1200} onChange={() => {}} testID="km" /></Card></Envolve>);
     const e = campoDoTeste("km-campo");
     expect(e.borderColor).toBe("transparent");
-    expect(e.backgroundColor).toBe(comOpacidade(claro.color.foreground, 0.1));
+    expect(e.backgroundColor).toBe(claro.color.card);
+    expect(e.boxShadow).toEqual([...claro.shadowLayers.shadowSm]);
   });
 
   // 🔴 O caso que a intuição erra: inválido NÃO pode vencer aqui.

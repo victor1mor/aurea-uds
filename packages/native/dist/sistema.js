@@ -37,6 +37,7 @@ import * as ImagePicker from "expo-image-picker";
 import { IconButton } from "./actions.js";
 import { canto, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
+import { useMaisContraste } from "./contraste.js";
 import { Alert } from "./feedback.js";
 import { Icon } from "./icon.js";
 import { alturaDoTamanho, respiroDoTamanho, useCampo } from "./inputs.js";
@@ -142,6 +143,7 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
     const t = useAureaTokens();
     // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
     const naSuperficie = useNaSuperficie();
+    const maisContraste = useMaisContraste();
     const s = folha(t);
     const strings = useAureaStrings();
     const campo = useCampo();
@@ -179,7 +181,7 @@ export function DatePicker({ value, onChange, mode = "date", minimumDate, maximu
     // dos lados (era 13). Era uma cópia das contas de lá.
     const pele = [
         s.gatilho,
-        fundoDeCampo(t, naSuperficie),
+        fundoDeCampo(t, naSuperficie, maisContraste),
         { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam) },
         campo?.invalido && s.invalido,
         inativo && s.desabilitado,

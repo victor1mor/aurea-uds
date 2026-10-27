@@ -49,8 +49,9 @@ import {Platform, TextInput, View, type StyleProp, type ViewStyle} from "react-n
 import {IconButton} from "./actions.js";
 // Só o TIPO (some na compilação): a lista gerada do A-04, a mesma que o `Icon` confere.
 import type {AureaIcon} from "./icon.js";
-import {canto, criarFolha, estadoAcessivel, fundoDeCampo} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, fundoDeCampo, focoDoCampo} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
+import {useMaisContraste} from "./contraste.js";
 import {useCampo, type AureaFieldSize} from "./inputs.js";
 import {useAureaStrings, useAureaTokens, usePeleSobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -338,6 +339,7 @@ export function NumberField({
   const t = useAureaTokens();
   // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
   const naSuperficie = useNaSuperficie();
+  const maisContraste = useMaisContraste();
   const s = folha(t);
   const peleDaMarca = usePeleSobreAMarca();
   const strings = useAureaStrings();
@@ -482,7 +484,7 @@ export function NumberField({
         aria-invalid={campo?.invalido}
         style={[
           s.campo,
-          fundoDeCampo(t, naSuperficie),
+          fundoDeCampo(t, naSuperficie, maisContraste),
           tam === "display" && s.campoDisplay,
           fullWidth && s.campoLargo,
           {height: alturaDoTamanho(t, tam), fontSize: fonteDoTamanho(t, tam),
@@ -491,7 +493,7 @@ export function NumberField({
           // A ORDEM IMPORTA e é a mesma do `Input` do Lote 4: o inválido vem antes, o foco
           // depois. Um campo inválido que está sendo corrigido tem de mostrar que está ativo —
           // invertendo, a pessoa digita sem pista nenhuma de onde o teclado está batendo.
-          focado && {borderColor: t.color.focusStrong},
+          focado && {borderColor: focoDoCampo(t, maisContraste)},
           // 🔴 E DENTRO DO CARTÃO DA MARCA A TINTA VENCE OS DOIS — `usePeleSobreAMarca` tem os
           // números: sobre o amarelo o inválido mede 1,86 e o foco do tema escuro mede 1,00.
           // O foco continua existindo, por espessura.

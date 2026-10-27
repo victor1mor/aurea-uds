@@ -3,6 +3,7 @@
 - **Data:** 09/10/2026
 - **Estado:** aceita · executada na `0.27.0` (ainda não publicada) · aprovada pela bancada em
   09/10/2026 (*"aprovado, pode enviar"*).
+- **Os NEUTROS foram substituídos pela [ADR-0083](0083-a-paleta-da-1-0.md) (26/10/2026)** — a base Zinco profundo; as cores de estado continuam.
 - **Origem:** o pedido "cores e tons" do app consumidor (no escuro, ele queria os botões com a cor
   do claro), e a decisão do Victor depois de comparar, lado a lado, a Aurea, um assistente e um
   aplicativo de mensagens: *"as cores de tema claro e escuro vamos usar igual do [aplicativo], a

@@ -3,9 +3,9 @@
   "_regra": "Quando isto e a ficha do registry discordam, isto ganha: veio do compilador. O check 26 do validate.py reprova a divergência.",
   "schemaVersion": "1.0",
   "totals": {
-    "modulos": 32,
+    "modulos": 33,
     "componentes": 90,
-    "hooks": 15,
+    "hooks": 16,
     "aliasesLiterais": 65,
     "propsDistintas": 204
   },
@@ -3014,6 +3014,13 @@
         }
       ],
       "hooks": [],
+      "clientDirective": false
+    },
+    "contraste": {
+      "components": [],
+      "hooks": [
+        "useMaisContraste"
+      ],
       "clientDirective": false
     },
     "data": {

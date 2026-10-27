@@ -3,6 +3,7 @@
 - **Data:** 20/10/2026
 - **Estado:** aceita · feita na branch `claude/amarelo-azul`, para a `0.37.0`. **Substitui o item 1 e a seção "O custo,
   escrito" da [ADR-0073](0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md)**; o resto dela continua valendo.
+- **SUBSTITUÍDA pela [ADR-0083](0083-a-paleta-da-1-0.md) (26/10/2026)** — no claro, a letra de destaque e o link são o grafite do texto; o azul deixa de ser destaque.
 - **Origem:** a sessão do app, adotando a `0.36.0`, mediu no tema claro a letra de destaque amarela: links e o nome a
   1,75:1, a aba escolhida a 1,91:1, o selo "PRINCIPAL" a 1,6:1. O Victor: *"estamos abaixo do mínimo?"* — sim (a WCAG
   1.4.3 pede 4,5:1 para texto). Depois: *"vamos reabrir que quero que me de novas sugestões"*, com três duplas de cor que

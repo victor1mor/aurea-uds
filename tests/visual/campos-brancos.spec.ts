@@ -13,6 +13,9 @@ import {join} from "node:path";
 //   · o escuro não muda; e o tema da FAIXA manda (GAR-05): campo numa faixa escura dentro de página clara fica escuro, e
 //     o contrário também; a marca `lory` no claro, branca também.
 // Provado contra o defeito: com o CSS da 0.39.0, todo caso "branco" reprova (o campo era o cinza em toda parte).
+// ADR-0083 (26/10/2026): DENTRO das superfícies brancas o campo também é branco com a sombra (o item 2 da ADR-0078 saiu)
+// — na Aurea; a `lory` fica como era (congelada), e o cinza dentro do cartão continua nela. Com o CSS da 0.44.0, os casos
+// "dentro" reprovam.
 // A folha vai no <head>, antes de desenhar: posta depois, o teste mede a transição do fundo (a lição da 0.37.1).
 const CSS = readFileSync(join(process.cwd(), "packages/core/dist/aurea.css"), "utf8");
 const BRANCO = "rgb(255, 255, 255)";
@@ -55,16 +58,24 @@ const BRANCAS: Record<string, string> = {
   "o item da SortableList": `<ul class="sortable-list"><li class="sortable-item">${campos}</li></ul>`,
 };
 for (const [nome, html] of Object.entries(BRANCAS)) {
-  test(`claro, dentro de ${nome} (superfície branca): o campo volta ao cinza, sem sombra`, async ({page}) => {
+  test(`claro, dentro de ${nome} (superfície branca): o campo continua branco, com a sombra (ADR-0083)`, async ({page}) => {
     const m = await medir(page, html);
     for (const id of NA_PAGINA) {
-      expect(m[id].fundo, `${nome} · ${id}: não é branco`).not.toBe(BRANCO);
-      expect(m[id].sombra, `${nome} · ${id}: sem sombra`).toBe("none");
+      expect(m[id].fundo, `${nome} · ${id}: branco`).toBe(BRANCO);
+      expect(m[id].sombra, `${nome} · ${id}: a sombra leve`).toBe(SOMBRA);
     }
   });
 }
 
-test("claro, dentro da lateral da documentação aberta (popover): o campo volta ao cinza, sem sombra", async ({page}) => {
+test("na lory, que fica como era: dentro do cartão, o campo continua o cinza, sem sombra", async ({page}) => {
+  const m = await medir(page, BRANCAS["o cartão"], "light", "lory");
+  for (const id of NA_PAGINA) {
+    expect(m[id].fundo, `lory · ${id}: não é branco`).not.toBe(BRANCO);
+    expect(m[id].sombra, `lory · ${id}: sem sombra`).toBe("none");
+  }
+});
+
+test("claro, dentro da lateral da documentação aberta (popover): o campo continua branco, com a sombra (ADR-0083)", async ({page}) => {
   // 0.40.1: no celular e no tablet, a lateral do `AppShell layout="docs"` abre como popover, com o fundo do popover.
   await page.setViewportSize({width: 375, height: 800});
   await page.setContent(`<!doctype html><html data-theme="light"><head><meta charset="utf-8"><style>${CSS}</style></head>`
@@ -77,8 +88,8 @@ test("claro, dentro da lateral da documentação aberta (popover): o campo volta
   const lateral = await page.evaluate(() => getComputedStyle(document.getElementById("lateral")!).backgroundColor);
   expect(lateral, "a lateral aberta pinta o fundo do popover (branco)").toBe(BRANCO);
   for (const id of NA_PAGINA) {
-    expect(m[id].fundo, `lateral aberta · ${id}: não é branco`).not.toBe(BRANCO);
-    expect(m[id].sombra, `lateral aberta · ${id}: sem sombra`).toBe("none");
+    expect(m[id].fundo, `lateral aberta · ${id}: branco`).toBe(BRANCO);
+    expect(m[id].sombra, `lateral aberta · ${id}: a sombra leve`).toBe(SOMBRA);
   }
 });
 

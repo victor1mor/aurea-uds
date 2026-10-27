@@ -201,25 +201,31 @@ for (const tema of ["dark", "light"] as const) {
       document.body.append(p);
     }, tema);
     await esperarTransicoes(page);
-    const {link, fundo, corpo} = await page.evaluate(() => {
+    const {link, fundo, corpo, linha, espessura, corDaLinha} = await page.evaluate(() => {
       const a = document.getElementById("prova-a")!;
       let n: HTMLElement | null = a.parentElement, bg = "";
       while (n) { const c = getComputedStyle(n).backgroundColor;
         if (c && c !== "rgba(0, 0, 0, 0)") { bg = c; break; } n = n.parentElement; }
-      return {link: getComputedStyle(a).color, fundo: bg,
-        corpo: getComputedStyle(document.getElementById("prova-link")!).color};
+      const cs = getComputedStyle(a);
+      return {link: cs.color, fundo: bg, corpo: getComputedStyle(document.getElementById("prova-link")!).color,
+        linha: cs.textDecorationLine, espessura: parseFloat(cs.textDecorationThickness), corDaLinha: cs.textDecorationColor};
     });
     const r = razao(link, fundo);
     // ~~ADR-0073: no claro, o link era o amarelo da marca (1,75:1), e a trava cobrava que ele FOSSE o amarelo.~~ Desde a
     // ADR-0076 (20/10/2026), no claro ele é o azul da marca: o 4,5:1 vale nos dois temas, sem exceção.
     expect(r, `link em prosa a ${r.toFixed(2)}:1 no tema ${tema} — SC 1.4.3 pede 4.5`)
       .toBeGreaterThanOrEqual(4.5);
-    // e ele tem de se DISTINGUIR do corpo: um link da cor do texto, num parágrafo, só existe
-    // para quem passa o ponteiro. SC 1.4.1 — cor não pode ser o único sinal, mas quando ela é
-    // um dos sinais, precisa ser um sinal.
-    const contraCorpo = razao(link, corpo);
-    expect(contraCorpo, `link e corpo do texto a ${contraCorpo.toFixed(2)}:1 — indistinguíveis`)
-      .toBeGreaterThanOrEqual(1.4);
+    // e ele tem de se DISTINGUIR do corpo — SC 1.4.1: cor não pode ser o único sinal. Desde a ADR-0083 (26/10/2026) o
+    // sinal é o SUBLINHADO, nos dois temas: no claro, o marca-texto (a letra é a do texto, a faixa amarela atrás); no
+    // escuro, o amarelo sublinhado. Antes, o link de prosa não tinha sublinhado e a cor era o único sinal.
+    expect(linha, "o link em prosa tem sublinhado parado").toContain("underline");
+    expect(espessura, "e ele se vê: 2 ou mais").toBeGreaterThanOrEqual(2);
+    expect(corDaLinha, "na cor da marca, e não transparente").not.toBe("rgba(0, 0, 0, 0)");
+    if (tema === "dark") {
+      // no escuro a cor também é um sinal (o amarelo contra o texto quase branco)
+      const contraCorpo = razao(link, corpo);
+      expect(contraCorpo, `link e corpo do texto a ${contraCorpo.toFixed(2)}:1 — indistinguíveis`).toBeGreaterThanOrEqual(1.4);
+    }
   });
 }
 

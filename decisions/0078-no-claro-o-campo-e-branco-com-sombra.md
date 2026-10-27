@@ -4,6 +4,7 @@
 - **Estado:** aceita · feita na branch `claude/campos`, na `0.40.0` (a web e o site); **o React Native na `0.40.1`**, na
   branch `claude/nativo`, junto com a fonte do nativo (ADR-0077; o Victor, *"pode fazer juntos"*) — ver "O nativo", abaixo.
   **Muda o item 7 da [ADR-0072](0072-sem-linha.md) só para os campos, e só no tema claro.**
+- **O item 2 (o cinza dentro de uma superfície branca) foi substituído pela [ADR-0083](0083-a-paleta-da-1-0.md) (26/10/2026)** — o campo é branco com a sombra em todo lugar.
 - **Origem:** o Victor comparou a página inicial da Aurea com a da referência, as duas na mesma largura: *"porque nossos
   caixas não são brancas?"* — e o sistema que serviu de modelo à ADR-0077 também usa o campo branco. Viu a bancada com quatro saídas nos temas da Aurea (claro, escuro e a marca `lory`), no
   notebook e no monitor de baixa visão: *"gostei Branco + sombra no meu notebook dá pra ver perfeitamente e no meu

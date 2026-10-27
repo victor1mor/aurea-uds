@@ -206,7 +206,10 @@ describe("a barra de baixo, por padrão, marca a aba escolhida com o amarelo por
     const fundos = __instancias("View").map((v) => StyleSheet.flatten(v.style)?.backgroundColor);
     expect(fundos).toContain(claro.color.primary);
     const letras = __instancias("Text").map((v) => StyleSheet.flatten(v.style)?.color);
-    expect(letras).not.toContain(claro.color.primaryEmphasis);
+    // O nome não é o AZUL da marca. Desde a ADR-0083 (26/10/2026) o destaque do claro é o grafite do texto — a mesma cor
+    // do nome —, e a comparação passou a ser com o azul de verdade.
+    expect(claro.color.brandBlue).toBe("#0246f1");
+    expect(letras).not.toContain(claro.color.brandBlue);
     expect(container.textContent).toContain("Home");
   });
   it("com `indicator=\"none\"` explícito, continua sem cápsula", () => {

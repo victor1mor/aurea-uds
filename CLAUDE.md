@@ -195,6 +195,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.41.0` | A lateral com o topo e o pé fixos: `header` e `footer` no `Sidebar`, e as partes `Sidebar.Brand`, `Sidebar.User`, `Sidebar.Nav` e `Sidebar.Show` — o 4-C das quinze laterais ([ADR-0079](decisions/0079-a-lateral-com-topo-e-pe-fixos.md)), pedido #94. **Publicada em 23/10/2026** (entre 14:44 e 14:50, Brasília, medido no npm), pelo terminal do Victor |
 | `0.42.0` | A lateral até o topo: `AppShell layout="sidebar"` (a lateral do alto até embaixo, com a marca nela, e a barra de cima só sobre o conteúdo, quando o app passa `topbar`), `AppShell.SidebarToggle` e `sidebarFooter` — o MNT-34 ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)), pedido #95. **Publicada em 25/10/2026** (entre 08:32 e 08:39, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #96 (a auditoria de volta ao verde) |
 | `0.43.0` | O bloco 1, o catálogo fiel: toda peça com página e toda variação num exemplo vivo, o nativo no site (a chave Web \| Native e as 79 páginas do nativo), quatro travas novas na CI, `CodeBlock tabs`, `SegmentedControl` com `size` e `href`, as fichas das peças só do nativo e as decisões da bancada ([ADR-0081](decisions/0081-a-bancada-do-bloco-1.md)) — pedido #97. **Publicada em 25/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor |
+| `0.44.0` | O bloco 2, a lateral inteira: `Sidebar` com `collapsible`, `indicator` e `panel`, `Sidebar.Provider`, `Sidebar.Toggle` e `useSidebar` (o Ctrl+B), no item `avatar`, `action`, o grupo que dobra e o `"separator"`, o texto e o fio a 16 e a lateral solta do topo até embaixo ([ADR-0082](decisions/0082-a-lateral-inteira.md)) — pedido #99. **Publicada em 26/10/2026** (entre 19:50 e 19:55, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -633,6 +634,24 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    **Publicada em 25/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
    #97. O registro entrou no lote seguinte (o bloco 2).
 
+42. **`0.44.0`, o bloco 2 do plano único — a lateral inteira, feito em 26/10/2026** ([ADR-0082](decisions/0082-a-lateral-inteira.md))
+   — o que faltava das quinze laterais aprovadas em 21/10 (4-A, 4-B, 4-D a 4-H) e o 2-A: `Sidebar` com `collapsible`
+   (`icon`, `capsule`, `offcanvas`), `indicator` (cinco jeitos do item atual) e `panel` (`docked`, `overlay`);
+   `Sidebar.Provider`, `Sidebar.Toggle` e `useSidebar`, com o Ctrl+B que não age onde se digita; no item, `avatar`,
+   `action`, o grupo que dobra e o `"separator"`; o texto e o fio a 16 (`--sidebar-item-x`); a lateral solta do topo até
+   embaixo; o `AppShell` com o mesmo provedor e seis padrões novos no site. Aprovada na bancada com as quinze rodando
+   (*"Aprovo as quinze e as quatro decisões como propostas"*). ⚠ **As lições:** (1) o teste de navegador achou um defeito
+   antes de sair (na lateral rente que sai da tela, a coluna ficava em 68: a regra da rente recolhida vinha depois na
+   folha); (2) a suíte inteira do Chromium achou sete pontos que os testes do lote não pegavam (o nome das cinco laterais
+   do exemplo, a chave que estourava a 200%, a prévia mais alta que a caixa, o teste que supunha a lateral aberta, o logo a
+   20, a página que rolava de lado a 320 e o painel com 262) — e os dois testes que tinham reprovado só rodaram de novo
+   DEPOIS do commit, antes do envio: o que reprovou roda de novo depois do conserto, antes do commit; (3) o validador achou
+   sete acertos de ficha (o check 46 só alcança as partes `Sidebar.X = …` escritas logo depois da função; o check 47 não
+   aceita número de versão no texto da ficha; a nota de teclado só onde o teclado foi medido); (4) a bancada se entrega pelo
+   endereço COMPLETO da página — o Victor abriu a raiz do servidor e viu uma lista de pastas (*"cade?"*).
+   **Publicada em 26/10/2026** (entre 19:50 e 19:55, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+   #99. O registro entrou no lote seguinte (as cores, passo A).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -773,23 +792,33 @@ no git.
 - ~~No tema claro, o amarelo como LETRA ou ÍCONE é o `brand-yellow-text` (`#826202`), ADR-0054~~ →
   ~~**no tema claro, a letra e o ícone de destaque são o PRÓPRIO amarelo da marca**, o mesmo do escuro
   (decisão do Victor, 18/10/2026, *"b aprovaro"*, sabendo que mede 1,75:1 —
-  [ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md))~~ → **no tema claro, a letra de
-  destaque é o AZUL da marca**, `brand-blue` (`#0246f1`, 5,59 a 6,67:1 nos fundos do claro): `link`, `link-hover`,
-  `primary-emphasis`, `primary-outline` e, por eles, o `sidebar-primary`. O amarelo continua a marca: o cheio, o
-  controle marcado e o destaque do escuro (decisão do Victor, 20/10/2026, *"Amarelo + azul"*, olhando seis caminhos
-  rodando — [ADR-0076](decisions/0076-no-claro-a-letra-de-destaque-e-o-azul-da-marca.md)). O selo primário cheio enche
-  com o amarelo (fora de marca), e o item atual da lateral, no claro, é o botão primário (fundo amarelo, letra
-  cinza-escura, sem o fio — *"não pode ser na cor do botão?"*). **Sobre o amarelo, a letra é o
-  cinza-escuro** `brand-yellow-ink` (`#242424`), nos dois temas; o marrom fica só onde ele pediu (`primary-mark`: o
-  bichinho da chave, o centro do `Slider`, o play do `MediaEmbed` e o `BottomNav` cheio). O foco do claro é a cor do
-  texto; o controle marcado é o amarelo nos dois temas, e a bolinha do rádio é branca. ~~⚠ As travas de contraste
-  aceitam SÓ esta exceção (o `--primary` como letra no claro): `amarelo-no-claro.test.tsx`, o axe da varredura e o
-  `marca.spec`.~~ Desde a ADR-0076, as travas de contraste não aceitam exceção nenhuma: o 4,5:1 vale nos dois temas.
-  Temas extras decididos, sem prioridade: Amarelo + âmbar, Oliva + folhagem e Azul elétrico (ADR-0076, "O que fica
-  para depois").
-- **Os neutros e as cores de estado dos dois temas seguem a paleta de referência** (decisão do
+  [ADR-0073](decisions/0073-no-claro-a-letra-de-destaque-e-o-amarelo-da-marca.md))~~ → ~~**no tema claro, a letra de
+  destaque é o AZUL da marca**, `brand-blue` (decisão do Victor, 20/10/2026, *"Amarelo + azul"* —
+  [ADR-0076](decisions/0076-no-claro-a-letra-de-destaque-e-o-azul-da-marca.md))~~ → **NO CLARO, O AMARELO NUNCA É LETRA**
+  (a paleta da 1.0, a proposta de cores do Victor de 25 e 26/10/2026 e a bancada de 27/10/2026 —
+  [ADR-0083](decisions/0083-a-paleta-da-1-0.md)): o destaque (`primary-emphasis`) e o link (`link`, `link-hover`) são a
+  COR DO TEXTO (`#09090B`); o amarelo aparece como fundo, traço, sublinhado, faixa ou indicador. O link se separa do texto
+  pelo **marca-texto** (a faixa amarela a 45% atrás da metade de baixo das letras — o padrão do claro) ou pelo
+  **sublinhado** amarelo (a variação, `data-link="underline"` no link ou num contêiner; e o único jeito no escuro, onde o
+  link é o amarelo); a navegação (a trilha, `<nav>`, o segmento que é link) fica sem. O escolhido do claro (aba, segmento,
+  item de navegação, `.eyebrow`) tem a letra do texto, com o fio amarelo. O item atual da lateral, no claro, continua o
+  botão primário. **Sobre o amarelo, a tinta** `brand-yellow-ink` (**`#18181B`**), nos dois temas, e **nada de marrom em
+  lugar nenhum** (o `primary-mark` é a tinta). **Dentro dos controles, as marcas são BRANCAS** (`--control-thumb`, o visto,
+  o ponto do rádio). **O foco:** o `--focus` do claro é o bronze `#BD7000`; a maioria das peças usa o `--focus-strong`
+  (o grafite no claro, o amarelo no escuro); **o foco dos CAMPOS é o amarelo** nos dois temas — no claro, 1,75:1, a
+  exceção consciente do Victor (*"1 C Amarelo"*), que o `geometry.spec` aceita só nos campos. Fora essa exceção e as marcas
+  brancas, o 4,5:1 vale nos dois temas — e a varredura do axe cobra. **O botão ligado** é amarelo com a letra do botão
+  primário, sem fio. **"Aumentar contraste" do sistema** (`prefers-contrast: more`; no nativo, `useMaisContraste`): o
+  contorno de 3:1 nos campos (`--input-strong`), as marcas na tinta e o foco do campo no grafite. Temas extras decididos,
+  sem prioridade: Amarelo + âmbar, Oliva + folhagem e Azul elétrico (ADR-0076) — e as 11 marcas da proposta da paleta
+  (passo C, só com o sim do Victor).
+- ~~**Os neutros** e~~ **as cores de estado dos dois temas seguem a paleta de referência** (decisão do
   Victor, 09/10/2026, [ADR-0061](decisions/0061-as-cores-dos-temas-seguem-a-paleta-de-referencia.md));
-  o amarelo da marca, os raios, a fonte e os ícones continuam os nossos. O fundo cheio de estado
+  o amarelo da marca, os raios, a fonte e os ícones continuam os nossos. **Os NEUTROS são a base Zinco profundo**
+  (ADR-0083): claro — página `#F5F5F5`, cartão branco, texto `#09090B`, secundário `#EBEBED`, texto de apoio `#5E5E65`
+  (aprovado na bancada: o `#686871` da proposta dava 3,88:1 nos fundos de 10% dos blocos); escuro — página `#09090B`,
+  cartão `#18181B` **sem borda**, texto `#FAFAFA`, texto de apoio `#A1A1AA`. ⚠ Os fundos translúcidos (`--fill-*`) são
+  feitos da cor do texto: texto mais escuro, fundo mais escuro — cor nova de texto se mede também sobre eles. O fundo cheio de estado
   (`--success`, `--info`, `--warning`, `--destructive`) é a MESMA cor nos dois temas; letra, ícone,
   borda e barra sobre a tela usam o par `-400`. ⚠ Nunca pintar letra com a cor de fundo de estado:
   `paleta-adr0061.test.tsx` reprova.
@@ -800,16 +829,25 @@ no git.
   10%, `--fill-3` 20%; no nativo, `preenchimento()`), e OPACO onde algo passa por trás ou uma peça cobre outra
   (`-solid`; `misturaOpaca()`). O aviso que era linha (inválido, escolhido, erro) é fundo. O foco fica (no nativo, é
   borda). As DUAS linhas: a do cartão de contorno, clara (o texto a 10%), e a de ponta a ponta embaixo das áreas do
-  site (`Header` com `tabs` e `divider`, decisão do Victor de 17/10/2026, ADR-0072 item 9). Quem cobra: `tests/unit/sem-linha.test.tsx`
+  site (`Header` com `tabs` e `divider`, decisão do Victor de 17/10/2026, ADR-0072 item 9) — e a que SÓ o "aumentar
+  contraste" do sistema acende: o contorno de 3:1 dos campos (`--input-strong`, ADR-0083), uma exceção nomeada na trava,
+  presa ao `@media (prefers-contrast:more)`. Quem cobra: `tests/unit/sem-linha.test.tsx`
   (o código, em todo estado) e a varredura "nenhuma peça desenha linha" (toda página, dois temas, três navegadores).
   **O CAMPO NO CLARO É BRANCO COM SOMBRA** (decisão do Victor, 22/10/2026, *"gostei Branco + sombra"*,
   [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)): solto na página, a cor do cartão e o `--shadow-sm`
-  (a sombra da referência); dentro de uma superfície branca (cartão, janela, folha, menu, painel do app), o `--fill-2` de
-  sempre, e a superfície escolhe sozinha (`--field-fill`/`--field-lift`); no escuro, nada muda. No nativo (`0.40.1`), o mesmo por `fundoDeCampo()`: a superfície branca liga um
+  (a sombra da referência); ~~dentro de uma superfície branca (cartão, janela, folha, menu, painel do app), o `--fill-2` de
+  sempre~~ → **também dentro de uma superfície branca** (ADR-0083: dentro do cartão branco, quem separa o campo é a
+  sombra), e a superfície escolhe sozinha (`--field-fill`/`--field-lift`) — a lista continua valendo para a `lory`; no
+  escuro, nada muda. No nativo (`0.40.1`), o mesmo por `fundoDeCampo()`: a superfície branca liga um
   contexto interno (`superficie.tsx`) que o campo lê. ⚠ **Peça nova que pinta a cor do cartão (ou do popover) e
   recebe conteúdo do app entra na lista** (a regra das superfícies no `aurea.css`; no nativo, liga o contexto) — a
   0.40.0 esqueceu o `Header` flutuante, e a 0.40.1 consertou.
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
+- **A marca `lory` fica CONGELADA** (decisão do Victor, 26/10/2026 — ADR-0083): os tokens dela estão escritos com os valores
+  de antes da paleta da 1.0, e toda regra nova da paleta leva `:where(:not([data-brand="lory"],[data-brand="lory"] *))`. A
+  única mudança nela é o conserto da linha do tempo (era defeito em todas as marcas). Quem cobra:
+  `tests/visual/lory-congelada.spec.ts` (a cor de cada elemento do banco da paleta contra a 0.44.0). Ela vai virar Aurea
+  Ember (`data-brand="ember"`) no passo C, só no nome.
 - ~~Proibido: a aparência de outro design system~~ (trocado em 11/10/2026, ordem do Victor): **a peça
   é a da referência principal, quase idêntica, com as características desta seção por cima** (seção
   2, "quase idêntica"). Nome de componente igual ao dela é permitido. Continua proibido: o nome da

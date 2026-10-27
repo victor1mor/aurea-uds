@@ -8,6 +8,8 @@
 //      letra, ícone, borda ou barra com eles: para isso existe o par `-400`.
 // Provado contra o defeito: com a folha da 0.26.1, (1) reprova em todos os valores e (2) acha os
 // 24 usos de fundo como letra que esta versão trocou (20 de letra, ícone ou borda e 4 barras).
+// ADR-0083 (26/10/2026): os NEUTROS passaram à base Zinco profundo (a proposta de cores do Victor); as cores de estado
+// continuam as da paleta de referência. O contrato dos valores mudou junto — com a folha da 0.44.0, os neutros reprovam.
 import {readFileSync} from "node:fs";
 import {render} from "@testing-library/react";
 import * as React from "react";
@@ -26,23 +28,25 @@ const bloco = (sel: string) => {
 const valor = (b: string, nome: string) => b.match(new RegExp(`--${nome}:([^;]+);`))?.[1].trim();
 
 const CLARO: Record<string, string> = {
-  background: "#f5f5f5", foreground: "#242424", card: "#ffffff", border: "#e0e0e0",
-  "muted-foreground": "#616161", "border-strong": "#616161",
+  // os neutros do Zinco profundo (ADR-0083)
+  background: "#f5f5f5", foreground: "#09090b", card: "#ffffff", border: "#e4e4e7",
+  "muted-foreground": "#5e5e65", "border-strong": "#5e5e65",
   success: "#107c10", "success-400": "#0e700e", "success-bg": "#f1faf1",
   warning: "#f7630c", "warning-400": "#8a3707", "warning-bg": "#fff9f5",
   destructive: "#c50f1f", "danger-400": "#b10e1c", "danger-bg": "#fdf3f4",
   info: "#0078d4", "info-400": "#006cbf", "info-bg": "#f3f9fd",
 };
 const ESCURO: Record<string, string> = {
-  background: "#1f1f1f", foreground: "#ffffff", card: "#292929", border: "#525252",
-  "muted-foreground": "#adadad", "border-strong": "#adadad", secondary: "#333333",
+  // os neutros do Zinco profundo (ADR-0083)
+  background: "#09090b", foreground: "#fafafa", card: "#18181b", border: "#2f2f35",
+  "muted-foreground": "#a1a1aa", "border-strong": "#a1a1aa", secondary: "#27272a",
   success: "#107c10", "success-400": "#54b054", "success-bg": "#052505",
   warning: "#f7630c", "warning-400": "#faa06b", "warning-bg": "#4a1e04",
   destructive: "#c50f1f", "danger-400": "#eeacb2", "danger-bg": "#3b0509",
   info: "#0078d4", "info-400": "#5caae5", "info-bg": "#002440",
 };
 
-describe("ADR-0061 · os valores da paleta de referência", () => {
+describe("ADR-0061 e ADR-0083 · os valores: os neutros do Zinco profundo e as cores de estado da referência", () => {
   test.each([["[data-theme=\"light\"]", CLARO], ["[data-theme=\"dark\"]", ESCURO]] as const)("%s", (sel, mapa) => {
     const b = bloco(sel);
     for (const [nome, esperado] of Object.entries(mapa)) expect(valor(b, nome), `--${nome}`).toBe(esperado);

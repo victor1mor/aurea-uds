@@ -12,6 +12,7 @@ export default defineConfig({
   // (ADR-0064), o do mapa de rede (`rede.html`); e desde a rodada 2 (ADR-0065), o do mapa que se arruma
   // (`rede2.html`); e desde 17/10/2026 (MNT-27), o das faixas (`rede4.html`); e desde 19/10/2026 (lote U), o do aviso de
   // cookies, da abertura e do Chip (`lote-u.html`); e desde 21/10/2026 (MNT-31), o da legenda e do minimapa (`rede5.html`);
-  // e desde 25/10/2026 (o bloco 2), o da lateral: as quinze laterais, o item atual e a lateral solta (`lateral.html`).
-  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html", rede3: "rede3.html", rede4: "rede4.html", rede5: "rede5.html", "lote-u": "lote-u.html", lateral: "lateral.html"}}},
+  // e desde 25/10/2026 (o bloco 2), o da lateral: as quinze laterais, o item atual e a lateral solta (`lateral.html`); e
+  // desde 27/10/2026 (as cores, passo A — ADR-0083), o da paleta: as peças que a paleta da 1.0 toca (`paleta.html`).
+  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html", rede3: "rede3.html", rede4: "rede4.html", rede5: "rede5.html", "lote-u": "lote-u.html", lateral: "lateral.html", paleta: "paleta.html"}}},
 });

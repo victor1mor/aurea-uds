@@ -70,6 +70,8 @@
       "dist/busca.js",
       "dist/chart.d.ts",
       "dist/chart.js",
+      "dist/contraste.d.ts",
+      "dist/contraste.js",
       "dist/data.d.ts",
       "dist/data.js",
       "dist/display.d.ts",

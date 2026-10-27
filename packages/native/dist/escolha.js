@@ -12,8 +12,9 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // do `BottomSheet` (`overlays.tsx`).
 import * as React from "react";
 import { Animated, PanResponder, Platform, Pressable, TextInput, View, } from "react-native";
-import { canto, criarFolha, estadoAcessivel, fundoDeCampo } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel, fundoDeCampo, focoDoCampo, marcaDoControle } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
+import { useMaisContraste } from "./contraste.js";
 import { Icon } from "./icon.js";
 import { Label, useCampo } from "./inputs.js";
 import { driverNativo, useReduceMotion } from "./movimento.js";
@@ -46,7 +47,7 @@ const folha = criarFolha((t) => ({
         backgroundColor: t.color.controlSelected },
     alcaDeitada: { width: t.size.space7, height: t.size.space5 },
     alcaEmPe: { width: t.size.space5, height: t.size.space7 },
-    bolinha: { flex: 1, ...canto(t.size.radiusFull), backgroundColor: t.color.primaryMark,
+    bolinha: { flex: 1, ...canto(t.size.radiusFull), backgroundColor: t.color.controlThumb,
         boxShadow: [...t.shadowLayers.shadowSm] },
     // ── OTPField ────────────────────────────────────────────────────────────────────────────────
     // A referência: casas de 44 × 48 com 8 entre elas. A altura é a do campo (`touchControlHMd`, a
@@ -59,8 +60,9 @@ const folha = criarFolha((t) => ({
         borderWidth: t.size.borderWidth, borderColor: "transparent",
         ...canto(t.size.radiusControl),
     },
-    // A casa ativa: a borda da cor do foco, com a espessura do anel (o contorno de 2 da referência).
-    casaAtiva: { borderColor: t.color.focusStrong, borderWidth: t.size.focusWidth },
+    // A casa ativa: a borda da cor do foco (`focoDoCampo`, na hora de pintar: o amarelo, ou o grafite com "aumentar
+    // contraste" — ADR-0083), com a espessura do anel (o contorno de 2 da referência).
+    casaAtiva: { borderWidth: t.size.focusWidth },
     casaInvalida: { borderColor: "transparent", backgroundColor: t.color.dangerBg },
     // O dígito da referência: 18 em seminegrito, na linha de 28 do `text-lg`.
     digito: { fontSize: t.size.textLg, lineHeight: t.size.textLg * t.size.textLgLeading,
@@ -252,6 +254,7 @@ export function Slider({ label, labelHidden, value, defaultValue, onValueChange,
 }
 function AlcaDoDeslizante({ indice, ctl, vertical, deslocamento, arrastando, inativo, nome, valorEscrito, porcento, rotulosDasAcoes, testID, }) {
     const t = useAureaTokens();
+    const maisContraste = useMaisContraste();
     const s = folha(t);
     const reduzir = useReduceMotion();
     // A bolinha encolhe a 90% enquanto o dedo arrasta — a referência e o `.slider-thumb` da web. Com
@@ -290,7 +293,8 @@ function AlcaDoDeslizante({ indice, ctl, vertical, deslocamento, arrastando, ina
                 ctl.current.passo(indice, 1);
             else if (nomeDaAcao === "decrement")
                 ctl.current.passo(indice, -1);
-        }, ...estadoAcessivel({ disabled: inativo }), style: [s.alca, vertical ? s.alcaEmPe : s.alcaDeitada, vertical ? { bottom: deslocamento } : { left: deslocamento }], children: _jsx(Animated.View, { style: [s.bolinha, { transform: [{ scale: escala }] }] }) }));
+        }, ...estadoAcessivel({ disabled: inativo }), style: [s.alca, vertical ? s.alcaEmPe : s.alcaDeitada, vertical ? { bottom: deslocamento } : { left: deslocamento }], children: _jsx(Animated.View, { style: [s.bolinha, maisContraste && { backgroundColor: marcaDoControle(t, t.color.controlThumb, true) },
+                { transform: [{ scale: escala }] }] }) }));
 }
 const soDigitos = (s) => s.replace(/\D/g, "");
 /**
@@ -322,6 +326,7 @@ export function OTPField({ length, value, defaultValue, onValueChange, mask, dis
     const t = useAureaTokens();
     // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
     const naSuperficie = useNaSuperficie();
+    const maisContraste = useMaisContraste();
     const s = folha(t);
     const strings = useAureaStrings();
     const campo = useCampo();
@@ -347,8 +352,9 @@ export function OTPField({ length, value, defaultValue, onValueChange, mask, dis
                     const ativa = focado && i === valor.length;
                     return (_jsx(View, { testID: testID ? `${testID}-casa-${i}` : undefined, style: [
                             s.casa,
-                            fundoDeCampo(t, naSuperficie),
+                            fundoDeCampo(t, naSuperficie, maisContraste),
                             ativa && s.casaAtiva,
+                            ativa && { borderColor: focoDoCampo(t, maisContraste) },
                             invalido && s.casaInvalida,
                             // Sobre a marca vale a tinta, inclusive no lugar do vermelho — a regra do `Input`.
                             pele && { borderColor: "transparent", backgroundColor: pele.backgroundColor },

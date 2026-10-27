@@ -122,10 +122,13 @@ function corNativa(v) {
             oklch: `oklch(${v.components.map(num).join(" ")}${alfa})`};
   }
   // srgb: já está no gamute por construção — as três formas são a mesma cor.
+  // Com transparência, o hex de OITO dígitos, como o oklch acima: o `hex` é o único que o React Native aceita, e o
+  // `native-lote0.test.tsx` cobra. Era `rgba()` — um caminho que nenhum token de COR usava até a faixa do marca-texto
+  // (`link-mark`, ADR-0083); as sombras não passam por aqui.
   const [r, g, b] = v.components;
   const hex = v.hex ?? "#" + [r, g, b].map(c => Math.round(c * 255).toString(16).padStart(2, "0")).join("");
   const a = v.alpha === undefined ? "" : ` / ${num(v.alpha)}`;
-  return {hex: v.alpha === undefined ? hex : `rgba(${[r, g, b].map(c => Math.round(c * 255)).join(",")},${num(v.alpha)})`,
+  return {hex: v.alpha === undefined ? hex : hex + Math.round(v.alpha * 255).toString(16).padStart(2, "0"),
           p3: `color(display-p3 ${[r, g, b].map(c => arred(c, 4)).join(" ")}${a})`,
           oklch: null};
 }

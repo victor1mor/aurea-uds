@@ -85,13 +85,15 @@ describe("2 · o tom `link` no Text", () => {
     expect(StyleSheet.flatten(props("Text").style).color).toBe(claro.color.link);
   });
 
-  // No nativo, `primary` escreve com a LETRA do amarelo (24/10/2026, decisão do Victor, vendo a referência ao lado): no
-  // claro, o amarelo misturado com o texto do jeito que a referência mistura o dela (80/150), e ela passa na leitura no
-  // branco e no fundo da página; no escuro, o amarelo. O amarelo puro no claro (1,92) reprova.
-  it("e `primary` é a letra do amarelo: no claro, misturado com o texto, legível", () => {
+  // No nativo, `primary` escreve com a LETRA do amarelo: no claro, o destaque GRAFITE (ADR-0083, 26/10/2026 — o amarelo
+  // nunca vira letra no claro), que passa na leitura no branco e no fundo da página; no escuro, o amarelo. Era o amarelo
+  // misturado com o texto (80/150, 24/10/2026), um marrom. O amarelo puro no claro (1,92) reprova.
+  it("e `primary` é a letra do amarelo: no claro, o grafite do destaque, legível", () => {
     render(<Envolve><Text tone="primary">x</Text></Envolve>);
     const cor = StyleSheet.flatten(props("Text").style).color as string;
-    expect(cor).toBe(misturaNoOklab(claro.color.primary, claro.color.foreground, 80 / 150));
+    expect(cor).toBe(claro.color.primaryEmphasis);
+    expect(cor).toBe(claro.color.foreground);
+    expect(cor).not.toBe(misturaNoOklab(claro.color.primary, claro.color.foreground, 80 / 150));
     const lum = (h: string) => { const v = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255)
       .map((c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
     const razao = (a: string, b: string) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };

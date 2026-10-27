@@ -32,19 +32,22 @@ The accent is the brand yellow, `oklch(0.795 0.184 86.047)`. It is the same in b
 | Token | Use |
 |---|---|
 | `--primary` | The yellow fill: the primary button, the brand card, full bars |
-| `--primary-foreground` | Text and icons on the yellow. Dark gray in both themes |
+| `--primary-foreground` | Text and icons on the yellow. The ink `#18181B` in both themes |
 | `--primary-hover` | The yellow fill under the pointer |
 | `--primary-active` | The yellow fill while pressed |
-| `--primary-emphasis` | Yellow used as text or icon: the current item, the primary badge |
+| `--primary-emphasis` | The accent used as text or icon: the text color in the light theme, the yellow in the dark theme |
 | `--primary-outline` | Yellow used as a stroke or a thin mark |
-| `--primary-mark` | The small brown mark on the yellow: the switch knob, the slider thumb center |
-| `--link` | Link text |
+| `--primary-mark` | A mark drawn on the yellow that is not a label: the icon of a filled bottom bar, the play button. The ink |
+| `--link` | Link text: the text color in the light theme, the yellow in the dark theme |
 | `--link-hover` | Link text under the pointer |
+| `--link-mark` | The yellow highlight behind a link in the light theme. Transparent in the dark theme |
+| `--link-underline` | The yellow underline of a link |
 | `--control-selected` | A checked checkbox, radio, switch or slider |
-| `--control-selected-foreground` | The check mark on a checked control |
+| `--control-selected-foreground` | The white tick on a checked checkbox |
+| `--control-thumb` | The white knob of a switch and handle of a slider |
 | `--control-selected-dot` | The white dot of a checked radio |
 
-In the light theme, emphasis text and links use the brand blue (`#0246f1`), which measures 5.59:1 to 6.67:1 on the light backgrounds. The yellow stays the brand: fills, checked controls, and emphasis in the dark theme.
+In the light theme the yellow is never used as text. Emphasis text and links are the text color, and a link stands apart from the text around it with a yellow highlight behind its letters — or a yellow underline, with `data-link="underline"` on the link or on a container. The yellow stays the brand: fills, lines, highlights, checked controls, and emphasis in the dark theme. Inside a checked control the marks are white; when the system asks for more contrast, they turn to the ink.
 
 ## Neutrals
 
@@ -62,7 +65,7 @@ Neutrals are the grays that fill quiet controls and hover states.
 
 ## Fills
 
-Aurea draws no borders around components. A piece that needs to stand apart from what is behind it gets a fill instead. The fills are the text color at a low opacity, so they show on any background. In the light theme, fields on the page are the exception: they are white, with a soft shadow, and keep the fill only inside a white surface.
+Aurea draws no borders around components. A piece that needs to stand apart from what is behind it gets a fill instead. The fills are the text color at a low opacity, so they show on any background. In the light theme, fields are the exception: they are white, with a soft shadow, everywhere — inside cards and dialogs too.
 
 | Token | Use |
 |---|---|
@@ -87,7 +90,7 @@ There are four status colors: success, warning, danger and info. Each one has th
 | Soft background | `--success-bg` | `--warning-bg` | `--danger-bg` | `--info-bg` |
 
 - The full fill is the **same color in both themes**. A solid success button looks the same in light and dark.
-- Text on the warning fill is dark gray. Text on the other three fills is white.
+- Text on the warning fill is the ink. Text on the other three fills is white.
 - Text, icons and progress bars on the page use the `-400` role. Each theme sets it so it reads on its own surfaces.
 - **Never paint text with a full fill color.** In the dark theme, the fills used as text fall below 4.5:1.
 
@@ -127,7 +130,7 @@ Surfaces float over the page: cards, dialogs, menus, panels.
 
 ## Form field
 
-Fields (input, textarea, select, number field) are filled with `--fill-2`. They have no border.
+Fields (input, textarea, select, number field) have no border. In the light theme they are white with a soft shadow; in the dark theme they are filled with `--fill-2`. When the system asks for more contrast (`prefers-contrast: more`), they get a 3:1 outline, `--input-strong`.
 
 An invalid field turns its fill to `--danger-bg`, and its focus ring to `--danger-400`. No red line is drawn.
 
@@ -162,6 +165,7 @@ The [Badge](./badge.html) takes them as `variant` on the web and as `tone` in Re
 | Token | Use |
 |---|---|
 | `--focus-strong` | The focus ring. The yellow in the dark theme, the text color in the light theme |
+| `--focus` | The focus of the brand: the bronze `#BD7000` in the light theme. Fields use the yellow for their focus |
 | `--selection` | Selected text |
 | `--overlay` | The veil behind dialogs and drawers |
 | `--chart-1` to `--chart-5` | The chart scale. In the default brand, five steps of one blue |
@@ -173,8 +177,8 @@ Primitives are the raw values behind the roles. They are the same in both themes
 | Token | Value |
 |---|---|
 | `--brand-yellow` | `oklch(0.795 0.184 86.047)` |
-| `--brand-yellow-ink` | `#242424`, the text on the yellow |
-| `--brand-yellow-foreground` | `oklch(0.421 0.095 57.708)`, the brown mark on the yellow |
+| `--brand-yellow-ink` | `#18181B`, the ink on the yellow |
+| `--brand-yellow-foreground` | `oklch(0.421 0.095 57.708)`. Deprecated: no longer used, leaves in 1.0 |
 | `--white` | `oklch(1 0 0)` |
 | `--black` | `oklch(0 0 0)` |
 
@@ -224,14 +228,14 @@ The main roles, side by side.
 
 | Token | Light | Dark |
 |---|---|---|
-| `--background` | `#f5f5f5` | `#1f1f1f` |
-| `--foreground` | `#242424` | `#ffffff` |
-| `--card` | `#ffffff` | `#292929` |
-| `--secondary` | `#ebebeb` | `#333333` |
-| `--muted-foreground` | `#616161` | `#adadad` |
-| `--border` | `#e0e0e0` | `#525252` |
+| `--background` | `#f5f5f5` | `#09090b` |
+| `--foreground` | `#09090b` | `#fafafa` |
+| `--card` | `#ffffff` | `#18181b` |
+| `--secondary` | `#ebebed` | `#27272a` |
+| `--muted-foreground` | `#5e5e65` | `#a1a1aa` |
+| `--border` | `#e4e4e7` | `#2f2f35` |
 | `--primary` | the brand yellow | the brand yellow |
-| `--primary-foreground` | `#242424` | `#242424` |
+| `--primary-foreground` | `#18181b` | `#18181b` |
 | `--success` | `#107c10` | `#107c10` |
 | `--success-400` | `#0e700e` | `#54b054` |
 | `--warning` | `#f7630c` | `#f7630c` |

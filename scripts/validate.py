@@ -2542,6 +2542,9 @@ NAO_E_ESTADO = {
     # A caixa de exemplo do `CodeBlock preview` (DOC-02): `data-panel` diz QUAL painel é (a prévia ou o
     # código) — é nome, e quem diz se ele está à mostra é o `hidden`.
     "panel": "é o NOME do painel da caixa de exemplo (prévia ou código), não estado",
+    # O jeito do link (ADR-0083, 27/10/2026): `data-link="underline"` pede o sublinhado no lugar do marca-texto, no próprio
+    # link, num contêiner ou no `<html>` — um MODO de leitura escolhido por quem escreve a página, como o tema.
+    "link": "é o JEITO do link (`data-link=\"underline\"`, ADR-0083), modo escolhido pela página, não estado",
 }
 _css_sem_comentario = re.sub(r"/\*.*?\*/", "", core_src, flags=re.S)
 _pintados = {m for m in re.findall(r"\[data-([a-z-]+)", _css_sem_comentario)}
