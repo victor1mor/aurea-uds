@@ -45,7 +45,7 @@
    fundo de 10% dos blocos — código, registro, área de soltar, os da ADR-0072 — dentro da caixa de prévia, fora das 78
    combinações dela: o texto mais escuro, `#09090B`, escurece os fundos feitos dele. O `#5E5E65` é o zinco mais claro que
    passa em todo fundo medido — 4,52 ali, 4,60 no nó do mapa, 6,43 no branco —, quase o cinza da 0.44.0, `#616161`. Achado
-   pela varredura do axe em 27/10/2026; a escolha vai à bancada); escuro — página `#09090B`, cartão `#18181B`, texto `#FAFAFA`,
+   pela varredura do axe em 27/10/2026; **aprovado na bancada**: *"Aprovo o #5E5E65 no texto de apoio."*); escuro — página `#09090B`, cartão `#18181B`, texto `#FAFAFA`,
    secundário `#27272A`, texto de apoio `#A1A1AA`. **O cartão do escuro não tem linha** (o Victor, 26/10/2026: *"sem
    bordas"* — a ADR-0072 continua).
 2. **No claro, o amarelo nunca é letra.** O destaque (`--primary-emphasis`) e o link (`--link`) são o grafite do texto; o
