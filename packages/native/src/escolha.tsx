@@ -15,8 +15,9 @@ import {
   type AccessibilityActionEvent, type GestureResponderEvent, type LayoutChangeEvent,
   type PanResponderGestureState, type StyleProp, type TextStyle, type ViewStyle,
 } from "react-native";
-import {canto, criarFolha, estadoAcessivel, fundoDeCampo} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, fundoDeCampo, focoDoCampo, marcaDoControle} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
+import {useMaisContraste} from "./contraste.js";
 import {Icon, type AureaIcon, type AureaIconRegistry} from "./icon.js";
 import {Label, useCampo} from "./inputs.js";
 import {driverNativo, useReduceMotion} from "./movimento.js";
@@ -52,7 +53,7 @@ const folha = criarFolha((t: AureaTokens) => ({
          backgroundColor: t.color.controlSelected},
   alcaDeitada: {width: t.size.space7, height: t.size.space5},
   alcaEmPe: {width: t.size.space5, height: t.size.space7},
-  bolinha: {flex: 1, ...canto(t.size.radiusFull), backgroundColor: t.color.primaryMark,
+  bolinha: {flex: 1, ...canto(t.size.radiusFull), backgroundColor: t.color.controlThumb,
             boxShadow: [...t.shadowLayers.shadowSm]},
 
   // ── OTPField ────────────────────────────────────────────────────────────────────────────────
@@ -66,8 +67,9 @@ const folha = criarFolha((t: AureaTokens) => ({
     borderWidth: t.size.borderWidth, borderColor: "transparent",
     ...canto(t.size.radiusControl),
   },
-  // A casa ativa: a borda da cor do foco, com a espessura do anel (o contorno de 2 da referência).
-  casaAtiva: {borderColor: t.color.focusStrong, borderWidth: t.size.focusWidth},
+  // A casa ativa: a borda da cor do foco (`focoDoCampo`, na hora de pintar: o amarelo, ou o grafite com "aumentar
+  // contraste" — ADR-0083), com a espessura do anel (o contorno de 2 da referência).
+  casaAtiva: {borderWidth: t.size.focusWidth},
   casaInvalida: {borderColor: "transparent", backgroundColor: t.color.dangerBg},
   // O dígito da referência: 18 em seminegrito, na linha de 28 do `text-lg`.
   digito: {fontSize: t.size.textLg, lineHeight: t.size.textLg * t.size.textLgLeading,
@@ -371,6 +373,7 @@ function AlcaDoDeslizante({
   testID?: string;
 }) {
   const t = useAureaTokens();
+  const maisContraste = useMaisContraste();
   const s = folha(t);
   const reduzir = useReduceMotion();
   // A bolinha encolhe a 90% enquanto o dedo arrasta — a referência e o `.slider-thumb` da web. Com
@@ -422,7 +425,8 @@ function AlcaDoDeslizante({
       }}
       {...estadoAcessivel({disabled: inativo})}
       style={[s.alca, vertical ? s.alcaEmPe : s.alcaDeitada, vertical ? {bottom: deslocamento} : {left: deslocamento}]}>
-      <Animated.View style={[s.bolinha, {transform: [{scale: escala}]}]} />
+      <Animated.View style={[s.bolinha, maisContraste && {backgroundColor: marcaDoControle(t, t.color.controlThumb, true)},
+        {transform: [{scale: escala}]}]} />
     </View>
   );
 }
@@ -477,6 +481,7 @@ export function OTPField({length, value, defaultValue, onValueChange, mask, disa
   const t = useAureaTokens();
   // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
   const naSuperficie = useNaSuperficie();
+  const maisContraste = useMaisContraste();
   const s = folha(t);
   const strings = useAureaStrings();
   const campo = useCampo();
@@ -517,8 +522,9 @@ export function OTPField({length, value, defaultValue, onValueChange, mask, disa
               testID={testID ? `${testID}-casa-${i}` : undefined}
               style={[
                 s.casa,
-                fundoDeCampo(t, naSuperficie),
+                fundoDeCampo(t, naSuperficie, maisContraste),
                 ativa && s.casaAtiva,
+                ativa && {borderColor: focoDoCampo(t, maisContraste)},
                 invalido && s.casaInvalida,
                 // Sobre a marca vale a tinta, inclusive no lugar do vermelho — a regra do `Input`.
                 pele && {borderColor: "transparent", backgroundColor: pele.backgroundColor},

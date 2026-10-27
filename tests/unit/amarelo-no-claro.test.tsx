@@ -13,6 +13,11 @@
 //   4. sobre o amarelo, a letra é o cinza-escuro `brand-yellow-ink` nos dois temas — antes, o
 //      marrom; a marca marrom fica só onde o Victor pediu (`primaryMark`), e a bolinha do rádio é
 //      branca (`controlSelectedDot`).
+//
+// ADR-0083 (26/10/2026, a paleta da 1.0) SUBSTITUI a ADR-0076 e o item 4: no claro, o destaque e o link são o
+// GRAFITE do texto (o amarelo nunca vira letra no claro; o contorno é o amarelo translúcido); sobre o amarelo, a tinta
+// passa a #18181b e a marca (`primaryMark`) também — sem marrom; e dentro dos controles (o visto, a bolinha, a alça, o
+// ponto do rádio) as marcas são BRANCAS. Com os tokens da 0.44.0, os testes 1 e 4 reprovam.
 import {readFileSync} from "node:fs";
 import {render} from "@testing-library/react";
 import * as React from "react";
@@ -37,11 +42,13 @@ const contraste = (a: string, b: string) => {
 const FUNDOS = ["background", "card", "popover", "surface1", "surface2", "surface3", "muted",
   "secondary", "fieldBg", "surfaceInset", "accent"].filter((k) => claro[k]).map((k) => [k, claro[k].hex] as const);
 
-describe("ADR-0076 · a letra de destaque do claro é o azul da marca; o resto da ADR-0073 fica", () => {
-  it("no claro, destaque, contorno e link são o azul da marca e passam 4,5:1 em todo fundo; no escuro, o amarelo", () => {
+describe("ADR-0083 · a letra de destaque do claro é o grafite do texto; o resto da ADR-0073 fica", () => {
+  it("no claro, destaque e link são o grafite e passam 4,5:1 em todo fundo; o contorno é o amarelo; no escuro, o amarelo", () => {
     expect(FUNDOS.length).toBeGreaterThan(5);
-    for (const nome of ["primaryEmphasis", "primaryOutline", "link", "linkHover"]) {
-      expect(claro[nome].hex, nome).toBe(raiz.brandBlue.hex);
+    expect(claro.primaryOutline.hex).toBe(`${claro.primary.hex}59`);
+    for (const nome of ["primaryEmphasis", "link", "linkHover"]) {
+      expect(claro[nome].hex, nome).toBe(claro.foreground.hex);
+      expect(claro[nome].hex, nome).not.toBe(raiz.brandBlue.hex);
       for (const [fundo, cor] of FUNDOS) {
         expect(contraste(claro[nome].hex, cor), `${nome} × ${fundo}`).toBeGreaterThanOrEqual(4.5);
       }
@@ -61,18 +68,18 @@ describe("ADR-0076 · a letra de destaque do claro é o azul da marca; o resto d
       expect(temas[tema].controlSelected.hex, tema).toBe(temas[tema].primary.hex);
     }
   });
-  it("sobre o amarelo: a letra cinza-escura, a marca marrom e a bolinha branca", () => {
+  it("sobre o amarelo: a letra e a marca na tinta #18181b; dentro dos controles, as marcas brancas", () => {
     const tinta = raiz.brandYellowInk.hex;
-    const marrom = raiz.brandYellowForeground.hex;
+    expect(tinta).toBe("#18181b");
     for (const tema of ["dark", "light"] as const) {
       const t = temas[tema];
-      for (const nome of ["primaryForeground", "sidebarPrimaryForeground", "controlSelectedForeground"]) {
+      for (const nome of ["primaryForeground", "sidebarPrimaryForeground", "primaryMark"]) {
         expect(t[nome].hex, `${tema} ${nome}`).toBe(tinta);
       }
-      expect(contraste(t.primaryForeground.hex, t.primary.hex), tema).toBeGreaterThanOrEqual(4.5);
-      expect(t.primaryMark.hex, tema).toBe(marrom);
-      expect(contraste(t.primaryMark.hex, t.primary.hex), tema).toBeGreaterThanOrEqual(3);
-      expect(lum(t.controlSelectedDot.hex), tema).toBeGreaterThan(0.9);
+      expect(contraste(t.primaryForeground.hex, t.primary.hex), tema).toBeGreaterThanOrEqual(9);
+      for (const nome of ["controlSelectedForeground", "controlThumb", "controlSelectedDot"]) {
+        expect(lum(t[nome].hex), `${tema} ${nome}`).toBeGreaterThan(0.9);
+      }
     }
   });
 });

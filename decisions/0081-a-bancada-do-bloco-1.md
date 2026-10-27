@@ -2,6 +2,7 @@
 
 - **Data:** 24/10/2026
 - **Estado:** aceita · feita na branch `claude/nat2`, na `0.43.0` (o bloco 1, o catálogo fiel).
+- **Os itens 2 e 3 (o azul no claro) foram substituídos pela [ADR-0083](0083-a-paleta-da-1-0.md) (26/10/2026)** — o grafite.
 - **Substitui:** a [ADR-0002](0002-altura-fixa-do-demo.md) (a caixa do exemplo de altura fixa).
 - **Origem:** a bancada do bloco 1 — sete pontos lado a lado, nos dois temas, com o contraste medido na página, e dois de
   API. O Victor, depois de ver: *"Vi a bancada. Pode seguir com as opções que você recomendou nos nove pontos."*

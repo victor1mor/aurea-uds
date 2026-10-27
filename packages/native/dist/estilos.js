@@ -57,14 +57,31 @@ export const comOpacidade = (cor, pct) => /^#[0-9a-fA-F]{6}$/.test(cor)
  */
 export const preenchimento = (t, nivel) => comOpacidade(t.color.foreground, nivel === 1 ? 0.06 : nivel === 2 ? 0.1 : 0.2);
 /**
- * O fundo do CAMPO (ADR-0078, a web na 0.40.0, o nativo na 0.40.1). No CLARO, solto na tela: a cor do cartão com a
- * sombra leve (`shadowSm`, a mesma da referência); dentro de uma superfície branca (`useNaSuperficie()`, em
- * `superficie.tsx`) e no ESCURO, o cinza de antes (`preenchimento(t, 2)`), sem sombra. Quem chama põe este estilo
- * logo depois da pele do campo, antes dos estados (inválido, desativado), que continuam vencendo.
+ * O fundo do CAMPO. No CLARO, a cor do cartão com a sombra leve (`shadowSm`, a mesma da referência) — EM TODO LUGAR,
+ * também dentro de uma superfície branca (ADR-0083, 26/10/2026: o Victor, "campos brancos e sem borda, na página e
+ * dentro dos cartões"; dentro do cartão branco, quem separa o campo é a sombra). No ESCURO, o cinza de sempre
+ * (`preenchimento(t, 2)`), sem sombra. Era o cinza dentro da superfície (ADR-0078): o `naSuperficie` continua no sinal
+ * (o `Card`, a janela e a folha ainda ligam o contexto de `superficie.tsx`), sem mudar a cor.
+ * Com "aumentar contraste" no sistema (`useMaisContraste`, em `contraste.ts`), o campo ganha o contorno de 3:1
+ * (`inputStrong`): a única linha que essa preferência acende, como na web (ADR-0083). Quem chama põe este estilo logo
+ * depois da pele do campo, antes dos estados (inválido, foco, desativado), que continuam vencendo.
  */
-export const fundoDeCampo = (t, naSuperficie) => t.theme === "light" && !naSuperficie
-    ? { backgroundColor: t.color.card, boxShadow: [...t.shadowLayers.shadowSm] }
-    : { backgroundColor: preenchimento(t, 2) };
+export const fundoDeCampo = (t, _naSuperficie, maisContraste = false) => ({
+    ...(t.theme === "light"
+        ? { backgroundColor: t.color.card, boxShadow: [...t.shadowLayers.shadowSm] }
+        : { backgroundColor: preenchimento(t, 2) }),
+    ...(maisContraste ? { borderColor: t.color.inputStrong } : null),
+});
+/**
+ * A cor do FOCO do campo (no nativo, o foco é a borda): o amarelo da marca, nos dois temas — uma linha só, como na web
+ * (ADR-0083, 26/10/2026). Com "aumentar contraste" no sistema, volta ao `focusStrong` (o grafite no claro).
+ */
+export const focoDoCampo = (t, maisContraste = false) => maisContraste ? t.color.focusStrong : t.color.primary;
+/**
+ * A marca DENTRO de um controle ligado — a bolinha do `Switch`, a alça do `Slider`, o visto do `Checkbox` e o ponto do
+ * rádio: branca (ADR-0083, 26/10/2026, o Victor: "como na referência"); com "aumentar contraste" no sistema, a tinta.
+ */
+export const marcaDoControle = (t, branca, maisContraste = false) => maisContraste ? t.color.brandYellowInk : branca;
 /**
  * A mesma mistura, OPACA: a cor da frente a `pct` sobre a do fundo. Para o que tem algo passando POR TRÁS (o traço dos
  * passos) ou cobre outra peça (as fotos sobrepostas) — translúcido, o que está atrás aparece. Hex de seis, como o
@@ -108,20 +125,17 @@ export const misturaNoOklab = (frente, fundo, pct) => {
     return doOklab([0, 1, 2].map((i) => a[i] * pct + b[i] * (1 - pct)));
 };
 /**
- * A COR DO ESCOLHIDO, a mesma da web (bloco 1, 23/10/2026): no claro, a marca a 45% sobre a cor do texto, no oklab — o
- * `.is-selected`, o `.segmented .active` e o botão pressionado da web; no escuro, o destaque (o amarelo). Era o
- * `primaryEmphasis`, que no claro é o AZUL (ADR-0076): o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web
- * não é azul?"*) e pediu o conserto, 23/10/2026.
+ * A COR DO ESCOLHIDO, a mesma da web: no claro, o GRAFITE do texto (ADR-0083, 26/10/2026 — o amarelo não vira letra no
+ * claro; o fio amarelo de baixo marca o escolhido); no escuro, o destaque (o amarelo). Era a marca a 45% sobre o texto
+ * (o "marrom", bloco 1, 23/10/2026), e antes o azul.
  */
-export const corDoEscolhido = (t) => t.theme === "light" ? misturaNoOklab(t.color.primary, t.color.foreground, 0.45) : t.color.primaryEmphasis;
+export const corDoEscolhido = (t) => t.theme === "light" ? t.color.foreground : t.color.primaryEmphasis;
 /**
- * A LETRA DO AMARELO, a do texto com `tone="primary"` (decisão do Victor, 24/10/2026, vendo a referência ao lado: *"fica
- * como a referência: o nosso amarelo misturado com a cor do texto"*). No claro, o amarelo da marca misturado com a cor do
- * texto do jeito que a referência mistura a letra do amarelo dela — `color-mix(in oklab, amarelo 80%, texto 70%)`: os
- * pesos somam 150 e viram 80/150 —, que passa na leitura no branco e no cinza da página (o amarelo puro media 1,92). No
- * escuro, o amarelo da marca, que já se lê.
+ * A LETRA DO AMARELO, a do texto com `tone="primary"`: o destaque (`primaryEmphasis`) — no claro, o grafite do texto; no
+ * escuro, o amarelo da marca, que já se lê (ADR-0083, 26/10/2026). Era, no claro, o amarelo misturado com o texto do
+ * jeito da referência (80/150, decisão de 24/10/2026), que dava um marrom.
  */
-export const letraDoAmarelo = (t) => t.theme === "light" ? misturaNoOklab(t.color.primary, t.color.foreground, 80 / 150) : t.color.primary;
+export const letraDoAmarelo = (t) => t.theme === "light" ? t.color.primaryEmphasis : t.color.primary;
 /**
  * 🍎 O CANTO DO iOS — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
  *

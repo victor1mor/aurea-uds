@@ -73,9 +73,10 @@ describe("Slider · as medidas do nativo da referência", () => {
     expect([a.width, a.height, a.padding, a.borderRadius, a.backgroundColor])
       .toEqual([28, 20, t.size.space05, t.size.radiusFull, t.color.controlSelected]);
     const bolinha = plano(__instancias("Animated.View").at(-1));
-    // A bolinha é a marca marrom sobre o amarelo (`primaryMark`), como o centro do pino da web — decisão do Victor,
-    // 17/10/2026: *"slider não coloque preto coloque marrom"* (ADR-0073).
-    expect([bolinha.flex, bolinha.backgroundColor, bolinha.borderRadius]).toEqual([1, t.color.primaryMark, t.size.radiusFull]);
+    // A bolinha é BRANCA sobre o amarelo (`controlThumb`), como o centro do pino da web — ADR-0083 (26/10/2026), as
+    // marcas dentro dos controles brancas. Era a marca marrom (`primaryMark`, 17/10/2026).
+    expect([bolinha.flex, bolinha.backgroundColor, bolinha.borderRadius]).toEqual([1, t.color.controlThumb, t.size.radiusFull]);
+    expect(t.color.controlThumb).toBe("#ffffff");
     expect(bolinha.boxShadow).toEqual([...t.shadowLayers.shadowSm]);
     const raiz = plano(__instancias("View").find((p) => p.testID === "s"));
     expect(raiz.gap).toBe(8);
@@ -85,7 +86,7 @@ describe("Slider · as medidas do nativo da referência", () => {
   it("no tema claro a marca é a do controle marcado (a do `Switch`)", () => {
     render(<Envolve tema="light"><Slider label="Volume" defaultValue={30} /></Envolve>);
     expect(plano(alcas()[0]).backgroundColor).toBe(claro.color.controlSelected);
-    expect(plano(__instancias("Animated.View").at(-1)).backgroundColor).toBe(claro.color.primaryMark);
+    expect(plano(__instancias("Animated.View").at(-1)).backgroundColor).toBe(claro.color.controlThumb);
   });
 
   it("na vertical o trilho tem 20 de largura e a alça é 20 × 28, e nunca some sem altura no pai", () => {
@@ -534,13 +535,13 @@ describe("TagGroup · escolher", () => {
 
   it("a escolhida: 10% da marca sobre o fundo secundário e a letra no destaque, nos dois temas", () => {
     render(<Envolve><TagGroup label="Assuntos" items={ITENS} selectionMode="single" defaultSelectedKeys={["design"]} testID="g" /></Envolve>);
-    // #f0b100 a 10% sobre #333333, canal a canal.
-    expect(plano(etiqueta("design")).backgroundColor).toBe("#46402e");
+    // #f0b100 a 10% sobre #27272a (o secundário do Zinco profundo, ADR-0083), canal a canal.
+    expect(plano(etiqueta("design")).backgroundColor).toBe("#3b3526");
     expect(rotulo("Design").color).toBe(t.color.primaryEmphasis);
     expect(plano(etiqueta("codigo")).backgroundColor).toBe(t.color.secondary);
     render(<Envolve tema="light"><TagGroup label="Assuntos" items={ITENS} selectionMode="single" defaultSelectedKeys={["design"]} testID="g" /></Envolve>);
-    // #f0b100 a 10% sobre #ebebeb.
-    expect(plano(etiqueta("design")).backgroundColor).toBe("#ece5d4");
+    // #f0b100 a 10% sobre #ebebed.
+    expect(plano(etiqueta("design")).backgroundColor).toBe("#ece5d5");
     expect(rotulo("Design").color).toBe(claro.color.primaryEmphasis);
   });
 

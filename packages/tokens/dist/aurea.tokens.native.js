@@ -37,8 +37,8 @@ export const base = {
     "oklch": "oklch(0.516 0.105 86.047)"
   },
   "brandYellowInk": {
-    "hex": "#242424",
-    "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+    "hex": "#18181b",
+    "p3": "color(display-p3 0.0941 0.0941 0.1059)",
     "oklch": null
   },
   "brandBlue": {
@@ -376,33 +376,33 @@ export const shadowLayers = {
 export const themes = {
   "dark": {
     "background": {
-      "hex": "#1f1f1f",
-      "p3": "color(display-p3 0.1216 0.1216 0.1216)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "foreground": {
-      "hex": "#ffffff",
-      "p3": "color(display-p3 1 1 1)",
+      "hex": "#fafafa",
+      "p3": "color(display-p3 0.9804 0.9804 0.9804)",
       "oklch": null
     },
     "card": {
-      "hex": "#292929",
-      "p3": "color(display-p3 0.1608 0.1608 0.1608)",
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
       "oklch": null
     },
     "cardForeground": {
-      "hex": "#ffffff",
-      "p3": "color(display-p3 1 1 1)",
+      "hex": "#fafafa",
+      "p3": "color(display-p3 0.9804 0.9804 0.9804)",
       "oklch": null
     },
     "popover": {
-      "hex": "#292929",
-      "p3": "color(display-p3 0.1608 0.1608 0.1608)",
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
       "oklch": null
     },
     "popoverForeground": {
-      "hex": "#ffffff",
-      "p3": "color(display-p3 1 1 1)",
+      "hex": "#fafafa",
+      "p3": "color(display-p3 0.9804 0.9804 0.9804)",
       "oklch": null
     },
     "primary": {
@@ -411,8 +411,8 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "primaryForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
       "oklch": null
     },
     "link": {
@@ -426,33 +426,33 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "secondary": {
-      "hex": "#333333",
-      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "hex": "#27272a",
+      "p3": "color(display-p3 0.1529 0.1529 0.1647)",
       "oklch": null
     },
     "secondaryForeground": {
-      "hex": "#ffffff",
-      "p3": "color(display-p3 1 1 1)",
+      "hex": "#fafafa",
+      "p3": "color(display-p3 0.9804 0.9804 0.9804)",
       "oklch": null
     },
     "muted": {
-      "hex": "#333333",
-      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "hex": "#27272a",
+      "p3": "color(display-p3 0.1529 0.1529 0.1647)",
       "oklch": null
     },
     "mutedForeground": {
-      "hex": "#adadad",
-      "p3": "color(display-p3 0.6784 0.6784 0.6784)",
+      "hex": "#a1a1aa",
+      "p3": "color(display-p3 0.6314 0.6314 0.6667)",
       "oklch": null
     },
     "accent": {
-      "hex": "#333333",
-      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "hex": "#27272a",
+      "p3": "color(display-p3 0.1529 0.1529 0.1647)",
       "oklch": null
     },
     "accentForeground": {
-      "hex": "#ffffff",
-      "p3": "color(display-p3 1 1 1)",
+      "hex": "#fafafa",
+      "p3": "color(display-p3 0.9804 0.9804 0.9804)",
       "oklch": null
     },
     "destructive": {
@@ -466,53 +466,53 @@ export const themes = {
       "oklch": null
     },
     "border": {
-      "hex": "#525252",
-      "p3": "color(display-p3 0.3216 0.3216 0.3216)",
+      "hex": "#2f2f35",
+      "p3": "color(display-p3 0.1843 0.1843 0.2078)",
       "oklch": null
     },
     "input": {
-      "hex": "#525252",
-      "p3": "color(display-p3 0.3216 0.3216 0.3216)",
+      "hex": "#3f3f46",
+      "p3": "color(display-p3 0.2471 0.2471 0.2745)",
       "oklch": null
     },
     "ring": {
-      "hex": "#666666",
-      "p3": "color(display-p3 0.4 0.4 0.4)",
+      "hex": "#71717a",
+      "p3": "color(display-p3 0.4431 0.4431 0.4784)",
       "oklch": null
     },
     "chart1": {
-      "hex": "#8ec5ff",
-      "p3": "color(display-p3 0.6026 0.7672 0.9939)",
-      "oklch": "oklch(0.809 0.105 251.813)"
+      "hex": "#bbdbff",
+      "p3": "color(display-p3 0.7333 0.8588 1)",
+      "oklch": null
     },
     "chart2": {
-      "hex": "#2b7fff",
-      "p3": "color(display-p3 0.2664 0.4912 0.9886)",
-      "oklch": "oklch(0.623 0.214 259.815)"
+      "hex": "#97bfff",
+      "p3": "color(display-p3 0.5922 0.749 1)",
+      "oklch": null
     },
     "chart3": {
-      "hex": "#155dfc",
-      "p3": "color(display-p3 0.1745 0.359 0.9502)",
-      "oklch": "oklch(0.546 0.245 262.881)"
+      "hex": "#76a4ff",
+      "p3": "color(display-p3 0.4627 0.6431 1)",
+      "oklch": null
     },
     "chart4": {
-      "hex": "#1447e6",
-      "p3": "color(display-p3 0.1379 0.275 0.8676)",
-      "oklch": "oklch(0.488 0.243 264.376)"
+      "hex": "#5789ff",
+      "p3": "color(display-p3 0.3412 0.5373 1)",
+      "oklch": null
     },
     "chart5": {
-      "hex": "#193cb8",
-      "p3": "color(display-p3 0.134 0.2306 0.6955)",
-      "oklch": "oklch(0.424 0.199 265.638)"
+      "hex": "#4371f2",
+      "p3": "color(display-p3 0.2627 0.4431 0.949)",
+      "oklch": null
     },
     "sidebar": {
-      "hex": "#292929",
-      "p3": "color(display-p3 0.1608 0.1608 0.1608)",
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
       "oklch": null
     },
     "sidebarForeground": {
-      "hex": "#ffffff",
-      "p3": "color(display-p3 1 1 1)",
+      "hex": "#fafafa",
+      "p3": "color(display-p3 0.9804 0.9804 0.9804)",
       "oklch": null
     },
     "sidebarPrimary": {
@@ -521,73 +521,73 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "sidebarPrimaryForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
       "oklch": null
     },
     "sidebarAccent": {
-      "hex": "#333333",
-      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "hex": "#27272a",
+      "p3": "color(display-p3 0.1529 0.1529 0.1647)",
       "oklch": null
     },
     "sidebarAccentForeground": {
-      "hex": "#ffffff",
-      "p3": "color(display-p3 1 1 1)",
+      "hex": "#fafafa",
+      "p3": "color(display-p3 0.9804 0.9804 0.9804)",
       "oklch": null
     },
     "sidebarBorder": {
-      "hex": "#525252",
-      "p3": "color(display-p3 0.3216 0.3216 0.3216)",
+      "hex": "#2f2f35",
+      "p3": "color(display-p3 0.1843 0.1843 0.2078)",
       "oklch": null
     },
     "sidebarRing": {
-      "hex": "#666666",
-      "p3": "color(display-p3 0.4 0.4 0.4)",
+      "hex": "#71717a",
+      "p3": "color(display-p3 0.4431 0.4431 0.4784)",
       "oklch": null
     },
     "surface1": {
-      "hex": "#292929",
-      "p3": "color(display-p3 0.1608 0.1608 0.1608)",
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
       "oklch": null
     },
     "surface2": {
-      "hex": "#333333",
-      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "hex": "#27272a",
+      "p3": "color(display-p3 0.1529 0.1529 0.1647)",
       "oklch": null
     },
     "surface3": {
-      "hex": "#333333",
-      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "hex": "#27272a",
+      "p3": "color(display-p3 0.1529 0.1529 0.1647)",
       "oklch": null
     },
     "surfaceInset": {
-      "hex": "#141414",
-      "p3": "color(display-p3 0.0784 0.0784 0.0784)",
+      "hex": "#050506",
+      "p3": "color(display-p3 0.0196 0.0196 0.0235)",
       "oklch": null
     },
     "surfaceHover": {
-      "hex": "#383838",
-      "p3": "color(display-p3 0.2196 0.2196 0.2196)",
+      "hex": "#27272a",
+      "p3": "color(display-p3 0.1529 0.1529 0.1647)",
       "oklch": null
     },
     "foregroundStrong": {
-      "hex": "#ffffff",
-      "p3": "color(display-p3 1 1 1)",
+      "hex": "#fafafa",
+      "p3": "color(display-p3 0.9804 0.9804 0.9804)",
       "oklch": null
     },
     "subtleForeground": {
-      "hex": "#adadad",
-      "p3": "color(display-p3 0.6784 0.6784 0.6784)",
+      "hex": "#a1a1aa",
+      "p3": "color(display-p3 0.6314 0.6314 0.6667)",
       "oklch": null
     },
     "borderStrong": {
-      "hex": "#adadad",
-      "p3": "color(display-p3 0.6784 0.6784 0.6784)",
+      "hex": "#a1a1aa",
+      "p3": "color(display-p3 0.6314 0.6314 0.6667)",
       "oklch": null
     },
     "fieldBg": {
-      "hex": "#333333",
-      "p3": "color(display-p3 0.2 0.2 0.2)",
+      "hex": "#27272a",
+      "p3": "color(display-p3 0.1529 0.1529 0.1647)",
       "oklch": null
     },
     "overlay": {
@@ -606,14 +606,14 @@ export const themes = {
       "oklch": "oklch(0.74 0.17 84)"
     },
     "secondaryHover": {
-      "hex": "#3d3d3d",
-      "p3": "color(display-p3 0.2392 0.2392 0.2392)",
+      "hex": "#303036",
+      "p3": "color(display-p3 0.1882 0.1882 0.2118)",
       "oklch": null
     },
     "segment": {
-      "hex": "#46464c",
-      "p3": "color(display-p3 0.2745 0.2745 0.296)",
-      "oklch": "oklch(0.3964 0.01 285.93)"
+      "hex": "#3f3f46",
+      "p3": "color(display-p3 0.2471 0.2471 0.2745)",
+      "oklch": null
     },
     "focus": {
       "hex": "#f0b100",
@@ -641,8 +641,8 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "controlSelectedForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
       "oklch": null
     },
     "controlSelectedDot": {
@@ -651,9 +651,9 @@ export const themes = {
       "oklch": "oklch(0.985 0 0)"
     },
     "primaryMark": {
-      "hex": "#733e0a",
-      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-      "oklch": "oklch(0.421 0.095 57.708)"
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
+      "oklch": null
     },
     "selection": {
       "hex": "#f0b10038",
@@ -816,8 +816,8 @@ export const themes = {
       "oklch": null
     },
     "warningForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
       "oklch": null
     },
     "warningHover": {
@@ -825,35 +825,55 @@ export const themes = {
       "p3": "color(display-p3 0.8706 0.349 0.0431)",
       "oklch": null
     },
+    "inputStrong": {
+      "hex": "#646467",
+      "p3": "color(display-p3 0.3922 0.3922 0.4039)",
+      "oklch": null
+    },
+    "controlThumb": {
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
+    },
+    "linkMark": {
+      "hex": "#00000000",
+      "p3": "color(display-p3 0 0 0 / 0)",
+      "oklch": null
+    },
+    "linkUnderline": {
+      "hex": "#f0b100",
+      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
+      "oklch": "oklch(0.795 0.184 86.047)"
+    },
     "textMuted": {
-      "hex": "#adadad",
-      "p3": "color(display-p3 0.6784 0.6784 0.6784)",
+      "hex": "#a1a1aa",
+      "p3": "color(display-p3 0.6314 0.6314 0.6667)",
       "oklch": null
     },
     "oracle300": {
-      "hex": "#8ec5ff",
-      "p3": "color(display-p3 0.6026 0.7672 0.9939)",
-      "oklch": "oklch(0.809 0.105 251.813)"
+      "hex": "#bbdbff",
+      "p3": "color(display-p3 0.7333 0.8588 1)",
+      "oklch": null
     },
     "oracle400": {
-      "hex": "#2b7fff",
-      "p3": "color(display-p3 0.2664 0.4912 0.9886)",
-      "oklch": "oklch(0.623 0.214 259.815)"
+      "hex": "#97bfff",
+      "p3": "color(display-p3 0.5922 0.749 1)",
+      "oklch": null
     },
     "oracle500": {
-      "hex": "#155dfc",
-      "p3": "color(display-p3 0.1745 0.359 0.9502)",
-      "oklch": "oklch(0.546 0.245 262.881)"
+      "hex": "#76a4ff",
+      "p3": "color(display-p3 0.4627 0.6431 1)",
+      "oklch": null
     },
     "oracle600": {
-      "hex": "#1447e6",
-      "p3": "color(display-p3 0.1379 0.275 0.8676)",
-      "oklch": "oklch(0.488 0.243 264.376)"
+      "hex": "#5789ff",
+      "p3": "color(display-p3 0.3412 0.5373 1)",
+      "oklch": null
     },
     "oracle700": {
-      "hex": "#193cb8",
-      "p3": "color(display-p3 0.134 0.2306 0.6955)",
-      "oklch": "oklch(0.424 0.199 265.638)"
+      "hex": "#4371f2",
+      "p3": "color(display-p3 0.2627 0.4431 0.949)",
+      "oklch": null
     }
   },
   "light": {
@@ -863,8 +883,8 @@ export const themes = {
       "oklch": null
     },
     "foreground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "card": {
@@ -873,8 +893,8 @@ export const themes = {
       "oklch": null
     },
     "cardForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "popover": {
@@ -883,8 +903,8 @@ export const themes = {
       "oklch": null
     },
     "popoverForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "primary": {
@@ -893,48 +913,48 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "primaryForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
       "oklch": null
     },
     "link": {
-      "hex": "#0246f1",
-      "p3": "color(display-p3 0.0078 0.2745 0.9451)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "linkHover": {
-      "hex": "#0246f1",
-      "p3": "color(display-p3 0.0078 0.2745 0.9451)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "secondary": {
-      "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "hex": "#ebebed",
+      "p3": "color(display-p3 0.9216 0.9216 0.9294)",
       "oklch": null
     },
     "secondaryForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "muted": {
-      "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "hex": "#ebebed",
+      "p3": "color(display-p3 0.9216 0.9216 0.9294)",
       "oklch": null
     },
     "mutedForeground": {
-      "hex": "#616161",
-      "p3": "color(display-p3 0.3804 0.3804 0.3804)",
+      "hex": "#686871",
+      "p3": "color(display-p3 0.4078 0.4078 0.4431)",
       "oklch": null
     },
     "accent": {
-      "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "hex": "#ebebed",
+      "p3": "color(display-p3 0.9216 0.9216 0.9294)",
       "oklch": null
     },
     "accentForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "destructive": {
@@ -948,44 +968,44 @@ export const themes = {
       "oklch": null
     },
     "border": {
-      "hex": "#e0e0e0",
-      "p3": "color(display-p3 0.8784 0.8784 0.8784)",
+      "hex": "#e4e4e7",
+      "p3": "color(display-p3 0.8941 0.8941 0.9059)",
       "oklch": null
     },
     "input": {
-      "hex": "#e0e0e0",
-      "p3": "color(display-p3 0.8784 0.8784 0.8784)",
+      "hex": "#d4d4d8",
+      "p3": "color(display-p3 0.8314 0.8314 0.8471)",
       "oklch": null
     },
     "ring": {
-      "hex": "#d1d1d1",
-      "p3": "color(display-p3 0.8196 0.8196 0.8196)",
+      "hex": "#8a8a93",
+      "p3": "color(display-p3 0.5412 0.5412 0.5765)",
       "oklch": null
     },
     "chart1": {
-      "hex": "#8ec5ff",
-      "p3": "color(display-p3 0.6026 0.7672 0.9939)",
-      "oklch": "oklch(0.809 0.105 251.813)"
+      "hex": "#4589d2",
+      "p3": "color(display-p3 0.2706 0.5373 0.8235)",
+      "oklch": null
     },
     "chart2": {
-      "hex": "#2b7fff",
-      "p3": "color(display-p3 0.2664 0.4912 0.9886)",
-      "oklch": "oklch(0.623 0.214 259.815)"
+      "hex": "#246cdf",
+      "p3": "color(display-p3 0.1412 0.4235 0.8745)",
+      "oklch": null
     },
     "chart3": {
-      "hex": "#155dfc",
-      "p3": "color(display-p3 0.1745 0.359 0.9502)",
-      "oklch": "oklch(0.546 0.245 262.881)"
+      "hex": "#114fda",
+      "p3": "color(display-p3 0.0667 0.3098 0.8549)",
+      "oklch": null
     },
     "chart4": {
-      "hex": "#1447e6",
-      "p3": "color(display-p3 0.1379 0.275 0.8676)",
-      "oklch": "oklch(0.488 0.243 264.376)"
+      "hex": "#0c37c4",
+      "p3": "color(display-p3 0.0471 0.2157 0.7686)",
+      "oklch": null
     },
     "chart5": {
-      "hex": "#193cb8",
-      "p3": "color(display-p3 0.134 0.2306 0.6955)",
-      "oklch": "oklch(0.424 0.199 265.638)"
+      "hex": "#0c24a3",
+      "p3": "color(display-p3 0.0471 0.1412 0.6392)",
+      "oklch": null
     },
     "sidebar": {
       "hex": "#ffffff",
@@ -993,38 +1013,38 @@ export const themes = {
       "oklch": null
     },
     "sidebarForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "sidebarPrimary": {
-      "hex": "#0246f1",
-      "p3": "color(display-p3 0.0078 0.2745 0.9451)",
-      "oklch": null
+      "hex": "#f0b100",
+      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
+      "oklch": "oklch(0.795 0.184 86.047)"
     },
     "sidebarPrimaryForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
       "oklch": null
     },
     "sidebarAccent": {
-      "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "hex": "#ebebed",
+      "p3": "color(display-p3 0.9216 0.9216 0.9294)",
       "oklch": null
     },
     "sidebarAccentForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "sidebarBorder": {
-      "hex": "#e0e0e0",
-      "p3": "color(display-p3 0.8784 0.8784 0.8784)",
+      "hex": "#e4e4e7",
+      "p3": "color(display-p3 0.8941 0.8941 0.9059)",
       "oklch": null
     },
     "sidebarRing": {
-      "hex": "#d1d1d1",
-      "p3": "color(display-p3 0.8196 0.8196 0.8196)",
+      "hex": "#8a8a93",
+      "p3": "color(display-p3 0.5412 0.5412 0.5765)",
       "oklch": null
     },
     "surface1": {
@@ -1033,43 +1053,43 @@ export const themes = {
       "oklch": null
     },
     "surface2": {
-      "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "hex": "#ebebed",
+      "p3": "color(display-p3 0.9216 0.9216 0.9294)",
       "oklch": null
     },
     "surface3": {
-      "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "hex": "#ebebed",
+      "p3": "color(display-p3 0.9216 0.9216 0.9294)",
       "oklch": null
     },
     "surfaceInset": {
-      "hex": "#f0f0f0",
-      "p3": "color(display-p3 0.9412 0.9412 0.9412)",
+      "hex": "#efeff1",
+      "p3": "color(display-p3 0.9373 0.9373 0.9451)",
       "oklch": null
     },
     "surfaceHover": {
-      "hex": "#e6e6e6",
-      "p3": "color(display-p3 0.902 0.902 0.902)",
+      "hex": "#f4f4f5",
+      "p3": "color(display-p3 0.9569 0.9569 0.9608)",
       "oklch": null
     },
     "foregroundStrong": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "subtleForeground": {
-      "hex": "#616161",
-      "p3": "color(display-p3 0.3804 0.3804 0.3804)",
+      "hex": "#686871",
+      "p3": "color(display-p3 0.4078 0.4078 0.4431)",
       "oklch": null
     },
     "borderStrong": {
-      "hex": "#616161",
-      "p3": "color(display-p3 0.3804 0.3804 0.3804)",
+      "hex": "#686871",
+      "p3": "color(display-p3 0.4078 0.4078 0.4431)",
       "oklch": null
     },
     "fieldBg": {
-      "hex": "#ebebeb",
-      "p3": "color(display-p3 0.9216 0.9216 0.9216)",
+      "hex": "#ebebed",
+      "p3": "color(display-p3 0.9216 0.9216 0.9294)",
       "oklch": null
     },
     "overlay": {
@@ -1088,8 +1108,8 @@ export const themes = {
       "oklch": "oklch(0.74 0.17 84)"
     },
     "secondaryHover": {
-      "hex": "#e6e6e6",
-      "p3": "color(display-p3 0.902 0.902 0.902)",
+      "hex": "#e4e4e7",
+      "p3": "color(display-p3 0.8941 0.8941 0.9059)",
       "oklch": null
     },
     "segment": {
@@ -1098,23 +1118,23 @@ export const themes = {
       "oklch": "oklch(1 0 0)"
     },
     "focus": {
-      "hex": "#f0b100",
-      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
-      "oklch": "oklch(0.795 0.184 86.047)"
+      "hex": "#bd7000",
+      "p3": "color(display-p3 0.7412 0.4392 0)",
+      "oklch": null
     },
     "focusStrong": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "primaryEmphasis": {
-      "hex": "#0246f1",
-      "p3": "color(display-p3 0.0078 0.2745 0.9451)",
+      "hex": "#09090b",
+      "p3": "color(display-p3 0.0353 0.0353 0.0431)",
       "oklch": null
     },
     "primaryOutline": {
-      "hex": "#0246f1",
-      "p3": "color(display-p3 0.0078 0.2745 0.9451)",
+      "hex": "#f0b10059",
+      "p3": "color(display-p3 0.9412 0.6941 0 / 0.35)",
       "oklch": null
     },
     "controlSelected": {
@@ -1123,8 +1143,8 @@ export const themes = {
       "oklch": "oklch(0.795 0.184 86.047)"
     },
     "controlSelectedForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
       "oklch": null
     },
     "controlSelectedDot": {
@@ -1133,9 +1153,9 @@ export const themes = {
       "oklch": "oklch(0.985 0 0)"
     },
     "primaryMark": {
-      "hex": "#733e0a",
-      "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-      "oklch": "oklch(0.421 0.095 57.708)"
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
+      "oklch": null
     },
     "success400": {
       "hex": "#0e700e",
@@ -1158,14 +1178,14 @@ export const themes = {
       "oklch": null
     },
     "oracle300": {
-      "hex": "#8ec5ff",
-      "p3": "color(display-p3 0.6026 0.7672 0.9939)",
-      "oklch": "oklch(0.809 0.105 251.813)"
+      "hex": "#4589d2",
+      "p3": "color(display-p3 0.2706 0.5373 0.8235)",
+      "oklch": null
     },
     "oracle400": {
-      "hex": "#2b7fff",
-      "p3": "color(display-p3 0.2664 0.4912 0.9886)",
-      "oklch": "oklch(0.623 0.214 259.815)"
+      "hex": "#246cdf",
+      "p3": "color(display-p3 0.1412 0.4235 0.8745)",
+      "oklch": null
     },
     "selection": {
       "hex": "#f0b1002e",
@@ -1308,8 +1328,8 @@ export const themes = {
       "oklch": null
     },
     "warningForeground": {
-      "hex": "#242424",
-      "p3": "color(display-p3 0.1412 0.1412 0.1412)",
+      "hex": "#18181b",
+      "p3": "color(display-p3 0.0941 0.0941 0.1059)",
       "oklch": null
     },
     "warningHover": {
@@ -1317,25 +1337,50 @@ export const themes = {
       "p3": "color(display-p3 0.8706 0.349 0.0431)",
       "oklch": null
     },
+    "inputStrong": {
+      "hex": "#8d8d91",
+      "p3": "color(display-p3 0.5529 0.5529 0.5686)",
+      "oklch": null
+    },
+    "linkMark": {
+      "hex": "#f0b10073",
+      "p3": "color(display-p3 0.9412 0.6941 0 / 0.45)",
+      "oklch": null
+    },
+    "linkUnderline": {
+      "hex": "#f0b100",
+      "p3": "color(display-p3 0.9037 0.7031 0.0745)",
+      "oklch": "oklch(0.795 0.184 86.047)"
+    },
+    "controlThumb": {
+      "hex": "#ffffff",
+      "p3": "color(display-p3 1 1 1)",
+      "oklch": null
+    },
+    "warning500": {
+      "hex": "#d07612",
+      "p3": "color(display-p3 0.8157 0.4627 0.0706)",
+      "oklch": null
+    },
     "textMuted": {
-      "hex": "#616161",
-      "p3": "color(display-p3 0.3804 0.3804 0.3804)",
+      "hex": "#686871",
+      "p3": "color(display-p3 0.4078 0.4078 0.4431)",
       "oklch": null
     },
     "oracle500": {
-      "hex": "#155dfc",
-      "p3": "color(display-p3 0.1745 0.359 0.9502)",
-      "oklch": "oklch(0.546 0.245 262.881)"
+      "hex": "#114fda",
+      "p3": "color(display-p3 0.0667 0.3098 0.8549)",
+      "oklch": null
     },
     "oracle600": {
-      "hex": "#1447e6",
-      "p3": "color(display-p3 0.1379 0.275 0.8676)",
-      "oklch": "oklch(0.488 0.243 264.376)"
+      "hex": "#0c37c4",
+      "p3": "color(display-p3 0.0471 0.2157 0.7686)",
+      "oklch": null
     },
     "oracle700": {
-      "hex": "#193cb8",
-      "p3": "color(display-p3 0.134 0.2306 0.6955)",
-      "oklch": "oklch(0.424 0.199 265.638)"
+      "hex": "#0c24a3",
+      "p3": "color(display-p3 0.0471 0.1412 0.6392)",
+      "oklch": null
     }
   }
 };

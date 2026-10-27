@@ -21,9 +21,11 @@ describe("a mistura no oklab (a do `color-mix(in oklab, …)` da web)", () => {
     expect(misturaNoOklab("#000000", "#ffffff", 0.5)).toBe("#636363");
     expect(misturaNoOklab("#ffffff", "#000000", 1)).toBe("#ffffff");
   });
-  it("no claro, a cor do escolhido é a marca a 45% sobre o texto; no escuro, o destaque", () => {
-    expect(corDoEscolhido(claro)).toBe(misturaNoOklab(claro.color.primary, claro.color.foreground, 0.45));
-    expect(corDoEscolhido(claro)).not.toBe(claro.color.primaryEmphasis);
+  // ADR-0083 (26/10/2026): no claro, o escolhido é o GRAFITE do texto — era a marca a 45% sobre o texto (o "marrom").
+  // Com o nativo da 0.44.0, reprova (a mistura no lugar do grafite).
+  it("no claro, a cor do escolhido é o grafite do texto; no escuro, o destaque", () => {
+    expect(corDoEscolhido(claro)).toBe(claro.color.foreground);
+    expect(corDoEscolhido(claro)).not.toBe(misturaNoOklab(claro.color.primary, claro.color.foreground, 0.45));
     expect(corDoEscolhido(escuro)).toBe(escuro.color.primaryEmphasis);
   });
 });

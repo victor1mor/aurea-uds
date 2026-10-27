@@ -37,6 +37,7 @@
     },
     "brand-yellow-foreground": {
       "$type": "color",
+      "$description": "OBSOLETO desde a ADR-0083 (26/10/2026): o marrom sobre o amarelo saiu de todo lugar (a marca sobre o amarelo é a tinta, --brand-yellow-ink; a bolinha e a alça são brancas, --control-thumb). Fica até a 1.0 para não quebrar quem a lê.",
       "$value": {
         "colorSpace": "oklch",
         "components": [
@@ -48,7 +49,7 @@
     },
     "brand-yellow-text": {
       "$type": "color",
-      "$description": "Sem uso nos temas desde a ADR-0073 (18/10/2026): a letra de destaque do tema claro passou a ser o próprio amarelo da marca, por decisão do Victor. Fica para não quebrar quem a lê. Era o amarelo da marca como LETRA ou ÍCONE sobre fundo claro (ADR-0054, 02/10/2026): mesmo matiz do --primary (86), escurecido até 4,5:1 no pior fundo do tema claro.",
+      "$description": "OBSOLETO: sem uso nos temas desde a ADR-0073 (18/10/2026), e a ADR-0083 (26/10/2026) confirma: no claro, o amarelo não vira letra. Fica até a 1.0 para não quebrar quem a lê. Era o amarelo da marca como LETRA ou ÍCONE sobre fundo claro (ADR-0054).",
       "$value": {
         "colorSpace": "oklch",
         "components": [
@@ -60,15 +61,15 @@
     },
     "brand-yellow-ink": {
       "$type": "color",
-      "$description": "The dark grey drawn ON the brand yellow (the label of the primary button, the check of the checkbox), in both themes: the text grey of the light theme, 8.13:1 on the yellow. Replaces the brown there (decision of 18/10/2026, ADR-0073).",
+      "$description": "O cinza-escuro desenhado SOBRE o amarelo da marca — a letra do botão primário, o ícone da barra de baixo cheia, o play —, nos dois temas: #18181B, o tom do zinco, 9,28:1 sobre o amarelo (ADR-0083, 26/10/2026; era #242424, ADR-0073).",
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.14118,
-          0.14118,
-          0.14118
+          0.09412,
+          0.09412,
+          0.10588
         ],
-        "hex": "#242424"
+        "hex": "#18181b"
       }
     },
     "brand-blue": {
@@ -1316,15 +1317,15 @@
     "dark": {
       "background": {
         "$type": "color",
-        "$description": "The page canvas — the furthest-back surface. Everything floats on top of it; nothing else should use it as a fill. A paleta de referência escolhida pelo Victor (ADR-0061, 09/10/2026): os neutros e as cores de estado dos dois temas seguem essa referência; o amarelo da marca não muda.",
+        "$description": "The page canvas — the furthest-back surface. Everything floats on top of it; nothing else should use it as a fill. A base Zinco profundo (ADR-0083, 26/10/2026): página #09090B e cartão #18181B, sem linha no cartão (o Victor: \"sem bordas\"). Substitui os neutros da paleta de referência (ADR-0061); o amarelo da marca não muda.",
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.12157,
-            0.12157,
-            0.12157
+            0.03529,
+            0.03529,
+            0.04314
           ],
-          "hex": "#1f1f1f"
+          "hex": "#09090b"
         }
       },
       "foreground": {
@@ -1333,11 +1334,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            1.0,
-            1.0,
-            1.0
+            0.98039,
+            0.98039,
+            0.98039
           ],
-          "hex": "#ffffff"
+          "hex": "#fafafa"
         }
       },
       "card": {
@@ -1346,11 +1347,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.16078,
-            0.16078,
-            0.16078
+            0.09412,
+            0.09412,
+            0.10588
           ],
-          "hex": "#292929"
+          "hex": "#18181b"
         }
       },
       "card-foreground": {
@@ -1359,11 +1360,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            1.0,
-            1.0,
-            1.0
+            0.98039,
+            0.98039,
+            0.98039
           ],
-          "hex": "#ffffff"
+          "hex": "#fafafa"
         }
       },
       "popover": {
@@ -1372,11 +1373,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.16078,
-            0.16078,
-            0.16078
+            0.09412,
+            0.09412,
+            0.10588
           ],
-          "hex": "#292929"
+          "hex": "#18181b"
         }
       },
       "popover-foreground": {
@@ -1385,11 +1386,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            1.0,
-            1.0,
-            1.0
+            0.98039,
+            0.98039,
+            0.98039
           ],
-          "hex": "#ffffff"
+          "hex": "#fafafa"
         }
       },
       "primary": {
@@ -1418,11 +1419,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.2,
-            0.2,
-            0.2
+            0.15294,
+            0.15294,
+            0.16471
           ],
-          "hex": "#333333"
+          "hex": "#27272a"
         }
       },
       "secondary-foreground": {
@@ -1431,25 +1432,17 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            1.0,
-            1.0,
-            1.0
+            0.98039,
+            0.98039,
+            0.98039
           ],
-          "hex": "#ffffff"
+          "hex": "#fafafa"
         }
       },
       "muted": {
         "$type": "color",
         "$description": "Fill for a de-emphasised block — the surface counterpart of --muted-foreground, not a text colour.",
-        "$value": {
-          "colorSpace": "srgb",
-          "components": [
-            0.2,
-            0.2,
-            0.2
-          ],
-          "hex": "#333333"
-        }
+        "$value": "{secondary}"
       },
       "muted-foreground": {
         "$type": "color",
@@ -1457,25 +1450,17 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.67843,
-            0.67843,
-            0.67843
+            0.63137,
+            0.63137,
+            0.66667
           ],
-          "hex": "#adadad"
+          "hex": "#a1a1aa"
         }
       },
       "accent": {
         "$type": "color",
         "$description": "Hover surface of a control that has no fill of its own (ghost and outline buttons). The lightest possible \"something happened here\".",
-        "$value": {
-          "colorSpace": "srgb",
-          "components": [
-            0.2,
-            0.2,
-            0.2
-          ],
-          "hex": "#333333"
-        }
+        "$value": "{secondary}"
       },
       "accent-foreground": {
         "$type": "color",
@@ -1483,11 +1468,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            1.0,
-            1.0,
-            1.0
+            0.98039,
+            0.98039,
+            0.98039
           ],
-          "hex": "#ffffff"
+          "hex": "#fafafa"
         }
       },
       "destructive": {
@@ -1522,11 +1507,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.32157,
-            0.32157,
-            0.32157
+            0.18431,
+            0.18431,
+            0.20784
           ],
-          "hex": "#525252"
+          "hex": "#2f2f35"
         }
       },
       "input": {
@@ -1535,11 +1520,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.32157,
-            0.32157,
-            0.32157
+            0.24706,
+            0.24706,
+            0.27451
           ],
-          "hex": "#525252"
+          "hex": "#3f3f46"
         }
       },
       "ring": {
@@ -1548,71 +1533,76 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.4,
-            0.4,
-            0.4
+            0.44314,
+            0.44314,
+            0.47843
           ],
-          "hex": "#666666"
+          "hex": "#71717a"
         }
       },
       "chart-1": {
         "$type": "color",
-        "$description": "First series of a chart. The five chart tokens are an ORDERED sequence: use them in order, so two charts on the same page give the same series the same colour.",
+        "$description": "First series of a chart. The five chart tokens are an ORDERED sequence: use them in order, so two charts on the same page give the same series the same colour. Cinco degraus azuis, todos com 3:1 ou mais sobre o cartão e a página, nos dois temas (ADR-0083, 26/10/2026; antes, o chart-1 do claro e o 4 e o 5 do escuro reprovavam).",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.809,
-            0.105,
-            251.813
-          ]
+            0.73333,
+            0.85882,
+            1.0
+          ],
+          "hex": "#bbdbff"
         }
       },
       "chart-2": {
         "$type": "color",
         "$description": "Second series of a chart. See --chart-1 for the rule.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.623,
-            0.214,
-            259.815
-          ]
+            0.59216,
+            0.74902,
+            1.0
+          ],
+          "hex": "#97bfff"
         }
       },
       "chart-3": {
         "$type": "color",
         "$description": "Third series of a chart. See --chart-1 for the rule.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.546,
-            0.245,
-            262.881
-          ]
+            0.46275,
+            0.64314,
+            1.0
+          ],
+          "hex": "#76a4ff"
         }
       },
       "chart-4": {
         "$type": "color",
         "$description": "Fourth series of a chart. See --chart-1 for the rule.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.488,
-            0.243,
-            264.376
-          ]
+            0.34118,
+            0.53725,
+            1.0
+          ],
+          "hex": "#5789ff"
         }
       },
       "chart-5": {
         "$type": "color",
         "$description": "Fifth series of a chart. Past five series a chart needs a different form, not a sixth colour.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.424,
-            0.199,
-            265.638
-          ]
+            0.26275,
+            0.44314,
+            0.94902
+          ],
+          "hex": "#4371f2"
         }
       },
       "sidebar": {
@@ -1621,11 +1611,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.16078,
-            0.16078,
-            0.16078
+            0.09412,
+            0.09412,
+            0.10588
           ],
-          "hex": "#292929"
+          "hex": "#18181b"
         }
       },
       "sidebar-foreground": {
@@ -1634,11 +1624,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            1.0,
-            1.0,
-            1.0
+            0.98039,
+            0.98039,
+            0.98039
           ],
-          "hex": "#ffffff"
+          "hex": "#fafafa"
         }
       },
       "sidebar-primary": {
@@ -1654,15 +1644,7 @@
       "sidebar-accent": {
         "$type": "color",
         "$description": "Hover surface of a sidebar item.",
-        "$value": {
-          "colorSpace": "srgb",
-          "components": [
-            0.2,
-            0.2,
-            0.2
-          ],
-          "hex": "#333333"
-        }
+        "$value": "{secondary}"
       },
       "sidebar-accent-foreground": {
         "$type": "color",
@@ -1670,11 +1652,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            1.0,
-            1.0,
-            1.0
+            0.98039,
+            0.98039,
+            0.98039
           ],
-          "hex": "#ffffff"
+          "hex": "#fafafa"
         }
       },
       "sidebar-border": {
@@ -1683,11 +1665,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.32157,
-            0.32157,
-            0.32157
+            0.18431,
+            0.18431,
+            0.20784
           ],
-          "hex": "#525252"
+          "hex": "#2f2f35"
         }
       },
       "sidebar-ring": {
@@ -1696,11 +1678,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.4,
-            0.4,
-            0.4
+            0.44314,
+            0.44314,
+            0.47843
           ],
-          "hex": "#666666"
+          "hex": "#71717a"
         }
       },
       "surface-1": {
@@ -1724,11 +1706,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.07843,
-            0.07843,
-            0.07843
+            0.01961,
+            0.01961,
+            0.02353
           ],
-          "hex": "#141414"
+          "hex": "#050506"
         }
       },
       "surface-hover": {
@@ -1737,11 +1719,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.21961,
-            0.21961,
-            0.21961
+            0.15294,
+            0.15294,
+            0.16471
           ],
-          "hex": "#383838"
+          "hex": "#27272a"
         }
       },
       "foreground-strong": {
@@ -1755,11 +1737,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.67843,
-            0.67843,
-            0.67843
+            0.63137,
+            0.63137,
+            0.66667
           ],
-          "hex": "#adadad"
+          "hex": "#a1a1aa"
         }
       },
       "border-strong": {
@@ -1768,11 +1750,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.67843,
-            0.67843,
-            0.67843
+            0.63137,
+            0.63137,
+            0.66667
           ],
-          "hex": "#adadad"
+          "hex": "#a1a1aa"
         }
       },
       "field-bg": {
@@ -1823,23 +1805,24 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.23922,
-            0.23922,
-            0.23922
+            0.18824,
+            0.18824,
+            0.21176
           ],
-          "hex": "#3d3d3d"
+          "hex": "#303036"
         }
       },
       "segment": {
         "$type": "color",
         "$description": "A cápsula do item ESCOLHIDO dentro de um trilho (`Tabs`, `SegmentedControl`), que fica sobre --muted. Existe porque o escolhido usava --secondary e, medido em 08/10/2026, dava 1,02:1 contra o trilho no escuro e 1:1 no claro — a 'cápsula elevada' não se via. O número é o da referência principal para o mesmo papel (o mesmo matiz do --secondary); no claro, branco com --shadow-sm.",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.3964,
-            0.01,
-            285.93
-          ]
+            0.24706,
+            0.24706,
+            0.27451
+          ],
+          "hex": "#3f3f46"
         }
       },
       "focus": {
@@ -1869,8 +1852,16 @@
       },
       "control-selected-foreground": {
         "$type": "color",
-        "$description": "The glyph drawn ON --control-selected: the tick, the dot.",
-        "$value": "{brand-yellow-ink}"
+        "$description": "The glyph drawn ON --control-selected: the tick. Branco sobre o amarelo desde a ADR-0083 (26/10/2026; era a tinta); com \"aumentar contraste\" no sistema, vira a tinta.",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
+        }
       },
       "control-selected-dot": {
         "$type": "color",
@@ -1886,8 +1877,8 @@
       },
       "primary-mark": {
         "$type": "color",
-        "$description": "The brown mark kept on the yellow where the Victor chose it (17/10/2026): the knob of the checked Switch, the centre of the Slider thumb, the play of the MediaEmbed and the current item of the filled BottomNav.",
-        "$value": "{brand-yellow-foreground}"
+        "$description": "A marca desenhada sobre o amarelo que não é letra de botão: o ícone da barra de baixo cheia e o play do MediaEmbed. É a tinta (--brand-yellow-ink) desde a ADR-0083 (26/10/2026); era o marrom (17/10/2026). A bolinha do Switch e a alça do Slider saíram para --control-thumb.",
+        "$value": "{brand-yellow-ink}"
       },
       "selection": {
         "$type": "color",
@@ -2295,17 +2286,9 @@
         "$description": "Preenchimento semântico do tom. Existe pelo mesmo motivo que --destructive: um botão cheio precisa do PAR cor+texto, e o par é escolhido por tema. Medido em 21/08/2026: AA de contraste do foreground sobre ele."
       },
       "warning-foreground": {
-        "$value": {
-          "colorSpace": "srgb",
-          "components": [
-            0.14118,
-            0.14118,
-            0.14118
-          ],
-          "hex": "#242424"
-        },
         "$type": "color",
-        "$description": "Par do preenchimento."
+        "$description": "Par do preenchimento: a tinta (--brand-yellow-ink), 5,69:1 no laranja e 4,67:1 no hover (ADR-0083, 26/10/2026; era #242424, 4,09:1 no hover).",
+        "$value": "{brand-yellow-ink}"
       },
       "warning-hover": {
         "$value": {
@@ -2319,11 +2302,56 @@
         },
         "$type": "color",
         "$description": "Realce do preenchimento."
+      },
+      "input-strong": {
+        "$type": "color",
+        "$description": "O contorno dos campos SÓ para quem pede mais contraste ao sistema (prefers-contrast: more): 3,00:1 no cartão (ADR-0083, 26/10/2026). Fora disso, o campo continua sem linha (ADR-0072).",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.39216,
+            0.39216,
+            0.40392
+          ],
+          "hex": "#646467"
+        }
+      },
+      "control-thumb": {
+        "$type": "color",
+        "$description": "A bolinha do Switch ligado e a alça do Slider: brancas, nos dois temas (ADR-0083, 26/10/2026, decisão do Victor). Com \"aumentar contraste\" no sistema, viram a tinta.",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
+        }
+      },
+      "link-mark": {
+        "$type": "color",
+        "$description": "Transparente: no escuro o link não tem faixa — o amarelo misturado ao quase preto vira marrom (ADR-0083).",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "alpha": 0.0,
+          "hex": "#000000"
+        }
+      },
+      "link-underline": {
+        "$type": "color",
+        "$value": "{primary}"
       }
     },
     "light": {
       "background": {
         "$type": "color",
+        "$description": "A base Zinco profundo (ADR-0083, 26/10/2026): página #F5F5F5, a da referência, para o campo branco aparecer; cartão branco. Substitui os neutros da paleta de referência (ADR-0061); o amarelo da marca não muda.",
         "$value": {
           "colorSpace": "srgb",
           "components": [
@@ -2332,19 +2360,18 @@
             0.96078
           ],
           "hex": "#f5f5f5"
-        },
-        "$description": "A paleta de referência escolhida pelo Victor (ADR-0061, 09/10/2026): os neutros e as cores de estado dos dois temas seguem essa referência; o amarelo da marca não muda."
+        }
       },
       "foreground": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.14118,
-            0.14118,
-            0.14118
+            0.03529,
+            0.03529,
+            0.04314
           ],
-          "hex": "#242424"
+          "hex": "#09090b"
         }
       },
       "card": {
@@ -2364,11 +2391,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.14118,
-            0.14118,
-            0.14118
+            0.03529,
+            0.03529,
+            0.04314
           ],
-          "hex": "#242424"
+          "hex": "#09090b"
         }
       },
       "popover": {
@@ -2388,11 +2415,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.14118,
-            0.14118,
-            0.14118
+            0.03529,
+            0.03529,
+            0.04314
           ],
-          "hex": "#242424"
+          "hex": "#09090b"
         }
       },
       "primary": {
@@ -2405,12 +2432,12 @@
       },
       "link": {
         "$type": "color",
-        "$value": "{brand-blue}",
-        "$description": "Cor de LINK em prosa. No claro é o azul da marca (ADR-0076, 20/10/2026): o amarelo como letra media 1,75:1, e o AA de texto pede 4,5:1. No escuro o link segue sendo o amarelo. Identidade e papel semântico são coisas diferentes (ADR-0044)."
+        "$description": "Cor de LINK em prosa. No claro é o grafite do texto (ADR-0083, 26/10/2026): o link se separa do texto pelo marca-texto amarelo (--link-mark), o padrão, ou pelo sublinhado amarelo (--link-underline), a variação — nunca só pela cor. No escuro o link é o amarelo, sublinhado. Era o azul da marca (ADR-0076).",
+        "$value": "{foreground}"
       },
       "link-hover": {
         "$type": "color",
-        "$value": "{brand-blue}",
+        "$value": "{foreground}",
         "$description": "O link sob o ponteiro. Mesmo papel do `--link`, um degrau adiante — a diferença tem de ser perceptível sem depender só de sublinhado."
       },
       "secondary": {
@@ -2420,9 +2447,9 @@
           "components": [
             0.92157,
             0.92157,
-            0.92157
+            0.92941
           ],
-          "hex": "#ebebeb"
+          "hex": "#ebebed"
         }
       },
       "secondary-foreground": {
@@ -2430,11 +2457,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.14118,
-            0.14118,
-            0.14118
+            0.03529,
+            0.03529,
+            0.04314
           ],
-          "hex": "#242424"
+          "hex": "#09090b"
         }
       },
       "muted": {
@@ -2446,11 +2473,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.38039,
-            0.38039,
-            0.38039
+            0.40784,
+            0.40784,
+            0.44314
           ],
-          "hex": "#616161"
+          "hex": "#686871"
         }
       },
       "accent": {
@@ -2462,11 +2489,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.14118,
-            0.14118,
-            0.14118
+            0.03529,
+            0.03529,
+            0.04314
           ],
-          "hex": "#242424"
+          "hex": "#09090b"
         }
       },
       "destructive": {
@@ -2498,11 +2525,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.87843,
-            0.87843,
-            0.87843
+            0.89412,
+            0.89412,
+            0.90588
           ],
-          "hex": "#e0e0e0"
+          "hex": "#e4e4e7"
         }
       },
       "input": {
@@ -2510,11 +2537,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.87843,
-            0.87843,
-            0.87843
+            0.83137,
+            0.83137,
+            0.84706
           ],
-          "hex": "#e0e0e0"
+          "hex": "#d4d4d8"
         }
       },
       "ring": {
@@ -2522,66 +2549,71 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.81961,
-            0.81961,
-            0.81961
+            0.54118,
+            0.54118,
+            0.57647
           ],
-          "hex": "#d1d1d1"
+          "hex": "#8a8a93"
         }
       },
       "chart-1": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.809,
-            0.105,
-            251.813
-          ]
+            0.27059,
+            0.53725,
+            0.82353
+          ],
+          "hex": "#4589d2"
         }
       },
       "chart-2": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.623,
-            0.214,
-            259.815
-          ]
+            0.14118,
+            0.42353,
+            0.87451
+          ],
+          "hex": "#246cdf"
         }
       },
       "chart-3": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.546,
-            0.245,
-            262.881
-          ]
+            0.06667,
+            0.3098,
+            0.8549
+          ],
+          "hex": "#114fda"
         }
       },
       "chart-4": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.488,
-            0.243,
-            264.376
-          ]
+            0.04706,
+            0.21569,
+            0.76863
+          ],
+          "hex": "#0c37c4"
         }
       },
       "chart-5": {
         "$type": "color",
         "$value": {
-          "colorSpace": "oklch",
+          "colorSpace": "srgb",
           "components": [
-            0.424,
-            0.199,
-            265.638
-          ]
+            0.04706,
+            0.14118,
+            0.63922
+          ],
+          "hex": "#0c24a3"
         }
       },
       "sidebar": {
@@ -2593,17 +2625,17 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.14118,
-            0.14118,
-            0.14118
+            0.03529,
+            0.03529,
+            0.04314
           ],
-          "hex": "#242424"
+          "hex": "#09090b"
         }
       },
       "sidebar-primary": {
         "$type": "color",
-        "$value": "{primary-emphasis}",
-        "$description": "The accent INSIDE the sidebar — the current item's text. It is not `{primary}` in the light theme and that is the whole point: the raw yellow does not read on the white panel, measured at 1.60:1 on 20/08/2026 when a refactor briefly pointed it there. Each brand sets this to whatever reads on ITS OWN panel, which is why `lory` keeps the bright orange — the sidebar of that brand is dark in both themes, so the emphasis variant would be the wrong direction."
+        "$description": "The accent INSIDE the sidebar. No claro da marca padrão é o amarelo (ADR-0083, 26/10/2026): o item atual é o botão primário (fundo amarelo, letra na tinta), e o fio do item atual sai amarelo; com o destaque grafite, o grafite viraria letra sobre grafite. Cada marca publica o seu.",
+        "$value": "{primary}"
       },
       "sidebar-primary-foreground": {
         "$type": "color",
@@ -2618,11 +2650,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.14118,
-            0.14118,
-            0.14118
+            0.03529,
+            0.03529,
+            0.04314
           ],
-          "hex": "#242424"
+          "hex": "#09090b"
         }
       },
       "sidebar-border": {
@@ -2630,11 +2662,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.87843,
-            0.87843,
-            0.87843
+            0.89412,
+            0.89412,
+            0.90588
           ],
-          "hex": "#e0e0e0"
+          "hex": "#e4e4e7"
         }
       },
       "sidebar-ring": {
@@ -2642,11 +2674,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.81961,
-            0.81961,
-            0.81961
+            0.54118,
+            0.54118,
+            0.57647
           ],
-          "hex": "#d1d1d1"
+          "hex": "#8a8a93"
         }
       },
       "surface-1": {
@@ -2666,11 +2698,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.94118,
-            0.94118,
-            0.94118
+            0.93725,
+            0.93725,
+            0.9451
           ],
-          "hex": "#f0f0f0"
+          "hex": "#efeff1"
         },
         "$description": "Superficie afundada do tema claro. NAO pode ser alias de {secondary}: eram o mesmo 0.94, e um Button secondary desaparecia dentro de um painel inset (achado 24/07/2026). 0.955 fica entre o fundo (0.965) e o secondary (0.94) — afunda sem colidir."
       },
@@ -2679,11 +2711,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.90196,
-            0.90196,
-            0.90196
+            0.95686,
+            0.95686,
+            0.96078
           ],
-          "hex": "#e6e6e6"
+          "hex": "#f4f4f5"
         }
       },
       "foreground-strong": {
@@ -2695,11 +2727,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.38039,
-            0.38039,
-            0.38039
+            0.40784,
+            0.40784,
+            0.44314
           ],
-          "hex": "#616161"
+          "hex": "#686871"
         }
       },
       "border-strong": {
@@ -2707,11 +2739,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.38039,
-            0.38039,
-            0.38039
+            0.40784,
+            0.40784,
+            0.44314
           ],
-          "hex": "#616161"
+          "hex": "#686871"
         }
       },
       "field-bg": {
@@ -2754,7 +2786,15 @@
       },
       "secondary-hover": {
         "$type": "color",
-        "$value": "{surface-hover}"
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.89412,
+            0.89412,
+            0.90588
+          ],
+          "hex": "#e4e4e7"
+        }
       },
       "segment": {
         "$type": "color",
@@ -2769,7 +2809,16 @@
       },
       "focus": {
         "$type": "color",
-        "$value": "{primary}"
+        "$description": "O anel de foco da MARCA no claro: o bronze #BD7000, 3,83:1 no branco e 3,51:1 na página (ADR-0083, 26/10/2026). O amarelo puro dava 1,91:1. A maior parte das peças usa --focus-strong, o grafite.",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.74118,
+            0.43922,
+            0.0
+          ],
+          "hex": "#bd7000"
+        }
       },
       "focus-strong": {
         "$type": "color",
@@ -2777,11 +2826,21 @@
       },
       "primary-emphasis": {
         "$type": "color",
-        "$value": "{brand-blue}"
+        "$description": "O destaque como LETRA. No claro é o grafite do texto (ADR-0083, 26/10/2026): o amarelo não vira letra no claro — aparece como fundo, traço ou indicador. No escuro é o amarelo. Era o azul da marca no claro (ADR-0076).",
+        "$value": "{foreground}"
       },
       "primary-outline": {
         "$type": "color",
-        "$value": "{brand-blue}"
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.94118,
+            0.69412,
+            0.0
+          ],
+          "alpha": 0.35,
+          "hex": "#f0b100"
+        }
       },
       "control-selected": {
         "$type": "color",
@@ -2789,7 +2848,16 @@
       },
       "control-selected-foreground": {
         "$type": "color",
-        "$value": "{brand-yellow-ink}"
+        "$description": "O visto do Checkbox marcado: branco sobre o amarelo (ADR-0083, 26/10/2026; era a tinta). Com \"aumentar contraste\" no sistema, vira a tinta.",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
+        }
       },
       "control-selected-dot": {
         "$type": "color",
@@ -2805,8 +2873,8 @@
       },
       "primary-mark": {
         "$type": "color",
-        "$description": "The brown mark kept on the yellow where the Victor chose it (17/10/2026): the knob of the checked Switch, the centre of the Slider thumb, the play of the MediaEmbed and the current item of the filled BottomNav.",
-        "$value": "{brand-yellow-foreground}"
+        "$description": "A marca desenhada sobre o amarelo que não é letra de botão: o ícone da barra de baixo cheia e o play do MediaEmbed. É a tinta (--brand-yellow-ink) desde a ADR-0083 (26/10/2026); era o marrom (17/10/2026). A bolinha do Switch e a alça do Slider saíram para --control-thumb.",
+        "$value": "{brand-yellow-ink}"
       },
       "success-400": {
         "$value": {
@@ -3195,17 +3263,9 @@
         "$description": "Preenchimento semântico do tom. Existe pelo mesmo motivo que --destructive: um botão cheio precisa do PAR cor+texto, e o par é escolhido por tema. Medido em 21/08/2026: AA de contraste do foreground sobre ele. L foi de 0.535 para 0.525 em 29/08/2026: sobre --warning-bg o par media 4.449:1, abaixo do AA de 4.5. Medido pelas 18 combinações de crachá do skin.spec, e a diferença é imperceptível — o que muda é passar ou não passar."
       },
       "warning-foreground": {
-        "$value": {
-          "colorSpace": "srgb",
-          "components": [
-            0.14118,
-            0.14118,
-            0.14118
-          ],
-          "hex": "#242424"
-        },
         "$type": "color",
-        "$description": "Par do preenchimento."
+        "$description": "Par do preenchimento: a tinta (--brand-yellow-ink), 5,69:1 no laranja e 4,67:1 no hover (ADR-0083, 26/10/2026; era #242424, 4,09:1 no hover).",
+        "$value": "{brand-yellow-ink}"
       },
       "warning-hover": {
         "$value": {
@@ -3219,6 +3279,64 @@
         },
         "$type": "color",
         "$description": "Realce do preenchimento."
+      },
+      "input-strong": {
+        "$type": "color",
+        "$description": "O contorno dos campos SÓ para quem pede mais contraste ao sistema (prefers-contrast: more): 3,03:1 na página e 3,31:1 no cartão (ADR-0083, 26/10/2026). Fora disso, o campo continua sem linha (ADR-0072).",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.55294,
+            0.55294,
+            0.56863
+          ],
+          "hex": "#8d8d91"
+        }
+      },
+      "link-mark": {
+        "$type": "color",
+        "$description": "A faixa do marca-texto atrás do link no claro: o amarelo da marca a 45% (ADR-0083, 26/10/2026). O texto do link sobre ela mede 14,79:1.",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.94118,
+            0.69412,
+            0.0
+          ],
+          "alpha": 0.45,
+          "hex": "#f0b100"
+        }
+      },
+      "link-underline": {
+        "$type": "color",
+        "$description": "O sublinhado do link, nos dois temas: o amarelo da marca (ADR-0083, 26/10/2026). No claro é a variação (class=\"link-underline\" ou data-link=\"underline\"); no escuro, o único jeito.",
+        "$value": "{primary}"
+      },
+      "control-thumb": {
+        "$type": "color",
+        "$description": "A bolinha do Switch ligado e a alça do Slider: brancas, nos dois temas (ADR-0083, 26/10/2026, decisão do Victor). Com \"aumentar contraste\" no sistema, viram a tinta.",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "hex": "#ffffff"
+        }
+      },
+      "warning-500": {
+        "$type": "color",
+        "$description": "No claro, o degrau 500 do aviso escurece a #D07612 (ADR-0083, 26/10/2026): o único uso dele é a célula de \"atenção\" do painel de saúde, um indicador de estado, que pede 3:1 — o #E98D35 da escala dava 2,31:1 na página; este dá 3,07:1 na página e 3,34:1 no cartão. No escuro, a escala já passa.",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.81569,
+            0.46275,
+            0.07059
+          ],
+          "hex": "#d07612"
+        }
       }
     }
   },
@@ -3928,6 +4046,37 @@
               235
             ]
           }
+        },
+        "brand-yellow-ink": {
+          "$type": "color",
+          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. A tinta da Aurea passou a #18181B; a da lory continua #242424.",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.14118,
+              0.14118,
+              0.14118
+            ],
+            "hex": "#242424"
+          }
+        },
+        "warning-foreground": {
+          "$type": "color",
+          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. A letra sobre o laranja de aviso continua #242424.",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.14118,
+              0.14118,
+              0.14118
+            ],
+            "hex": "#242424"
+          }
+        },
+        "control-thumb": {
+          "$type": "color",
+          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. A bolinha do Switch e a alça do Slider continuam a marca dela (--primary-mark).",
+          "$value": "{primary-mark}"
         }
       },
       "light": {
@@ -4640,6 +4789,49 @@
               0.44,
               0.106,
               86.047
+            ]
+          }
+        },
+        "brand-yellow-ink": {
+          "$type": "color",
+          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. A tinta da Aurea passou a #18181B; a da lory continua #242424.",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.14118,
+              0.14118,
+              0.14118
+            ],
+            "hex": "#242424"
+          }
+        },
+        "warning-foreground": {
+          "$type": "color",
+          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. A letra sobre o laranja de aviso continua #242424.",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.14118,
+              0.14118,
+              0.14118
+            ],
+            "hex": "#242424"
+          }
+        },
+        "control-thumb": {
+          "$type": "color",
+          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. A bolinha do Switch e a alça do Slider continuam a marca dela (--primary-mark).",
+          "$value": "{primary-mark}"
+        },
+        "warning-500": {
+          "$type": "color",
+          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. O degrau 500 do aviso continua o da escala.",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.727,
+              0.149,
+              60
             ]
           }
         }

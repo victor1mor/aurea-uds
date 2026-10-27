@@ -69,8 +69,9 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, Easing, FlatList, Modal, PanResponder, Platform, Pressable, TextInput, View, } from "react-native";
 import { IconButton } from "./actions.js";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo, focoDoCampo } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
+import { useMaisContraste } from "./contraste.js";
 import { Spinner } from "./feedback.js";
 import { Icon } from "./icon.js";
 import { KeyboardAvoiding, alturaDoTamanho, indicadorDaEscolhida, respiroDoGatilho, respiroDoTamanho, useCampo, } from "./inputs.js";
@@ -217,6 +218,7 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
     const t = useAureaTokens();
     // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
     const naSuperficie = useNaSuperficie();
+    const maisContraste = useMaisContraste();
     const s = folha(t);
     // A folha sai do fluxo: pinta com os tokens do APP (ADR-0063 — ver `useTokensDoApp`).
     const tf = useTokensDoApp();
@@ -307,7 +309,7 @@ export function Combobox({ items, value, onValueChange, onSearchChange, searchDe
     const nada = !loading && filtrados.length === 0;
     return (_jsxs(_Fragment, { children: [_jsxs(View, { style: [
                     s.caixa,
-                    fundoDeCampo(t, naSuperficie),
+                    fundoDeCampo(t, naSuperficie, maisContraste),
                     // 0.32.0: o gatilho do `Select` — altura de toque, 16 dos lados no `md` e 12 entre o
                     // texto e as ações (era 13 e nada).
                     { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoGatilho(t, tam), gap: t.size.space3 },
@@ -382,6 +384,7 @@ export function SearchField({ value, onChangeText, onSearchChange, searchDelay =
     const t = useAureaTokens();
     // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
     const naSuperficie = useNaSuperficie();
+    const maisContraste = useMaisContraste();
     const s = folha(t);
     const peleDaMarca = usePeleSobreAMarca();
     const strings = useAureaStrings();
@@ -420,13 +423,13 @@ export function SearchField({ value, onChangeText, onSearchChange, searchDelay =
     }, [cancelar, onChangeText, searchDelay]);
     return (_jsxs(View, { testID: testID, style: [
             s.caixa,
-            fundoDeCampo(t, naSuperficie),
+            fundoDeCampo(t, naSuperficie, maisContraste),
             { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam),
                 gap: t.size.space1 },
             campo?.invalido && s.invalido,
             // O foco é a única pista de campo ativo que sobra no telefone — mesma decisão do `Input`
             // do Lote 4, e ela vale igual aqui.
-            focado && { borderColor: t.color.focusStrong },
+            focado && { borderColor: focoDoCampo(t, maisContraste) },
             // Sobre a marca a tinta vence inválido e foco; o foco vira ESPESSURA — `usePeleSobreAMarca`.
             peleDaMarca,
             peleDaMarca && focado && { borderWidth: t.size.borderWidth * 2 },

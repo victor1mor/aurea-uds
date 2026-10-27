@@ -74,13 +74,33 @@ const PROP_CSS = /(?<![\w-])(border(?:-(?:top|right|bottom|left|block|inline)(?:
 
 // A ÚNICA linha que fica (o Victor, 16/10/2026: "caixa B, o resto tudo B"): o cartão de contorno — a caixa da
 // vitrine — com a linha clara, o texto a 10%. Só ela, só a cor da borda, só com esse seletor sozinho.
-const LINHA_PERMITIDA_CSS = [{seletor: ".card-outline", prop: "border-color"}];
+// E a que só ACENDE quando o sistema pede mais contraste (ADR-0083, 26/10/2026): o contorno de 3:1 dos campos, na cor
+// `--input-strong`, só dentro de `@media (prefers-contrast:more)` — sem linha nenhuma, um campo branco nunca chega aos
+// 3:1 da WCAG 1.4.11. Fora dessa preferência, o mesmo contorno reprova.
+const LINHA_PERMITIDA_CSS: {seletor: string; prop: string; valor?: string; media?: string}[] = [
+  {seletor: ".card-outline", prop: "border-color"},
+  {seletor: ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not([data-brand="lory"],[data-brand="lory"] *))',
+    prop: "border-color", valor: "var(--input-strong)", media: "@media (prefers-contrast:more)"},
+];
 
 /** O seletor da regra em que a declaração está (o texto entre a última `}` ou `{` e a `{` dela). */
 function seletorDe(css: string, pos: number): string {
   const abre = css.lastIndexOf("{", pos);
   const antes = Math.max(css.lastIndexOf("}", abre), css.lastIndexOf("{", abre - 1));
   return css.slice(antes + 1, abre).trim();
+}
+
+/** O `@media` que contém a posição (o mais de dentro), ou "" — lido pelas chaves, não pela distância. */
+function mediaDe(css: string, pos: number): string {
+  const pilha: string[] = [];
+  let inicio = 0;
+  for (let i = 0; i < pos; i++) {
+    const c = css[i];
+    if (c === "{") { pilha.push(css.slice(inicio, i).trim()); inicio = i + 1; }
+    else if (c === "}") { pilha.pop(); inicio = i + 1; }
+    else if (c === ";") inicio = i + 1;
+  }
+  return [...pilha].reverse().find((h) => h.startsWith("@media")) ?? "";
 }
 
 export function linhasNoCss(css: string, origem: string): string[] {
@@ -90,7 +110,9 @@ export function linhasNoCss(css: string, origem: string): string[] {
     const [, prop, valor] = m;
     const linha = limpo.slice(0, m.index).split("\n").length;
     const sel = seletorDe(limpo, m.index!);
-    if (LINHA_PERMITIDA_CSS.some((p) => p.seletor === sel && p.prop === prop.toLowerCase())) continue;
+    if (LINHA_PERMITIDA_CSS.some((p) => p.seletor === sel && p.prop === prop.toLowerCase()
+      && (p.valor === undefined || p.valor === valor.trim())
+      && (p.media === undefined || p.media === mediaDe(limpo, m.index!)))) continue;
     const ruim = prop.toLowerCase() === "box-shadow" ? anelFino(valor) : bordaVisivel(prop, valor);
     if (ruim) achadas.push(`${origem}:${linha} — ${prop}: ${valor.trim().slice(0, 80)}`);
   }
@@ -123,7 +145,12 @@ export function linhasNoNativo(fonte: string, origem: string): string[] {
   const achadas: string[] = [];
   for (const m of limpo.matchAll(COR_NATIVA)) {
     const valor = m[2].trim();
-    if (/^["']transparent["']$/.test(valor) || /focus/i.test(valor) || /^string\b/.test(valor)) continue;
+    // O foco do CAMPO passa por `focoDoCampo(` (ADR-0083: o amarelo, ou o `focusStrong` com "aumentar contraste").
+    if (/^["']transparent["']$/.test(valor) || /focus/i.test(valor) || /^focoDoCampo\(/.test(valor) || /^string\b/.test(valor)) continue;
+    // E o contorno de 3:1 que SÓ o "aumentar contraste" acende (ADR-0083, a mesma exceção da web): só no `estilos.ts`, só
+    // com o `inputStrong`, e só dentro da condição `maisContraste` do `fundoDeCampo`.
+    const linhaInteira = limpo.slice(limpo.lastIndexOf("\n", m.index!) + 1, limpo.indexOf("\n", m.index!));
+    if (origem === "estilos.ts" && valor === "t.color.inputStrong" && /maisContraste \? \{borderColor: t\.color\.inputStrong\}/.test(linhaInteira)) continue;
     // A única linha que fica no nativo: o cartão de contorno (a mesma da web, o texto a 10%).
     const linhaDoFonte = limpo.slice(limpo.lastIndexOf("\n", m.index!) + 1, limpo.indexOf("\n", m.index!));
     if (origem === "layout.tsx" && /^\s*card_outline:/.test(linhaDoFonte) && /comOpacidade\(t\.color\.foreground, 0\.1\)/.test(linhaDoFonte)) continue;
@@ -186,10 +213,22 @@ describe("sem linha — nenhuma peça da Aurea desenha borda (ADR-0072)", () => 
     expect(linhasNoCss(transparente, "amostra")).toEqual([]);
     expect(linhasNoJs('{border:"var(--border-width) solid var(--border)", borderLeftColor:"var(--foreground)"}', "x")).toHaveLength(2);
     expect(linhasNoNativo("{borderColor: t.color.border, borderTopColor: cor, borderColor: t.color.focusStrong, borderColor: \"transparent\"}", "x")).toHaveLength(2);
+    // O contorno do "aumentar contraste" no nativo vale SÓ no `fundoDeCampo` do `estilos.ts`, sob a condição.
+    expect(linhasNoNativo("  ...(maisContraste ? {borderColor: t.color.inputStrong} : null),", "estilos.ts")).toEqual([]);
+    expect(linhasNoNativo("  {borderColor: t.color.inputStrong},", "estilos.ts")).toHaveLength(1);
+    expect(linhasNoNativo("  ...(maisContraste ? {borderColor: t.color.inputStrong} : null),", "inputs.tsx")).toHaveLength(1);
+    expect(linhasNoNativo("focado && {borderColor: focoDoCampo(t, maisContraste)},", "x")).toEqual([]);
     // A exceção vale SÓ para o seletor sozinho: o mesmo valor em outra regra, ou outra propriedade nele, reprova.
     expect(linhasNoCss(".card-outline { border-color:color-mix(in oklab,var(--foreground) 10%,transparent); }", "x")).toEqual([]);
     expect(linhasNoCss(".card-outline:hover { border-color:var(--primary); }", "x")).toHaveLength(1);
     expect(linhasNoCss(".card-outline { box-shadow:inset 0 0 0 1px var(--border); }", "x")).toHaveLength(1);
     expect(linhasNoCss(".card { border-color:color-mix(in oklab,var(--foreground) 10%,transparent); }", "x")).toHaveLength(1);
+    // O contorno do "aumentar contraste" (ADR-0083) vale SÓ dentro do `@media (prefers-contrast:more)`, só com a cor dele.
+    const campos = ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not([data-brand="lory"],[data-brand="lory"] *))';
+    expect(linhasNoCss(`@media (prefers-contrast:more) { ${campos} { border-color:var(--input-strong); } }`, "x")).toEqual([]);
+    expect(linhasNoCss(`${campos} { border-color:var(--input-strong); }`, "x")).toHaveLength(1);
+    expect(linhasNoCss(`@media (min-width:600px) { ${campos} { border-color:var(--input-strong); } }`, "x")).toHaveLength(1);
+    expect(linhasNoCss(`@media (prefers-contrast:more) { ${campos} { border-color:var(--border); } }`, "x")).toHaveLength(1);
+    expect(linhasNoCss(`@media (prefers-contrast:more) { .input { border-color:var(--input-strong); } }`, "x")).toHaveLength(1);
   });
 });

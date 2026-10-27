@@ -4,7 +4,7 @@
   --brand-yellow:oklch(0.795 0.184 86.047);
   --brand-yellow-foreground:oklch(0.421 0.095 57.708);
   --brand-yellow-text:oklch(0.516 0.105 86.047);
-  --brand-yellow-ink:#242424;
+  --brand-yellow-ink:#18181b;
   --brand-blue:#0246f1;
   --white:oklch(1 0 0);
   --black:oklch(0 0 0);
@@ -149,62 +149,62 @@
   --tracking-widest:0.12em;
 }
 [data-theme="dark"]{
-  --background:#1f1f1f;
-  --foreground:#ffffff;
-  --card:#292929;
-  --card-foreground:#ffffff;
-  --popover:#292929;
-  --popover-foreground:#ffffff;
+  --background:#09090b;
+  --foreground:#fafafa;
+  --card:#18181b;
+  --card-foreground:#fafafa;
+  --popover:#18181b;
+  --popover-foreground:#fafafa;
   --primary:var(--brand-yellow);
   --primary-foreground:var(--brand-yellow-ink);
   --link:var(--brand-yellow);
   --link-hover:var(--brand-yellow);
-  --secondary:#333333;
-  --secondary-foreground:#ffffff;
-  --muted:#333333;
-  --muted-foreground:#adadad;
-  --accent:#333333;
-  --accent-foreground:#ffffff;
+  --secondary:#27272a;
+  --secondary-foreground:#fafafa;
+  --muted:var(--secondary);
+  --muted-foreground:#a1a1aa;
+  --accent:var(--secondary);
+  --accent-foreground:#fafafa;
   --destructive:#c50f1f;
   --destructive-foreground:#ffffff;
-  --border:#525252;
-  --input:#525252;
-  --ring:#666666;
-  --chart-1:oklch(0.809 0.105 251.813);
-  --chart-2:oklch(0.623 0.214 259.815);
-  --chart-3:oklch(0.546 0.245 262.881);
-  --chart-4:oklch(0.488 0.243 264.376);
-  --chart-5:oklch(0.424 0.199 265.638);
-  --sidebar:#292929;
-  --sidebar-foreground:#ffffff;
+  --border:#2f2f35;
+  --input:#3f3f46;
+  --ring:#71717a;
+  --chart-1:#bbdbff;
+  --chart-2:#97bfff;
+  --chart-3:#76a4ff;
+  --chart-4:#5789ff;
+  --chart-5:#4371f2;
+  --sidebar:#18181b;
+  --sidebar-foreground:#fafafa;
   --sidebar-primary:var(--brand-yellow);
   --sidebar-primary-foreground:var(--brand-yellow-ink);
-  --sidebar-accent:#333333;
-  --sidebar-accent-foreground:#ffffff;
-  --sidebar-border:#525252;
-  --sidebar-ring:#666666;
+  --sidebar-accent:var(--secondary);
+  --sidebar-accent-foreground:#fafafa;
+  --sidebar-border:#2f2f35;
+  --sidebar-ring:#71717a;
   --surface-1:var(--card);
   --surface-2:var(--secondary);
   --surface-3:var(--muted);
-  --surface-inset:#141414;
-  --surface-hover:#383838;
+  --surface-inset:#050506;
+  --surface-hover:#27272a;
   --foreground-strong:var(--foreground);
-  --subtle-foreground:#adadad;
-  --border-strong:#adadad;
+  --subtle-foreground:#a1a1aa;
+  --border-strong:#a1a1aa;
   --field-bg:var(--muted);
   --overlay:oklch(0 0 0 / 0.5);
   --primary-hover:oklch(0.835 0.19 89);
   --primary-active:oklch(0.74 0.17 84);
-  --secondary-hover:#3d3d3d;
-  --segment:oklch(0.3964 0.01 285.93);
+  --secondary-hover:#303036;
+  --segment:#3f3f46;
   --focus:var(--primary);
   --focus-strong:var(--primary);
   --primary-emphasis:var(--primary);
   --primary-outline:var(--primary);
   --control-selected:var(--primary);
-  --control-selected-foreground:var(--brand-yellow-ink);
+  --control-selected-foreground:#ffffff;
   --control-selected-dot:oklch(0.985 0 0);
-  --primary-mark:var(--brand-yellow-foreground);
+  --primary-mark:var(--brand-yellow-ink);
   --selection:oklch(0.795 0.184 86.047 / 0.22);
   --success-bg:#052505;
   --warning-bg:#4a1e04;
@@ -237,66 +237,70 @@
   --info-foreground:#ffffff;
   --info-hover:#006cbf;
   --warning:#f7630c;
-  --warning-foreground:#242424;
+  --warning-foreground:var(--brand-yellow-ink);
   --warning-hover:#de590b;
+  --input-strong:#646467;
+  --control-thumb:#ffffff;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:var(--primary);
 }
 [data-theme="light"]{
   --background:#f5f5f5;
-  --foreground:#242424;
+  --foreground:#09090b;
   --card:#ffffff;
-  --card-foreground:#242424;
+  --card-foreground:#09090b;
   --popover:#ffffff;
-  --popover-foreground:#242424;
+  --popover-foreground:#09090b;
   --primary:var(--brand-yellow);
   --primary-foreground:var(--brand-yellow-ink);
-  --link:var(--brand-blue);
-  --link-hover:var(--brand-blue);
-  --secondary:#ebebeb;
-  --secondary-foreground:#242424;
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --secondary:#ebebed;
+  --secondary-foreground:#09090b;
   --muted:var(--secondary);
-  --muted-foreground:#616161;
+  --muted-foreground:#686871;
   --accent:var(--secondary);
-  --accent-foreground:#242424;
+  --accent-foreground:#09090b;
   --destructive:#c50f1f;
   --destructive-foreground:#ffffff;
-  --border:#e0e0e0;
-  --input:#e0e0e0;
-  --ring:#d1d1d1;
-  --chart-1:oklch(0.809 0.105 251.813);
-  --chart-2:oklch(0.623 0.214 259.815);
-  --chart-3:oklch(0.546 0.245 262.881);
-  --chart-4:oklch(0.488 0.243 264.376);
-  --chart-5:oklch(0.424 0.199 265.638);
+  --border:#e4e4e7;
+  --input:#d4d4d8;
+  --ring:#8a8a93;
+  --chart-1:#4589d2;
+  --chart-2:#246cdf;
+  --chart-3:#114fda;
+  --chart-4:#0c37c4;
+  --chart-5:#0c24a3;
   --sidebar:var(--card);
-  --sidebar-foreground:#242424;
-  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-foreground:#09090b;
+  --sidebar-primary:var(--primary);
   --sidebar-primary-foreground:var(--brand-yellow-ink);
   --sidebar-accent:var(--secondary);
-  --sidebar-accent-foreground:#242424;
-  --sidebar-border:#e0e0e0;
-  --sidebar-ring:#d1d1d1;
+  --sidebar-accent-foreground:#09090b;
+  --sidebar-border:#e4e4e7;
+  --sidebar-ring:#8a8a93;
   --surface-1:var(--card);
   --surface-2:var(--secondary);
   --surface-3:var(--muted);
-  --surface-inset:#f0f0f0;
-  --surface-hover:#e6e6e6;
+  --surface-inset:#efeff1;
+  --surface-hover:#f4f4f5;
   --foreground-strong:var(--foreground);
-  --subtle-foreground:#616161;
-  --border-strong:#616161;
+  --subtle-foreground:#686871;
+  --border-strong:#686871;
   --field-bg:var(--muted);
   --overlay:oklch(0 0 0 / 0.4);
   --primary-hover:oklch(0.835 0.19 89);
   --primary-active:oklch(0.74 0.17 84);
-  --secondary-hover:var(--surface-hover);
+  --secondary-hover:#e4e4e7;
   --segment:oklch(1 0 0);
-  --focus:var(--primary);
+  --focus:#bd7000;
   --focus-strong:var(--foreground);
-  --primary-emphasis:var(--brand-blue);
-  --primary-outline:var(--brand-blue);
+  --primary-emphasis:var(--foreground);
+  --primary-outline:rgba(240,177,0,0.35);
   --control-selected:var(--brand-yellow);
-  --control-selected-foreground:var(--brand-yellow-ink);
+  --control-selected-foreground:#ffffff;
   --control-selected-dot:oklch(0.985 0 0);
-  --primary-mark:var(--brand-yellow-foreground);
+  --primary-mark:var(--brand-yellow-ink);
   --success-400:#0e700e;
   --warning-400:#8a3707;
   --danger-400:#b10e1c;
@@ -331,8 +335,13 @@
   --info-foreground:#ffffff;
   --info-hover:#006cbf;
   --warning:#f7630c;
-  --warning-foreground:#242424;
+  --warning-foreground:var(--brand-yellow-ink);
   --warning-hover:#de590b;
+  --input-strong:#8d8d91;
+  --link-mark:rgba(240,177,0,0.45);
+  --link-underline:var(--primary);
+  --control-thumb:#ffffff;
+  --warning-500:#d07612;
 }
 [data-brand="lory"][data-theme="dark"],[data-brand="lory"] [data-theme="dark"]{
   --background:oklch(0.16 0.018 250);
@@ -398,6 +407,9 @@
   --warning-bg:oklch(0.34 0.07 80);
   --danger-bg:oklch(0.34 0.09 25);
   --info-bg:oklch(0.32 0.06 235);
+  --brand-yellow-ink:#242424;
+  --warning-foreground:#242424;
+  --control-thumb:var(--primary-mark);
 }
 [data-brand="lory"][data-theme="light"],[data-brand="lory"] [data-theme="light"]{
   --background:oklch(0.984 0.004 70);
@@ -464,6 +476,10 @@
   --info-bg:oklch(0.95 0.04 235);
   --link:oklch(0.52 0.106 86.047);
   --link-hover:oklch(0.44 0.106 86.047);
+  --brand-yellow-ink:#242424;
+  --warning-foreground:#242424;
+  --control-thumb:var(--primary-mark);
+  --warning-500:oklch(0.727 0.149 60);
 }
 [data-density="compact"]{
   --control-h-xs:1.5rem;
@@ -1661,7 +1677,9 @@ img,svg { display:block; }
    quatro níveis alternados (escuro > claro > escuro > claro) não são cobertos. Quem cobra:
    `tests/visual/tema-na-secao.spec.ts`, e o `tema-na-secao.test.tsx` reprova regra nova sem a
    guarda. */
-[data-theme="light"] .eyebrow:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
+/* A mistura de 45% ficou SÓ na `lory` (ADR-0083, 26/10/2026): na Aurea, a letra de destaque do claro é o grafite —
+   a regra fica na seção "A paleta da 1.0", no fim da folha. */
+[data-theme="light"] .eyebrow:where([data-brand="lory"],[data-brand="lory"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
 .demo { min-width:0; padding:var(--card-pad); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); color:var(--card-foreground); box-shadow:none; }
 
 /* ========================================================================== */
@@ -2337,7 +2355,7 @@ img,svg { display:block; }
    mesma distância nos dois sentidos de escrita. */
 .switch-track:after { --thumb-h:calc(var(--switch-h) - 2 * var(--space-05)); --thumb-w:calc(var(--thumb-h) * 11 / 8); content:""; position:absolute; inset-inline-start:calc(var(--space-05) - var(--border-width)); top:calc(var(--space-05) - var(--border-width)); block-size:var(--thumb-h); inline-size:var(--thumb-w); border-radius:var(--radius-full); background:var(--muted-foreground); transition:transform var(--duration-base) var(--ease-standard),background var(--duration-base) var(--ease-standard); }
 .switch-track { --switch-x:calc(var(--switch-h) * 2 - (var(--switch-h) - 2 * var(--space-05)) * 11 / 8 - 2 * var(--space-05)); }
-.switch input:checked + .switch-track { background:var(--control-selected); border-color:transparent; } .switch input:checked + .switch-track:after { transform:translateX(var(--switch-x)); background:var(--primary-mark); }
+.switch input:checked + .switch-track { background:var(--control-selected); border-color:transparent; } .switch input:checked + .switch-track:after { transform:translateX(var(--switch-x)); background:var(--control-thumb); }
 /* DESATIVADO (lote 1, as travas, 20/10/2026 — o check 49 achou): o `<input>` é invisível e quem desenha é a marca,
    então o `disabled` chegava ao campo e nada mudava na tela. A peça inteira recua, marca e nome, como na referência
    (o estado de desativado dela vai na raiz do controle, a 0,5). Vale também para as opções de um grupo desativado. */
@@ -2381,7 +2399,7 @@ img,svg { display:block; }
 .slider-track { position:relative; inline-size:100%; block-size:var(--space-5); border-inline:var(--space-3) solid transparent; border-radius:var(--radius-full); background:var(--secondary); }
 .slider-fill { box-sizing:content-box; block-size:100%; margin-inline-start:calc(-1 * var(--space-3)); padding-inline-start:var(--space-3); border-radius:var(--radius-full); background:var(--primary); }
 .slider-thumb { display:grid; place-items:center; inline-size:calc(var(--space-6) + var(--space-1)); block-size:100%; border-radius:var(--radius-full); background:var(--primary); cursor:grab; }
-.slider-thumb::after { content:""; inline-size:var(--space-6); block-size:var(--space-4); border-radius:var(--radius-full); background:var(--primary-mark); box-shadow:var(--shadow-sm); transition:scale var(--duration-fast) var(--ease-standard); }
+.slider-thumb::after { content:""; inline-size:var(--space-6); block-size:var(--space-4); border-radius:var(--radius-full); background:var(--control-thumb); box-shadow:var(--shadow-sm); transition:scale var(--duration-fast) var(--ease-standard); }
 .slider-thumb[data-dragging] { cursor:grabbing; }
 .slider-thumb[data-dragging]::after { scale:.9; }
 .slider-thumb:has(input:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
@@ -2476,7 +2494,9 @@ img,svg { display:block; }
    O fio é 2px (fração de pixel borra), inset 15px, e o amarelo entra a 75% — cheio ele
    grita mais que o próprio rótulo. No tema CLARO o amarelo puro como texto dá 1.6:1, longe
    dos 4.5:1 do AA, então o rótulo aprofunda com --foreground e segue âmbar. */
-.is-selected,.btn-nav[aria-current]:not([aria-current="false"]),.btn[aria-pressed="true"],
+/* O BOTÃO LIGADO saiu desta linguagem na Aurea (ADR-0083, 26/10/2026): amarelo cheio, a letra do botão primário e
+   sem fio — a regra fica na seção "A paleta da 1.0", no fim da folha. Aqui ele continua só na `lory`. */
+.is-selected,.btn-nav[aria-current]:not([aria-current="false"]),.btn[aria-pressed="true"]:where([data-brand="lory"],[data-brand="lory"] *),
 .segmented :is(button,a).active { --btn-bg:var(--secondary); --btn-fg:var(--primary); position:relative; background:var(--secondary); color:var(--primary); }
 /* A CÁPSULA ELEVADA que a regra acima promete, e que no trilho não se via (ADR-0059, 08/10/2026):
    o segmento aceso e a aba escolhida vivem sobre --muted, e --secondary dava 1:1 contra ele no
@@ -2489,8 +2509,8 @@ img,svg { display:block; }
    da marca; o da Aurea é o "clarinho" (o amarelo a 10%, a receita do `.badge-primary` que o Victor
    escolheu para a página atual da paginação), aqui sobre o cinza, para o grupo colado continuar uma
    cápsula só. A letra da marca e o fio continuam os do "selecionado". */
-.btn.toggle[data-pressed] { --btn-bg:color-mix(in oklab, var(--primary) 10%, var(--secondary)); background:var(--btn-bg); }
-.btn.toggle[data-pressed]:hover:not(:disabled):not([aria-disabled="true"]) { --btn-bg:color-mix(in oklab, var(--primary) 10%, var(--secondary-hover)); }
+.btn.toggle[data-pressed]:where([data-brand="lory"],[data-brand="lory"] *) { --btn-bg:color-mix(in oklab, var(--primary) 10%, var(--secondary)); background:var(--btn-bg); }
+.btn.toggle[data-pressed]:hover:not(:disabled):not([aria-disabled="true"]):where([data-brand="lory"],[data-brand="lory"] *) { --btn-bg:color-mix(in oklab, var(--primary) 10%, var(--secondary-hover)); }
 /* O ATIVO DA NAV DA LATERAL sai da escala DELA, e não da página (20/08/2026, o Victor viu sob a
    marca `lory`). Ele dividia esta regra com o `.segmented`, que vive no conteúdo — e `--secondary`
    é quase branco no tema claro. Numa lateral escura isso desenhava uma pílula branca com texto
@@ -2511,7 +2531,7 @@ img,svg { display:block; }
    saíram com a mesma cor. Com o `:not` ela pesa (0,3,1) e só alcança quem está em repouso. */
 [data-theme="light"] .doc-nav a:not(.active):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color:color-mix(in oklab, var(--sidebar-foreground) 72%, transparent); }
 .is-selected::after,.btn-nav[aria-current]:not([aria-current="false"])::after,
-.btn[aria-pressed="true"]:not(.btn-icon)::after,.segmented :is(button,a).active::after,.tabs-secondary .tab[data-active]::after,
+.btn[aria-pressed="true"]:not(.btn-icon):where([data-brand="lory"],[data-brand="lory"] *)::after,.segmented :is(button,a).active::after,.tabs-secondary .tab[data-active]::after,
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { content:""; position:absolute; inset-inline:15px; bottom:0; height:2px; border-radius:var(--radius-full); background:color-mix(in oklab, var(--primary) 75%, transparent); }
 /* e o fio do ativo da lateral segue a marca DELA, pelo mesmo motivo da regra de cor acima. */
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { background:var(--sidebar-current-line, color-mix(in oklab, var(--sidebar-primary) 75%, transparent)); }
@@ -2523,8 +2543,10 @@ img,svg { display:block; }
    Sobre o amarelo, a letra de destaque de DENTRO do item (o selo primário de contagem, um ícone de destaque) é a tinta do
    botão: o azul sobre o amarelo mede 3,49:1 — o axe da varredura achou, no "12" do exemplo da `Sidebar`. */
 [data-theme="light"] :is(.sidebar-item[aria-current],.doc-nav a.active):not(:where([data-brand],[data-brand] *,.sidebar[class*="sidebar-indicator-"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --sidebar-current-line:transparent; --primary-emphasis:var(--primary-foreground); --sidebar-primary:var(--primary-foreground); background:var(--primary); color:var(--primary-foreground); }
-[data-theme="light"] .is-selected:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
-[data-theme="light"] .btn[aria-pressed="true"]:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .segmented :is(button,a).active:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
+/* A mistura de 45% (o "marrom") ficou SÓ na `lory` (ADR-0083, 26/10/2026). Na Aurea, o escolhido do claro tem a letra
+   grafite, e o botão ligado é amarelo — as duas regras ficam na seção "A paleta da 1.0", no fim da folha. */
+[data-theme="light"] .is-selected:where([data-brand="lory"],[data-brand="lory"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where([data-brand="lory"],[data-brand="lory"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+[data-theme="light"] .btn[aria-pressed="true"]:where([data-brand="lory"],[data-brand="lory"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .segmented :is(button,a).active:where([data-brand="lory"],[data-brand="lory"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
   { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
 /* A NAV DA LATERAL SAIU DESTA LISTA em 20/08/2026. O ajuste existe porque o amarelo puro não se lê
    sobre o claro — mas ele mistura o `--foreground` da PÁGINA, e o item da lateral não está sobre a
@@ -4910,6 +4932,102 @@ button.graph-node-body { cursor:pointer; }
    DESENHO CHEIO, não aro; e a sombra o solta da trilha. */
 .slider-color .slider-thumb,.color-area-thumb { background:var(--white); box-shadow:var(--shadow-md); }
 .slider-color .slider-thumb::after,.color-area-thumb::after { content:""; position:absolute; inset:calc(3 * var(--border-width)); inline-size:auto; block-size:auto; border-radius:var(--radius-full); background:var(--color-checker) center/var(--space-2) var(--space-2); box-shadow:inset 0 0 0 var(--space-4) var(--slider-thumb-color,var(--color-area-thumb,var(--primary))); }
+
+/* ═══ A PALETA DA 1.0 — passo A (ADR-0083, 26/10/2026) ═══════════════════════════════════════════════════════════
+   A proposta de cores que o Victor aprovou família por família em 25 e 26/10/2026: a base Zinco profundo, o destaque
+   GRAFITE no claro (o amarelo vira fundo, traço ou indicador, nunca letra), o link com marca-texto, os campos brancos,
+   as marcas brancas dentro dos controles, o botão ligado amarelo e a linha do tempo consertada. Os TOKENS mudaram na
+   fonte (`aurea.tokens.json`); aqui ficam as REGRAS que mudam junto.
+   A `lory` fica 100% como é hoje (decisão do Victor, 26/10/2026): os tokens dela foram congelados na fonte, e toda
+   regra desta seção leva `:where(:not([data-brand="lory"],[data-brand="lory"] *))`, de força zero. Quem prova que
+   ela sai igual: `tests/visual/lory-congelada.spec.ts`. */
+
+/* O ESCOLHIDO do claro tem a letra grafite (era a mistura de 45%, que dava marrom): a aba, o segmento aceso, o item de
+   navegação atual e o rótulo `.eyebrow`. O fio amarelo de baixo continua. No escuro, a letra continua o amarelo. */
+[data-theme="light"] .is-selected:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+[data-theme="light"] .eyebrow:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+[data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+[data-theme="light"] .segmented :is(button,a).active:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
+  { --btn-fg:var(--foreground); color:var(--foreground); }
+
+/* O BOTÃO LIGADO (Toggle, ToggleGroup, ToolbarButton): amarelo cheio com a letra do botão primário, nos dois temas, sem
+   o fio de baixo e sem o fundo "clarinho". As cores passam por `--pressed-*` no próprio botão, para uma faixa com outro
+   `data-theme` acertar e para os outros estilos aprovados (o cinza e o grafite) só trocarem as três variáveis. */
+:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  --pressed-bg:var(--primary); --pressed-bg-hover:var(--primary-hover); --pressed-fg:var(--primary-foreground);
+  --btn-bg:var(--pressed-bg); --btn-fg:var(--pressed-fg); background:var(--pressed-bg); color:var(--pressed-fg); }
+:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):hover:not(:disabled):not([aria-disabled="true"]):where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  --btn-bg:var(--pressed-bg-hover); background:var(--pressed-bg-hover); }
+
+/* O LINK separa-se do texto por mais que a cor (WCAG 1.4.1): no claro a letra é o grafite e no escuro o amarelo — a
+   mesma cor do texto em volta, ou quase (1,91:1 no escuro). Vale para o link sem classe, para o componente `Link` e
+   para o texto no tom link. A NAVEGAÇÃO fica de fora — a trilha, todo link dentro de `<nav>` e o segmento que é link:
+   o marca-texto é para o link no meio do texto (medido no site em 27/10/2026: dos 596 links sem classe, 588 eram a
+   chave Web | Native e 6 a trilha; só 2 estavam na prosa).
+   A base, nos dois temas (e a VARIAÇÃO do claro): o sublinhado amarelo de 2 com 3 de afastamento. */
+:is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  color:var(--link); text-decoration-line:underline; text-decoration-color:var(--link-underline);
+  text-decoration-thickness:calc(2 * var(--border-width)); text-underline-offset:calc(3 * var(--border-width)); }
+/* O PADRÃO do claro: o MARCA-TEXTO — a faixa amarela a 45% atrás da metade de baixo das letras (o texto sobre ela mede
+   14,79:1); no ponteiro, ela cobre a palavra inteira. É um sublinhado grosso que sobe para trás das letras, e não um
+   fundo: assim acompanha só o texto, mesmo quando o elemento ocupa a linha inteira ou o link quebra em várias linhas.
+   As medidas são PROPORÇÕES DA LETRA (em), medidas na bancada de 26/10/2026, e crescem com ela; provadas nos três
+   navegadores em 27/10/2026. A variação (o sublinhado) se pede com `class="link-underline"` num link, ou com
+   `data-link="underline"` num contêiner ou no `<html>`. */
+[data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not(.link-underline,[data-link="underline"] *):where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+  text-decoration-color:var(--link-mark); text-decoration-thickness:.5em; text-underline-offset:-.32em; text-decoration-skip-ink:none;
+  transition:text-decoration-thickness var(--duration-fast) var(--ease-standard),text-underline-offset var(--duration-fast) var(--ease-standard); }
+[data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not(.link-underline,[data-link="underline"] *):hover:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+  text-decoration-thickness:1.25em; text-underline-offset:-1.02em; }
+@media (prefers-reduced-motion:reduce) {
+  [data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { transition:none; }
+}
+
+/* As TINTAS que saíam do destaque ficariam cinza com o destaque grafite: no claro, elas saem do próprio amarelo — o selo
+   primário de contorno (16%) e a marca do item atual da barra de baixo de aro (15%). */
+[data-theme="light"] .badge-primary.badge-outline:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+  background-color:color-mix(in oklab, var(--primary) 16%, transparent); }
+[data-theme="light"] .bottom-nav-ind-circle-outline .bottom-nav-item[aria-current] .bottom-nav-mark:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+  background:color-mix(in srgb, var(--primary) 15%, transparent); }
+
+/* O CAMPO no claro é BRANCO com a sombra fina em todo lugar, também DENTRO das superfícies brancas (era o cinza
+   `--fill-2` ali — ADR-0078, item 2, revertido pela ADR-0083): dentro de um cartão branco, quem separa o campo é a
+   sombra. A lista é a das superfícies da regra de campo, acima. No escuro, nada muda. */
+[data-theme="light"] :is(.card:not(.card-outline):not(.card-inset),.content:not(.content-plain),.section-card,.demo,.dialog,.drawer,.popover,.menu,.command-palette,.alert,.banner-consent,.toast,.accordion-surface,.datagrid-detail,:is(.table,.table-wrap) tbody :is(td,th),.topbar-floating,.topbar-pill,.sortable-item,.app-shell-docs > .sidebar[popover]:popover-open):where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+  --field-fill:var(--card); --field-lift:var(--field-lift-page); }
+
+/* O FOCO DOS CAMPOS no claro é o amarelo, uma linha só, como no escuro (decisão do Victor, 26/10/2026; a medida — 1,75:1
+   na página, 1,91:1 no cartão, abaixo dos 3:1 — vai à bancada do passo A). Os botões e o resto continuam com o grafite. */
+[data-theme="light"] :is(.input,.textarea,.select):focus-visible:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+[data-theme="light"] :is(.input-group,.combobox-multi):focus-within:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+  outline-color:var(--primary); }
+
+/* "AUMENTAR CONTRASTE" do sistema (`prefers-contrast: more`: o "Aumentar contraste" do macOS, do iOS e do Android, o
+   alto contraste do Windows). Sem linha nenhuma, um campo branco nunca chega aos 3:1 da WCAG 1.4.11 — a página ou o
+   cartão teriam de ser um cinza médio. Então quem pede mais contraste recebe: o contorno de 3:1 nos campos (a única
+   linha que esta preferência acende, exceção nomeada à ADR-0072 pela ADR-0083), as quatro marcas dos controles na
+   tinta, e o foco dos campos de volta ao grafite. Fora dela, nada disto existe. */
+@media (prefers-contrast:more) {
+  :is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not([data-brand="lory"],[data-brand="lory"] *)) { border-color:var(--input-strong); }
+  .input-group > :is(.input,.select,.textarea):where(:not([data-brand="lory"],[data-brand="lory"] *)) { border:0; }
+  :root:where(:not([data-brand="lory"])),[data-theme]:where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+    --control-thumb:var(--brand-yellow-ink); --control-selected-foreground:var(--brand-yellow-ink); --control-selected-dot:var(--brand-yellow-ink); }
+  [data-theme="light"] :is(.input,.textarea,.select):focus-visible:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+  [data-theme="light"] :is(.input-group,.combobox-multi):focus-within:where(:not([data-brand="lory"],[data-brand="lory"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+    outline-color:var(--focus-strong); }
+}
+
+/* A LINHA DO TEMPO: o trilho era o `::before` da lista, posicionado, e o ponto não — o navegador pinta o posicionado
+   por cima, e a linha passava por CIMA da bolinha; e ia até o fim da lista, sobrando depois do último ponto (achado na
+   bancada de 26/10/2026). Agora cada item desenha o trecho até o ponto seguinte, e o ponto fica por cima. O trilho passa
+   de `--border` para `--input`: na página do Zinco profundo, o `--border` quase não aparecia. */
+.timeline:where(:not([data-brand="lory"],[data-brand="lory"] *))::before { content:none; }
+.timeline > li:where(:not([data-brand="lory"],[data-brand="lory"] *)) { position:relative; }
+.timeline > li:not(:last-child):where(:not([data-brand="lory"],[data-brand="lory"] *))::before {
+  content:""; position:absolute; inset-inline-start:calc(var(--space-3) / 2 - var(--border-width) / 2);
+  inset-block-start:calc(var(--space-1) + var(--space-3)); inset-block-end:calc(-1 * (var(--space-5) + var(--space-1)));
+  inline-size:var(--border-width); background:var(--input); }
+.timeline-dot:where(:not([data-brand="lory"],[data-brand="lory"] *)) { position:relative; z-index:1; }
 
 /* >>> camada responsiva — GERADA por scripts/build-responsive-layer.mjs <<< */
 /* As variáveis de passo NÃO HERDAM. Ver o comentário de VARIAVEIS no gerador: um ícone dentro

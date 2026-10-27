@@ -84,10 +84,9 @@ const PAPEL = {
 };
 const COR = {
     default: "foreground", muted: "mutedForeground", subtle: "subtleForeground",
-    // `primary` escreve com a LETRA do amarelo (`letraDoAmarelo`, logo abaixo, na folha): no claro, o amarelo da marca
-    // misturado com a cor do texto, como a referência faz com a letra do amarelo dela; no escuro, o amarelo. Decisão do
-    // Victor, 24/10/2026, vendo a referência ao lado (~~o amarelo de PREENCHER puro, 1,73:1 no claro~~; ~~a letra de
-    // destaque da ADR-0081, o azul no claro~~, que ficou só na web).
+    // `primary` escreve com a LETRA do amarelo (`letraDoAmarelo`, logo abaixo, na folha): no claro, o destaque grafite
+    // (ADR-0083, 26/10/2026 — o amarelo não vira letra no claro); no escuro, o amarelo. (~~o amarelo misturado com a cor
+    // do texto, decisão de 24/10/2026~~; ~~o amarelo de PREENCHER puro, 1,73:1 no claro~~; ~~o azul no claro~~.)
     primary: "primary", link: "link", danger: "destructive", success: "success",
     warning: "warning", info: "info",
 };
@@ -102,7 +101,7 @@ const folha = criarFolha((t) => {
         // fundo — no escuro, ~2,5:1. Achado na 0.28.0; `paleta-adr0061.test.tsx` cobra.
         tons[tom] = { color: letraDoToken(t, token) ?? t.color.foreground };
     }
-    // O `primary` escreve com a LETRA do amarelo (24/10/2026): no claro, o amarelo misturado com o texto, como a referência.
+    // O `primary` escreve com a LETRA do amarelo: no claro, o destaque grafite (ADR-0083); no escuro, o amarelo.
     tons.primary = { color: letraDoAmarelo(t) };
     return tons;
 });
@@ -164,6 +163,18 @@ export function Text({ type, size, weight: pesoPedido, font: fontePedida, tone =
     // ⚠ **A consequência está declarada e não é neutra:** dentro de um cartão da marca não existe
     // texto esmaecido. A hierarquia sai de PESO e TAMANHO.
     // ⚠ E `style` continua por último de propósito: quem passa cor à mão assume a conta.
+    if (tone === "link" && !sobreAMarca) {
+        // O LINK separa-se do texto por mais que a cor (ADR-0083, 26/10/2026; WCAG 1.4.1). No CLARO, o marca-texto: a letra é
+        // o grafite e a faixa amarela a 45% vai num `Text` de DENTRO — fundo num trecho de texto acompanha só as letras, e
+        // não a largura da caixa (no React Native a faixa cobre a altura da linha inteira, e não só a metade de baixo como na
+        // web; o contraste é o mesmo, 14,79:1). No ESCURO, o amarelo sublinhado — a cor do sublinhado só vale no iOS; no
+        // Android ele sai na cor da letra, que já é o amarelo.
+        const { children, ...resto } = rest;
+        if (t.theme === "light") {
+            return (_jsx(TextRN, { style: [s[tone], proprio, style], ...resto, children: _jsx(TextRN, { style: { backgroundColor: t.color.linkMark }, children: children }) }));
+        }
+        return (_jsx(TextRN, { style: [s[tone], proprio, { textDecorationLine: "underline", textDecorationColor: t.color.linkUnderline }, style], ...resto, children: children }));
+    }
     return _jsx(TextRN, { style: [s[tone], sobreAMarca && { color: sobreAMarca.tinta }, proprio, style], ...rest });
 }
 const PESO = { normal: 400, medium: 500, semibold: 600, bold: 700 };

@@ -1,8 +1,9 @@
-// ADR-0078 no NATIVO (0.40.1) — no claro, o campo solto na tela é a cor do cartão com a sombra leve; dentro de uma
-// superfície branca (o `Card`, as janelas, o `Popover`), o cinza de antes; no escuro, nada muda. E a ADR-0077 no
-// nativo: o `numeric` e o número do `KPI` na fonte de código (a IBM Plex Mono), como na web.
+// ADR-0078 no NATIVO (0.40.1) — no claro, o campo solto na tela é a cor do cartão com a sombra leve; no escuro, nada
+// muda. Dentro de uma superfície branca (o `Card`, as janelas, o `Popover`) ele era o cinza de antes, até a ADR-0083
+// (26/10/2026): branco com a sombra também ali. E a ADR-0077 no nativo: o `numeric` e o número do `KPI` na fonte de
+// código (a IBM Plex Mono), como na web.
 // Provado contra o defeito: com o nativo da 0.40.0, todo caso "branco" reprova (o campo era `preenchimento(t, 2)` em
-// toda parte), e o `numeric` saía na fonte do texto.
+// toda parte), e o `numeric` saía na fonte do texto; com o da 0.44.0, os casos "dentro da superfície" reprovam.
 import {render} from "@testing-library/react";
 import {describe, expect, it} from "vitest";
 import * as React from "react";
@@ -47,7 +48,7 @@ const noCartao = (f: React.ReactElement) => <Card>{f}</Card>;
 const noContorno = (f: React.ReactElement) => <Card variant="outline">{f}</Card>;
 const contornoNoCartao = (f: React.ReactElement) => <Card><Card variant="outline">{f}</Card></Card>;
 
-describe("ADR-0078 · o campo branco no claro (nativo)", () => {
+describe("ADR-0083 · o campo branco no claro, em todo lugar (nativo)", () => {
   for (const [nome, campo, primitivo, alvo] of CAMPOS) {
     const a = alvo("ID");
     it(`${nome}: solto no claro, a cor do cartão e a sombra leve`, () => {
@@ -55,46 +56,40 @@ describe("ADR-0078 · o campo branco no claro (nativo)", () => {
       expect(s.backgroundColor, `${nome}: branco`).toBe(claro.color.card);
       expect(s.boxShadow, `${nome}: a sombra de três camadas`).toEqual([...claro.shadowLayers.shadowSm]);
     });
-    it(`${nome}: dentro do cartão, o cinza de antes e sem sombra`, () => {
-      const s = medir("light", noCartao, campo, primitivo, a);
-      expect(s.backgroundColor, `${nome}: cinza`).toBe(cinza(claro));
-      expect(s.boxShadow, `${nome}: sem sombra`).toBeUndefined();
-    });
-    it(`${nome}: o cartão de contorno herda — branco na tela, cinza dentro de outro cartão`, () => {
-      expect(medir("light", noContorno, campo, primitivo, a).backgroundColor, `${nome}: contorno na tela`).toBe(claro.color.card);
-      expect(medir("light", contornoNoCartao, campo, primitivo, a).backgroundColor, `${nome}: contorno no cartão`).toBe(cinza(claro));
+    it(`${nome}: dentro do cartão, também branco com a sombra (era o cinza — ADR-0078, item 2)`, () => {
+      for (const [onde, embrulho] of [["cartão", noCartao], ["contorno na tela", noContorno], ["contorno no cartão", contornoNoCartao]] as const) {
+        const s = medir("light", embrulho, campo, primitivo, a);
+        expect(s.backgroundColor, `${nome}: ${onde}`).toBe(claro.color.card);
+        expect(s.backgroundColor, `${nome}: ${onde}, não o cinza`).not.toBe(cinza(claro));
+        expect(s.boxShadow, `${nome}: ${onde}, com a sombra`).toEqual([...claro.shadowLayers.shadowSm]);
+      }
     });
     it(`${nome}: no escuro, nada muda — o cinza e sem sombra`, () => {
-      const s = medir("dark", solto, campo, primitivo, a);
-      expect(s.backgroundColor, `${nome}: cinza no escuro`).toBe(cinza(escuro));
-      expect(s.boxShadow, `${nome}: sem sombra no escuro`).toBeUndefined();
+      for (const [onde, embrulho] of [["solto", solto], ["cartão", noCartao]] as const) {
+        const s = medir("dark", embrulho, campo, primitivo, a);
+        expect(s.backgroundColor, `${nome}: cinza no escuro, ${onde}`).toBe(cinza(escuro));
+        expect(s.boxShadow, `${nome}: sem sombra no escuro, ${onde}`).toBeUndefined();
+      }
     });
   }
 });
 
-// 0.40.1, a pergunta "quem mais pinta a cor do cartão?": o `Header` flutuante e o de pílula, e o `ScrollShadow` de
-// superfície (o padrão), recebem conteúdo do app. Sem o contexto, o campo dentro deles saía branco no branco.
-// O `Alert`, o `Toast` e a célula da `Table` ficam de fora: são um elemento só para o leitor de tela, e campo dentro
-// deles some no iPhone (o check 43).
-describe("ADR-0078 · as superfícies brancas que a 0.40.0 esqueceu (nativo)", () => {
+// As superfícies que ligam o contexto "estou numa superfície branca" (a 0.40.1 achou o `Header` flutuante e o de
+// pílula, e o `ScrollShadow` de superfície). Desde a ADR-0083 o contexto não muda mais a cor do campo: em todas, branco.
+describe("ADR-0083 · nas superfícies brancas, o campo também é branco (nativo)", () => {
   const [, campo, primitivo] = CAMPOS[0];
-  const CASOS: [string, (f: React.ReactElement) => React.ReactElement, "cinza" | "branco"][] = [
-    ["o Header flutuante (o padrão)", (f) => <Header>{f}</Header>, "cinza"],
-    ["o Header de pílula", (f) => <Header variant="pill">{f}</Header>, "cinza"],
-    ["o Header rente (a cor da página)", (f) => <Header variant="flush">{f}</Header>, "branco"],
-    ["o ScrollShadow de superfície (o padrão)", (f) => <ScrollShadow><ScrollView>{f}</ScrollView></ScrollShadow>, "cinza"],
-    ["o ScrollShadow sem caixa (plain)", (f) => <ScrollShadow variant="plain"><ScrollView>{f}</ScrollView></ScrollShadow>, "branco"],
+  const CASOS: [string, (f: React.ReactElement) => React.ReactElement][] = [
+    ["o Header flutuante (o padrão)", (f) => <Header>{f}</Header>],
+    ["o Header de pílula", (f) => <Header variant="pill">{f}</Header>],
+    ["o Header rente (a cor da página)", (f) => <Header variant="flush">{f}</Header>],
+    ["o ScrollShadow de superfície (o padrão)", (f) => <ScrollShadow><ScrollView>{f}</ScrollView></ScrollShadow>],
+    ["o ScrollShadow sem caixa (plain)", (f) => <ScrollShadow variant="plain"><ScrollView>{f}</ScrollView></ScrollShadow>],
   ];
-  for (const [nome, embrulho, esperado] of CASOS) {
-    it(`Input dentro d${nome.startsWith("o ") ? "" : "e "}${nome}: ${esperado}`, () => {
+  for (const [nome, embrulho] of CASOS) {
+    it(`Input dentro d${nome.startsWith("o ") ? "" : "e "}${nome}: branco com a sombra`, () => {
       const s = medir("light", embrulho, campo, primitivo, "ID");
-      if (esperado === "cinza") {
-        expect(s.backgroundColor, `${nome}: cinza`).toBe(cinza(claro));
-        expect(s.boxShadow, `${nome}: sem sombra`).toBeUndefined();
-      } else {
-        expect(s.backgroundColor, `${nome}: branco`).toBe(claro.color.card);
-        expect(s.boxShadow, `${nome}: com a sombra`).toEqual([...claro.shadowLayers.shadowSm]);
-      }
+      expect(s.backgroundColor, `${nome}: branco`).toBe(claro.color.card);
+      expect(s.boxShadow, `${nome}: com a sombra`).toEqual([...claro.shadowLayers.shadowSm]);
     });
   }
 });

@@ -45,8 +45,9 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, focoDoCampo, marcaDoControle } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
+import { useMaisContraste } from "./contraste.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
@@ -232,6 +233,7 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
     const t = useAureaTokens();
     // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
     const naSuperficie = useNaSuperficie();
+    const maisContraste = useMaisContraste();
     const s = folha(t);
     const peleDaMarca = usePeleSobreAMarca();
     const campo = useCampo();
@@ -264,7 +266,7 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
             // desenhando daria borda dentro de borda — que é exatamente o defeito que o `.input-group
             // > .input` da web zera à mão (`aurea.css:751`).
             grupo ? s.campoNoGrupo : s.caixa,
-            !grupo && fundoDeCampo(t, naSuperficie),
+            !grupo && fundoDeCampo(t, naSuperficie, maisContraste),
             grupo
                 ? { fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400], color: t.color.foreground }
                 : { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam),
@@ -288,7 +290,7 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
             !grupo && campo?.invalido && s.invalido,
             // O foco é o único estado que sobra do trio da web (hover/focus/active), e ele importa
             // mais aqui: no telefone é a única pista de qual campo o teclado está alimentando.
-            !grupo && focado && { borderColor: t.color.focusStrong },
+            !grupo && focado && { borderColor: focoDoCampo(t, maisContraste) },
             // 🔴 DENTRO DO CARTÃO DA MARCA A TINTA VENCE TUDO — inclusive inválido e foco, e isso é
             // medição, não preferência (os números estão no `usePeleSobreAMarca`): sobre o amarelo a
             // borda de inválido mede **1,86** e o `focusStrong` do tema ESCURO mede **1,00**, porque
@@ -333,6 +335,7 @@ export function InputGroup({ size, disabled, children, style, testID, ...rest })
     const t = useAureaTokens();
     // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
     const naSuperficie = useNaSuperficie();
+    const maisContraste = useMaisContraste();
     const s = folha(t);
     const peleDaMarca = usePeleSobreAMarca();
     const campo = useCampo();
@@ -344,12 +347,12 @@ export function InputGroup({ size, disabled, children, style, testID, ...rest })
     const ctx = React.useMemo(() => ({ size: tam, disabled: inativo, aoFocar: setFocado }), [tam, inativo]);
     return (_jsx(View, { testID: testID, style: [
             s.grupo,
-            fundoDeCampo(t, naSuperficie),
+            fundoDeCampo(t, naSuperficie, maisContraste),
             { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam) },
             campo?.invalido && s.invalido,
             // O foco vem do campo lá dentro, por contexto: no React Native não existe `:focus-within`,
             // e sem isto a única pista de qual campo o teclado alimenta sumiria ao entrar num grupo.
-            focado && { borderColor: t.color.focusStrong },
+            focado && { borderColor: focoDoCampo(t, maisContraste) },
             // Sobre a marca a tinta vence inválido e foco — ver `usePeleSobreAMarca`.
             peleDaMarca,
             peleDaMarca && focado && { borderWidth: t.size.borderWidth * 2 },
@@ -378,6 +381,7 @@ export function PasswordField({ defaultVisible = false, size, disabled, autoCapi
 const FOLGA_DO_TOQUE = (t) => t.size.space1 + t.size.space05;
 function ControleMarcado({ papel, label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align = "center", }) {
     const t = useAureaTokens();
+    const maisContraste = useMaisContraste();
     const s = folha(t);
     const campo = useCampo();
     const tam = size ?? campo?.size ?? "md";
@@ -414,11 +418,11 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
                     // O ponto do rádio é branco, sobre a marca já pintada (decisão do Victor, 17/10/2026).
                     // 0.32.0: 10, o ponto da referência e o do `RadioGroup` (`space2 + space05`); era 8.
                     ? _jsx(View, { style: { width: t.size.space2 + t.size.space05, height: t.size.space2 + t.size.space05,
-                            ...canto(t.size.radiusFull), backgroundColor: t.color.controlSelectedDot } })
+                            ...canto(t.size.radiusFull), backgroundColor: marcaDoControle(t, t.color.controlSelectedDot, maisContraste) } })
                     // O visto. Era desenhado com DUAS BORDAS de um retângulo girado; sem linha (16/10/2026), ele é
                     // um glifo, o mesmo da web (a máscara do `.checkbox` no `aurea.css`), sobre o `react-native-svg`
                     // que o pacote já usa — sem depender do registro de ícones do app.
-                    : _jsx(Svg, { width: "100%", height: "100%", viewBox: "0 0 16 16", children: _jsx(Path, { d: "M3.5 8.5l3 3 6-7", fill: "none", stroke: t.color.controlSelectedForeground, strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" }) })) }), temTexto && (_jsxs(View, { style: { flex: 1 }, children: [typeof label === "string" ? _jsx(Text, { size: "sm", children: label }) : label, description != null && (typeof description === "string"
+                    : _jsx(Svg, { width: "100%", height: "100%", viewBox: "0 0 16 16", children: _jsx(Path, { d: "M3.5 8.5l3 3 6-7", fill: "none", stroke: marcaDoControle(t, t.color.controlSelectedForeground, maisContraste), strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" }) })) }), temTexto && (_jsxs(View, { style: { flex: 1 }, children: [typeof label === "string" ? _jsx(Text, { size: "sm", children: label }) : label, description != null && (typeof description === "string"
                         ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description)] }))] }));
 }
 /** A caixa que marca. `accessibilityRole="checkbox"` + `state.checked`. */
@@ -438,6 +442,7 @@ function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, or
 }
 function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, icon, style, accessibilityLabel, children, ...rest }) {
     const t = useAureaTokens();
+    const maisContraste = useMaisContraste();
     const s = folha(t);
     const grupo = React.useContext(GrupoDeRadio);
     if (__DEV__ && !grupo)
@@ -460,7 +465,7 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
             escolhido && { backgroundColor: erro ? perigo : t.color.controlSelected,
                 borderColor: "transparent" },
         ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, ...canto(t.size.radiusFull),
-                backgroundColor: t.color.controlSelectedDot } }) }, "marca"));
+                backgroundColor: marcaDoControle(t, t.color.controlSelectedDot, maisContraste) } }) }, "marca"));
     // O ícone é decorativo: o rótulo já diz o que a opção é, e o `Icon` sem `label` sai da árvore
     // de acessibilidade. A cor acompanha a do rótulo, inclusive no erro.
     const glifo = icon != null && (_jsx(Icon, { name: icon, size: "lg", weight: escolhido ? "fill" : "regular", color: erro ? perigo : t.color.foreground }, "icone"));
@@ -504,6 +509,7 @@ export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, { Item: ItemDoGrupoD
  */
 export function Switch({ label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align = "center", }) {
     const t = useAureaTokens();
+    const maisContraste = useMaisContraste();
     const s = folha(t);
     const campo = useCampo();
     const tam = size ?? campo?.size ?? "md";
@@ -568,7 +574,7 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
                 ], children: _jsx(Animated.View, { style: [
                         s.polegar,
                         { width: larguraDoPolegar, height: alturaDoPolegar,
-                            backgroundColor: checked ? t.color.primaryMark : t.color.mutedForeground,
+                            backgroundColor: checked ? marcaDoControle(t, t.color.controlThumb, maisContraste) : t.color.mutedForeground,
                             transform: [{ translateX: pos.interpolate({ inputRange: [0, 1], outputRange: [0, curso] }) }] },
                     ] }) }), temTexto && (_jsxs(View, { style: { flex: 1 }, children: [typeof label === "string" ? _jsx(Text, { size: "sm", children: label }) : label, description != null && (typeof description === "string"
                         ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description)] }))] }));
@@ -646,6 +652,7 @@ export function Select({ items, value, onChange, placeholder, disabled, size, ch
     const t = useAureaTokens();
     // ADR-0078: dentro de uma superfície branca o campo volta ao cinza.
     const naSuperficie = useNaSuperficie();
+    const maisContraste = useMaisContraste();
     const s = folha(t);
     // A folha sai do fluxo: pinta com os tokens do APP (ADR-0063 — ver `useTokensDoApp`).
     const tf = useTokensDoApp();
@@ -658,7 +665,7 @@ export function Select({ items, value, onChange, placeholder, disabled, size, ch
     const escolhido = items.find((i) => i.value === value);
     return (_jsxs(_Fragment, { children: [_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : () => setAberto(true), disabled: inativo, accessibilityRole: "button", accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, accessibilityValue: { text: escolhido?.label }, ...estadoAcessivel({ disabled: !!inativo, expanded: aberto }), style: [
                     s.caixa,
-                    fundoDeCampo(t, naSuperficie),
+                    fundoDeCampo(t, naSuperficie, maisContraste),
                     // 0.32.0: o gatilho da referência — 16 dos lados (era 13) e 12 entre o valor e a seta.
                     // Os 12 de cima e de baixo dela são a altura de toque: 48 menos a linha de 24 do valor.
                     { flexDirection: "row", alignItems: "center", justifyContent: "space-between",

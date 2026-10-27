@@ -52,6 +52,7 @@ export function __limpar(): void {
   lacos.length = 0;
   configsDeAnimacao.length = 0;
   reduzirMovimento = false;
+  maisContraste = false;
   plataforma = "android";
   __chamadasDeSistema.length = 0;
 }
@@ -389,11 +390,18 @@ export const PanResponder = {
 let reduzirMovimento = false;
 /** Liga a preferência de "menos movimento" para o próximo render. */
 export function __definirReduceMotion(v: boolean): void { reduzirMovimento = v; }
+// "Aumentar contraste" (ADR-0083): o iOS responde por `isDarkerSystemColorsEnabled`, o Android por
+// `isHighTextContrastEnabled` — os nomes do React Native 0.87.1. O dublê responde o mesmo pelos dois.
+let maisContraste = false;
+/** Liga a preferência de "mais contraste" para o próximo render. */
+export function __definirMaisContraste(v: boolean): void { maisContraste = v; }
 
 /** O que foi dito ao leitor de tela por `announceForAccessibility` (GAR-14, 0.28.0). */
 export const __anuncios: string[] = [];
 export const AccessibilityInfo = {
   isReduceMotionEnabled: () => Promise.resolve(reduzirMovimento),
+  isDarkerSystemColorsEnabled: () => Promise.resolve(maisContraste),
+  isHighTextContrastEnabled: () => Promise.resolve(maisContraste),
   addEventListener: (_evento: string, _ouvinte: unknown) => ({remove: () => {}}),
   announceForAccessibility: (texto: string) => { __anuncios.push(texto); },
 };
