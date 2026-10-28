@@ -1076,7 +1076,9 @@ for (const theme of ["dark", "light"] as const) {
                 rotuloForaDaMarca: (() => {
                   const m = s2.querySelector(".bottom-nav-mark")!.getBoundingClientRect();
                   const r = s2.querySelector(".bottom-nav-label")!.getBoundingClientRect();
-                  return r.top >= m.bottom - 1;
+                  // O círculo de 28 entra 2 na linha do nome (27/10/2026, a barra na mesma altura — ADR-0084, a forma "B"):
+                  // o nome continua EMBAIXO dele, com até esses 2 de sobreposição.
+                  return r.top >= m.bottom - 2 - 1;
                 })(),
               };
             })(),

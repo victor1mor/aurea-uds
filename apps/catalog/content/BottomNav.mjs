@@ -223,12 +223,22 @@ export default {
       render: () => h("div", {style: {display: "grid", gap: "var(--space-4)"}},
         ...LEGADO.map(([v, rotulo]) => h(Barra, {key: v, variant: v, label: rotulo, inicial: "fuel"}))),
     },
-    {...cada({titulo: "The colour of the current item", descricao: "currentStyle (ADR-0084) — indicator picks the shape, "
-      + "currentStyle the colour; here on the capsule. current (the default), neutral, contrast, brand, ring, plain; with "
-      + "yellow and white: brand-white (it fails WCAG — white on the yellow measures 1.91:1), white-ring and brand-gradient; "
-      + "and the whole bar in yellow: bar-ink, bar-ring, bar-plain and bar-light. Floating and edge bars alike.",
-      valores: ["current", "neutral", "contrast", "brand", "ring", "plain", "brand-white", "white-ring", "brand-gradient", "bar-ink", "bar-ring", "bar-plain", "bar-light"], coluna: true,
+    // Três caixas, e não uma: a moldura de prévia tem 800 × 460, e as treze barras empilhadas não cabem nela (medido pelo
+    // `moldura-da-previa.spec`, 27/10/2026). Os grupos são os da proposta aprovada: as seis cores, o amarelo e o branco, e a
+    // barra amarela — duas colunas, centralizadas.
+    ...[
+      ["The colour of the current item", "currentStyle (ADR-0084) — indicator picks the shape, currentStyle the colour; here "
+        + "on the capsule. current (the default), neutral, contrast, brand, ring and plain. Floating and edge bars alike.",
+        ["current", "neutral", "contrast", "brand", "ring", "plain"]],
+      ["The current item in yellow and white", "brand-white (it fails WCAG — white on the yellow measures 1.91:1), "
+        + "white-ring and brand-gradient (the one gradient in a navigation component).",
+        ["brand-white", "white-ring", "brand-gradient"]],
+      ["The whole bar in yellow", "Every icon and label in ink; the current item marked by bar-ink, bar-ring, bar-plain or "
+        + "bar-light.",
+        ["bar-ink", "bar-ring", "bar-plain", "bar-light"]],
+    ].map(([titulo, descricao, valores]) => ({...cada({titulo, descricao, valores,
+      estilo: {display: "grid", gridTemplateColumns: "repeat(2, min(22rem, 100%))", gap: "var(--space-4)", justifyContent: "center"},
       codigo: v => `<BottomNav indicator="capsule" currentStyle="${v}" label="Garage" current={route} items={items} />`,
-      peca: v => demo({indicator: "capsule", currentStyle: v, label: `Garage ${v}`, inicial: "fuel"})}), embed: true},
+      peca: v => demo({indicator: "capsule", currentStyle: v, label: `Garage ${v}`, inicial: "fuel"})}), embed: true})),
   ],
 };

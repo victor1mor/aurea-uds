@@ -161,7 +161,7 @@ flat, surface, pill and dock still work and map onto the pair: flat is edge with
 
 ### The colour of the current item
 
-currentStyle (ADR-0084) — indicator picks the shape, currentStyle the colour; here on the capsule. current (the default), neutral, contrast, brand, ring, plain; with yellow and white: brand-white (it fails WCAG — white on the yellow measures 1.91:1), white-ring and brand-gradient; and the whole bar in yellow: bar-ink, bar-ring, bar-plain and bar-light. Floating and edge bars alike.
+currentStyle (ADR-0084) — indicator picks the shape, currentStyle the colour; here on the capsule. current (the default), neutral, contrast, brand, ring and plain. Floating and edge bars alike.
 
 ```tsx
 <BottomNav indicator="capsule" currentStyle="current" label="Garage" current={route} items={items} />
@@ -170,9 +170,23 @@ currentStyle (ADR-0084) — indicator picks the shape, currentStyle the colour; 
 <BottomNav indicator="capsule" currentStyle="brand" label="Garage" current={route} items={items} />
 <BottomNav indicator="capsule" currentStyle="ring" label="Garage" current={route} items={items} />
 <BottomNav indicator="capsule" currentStyle="plain" label="Garage" current={route} items={items} />
+```
+
+### The current item in yellow and white
+
+brand-white (it fails WCAG — white on the yellow measures 1.91:1), white-ring and brand-gradient (the one gradient in a navigation component).
+
+```tsx
 <BottomNav indicator="capsule" currentStyle="brand-white" label="Garage" current={route} items={items} />
 <BottomNav indicator="capsule" currentStyle="white-ring" label="Garage" current={route} items={items} />
 <BottomNav indicator="capsule" currentStyle="brand-gradient" label="Garage" current={route} items={items} />
+```
+
+### The whole bar in yellow
+
+Every icon and label in ink; the current item marked by bar-ink, bar-ring, bar-plain or bar-light.
+
+```tsx
 <BottomNav indicator="capsule" currentStyle="bar-ink" label="Garage" current={route} items={items} />
 <BottomNav indicator="capsule" currentStyle="bar-ring" label="Garage" current={route} items={items} />
 <BottomNav indicator="capsule" currentStyle="bar-plain" label="Garage" current={route} items={items} />
