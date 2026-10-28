@@ -658,7 +658,7 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    proposta de cores que o Victor preparou componente a componente (25 e 26/10/2026) e as quatro decisões da bancada: o foco dos
    campos no amarelo (*"1 C Amarelo"*), o texto de apoio `#5E5E65` (o `#686871` da proposta dava 3,88:1 nos fundos de 10% —
    o axe achou), a linha do tempo consertada em todas as marcas e o cartão do escuro sem borda. Web e nativo; a `lory`
-   congelada, provada contra a 0.44.0 (`lory-congelada.spec.ts`). ⚠ **As lições:** (1) a fronteira do core recusou a classe
+   congelada, provada contra a 0.44.0 (`ember-congelada.spec.ts`). ⚠ **As lições:** (1) a fronteira do core recusou a classe
    `link-underline` (o core só tem classe que um componente produz) — a variação virou o atributo `data-link="underline"`;
    (2) a suíte inteira do Chromium achou o `rtl.spec` lendo o trilho antigo da linha do tempo, e a CI achou o `geometry.spec`
    comparando a cor calculada ("86.046997", no WebKit) com o texto do token ("86.047") — cor se compara pelo MESMO caminho
@@ -879,7 +879,7 @@ no git.
   0.40.0 esqueceu o `Header` flutuante, e a 0.40.1 consertou.
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
 - **As TREZE marcas** (passo C, 28/10/2026 — [ADR-0085](decisions/0085-as-treze-marcas.md)): a padrão, a **Aurea Gold**,
-  sem `data-brand`; a **Aurea Ember** (`ember`, a antiga `lory` — o nome antigo vale como apelido só na `0.47.0`); e as 11 da
+  sem `data-brand`; a **Aurea Ember** (`ember`, a antiga `lory` — sem apelido: *"mude 100% lory para ember"*); e as 11 da
   paleta da 1.0 (`sun`, `honey`, `orange`, `magenta`, `violet`, `indigo`, `cobalt`, `cyan`, `turquoise`, `emerald`,
   `lime`), com os neutros da Aurea. ⚠ **Regra para "qualquer marca" (`[data-brand]` sem nome) não se escreve:** ela valia só
   para a `lory` quando ela era a única, e com as 11 passou a valer para todas — o selo cheio saiu errado assim. Só sobra a da
@@ -887,11 +887,11 @@ no git.
   `tests/visual/marcas-passo-c.spec.ts`.
 - **A Ember fica CONGELADA no padrão** (decisão do Victor, 26/10/2026 — ADR-0083): os tokens dela estão escritos com os
   valores de antes da paleta da 1.0, e toda regra nova da paleta (passo A) leva
-  `:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *))`. As
+  `:where(:not([data-brand="ember"],[data-brand="ember"] *))`. As
   exceções, cada uma decidida pelo Victor: o conserto da linha do tempo (era defeito em todas as marcas); as marcas dos
   controles brancas no escuro (*"Brancos, como as outras"*, 28/10/2026); e os estilos novos do passo B, que a alcançam quando
-  o app os escolhe (*"Sim, como as outras"*, 28/10/2026). Quem cobra: `tests/visual/lory-congelada.spec.ts` (com os dois
-  nomes, contra a 0.44.0).
+  o app os escolhe (*"Sim, como as outras"*, 28/10/2026). Quem cobra: `tests/visual/ember-congelada.spec.ts` (contra a
+  0.44.0).
 - ~~Proibido: a aparência de outro design system~~ (trocado em 11/10/2026, ordem do Victor): **a peça
   é a da referência principal, quase idêntica, com as características desta seção por cima** (seção
   2, "quase idêntica"). Nome de componente igual ao dela é permitido. Continua proibido: o nome da

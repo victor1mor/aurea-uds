@@ -3,7 +3,7 @@
 // pelo próprio navegador (o mesmo caminho dos dois lados — a lição do WebKit na 0.45.0), e cada letra e cada ícone do item
 // atual da barra de baixo têm o contraste medido contra o fundo de verdade, nos dois temas, nos nove formatos e nas duas
 // barras. O `brand-white` é a reprovação consciente (1,91:1): o teste prova que ela existe — e que fica só nele.
-// Provado contra o defeito (27/10/2026): com o CSS do core da 0.45.0 no lugar do de hoje, reprovam todos menos a `lory`.
+// Provado contra o defeito (27/10/2026): com o CSS do core da 0.45.0 no lugar do de hoje, reprovam todos menos a `ember`.
 import {test, expect, type Page} from "@playwright/test";
 
 const APP = "/apps/keyboard-probe/out/estilos.html";
@@ -178,11 +178,11 @@ for (const tema of ["light", "dark"] as const) {
   });
 }
 
-// ~~A `lory` fica de fora: os estilos novos não a alcançam.~~ → A Ember (a antiga `lory`) RECEBE os estilos, como as outras
+// ~~A `ember` fica de fora: os estilos novos não a alcançam.~~ → A Ember RECEBE os estilos, como as outras
 // marcas (o Victor, 28/10/2026: "Sim, como as outras"); o padrão dela, sem estilo escolhido, continua o de antes (quem prova
-// é o `lory-congelada.spec.ts`). Provado contra o defeito: com a seção do passo B ainda excluindo a Ember, os três estilos
+// é o `ember-congelada.spec.ts`). Provado contra o defeito: com a seção do passo B ainda excluindo a Ember, os três estilos
 // saem iguais ao padrão e reprova.
-for (const marca of ["ember", "lory"]) test(`a ${marca} recebe os estilos novos, como as outras marcas`, async ({page: p}) => {
+for (const marca of ["ember"]) test(`a ${marca} recebe os estilos novos, como as outras marcas`, async ({page: p}) => {
   await abrir(p, `tema=light&marca=${marca}`);
   const r = await p.evaluate(() => {
     const fundo = (sel: string) => getComputedStyle(document.querySelector(sel)!).backgroundColor;

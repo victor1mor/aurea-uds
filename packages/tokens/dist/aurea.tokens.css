@@ -342,7 +342,7 @@
   --control-thumb:#ffffff;
   --warning-500:#d07612;
 }
-[data-brand="ember"][data-theme="dark"],[data-brand="lory"][data-theme="dark"],[data-brand="ember"] [data-theme="dark"],[data-brand="lory"] [data-theme="dark"]{
+[data-brand="ember"][data-theme="dark"],[data-brand="ember"] [data-theme="dark"]{
   --background:oklch(0.16 0.018 250);
   --foreground:oklch(0.96 0.006 250);
   --foreground-strong:oklch(1 0 0);
@@ -410,7 +410,7 @@
   --warning-foreground:#242424;
   --control-thumb:oklch(1 0 0);
 }
-[data-brand="ember"][data-theme="light"],[data-brand="lory"][data-theme="light"],[data-brand="ember"] [data-theme="light"],[data-brand="lory"] [data-theme="light"]{
+[data-brand="ember"][data-theme="light"],[data-brand="ember"] [data-theme="light"]{
   --background:oklch(0.984 0.004 70);
   --foreground:oklch(0.24 0.022 250);
   --foreground-strong:oklch(0.16 0.02 250);

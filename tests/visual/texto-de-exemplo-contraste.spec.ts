@@ -2,18 +2,18 @@ import {expect, test} from "@playwright/test";
 import {readFileSync} from "node:fs";
 import {join} from "node:path";
 
-// MNT-29 (21/10/2026, o app de rede, que usa a marca `lory`, medido na 0.36.0): o texto de exemplo do campo dava 3,17:1
-// no escuro — o mínimo é 4,5. Medido aqui: era a marca, e não o campo. Na `lory`, a cor fraca (`--subtle-foreground`,
+// MNT-29 (21/10/2026, o app de rede, que usa a marca `ember`, medido na 0.36.0): o texto de exemplo do campo dava 3,17:1
+// no escuro — o mínimo é 4,5. Medido aqui: era a marca, e não o campo. Na `ember`, a cor fraca (`--subtle-foreground`,
 // a do `::placeholder` e de mais 15 textos do core) dava 2,51 a 2,62 no claro e 3,16 a 3,58 no escuro, e até a média
 // (`--muted-foreground`) dava 4,27 no claro. Na Aurea sem marca, as duas são a mesma cor e passam (4,69 a 5,38). A
-// referência: 4,83 no claro e 6,75 no escuro. Conserto nos tokens da `lory`: a fraca igual à média, e a média do claro
+// referência: 4,83 no claro e 6,75 no escuro. Conserto nos tokens da `ember`: a fraca igual à média, e a média do claro
 // em 0,49 de luminosidade.
 // O CSS vai no <head>, ANTES do campo existir: o campo tem transição de fundo, e com a folha acrescentada depois o
 // fundo partia do branco do navegador — a medida pegava o começo da transição (2,24 onde a página real dá 4,69).
 const CSS = readFileSync(join(process.cwd(), "packages/core/dist/aurea.css"), "utf8");
 const MINIMO = 4.5;
 
-for (const marca of ["", "lory"]) for (const tema of ["light", "dark"]) {
+for (const marca of ["", "ember"]) for (const tema of ["light", "dark"]) {
   test(`o texto de exemplo do campo passa de ${MINIMO}:1 — ${marca || "aurea"}, ${tema}`, async ({page}) => {
     await page.setContent(`<!doctype html><html data-theme="${tema}"${marca ? ` data-brand="${marca}"` : ""}><head><meta charset="utf-8"><style>${CSS}</style></head><body style="margin:0">`
       + `<main style="padding:20px;background:var(--background)"><div class="card" style="padding:20px">`

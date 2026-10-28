@@ -1,6 +1,6 @@
 // AS CORES, PASSO B (ADR-0084, 27/10/2026) — os estilos novos, lidos no código da web: cada prop escreve o atributo na
 // peça (e sem a prop, nada — o padrão não muda), o core tem uma regra para cada valor, nenhuma regra nova alcança a
-// `lory`, as medidas saem de token, e o degradê mora só na regra do `brand-gradient`. As cores no navegador estão em
+// `ember`, as medidas saem de token, e o degradê mora só na regra do `brand-gradient`. As cores no navegador estão em
 // `tests/visual/paleta-passo-b.spec.ts`; o nativo, em `native-passo-b.test.tsx`.
 // Provado contra o defeito (27/10/2026): com o código da 0.45.0, reprovam todos (nenhuma prop escreve atributo, e a seção
 // do passo B não existe no core).
@@ -72,12 +72,12 @@ describe("o core: a seção do passo B", () => {
       expect(secao, `data-${familia}="${v}"`).toContain(`[data-${familia}="${v}"]`);
     }
   });
-  // ~~toda regra da seção leva a exclusão da lory~~ → a Ember (a antiga lory) RECEBE os estilos, como as outras marcas
+  // ~~toda regra da seção leva a exclusão da ember~~ → a Ember RECEBE os estilos, como as outras marcas
   // (o Victor, 28/10/2026: "Sim, como as outras"). Provado contra o defeito: com a guarda de antes, reprova.
   it("nenhuma regra da seção exclui a Ember, e o ligado dela com estilo ganha a pintura", () => {
     expect(regras.length).toBeGreaterThan(40);
-    for (const r of regras) expect(r.sel, r.sel.slice(0, 120)).not.toContain(':where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *))');
-    const pintura = regras.filter((r) => r.sel.includes('[data-pressed-style]') && r.sel.includes(':where(:is([data-brand="ember"],[data-brand="lory"])')
+    for (const r of regras) expect(r.sel, r.sel.slice(0, 120)).not.toContain(':where(:not([data-brand="ember"],[data-brand="ember"] *))');
+    const pintura = regras.filter((r) => r.sel.includes('[data-pressed-style]') && r.sel.includes(':where([data-brand="ember"]')
       && r.corpo.includes('background:var(--pressed-bg)'));
     expect(pintura.length).toBe(1);
   });

@@ -1,6 +1,6 @@
 // BANCO DOS ESTILOS — o passo B das cores (ADR-0084, 27/10/2026): as peças de verdade em todos os estilos que o Victor
 // aprovou em 26/10/2026 — o botão ligado em três, o segmento aceso em seis, a linha do tempo em cinco e o item atual da
-// barra de baixo em treze. O tema vem de `?tema=dark`; a marca, de `?marca=lory` (ela não muda: os estilos não a alcançam).
+// barra de baixo em treze. O tema vem de `?tema=dark`; a marca, de `?marca=ember` (ela não muda: os estilos não a alcançam).
 // A barra de baixo tem os botões de forma (`indicator`) e de lugar (`variant`) no topo — e `?ind=` e `?var=` no endereço.
 //
 // Como os outros bancos, este não afirma nada: monta. Quem afirma é `tests/visual/paleta-passo-b.spec.ts`; cada peça

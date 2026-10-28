@@ -92,7 +92,7 @@ na escala.
   na regra que nomeia um estilo de aro; no nativo, a sombra por dentro só nasce no `aroDoEstilo` do `estilos.ts`. A
   varredura do navegador (`catalog-sweep.spec.ts`) descarta só o anel, e só dentro de um estilo de aro escolhido.
 - **Os estilos:** `tests/unit/paleta-passo-b.test.tsx` (o que o código promete) e `tests/visual/paleta-passo-b.spec.ts` (as
-  cores no navegador), provados contra a 0.45.0; `tests/visual/lory-congelada.spec.ts` continua provando a `lory`.
+  cores no navegador), provados contra a 0.45.0; `tests/visual/ember-congelada.spec.ts` continua provando a Ember.
 
 ## As consequências, com os custos
 

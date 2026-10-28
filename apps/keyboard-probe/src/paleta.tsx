@@ -1,13 +1,13 @@
 // BANCO DA PALETA — o passo A das cores (ADR-0083, 27/10/2026): as peças de verdade que a paleta da 1.0 toca, família por
 // família, como a bancada da proposta do Victor (ações, seleção, navegação, campos, links, avisos e dados). O tema vem de
-// `?tema=dark`; a marca, de `?marca=lory` (ela tem de sair IGUAL à 0.44.0).
+// `?tema=dark`; a marca, de `?marca=ember` (ela tem de sair IGUAL à 0.44.0).
 // Só para a bancada humana: `?foco=grafite` mostra o foco dos campos no grafite (a alternativa à decisão "c"), e
 // `?contraste=simulado` liga as regras do "aumentar contraste" sem mexer no sistema; `?apoio=proposta` mostra o texto de
 // apoio da proposta (#686871) no lugar do #616168. Os testes usam a preferência de
 // verdade (o Playwright emula `prefers-contrast: more`).
 //
 // Como os outros bancos, este não afirma nada: monta. Quem afirma é `tests/visual/paleta-passo-a.spec.ts` e
-// `tests/visual/lory-congelada.spec.ts`; cada peça medida leva `data-prova`.
+// `tests/visual/ember-congelada.spec.ts`; cada peça medida leva `data-prova`.
 import {StrictMode, useEffect, type ReactNode} from "react";
 import {createRoot} from "react-dom/client";
 import {

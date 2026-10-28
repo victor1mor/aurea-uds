@@ -7,8 +7,8 @@ import {esperarTransicoes} from "./esperar-transicoes";
 // no navegador, com o código de verdade: nos dois bancos das cores (`paleta.html`, as peças que a paleta toca; `estilos.html`,
 // os estilos do passo B), em cada marca e nos dois temas, o axe procura texto e ícone abaixo do contraste da WCAG.
 //
-// A Aurea Gold (sem `data-brand`) entra também: ela é a régua. A Aurea Ember (a antiga `lory`) entra desde que recebe os
-// estilos novos (28/10/2026), com o único par que ela já reprovava (abaixo); o padrão dela é provado no `lory-congelada.spec.ts`.
+// A Aurea Gold (sem `data-brand`) entra também: ela é a régua. A Aurea Ember entra desde que recebe os
+// estilos novos (28/10/2026), com o único par que ela já reprovava (abaixo); o padrão dela é provado no `ember-congelada.spec.ts`.
 //
 // A ÚNICA exceção: o estilo `brand-white` da barra de baixo (o F) nas marcas de letra escura — o branco sobre um primário
 // claro. O Victor o aprovou sabendo (ADR-0084). Nas marcas de letra branca o F é igual ao `brand`, e passa.

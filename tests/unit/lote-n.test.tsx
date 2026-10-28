@@ -3,7 +3,7 @@
 //          no claro, sem linha em volta; no escuro, o contorno amarelo, pelo tema do ANCESTRAL;
 //   MT-02: `Card accent` — o traço no topo, `--accent-width` (4), na cor CHEIA do tom;
 //   e o conserto que o MT-01 achou: uma faixa escura (`Section theme`, `contrast`) numa página
-//   `lory` saía com o escuro da Aurea, porque o seletor da marca exigia marca e tema no MESMO
+//   `ember` saía com o escuro da Aurea, porque o seletor da marca exigia marca e tema no MESMO
 //   elemento. As cores se medem no navegador (`tests/visual/marca.spec.ts`).
 // Provado contra o defeito: na 0.28.0 o `Card` não tem `contrast` nem `accent` (sai a classe
 // `card-contrast` sem regra e nenhum atributo), o CSS não tem as regras, o token não existe e o
@@ -87,11 +87,11 @@ describe("MT-02 · Card accent", () => {
 
 describe("A faixa escura numa página de marca (achado do MT-01)", () => {
   for (const tema of ["dark", "light"]) {
-    // A `lory` passou a se chamar `ember` (passo C, 28/10/2026), e o nome antigo vale por uma versão: os dois chegam ao pedaço.
-    test(`a marca ember (e o apelido lory) chega a um pedaço com data-theme="${tema}"`, () => {
+    // A `ember` passou a se chamar `ember` (passo C, 28/10/2026), e o nome antigo vale por uma versão: os dois chegam ao pedaço.
+    test(`a marca ember (e o apelido ember) chega a um pedaço com data-theme="${tema}"`, () => {
       const par = (m: string) => `[data-brand="${m}"][data-theme="${tema}"]`;
       const dentro = (m: string) => `[data-brand="${m}"] [data-theme="${tema}"]`;
-      expect(tokens).toContain(`${par("ember")},${par("lory")},${dentro("ember")},${dentro("lory")}{`);
+      expect(tokens).toContain(`${par("ember")},${dentro("ember")}{`);
     });
   }
 

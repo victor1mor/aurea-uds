@@ -66,7 +66,7 @@ const razao = (a: [number, number, number], b: [number, number, number]) => {
   return (x + 0.05) / (y + 0.05);
 };
 
-for (const [tema, marca] of [["dark", null], ["light", null], ["dark", "lory"], ["light", "lory"]] as const) {
+for (const [tema, marca] of [["dark", null], ["light", null], ["dark", "ember"], ["light", "ember"]] as const) {
   test(`categorias do selo · AA nas três ênfases · ${tema}${marca ? ` · ${marca}` : ""}`, async ({page: p, baseURL}) => {
     await abrir(p, baseURL, tema, marca);
     const medidas = await p.evaluate(() => [...document.querySelectorAll<HTMLElement>("[data-cat]")].map((e) => {

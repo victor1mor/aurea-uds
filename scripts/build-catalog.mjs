@@ -1359,8 +1359,8 @@ const SELETORES = tokensDoc.$extensions["ui.aurea"].selectors;
 // `[data-theme="dark"]` → `{"data-theme": "dark"}`. O atributo vai na PRÓPRIA amostra, e é o que
 // faz `var(--chart-1)` resolver no valor que aquela linha documenta em vez de no tema da página.
 // É a cascata funcionando como foi desenhada, em vez de contornada.
-// UM OU MAIS ATRIBUTOS. Era um só até 20/08/2026, quando a marca `lory` entrou e trouxe
-// `[data-brand="lory"][data-theme="dark"]` — duas condições, porque marca e tema são eixos
+// UM OU MAIS ATRIBUTOS. Era um só até 20/08/2026, quando a marca `ember` entrou e trouxe
+// `[data-brand="ember"][data-theme="dark"]` — duas condições, porque marca e tema são eixos
 // independentes. Casar um par de cada vez faz a amostra carregar os DOIS atributos, e é isso que
 // a linha precisa para resolver o valor que ela documenta em vez do tema da página.
 function atributosDoEscopo(scope) {
@@ -1507,7 +1507,7 @@ const mark = h("svg", {width: 26, height: 26, viewBox: "0 0 1000 1000", "aria-hi
 // Aurea os "temas" são as MARCAS (ADR-0036). Ele é vivo (a `Popover` da Aurea): quem monta é o `search.js`, sobre
 // este lugar; aqui sai o botão parado, igual ao vivo, para a barra não pular. As cores vêm dos TOKENS — a da marca
 // em hex, que é o que a `ColorSwatch` lê para pôr o "visto" claro ou escuro.
-// AS 13 MARCAS (passo C das cores, 28/10/2026): a padrão, a Aurea Gold, sem `data-brand`; a Aurea Ember (a antiga `lory`); e
+// AS 13 MARCAS (passo C das cores, 28/10/2026): a padrão, a Aurea Gold, sem `data-brand`; a Aurea Ember; e
 // as 11 da paleta da 1.0, na ordem da proposta do Victor. O nome é o dele sem o "Aurea" da frente, que todas têm. A cor é o
 // primário do tema escuro (nas 11 é o mesmo nos dois temas); as 11 estão em hex no arquivo de tokens.
 const hexDoToken = t => t.$value.hex ?? linearSrgbParaHex(oklchParaLinearSrgb(t.$value.components));
@@ -2103,7 +2103,7 @@ write(join(outDir, "assets/search-index.js"), `window.AUREA_SEARCH = ${JSON.stri
 // Victor navega: `file:///C:/dev/aurea-uds/...`. Falhar em silêncio devolve o comportamento
 // antigo (tema do template); estourar deixaria a página sem estilo nenhum.
 const TEMA_SALVO = `<script>
-try{var t=localStorage.getItem("aurea-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;else if(t==="system")document.documentElement.dataset.theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var b=localStorage.getItem("aurea-brand");if(b==="lory")b="ember";if(b)document.documentElement.dataset.brand=b}catch(e){}
+try{var t=localStorage.getItem("aurea-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;else if(t==="system")document.documentElement.dataset.theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var b=localStorage.getItem("aurea-brand");if(b)document.documentElement.dataset.brand=b}catch(e){}
 </script>
 `;
 

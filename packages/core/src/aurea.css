@@ -388,7 +388,7 @@ img,svg { display:block; }
    o painel do `Tabs`, o `KPI`). É a coluna "On this page" de uma documentação, como a da referência: os
    itens soltos na página. Tira só a PINTURA — fundo, cor da borda, sombra — e guarda a geometria da
    flutuante (margens, altura, a mesma borda de 1, agora invisível), então trocar de variante não mexe em
-   nada de lugar. O texto continua na escala da lateral: medido nos quatro (Aurea e `lory`, claro e
+   nada de lugar. O texto continua na escala da lateral: medido nos quatro (Aurea e `ember`, claro e
    escuro), o `--sidebar-foreground` é o mesmo `--foreground` da página. */
 .sidebar-plain { border-color:transparent; background:transparent; box-shadow:none; }
 /* A COLUNA DA DIREITA do `AppShell` (`aside`): a terceira trilha, da largura da lateral, de 1280 para
@@ -633,7 +633,7 @@ img,svg { display:block; }
 /* A LATERAL SE PINTA COM OS TOKENS DELA, e isto é conserto de 20/08/2026 — o Victor viu.
    Estas duas regras usavam `--secondary` e `--foreground`, que são tokens da PÁGINA. Na Aurea
    isso nunca apareceu porque o painel e a página têm a mesma claridade nos dois temas; sob a
-   marca `lory`, onde a lateral é escura mesmo no tema claro (decisão de produto da marca), o
+   marca `ember`, onde a lateral é escura mesmo no tema claro (decisão de produto da marca), o
    item atual virava uma pílula QUASE BRANCA com texto escuro em cima de um painel escuro. Ele
    chamou de "cores invertidas", e é exatamente o que era.
    `--sidebar-accent` e `--sidebar-accent-foreground` já eram PUBLICADOS e não tinham um único
@@ -642,9 +642,9 @@ img,svg { display:block; }
 /* O ITEM ESMAECIDO, como o da referência (ADR-0067, decisão do Victor de 13/10/2026, vendo os dois rodando:
    "B, igual ao dela"): o item que não é o atual fica cinza, e o título de grupo e o item atual ficam fortes;
    passando o mouse, o item acende. O cinza sai da ESCALA DA LATERAL (o texto dela, esmaecido), e não do
-   `--muted-foreground` da página — sob a marca `lory` a lateral é escura e a página não (a lição de
+   `--muted-foreground` da página — sob a marca `ember` a lateral é escura e a página não (a lição de
    20/08/2026, logo abaixo). Medido contra o fundo da lateral (13/10/2026): 7,6:1 no escuro e 5,4:1 no
-   claro; na marca `lory`, 7,8:1 e 5,6:1 — o branco de antes era 14,5:1. */
+   claro; na marca `ember`, 7,8:1 e 5,6:1 — o branco de antes era 14,5:1. */
 .sidebar-item:not([aria-current]) { color:color-mix(in oklab, var(--sidebar-foreground) 68%, transparent); }
 @media (hover:hover) and (pointer:fine) { .sidebar-item:hover { background:var(--sidebar-accent); } .sidebar-item:not([aria-current]):hover { color:var(--sidebar-foreground); } }
 /* A-05 (24/09/2026), decisão do Victor: o item atual da lateral passa a usar a MARCA DA CASA para
@@ -652,7 +652,7 @@ img,svg { display:block; }
    `SegmentedControl`, o `Button variant="nav"` e a navegação do catálogo (`.doc-nav`) já usavam.
    Era o único de fora: pílula cinza com texto branco, e um app copiou a regra da casa à mão.
    As cores saem da escala DA LATERAL (`--sidebar-accent`, `--sidebar-primary`), exatamente como o
-   `.doc-nav a.active` — não da página. Foi a lição de 20/08/2026 sob a marca `lory`: com
+   `.doc-nav a.active` — não da página. Foi a lição de 20/08/2026 sob a marca `ember`: com
    `--secondary`/`--primary` da página, a lateral escura desenhava as cores invertidas.
    O FIO não mora aqui: a lateral entrou na lista da regra da casa (`.is-selected::after`, mais
    abaixo), com o do `.doc-nav`. Copiar a regra faria duas cópias do mesmo fio divergirem. */
@@ -1169,9 +1169,9 @@ img,svg { display:block; }
    quatro níveis alternados (escuro > claro > escuro > claro) não são cobertos. Quem cobra:
    `tests/visual/tema-na-secao.spec.ts`, e o `tema-na-secao.test.tsx` reprova regra nova sem a
    guarda. */
-/* A mistura de 45% ficou SÓ na `lory` (ADR-0083, 26/10/2026): na Aurea, a letra de destaque do claro é o grafite —
+/* A mistura de 45% ficou SÓ na `ember` (ADR-0083, 26/10/2026): na Aurea, a letra de destaque do claro é o grafite —
    a regra fica na seção "A paleta da 1.0", no fim da folha. */
-[data-theme="light"] .eyebrow:where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
+[data-theme="light"] .eyebrow:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
 .demo { min-width:0; padding:var(--card-pad); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); color:var(--card-foreground); box-shadow:none; }
 
 /* ========================================================================== */
@@ -1271,9 +1271,9 @@ img,svg { display:block; }
 .btn-danger-ghost:hover:not(:disabled):not([aria-disabled="true"]) { --btn-bg:color-mix(in oklab, var(--destructive) 14%, transparent); }
 [data-theme="light"] .btn-danger-outline:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-danger-ghost:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-link-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:var(--danger-400); }
 /* A LETRA DA MARCA nos botões sem caixa é a de DESTAQUE (ADR-0081, 24/10/2026 — a ADR-0076 aplicada a eles): o azul no
-   claro, o amarelo no escuro, e na `lory` o laranja escuro dela. De 21/08 até aqui, o claro levava a mistura marrom
+   claro, o amarelo no escuro, e na `ember` o laranja escuro dela. De 21/08 até aqui, o claro levava a mistura marrom
    (a marca a 45% no texto): passava sobre a página e caía para 4,22 dentro da barra de ferramentas; o azul dá 4,69. O
-   `--primary-outline` não serve de letra: na `lory` ele é translúcido (é do contorno). */
+   `--primary-outline` não serve de letra: na `ember` ele é translúcido (é do contorno). */
 /* LINK: aparência de texto, sem cápsula e sem altura de controle — o sublinhado é o que diz
    que é clicável, então ele existe desde o repouso (revelar no hover esconde a affordance).
    Três tons: neutro, marca e destrutivo. No claro a marca aprofunda, senão não passa o AA. */
@@ -1990,8 +1990,8 @@ img,svg { display:block; }
    grita mais que o próprio rótulo. No tema CLARO o amarelo puro como texto dá 1.6:1, longe
    dos 4.5:1 do AA, então o rótulo aprofunda com --foreground e segue âmbar. */
 /* O BOTÃO LIGADO saiu desta linguagem na Aurea (ADR-0083, 26/10/2026): amarelo cheio, a letra do botão primário e
-   sem fio — a regra fica na seção "A paleta da 1.0", no fim da folha. Aqui ele continua só na `lory`. */
-.is-selected,.btn-nav[aria-current]:not([aria-current="false"]),.btn[aria-pressed="true"]:where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *),
+   sem fio — a regra fica na seção "A paleta da 1.0", no fim da folha. Aqui ele continua só na `ember`. */
+.is-selected,.btn-nav[aria-current]:not([aria-current="false"]),.btn[aria-pressed="true"]:where([data-brand="ember"],[data-brand="ember"] *),
 .segmented :is(button,a).active { --btn-bg:var(--secondary); --btn-fg:var(--primary); position:relative; background:var(--secondary); color:var(--primary); }
 /* A CÁPSULA ELEVADA que a regra acima promete, e que no trilho não se via (ADR-0059, 08/10/2026):
    o segmento aceso e a aba escolhida vivem sobre --muted, e --secondary dava 1:1 contra ele no
@@ -2004,10 +2004,10 @@ img,svg { display:block; }
    da marca; o da Aurea é o "clarinho" (o amarelo a 10%, a receita do `.badge-primary` que o Victor
    escolheu para a página atual da paginação), aqui sobre o cinza, para o grupo colado continuar uma
    cápsula só. A letra da marca e o fio continuam os do "selecionado". */
-.btn.toggle[data-pressed]:where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *) { --btn-bg:color-mix(in oklab, var(--primary) 10%, var(--secondary)); background:var(--btn-bg); }
-.btn.toggle[data-pressed]:hover:not(:disabled):not([aria-disabled="true"]):where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *) { --btn-bg:color-mix(in oklab, var(--primary) 10%, var(--secondary-hover)); }
+.btn.toggle[data-pressed]:where([data-brand="ember"],[data-brand="ember"] *) { --btn-bg:color-mix(in oklab, var(--primary) 10%, var(--secondary)); background:var(--btn-bg); }
+.btn.toggle[data-pressed]:hover:not(:disabled):not([aria-disabled="true"]):where([data-brand="ember"],[data-brand="ember"] *) { --btn-bg:color-mix(in oklab, var(--primary) 10%, var(--secondary-hover)); }
 /* O ATIVO DA NAV DA LATERAL sai da escala DELA, e não da página (20/08/2026, o Victor viu sob a
-   marca `lory`). Ele dividia esta regra com o `.segmented`, que vive no conteúdo — e `--secondary`
+   marca `ember`). Ele dividia esta regra com o `.segmented`, que vive no conteúdo — e `--secondary`
    é quase branco no tema claro. Numa lateral escura isso desenhava uma pílula branca com texto
    escuro: as cores invertidas que ele apontou.
    `--sidebar-accent` e `--sidebar-primary` já eram publicados e não tinham uso no core. O segundo
@@ -2018,7 +2018,7 @@ img,svg { display:block; }
    Os links da lateral do catálogo não têm atributo `class`, então `[data-theme="light"]
    a:not([class])` — a regra que existe para LINK DE PROSA — casa com eles. Ela pesa (0,2,1) e a
    `.doc-nav a` pesa (0,1,1): a regra de prosa ganhava e pintava o item com
-   `color-mix(--primary, --foreground)`. Sob a marca `lory` isso deu MARROM ESCURO
+   `color-mix(--primary, --foreground)`. Sob a marca `ember` isso deu MARROM ESCURO
    (`oklab(0.44 0.059 0.051)`) sobre um painel escuro — ilegível, e foi o que ele viu.
    Mesmo peso, e depois na folha: quem manda no que está DENTRO da lateral é a lateral.
    `:not(.active)` NÃO é enfeite — a primeira versão desta linha não tinha, pesava igual à regra do
@@ -2026,7 +2026,7 @@ img,svg { display:block; }
    saíram com a mesma cor. Com o `:not` ela pesa (0,3,1) e só alcança quem está em repouso. */
 [data-theme="light"] .doc-nav a:not(.active):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color:color-mix(in oklab, var(--sidebar-foreground) 72%, transparent); }
 .is-selected::after,.btn-nav[aria-current]:not([aria-current="false"])::after,
-.btn[aria-pressed="true"]:not(.btn-icon):where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)::after,.segmented :is(button,a).active::after,.tabs-secondary .tab[data-active]::after,
+.btn[aria-pressed="true"]:not(.btn-icon):where([data-brand="ember"],[data-brand="ember"] *)::after,.segmented :is(button,a).active::after,.tabs-secondary .tab[data-active]::after,
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { content:""; position:absolute; inset-inline:15px; bottom:0; height:2px; border-radius:var(--radius-full); background:color-mix(in oklab, var(--primary) 75%, transparent); }
 /* e o fio do ativo da lateral segue a marca DELA, pelo mesmo motivo da regra de cor acima. */
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { background:var(--sidebar-current-line, color-mix(in oklab, var(--sidebar-primary) 75%, transparent)); }
@@ -2034,18 +2034,18 @@ img,svg { display:block; }
 /* ADR-0076 (20/10/2026), o Victor olhando a bancada: "não quero ele azul, não pode ser na cor do botão?". No claro da Aurea
    padrão, o item atual da lateral é o botão primário: o fundo amarelo e a letra cinza-escura dele (8,13:1). O fundo já
    marca o estado, e o fio de baixo some (`--sidebar-current-line` transparente: regra no `::after` não aceitaria a guarda
-   de tema no fim). Só sem `data-brand` (a `lory` tem a lateral dela) e só no claro (no escuro, a letra amarela continua).
+   de tema no fim). Só sem `data-brand` (a `ember` tem a lateral dela) e só no claro (no escuro, a letra amarela continua).
    Sobre o amarelo, a letra de destaque de DENTRO do item (o selo primário de contagem, um ícone de destaque) é a tinta do
    botão: o azul sobre o amarelo mede 3,49:1 — o axe da varredura achou, no "12" do exemplo da `Sidebar`. */
 [data-theme="light"] :is(.sidebar-item[aria-current],.doc-nav a.active):not(:where([data-brand],[data-brand] *,.sidebar[class*="sidebar-indicator-"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --sidebar-current-line:transparent; --primary-emphasis:var(--primary-foreground); --sidebar-primary:var(--primary-foreground); background:var(--primary); color:var(--primary-foreground); }
-/* A mistura de 45% (o "marrom") ficou SÓ na `lory` (ADR-0083, 26/10/2026). Na Aurea, o escolhido do claro tem a letra
+/* A mistura de 45% (o "marrom") ficou SÓ na `ember` (ADR-0083, 26/10/2026). Na Aurea, o escolhido do claro tem a letra
    grafite, e o botão ligado é amarelo — as duas regras ficam na seção "A paleta da 1.0", no fim da folha. */
-[data-theme="light"] .is-selected:where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
-[data-theme="light"] .btn[aria-pressed="true"]:where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .segmented :is(button,a).active:where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
+[data-theme="light"] .is-selected:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+[data-theme="light"] .btn[aria-pressed="true"]:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .segmented :is(button,a).active:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
   { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
 /* A NAV DA LATERAL SAIU DESTA LISTA em 20/08/2026. O ajuste existe porque o amarelo puro não se lê
    sobre o claro — mas ele mistura o `--foreground` da PÁGINA, e o item da lateral não está sobre a
-   página: está sobre `--sidebar-accent`. Sob a marca `lory`, onde esse fundo é escuro no tema
+   página: está sobre `--sidebar-accent`. Sob a marca `ember`, onde esse fundo é escuro no tema
    claro, a mistura escurecia o texto contra um fundo escuro. Quem manda ali é `--sidebar-primary`,
    que cada marca já publica com a claridade certa para o painel dela. */
 
@@ -2073,11 +2073,11 @@ img,svg { display:block; }
 .badge-primary { --badge-accent:var(--primary-emphasis); --badge-on:var(--primary-foreground); color:var(--primary-emphasis); border-color:transparent; background:color-mix(in srgb,var(--primary) 10%,transparent); }
 /* ADR-0076 (20/10/2026): na Aurea padrão a letra de destaque do claro é o AZUL, e o cheio continua o AMARELO — o fundo do
    selo cheio é o primário, e não o acento (com o acento, sairia a letra cinza no azul, 1,99:1). Só sem `data-brand`, como o
-   contorno lá embaixo: na `lory` do claro o primário com a letra dela mede 3,08:1, e o acento dela já é o fundo certo. */
-/* Passo C (28/10/2026): "sem `data-brand`" queria dizer "fora da `lory`" — ela era a única marca. Com as 11 marcas novas, o
+   contorno lá embaixo: na `ember` do claro o primário com a letra dela mede 3,08:1, e o acento dela já é o fundo certo. */
+/* Passo C (28/10/2026): "sem `data-brand`" queria dizer "fora da `ember`" — ela era a única marca. Com as 11 marcas novas, o
    selo cheio delas saía no acento (a letra escura no grafite, 1,12:1 na Aurea Sun do claro; a branca no azul claro, 2,25:1
-   na Cobalt do escuro). O selo cheio é o botão cheio em toda marca; só a Ember (a antiga `lory`) fica como era. */
-.badge-primary:not(:where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)) { --badge-fill:var(--primary); }
+   na Cobalt do escuro). O selo cheio é o botão cheio em toda marca; só a Ember fica como era. */
+.badge-primary:not(:where([data-brand="ember"],[data-brand="ember"] *)) { --badge-fill:var(--primary); }
 /* TAMANHOS. O md é a base (24px), que não muda — é o que as 103 fichas já usam. */
 .badge-xs { min-height:var(--space-4); padding:0 var(--space-1); border-width:0; }
 .badge-sm { min-height:var(--space-5); padding:0 calc(var(--space-1) + var(--space-05) - var(--border-width)); }
@@ -2702,11 +2702,11 @@ button.tag-main { cursor:pointer; }
    alinham por construção em vez de por número copiado. Saem junto os 24px de recuo e os 7px
    do trilho — dois px crus a menos na catraca do check 12. */
 .timeline { position:relative; display:flex; flex-direction:column; gap:var(--space-5); margin:0; padding:0; list-style:none; }
-/* O TRILHO POR BAIXO DOS PONTOS (ADR-0083, 27/10/2026, em todas as marcas — o Victor: o defeito "não tinha só na lory, no
+/* O TRILHO POR BAIXO DOS PONTOS (ADR-0083, 27/10/2026, em todas as marcas — o Victor: o defeito "não tinha só na ember, no
    tema padrão da Aurea também"). Era um `::before` da lista inteira, posicionado, e o ponto não: o navegador pinta o
    posicionado por cima, e a linha passava por CIMA da bolinha; e ia até o fim da lista, sobrando depois do último ponto.
    Agora cada item desenha o trecho até o ponto seguinte, centrado no ponto, e o ponto fica por cima. A cor é a da linha
-   (`--border`); a paleta da 1.0 a troca por `--input`, mais adiante, fora da lory. */
+   (`--border`); a paleta da 1.0 a troca por `--input`, mais adiante, fora da ember. */
 .timeline > li { position:relative; display:flex; align-items:flex-start; gap:var(--space-3); }
 .timeline > li:not(:last-child)::before { content:""; position:absolute; inset-inline-start:calc(var(--space-3) / 2 - var(--border-width) / 2);
   inset-block-start:calc(var(--space-1) + var(--space-3)); inset-block-end:calc(-1 * (var(--space-5) + var(--space-1)));
@@ -4424,9 +4424,9 @@ button.graph-node-body { cursor:pointer; }
 /* Menos o primário da Aurea (ADR-0073, decisão do Victor de 18/10/2026, "A"): a letra é o próprio acento (o amarelo no
    escuro; o azul no claro, desde a ADR-0076), a mesma do selo suave e do botão de contorno da marca — misturado ao texto,
    o amarelo virava mostarda (2,36:1) só nesta peça. A
-   referência principal usa a mesma letra no suave e no contorno. Só sem `data-brand`: na `lory` do claro, sem a
+   referência principal usa a mesma letra no suave e no contorno. Só sem `data-brand`: na `ember` do claro, sem a
    mistura, a letra cairia de 5,56 para 4,42:1. */
-.badge-primary.badge-outline:not(:where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)) { color:var(--badge-accent); }
+.badge-primary.badge-outline:not(:where([data-brand="ember"],[data-brand="ember"] *)) { color:var(--badge-accent); }
 /* O registro ganhou o fundo dos campos; o nível `info` (o azul) caía a 4,08:1 sobre ele no claro. A mesma letra 20% para o texto. */
 .log-stream .log-level.info { color:color-mix(in oklab,var(--info-400) 80%,var(--foreground)); }
 .step:not(.step-done,.step-active,.step-error,.done,.active) .step-dot { background-color:var(--fill-3-solid); }
@@ -4443,34 +4443,34 @@ button.graph-node-body { cursor:pointer; }
    GRAFITE no claro (o amarelo vira fundo, traço ou indicador, nunca letra), o link com marca-texto, os campos brancos,
    as marcas brancas dentro dos controles, o botão ligado amarelo e a linha do tempo consertada. Os TOKENS mudaram na
    fonte (`aurea.tokens.json`); aqui ficam as REGRAS que mudam junto.
-   A `lory` fica 100% como é hoje (decisão do Victor, 26/10/2026): os tokens dela foram congelados na fonte, e toda
-   regra desta seção leva `:where(:not([data-brand="lory"],[data-brand="lory"] *))`, de força zero. Quem prova que
-   ela sai igual: `tests/visual/lory-congelada.spec.ts`. */
+   A `ember` fica 100% como é hoje (decisão do Victor, 26/10/2026): os tokens dela foram congelados na fonte, e toda
+   regra desta seção leva `:where(:not([data-brand="ember"],[data-brand="ember"] *))`, de força zero. Quem prova que
+   ela sai igual: `tests/visual/ember-congelada.spec.ts`. */
 
 /* O ESCOLHIDO do claro tem a letra grafite (era a mistura de 45%, que dava marrom): a aba, o segmento aceso, o item de
    navegação atual e o rótulo `.eyebrow`. O fio amarelo de baixo continua. No escuro, a letra continua o amarelo. */
-[data-theme="light"] .is-selected:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
-[data-theme="light"] .eyebrow:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
-[data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
-[data-theme="light"] .segmented :is(button,a).active:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
+[data-theme="light"] .is-selected:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+[data-theme="light"] .eyebrow:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+[data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+[data-theme="light"] .segmented :is(button,a).active:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
   { --btn-fg:var(--foreground); color:var(--foreground); }
 /* NO ESCURO, a letra do escolhido é o `--primary-emphasis`, a versão do primário feita para ser letra (a regra 2.1b da
    proposta; passo C, 28/10/2026). Na Aurea Gold ele é o próprio amarelo, e nada muda. Nas marcas escuras, o primário puro
    como letra media 1,56:1 (cobalt) a 4,3:1 (cyan) — o axe achou no banco das marcas, e também no `.eyebrow`, que a proposta
    não listava (2,98 a 4,29:1). Quem cobra: `tests/visual/marcas-passo-c.spec.ts`. */
-[data-theme="dark"] .is-selected:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *),
-[data-theme="dark"] .eyebrow:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *),
-[data-theme="dark"] .btn-nav[aria-current]:not([aria-current="false"]):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *),
-[data-theme="dark"] .segmented :is(button,a).active:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *)
+[data-theme="dark"] .is-selected:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *),
+[data-theme="dark"] .eyebrow:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *),
+[data-theme="dark"] .btn-nav[aria-current]:not([aria-current="false"]):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *),
+[data-theme="dark"] .segmented :is(button,a).active:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *)
   { --btn-fg:var(--primary-emphasis); color:var(--primary-emphasis); }
 
 /* O BOTÃO LIGADO (Toggle, ToggleGroup, ToolbarButton): amarelo cheio com a letra do botão primário, nos dois temas, sem
    o fio de baixo e sem o fundo "clarinho". As cores passam por `--pressed-*` no próprio botão, para uma faixa com outro
    `data-theme` acertar e para os outros estilos aprovados (o cinza e o grafite) só trocarem as três variáveis. */
-:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)) {
+:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):where(:not([data-brand="ember"],[data-brand="ember"] *)) {
   --pressed-bg:var(--primary); --pressed-bg-hover:var(--primary-hover); --pressed-fg:var(--primary-foreground);
   --btn-bg:var(--pressed-bg); --btn-fg:var(--pressed-fg); background:var(--pressed-bg); color:var(--pressed-fg); }
-:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):hover:not(:disabled):not([aria-disabled="true"]):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)) {
+:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):hover:not(:disabled):not([aria-disabled="true"]):where(:not([data-brand="ember"],[data-brand="ember"] *)) {
   --btn-bg:var(--pressed-bg-hover); background:var(--pressed-bg-hover); }
 
 /* O LINK separa-se do texto por mais que a cor (WCAG 1.4.1): no claro a letra é o grafite e no escuro o amarelo — a
@@ -4479,7 +4479,7 @@ button.graph-node-body { cursor:pointer; }
    o marca-texto é para o link no meio do texto (medido no site em 27/10/2026: dos 596 links sem classe, 588 eram a
    chave Web | Native e 6 a trilha; só 2 estavam na prosa).
    A base, nos dois temas (e a VARIAÇÃO do claro): o sublinhado amarelo de 2 com 3 de afastamento. */
-:is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)) {
+:is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):where(:not([data-brand="ember"],[data-brand="ember"] *)) {
   color:var(--link); text-decoration-line:underline; text-decoration-color:var(--link-underline);
   text-decoration-thickness:calc(2 * var(--border-width)); text-underline-offset:calc(3 * var(--border-width)); }
 /* O PADRÃO do claro: o MARCA-TEXTO — a faixa amarela a 45% atrás da metade de baixo das letras (o texto sobre ela mede
@@ -4488,32 +4488,32 @@ button.graph-node-body { cursor:pointer; }
    As medidas são PROPORÇÕES DA LETRA (em), medidas na bancada de 26/10/2026, e crescem com ela; provadas nos três
    navegadores em 27/10/2026. A variação (o sublinhado) se pede com `data-link="underline"` no próprio link, num
    contêiner ou no `<html>` — um atributo, e não uma classe: o core só tem classe que um componente produz. */
-[data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not([data-link="underline"],[data-link="underline"] *):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+[data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not([data-link="underline"],[data-link="underline"] *):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   text-decoration-color:var(--link-mark); text-decoration-thickness:.5em; text-underline-offset:-.32em; text-decoration-skip-ink:none;
   transition:text-decoration-thickness var(--duration-fast) var(--ease-standard),text-underline-offset var(--duration-fast) var(--ease-standard); }
-[data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not([data-link="underline"],[data-link="underline"] *):hover:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+[data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not([data-link="underline"],[data-link="underline"] *):hover:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   text-decoration-thickness:1.25em; text-underline-offset:-1.02em; }
 @media (prefers-reduced-motion:reduce) {
-  [data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { transition:none; }
+  [data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { transition:none; }
 }
 
 /* As TINTAS que saíam do destaque ficariam cinza com o destaque grafite: no claro, elas saem do próprio amarelo — o selo
    primário de contorno (16%) e a marca do item atual da barra de baixo de aro (15%). */
-[data-theme="light"] .badge-primary.badge-outline:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+[data-theme="light"] .badge-primary.badge-outline:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   background-color:color-mix(in oklab, var(--primary) 16%, transparent); }
-[data-theme="light"] .bottom-nav-ind-circle-outline .bottom-nav-item[aria-current] .bottom-nav-mark:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+[data-theme="light"] .bottom-nav-ind-circle-outline .bottom-nav-item[aria-current] .bottom-nav-mark:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   background:color-mix(in srgb, var(--primary) 15%, transparent); }
 
 /* O CAMPO no claro é BRANCO com a sombra fina em todo lugar, também DENTRO das superfícies brancas (era o cinza
    `--fill-2` ali — ADR-0078, item 2, revertido pela ADR-0083): dentro de um cartão branco, quem separa o campo é a
    sombra. A lista é a das superfícies da regra de campo, acima. No escuro, nada muda. */
-[data-theme="light"] :is(.card:not(.card-outline):not(.card-inset),.content:not(.content-plain),.section-card,.demo,.dialog,.drawer,.popover,.menu,.command-palette,.alert,.banner-consent,.toast,.accordion-surface,.datagrid-detail,:is(.table,.table-wrap) tbody :is(td,th),.topbar-floating,.topbar-pill,.sortable-item,.app-shell-docs > .sidebar[popover]:popover-open):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+[data-theme="light"] :is(.card:not(.card-outline):not(.card-inset),.content:not(.content-plain),.section-card,.demo,.dialog,.drawer,.popover,.menu,.command-palette,.alert,.banner-consent,.toast,.accordion-surface,.datagrid-detail,:is(.table,.table-wrap) tbody :is(td,th),.topbar-floating,.topbar-pill,.sortable-item,.app-shell-docs > .sidebar[popover]:popover-open):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   --field-fill:var(--card); --field-lift:var(--field-lift-page); }
 
 /* O FOCO DOS CAMPOS no claro é o amarelo, uma linha só, como no escuro (decisão do Victor, 26/10/2026; a medida — 1,75:1
    na página, 1,91:1 no cartão, abaixo dos 3:1 — vai à bancada do passo A). Os botões e o resto continuam com o grafite. */
-[data-theme="light"] :is(.input,.textarea,.select):focus-visible:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
-[data-theme="light"] :is(.input-group,.combobox-multi):focus-within:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+[data-theme="light"] :is(.input,.textarea,.select):focus-visible:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+[data-theme="light"] :is(.input-group,.combobox-multi):focus-within:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   outline-color:var(--primary); }
 
 /* "AUMENTAR CONTRASTE" do sistema (`prefers-contrast: more`: o "Aumentar contraste" do macOS, do iOS e do Android, o
@@ -4522,18 +4522,18 @@ button.graph-node-body { cursor:pointer; }
    linha que esta preferência acende, exceção nomeada à ADR-0072 pela ADR-0083), as quatro marcas dos controles na
    tinta, e o foco dos campos de volta ao grafite. Fora dela, nada disto existe. */
 @media (prefers-contrast:more) {
-  :is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)) { border-color:var(--input-strong); }
-  .input-group > :is(.input,.select,.textarea):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)) { border:0; }
-  :root:where(:not(:is([data-brand="ember"],[data-brand="lory"]))),[data-theme]:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)) {
+  :is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not([data-brand="ember"],[data-brand="ember"] *)) { border-color:var(--input-strong); }
+  .input-group > :is(.input,.select,.textarea):where(:not([data-brand="ember"],[data-brand="ember"] *)) { border:0; }
+  :root:where(:not([data-brand="ember"])),[data-theme]:where(:not([data-brand="ember"],[data-brand="ember"] *)) {
     --control-thumb:var(--brand-yellow-ink); --control-selected-foreground:var(--brand-yellow-ink); --control-selected-dot:var(--brand-yellow-ink); }
-  [data-theme="light"] :is(.input,.textarea,.select):focus-visible:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
-  [data-theme="light"] :is(.input-group,.combobox-multi):focus-within:where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+  [data-theme="light"] :is(.input,.textarea,.select):focus-visible:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
+  [data-theme="light"] :is(.input-group,.combobox-multi):focus-within:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
     outline-color:var(--focus-strong); }
 }
 
 /* A LINHA DO TEMPO: o trilho por baixo dos pontos é conserto de todas as marcas (na regra da linha do tempo, acima). Aqui
    só a cor: de `--border` para `--input` — na página do Zinco profundo, o `--border` quase não aparecia. */
-.timeline > li:not(:last-child):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *))::before { background:var(--input); }
+.timeline > li:not(:last-child):where(:not([data-brand="ember"],[data-brand="ember"] *))::before { background:var(--input); }
 
 /* ═══ AS CORES, passo B — os estilos novos (ADR-0084, 27/10/2026) ═════════════════════════════════════════════════
    Os estilos que o Victor aprovou em 26/10/2026, todos para construir, cada um uma VARIAÇÃO (o padrão de cada peça não
@@ -4543,8 +4543,8 @@ button.graph-node-body { cursor:pointer; }
    peça com o seu atributo ganha do contêiner (`:not([data-…])` no caminho do contêiner); contêiner dentro de contêiner
    vale o que vem depois aqui.
    As cores ficam NA PEÇA, e não num token herdado da raiz: assim uma faixa com outro `data-theme` acerta.
-   ~~A `lory` fica de fora, como no passo A (a marca congelada): toda regra leva o `:where(:not(…lory…))` de força zero.~~
-   → A Aurea Ember (a antiga `lory`) RECEBE os estilos, como as outras marcas (o Victor, 28/10/2026, vendo que na Ember as
+   ~~A `ember` fica de fora, como no passo A (a marca congelada): toda regra leva o `:where(:not(…ember…))` de força zero.~~
+   → A Aurea Ember RECEBE os estilos, como as outras marcas (o Victor, 28/10/2026, vendo que na Ember as
    variações saíam todas iguais: "Sim, como as outras"). O padrão dela, sem estilo escolhido, continua congelado — as
    regras do passo A continuam sem alcançá-la. Por isso o botão ligado dela, com um estilo escolhido, ganha aqui a
    pintura que o passo A dá às outras marcas (logo abaixo do 2.8).
@@ -4562,11 +4562,11 @@ button.graph-node-body { cursor:pointer; }
   --pressed-bg:var(--primary); --pressed-bg-hover:var(--primary-hover); --pressed-fg:var(--primary-foreground); }
 /* A Ember com um estilo escolhido: a pintura do botão ligado (a do passo A, que não a alcança) e sem o fio de baixo do
    ligado dela de sempre. Sem estilo escolhido, o ligado da Ember continua o de antes. */
-:is([data-pressed-style] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style]):where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *) {
+:is([data-pressed-style] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style]):where([data-brand="ember"],[data-brand="ember"] *) {
   --btn-bg:var(--pressed-bg); --btn-fg:var(--pressed-fg); background:var(--pressed-bg); color:var(--pressed-fg); }
-:is([data-pressed-style] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style]):hover:not(:disabled):not([aria-disabled="true"]):where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *) {
+:is([data-pressed-style] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style]):hover:not(:disabled):not([aria-disabled="true"]):where([data-brand="ember"],[data-brand="ember"] *) {
   --btn-bg:var(--pressed-bg-hover); background:var(--pressed-bg-hover); }
-:is([data-pressed-style] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style]):where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)::after { content:none; }
+:is([data-pressed-style] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style]):where([data-brand="ember"],[data-brand="ember"] *)::after { content:none; }
 /* O cinza é o mais discreto — o ligado fica perto do desligado. Quem pede mais contraste ganha o contorno de 3:1 (a mesma
    exceção dos campos, ADR-0083: a linha que só o "aumentar contraste" acende). */
 @media (prefers-contrast:more) {

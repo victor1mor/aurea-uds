@@ -37,10 +37,10 @@
 1. **Treze paletas.** A padrão, a **Aurea Gold**, não tem atributo. As outras doze são `data-brand`: a **Aurea Ember**
    (`ember`) e as 11 da paleta da 1.0 — `sun`, `honey`, `orange`, `magenta`, `violet`, `indigo`, `cobalt`, `cyan`,
    `turquoise`, `emerald` e `lime`.
-2. **A `lory` passa a se chamar Aurea Ember.** Só o nome: as cores, os links e tudo o mais ficam como eram, e continuam
-   congelados (ADR-0083). `data-brand="lory"` vale como apelido **por uma versão** — no CSS dos tokens (o gerador lê o
-   apelido em `brandAliases`) e no core (`:is([data-brand="ember"],[data-brand="lory"])`, que pesa o mesmo que o
-   atributo sozinho). O site lê a escolha gravada `lory` como `ember`.
+2. **A `lory` passa a se chamar Aurea Ember, sem apelido.** Só o nome: as cores, os links e tudo o mais ficam como eram,
+   e continuam congelados (ADR-0083). A proposta sugeria aceitar `lory` como apelido por uma versão; a sessão adotou sem
+   perguntar, e o Victor mandou tirar (*"mude 100% lory para ember"*, 28/10/2026). O nome `lory` não existe mais nos tokens,
+   no core, no site nem nos testes.
 3. **As 11 marcas usam os neutros da Aurea** e redefinem só o primário e o que nasce dele: o link, o foco, o controle
    escolhido, a lateral, a seleção e o acento. Os valores são os da parte 3 da proposta, sem mudança.
 4. **Os quatro ajustes da 9b:** (1) no escuro, a letra do escolhido é o `--primary-emphasis` — na Aurea Gold ele é o
@@ -76,15 +76,15 @@
   só o F das marcas de letra escura passa, e a célula "atenção" do escuro, que não é de marca. Provado contra o defeito.
 - `tests/unit/marcas-passo-c.test.tsx`: os nomes e o primário das marcas, o apelido, o aviso da Orange, e que o core não
   fala da `lory` sem a `ember` nem escreve regra nova para qualquer marca.
-- `tests/visual/lory-congelada.spec.ts`: a Ember e a `lory` saem com as cores da 0.44.0, nos dois temas. Provado contra o
-  defeito: com o core escrevendo só `lory`, a `ember` reprova (77 diferenças).
+- `tests/visual/ember-congelada.spec.ts`: a Ember sai com as cores da 0.44.0, nos dois temas. Provado contra o defeito:
+  com o core escrevendo só `lory`, a `ember` reprova (77 diferenças).
 
 ## As consequências, com os custos
 
 - **Doze marcas a mais no arquivo de tokens** (522 tokens: 11 marcas, dois temas): a página de tokens do site cresce, e a foto dela muda.
-- **O apelido `lory` sai na versão seguinte.** Quem usa `data-brand="lory"` tem uma versão para trocar.
+- **Quem usa `data-brand="lory"` precisa trocar por `ember` ao atualizar** — senão sai a Aurea Gold.
 - **O site ganha as 13 marcas no botão "Theme"**, com o nome sem o "Aurea" da frente (Gold, Ember, Sun…).
 
 ## Revisão
 
-Quando o apelido `lory` sair (a versão depois da `0.47.0`): tirar o `brandAliases`, o `:is()` do core e a leitura do site.
+Nada pendente do nome: a `lory` saiu inteira na própria `0.47.0`.

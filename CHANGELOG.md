@@ -198,8 +198,8 @@ bancada (28/10/2026): *"Aprovo"*. Só a web — o nativo não tem eixo de marca.
 
 ### ⚠ Pode quebrar
 
-- **`data-brand="lory"` passa a se chamar `data-brand="ember"`.** O nome antigo continua valendo nesta versão, como apelido
-  — no CSS dos tokens e no core —, e sai na seguinte.
+- **`data-brand="lory"` deixa de existir: troque por `data-brand="ember"`.** Sem apelido — a ordem do Victor (28/10/2026):
+  *"mude 100% lory para ember"*. Um app que continuar com `lory` sai com a Aurea Gold.
 
 ### Acrescentado
 
@@ -219,13 +219,13 @@ bancada (28/10/2026): *"Aprovo"*. Só a web — o nativo não tem eixo de marca.
 
 ### Para quem cuida do repositório
 
-- **O apelido de marca** mora em `brandAliases`, no arquivo de tokens; o `scripts/build-tokens.mjs` emite o nome novo e o
-  antigo no mesmo bloco, e o core escreve `:is([data-brand="ember"],[data-brand="lory"])`, que pesa o mesmo que o atributo
-  sozinho.
+- **O nome `lory` saiu de todo o código** (tokens, core, site, bancos e testes); a prova e a referência dela passaram a
+  `tests/visual/ember-congelada.spec.ts` e `ember-0.44.0.json`. O `tests/unit/marcas-passo-c.test.tsx` reprova se o nome
+  voltar aos tokens ou ao core.
 - **Provas novas:** `tests/visual/marcas-passo-c.spec.ts` (o axe nos dois bancos das cores, nas 13 marcas e nos dois
   temas — achou os três defeitos de contraste desta versão), `tests/unit/marcas-passo-c.test.tsx` (os nomes, o primário,
   o apelido, e que o core não escreve regra nova para "qualquer marca"), `tests/visual/toolbar-medidas.spec.ts` e
-  `tests/visual/contador-vermelho.spec.ts`. O `lory-congelada.spec.ts` prova a Ember com os dois nomes, e aceita só as
+  `tests/visual/contador-vermelho.spec.ts`. O `ember-congelada.spec.ts` prova a Ember contra a 0.44.0, e aceita só as
   marcas brancas do escuro.
 - **Achado e deixado para um lote próprio** (decisão do Victor): no escuro, o nome dentro da célula "atenção" do painel de
   saúde mede 2,41:1 — já na 0.46.0, igual em todas as marcas.

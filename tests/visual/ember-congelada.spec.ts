@@ -1,22 +1,22 @@
 import {test, expect, type Page} from "@playwright/test";
 import {readFileSync, writeFileSync, existsSync} from "node:fs";
 
-// A `lory` CONGELADA (ADR-0083, 26/10/2026). A paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje, e
+// A `ember` CONGELADA (ADR-0083, 26/10/2026). A paleta da 1.0 não vale nela — o Victor: a ember fica 100% como é hoje, e
 // vai só mudar de nome (Aurea Ember, no passo C). Os tokens dela foram congelados na fonte, e toda regra nova leva a
 // exclusão dela. Este teste prova no navegador: no banco da paleta (`apps/keyboard-probe/paleta.html`, as peças que a
-// paleta toca), com `data-brand="lory"`, nos dois temas, a cor de CADA elemento — letra, fundo, borda, contorno, sombra,
+// paleta toca), com `data-brand="ember"`, nos dois temas, a cor de CADA elemento — letra, fundo, borda, contorno, sombra,
 // sublinhado, e o `::before`/`::after` — é a mesma da 0.44.0.
 //
-// A referência (`lory-0.44.0.json`) foi gravada com a folha da 0.44.0 no lugar da de hoje, pelo MESMO código abaixo:
-//   LORY_GRAVAR=<caminho do aurea.css da 0.44.0> npx playwright test tests/visual/lory-congelada.spec.ts --project=chromium
+// A referência (`ember-0.44.0.json`) foi gravada com a folha da 0.44.0 no lugar da de hoje, pelo MESMO código abaixo:
+//   EMBER_GRAVAR=<caminho do aurea.css da 0.44.0> npx playwright test tests/visual/ember-congelada.spec.ts --project=chromium
 // Só cor e enfeite entram na comparação, não medida: um lote que mude o espaço de uma peça não mexe aqui.
 // A exceção: o desenho da LINHA DO TEMPO (os `::before`), que o conserto de 27/10/2026 refez em todas as marcas — o defeito
-// era geral (o Victor). A cor da linha da lory é provada no `paleta-passo-a.spec.ts`.
-// Provado contra o defeito (27/10/2026): sem o congelamento dos tokens da lory, reprova (a tinta e a letra do aviso); sem
+// era geral (o Victor). A cor da linha da ember é provada no `paleta-passo-a.spec.ts`.
+// Provado contra o defeito (27/10/2026): sem o congelamento dos tokens da ember, reprova (a tinta e a letra do aviso); sem
 // a exclusão nas regras novas, reprova (o link, o campo, o botão ligado, a linha do tempo).
 const APP = "/apps/keyboard-probe/out/paleta.html";
-const REF = "tests/visual/lory-0.44.0.json";
-const GRAVAR = process.env.LORY_GRAVAR;
+const REF = "tests/visual/ember-0.44.0.json";
+const GRAVAR = process.env.EMBER_GRAVAR;
 
 const PROPS = ["color", "background-color", "background-image", "border-top-color", "border-right-color", "border-bottom-color",
   "border-left-color", "outline-color", "box-shadow", "text-decoration-line", "text-decoration-color",
@@ -25,7 +25,7 @@ const PSEUDO = ["content", "background-color", "background-image", "box-shadow",
 
 type Foto = Record<string, Record<string, string>>;
 
-async function fotografar(p: Page, tema: string, marca = "lory"): Promise<Foto> {
+async function fotografar(p: Page, tema: string, marca = "ember"): Promise<Foto> {
   if (GRAVAR) {
     const antiga = readFileSync(GRAVAR, "utf8");
     await p.route(/\/assets\/aurea-[^/]+\.css$/, (r) => r.fulfill({status: 200, contentType: "text/css", body: antiga}));
@@ -54,13 +54,12 @@ async function fotografar(p: Page, tema: string, marca = "lory"): Promise<Foto> 
   }, {PROPS, PSEUDO});
 }
 
-// O NOME NOVO (passo C, 28/10/2026): a `lory` passou a se chamar Aurea Ember (`ember`), e o nome antigo vale por uma versão.
+// O NOME NOVO (passo C, 28/10/2026): a `ember` passou a se chamar Aurea Ember (`ember`), e o nome antigo vale por uma versão.
 // Os dois nomes têm de sair com as MESMAS cores da 0.44.0 — só o nome mudou. Provado contra o defeito: com a marca renomeada
-// nos tokens e o core ainda escrevendo só `lory`, a `ember` reprova (as regras novas da paleta a alcançam).
-for (const marca of ["lory", "ember"]) for (const tema of ["light", "dark"]) {
+// nos tokens e o core ainda escrevendo só `ember`, a `ember` reprova (as regras novas da paleta a alcançam).
+for (const marca of ["ember"]) for (const tema of ["light", "dark"]) {
   test(`a ${marca} no ${tema === "light" ? "claro" : "escuro"} sai com as cores da 0.44.0`, async ({page: p}, info) => {
     test.skip(info.project.name !== "chromium", "a referência foi gravada no Chromium");
-    test.skip(Boolean(GRAVAR) && marca !== "lory", "a referência se grava com o nome de quando ela foi gravada");
     const agora = await fotografar(p, tema, marca);
     expect(Object.keys(agora).length, "o banco tem peças").toBeGreaterThan(200);
     if (GRAVAR) {

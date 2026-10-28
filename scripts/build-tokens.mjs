@@ -39,27 +39,20 @@ css += emitGroup(sel["theme.light"], dtcg.theme.light);
 // (ADR-0036). Sem `data-brand` no documento, nada disto se aplica e a Aurea é a de sempre.
 // O TEMA NUM PEDAÇO DA TELA (ADR-0063, 10/10/2026): o par `[data-brand][data-theme]` só casa
 // quando os dois atributos estão no MESMO elemento — o `<html>`. Uma `Section theme="dark"` ou um
-// `Card variant="contrast"` põem só `data-theme` no próprio elemento, e numa página `lory` saíam com
+// `Card variant="contrast"` põem só `data-theme` no próprio elemento, e numa página `ember` saíam com
 // o escuro da Aurea (medido: `--card` #292929 e o amarelo, em vez do azulado e do laranja da
-// `lory`). A segunda forma, com o tema DENTRO da marca, leva a marca para o pedaço. O seletor
+// `ember`). A segunda forma, com o tema DENTRO da marca, leva a marca para o pedaço. O seletor
 // declarado no JSON continua o par, que é o que o catálogo lê.
-// O APELIDO (passo C das cores, 28/10/2026): a `lory` passou a se chamar `ember` (Aurea Ember), e o nome antigo vale por
-// uma versão. O apelido mora em `brandAliases` e sai aqui, no MESMO bloco da marca — e não no seletor declarado, que o
-// catálogo lê como um par só.
-const apelidos = Object.entries(dtcg.$extensions["ui.aurea"].brandAliases ?? {});
 for (const [nome, marca] of Object.entries(dtcg.brand ?? {})) {
   if (nome.startsWith("$")) continue;
   for (const tema of ["dark", "light"]) {
     const chave = `brand.${nome}.${tema}`;
     if (!sel[chave]) throw new Error(`marca sem seletor declarado: ${chave}`);
-    const pares = [sel[chave], ...apelidos.filter(([, alvo]) => alvo === nome)
-      .map(([velho]) => sel[chave].replace(`"${nome}"`, `"${velho}"`))];
-    const dentro = pares.map(p => p.replace("][data-theme", "] [data-theme"));
-    if (dentro.some((d, i) => d === pares[i])) throw new Error(`seletor de marca sem o tema: ${chave}`);
-    css += emitGroup([...pares, ...dentro].join(","), marca[tema]);
+    const dentro = sel[chave].replace("][data-theme", "] [data-theme");
+    if (dentro === sel[chave]) throw new Error(`seletor de marca sem o tema: ${chave}`);
+    css += emitGroup(`${sel[chave]},${dentro}`, marca[tema]);
   }
 }
-for (const [velho, alvo] of apelidos) if (!dtcg.brand?.[alvo]) throw new Error(`apelido de marca sem a marca: ${velho} → ${alvo}`);
 css += emitGroup(sel["density.compact"], dtcg.density.compact);
 css += emitGroup(sel["density.comfortable"], dtcg.density.comfortable);
 css += emitGroup(sel["density.spacious"], dtcg.density.spacious);

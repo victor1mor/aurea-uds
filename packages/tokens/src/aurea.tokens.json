@@ -42,9 +42,6 @@
         "brand.emerald.light": "[data-brand=\"emerald\"][data-theme=\"light\"]",
         "brand.lime.dark": "[data-brand=\"lime\"][data-theme=\"dark\"]",
         "brand.lime.light": "[data-brand=\"lime\"][data-theme=\"light\"]"
-      },
-      "brandAliases": {
-        "lory": "ember"
       }
     }
   },
@@ -3369,9 +3366,9 @@
   "brand": {
     "$description": "Named brand palettes. A brand REDEFINES colour and nothing else — type, radius, density and icons stay Aurea's. The axis is orthogonal to theme: every brand carries its own dark and light. Without a `data-brand` the document is Aurea, unchanged. See ADR-0036.",
     "ember": {
-      "$description": "Aurea Ember — a marca que se chamava `lory` até a 0.46.0 (o Victor, 26/10/2026: só o nome muda; as cores ficam 100% como eram). `data-brand=\"lory\"` continua valendo como apelido por uma versão. Brand palette, read on 20/08/2026 from the standalone UI kit the owner supplied, and corrected twice by him looking at the screen. THE SIDEBAR IS A SURFACE, like Aurea's — where `sidebar` aliases `card` — so it maps to their `--surface`/`--surface-2` and NOT to their `--side*`. Their `--side*` describes the dark rail of their own app, a product decision he rejected here; mapping it onto our sidebar inverted the relationship the system has everywhere else. Measured: in Aurea the panel is LIGHTER than the page in dark and white in light. Lory now does the same.",
+      "$description": "Aurea Ember — a marca que se chamava `ember` até a 0.46.0 (o Victor, 26/10/2026: só o nome muda; as cores ficam 100% como eram). Brand palette, read on 20/08/2026 from the standalone UI kit the owner supplied, and corrected twice by him looking at the screen. THE SIDEBAR IS A SURFACE, like Aurea's — where `sidebar` aliases `card` — so it maps to their `--surface`/`--surface-2` and NOT to their `--side*`. Their `--side*` describes the dark rail of their own app, a product decision he rejected here; mapping it onto our sidebar inverted the relationship the system has everywhere else. Measured: in Aurea the panel is LIGHTER than the page in dark and white in light. Ember now does the same.",
       "dark": {
-        "$description": "Aurea Ember (a antiga lory), escuro.",
+        "$description": "Aurea Ember, escuro.",
         "background": {
           "$type": "color",
           "$value": {
@@ -4077,7 +4074,7 @@
         },
         "brand-yellow-ink": {
           "$type": "color",
-          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. A tinta da Aurea passou a #18181B; a da lory continua #242424.",
+          "$description": "Congelado na ember (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a ember fica 100% como é hoje. A tinta da Aurea passou a #18181B; a da ember continua #242424.",
           "$value": {
             "colorSpace": "srgb",
             "components": [
@@ -4090,7 +4087,7 @@
         },
         "warning-foreground": {
           "$type": "color",
-          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. A letra sobre o laranja de aviso continua #242424.",
+          "$description": "Congelado na ember (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a ember fica 100% como é hoje. A letra sobre o laranja de aviso continua #242424.",
           "$value": {
             "colorSpace": "srgb",
             "components": [
@@ -4115,7 +4112,7 @@
         }
       },
       "light": {
-        "$description": "Aurea Ember (a antiga lory), claro.",
+        "$description": "Aurea Ember, claro.",
         "background": {
           "$type": "color",
           "$value": {
@@ -4829,7 +4826,7 @@
         },
         "brand-yellow-ink": {
           "$type": "color",
-          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. A tinta da Aurea passou a #18181B; a da lory continua #242424.",
+          "$description": "Congelado na ember (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a ember fica 100% como é hoje. A tinta da Aurea passou a #18181B; a da ember continua #242424.",
           "$value": {
             "colorSpace": "srgb",
             "components": [
@@ -4842,7 +4839,7 @@
         },
         "warning-foreground": {
           "$type": "color",
-          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. A letra sobre o laranja de aviso continua #242424.",
+          "$description": "Congelado na ember (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a ember fica 100% como é hoje. A letra sobre o laranja de aviso continua #242424.",
           "$value": {
             "colorSpace": "srgb",
             "components": [
@@ -4855,12 +4852,12 @@
         },
         "control-thumb": {
           "$type": "color",
-          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. A bolinha do Switch e a alça do Slider continuam a marca dela (--primary-mark).",
+          "$description": "Congelado na ember (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a ember fica 100% como é hoje. A bolinha do Switch e a alça do Slider continuam a marca dela (--primary-mark).",
           "$value": "{primary-mark}"
         },
         "warning-500": {
           "$type": "color",
-          "$description": "Congelado na lory (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a lory fica 100% como é hoje. O degrau 500 do aviso continua o da escala.",
+          "$description": "Congelado na ember (ADR-0083, 26/10/2026): a paleta da 1.0 não vale nela — o Victor: a ember fica 100% como é hoje. O degrau 500 do aviso continua o da escala.",
           "$value": {
             "colorSpace": "oklch",
             "components": [

@@ -2,7 +2,7 @@ import {test, expect} from "@playwright/test";
 
 // ADR-0076 (20/10/2026). Com a letra de destaque do claro virando o azul, o item atual da lateral saiu azul; o Victor,
 // olhando a bancada: "não quero ele azul, não pode ser na cor do botão?". No claro da Aurea padrão, o item atual é o
-// botão primário — o fundo amarelo e a letra cinza-escura (8,13:1) —, sem o fio de baixo. A `lory` e o escuro não mudam.
+// botão primário — o fundo amarelo e a letra cinza-escura (8,13:1) —, sem o fio de baixo. A `ember` e o escuro não mudam.
 //
 // Medido no navegador, com a folha publicada e a marcação que a `Sidebar` emite (o selo de contagem dentro do item atual,
 // como no exemplo dela). Provado contra o defeito: sem a regra, o item atual do claro sai com a letra azul e o fundo
@@ -48,11 +48,11 @@ test("no claro da Aurea, o item atual da lateral é o botão primário: fundo am
   expect(m.selo, "o selo primário dentro do item atual se lê sobre o amarelo").toBeGreaterThanOrEqual(4.5);
 });
 
-test("no escuro, e na lory, o item atual continua como era", async ({page, baseURL}) => {
+test("no escuro, e na ember, o item atual continua como era", async ({page, baseURL}) => {
   const escuro = await medir(page, baseURL, "dark", "");
   expect(escuro.letra, "no escuro, a letra de destaque da lateral").toBe(escuro.destaque);
   expect(escuro.fundo).not.toBe(escuro.primario);
-  const lory = await medir(page, baseURL, "light", "lory");
-  expect(lory.letra, "na lory do claro, a letra de destaque dela").toBe(lory.destaque);
-  expect(lory.fundo).not.toBe(lory.primario);
+  const ember = await medir(page, baseURL, "light", "ember");
+  expect(ember.letra, "na ember do claro, a letra de destaque dela").toBe(ember.destaque);
+  expect(ember.fundo).not.toBe(ember.primario);
 });

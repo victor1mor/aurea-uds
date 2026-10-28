@@ -4,7 +4,7 @@
 // que o Victor lê (640, a 200%).
 //
 // Como os outros bancos, este não afirma nada: monta. Quem afirma é `tests/visual/rede-mnt31.spec.ts`.
-// O endereço escolhe o tema e a marca: `?claro`, `?aurea` (sem a marca `lory`, que é a do app).
+// O endereço escolhe o tema e a marca: `?claro`, `?aurea` (sem a marca `ember`, que é a do app).
 import {StrictMode, useEffect, useState} from "react";
 import {createRoot} from "react-dom/client";
 import {AureaProvider, SegmentedControl, ptBR} from "@aurea-uds/react";
@@ -18,7 +18,7 @@ import {NOS, ARESTAS} from "./rede-dados";
 
 const q = new URLSearchParams(location.search);
 document.documentElement.dataset.theme = q.has("claro") ? "light" : "dark";
-if (!q.has("aurea")) document.documentElement.dataset.brand = "lory";
+if (!q.has("aurea")) document.documentElement.dataset.brand = "ember";
 
 type Caso = {id: string; titulo: string; texto: string; props: Partial<DependencyGraphProps>};
 const CASOS: Caso[] = [
@@ -40,12 +40,12 @@ function Banco() {
   const [marca, setMarca] = useState(document.documentElement.dataset.brand ?? "aurea");
   useEffect(() => {
     document.documentElement.dataset.theme = tema;
-    if (marca === "lory") document.documentElement.dataset.brand = "lory"; else delete document.documentElement.dataset.brand;
+    if (marca === "ember") document.documentElement.dataset.brand = "ember"; else delete document.documentElement.dataset.brand;
   }, [tema, marca]);
   return <main className="rede5">
     <div className="barra">
       <SegmentedControl label="Tema" value={tema} onChange={setTema} items={[{value: "dark", label: "Escuro"}, {value: "light", label: "Claro"}]}/>
-      <SegmentedControl label="Marca" value={marca} onChange={setMarca} items={[{value: "lory", label: "lory"}, {value: "aurea", label: "Aurea"}]}/>
+      <SegmentedControl label="Marca" value={marca} onChange={setMarca} items={[{value: "ember", label: "ember"}, {value: "aurea", label: "Aurea"}]}/>
     </div>
     {CASOS.map((c) => <section key={c.id} className="caso" id={c.id} data-caso={c.id}>
       <h2>{c.titulo}</h2>

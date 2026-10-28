@@ -96,7 +96,7 @@ Aurea ships thirteen palettes. The default needs no attribute; the other twelve 
 | Aurea Lime | `lime` | `#A3E635` | dark |
 
 - **The neutrals are Aurea's in every brand.** A brand changes the primary color and the roles built on it: links, focus, the selected control, the sidebar and the selection.
-- **Aurea Ember keeps its own neutrals.** It was called `lory` until 0.46.0, and `data-brand="lory"` still works for one more version.
+- **Aurea Ember keeps its own neutrals.**
 - **Aurea Orange moves the warning color to honey,** so a warning never looks like the brand.
 - **`currentStyle="brand-white"` on the bottom bar fails WCAG on the light primaries** (Gold, Sun, Honey, Orange, Cyan, Turquoise, Emerald, Lime), as it does on Aurea Gold.
 

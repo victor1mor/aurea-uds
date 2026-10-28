@@ -86,7 +86,7 @@ const LINHA_PERMITIDA_CSS: {seletor: string; prop: string; valor?: string; media
   // a mesma exceção dos campos, só nessa preferência e só com a cor dela.
   {seletor: ':is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"])',
     prop: "box-shadow", valor: "inset 0 0 0 var(--border-width) var(--input-strong)", media: "@media (prefers-contrast:more)"},
-  {seletor: ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *))',
+  {seletor: ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not([data-brand="ember"],[data-brand="ember"] *))',
     prop: "border-color", valor: "var(--input-strong)", media: "@media (prefers-contrast:more)"},
 ];
 
@@ -259,7 +259,7 @@ describe("sem linha — nenhuma peça da Aurea desenha borda (ADR-0072)", () => 
     expect(linhasNoCss(".card-outline { box-shadow:inset 0 0 0 1px var(--border); }", "x")).toHaveLength(1);
     expect(linhasNoCss(".card { border-color:color-mix(in oklab,var(--foreground) 10%,transparent); }", "x")).toHaveLength(1);
     // O contorno do "aumentar contraste" (ADR-0083) vale SÓ dentro do `@media (prefers-contrast:more)`, só com a cor dele.
-    const campos = ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *))';
+    const campos = ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not([data-brand="ember"],[data-brand="ember"] *))';
     expect(linhasNoCss(`@media (prefers-contrast:more) { ${campos} { border-color:var(--input-strong); } }`, "x")).toEqual([]);
     expect(linhasNoCss(`${campos} { border-color:var(--input-strong); }`, "x")).toHaveLength(1);
     expect(linhasNoCss(`@media (min-width:600px) { ${campos} { border-color:var(--input-strong); } }`, "x")).toHaveLength(1);
