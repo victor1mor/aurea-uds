@@ -8,3 +8,5 @@ export declare const breakpoints: Record<string, number>;
 export declare const shadowLayers: Record<string, AureaShadow[]>;
 export declare const themes: Record<"dark" | "light", Record<string, AureaColor | number>>;
 export declare const densities: Record<"compact" | "comfortable" | "spacious", Record<string, number>>;
+export type AureaBrandName = "ember" | "sun" | "honey" | "orange" | "magenta" | "violet" | "indigo" | "cobalt" | "cyan" | "turquoise" | "emerald" | "lime";
+export declare const brands: Record<AureaBrandName, Record<"dark" | "light", Record<string, AureaColor>>>;

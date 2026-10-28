@@ -48,6 +48,7 @@ export default {
     children: "Your app. Put the provider once, at the root; a second one inside scopes the theme or the density to a part of the screen.",
     theme: "Controlled theme: dark or light. When present it rules, and setTheme only asks, through onThemeChange.",
     density: "Controlled density: compact, comfortable or spacious. Same convention as theme.",
+    brand: "The brand: ember or one of the eleven of the 1.0 palette (sun, honey, orange, magenta, violet, indigo, cobalt, cyan, turquoise, emerald, lime) — the same names as data-brand on the web. Without it, Aurea Gold. A brand changes colour only.",
     defaultTheme: "The starting theme, uncontrolled. Without it (and without theme), the provider follows the device until someone calls setTheme.",
     defaultDensity: "The starting density, uncontrolled. comfortable by default.",
     fontFamilies: "The role → weight → family map that puts the text in Inter, the headings in Sora and the code in IBM Plex Mono: FONT_FAMILIES from @aurea-uds/fonts/native. Without it, every weight but Regular and Bold falls to the system font on the device.",
@@ -84,6 +85,12 @@ export default function App() {
       valores: ["compact", "comfortable", "spacious"], estilo: grade,
       codigo: v => `<AureaProvider theme={theme} density="${v}" fontFamilies={FONT_FAMILIES}>\n  <Card>…</Card>\n</AureaProvider>`,
       peca: v => h(ComOTemaDoApp, {density: v})}),
+    cada({titulo: "Brand", descricao: "The same twelve brands as data-brand on the web. The brand changes the primary colour and the roles built on it; type, radius, density and icons stay Aurea's. Without brand, Aurea Gold.",
+      valores: ["ember", "sun", "honey", "orange", "magenta", "violet", "indigo", "cobalt", "cyan", "turquoise", "emerald", "lime"], estilo: grade,
+      codigo: v => `<AureaProvider theme={theme} brand="${v}" fontFamilies={FONT_FAMILIES}>
+  <Card>…</Card>
+</AureaProvider>`,
+      peca: v => h(ComOTemaDoApp, {brand: v})}),
     {
       title: "Starting values",
       description: "Uncontrolled: defaultTheme and defaultDensity only seed the provider, and the buttons inside change it through useAureaTheme().",

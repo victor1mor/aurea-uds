@@ -416,15 +416,15 @@ test.describe("catálogo · varredura de todas as páginas", () => {
   // `--secondary` sobre o trilho `--muted`: no claro, a MESMA cor (1:1); no escuro, 1,02:1. O
   // Victor mostrou a aba do painel da web ao lado da aba da referência principal, onde a escolhida
   // é uma cápsula branca com sombra. Agora é `--segment` + `--shadow-sm`. Mede em toda página de
-  // componente, nos dois temas e na marca `lory`, a cor da cápsula contra a do trilho atrás dela.
-  // O piso de 1,08:1 é o que a marca mais clara dá (a `lory` no claro: branco sobre 0,965); a
+  // componente, nos dois temas e na marca `ember`, a cor da cápsula contra a do trilho atrás dela.
+  // O piso de 1,08:1 é o que a marca mais clara dá (a `ember` no claro: branco sobre 0,965); a
   // versão de antes dá 1,00 e 1,02 e reprova.
   test("a cápsula da aba e do segmento escolhidos se distingue do trilho — ADR-0059", async ({page}) => {
     const falhas: string[] = [];
     let medidas = 0;
     for (const f of PAGES.filter(p => pageType(p) === "component")) {
       await abrir(page, url(f), avisar);
-      for (const [tema, marca] of [["dark", ""], ["light", ""], ["dark", "lory"], ["light", "lory"]] as const) {
+      for (const [tema, marca] of [["dark", ""], ["light", ""], ["dark", "ember"], ["light", "ember"]] as const) {
         await page.evaluate(([t, m]) => {
           document.documentElement.dataset.theme = t;
           if (m) document.documentElement.dataset.brand = m; else delete document.documentElement.dataset.brand;
@@ -852,6 +852,7 @@ test.describe("catálogo · contratos do modelo de página", () => {
 
   // O Victor, 14/10/2026: "crie um botão tema como da [referência]". O botão pequeno com o balde e "Theme" abre a janelinha
   // com as amostras das MARCAS e o nome embaixo; escolher troca a marca da página, grava, e o botão mostra o nome dela.
+  // AS 13 MARCAS (passo C, 28/10/2026): o botão lista a Gold (a padrão), a Ember e as 11 da paleta da 1.0.
   test("o botão Theme troca a marca: abre as amostras com nome, grava a escolha, e volta para a Aurea", async ({page}) => {
     await page.setViewportSize({width: 1440, height: 900});
     await page.goto("/apps/catalog/index.html");
@@ -862,21 +863,22 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await tema.click();
     const grupo = page.getByRole("radiogroup", {name: "Design theme", exact: true});
     await expect(grupo).toBeVisible();
-    await expect(grupo.locator(".color-swatch-name")).toHaveText(["Aurea", "Lory"]);
-    await expect(grupo.getByRole("radio", {name: "Aurea"})).toBeChecked();
-    await grupo.getByText("Lory").click();
-    await expect(page.locator("html")).toHaveAttribute("data-brand", "lory");
-    expect(await page.evaluate(() => localStorage.getItem("aurea-brand"))).toBe("lory");
+    await expect(grupo.locator(".color-swatch-name")).toHaveText(["Gold", "Ember", "Sun", "Honey", "Orange", "Magenta", "Violet",
+      "Indigo", "Cobalt", "Cyan", "Turquoise", "Emerald", "Lime"]);
+    await expect(grupo.getByRole("radio", {name: "Gold"})).toBeChecked();
+    await grupo.getByText("Ember").click();
+    await expect(page.locator("html")).toHaveAttribute("data-brand", "ember");
+    expect(await page.evaluate(() => localStorage.getItem("aurea-brand"))).toBe("ember");
     await page.keyboard.press("Escape");
-    const tLory = page.getByRole("button", {name: "Design theme: Lory"});
-    await expect(tLory).toHaveText("Lory");
+    const tEmber = page.getByRole("button", {name: "Design theme: Ember"});
+    await expect(tEmber).toHaveText("Ember");
     // A página nova abre com a marca gravada, e o botão já diz qual é.
     await page.reload();
     await page.waitForLoadState("load");
-    await expect(page.locator("html")).toHaveAttribute("data-brand", "lory");
-    await expect(page.getByRole("button", {name: "Design theme: Lory"})).toBeVisible();
-    await page.getByRole("button", {name: "Design theme: Lory"}).click();
-    await page.getByRole("radiogroup", {name: "Design theme", exact: true}).getByText("Aurea").click();
+    await expect(page.locator("html")).toHaveAttribute("data-brand", "ember");
+    await expect(page.getByRole("button", {name: "Design theme: Ember"})).toBeVisible();
+    await page.getByRole("button", {name: "Design theme: Ember"}).click();
+    await page.getByRole("radiogroup", {name: "Design theme", exact: true}).getByText("Gold").click();
     await expect(page.locator("html")).not.toHaveAttribute("data-brand", /.*/);
     await page.evaluate(() => localStorage.removeItem("aurea-brand"));
     await page.keyboard.press("Escape");

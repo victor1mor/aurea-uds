@@ -1,6 +1,6 @@
 // BANCO DOS ESTILOS — o passo B das cores (ADR-0084, 27/10/2026): as peças de verdade em todos os estilos que o Victor
 // aprovou em 26/10/2026 — o botão ligado em três, o segmento aceso em seis, a linha do tempo em cinco e o item atual da
-// barra de baixo em treze. O tema vem de `?tema=dark`; a marca, de `?marca=lory` (ela não muda: os estilos não a alcançam).
+// barra de baixo em treze. O tema vem de `?tema=dark`; a marca, de `?marca=ember` (ela não muda: os estilos não a alcançam).
 // A barra de baixo tem os botões de forma (`indicator`) e de lugar (`variant`) no topo — e `?ind=` e `?var=` no endereço.
 //
 // Como os outros bancos, este não afirma nada: monta. Quem afirma é `tests/visual/paleta-passo-b.spec.ts`; cada peça
@@ -29,8 +29,9 @@ const ATUAL: BottomNavCurrentStyle[] = ["current", "neutral", "contrast", "brand
 const FORMAS: BottomNavIndicator[] = ["none", "subtle", "pill", "circle", "circle-raised", "circle-outline", "circle-bold", "capsule", "expand"];
 const ITENS = [
   {id: "home", label: "Home", icon: "house" as const},
-  // O contador é o `<Badge size="xs">` (o contrato do componente, como no site); o ponto vazio é o "tem novidade".
-  {id: "alerts", label: "Alerts", icon: "bell" as const, badge: <Badge size="xs" variant="primary" emphasis="solid">3</Badge>},
+  // O contador é o `<Badge size="xs">` (o contrato do componente, como no site), vermelho como no nativo (o Victor,
+  // 28/10/2026: "Vermelho, igual"); o ponto vazio é o "tem novidade".
+  {id: "alerts", label: "Alerts", icon: "bell" as const, badge: <Badge size="xs" variant="danger" emphasis="solid">3</Badge>},
   {id: "saved", label: "Saved", icon: "heart" as const, badge: ""},
   {id: "me", label: "Profile", icon: "user" as const},
 ];

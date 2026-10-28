@@ -11,10 +11,10 @@ import {join} from "node:path";
 //   · as superfícies brancas (cartão, janela, painel do app) devolvem o cinza; as que NÃO são brancas — o cartão de
 //     contorno (a caixa da vitrine) e o `inset` — e o painel de prévia do site deixam o branco;
 //   · o escuro não muda; e o tema da FAIXA manda (GAR-05): campo numa faixa escura dentro de página clara fica escuro, e
-//     o contrário também; a marca `lory` no claro, branca também.
+//     o contrário também; a marca `ember` no claro, branca também.
 // Provado contra o defeito: com o CSS da 0.39.0, todo caso "branco" reprova (o campo era o cinza em toda parte).
 // ADR-0083 (26/10/2026): DENTRO das superfícies brancas o campo também é branco com a sombra (o item 2 da ADR-0078 saiu)
-// — na Aurea; a `lory` fica como era (congelada), e o cinza dentro do cartão continua nela. Com o CSS da 0.44.0, os casos
+// — na Aurea; a `ember` fica como era (congelada), e o cinza dentro do cartão continua nela. Com o CSS da 0.44.0, os casos
 // "dentro" reprovam.
 // A folha vai no <head>, antes de desenhar: posta depois, o teste mede a transição do fundo (a lição da 0.37.1).
 const CSS = readFileSync(join(process.cwd(), "packages/core/dist/aurea.css"), "utf8");
@@ -67,11 +67,11 @@ for (const [nome, html] of Object.entries(BRANCAS)) {
   });
 }
 
-test("na lory, que fica como era: dentro do cartão, o campo continua o cinza, sem sombra", async ({page}) => {
-  const m = await medir(page, BRANCAS["o cartão"], "light", "lory");
+test("na ember, que fica como era: dentro do cartão, o campo continua o cinza, sem sombra", async ({page}) => {
+  const m = await medir(page, BRANCAS["o cartão"], "light", "ember");
   for (const id of NA_PAGINA) {
-    expect(m[id].fundo, `lory · ${id}: não é branco`).not.toBe(BRANCO);
-    expect(m[id].sombra, `lory · ${id}: sem sombra`).toBe("none");
+    expect(m[id].fundo, `ember · ${id}: não é branco`).not.toBe(BRANCO);
+    expect(m[id].sombra, `ember · ${id}: sem sombra`).toBe("none");
   }
 });
 
@@ -128,9 +128,9 @@ test("o tema da FAIXA manda: faixa escura em página clara, e faixa clara em pá
   expect(claraNaEscura.texto.sombra, "faixa clara: com sombra").toBe(SOMBRA);
 });
 
-test("a marca lory, no claro: o campo também é a cor do cartão dela, com sombra", async ({page}) => {
-  const m = await medir(page, campos, "light", "lory");
+test("a marca ember, no claro: o campo também é a cor do cartão dela, com sombra", async ({page}) => {
+  const m = await medir(page, campos, "light", "ember");
   const cartao = await page.evaluate(() => { const d = document.createElement("div"); d.style.background = "var(--card)"; document.body.append(d); return getComputedStyle(d).backgroundColor; });
-  expect(m.texto.fundo, "o campo é a cor do cartão da lory").toBe(cartao);
+  expect(m.texto.fundo, "o campo é a cor do cartão da ember").toBe(cartao);
   expect(m.texto.sombra).toBe(SOMBRA);
 });

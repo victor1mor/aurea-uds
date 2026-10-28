@@ -12,7 +12,7 @@ import {BottomNav} from "@aurea-uds/react";
 const items: SidebarItem[] = [
   {id: "garage", label: "Garage", icon: "car", href: "/"},
   {id: "fuel", label: "Fuel", icon: "gas-pump", href: "/fuel",
-    badge: <Badge size="xs" variant="primary" emphasis="solid">3</Badge>},
+    badge: <Badge size="xs" variant="danger" emphasis="solid">3</Badge>},
   {id: "service", label: "Service", icon: "wrench", href: "/service"},
   {id: "me", label: "Profile", icon: "user", href: "/me"},
 ];

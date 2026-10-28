@@ -30,13 +30,14 @@ const demo = (props) => h(Barra, props);
 // Victor desenhou. `tools` no lugar de `tool-kit` pelo peso óptico: o kit é denso e dominava a
 // barra ao lado de um contorno leve como o `user`.
 //
-// O CONTADOR É OURO, não vermelho (achado 10). Vermelho promete erro ou urgência; três recados
-// pendentes são quantidade. As variantes semânticas do Badge continuam todas disponíveis para
-// quem tiver de fato um alerta.
+// ~~O CONTADOR É OURO, não vermelho (achado 10). Vermelho promete erro ou urgência; três recados
+// pendentes são quantidade.~~ → O CONTADOR É VERMELHO (o Victor, 28/10/2026, comparando a bancada com a página do nativo:
+// "o correto é como o print ... vermelho destaque" e "Vermelho, igual"): o mesmo do `BottomNav` do nativo, que desenha o
+// número sempre no `danger`. Na web quem escolhe é o app; as outras variantes do Badge continuam disponíveis.
 const ITENS = [
   {id: "garage", label: "Garage", icon: "car"},
   {id: "fuel", label: "Fuel", icon: "gas-pump",
-    badge: h(Badge, {size: "xs", variant: "primary", emphasis: "solid"}, "3")},
+    badge: h(Badge, {size: "xs", variant: "danger", emphasis: "solid"}, "3")},
   {id: "service", label: "Service", icon: "wrench"},
   {id: "me", label: "Profile", icon: "user"},
 ];
@@ -48,7 +49,7 @@ const LEGADO = [["flat", "Garage flat"], ["surface", "Garage surface"], ["pill",
 const CODIGO_ITENS = `const items: SidebarItem[] = [
   {id: "garage", label: "Garage", icon: "car", href: "/"},
   {id: "fuel", label: "Fuel", icon: "gas-pump", href: "/fuel",
-    badge: <Badge size="xs" variant="primary" emphasis="solid">3</Badge>},
+    badge: <Badge size="xs" variant="danger" emphasis="solid">3</Badge>},
   {id: "service", label: "Service", icon: "wrench", href: "/service"},
   {id: "me", label: "Profile", icon: "user", href: "/me"},
 ];`;

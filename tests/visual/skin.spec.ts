@@ -1353,7 +1353,7 @@ for (const theme of ["dark", "light"] as const) {
             railToken: emPx("--sidebar-rail"),
             sidebarToken: emPx("--sidebar-width"),
             // O ACENTO DA LATERAL CONTRA O FUNDO DA LATERAL — trava nascida de um defeito meu em
-            // 20/08/2026. Ao consertar as cores invertidas que o Victor viu sob a marca `lory`, eu
+            // 20/08/2026. Ao consertar as cores invertidas que o Victor viu sob a marca `ember`, eu
             // tirei o ajuste de tema claro que existia por um motivo e deixei o amarelo cru no item
             // atual: **1,60:1** sobre o painel branco. Nenhum gate viu, porque nenhum media isto.
             // Mede TOKEN contra TOKEN de propósito: é o par que os dois consumidores usam — o

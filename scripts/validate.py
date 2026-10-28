@@ -2528,7 +2528,7 @@ TRADUZ_ESTADO = {
 NAO_E_ESTADO = {
     "theme": "é o tema do documento, não estado de componente",
     # A marca é o outro eixo do documento, ortogonal ao tema (ADR-0036). O core só a lê para NÃO aplicar uma regra feita
-    # para a Aurea padrão (ADR-0073: a letra do selo primário de contorno, que na `lory` do claro cairia a 4,42:1).
+    # para a Aurea padrão (ADR-0073: a letra do selo primário de contorno, que na `ember` do claro cairia a 4,42:1).
     "brand": "é a marca do documento (ADR-0036), eixo como o tema, não estado de componente",
     # Os quatro abaixo entraram com os componentes de agente, no merge de 28/08/2026, e nenhum é
     # ESTADO: são eixos de DADO. A diferença importa e é a mesma do `orientation` logo abaixo —

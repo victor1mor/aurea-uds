@@ -1,7 +1,7 @@
 // AS CORES, PASSO A (ADR-0083, 26/10/2026) — o que se prova lendo o código: a fonte dos tokens (os valores da proposta do
-// Victor e a `lory` congelada), a trava de que nenhuma regra nova do core alcança a `lory`, e o nativo (o escolhido, o
+// Victor e a `ember` congelada), a trava de que nenhuma regra nova do core alcança a `ember`, e o nativo (o escolhido, o
 // campo, o foco, as marcas dos controles, o link e o "aumentar contraste"). O efeito no navegador está em
-// `tests/visual/paleta-passo-a.spec.ts` e `tests/visual/lory-congelada.spec.ts`.
+// `tests/visual/paleta-passo-a.spec.ts` e `tests/visual/ember-congelada.spec.ts`.
 // Provado contra o defeito (27/10/2026): com a fonte, o core e o nativo da 0.44.0, reprovam todos.
 import {readFileSync} from "node:fs";
 import {act, render} from "@testing-library/react";
@@ -18,7 +18,7 @@ const alfaDe = (t: Token) => (t.$value as {alpha?: number}).alpha;
 const claro = resolverTokens("light", "comfortable");
 const escuro = resolverTokens("dark", "comfortable");
 
-describe("a fonte dos tokens: a proposta, e a lory congelada", () => {
+describe("a fonte dos tokens: a proposta, e a ember congelada", () => {
   it("a tinta sobre o amarelo é #18181b, e o amarelo da marca não muda", () => {
     expect(hexDe(fonte.base["brand-yellow-ink"])).toBe("#18181b");
     expect(fonte.base["brand-yellow"].$value).toEqual({colorSpace: "oklch", components: [0.795, 0.184, 86.047]});
@@ -42,21 +42,26 @@ describe("a fonte dos tokens: a proposta, e a lory congelada", () => {
     expect(hexDe(D["input-strong"])).toBe("#646467");
     expect(D["primary-mark"].$value).toBe("{brand-yellow-ink}");
   });
-  it("a lory guarda a tinta, a letra do aviso, a bolinha e a célula de hoje", () => {
+  it("a Ember guarda a tinta, a letra do aviso, a bolinha e a célula de hoje", () => {
     for (const tema of ["light", "dark"] as const) {
-      const L = fonte.brand.lory[tema];
+      const L = fonte.brand.ember[tema];
       expect(hexDe(L["brand-yellow-ink"]), tema).toBe("#242424");
       expect(hexDe(L["warning-foreground"]), tema).toBe("#242424");
-      expect(L["control-thumb"].$value, tema).toBe("{primary-mark}");
+      // A bolinha: a Ember do claro continua a marca dela (branca); a do escuro passou ao branco (o Victor, 28/10/2026:
+      // "Brancos, como as outras") — era o quase preto do fundo dela.
+      if (tema === "light") expect(L["control-thumb"].$value, tema).toBe("{primary-mark}");
+      else expect(L["control-thumb"].$value, tema).toEqual({colorSpace: "oklch", components: [1, 0, 0]});
     }
-    expect(fonte.brand.lory.light["warning-500"].$value).toEqual(fonte.base["warning-500"].$value);
+    expect(fonte.brand.ember.light["warning-500"].$value).toEqual(fonte.base["warning-500"].$value);
   });
 });
 
-describe("o core: nenhuma regra nova alcança a lory", () => {
+describe("o core: nenhuma regra nova alcança a ember", () => {
   const css = readFileSync("packages/core/src/aurea.css", "utf8");
   const ini = css.lastIndexOf("/*", css.indexOf("═══ A PALETA DA 1.0"));
-  const fim = css.indexOf(">>> camada responsiva");
+  // A seção do passo A vai até o começo da do passo B: desde 28/10/2026 os estilos do passo B alcançam a Ember ("Sim,
+  // como as outras"), e só o passo A continua sem alcançá-la.
+  const fim = css.indexOf("/* ═══ AS CORES, passo B");
   const secao = css.slice(ini, fim).replace(/\/\*[\s\S]*?\*\//g, "");
   const separar = (lista: string) => {
     const partes: string[] = []; let nivel = 0, atual = "";
@@ -75,14 +80,14 @@ describe("o core: nenhuma regra nova alcança a lory", () => {
     expect(fim).toBeGreaterThan(ini);
     expect(seletores.length).toBeGreaterThanOrEqual(20);
   });
-  it("todo seletor da seção leva a exclusão da lory", () => {
-    const sem = seletores.filter((s) => !s.includes(':where(:not([data-brand="lory"],[data-brand="lory"] *))')
-      && !s.startsWith(':root:where(:not([data-brand="lory"]))'));
+  it("todo seletor da seção leva a exclusão da ember", () => {
+    const sem = seletores.filter((s) => !s.includes(':where(:not([data-brand="ember"],[data-brand="ember"] *))')
+      && !s.startsWith(':root:where(:not([data-brand="ember"]))'));
     expect(sem).toEqual([]);
   });
-  it("as regras de antes do botão ligado e do escolhido ficaram SÓ na lory", () => {
-    const soNaLory = css.split(':where([data-brand="lory"],[data-brand="lory"] *)').length - 1;
-    expect(soNaLory).toBeGreaterThanOrEqual(9);
+  it("as regras de antes do botão ligado e do escolhido ficaram SÓ na ember", () => {
+    const soNaEmber = css.split(':where([data-brand="ember"],[data-brand="ember"] *)').length - 1;
+    expect(soNaEmber).toBeGreaterThanOrEqual(9);
     // e o botão ligado de antes não aparece mais sem a marca: nem o fio, nem a mistura
     expect(css).not.toMatch(/\.btn\[aria-pressed="true"\]:not\(\.btn-icon\)::after/);
     expect(css).not.toMatch(/\[data-theme="light"\] \.btn\[aria-pressed="true"\]:where\(:not\(\[data-theme="dark"\]/);

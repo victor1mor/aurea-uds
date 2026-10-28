@@ -60,7 +60,7 @@ describe("o Ctrl K separado, como o da referência", () => {
 describe("D — o desenho do app no encaixe do ícone do Button", () => {
   test("`leadingIcon` aceita um componente que devolve o <svg>", () => {
     const Bolinha = (p: React.SVGProps<SVGSVGElement>) => <svg {...p} data-bolinha="" viewBox="0 0 16 16"><circle cx={8} cy={8} r={7} /></svg>;
-    wrap(<Button leadingIcon={Bolinha}>Lory</Button>);
+    wrap(<Button leadingIcon={Bolinha}>Ember</Button>);
     const desenho = document.querySelector("[data-bolinha]")!;
     expect(desenho).toHaveClass("icon");
     expect(desenho).toHaveAttribute("aria-hidden", "true");

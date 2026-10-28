@@ -42,7 +42,10 @@
    `data-timeline-style` na peça. O mesmo atributo num contêiner, ou no `<html>`, vale para todos os de dentro; a peça com o
    seu atributo ganha do contêiner. No nativo, o mesmo atributo aparece no navegador (o `dataSet`, como a marca do cartão
    de contorno).
-7. **A `lory` fica de fora**, como no passo A: os estilos novos não a alcançam (a marca está congelada até o passo C).
+7. ~~**A `lory` fica de fora**, como no passo A: os estilos novos não a alcançam (a marca está congelada até o passo C).~~
+   → **A Aurea Ember (a antiga `lory`) recebe os estilos**, como as outras marcas (o Victor, 28/10/2026, vendo que na Ember
+   as variações saíam todas iguais: *"Sim, como as outras"* — [ADR-0085](0085-as-treze-marcas.md)). O padrão dela, sem
+   estilo escolhido, continua congelado.
 
 ## As duas exceções
 
@@ -89,7 +92,7 @@ na escala.
   na regra que nomeia um estilo de aro; no nativo, a sombra por dentro só nasce no `aroDoEstilo` do `estilos.ts`. A
   varredura do navegador (`catalog-sweep.spec.ts`) descarta só o anel, e só dentro de um estilo de aro escolhido.
 - **Os estilos:** `tests/unit/paleta-passo-b.test.tsx` (o que o código promete) e `tests/visual/paleta-passo-b.spec.ts` (as
-  cores no navegador), provados contra a 0.45.0; `tests/visual/lory-congelada.spec.ts` continua provando a `lory`.
+  cores no navegador), provados contra a 0.45.0; `tests/visual/ember-congelada.spec.ts` continua provando a Ember.
 
 ## As consequências, com os custos
 

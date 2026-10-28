@@ -34,7 +34,7 @@ import {comOpacidade} from "./estilos.js";
 import {defaultStrings, type AureaStrings} from "./strings.js";
 import {
   resolverTokens,
-  type AureaDensity, type AureaFontFamilies, type AureaThemeName, type AureaTokens,
+  type AureaBrand, type AureaDensity, type AureaFontFamilies, type AureaThemeName, type AureaTokens,
 } from "./tokens.js";
 
 export type AureaThemeControl = {
@@ -51,6 +51,8 @@ export type AureaThemeControl = {
 type Valor = {
   controle: AureaThemeControl; tokens: AureaTokens; strings: AureaStrings;
   fontes?: AureaFontFamilies; raiz: Valor | null;
+  /** A marca do app, para o tema num pedaço (`TemaDentro`) refazer os tokens com ela. */
+  marca?: AureaBrand | null;
 };
 
 // `comfortable` não é gosto: MEDIDO em 02/09/2026, os 8 tokens de densidade do `comfortable` são
@@ -68,6 +70,14 @@ export type AureaProviderProps = {
   theme?: AureaThemeName;
   /** Controlado: quando presente, manda, e `setDensity` só avisa. */
   density?: AureaDensity;
+  /**
+   * A marca (passo C das cores, ADR-0085): `"ember"` ou uma das 11 da paleta da 1.0 (`"sun"`, `"honey"`, `"orange"`,
+   * `"magenta"`, `"violet"`, `"indigo"`, `"cobalt"`, `"cyan"`, `"turquoise"`, `"emerald"`, `"lime"`). Ausente, é a Aurea
+   * Gold. O mesmo nome do `data-brand` da web. A marca muda só cor — tipo, canto, densidade e ícone continuam da Aurea.
+   *
+   *     <AureaProvider brand="cobalt">
+   */
+  brand?: AureaBrand;
   /**
    * Tema inicial do modo não controlado. Ausente, segue o **aparelho** (`useColorScheme`) até
    * alguém chamar `setTheme` — a partir daí a escolha da pessoa manda e o sistema não a desfaz.
@@ -119,7 +129,7 @@ export type AureaProviderProps = {
 };
 
 export function AureaProvider({
-  children, theme, density, defaultTheme, defaultDensity,
+  children, theme, density, brand, defaultTheme, defaultDensity,
   fontFamilies, icons, strings, onThemeChange, onDensityChange,
 }: AureaProviderProps) {
   const doAparelho = useColorScheme();
@@ -154,14 +164,15 @@ export function AureaProvider({
       // Alternar é sobre o que está NA TELA — a mesma regra que o hook da web escreveu.
       toggleTheme: () => setTheme(temaEfetivo === "dark" ? "light" : "dark"),
     },
-    tokens: resolverTokens(temaEfetivo, densidadeEfetiva, fontFamilies),
+    tokens: resolverTokens(temaEfetivo, densidadeEfetiva, fontFamilies, brand),
     // As frases NÃO dependem do par (tema, densidade), mas moram no mesmo `useMemo` de propósito:
     // um contexto a mais só se paga quando ele muda em outra hora, e este muda junto — é a mesma
     // conta que o cabeçalho deste arquivo já fez para os dois contextos que viraram um.
     strings: strings ?? defaultStrings,
     fontes: fontFamilies,
+    marca: brand ?? null,
     raiz: null,
-  }), [temaEfetivo, densidadeEfetiva, setTheme, setDensity, fontFamilies, strings]);
+  }), [temaEfetivo, densidadeEfetiva, setTheme, setDensity, fontFamilies, strings, brand]);
 
   // O registro de ícones fica num contexto PRÓPRIO: ele não muda quando o tema muda, e juntá-lo
   // ao valor do tema faria toda árvore que só desenha ícone re-renderizar na troca de tema.
@@ -330,7 +341,7 @@ export function TemaDentro({tema, children}: {tema: AureaThemeName; children?: R
   const v = usar("TemaDentro");
   const valor = React.useMemo<Valor>(() => ({
     ...v,
-    tokens: resolverTokens(tema, v.controle.density, v.fontes),
+    tokens: resolverTokens(tema, v.controle.density, v.fontes, v.marca),
     raiz: v.raiz ?? v,
   }), [v, tema]);
   if (v.tokens.theme === tema) return <>{children}</>;

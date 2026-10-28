@@ -24,6 +24,8 @@ The page always has a theme: `data-theme="light"` or `data-theme="dark"` on `<ht
 
 The accent is the brand yellow, `oklch(0.795 0.184 86.047)`. It is the same in both themes. It marks the main action, the current item and the chosen control.
 
+With `data-brand`, the accent is the brand's own colour, and every role below follows it. The thirteen brands are on [Theming](./docs-theming.html).
+
 | Token | Use |
 |---|---|
 | `--primary` | The yellow fill: the primary button, the brand card, full bars |
@@ -54,7 +56,7 @@ Neutrals are the grays that fill quiet controls and hover states.
 | `--secondary-foreground` | Text on `--secondary` |
 | `--secondary-hover` | `--secondary` under the pointer |
 | `--muted` | A quiet neutral fill |
-| `--accent` | The hover fill of outline and ghost buttons. In Aurea it is a gray, not the brand color |
+| `--accent` | The hover fill of outline and ghost buttons. In Aurea Gold it is a gray; in the eleven brands of the 1.0 palette, a light tint of the brand color |
 | `--accent-foreground` | Text on `--accent` |
 | `--segment` | The chosen tab in tabs and segmented controls |
 
@@ -86,6 +88,7 @@ There are four status colors: success, warning, danger and info. Each one has th
 
 - The full fill is the **same color in both themes**. A solid success button looks the same in light and dark.
 - Text on the warning fill is the ink. Text on the other three fills is white.
+- Aurea Orange moves the warning to honey (`#F5A524`), so a warning never looks like the brand.
 - Text, icons and progress bars on the page use the `-400` role. Each theme sets it so it reads on its own surfaces.
 - **Never paint text with a full fill color.** In the dark theme, the fills used as text fall below 4.5:1.
 

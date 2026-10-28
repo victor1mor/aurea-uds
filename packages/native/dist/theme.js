@@ -12,7 +12,7 @@ const DENSIDADE_PADRAO = "comfortable";
 // `dark` é o que o catálogo inteiro declara no `<html>`, e o que a identidade da Aurea assume.
 const TEMA_PADRAO = "dark";
 const Contexto = React.createContext(null);
-export function AureaProvider({ children, theme, density, defaultTheme, defaultDensity, fontFamilies, icons, strings, onThemeChange, onDensityChange, }) {
+export function AureaProvider({ children, theme, density, brand, defaultTheme, defaultDensity, fontFamilies, icons, strings, onThemeChange, onDensityChange, }) {
     const doAparelho = useColorScheme();
     const [temaInterno, setTemaInterno] = React.useState(defaultTheme ?? null);
     const [densidadeInterna, setDensidadeInterna] = React.useState(defaultDensity ?? DENSIDADE_PADRAO);
@@ -41,14 +41,15 @@ export function AureaProvider({ children, theme, density, defaultTheme, defaultD
             // Alternar é sobre o que está NA TELA — a mesma regra que o hook da web escreveu.
             toggleTheme: () => setTheme(temaEfetivo === "dark" ? "light" : "dark"),
         },
-        tokens: resolverTokens(temaEfetivo, densidadeEfetiva, fontFamilies),
+        tokens: resolverTokens(temaEfetivo, densidadeEfetiva, fontFamilies, brand),
         // As frases NÃO dependem do par (tema, densidade), mas moram no mesmo `useMemo` de propósito:
         // um contexto a mais só se paga quando ele muda em outra hora, e este muda junto — é a mesma
         // conta que o cabeçalho deste arquivo já fez para os dois contextos que viraram um.
         strings: strings ?? defaultStrings,
         fontes: fontFamilies,
+        marca: brand ?? null,
         raiz: null,
-    }), [temaEfetivo, densidadeEfetiva, setTheme, setDensity, fontFamilies, strings]);
+    }), [temaEfetivo, densidadeEfetiva, setTheme, setDensity, fontFamilies, strings, brand]);
     // O registro de ícones fica num contexto PRÓPRIO: ele não muda quando o tema muda, e juntá-lo
     // ao valor do tema faria toda árvore que só desenha ícone re-renderizar na troca de tema.
     const conteudo = icons
@@ -156,7 +157,7 @@ export function TemaDentro({ tema, children }) {
     const v = usar("TemaDentro");
     const valor = React.useMemo(() => ({
         ...v,
-        tokens: resolverTokens(tema, v.controle.density, v.fontes),
+        tokens: resolverTokens(tema, v.controle.density, v.fontes, v.marca),
         raiz: v.raiz ?? v,
     }), [v, tema]);
     if (v.tokens.theme === tema)

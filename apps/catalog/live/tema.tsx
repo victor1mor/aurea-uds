@@ -43,7 +43,7 @@ function Tema({marcas}: {marcas: Marca[]}) {
   const padrao = atual.id === "";
   // A referência troca o balde pela amostra da escolhida — e aqui também, desde 15/10/2026 (o Victor: "D … pode"): o
   // `Button` da web passou a aceitar o desenho do app no encaixe do ícone (`AureaIcon`, como o `Icon` e o
-  // `IconButton`). O nome falado contém o escrito ("Theme: Lory"), como pede a WCAG 2.5.3.
+  // `IconButton`). O nome falado contém o escrito ("Theme: Ember"), como pede a WCAG 2.5.3.
   // "Design theme", como o da referência: a chave claro/escuro/sistema ao lado já se chama "Theme" (15/10/2026).
   const nome = padrao ? "Design theme" : `Design theme: ${atual.label}`;
   const icone = padrao ? "paint-bucket" : amostra(atual.color);

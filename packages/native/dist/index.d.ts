@@ -2,7 +2,7 @@ export { AureaProvider, useAureaTheme, useAureaTokens } from "./theme.js";
 export type { AureaProviderProps, AureaThemeControl } from "./theme.js";
 export { BottomNavProvider, useBottomNavSpace } from "./barranav.js";
 export { resolverTokens } from "./tokens.js";
-export type { AureaDensity, AureaFontFamilies, AureaFontInput, AureaFontScale, AureaShadow, AureaThemeName, AureaTokens, } from "./tokens.js";
+export type { AureaBrand, AureaDensity, AureaFontFamilies, AureaFontInput, AureaFontScale, AureaShadow, AureaThemeName, AureaTokens, } from "./tokens.js";
 export { criarFolha, comOpacidade } from "./estilos.js";
 export { Text, Heading, Paragraph, Code } from "./text.js";
 export type { TextProps, AureaTextFont, AureaTextLeading, AureaTextSize, AureaTextTone, AureaTextWeight, AureaTextType, HeadingProps, ParagraphProps, CodeProps, AureaTypographyColor, AureaTypographyWeight, AureaTypographyAlign, } from "./text.js";

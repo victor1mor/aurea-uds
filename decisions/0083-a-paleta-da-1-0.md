@@ -114,7 +114,7 @@
 
 ## Como é obrigada
 
-- `tests/visual/lory-congelada.spec.ts` — a `lory`, nos dois temas, sai com as mesmas cores da 0.44.0.
+- `tests/visual/ember-congelada.spec.ts` — a `lory`, nos dois temas, sai com as mesmas cores da 0.44.0.
 - `tests/visual/paleta-passo-a.spec.ts` — no navegador: o escolhido grafite, o link com marca-texto (e a navegação sem), o
   botão ligado amarelo com a letra da tinta e sem fio, o campo branco no cartão, a linha do tempo por baixo dos pontos, o
   "aumentar contraste" (o contorno e as marcas na tinta).

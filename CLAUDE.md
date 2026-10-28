@@ -197,6 +197,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.43.0` | O bloco 1, o catálogo fiel: toda peça com página e toda variação num exemplo vivo, o nativo no site (a chave Web \| Native e as 79 páginas do nativo), quatro travas novas na CI, `CodeBlock tabs`, `SegmentedControl` com `size` e `href`, as fichas das peças só do nativo e as decisões da bancada ([ADR-0081](decisions/0081-a-bancada-do-bloco-1.md)) — pedido #97. **Publicada em 25/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor |
 | `0.44.0` | O bloco 2, a lateral inteira: `Sidebar` com `collapsible`, `indicator` e `panel`, `Sidebar.Provider`, `Sidebar.Toggle` e `useSidebar` (o Ctrl+B), no item `avatar`, `action`, o grupo que dobra e o `"separator"`, o texto e o fio a 16 e a lateral solta do topo até embaixo ([ADR-0082](decisions/0082-a-lateral-inteira.md)) — pedido #99. **Publicada em 26/10/2026** (entre 19:50 e 19:55, Brasília, medido no npm), pelo terminal do Victor |
 | `0.45.0` | As cores, passo A — a paleta da 1.0: os neutros Zinco, no claro o amarelo nunca é letra (o destaque e o link na cor do texto, o link com marca-texto), as marcas brancas nos controles, o foco dos campos no amarelo, o campo branco em todo lugar, o botão ligado amarelo, a linha do tempo consertada, o "aumentar contraste" do sistema e quatro tokens novos; a `lory` congelada ([ADR-0083](decisions/0083-a-paleta-da-1-0.md)) — pedido #100. **Publicada em 27/10/2026** (entre 16:20 e 16:28, Brasília, medido no npm), pelo terminal do Victor |
+| `0.46.0` | As cores, passo B — os estilos novos: `pressedStyle` no botão ligado (só web), `selectedStyle` no `SegmentedControl`, `variant` na `Timeline` e `currentStyle` no `BottomNav` (13 valores), web e nativo; a barra de baixo na mesma altura nos nove formatos; as duas exceções, o degradê do `brand-gradient` e os aros por dentro ([ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md)) — pedido #101. **Publicada em 28/10/2026** (entre 09:55 e 10:02, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -657,7 +658,7 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    proposta de cores que o Victor preparou componente a componente (25 e 26/10/2026) e as quatro decisões da bancada: o foco dos
    campos no amarelo (*"1 C Amarelo"*), o texto de apoio `#5E5E65` (o `#686871` da proposta dava 3,88:1 nos fundos de 10% —
    o axe achou), a linha do tempo consertada em todas as marcas e o cartão do escuro sem borda. Web e nativo; a `lory`
-   congelada, provada contra a 0.44.0 (`lory-congelada.spec.ts`). ⚠ **As lições:** (1) a fronteira do core recusou a classe
+   congelada, provada contra a 0.44.0 (`ember-congelada.spec.ts`). ⚠ **As lições:** (1) a fronteira do core recusou a classe
    `link-underline` (o core só tem classe que um componente produz) — a variação virou o atributo `data-link="underline"`;
    (2) a suíte inteira do Chromium achou o `rtl.spec` lendo o trilho antigo da linha do tempo, e a CI achou o `geometry.spec`
    comparando a cor calculada ("86.046997", no WebKit) com o texto do token ("86.047") — cor se compara pelo MESMO caminho
@@ -667,6 +668,19 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    27/10/2026** (entre 16:20 e 16:28, Brasília, medido no npm; o `native` apareceu no registro 6 minutos depois dos outros —
    a saída do terminal do Victor já dizia `+ @aurea-uds/native@0.45.0`), pelo terminal do Victor, da junção do pedido #100.
    O registro entrou no lote seguinte (as cores, passo B).
+
+44. **`0.46.0`, as cores, passo B — os estilos novos, feita em 27 e 28/10/2026** ([ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md))
+   — as variações da proposta de cores do Victor, todas para construir (*"Um lote só"*): o botão ligado em três cores
+   (`pressedStyle`, só web), o segmento aceso em seis (`selectedStyle`), a linha do tempo em cinco (`variant`) e o item atual
+   da barra de baixo em treze (`currentStyle`), cada uma também por atributo num contêiner; e as duas exceções nomeadas — o
+   degradê do `brand-gradient` (o check 4 só aceita `gradient(` na regra dele) e os aros, sempre sombra por dentro. Na
+   bancada o Victor viu a barra de baixo mais alta em cinco formatos (*"quero todos da mesma altura"*): o círculo e a cápsula
+   passaram a 28 e todas as barras a 54. Aprovada (*"Aprovo o passo B e os cinco pontos como estão"*). ⚠ **As lições:** (1) o
+   `sem-linha.test` não via o aro escrito por VARIÁVEL — passou a ler também a variável que guarda um anel; (2) depois de
+   mexer em exemplo do site, montar também o `build:live` (as caixas vivas), não só o `build:catalog`; (3) dois "defeitos"
+   da bancada eram do banco, não da peça (a caixa esticada da linha do tempo, o "3" solto em vez do `Badge`) — medidos antes
+   de mexer. **Publicada em 28/10/2026** (entre 09:55 e 10:02, Brasília, medido no npm), pelo terminal do Victor, da junção
+   do pedido #101. O registro entrou no lote seguinte (as cores, passo C).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
@@ -864,11 +878,22 @@ no git.
   recebe conteúdo do app entra na lista** (a regra das superfícies no `aurea.css`; no nativo, liga o contexto) — a
   0.40.0 esqueceu o `Header` flutuante, e a 0.40.1 consertou.
 - Temas escuro e claro equivalentes; densidades compact / comfortable / spacious.
-- **A marca `lory` fica CONGELADA** (decisão do Victor, 26/10/2026 — ADR-0083): os tokens dela estão escritos com os valores
-  de antes da paleta da 1.0, e toda regra nova da paleta leva `:where(:not([data-brand="lory"],[data-brand="lory"] *))`. A
-  única mudança nela é o conserto da linha do tempo (era defeito em todas as marcas). Quem cobra:
-  `tests/visual/lory-congelada.spec.ts` (a cor de cada elemento do banco da paleta contra a 0.44.0). Ela vai virar Aurea
-  Ember (`data-brand="ember"`) no passo C, só no nome.
+- **As TREZE marcas** (passo C, 28/10/2026 — [ADR-0085](decisions/0085-as-treze-marcas.md)): a padrão, a **Aurea Gold**,
+  sem `data-brand`; a **Aurea Ember** (`ember`, a antiga `lory` — sem apelido: *"mude 100% lory para ember"*); e as 11 da
+  paleta da 1.0 (`sun`, `honey`, `orange`, `magenta`, `violet`, `indigo`, `cobalt`, `cyan`, `turquoise`, `emerald`,
+  `lime`), com os neutros da Aurea. ⚠ **Regra para "qualquer marca" (`[data-brand]` sem nome) não se escreve:** ela valia só
+  para a `lory` quando ela era a única, e com as 11 passou a valer para todas — o selo cheio saiu errado assim. Só sobra a da
+  lateral; quem cobra é o `tests/unit/marcas-passo-c.test.tsx`. Toda marca nova passa pelo axe do
+  `tests/visual/marcas-passo-c.spec.ts`. **No nativo, a marca é a prop `brand` do `AureaProvider`** (os mesmos nomes); o
+  gerador emite o que cada marca muda sobre cada tema, e a folha memoizada tem a marca na chave — quem cobra é o
+  `tests/unit/native-marcas.test.tsx`.
+- **A Ember fica CONGELADA no padrão** (decisão do Victor, 26/10/2026 — ADR-0083): os tokens dela estão escritos com os
+  valores de antes da paleta da 1.0, e toda regra nova da paleta (passo A) leva
+  `:where(:not([data-brand="ember"],[data-brand="ember"] *))`. As
+  exceções, cada uma decidida pelo Victor: o conserto da linha do tempo (era defeito em todas as marcas); as marcas dos
+  controles brancas no escuro (*"Brancos, como as outras"*, 28/10/2026); e os estilos novos do passo B, que a alcançam quando
+  o app os escolhe (*"Sim, como as outras"*, 28/10/2026). Quem cobra: `tests/visual/ember-congelada.spec.ts` (contra a
+  0.44.0).
 - ~~Proibido: a aparência de outro design system~~ (trocado em 11/10/2026, ordem do Victor): **a peça
   é a da referência principal, quase idêntica, com as características desta seção por cima** (seção
   2, "quase idêntica"). Nome de componente igual ao dela é permitido. Continua proibido: o nome da
@@ -1028,7 +1053,7 @@ sessão não chega à outra; este arquivo chega. O que já estava nas seções a
 - **O caminho até a `1.0`** (08 e 09/10/2026): terminar a fila do documento de achados → auditar a
   referência principal peça a peça, com as variações, e adotar o jeito dela → a `1.0` só quando a
   sessão disser que está pronta, com aprovação visual dele, e com mais duas marcas além de `aurea` e
-  `lory` → antes dela, uma auditoria rígida e independente de tudo, feita por quem não escreveu o código
+  `lory` (cumprido na `0.47.0`: as 11 da paleta da 1.0) → antes dela, uma auditoria rígida e independente de tudo, feita por quem não escreveu o código
   (um agente sem o contexto da conversa, ou outra sessão aberta pelo Victor), consertada antes de sair.
 - **Sem versão paga por enquanto** (08/10/2026): não propor preço, plano pago ou venda sem pedido dele.
   Pedido de quem é de fora é bem-vindo e entra na fila normal, sem prazo prometido; texto público sobre

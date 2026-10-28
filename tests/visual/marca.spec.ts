@@ -8,7 +8,7 @@ import {esperarTransicoes} from "./esperar-transicoes";
 // única paleta que qualquer gate exercitava, e sob ela os dois eram invisíveis.
 //
 //  1. O item ATUAL da lateral usava `--secondary`/`--foreground`, que são tokens da PÁGINA. Na
-//     Aurea o painel e a página têm a mesma claridade, então nunca apareceu; sob `lory`, cuja
+//     Aurea o painel e a página têm a mesma claridade, então nunca apareceu; sob `ember`, cuja
 //     lateral é escura mesmo no tema claro, virava pílula quase branca com texto escuro.
 //  2. Os links da lateral do catálogo não têm atributo `class`, então a regra de LINK DE PROSA
 //     (`[data-theme="light"] a:not([class])`, peso 0,2,1) ganhava da regra da lateral (0,1,1) e
@@ -25,7 +25,7 @@ import {esperarTransicoes} from "./esperar-transicoes";
 // O eixo é combinatório por natureza: toda marca nova entra nesta matriz sem teste novo.
 // AS MARCAS SAEM DO ARQUIVO DE TOKENS, e isso é o cabeçalho acima cumprindo o que promete
 // ("toda marca nova entra nesta matriz sem teste novo"). Escrita à mão, a lista dizia isso e não
-// fazia: a `lory` só estava aqui porque alguém a digitou, e a próxima marca entraria muda. `""` é
+// fazia: a `ember` só estava aqui porque alguém a digitou, e a próxima marca entraria muda. `""` é
 // a Aurea — documento sem `data-brand`.
 // O filtro de `$` não é zelo: sem ele o `$description` do nó `brand` — metadado do DTCG — virava
 // uma MARCA chamada `$description`. `data-brand="$description"` não casa com nada, o documento
@@ -122,7 +122,7 @@ test.describe("marca · a lateral se lê em toda combinação", () => {
         expect.soft(m.rotulo, `${nome}/${tema}: o rótulo de grupo contra o painel`)
           .toBeGreaterThanOrEqual(AA);
         // A LATERAL É SUPERFÍCIE, e superfície NUNCA é mais escura que a página em que pousa.
-        // Esta é a trava que faltava quando o Victor apontou o painel azulado do `lory` no tema
+        // Esta é a trava que faltava quando o Victor apontou o painel azulado do `ember` no tema
         // escuro: as três medidas de contraste acima passavam, porque cada uma media o painel
         // contra ELE MESMO. O defeito estava na RELAÇÃO — eu tinha mapeado a lateral para o
         // trilho escuro do app deles (`--side`) em vez de mapear para superfície, e ela saiu
@@ -155,10 +155,10 @@ test.describe("marca · a lateral se lê em toda combinação", () => {
 
   // E a marca PRECISA mudar alguma coisa, senão ela é decoração no seletor. Prova pelo outro
   // lado: com `data-brand`, o primário deixa de ser o da Aurea.
-  test("com data-brand=lory, o primário deixa de ser o da Aurea", async ({page}) => {
+  test("com data-brand=ember, o primário deixa de ser o da Aurea", async ({page}) => {
     await page.goto(PAGINA);
     await page.evaluate(() => {
-      document.documentElement.dataset.brand = "lory";
+      document.documentElement.dataset.brand = "ember";
       document.documentElement.dataset.theme = "light";
     });
     await esperarTransicoes(page);
@@ -173,7 +173,7 @@ test.describe("marca · a lateral se lê em toda combinação", () => {
 // de crachá do `skin.spec.ts` montam só a marca PADRÃO. A ADR-0036 diz que marca redefine COR —
 // que é exatamente o eixo que aquele gate cobra —, então nenhuma marca jamais passou por ele.
 //
-// O que estava escondido ali: na `lory`, o crachá `warning` no tema claro media **1,74:1**. Os
+// O que estava escondido ali: na `ember`, o crachá `warning` no tema claro media **1,74:1**. Os
 // quatro semânticos do claro e o `danger` do escuro estavam abaixo do AA. A causa é estrutural e
 // vale para qualquer marca lida de um kit: o degrau `-400` vem do MEIO da rampa, e sobre um
 // `-bg` de claridade 0,95 nada do meio da rampa se lê.
