@@ -42,21 +42,26 @@ describe("a fonte dos tokens: a proposta, e a lory congelada", () => {
     expect(hexDe(D["input-strong"])).toBe("#646467");
     expect(D["primary-mark"].$value).toBe("{brand-yellow-ink}");
   });
-  it("a lory guarda a tinta, a letra do aviso, a bolinha e a célula de hoje", () => {
+  it("a Ember (a antiga lory) guarda a tinta, a letra do aviso, a bolinha e a célula de hoje", () => {
     for (const tema of ["light", "dark"] as const) {
-      const L = fonte.brand.lory[tema];
+      const L = fonte.brand.ember[tema];
       expect(hexDe(L["brand-yellow-ink"]), tema).toBe("#242424");
       expect(hexDe(L["warning-foreground"]), tema).toBe("#242424");
-      expect(L["control-thumb"].$value, tema).toBe("{primary-mark}");
+      // A bolinha: a Ember do claro continua a marca dela (branca); a do escuro passou ao branco (o Victor, 28/10/2026:
+      // "Brancos, como as outras") — era o quase preto do fundo dela.
+      if (tema === "light") expect(L["control-thumb"].$value, tema).toBe("{primary-mark}");
+      else expect(L["control-thumb"].$value, tema).toEqual({colorSpace: "oklch", components: [1, 0, 0]});
     }
-    expect(fonte.brand.lory.light["warning-500"].$value).toEqual(fonte.base["warning-500"].$value);
+    expect(fonte.brand.ember.light["warning-500"].$value).toEqual(fonte.base["warning-500"].$value);
   });
 });
 
 describe("o core: nenhuma regra nova alcança a lory", () => {
   const css = readFileSync("packages/core/src/aurea.css", "utf8");
   const ini = css.lastIndexOf("/*", css.indexOf("═══ A PALETA DA 1.0"));
-  const fim = css.indexOf(">>> camada responsiva");
+  // A seção do passo A vai até o começo da do passo B: desde 28/10/2026 os estilos do passo B alcançam a Ember ("Sim,
+  // como as outras"), e só o passo A continua sem alcançá-la.
+  const fim = css.indexOf("/* ═══ AS CORES, passo B");
   const secao = css.slice(ini, fim).replace(/\/\*[\s\S]*?\*\//g, "");
   const separar = (lista: string) => {
     const partes: string[] = []; let nivel = 0, atual = "";
@@ -76,12 +81,12 @@ describe("o core: nenhuma regra nova alcança a lory", () => {
     expect(seletores.length).toBeGreaterThanOrEqual(20);
   });
   it("todo seletor da seção leva a exclusão da lory", () => {
-    const sem = seletores.filter((s) => !s.includes(':where(:not([data-brand="lory"],[data-brand="lory"] *))')
-      && !s.startsWith(':root:where(:not([data-brand="lory"]))'));
+    const sem = seletores.filter((s) => !s.includes(':where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *))')
+      && !s.startsWith(':root:where(:not(:is([data-brand="ember"],[data-brand="lory"])))'));
     expect(sem).toEqual([]);
   });
   it("as regras de antes do botão ligado e do escolhido ficaram SÓ na lory", () => {
-    const soNaLory = css.split(':where([data-brand="lory"],[data-brand="lory"] *)').length - 1;
+    const soNaLory = css.split(':where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)').length - 1;
     expect(soNaLory).toBeGreaterThanOrEqual(9);
     // e o botão ligado de antes não aparece mais sem a marca: nem o fio, nem a mistura
     expect(css).not.toMatch(/\.btn\[aria-pressed="true"\]:not\(\.btn-icon\)::after/);

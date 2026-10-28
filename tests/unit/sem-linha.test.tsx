@@ -84,9 +84,9 @@ const LINHA_PERMITIDA_CSS: {seletor: string; prop: string; valor?: string; media
   {seletor: ".card-outline", prop: "border-color"},
   // O botão ligado CINZA (o `neutral`, ADR-0084) é o mais discreto, e ganha o contorno de 3:1 com "aumentar contraste" —
   // a mesma exceção dos campos, só nessa preferência e só com a cor dela.
-  {seletor: ':is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"]):where(:not([data-brand="lory"],[data-brand="lory"] *))',
+  {seletor: ':is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"])',
     prop: "box-shadow", valor: "inset 0 0 0 var(--border-width) var(--input-strong)", media: "@media (prefers-contrast:more)"},
-  {seletor: ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not([data-brand="lory"],[data-brand="lory"] *))',
+  {seletor: ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *))',
     prop: "border-color", valor: "var(--input-strong)", media: "@media (prefers-contrast:more)"},
 ];
 
@@ -259,7 +259,7 @@ describe("sem linha — nenhuma peça da Aurea desenha borda (ADR-0072)", () => 
     expect(linhasNoCss(".card-outline { box-shadow:inset 0 0 0 1px var(--border); }", "x")).toHaveLength(1);
     expect(linhasNoCss(".card { border-color:color-mix(in oklab,var(--foreground) 10%,transparent); }", "x")).toHaveLength(1);
     // O contorno do "aumentar contraste" (ADR-0083) vale SÓ dentro do `@media (prefers-contrast:more)`, só com a cor dele.
-    const campos = ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not([data-brand="lory"],[data-brand="lory"] *))';
+    const campos = ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *))';
     expect(linhasNoCss(`@media (prefers-contrast:more) { ${campos} { border-color:var(--input-strong); } }`, "x")).toEqual([]);
     expect(linhasNoCss(`${campos} { border-color:var(--input-strong); }`, "x")).toHaveLength(1);
     expect(linhasNoCss(`@media (min-width:600px) { ${campos} { border-color:var(--input-strong); } }`, "x")).toHaveLength(1);
@@ -275,7 +275,7 @@ describe("sem linha — nenhuma peça da Aurea desenha borda (ADR-0072)", () => 
     expect(linhasNoCss('.bottom-nav[data-current-style="ring"] .x { border-color:var(--primary); }', "x")).toHaveLength(1);
     expect(linhasNoCss('.bottom-nav[data-current-style="brand"] .x { --bn-ring:inset 0 0 0 calc(1.5 * var(--border-width)) var(--primary); }', "x")).toHaveLength(1);
     // O contorno do botão ligado cinza: só no "aumentar contraste".
-    const ligadoCinza = ':is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"]):where(:not([data-brand="lory"],[data-brand="lory"] *))';
+    const ligadoCinza = ':is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"])';
     expect(linhasNoCss(`@media (prefers-contrast:more) { ${ligadoCinza} { box-shadow:inset 0 0 0 var(--border-width) var(--input-strong); } }`, "x")).toEqual([]);
     expect(linhasNoCss(`${ligadoCinza} { box-shadow:inset 0 0 0 var(--border-width) var(--input-strong); }`, "x")).toHaveLength(1);
     // A sombra por dentro do nativo: só no `aroDoEstilo`.

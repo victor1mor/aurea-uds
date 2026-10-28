@@ -93,9 +93,10 @@ describe("ADR-0083 · a letra de destaque do claro é o grafite do texto; o rest
 describe("ADR-0073 e 0076 · o selo primário cheio enche com o amarelo e escreve com a tinta", () => {
   it("web: o `.badge-primary` declara a letra do cheio, e o fundo é o primário fora de marca", () => {
     const core = readFileSync("packages/core/src/aurea.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
-    const regra = core.match(/\.badge-primary \{([^}]*)\}/)?.[1] ?? "";
+    // A regra do selo começa a linha (desde 28/10/2026 a barra de baixo tem `… .badge-primary {` antes dela, na inversão).
+    const regra = core.match(/^\.badge-primary \{([^}]*)\}/m)?.[1] ?? "";
     expect(regra).toContain("--badge-on:var(--primary-foreground)");
-    expect(core).toContain(".badge-primary:not(:where([data-brand],[data-brand] *)) { --badge-fill:var(--primary); }");
+    expect(core).toContain('.badge-primary:not(:where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)) { --badge-fill:var(--primary); }');
   });
   it("nativo: no claro, o selo cheio é o amarelo com a tinta em cima", () => {
     const t = resolverTokens("light", "comfortable");
@@ -115,7 +116,7 @@ describe("ADR-0073 e 0076 · o selo primário cheio enche com o amarelo e escrev
 describe("ADR-0073 · o selo primário de contorno escreve com o acento, sem mistura", () => {
   it("web: a regra existe, e só fora de marca", () => {
     const core = readFileSync("packages/core/src/aurea.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
-    expect(core).toContain(".badge-primary.badge-outline:not(:where([data-brand],[data-brand] *)) { color:var(--badge-accent); }");
+    expect(core).toContain('.badge-primary.badge-outline:not(:where(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *)) { color:var(--badge-accent); }');
   });
   it("nativo: no claro, a letra do contorno primário é o acento, e a dos estados continua misturada", () => {
     const t = resolverTokens("light", "comfortable");

@@ -17,7 +17,7 @@ Three attributes switch the tokens. Each one is independent of the others.
 |---|---|---|
 | `data-theme` | `light`, `dark` | Every color role |
 | `data-density` | `compact`, `comfortable`, `spacious` | Control heights, table rows, card padding |
-| `data-brand` | `lory` | The color palette, in both themes |
+| `data-brand` | `ember`, `sun`, `honey`, `orange`, `magenta`, `violet`, `indigo`, `cobalt`, `cyan`, `turquoise`, `emerald`, `lime` | The color palette, in both themes |
 
 Everything else (type, space, radius, motion, shadows) is set once on `:root` and is the same in every theme, density and brand.
 
@@ -28,7 +28,7 @@ Each group of tokens is emitted under its own selector:
 [data-theme="dark"] { /* the dark color roles */ }
 [data-theme="light"] { /* the light color roles */ }
 [data-density="compact"] { /* the compact sizes */ }
-[data-brand="lory"][data-theme="dark"] { /* the brand palette, dark */ }
+[data-brand="cobalt"][data-theme="dark"] { /* the brand palette, dark */ }
 ```
 
 ::: demo theme-axes
@@ -74,7 +74,7 @@ The full list of color roles is on [Colors](./docs-colors.html).
 A brand is a second palette. It is set with `data-brand`, next to `data-theme`.
 
 ```html
-<html data-brand="lory" data-theme="light">
+<html data-brand="cobalt" data-theme="light">
 ```
 
 - **A brand changes color only.** Type, radius, density, space and icons stay Aurea's in every brand.
@@ -82,7 +82,30 @@ A brand is a second palette. It is set with `data-brand`, next to `data-theme`.
 - **Without `data-brand`, nothing changes.** You get Aurea as it is.
 - **Inside Aurea's own palette, the yellow never changes.** It is the same in light and dark.
 
-The package ships one brand, `lory`. A brand lives in the token file, next to the themes, and the build emits it with them. Brands are web only today: the React Native package has no brand axis.
+Aurea ships thirteen palettes. The default needs no attribute; the other twelve are set with `data-brand`.
+
+| Brand | `data-brand` | Primary | Text on the primary |
+|---|---|---|---|
+| Aurea Gold | none (the default) | `#F0B100` | dark |
+| Aurea Ember | `ember` | orange | white |
+| Aurea Sun | `sun` | `#FACC15` | dark |
+| Aurea Honey | `honey` | `#F5A524` | dark |
+| Aurea Orange | `orange` | `#FF7A1A` | dark |
+| Aurea Magenta | `magenta` | `#E0196E` | white |
+| Aurea Violet | `violet` | `#7C3AED` | white |
+| Aurea Indigo | `indigo` | `#4F46E5` | white |
+| Aurea Cobalt | `cobalt` | `#0246F1` | white |
+| Aurea Cyan | `cyan` | `#06B6D4` | dark |
+| Aurea Turquoise | `turquoise` | `#14C8A8` | dark |
+| Aurea Emerald | `emerald` | `#17C964` | dark |
+| Aurea Lime | `lime` | `#A3E635` | dark |
+
+- **The neutrals are Aurea's in every brand.** A brand changes the primary color and the roles built on it: links, focus, the selected control, the sidebar and the selection.
+- **Aurea Ember keeps its own neutrals.** It was called `lory` until 0.46.0, and `data-brand="lory"` still works for one more version.
+- **Aurea Orange moves the warning color to honey,** so a warning never looks like the brand.
+- **`currentStyle="brand-white"` on the bottom bar fails WCAG on the light primaries** (Gold, Sun, Honey, Orange, Cyan, Turquoise, Emerald, Lime), as it does on Aurea Gold.
+
+A brand lives in the token file, next to the themes, and the build emits it with them. Brands are web only today: the React Native package has no brand axis.
 
 ## A theme for one part of the page
 
@@ -101,7 +124,7 @@ The components do the same for you:
 - [Section](./section.html) takes `theme="dark"` or `theme="light"` for one band of a page.
 - [Card](./card.html) with `variant="contrast"` puts the dark theme inside the card.
 
-A brand set on an ancestor reaches a nested theme too: `[data-brand="lory"] [data-theme="dark"]` is part of the brand's selector.
+A brand set on an ancestor reaches a nested theme too: `[data-brand="cobalt"] [data-theme="dark"]` is part of the brand's selector.
 
 ## Overriding a token
 

@@ -456,6 +456,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.47.0](https://aureauds.dev/release-v0-47-0.md): Thirteen brands — Aurea Ember (formerly lory) and eleven new palettes — plus a tighter Toolbar and a red counter on the bottom bar.
 - [v0.46.0](https://aureauds.dev/release-v0-46-0.md): New styles for the pressed button, the selected segment, the timeline and the current item of the bottom bar — and a bottom bar of one height in every shape.
 - [v0.45.0](https://aureauds.dev/release-v0-45-0.md): The 1.0 palette — zinc neutrals, a graphite accent in light mode, highlighted links, white marks inside controls, white fields everywhere and support for the system's "increase contrast".
 - [v0.44.0](https://aureauds.dev/release-v0-44-0.md): The whole sidebar — three ways to collapse, its state outside the AppShell with Ctrl+B, groups that fold, actions, separators, avatars, sections with a panel and five ways to draw the current item.

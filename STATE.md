@@ -24,9 +24,9 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 
 | Métrica | Valor |
 |---|---|
-| Declarações emitidas | 504 |
-| Nomes distintos | 239 |
-| Nomes referenciados pelo core | 191 |
+| Declarações emitidas | 1026 |
+| Nomes distintos | 241 |
+| Nomes referenciados pelo core | 193 |
 | Nomes nunca referenciados pelo core | 48 |
 
 ## Catálogo gerado
@@ -37,9 +37,9 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Pattern | 234 |
 | Block | 15 |
 | Recipe | 23 |
-| Documentação | 82 |
+| Documentação | 83 |
 | Índice de área | 11 |
-| **Total** | **592** |
+| **Total** | **593** |
 
 ## Cobertura das fichas
 
@@ -70,9 +70,9 @@ starter têm o mínimo do modelo e ainda não têm `features` nem `examples`. O 
 
 | Métrica | Valor |
 |---|---|
-| Chamadas de `test()` nos testes unitários | 2275 |
+| Chamadas de `test()` nos testes unitários | 2281 |
 | Componentes citados nos testes unitários | 158 de 138 |
-| Specs de navegador (Playwright) | 67 |
+| Specs de navegador (Playwright) | 70 |
 | Baselines de screenshot no repositório | 48 |
 | Baselines `-linux.png` (o que a CI compara) | 24 |
 

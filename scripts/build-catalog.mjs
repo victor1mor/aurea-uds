@@ -845,7 +845,7 @@ const DEMOS_DOCS = {
   "theme-axes": () => h(A.Cluster, {gap: "normal", align: "start"},
     ...[[{"data-theme": "light"}, 'data-theme="light"'], [{"data-theme": "dark"}, 'data-theme="dark"'],
       [{"data-theme": "dark", "data-density": "compact"}, 'data-density="compact"'],
-      [{"data-theme": "dark", "data-brand": "lory"}, 'data-brand="lory"']].map(([attrs, rotulo]) =>
+      [{"data-theme": "dark", "data-brand": "ember"}, 'data-brand="ember"']].map(([attrs, rotulo]) =>
       // Dois botões, e não um selo primário: o selo escreve com o amarelo, e a exceção do amarelo como letra no claro
       // (ADR-0073) vale para a página no claro — num painel claro dentro da página escura, o axe o reprova (medido).
       painelComAtributos(attrs, rotulo, h(A.Cluster, {gap: "tight"}, h(A.Button, {variant: "primary"}, "Save"),
@@ -1507,9 +1507,14 @@ const mark = h("svg", {width: 26, height: 26, viewBox: "0 0 1000 1000", "aria-hi
 // Aurea os "temas" são as MARCAS (ADR-0036). Ele é vivo (a `Popover` da Aurea): quem monta é o `search.js`, sobre
 // este lugar; aqui sai o botão parado, igual ao vivo, para a barra não pular. As cores vêm dos TOKENS — a da marca
 // em hex, que é o que a `ColorSwatch` lê para pôr o "visto" claro ou escuro.
-const hexDoToken = t => linearSrgbParaHex(oklchParaLinearSrgb(t.$value.components));
-const MARCAS = [{id: "", label: "Aurea", color: hexDoToken(tokensDoc.base["brand-yellow"])},
-  {id: "lory", label: "Lory", color: hexDoToken(tokensDoc.brand.lory.dark.primary)}];
+// AS 13 MARCAS (passo C das cores, 28/10/2026): a padrão, a Aurea Gold, sem `data-brand`; a Aurea Ember (a antiga `lory`); e
+// as 11 da paleta da 1.0, na ordem da proposta do Victor. O nome é o dele sem o "Aurea" da frente, que todas têm. A cor é o
+// primário do tema escuro (nas 11 é o mesmo nos dois temas); as 11 estão em hex no arquivo de tokens.
+const hexDoToken = t => t.$value.hex ?? linearSrgbParaHex(oklchParaLinearSrgb(t.$value.components));
+const NOME_DA_MARCA = id => id.charAt(0).toUpperCase() + id.slice(1);
+const MARCAS = [{id: "", label: "Gold", color: hexDoToken(tokensDoc.base["brand-yellow"])},
+  ...Object.keys(tokensDoc.brand).filter(id => !id.startsWith("$"))
+    .map(id => ({id, label: NOME_DA_MARCA(id), color: hexDoToken(tokensDoc.brand[id].dark.primary)}))];
 // A MESMA CAIXA DOS VIZINHOS (o Victor, 15/10/2026: "por que os ícones da direita estão tamanhos diferentes?"): o `sm`
 // (32), como os outros botões do topo — na referência são todos de 32 a 34, com fundo. A letra fica a do `sm` (14): a
 // referência põe 12 e a letra apagada nesse botão com um ajuste só dela; na Aurea é o `quiet` do `Button` (15/10/2026).
@@ -2098,7 +2103,7 @@ write(join(outDir, "assets/search-index.js"), `window.AUREA_SEARCH = ${JSON.stri
 // Victor navega: `file:///C:/dev/aurea-uds/...`. Falhar em silêncio devolve o comportamento
 // antigo (tema do template); estourar deixaria a página sem estilo nenhum.
 const TEMA_SALVO = `<script>
-try{var t=localStorage.getItem("aurea-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;else if(t==="system")document.documentElement.dataset.theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var b=localStorage.getItem("aurea-brand");if(b)document.documentElement.dataset.brand=b}catch(e){}
+try{var t=localStorage.getItem("aurea-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t;else if(t==="system")document.documentElement.dataset.theme=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";var b=localStorage.getItem("aurea-brand");if(b==="lory")b="ember";if(b)document.documentElement.dataset.brand=b}catch(e){}
 </script>
 `;
 

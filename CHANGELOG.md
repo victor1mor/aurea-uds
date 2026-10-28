@@ -17,6 +17,14 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.46.0 (28/10/2026)
+
+- **A 0.46.0 publicada entre 09:55 e 10:02 de 28/10/2026** (Brasília, medido no npm; o `icons` às 09:55 e o `native`,
+  o último a aparecer no registro, às 10:02): o `released-surface.json` do commit do publish (`920f0a0e`) — nenhum nome
+  novo e nenhuma frase nova, nem na web nem no nativo. O CHANGELOG ([0.46.0] publicada) e o CLAUDE.md (a linha na tabela
+  e o item 44).
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.45.0 (27/10/2026)
 
 - **A 0.45.0 publicada entre 16:20 e 16:28 de 27/10/2026** (Brasília, medido no npm; o `tokens` às 16:20 e o `native`,
@@ -167,9 +175,67 @@ como deveria funcionar"*.
 
 ---
 
+## [0.47.0] — 2026-10-28
+
+⏳ **Ainda não publicada.** As cores, passo C — **as treze marcas** ([ADR-0085](decisions/0085-as-treze-marcas.md)): a
+`lory` passa a se chamar **Aurea Ember**, e as 11 marcas da paleta da 1.0 entram, oficiais com o sim do Victor (*"As 11"*);
+junto, o que a bancada achou e ele decidiu olhando: a `Toolbar` nas medidas da referência, o contador e o ponto da barra de
+baixo vermelhos como no nativo, e a Ember com os estilos novos e as marcas dos controles brancas no escuro. Aprovado na
+bancada (28/10/2026): *"Aprovo"*. Só a web — o nativo não tem eixo de marca.
+
+### ⚠ Muda a aparência
+
+- **A `Toolbar`** tem 4 por dentro e 8 entre os botões, como a barra "colada" da referência (eram 7 e 6, escritos à mão): a
+  caixa passa de 50 a 44 de altura.
+- **A barra de baixo** (`BottomNav`): o ponto vazio ("tem novidade") é vermelho (`--destructive`), como no nativo — na barra
+  inteira da marca (`currentStyle="bar-*"`) ele continua a tinta. E no item atual (`capsule`, `expand`, `circle-bold`) a
+  peça só inverte o selo da cor da MARCA (`.badge-primary`): um contador vermelho fica vermelho. Os exemplos do site passam
+  o contador vermelho (`variant="danger"`).
+- **Na Aurea Ember, no escuro**, a bolinha do `Switch`, a alça do `Slider`, o visto do `Checkbox` e o ponto do `Radio` são
+  brancos, como nas outras marcas (eram o quase preto do fundo dela).
+- **No escuro, nas marcas**, a letra do escolhido (o segmento aceso, a aba, o item de navegação atual) e o `.eyebrow` são o
+  `--primary-emphasis`. Na Aurea Gold ele é o próprio amarelo, e nada muda.
+
+### ⚠ Pode quebrar
+
+- **`data-brand="lory"` passa a se chamar `data-brand="ember"`.** O nome antigo continua valendo nesta versão, como apelido
+  — no CSS dos tokens e no core —, e sai na seguinte.
+
+### Acrescentado
+
+- **As 11 marcas da paleta da 1.0:** `data-brand="sun"`, `honey`, `orange`, `magenta`, `violet`, `indigo`, `cobalt`,
+  `cyan`, `turquoise`, `emerald` e `lime`, com os valores da proposta de cores do Victor. Os neutros são os da Aurea; cada
+  marca redefine o primário e o que nasce dele (o link, o foco, o controle escolhido, a lateral, a seleção, o acento e a
+  ponta do degradê do `brand-gradient`). A Aurea Orange troca o aviso pela cor do mel.
+- **A Aurea Ember recebe os estilos novos** (`pressedStyle`, `selectedStyle`, a `variant` da `Timeline` e o `currentStyle`),
+  como as outras marcas — muda o item 7 da [ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md). O padrão
+  dela, sem estilo escolhido, continua o de antes.
+- **O site:** o botão "Theme" lista as 13 marcas (Gold, Ember, Sun…), e a página de marcas (Theming) mostra a tabela delas.
+
+### Corrigido
+
+- **O selo cheio da marca** (`Badge` primário sólido) nas marcas: saía no acento (a letra escura no grafite, 1,12:1 na Sun
+  do claro). É o botão cheio em toda marca; a letra do selo de contorno da marca também segue a da Gold.
+
+### Para quem cuida do repositório
+
+- **O apelido de marca** mora em `brandAliases`, no arquivo de tokens; o `scripts/build-tokens.mjs` emite o nome novo e o
+  antigo no mesmo bloco, e o core escreve `:is([data-brand="ember"],[data-brand="lory"])`, que pesa o mesmo que o atributo
+  sozinho.
+- **Provas novas:** `tests/visual/marcas-passo-c.spec.ts` (o axe nos dois bancos das cores, nas 13 marcas e nos dois
+  temas — achou os três defeitos de contraste desta versão), `tests/unit/marcas-passo-c.test.tsx` (os nomes, o primário,
+  o apelido, e que o core não escreve regra nova para "qualquer marca"), `tests/visual/toolbar-medidas.spec.ts` e
+  `tests/visual/contador-vermelho.spec.ts`. O `lory-congelada.spec.ts` prova a Ember com os dois nomes, e aceita só as
+  marcas brancas do escuro.
+- **Achado e deixado para um lote próprio** (decisão do Victor): no escuro, o nome dentro da célula "atenção" do painel de
+  saúde mede 2,41:1 — já na 0.46.0, igual em todas as marcas.
+
+---
+
 ## [0.46.0] — 2026-10-27
 
-⏳ **Ainda não publicada.** As cores, passo B — **os estilos novos** ([ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md)):
+✅ **Publicada em 28/10/2026, entre 09:55 e 10:02 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+#101.** As cores, passo B — **os estilos novos** ([ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md)):
 as variações que o Victor aprovou em 26/10/2026, todas para construir — o botão ligado, o segmento aceso, a linha do tempo e
 o item atual da barra de baixo —, e a barra de baixo na mesma altura em todos os formatos. Aprovado na bancada (27/10/2026):
 *"Aprovo o passo B e os cinco pontos como estão"*. Web e nativo. O padrão de cada peça não muda; a `lory` fica de fora.

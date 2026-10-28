@@ -25,13 +25,13 @@ const PSEUDO = ["content", "background-color", "background-image", "box-shadow",
 
 type Foto = Record<string, Record<string, string>>;
 
-async function fotografar(p: Page, tema: string): Promise<Foto> {
+async function fotografar(p: Page, tema: string, marca = "lory"): Promise<Foto> {
   if (GRAVAR) {
     const antiga = readFileSync(GRAVAR, "utf8");
     await p.route(/\/assets\/aurea-[^/]+\.css$/, (r) => r.fulfill({status: 200, contentType: "text/css", body: antiga}));
   }
   await p.setViewportSize({width: 1280, height: 900});
-  await p.goto(`${APP}?marca=lory&tema=${tema}`, {waitUntil: "networkidle"});
+  await p.goto(`${APP}?marca=${marca}&tema=${tema}`, {waitUntil: "networkidle"});
   await p.evaluate(() => document.fonts.ready);
   return p.evaluate(({PROPS, PSEUDO}) => {
     const out: Record<string, Record<string, string>> = {};
@@ -54,10 +54,14 @@ async function fotografar(p: Page, tema: string): Promise<Foto> {
   }, {PROPS, PSEUDO});
 }
 
-for (const tema of ["light", "dark"]) {
-  test(`a lory no ${tema === "light" ? "claro" : "escuro"} sai com as cores da 0.44.0`, async ({page: p}, info) => {
+// O NOME NOVO (passo C, 28/10/2026): a `lory` passou a se chamar Aurea Ember (`ember`), e o nome antigo vale por uma versão.
+// Os dois nomes têm de sair com as MESMAS cores da 0.44.0 — só o nome mudou. Provado contra o defeito: com a marca renomeada
+// nos tokens e o core ainda escrevendo só `lory`, a `ember` reprova (as regras novas da paleta a alcançam).
+for (const marca of ["lory", "ember"]) for (const tema of ["light", "dark"]) {
+  test(`a ${marca} no ${tema === "light" ? "claro" : "escuro"} sai com as cores da 0.44.0`, async ({page: p}, info) => {
     test.skip(info.project.name !== "chromium", "a referência foi gravada no Chromium");
-    const agora = await fotografar(p, tema);
+    test.skip(Boolean(GRAVAR) && marca !== "lory", "a referência se grava com o nome de quando ela foi gravada");
+    const agora = await fotografar(p, tema, marca);
     expect(Object.keys(agora).length, "o banco tem peças").toBeGreaterThan(200);
     if (GRAVAR) {
       const ref = existsSync(REF) ? JSON.parse(readFileSync(REF, "utf8")) : {};
@@ -67,14 +71,23 @@ for (const tema of ["light", "dark"]) {
     }
     const ref: Foto = JSON.parse(readFileSync(REF, "utf8"))[tema];
     const diferencas: string[] = [];
+    // A ÚNICA MUDANÇA PERMITIDA (passo C, 28/10/2026, o Victor: "Brancos, como as outras"): no escuro, as marcas dos
+    // controles — a bolinha do Switch, a alça do Slider, o visto e o ponto do Radio — saíam no quase preto do fundo dela
+    // (`oklch(0.16 0.02 250)`) e passaram ao branco, como nas outras marcas e na referência. Medido: 9 propriedades, em 4
+    // peças, só no escuro.
+    const marcaDoControle = (antes: string, depois: string) => tema === "dark" && antes === "oklch(0.16 0.02 250)" && depois === "oklch(1 0 0)";
+    let permitidas = 0;
     for (const [chave, linha] of Object.entries(ref)) {
       const hoje = agora[chave];
       if (!hoje) { diferencas.push(`${chave}: sumiu`); continue; }
       for (const [prop, valor] of Object.entries(linha)) {
-        if (hoje[prop] !== valor) diferencas.push(`${chave} ${prop}: ${valor} → ${hoje[prop]}`);
+        if (hoje[prop] === valor) continue;
+        if (marcaDoControle(valor, hoje[prop])) { permitidas++; continue; }
+        diferencas.push(`${chave} ${prop}: ${valor} → ${hoje[prop]}`);
       }
     }
     expect(diferencas.slice(0, 40), `${diferencas.length} diferenças`).toEqual([]);
+    if (tema === "dark") expect(permitidas, "as marcas brancas do escuro estão lá").toBe(9);
     expect(Object.keys(agora).length, "o banco tem as mesmas peças").toBe(Object.keys(ref).length);
   });
 }

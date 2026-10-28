@@ -38,17 +38,20 @@ Contrast is checked on the colour the browser actually paints, after every token
 - **axe** runs on every page of this site, in the dark and the light theme, with the WCAG 2.0 and 2.1 A and AA rules plus best practices. It runs in Chromium, Firefox and WebKit.
 - A **contrast matrix** checks every `appearance` and `tone` of the button, in both themes.
 - A unit test fails if text is ever painted with the background colour of a state. Filled state backgrounds (`--success`, `--info`, `--warning`, `--destructive`) are for fills; text, icons and bars on the page use their `-400` pair.
-- Text on the brand yellow is dark grey (`brand-yellow-ink`, `#242424`), at 8.13:1, in both themes.
+- Text on the brand yellow is the ink (`brand-yellow-ink`, `#18181B`), at 9.28:1, in both themes.
+- Every brand (`data-brand`) is checked the same way: axe runs on the pieces the palette touches, in each of the thirteen brands and both themes.
 
 ### Known trade-offs
 
-Aurea has one documented gap against WCAG and one documented loss for readers with low vision. Both are deliberate project decisions, made with the numbers in front of them.
+Aurea has a few documented gaps against WCAG and one documented loss for readers with low vision. All are deliberate project decisions, made with the numbers in front of them.
 
 **1. Field boundaries.** Aurea draws no lines (see [Design Principles](./docs-design-principles.html)). Fields and controls are separated from the page by a fill instead of a border. In the light theme, a field on the page is white with a soft shadow: its fill measures 1.09:1 against the page, and the shadow draws the edge. Inside a white surface, and in the dark theme, fields keep a translucent fill. That boundary measures 1.34:1 for fields and 1.92:1 for controls in the dark theme, and 1.21:1 and 1.49:1 in the light theme. WCAG 1.4.11 asks for 3:1, so fields do not meet it.
 
 **2. Letters that look alike.** The text font is Inter, set without its disambiguation alternates (`ss02`). The capital `I` and the lowercase `l` are the same straight stroke, and the zero differs from the letter `O` only by its width. Titles, in Sora, behave the same way. WCAG does not ask for a particular typeface, but readers with low vision lose a help the previous typeface gave them. What still protects them is the rest of this page: contrast measured in both themes, a visible focus, 44px targets, and pages that do not scroll sideways with text at 200%.
 
-Accent text in the light theme passes: since v0.37.0 it uses the brand blue, and no colour has an exception in either theme.
+**3. White and yellow marks on the yellow.** In Aurea Gold, the marks inside a chosen control (the switch thumb, the checkbox mark, the radio dot) are white on the yellow: 1.91:1. Fields show their focus in the yellow, 1.75:1 on the page in the light theme; with the system's "increase contrast" on, it turns graphite. And `currentStyle="brand-white"` on the bottom bar draws white on the yellow, 1.91:1 — it is a style you choose, never the default.
+
+Accent text in the light theme passes: since v0.45.0 the yellow is never text there. Accent text and links are the text colour.
 
 If your product must meet WCAG AA in full, account for the field boundaries.
 
@@ -58,7 +61,7 @@ Every focusable piece shows one focus line. It is never a border plus a separate
 
 - Width: `--focus-width`, 2px. Gap from the piece: `--focus-offset`, 2px.
 - Inside a clipped container (a table row, a tree item), the ring is drawn inward so it is not cut off.
-- In the light theme, the ring is the text colour (`--focus-strong`): 14.24:1 on the page and 8.13:1 around the yellow button. In the dark theme, it is the brand yellow.
+- In the light theme, the ring of most pieces is the text colour (`--focus-strong`): 18.25:1 on the page and 10.42:1 around the yellow button. Fields use the yellow (trade-off 3 above). In the dark theme, the ring is the brand yellow.
 - On an invalid field, the ring takes the danger colour, so the error stays visible while it is being fixed.
 - React Native has no outline. There, focus is shown as a border in the focus colour.
 

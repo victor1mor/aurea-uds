@@ -72,9 +72,14 @@ describe("o core: a seção do passo B", () => {
       expect(secao, `data-${familia}="${v}"`).toContain(`[data-${familia}="${v}"]`);
     }
   });
-  it("toda regra da seção leva a exclusão da lory", () => {
+  // ~~toda regra da seção leva a exclusão da lory~~ → a Ember (a antiga lory) RECEBE os estilos, como as outras marcas
+  // (o Victor, 28/10/2026: "Sim, como as outras"). Provado contra o defeito: com a guarda de antes, reprova.
+  it("nenhuma regra da seção exclui a Ember, e o ligado dela com estilo ganha a pintura", () => {
     expect(regras.length).toBeGreaterThan(40);
-    for (const r of regras) expect(r.sel, r.sel.slice(0, 120)).toContain(':where(:not([data-brand="lory"],[data-brand="lory"] *))');
+    for (const r of regras) expect(r.sel, r.sel.slice(0, 120)).not.toContain(':where(:not(:is([data-brand="ember"],[data-brand="lory"]),:is([data-brand="ember"],[data-brand="lory"]) *))');
+    const pintura = regras.filter((r) => r.sel.includes('[data-pressed-style]') && r.sel.includes(':where(:is([data-brand="ember"],[data-brand="lory"])')
+      && r.corpo.includes('background:var(--pressed-bg)'));
+    expect(pintura.length).toBe(1);
   });
   it("a peça com o seu atributo ganha do contêiner: o caminho do contêiner pula quem tem o próprio", () => {
     const contem = (familia: string, classe: string) =>

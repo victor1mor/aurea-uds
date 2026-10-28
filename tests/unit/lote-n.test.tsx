@@ -87,10 +87,11 @@ describe("MT-02 · Card accent", () => {
 
 describe("A faixa escura numa página de marca (achado do MT-01)", () => {
   for (const tema of ["dark", "light"]) {
-    test(`a marca lory chega a um pedaço com data-theme="${tema}"`, () => {
-      const par = `[data-brand="lory"][data-theme="${tema}"]`;
-      const dentro = `[data-brand="lory"] [data-theme="${tema}"]`;
-      expect(tokens).toContain(`${par},${dentro}{`);
+    // A `lory` passou a se chamar `ember` (passo C, 28/10/2026), e o nome antigo vale por uma versão: os dois chegam ao pedaço.
+    test(`a marca ember (e o apelido lory) chega a um pedaço com data-theme="${tema}"`, () => {
+      const par = (m: string) => `[data-brand="${m}"][data-theme="${tema}"]`;
+      const dentro = (m: string) => `[data-brand="${m}"] [data-theme="${tema}"]`;
+      expect(tokens).toContain(`${par("ember")},${par("lory")},${dentro("ember")},${dentro("lory")}{`);
     });
   }
 

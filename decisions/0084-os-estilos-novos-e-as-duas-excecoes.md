@@ -42,7 +42,10 @@
    `data-timeline-style` na peça. O mesmo atributo num contêiner, ou no `<html>`, vale para todos os de dentro; a peça com o
    seu atributo ganha do contêiner. No nativo, o mesmo atributo aparece no navegador (o `dataSet`, como a marca do cartão
    de contorno).
-7. **A `lory` fica de fora**, como no passo A: os estilos novos não a alcançam (a marca está congelada até o passo C).
+7. ~~**A `lory` fica de fora**, como no passo A: os estilos novos não a alcançam (a marca está congelada até o passo C).~~
+   → **A Aurea Ember (a antiga `lory`) recebe os estilos**, como as outras marcas (o Victor, 28/10/2026, vendo que na Ember
+   as variações saíam todas iguais: *"Sim, como as outras"* — [ADR-0085](0085-as-treze-marcas.md)). O padrão dela, sem
+   estilo escolhido, continua congelado.
 
 ## As duas exceções
 

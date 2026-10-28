@@ -29,8 +29,9 @@ const ATUAL: BottomNavCurrentStyle[] = ["current", "neutral", "contrast", "brand
 const FORMAS: BottomNavIndicator[] = ["none", "subtle", "pill", "circle", "circle-raised", "circle-outline", "circle-bold", "capsule", "expand"];
 const ITENS = [
   {id: "home", label: "Home", icon: "house" as const},
-  // O contador é o `<Badge size="xs">` (o contrato do componente, como no site); o ponto vazio é o "tem novidade".
-  {id: "alerts", label: "Alerts", icon: "bell" as const, badge: <Badge size="xs" variant="primary" emphasis="solid">3</Badge>},
+  // O contador é o `<Badge size="xs">` (o contrato do componente, como no site), vermelho como no nativo (o Victor,
+  // 28/10/2026: "Vermelho, igual"); o ponto vazio é o "tem novidade".
+  {id: "alerts", label: "Alerts", icon: "bell" as const, badge: <Badge size="xs" variant="danger" emphasis="solid">3</Badge>},
   {id: "saved", label: "Saved", icon: "heart" as const, badge: ""},
   {id: "me", label: "Profile", icon: "user" as const},
 ];

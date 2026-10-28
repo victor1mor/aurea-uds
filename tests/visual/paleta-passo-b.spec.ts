@@ -178,17 +178,26 @@ for (const tema of ["light", "dark"] as const) {
   });
 }
 
-test("a `lory` fica de fora: os estilos novos não a alcançam", async ({page: p}) => {
-  await abrir(p, "tema=light&marca=lory");
+// ~~A `lory` fica de fora: os estilos novos não a alcançam.~~ → A Ember (a antiga `lory`) RECEBE os estilos, como as outras
+// marcas (o Victor, 28/10/2026: "Sim, como as outras"); o padrão dela, sem estilo escolhido, continua o de antes (quem prova
+// é o `lory-congelada.spec.ts`). Provado contra o defeito: com a seção do passo B ainda excluindo a Ember, os três estilos
+// saem iguais ao padrão e reprova.
+for (const marca of ["ember", "lory"]) test(`a ${marca} recebe os estilos novos, como as outras marcas`, async ({page: p}) => {
+  await abrir(p, `tema=light&marca=${marca}`);
   const r = await p.evaluate(() => {
     const fundo = (sel: string) => getComputedStyle(document.querySelector(sel)!).backgroundColor;
+    const tinta = (v: string) => { const s = document.createElement("span"); s.style.background = `var(${v})`; document.body.append(s);
+      const c = getComputedStyle(s).backgroundColor; s.remove(); return c; };
     return {segAtual: fundo('[data-prova="seg-current"] .active'), segContraste: fundo('[data-prova="seg-contrast"] .active'),
       barra: fundo('[data-prova="bn-bar-ink"] .bottom-nav'), barraPadrao: fundo('[data-prova="bn-current"] .bottom-nav'),
-      ligadoContraste: fundo('[data-prova="ligado-contrast"] > .btn.toggle[data-pressed]'), ligadoPadrao: fundo('[data-prova="ligado-brand"] > .btn.toggle[data-pressed]')};
+      ligadoContraste: fundo('[data-prova="ligado-contrast"] > .btn.toggle[data-pressed]'), ligadoPadrao: fundo('[data-prova="ligado-brand"] > .btn.toggle[data-pressed]'),
+      texto: tinta("--foreground"), primario: tinta("--primary")};
   });
-  expect(r.segContraste).toBe(r.segAtual);
-  expect(r.barra).toBe(r.barraPadrao);
-  expect(r.ligadoContraste).toBe(r.ligadoPadrao);
+  expect(r.segContraste).not.toBe(r.segAtual);
+  expect(r.segContraste).toBe(r.texto);
+  expect(r.barra).not.toBe(r.barraPadrao);
+  expect(r.barra).toBe(r.primario);
+  expect(r.ligadoContraste).toBe(r.texto);
 });
 
 test("o botão ligado cinza ganha o contorno de 3:1 com \"aumentar contraste\" — e só com ele", async ({browser}) => {
