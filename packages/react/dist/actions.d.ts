@@ -88,8 +88,13 @@ interface ToggleBase {
     /** 0.32.0, o `ToggleButton` da referência: `default` com o fundo neutro (o padrão), `ghost` sem fundo
      *  (o desenho de até a 0.31.0). O ligado é o idioma "selecionado" da Aurea nos dois. */
     variant?: ToggleVariant;
+    /** A cor do LIGADO (ADR-0084, 27/10/2026): `brand` — o amarelo do botão primário, o padrão —, `neutral` (o cinza) ou
+     *  `contrast` (o grafite, invertido). Dentro de um `ToggleGroup` ou de um `Toolbar` com `pressedStyle`, o do botão vale. */
+    pressedStyle?: TogglePressedStyle;
 }
 export type ToggleVariant = "default" | "ghost";
+/** As três cores do ligado aprovadas pelo Victor em 26/10/2026 (A cinza, B grafite, C amarelo — o padrão). */
+export type TogglePressedStyle = "neutral" | "contrast" | "brand";
 type ToggleChildren = Exclude<React.ReactNode, boolean | null | undefined>;
 export type ToggleProps = ToggleBase & ({
     children: ToggleChildren;
@@ -98,7 +103,7 @@ export type ToggleProps = ToggleBase & ({
     children?: never;
     label: string;
 });
-export declare function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size: sizePedido, disabled, id, className, children, variant }: ToggleProps): React.JSX.Element;
+export declare function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size: sizePedido, disabled, id, className, children, variant, pressedStyle }: ToggleProps): React.JSX.Element;
 export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     label: string;
     icon: AureaIcon;
@@ -130,15 +135,18 @@ export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement>, RefAtt
     detached?: boolean;
 }
 export declare function ButtonGroup({ label, orientation, variant, size, fullWidth, disabled, detached, className, ...props }: ButtonGroupProps): React.JSX.Element;
-export declare function Toolbar({ orientation, label, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export declare function Toolbar({ orientation, label, className, pressedStyle, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     orientation?: Responsive<Orientation>;
     label?: string;
+    pressedStyle?: TogglePressedStyle;
 }): React.JSX.Element;
 export declare function ToolbarGroup({ label, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     label?: string;
 }): React.JSX.Element;
 export declare function ToolbarSeparator({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
 export interface ToolbarButtonProps extends Omit<ButtonProps, "share"> {
+    /** A cor do ligado (ADR-0084): `brand` (o padrão), `neutral` ou `contrast`. Vale quando o botão está ligado (`aria-pressed`). */
+    pressedStyle?: TogglePressedStyle;
 }
 export declare const ToolbarButton: React.ForwardRefExoticComponent<Omit<ToolbarButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
 export interface ToggleGroupProps {
@@ -157,6 +165,9 @@ export interface ToggleGroupProps {
     fullWidth?: boolean;
     /** Botões soltos (vão de 4), em vez de colados. */
     detached?: boolean;
+    /** A cor do ligado de todos os botões de dentro (ADR-0084): `brand` (o padrão), `neutral` ou `contrast`; cada um pode
+     *  trocar a sua. */
+    pressedStyle?: TogglePressedStyle;
 }
-export declare function ToggleGroup({ value, defaultValue, onValueChange, multiple, orientation, disabled, label, className, children, size, fullWidth, detached }: ToggleGroupProps): React.JSX.Element;
+export declare function ToggleGroup({ value, defaultValue, onValueChange, multiple, orientation, disabled, label, className, children, size, fullWidth, detached, pressedStyle }: ToggleGroupProps): React.JSX.Element;
 export {};

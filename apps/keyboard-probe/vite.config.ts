@@ -14,5 +14,6 @@ export default defineConfig({
   // cookies, da abertura e do Chip (`lote-u.html`); e desde 21/10/2026 (MNT-31), o da legenda e do minimapa (`rede5.html`);
   // e desde 25/10/2026 (o bloco 2), o da lateral: as quinze laterais, o item atual e a lateral solta (`lateral.html`); e
   // desde 27/10/2026 (as cores, passo A — ADR-0083), o da paleta: as peças que a paleta da 1.0 toca (`paleta.html`).
-  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html", rede3: "rede3.html", rede4: "rede4.html", rede5: "rede5.html", "lote-u": "lote-u.html", lateral: "lateral.html", paleta: "paleta.html"}}},
+  // E o dos estilos (o passo B — ADR-0084): as peças em todos os estilos novos (`estilos.html`).
+  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html", rede3: "rede3.html", rede4: "rede4.html", rede5: "rede5.html", "lote-u": "lote-u.html", lateral: "lateral.html", paleta: "paleta.html", estilos: "estilos.html"}}},
 });

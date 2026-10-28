@@ -17,6 +17,14 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.45.0 (27/10/2026)
+
+- **A 0.45.0 publicada entre 16:20 e 16:28 de 27/10/2026** (Brasília, medido no npm; o `tokens` às 16:20 e o `native`,
+  o último a aparecer no registro, às 16:28): o `released-surface.json` do commit do publish (`3d5db12d`) — nenhum nome
+  novo e nenhuma frase nova, nem na web nem no nativo. O CHANGELOG ([0.45.0] publicada) e o CLAUDE.md (a linha na tabela
+  e o item 43).
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.44.0 (27/10/2026)
 
 - **A 0.44.0 publicada entre 19:50 e 19:55 de 26/10/2026** (Brasília, medido no npm; o `contracts` às 19:52 e o `native`,
@@ -159,9 +167,63 @@ como deveria funcionar"*.
 
 ---
 
+## [0.46.0] — 2026-10-27
+
+⏳ **Ainda não publicada.** As cores, passo B — **os estilos novos** ([ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md)):
+as variações que o Victor aprovou em 26/10/2026, todas para construir — o botão ligado, o segmento aceso, a linha do tempo e
+o item atual da barra de baixo —, e a barra de baixo na mesma altura em todos os formatos. Aprovado na bancada (27/10/2026):
+*"Aprovo o passo B e os cinco pontos como estão"*. Web e nativo. O padrão de cada peça não muda; a `lory` fica de fora.
+
+### ⚠ Muda a aparência
+
+- **A barra de baixo** (`BottomNav`) **tem a mesma altura nos nove formatos**: no `circle`, no `circle-raised`, no
+  `circle-outline` e no `capsule`, o círculo e a cápsula passam de 32 a 28 de altura e saem 2 da caixa em cima e embaixo; no
+  `circle-bold`, o disco perde a altura mínima (56 × 44). As barras medem 54 na web (eram 62 e 58) — o pedido do Victor na
+  bancada: *"quero todos da mesma altura do none, subtle, pill, expand"*, e a forma *"B: o círculo e a cápsula com 28"*.
+- **A linha do tempo do nativo** (`Timeline`): o trilho passa de `border` a `input`, como a web desde a 0.45.0 — o
+  `border` quase não aparecia.
+
+### Acrescentado
+
+- **O botão ligado em três cores:** `pressedStyle` (`brand`, o padrão; `neutral`, o cinza; `contrast`, o grafite) no
+  `Toggle`, no `ToggleGroup`, no `Toolbar` e no `ToolbarButton`. Só a web. O cinza ganha o contorno de 3:1 com "aumentar
+  contraste".
+- **O segmento aceso em seis:** `selectedStyle` no `SegmentedControl` (`current`, o padrão; `neutral`, `contrast`, `brand`,
+  `ring` e `dot`). Web e nativo; no nativo, o `current` continua a cápsula amarela.
+- **A linha do tempo em cinco:** `variant` na `Timeline` (`default`, o padrão; `ring`, `latest`, `time` e `contrast`). Web e
+  nativo.
+- **O item atual da barra de baixo em treze:** `currentStyle` no `BottomNav` — `current` (o padrão), `neutral`, `contrast`,
+  `brand`, `ring`, `plain`; `brand-white` (reprova a WCAG: o branco no amarelo mede 1,91:1 — aprovado sabendo disso),
+  `white-ring` e `brand-gradient` (o degradê); e a barra inteira amarela, `bar-ink`, `bar-ring`, `bar-plain` e `bar-light`.
+  Na barra flutuante e na fixa, em todos os formatos. Web e nativo.
+- **O atributo de cada estilo** (`data-pressed-style`, `data-segment-style`, `data-timeline-style`, `data-current-style`)
+  vale também num contêiner ou no `<html>`, para todos os de dentro; a peça com o seu ganha do contêiner.
+
+### As duas exceções (ADR-0084)
+
+- **O degradê do `brand-gradient`**, a segunda exceção à ADR-0007 (a primeira é a escolha de cor, ADR-0069): só o item atual da
+  barra de baixo, só quando o app escolhe. No nativo sem degradê, o amarelo cheio.
+- **Os aros dos estilos de aro** (o segmento `ring`, o item `ring`, `white-ring` e `bar-ring`, o ponto `ring`), exceção à
+  ADR-0072: sempre uma sombra por dentro, que não muda a medida da peça, e só quando o app escolhe o estilo.
+
+### Para quem cuida do repositório
+
+- **As travas ficaram mais fortes:** o `sem-linha.test` passou a ler também a VARIÁVEL que guarda um anel (o aro escrito
+  por variável passava calado) e a sombra por dentro do nativo (só no `aroDoEstilo`); a varredura do navegador descarta só o
+  anel, e só dentro de um estilo de aro; o check 4 aceita `gradient(` só na regra do `brand-gradient`.
+- **O banco dos estilos** (`apps/keyboard-probe/estilos.html`): as peças em todos os estilos, com a forma e o lugar da barra
+  de baixo nos botões de cima. Quem mede: `tests/visual/paleta-passo-b.spec.ts` (com o CSS da 0.45.0, reprovam todos menos o
+  da `lory`), `tests/unit/paleta-passo-b.test.tsx` e `tests/unit/native-passo-b.test.tsx`; o `geometry.spec` passou a exigir as
+  nove alturas da barra IGUAIS (era um teto por formato).
+- **O que a bancada achou, medido antes de mexer:** a linha do tempo `time` descia 20 — era o banco (a caixa esticada), não
+  a peça; o "3" solto do selo sumia no `contrast` — era o banco (o contrato é o `<Badge>`, e com ele o selo se lê nos treze).
+
+---
+
 ## [0.45.0] — 2026-10-27
 
-⏳ **Ainda não publicada.** As cores, passo A — **a paleta da 1.0** ([ADR-0083](decisions/0083-a-paleta-da-1-0.md)): a
+✅ **Publicada em 27/10/2026, entre 16:20 e 16:28 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+#100.** As cores, passo A — **a paleta da 1.0** ([ADR-0083](decisions/0083-a-paleta-da-1-0.md)): a
 proposta de cores que o Victor preparou componente a componente e aprovou família por família (25 e 26/10/2026), e as
 quatro decisões da bancada do passo A (27/10/2026): o foco dos campos no amarelo (*"1 C Amarelo"*), o texto de apoio
 `#5E5E65` (*"Aprovo o #5E5E65 no texto de apoio."*), o conserto da linha do tempo em todas as marcas e o cartão do escuro

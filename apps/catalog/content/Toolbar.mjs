@@ -1,5 +1,6 @@
 import {createElement as h} from "react";
 import {Toolbar, ToolbarButton, ToolbarGroup, ToolbarSeparator, IconButton} from "../../../packages/react/dist/index.js";
+import {cada} from "./_eixos.mjs";
 
 export default {
   description:
@@ -84,5 +85,11 @@ export default {
       render: () => h(Toolbar, {label: "History"},
         h(ToolbarButton, {disabled: true}, "Undo"), h(ToolbarButton, null, "Redo")),
     },
+    cada({titulo: "The colour of the on state", descricao: "pressedStyle on the toolbar colours every pressed button "
+      + "inside (ADR-0084): brand — the default — neutral or contrast. A button's own pressedStyle wins.",
+      valores: ["brand", "neutral", "contrast"], coluna: true,
+      codigo: v => `<Toolbar label="Format" pressedStyle="${v}">\n  <ToolbarButton pressed>Bold</ToolbarButton>\n  <ToolbarButton>Italic</ToolbarButton>\n</Toolbar>`,
+      peca: v => h(Toolbar, {label: `Format, ${v}`, pressedStyle: v},
+        h(ToolbarButton, {pressed: true}, "Bold"), h(ToolbarButton, null, "Italic"))}),
   ],
 };

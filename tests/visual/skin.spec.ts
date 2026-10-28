@@ -1076,7 +1076,9 @@ for (const theme of ["dark", "light"] as const) {
                 rotuloForaDaMarca: (() => {
                   const m = s2.querySelector(".bottom-nav-mark")!.getBoundingClientRect();
                   const r = s2.querySelector(".bottom-nav-label")!.getBoundingClientRect();
-                  return r.top >= m.bottom - 1;
+                  // O círculo de 28 entra 2 na linha do nome (27/10/2026, a barra na mesma altura — ADR-0084, a forma "B"):
+                  // o nome continua EMBAIXO dele, com até esses 2 de sobreposição.
+                  return r.top >= m.bottom - 2 - 1;
                 })(),
               };
             })(),
@@ -3313,7 +3315,7 @@ for (const theme of ["dark", "light"] as const) {
                 gap: parseFloat(getComputedStyle(item).rowGap)};
       };
       return {nenhum: medir("nenhum"), pilula: medir("pilula"), circulo: medir("circulo"), negrito: medir("negrito"),
-              iconeLg: sonda("var(--icon-lg)"), anel: sonda("2rem"), vao: sonda("var(--space-05)")};
+              iconeLg: sonda("var(--icon-lg)"), anel: sonda("calc(var(--icon-lg) + var(--space-1))"), vao: sonda("var(--space-05)")};
     });
     // ~~vão `--space-05`~~ → ZERO desde 03/10/2026, pedido do Victor: *"o texto pode ficar mais
     // próximo do ícone"* — como no aplicativo de mensagens de referência, o nome começa onde a caixa do ícone acaba.
@@ -3322,6 +3324,8 @@ for (const theme of ["dark", "light"] as const) {
       expect(m[k].gap).toBe(0);
       expect(m[k].iconeAoRotulo).toBeLessThanOrEqual(0.5);
     }
+    // ~~O círculo tem 32~~ → 28 desde 27/10/2026 (a barra na mesma altura em todos os formatos — ADR-0084, *"B: o círculo
+    // e a cápsula com 28"*), passando 2 por fora da caixa.
     expect(m.circulo.marca).toBe(m.anel);
     // E o `circle-bold` saiu da lista dos redondos no mesmo dia: o círculo dele é o DISCO em volta
     // do ícone e do nome, e a moldura fica da altura do ícone, para o nome encostar nele.

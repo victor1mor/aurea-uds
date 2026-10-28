@@ -390,7 +390,11 @@ export function KPI({label,value,trend,direction,tone,directionLabel,variant="ca
     :<Card className={cx("kpi",className)} {...props}>{miolo}</Card>;
 }
 export function DataList({items}:{items:Array<{term:ReactNode;value:ReactNode}>}){return <dl className="data-list">{items.map((i,n)=><React.Fragment key={n}><dt>{i.term}</dt><dd>{i.value}</dd></React.Fragment>)}</dl>}
-export function Timeline({items}:{items:Array<{title:ReactNode;description?:ReactNode;time?:ReactNode}>}){return <ol className="timeline">{items.map((i,n)=><li key={n}><span className="timeline-dot"/><div><strong>{i.title}</strong>{i.description&&<p>{i.description}</p>}{i.time&&<small className="muted">{i.time}</small>}</div></li>)}</ol>}
+// `variant` (ADR-0084, 27/10/2026): cinco estilos aprovados pelo Victor em 26/10/2026, todos sobre o conserto da ADR-0083 —
+// `default` (o ponto amarelo cheio, o padrão), `ring` (o ponto vazado), `latest` (só o último em destaque), `time` (a hora
+// numa coluna à esquerda) e `contrast` (os pontos na cor do texto). Vai como `data-timeline-style`.
+export type TimelineVariant="default"|"ring"|"latest"|"time"|"contrast";
+export function Timeline({items,variant}:{items:Array<{title:ReactNode;description?:ReactNode;time?:ReactNode}>;variant?:TimelineVariant}){return <ol className="timeline" data-timeline-style={variant}>{items.map((i,n)=><li key={n}><span className="timeline-dot"/><div><strong>{i.title}</strong>{i.description&&<p>{i.description}</p>}{i.time&&<small className="muted">{i.time}</small>}</div></li>)}</ol>}
 // Prose (item L5): UMA LINHA, e é para ser mesmo — quem transforma Markdown em elementos é o
 // consumidor. A trava do item é no CSS, escopada em `.prose`, e há prova dela no `skin.spec`.
 // Segurança, porque é o caminho de uso mais provável: quem entrega HTML de terceiro por

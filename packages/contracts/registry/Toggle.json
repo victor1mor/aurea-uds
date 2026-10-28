@@ -125,10 +125,23 @@
       "type": "default | ghost",
       "default": "default",
       "description": "default has the neutral fill; ghost has none. Pressed uses Aurea's selected language on both."
+    },
+    {
+      "name": "pressedStyle",
+      "type": "\"brand\" | \"neutral\" | \"contrast\"",
+      "default": "\"brand\"",
+      "description": "The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's \"increase contrast\", neutral gets a 3:1 outline."
     }
   ],
   "notes": [
     "THE LABEL MUST NOT CHANGE between the two states. If the text turns from \"Mute\" into \"Unmute\", or \"Play\" into \"Pause\", this is the wrong component — use a Button. A screen reader reads the new label and the pressed state at the same time, and the listener cannot tell whether the button describes what it IS or what it WILL DO. The rule is the W3C APG's and one of the references', and it is the one rule that decides between Toggle and Button.",
     "Button also accepts `pressed`. It is DEPRECATED since 0.4.0 and goes away in 1.0: two ways to make the same control is the \"which one do I use?\" that marks a duplicated feature."
-  ]
+  ],
+  "axes": {
+    "pressedStyle": [
+      "brand",
+      "neutral",
+      "contrast"
+    ]
+  }
 }

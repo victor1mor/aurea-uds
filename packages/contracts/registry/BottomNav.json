@@ -102,7 +102,7 @@
       "name": "indicator",
       "type": "\"none\" | \"subtle\" | \"pill\" | \"circle\" | \"circle-raised\" | \"circle-bold\" | \"circle-outline\" | \"capsule\" | \"expand\"",
       "default": "\"none\"",
-      "description": "The SHAPE that marks the current item. The meaning never changes with the shape: current is always the brand gold. `none` marks by colour alone; `subtle` and `pill` wrap icon and label in a tinted container and differ only in radius; `circle`, `circle-raised` and `circle-outline` wrap only the icon, by fill, by elevation or by a ring; `circle-bold` is a solid disc around icon and label, the only one that flips the whole foreground; `capsule` is the 56 × 32 active indicator of the design reference, behind the icon; `expand` draws only icons and grows the current item into a gold capsule with its label — the others keep theirs for the screen reader. Every other indicator keeps every label visible. No measure depends on which item is current, so the bar never moves (ADR-0055)."
+      "description": "The SHAPE that marks the current item. The meaning never changes with the shape: current is always the brand gold. `none` marks by colour alone; `subtle` and `pill` wrap icon and label in a tinted container and differ only in radius; `circle`, `circle-raised` and `circle-outline` wrap only the icon, by fill, by elevation or by a ring; `circle-bold` is a solid disc around icon and label, the only one that flips the whole foreground; `capsule` is a 56 × 28 capsule behind the icon (the active indicator of the design reference, kept at the bar's height), behind the icon; `expand` draws only icons and grows the current item into a gold capsule with its label — the others keep theirs for the screen reader. Every other indicator keeps every label visible. No measure depends on which item is current, so the bar never moves (ADR-0055)."
     },
     {
       "name": "width",
@@ -115,6 +115,12 @@
       "type": "string",
       "default": "\"Main\"",
       "description": "Accessible name of the <nav>. Two navigation landmarks with the same name fail axe, and a page with a bottom bar usually has a Topbar or Sidebar too — name it."
+    },
+    {
+      "name": "currentStyle",
+      "type": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"plain\" | \"brand-white\" | \"white-ring\" | \"brand-gradient\" | \"bar-ink\" | \"bar-ring\" | \"bar-plain\" | \"bar-light\"",
+      "default": "\"current\"",
+      "description": "The COLOUR of the current item (ADR-0084) — indicator picks the shape, currentStyle the colour. current (the default), neutral (grey), contrast (graphite), brand (solid yellow), ring (a yellow ring, no fill), plain (only the filled icon and a semibold label); brand-white (yellow with white — it FAILS WCAG: white on the yellow measures 1.91:1, chosen knowing it), white-ring (white with a yellow ring, ink inside) and brand-gradient (a yellow gradient — the one gradient in a navigation component; on React Native without gradients, solid yellow); and the whole bar in yellow, with every icon and label in ink: bar-ink, bar-ring, bar-plain and bar-light. The colour goes where the shape paints: the item in pill, subtle and expand; the icon frame in circle, circle-outline, circle-raised and capsule; the disc in circle-bold. The none indicator has no fill and does not change. Floating and edge bars alike. Written as data-current-style; the same attribute on a container sets it for every bar inside. Web and React Native."
     }
   ],
   "notes": [
@@ -137,6 +143,21 @@
     "width": [
       "content",
       "full"
+    ],
+    "currentStyle": [
+      "current",
+      "neutral",
+      "contrast",
+      "brand",
+      "ring",
+      "plain",
+      "brand-white",
+      "white-ring",
+      "brand-gradient",
+      "bar-ink",
+      "bar-ring",
+      "bar-plain",
+      "bar-light"
     ]
   },
   "variantProp": "variant"

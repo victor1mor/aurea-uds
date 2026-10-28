@@ -49,7 +49,7 @@ import {
   type ViewProps, type ViewStyle,
 } from "react-native";
 import Svg, {Path} from "react-native-svg";
-import {canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, focoDoCampo, marcaDoControle} from "./estilos.js";
+import {canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, focoDoCampo, marcaDoControle, aroDoEstilo, peleDoSegmento, marcaDoEstilo} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
 import {useMaisContraste} from "./contraste.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
@@ -162,6 +162,10 @@ const folha = criarFolha((t: AureaTokens) => ({
   // sombra pequena (ADR-0059) e o fio amarelo, com o nome na mistura marrom da web.~~ É um `Pressable`, que existe desde a
   // montagem: a regra do canto no Android (`native-capsula-android.test.tsx`) não o pega.
   segmentoAtivo: {backgroundColor: t.color.primary},
+  // O `dot` (ADR-0084): o ponto de 6 (`space1` + `space05`) antes do nome, a 8 dele (`space2`) — na web a proposta dizia 7.
+  segmentoComPonto: {flexDirection: "row", alignItems: "center", gap: t.size.space2},
+  pontoDoSegmento: {width: t.size.space1 + t.size.space05, height: t.size.space1 + t.size.space05,
+                    ...canto(t.size.radiusFull), backgroundColor: "transparent"},
 
   formulario: {gap: t.size.space5},
 
@@ -1169,7 +1173,16 @@ export interface SegmentedControlProps extends ViewProps {
    * rola, como sem a prop. Com `fullWidth`, o `justify` não tem efeito.
    */
   fullWidth?: boolean;
+  /**
+   * A cor do segmento aceso (ADR-0084, 27/10/2026), em seis estilos aprovados pelo Victor em 26/10/2026, os mesmos da web:
+   * `current` (a cápsula amarela de sempre — o padrão), `neutral` (a cápsula branca com sombra), `contrast` (o grafite),
+   * `brand` (o amarelo), `ring` (a cápsula neutra com o aro amarelo) e `dot` (a cápsula neutra com o ponto amarelo antes
+   * do nome — o lugar do ponto fica reservado em todos, para a largura não pular quando a escolha muda).
+   */
+  selectedStyle?: AureaSegmentedControlSelectedStyle;
 }
+/** Os seis estilos do segmento aceso (ADR-0084). */
+export type AureaSegmentedControlSelectedStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "dot";
 
 /**
  * Um de poucos, lado a lado.
@@ -1180,10 +1193,11 @@ export interface SegmentedControlProps extends ViewProps {
  * `radio` por segmento, e o estado `selected` em quem está escolhido.
  */
 export function SegmentedControl({
-  items, value, onChange, label, disabled, justify, fullWidth, style, ...rest
+  items, value, onChange, label, disabled, justify, fullWidth, selectedStyle, style, ...rest
 }: SegmentedControlProps) {
   const t = useAureaTokens();
   const s = folha(t);
+  const pele = peleDoSegmento(t, selectedStyle);
   const campo = useCampo();
   const inativo = disabled ?? campo?.disabled;
   return (
@@ -1203,6 +1217,7 @@ export function SegmentedControl({
         accessibilityRole="radiogroup"
         accessibilityLabel={label ?? campo?.label}
         style={[s.segmentada, fullWidth && s.segmentadaCheia, inativo && s.desabilitado, style]}
+        {...marcaDoEstilo("segmentStyle", selectedStyle)}
         {...rest}>
         {items.map((it) => {
           const ativo = it.value === value;
@@ -1214,7 +1229,14 @@ export function SegmentedControl({
               accessibilityRole="radio"
               {...estadoAcessivel({checked: ativo, disabled: !!inativo})}
               accessibilityLabel={typeof it.label === "string" ? it.label : undefined}
-              style={[s.segmento, fullWidth && s.segmentoCheio, ativo && s.segmentoAtivo]}>
+              style={[s.segmento, fullWidth && s.segmentoCheio, ativo && s.segmentoAtivo,
+                ativo && pele && {backgroundColor: pele.fundo,
+                  boxShadow: [...(pele.aro ? [aroDoEstilo(t, pele.aro)] : []), ...(pele.sombra ? t.shadowLayers.shadowSm : [])]},
+                pele?.ponto && s.segmentoComPonto]}>
+            {/* O ponto do `dot`: o lugar existe em todos os segmentos, e só o aceso o pinta. `collapsable={false}`: caixa
+                só com raio que ganha cor depois de montada sai QUADRADA no Android (react-native#52415, a regra do
+                `native-capsula-android.test.tsx`). */}
+            {pele?.ponto && <View collapsable={false} style={[s.pontoDoSegmento, ativo && {backgroundColor: t.color.primary}]} />}
             {typeof it.label === "string"
               ? <Text size="sm" weight={ativo ? 600 : 400}
                       // 🔴 ERA `foreground`, E ISSO QUEBRAVA A LINGUAGEM DE SELECIONADO.
@@ -1235,7 +1257,7 @@ export function SegmentedControl({
                       // azul?"*). ~~A aba escolhida é a mistura da web, `corDoEscolhido`.~~ → Desde
                       // 24/10/2026 a cápsula escolhida é o amarelo do botão (ver `segmentoAtivo`), e
                       // o nome vai na tinta do botão.
-                      style={{color: ativo ? t.color.primaryForeground : t.color.mutedForeground}}>
+                      style={{color: ativo ? (pele?.letra ?? t.color.primaryForeground) : t.color.mutedForeground}}>
                   {it.label}
                 </Text>
               : it.label}

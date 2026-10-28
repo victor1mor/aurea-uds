@@ -81,6 +81,68 @@ export declare const corDoEscolhido: (t: AureaTokens) => string;
  */
 export declare const letraDoAmarelo: (t: AureaTokens) => string;
 /**
+ * O ARO dos estilos de aro (o segmento `ring`, o item `ring`, o `white-ring` e o `bar-ring` da barra de baixo, e o ponto
+ * `ring` da linha do tempo): 1,5 da largura de borda (2 no ponto), na cor pedida — uma SOMBRA POR DENTRO, como o
+ * `inset 0 0 0 …` da web, e não borda: no React Native a borda ocupa lugar e a peça mudaria de medida ao ser escolhida. A
+ * sombra por dentro existe desde a 0.76 (a versão mínima do pacote), e o `react-native-web` a traduz.
+ * É linha, e por isso exceção nomeada à ADR-0072 (pela ADR-0084): o aro é o desenho que dá nome ao estilo, e só existe
+ * quando o app o escolhe. Quem cobra que ele não escape daqui: `sem-linha.test.tsx`.
+ */
+export declare const aroDoEstilo: (t: AureaTokens, cor: string, vezes?: number) => {
+    readonly offsetX: 0;
+    readonly offsetY: 0;
+    readonly blurRadius: 0;
+    readonly spreadDistance: number;
+    readonly color: string;
+    readonly inset: true;
+};
+/**
+ * A MARCA do estilo escolhido, para o navegador (`react-native-web`): o `dataSet` vira o mesmo atributo da web
+ * (`data-current-style`, `data-segment-style`, `data-timeline-style`), e a varredura do site reconhece o estilo de aro como
+ * na web. No aparelho o `dataSet` não existe e é ignorado — como a marca do cartão de contorno (`layout.tsx`).
+ */
+export declare const marcaDoEstilo: (nome: string, valor: string | undefined) => object;
+/** O segmento aceso em seis estilos (2.9). `current`: a cápsula amarela de sempre no nativo (24/10/2026). */
+export type PeleDoSegmento = {
+    fundo: string;
+    letra: string;
+    sombra: boolean;
+    aro: string | null;
+    ponto: boolean;
+};
+export declare const peleDoSegmento: (t: AureaTokens, estilo: string | undefined) => PeleDoSegmento | null;
+/**
+ * O item atual da barra de baixo em treze estilos (2.11, 2.11b e 2.13). `fundo` é o do formato (o item, a moldura do
+ * ícone ou o disco); `degrade`, a ponta do `brand-gradient` (o fundo sólido fica por baixo, para o RN sem degradê);
+ * `barra`, a barra inteira amarela. O `brand-white` REPROVA a WCAG (o branco no amarelo, 1,91:1) — aprovado pelo Victor
+ * sabendo disso.
+ */
+export type PeleDoAtual = {
+    fundo: string;
+    letra: string;
+    aro: string | null;
+    degrade: string | null;
+    negrito: boolean;
+    barra: boolean;
+};
+export declare const peleDoAtual: (t: AureaTokens, estilo: string | undefined) => PeleDoAtual | null;
+/**
+ * O fundo de uma pele: a cor sólida e, no `brand-gradient`, o degradê por cima — `backgroundImage` no RN que já o tem
+ * estável e `experimental_backgroundImage` nas versões de 0.76 em diante; onde nenhum existe, fica o amarelo cheio.
+ * A SEGUNDA exceção à ADR-0007 (pela ADR-0084): só aqui, e só neste estilo.
+ */
+export declare const fundoDaPele: (pele: {
+    fundo: string;
+    degrade?: string | null;
+}) => ViewStyle;
+/** A linha do tempo em cinco estilos (2.12): a cor do ponto, o aro do `ring` e o halo do último no `latest`. */
+export type PeleDoPonto = {
+    fundo: string;
+    aro: string | null;
+    halo: string | null;
+};
+export declare const peleDoPonto: (t: AureaTokens, estilo: string | undefined, ultimo: boolean) => PeleDoPonto | null;
+/**
  * 🍎 O CANTO DO iOS — HER-01, 06/10/2026: todo canto arredondado do nativo passa por aqui.
  *
  * `borderCurve: "continuous"` é o canto do iPhone: a curva entra no lado aos poucos, em vez de

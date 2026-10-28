@@ -388,11 +388,17 @@ test.describe("catálogo · varredura de todas as páginas", () => {
             // A única linha que fica (o Victor, 16/10/2026): a do cartão de contorno, a caixa da vitrine — na web pela classe,
             // no nativo pela marca que o `Card` põe só no navegador (`data-aurea-card="outline"`, bloco 1).
             if (e.classList.contains("card-outline") || (e as HTMLElement).dataset.aureaCard === "outline") continue;
-            for (const x of linhas(getComputedStyle(e))) out.push(`${nome(e)}: ${x}`);
+            // OS ESTILOS DE ARO (ADR-0084, 27/10/2026): o estilo que o app escolhe e que É um aro — o segmento `ring`, o item
+            // `ring`, `white-ring` e `bar-ring` da barra de baixo, o ponto `ring` da linha do tempo. Na web e no nativo
+            // (o nativo marca o mesmo atributo no navegador). Só o anel passa: a borda, nem aqui (`linhas` mede as duas,
+            // e o filtro abaixo descarta só o anel).
+            const deAro = !!e.closest('[data-segment-style="ring"],[data-current-style="ring"],[data-current-style="white-ring"],[data-current-style="bar-ring"],[data-timeline-style="ring"]');
+            const conta = (x: string) => !(deAro && x.startsWith("anel"));
+            for (const x of linhas(getComputedStyle(e))) if (conta(x)) out.push(`${nome(e)}: ${x}`);
             for (const ps of ["::before", "::after"]) {
               const s = getComputedStyle(e, ps);
               if (s.content === "none" || s.content === "normal") continue;
-              for (const x of linhas(s)) out.push(`${nome(e)}${ps}: ${x}`);
+              for (const x of linhas(s)) if (conta(x)) out.push(`${nome(e)}${ps}: ${x}`);
             }
           }
           return {out, n};

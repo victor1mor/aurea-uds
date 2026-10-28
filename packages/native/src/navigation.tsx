@@ -34,7 +34,7 @@ import {
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {useAnotarBottomNav} from "./barranav.js";
 import {Avatar, Badge} from "./display.js";
-import {canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca} from "./estilos.js";
+import {canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca, aroDoEstilo, fundoDaPele, marcaDoEstilo, peleDoAtual, type PeleDoAtual} from "./estilos.js";
 import {NaSuperficie} from "./superficie.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {Card} from "./layout.js";
@@ -152,7 +152,11 @@ const folha = criarFolha((t: AureaTokens) => ({
   // guias de barra de abas do iOS) diz o mesmo: canto superior do ÍCONE, nunca sobre o texto.
   marca: {position: "relative", alignItems: "center", justifyContent: "center",
           width: 32, height: 32, ...canto(t.size.radiusControl)},
-  marcaRedonda: {...canto(t.size.radiusFull)},
+  // A BARRA NA MESMA ALTURA EM TODOS OS FORMATOS (27/10/2026, o Victor: *"B: o círculo e a cápsula com 28, e todas as
+  // barras na altura de 54"* — ADR-0084): o círculo tinha 32 em volta do ícone de 24, e a barra ficava mais alta. Agora tem
+  // 28 (`iconLg` + `space1`) e passa 2 por fora da caixa em cima e embaixo (a margem negativa), como na web.
+  marcaRedonda: {width: t.size.iconLg + t.size.space1, height: t.size.iconLg + t.size.space1,
+                 marginVertical: -t.size.space05, ...canto(t.size.radiusFull)},
   contador: {position: "absolute", top: -t.size.space05, right: -t.size.space05},
 
   // ── A BARRA FICA PARADA QUANDO SE TROCA DE ABA — pedido do Victor, 03/10/2026 ──────────────
@@ -172,16 +176,18 @@ const folha = criarFolha((t: AureaTokens) => ({
   // (56 × 48).
   disco: {
     alignItems: "center", justifyContent: "center", gap: 0,
-    width: 56, minHeight: t.size.controlHLg, ...canto(t.size.radiusFull),
-    paddingHorizontal: t.size.space1, paddingVertical: t.size.space1,
+    // Sem a altura mínima, e com `space05` em cima e embaixo (27/10/2026, a barra na mesma altura — `marcaRedonda`): 56 × 44.
+    width: 56, ...canto(t.size.radiusFull),
+    paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
   },
   // `capsule` (a "A" da bancada, de uma referência de mercado): a moldura do ícone vira a cápsula
   // de 56 × 32 do indicador ativo dela — os mesmos `--bottomnav-bold` e `--bottomnav-ring` do
   // `aurea.css`, em todos os itens. O rótulo fica embaixo, fora dela.
-  marcaCapsula: {width: 56, height: 32, ...canto(t.size.radiusFull)},
+  // 56 × 28 desde 27/10/2026 (a barra na mesma altura — `marcaRedonda`), passando 2 por fora da caixa.
+  marcaCapsula: {width: 56, height: t.size.iconLg + t.size.space1, marginVertical: -t.size.space05, ...canto(t.size.radiusFull)},
   // O contador fica no canto do ÍCONE, e não da cápsula: sem a cápsula pintada (item não
   // escolhido) ele ficaria solto, longe do sino. São os (56 − 32) / 2 a mais para dentro.
-  contadorCapsula: {right: (56 - 32) / 2 - t.size.space05},
+  contadorCapsula: {right: (56 - (t.size.iconLg + t.size.space1)) / 2 - t.size.space05},
   // No `content` o item tem a largura da cápsula mais o recheio de sempre (`space1`), e não o
   // `space3` do `aba_content`: com ele cada item teria 80 e a barra, 340.
   aba_capsula_content: {paddingHorizontal: t.size.space1},
@@ -338,6 +344,14 @@ export type AureaBottomNavIndicator =
   // 03/10/2026, da bancada do Victor: `capsule` (cápsula amarela só atrás do ícone, de uma
   // referência de mercado) e `expand` (só ícone nos outros, o escolhido vira cápsula com o nome ao lado).
   | "capsule" | "expand";
+/**
+ * A cor do item atual (ADR-0084, 27/10/2026) — o `indicator` escolhe a forma, o `currentStyle` a cor. Os treze estilos da
+ * web, aprovados pelo Victor em 26/10/2026, na barra flutuante e na fixa.
+ */
+export type AureaBottomNavCurrentStyle =
+  | "current" | "neutral" | "contrast" | "brand" | "ring" | "plain"
+  | "brand-white" | "white-ring" | "brand-gradient"
+  | "bar-ink" | "bar-ring" | "bar-plain" | "bar-light";
 
 export interface BottomNavProps extends ViewProps {
   items: AureaNavItem[];
@@ -357,6 +371,16 @@ export interface BottomNavProps extends ViewProps {
   width?: AureaBottomNavWidth;
   /** Nome da barra para o leitor de tela. Sem ele, a frase do provider. */
   label?: string;
+  /**
+   * A COR do item atual (ADR-0084), a mesma da web: `current` (o de sempre — o padrão), `neutral` (o cinza), `contrast`
+   * (o grafite), `brand` (o amarelo cheio), `ring` (o aro amarelo), `plain` (só o ícone cheio e o nome em semibold);
+   * `brand-white` (o amarelo com o branco — ⚠ REPROVA a WCAG: 1,91:1), `white-ring` (o branco com o aro amarelo) e
+   * `brand-gradient` (o degradê; no React Native sem degradê, o amarelo cheio); e a barra inteira amarela: `bar-ink`,
+   * `bar-ring`, `bar-plain` e `bar-light`. A cor vai onde o formato pinta: o item no `pill`, no `subtle` e no `expand`; a
+   * moldura do ícone no `circle`, no `circle-outline`, no `circle-raised` e no `capsule`; o disco no `circle-bold`. O
+   * `none` não tem fundo, e não muda.
+   */
+  currentStyle?: AureaBottomNavCurrentStyle;
 }
 
 /**
@@ -433,7 +457,7 @@ export interface BottomNavProps extends ViewProps {
  * `useBottomNavSpace()`. Fora de um provedor os dois valem zero, e nada muda.
  */
 export function BottomNav({
-  items, current, variant = "floating", indicator = "capsule", width = "full", label, style, ...rest
+  items, current, variant = "floating", indicator = "capsule", width = "full", label, currentStyle, style, ...rest
 }: BottomNavProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -446,6 +470,11 @@ export function BottomNav({
   const anotar = useAnotarBottomNav();
   const flutua = variant !== "edge";
   const justa = flutua && width === "content";
+  // O passo B (ADR-0084): a pele do item atual, ou `null` no padrão. `naBarra`: a barra inteira amarela, com todos os
+  // ícones e nomes na tinta — sem transparência, que sobre o amarelo vira marrom.
+  const pele = peleDoAtual(t, currentStyle);
+  const naBarra = !!pele?.barra;
+  const pinta = (p: PeleDoAtual) => [fundoDaPele(p), p.aro ? {boxShadow: [aroDoEstilo(t, p.aro)]} : null];
 
   return (
     <View
@@ -457,6 +486,7 @@ export function BottomNav({
         flutua ? e.nativeEvent.layout.height + t.size.space4 * 2 + inset.bottom : 0)}
       style={[
         s.barra, flutua ? [s.barra_flutuante, justa ? s.barra_content : s.barra_cheia] : s.barra_edge,
+        naBarra && {backgroundColor: t.color.primary},
         // 🔴 NO `floating` A FOLGA DO SISTEMA VAI POR FORA — conserto de 19/09/2026, visto em
         // aparelho Samsung com os três botões (|||, ○, <).
         //
@@ -474,10 +504,17 @@ export function BottomNav({
           : {paddingBottom: Math.max(t.size.space1, inset.bottom)},
         style,
       ]}
+      {...marcaDoEstilo("currentStyle", currentStyle)}
       {...rest}>
       {items.map((it) => {
         const ativo = it.id === current;
-        const corDoTexto = !ativo ? t.color.mutedForeground
+        // Com um estilo do passo B (fora do `none`), a forma escolhida recebe a pele; o nome que fica FORA dela (embaixo
+        // da moldura, nos redondos e no `capsule`) vai na cor do texto — ou na tinta, na barra amarela.
+        const pintaPele = ativo && pele != null && indicator !== "none";
+        const nomeForaDaForma = (redondo && !disco) || capsula;
+        const corDoTexto = !ativo ? (naBarra ? t.color.primaryForeground : t.color.mutedForeground)
+          : pintaPele ? (nomeForaDaForma ? (naBarra ? t.color.primaryForeground : t.color.foreground) : pele!.letra)
+          : naBarra ? t.color.primaryForeground
           : indicator === "none" ? t.color.primaryEmphasis
           : indicator === "circle-bold" || indicator === "expand" ? t.color.primaryMark
           : indicator === "subtle" || indicator === "pill" ? t.color.primaryEmphasis
@@ -485,7 +522,7 @@ export function BottomNav({
           : t.color.foreground;
         // Na `capsule` o ícone está SOBRE o amarelo e o rótulo não: cada um tem a sua cor. Sobre o
         // amarelo, a marca (`primaryMark`): a tinta escura desde a ADR-0083 (26/10/2026); era o marrom (17/10/2026).
-        const corDoIcone = ativo && capsula ? t.color.primaryMark : corDoTexto;
+        const corDoIcone = pintaPele ? pele!.letra : ativo && capsula ? t.color.primaryMark : corDoTexto;
         // No `expand` o nome só aparece no escolhido; nos outros ele vira o nome do item para o
         // leitor de tela (o texto simples) ou fica na árvore sem ocupar lugar (o que não é texto).
         const nomeVisivel = !expande || ativo;
@@ -515,16 +552,17 @@ export function BottomNav({
             // ela fica da altura do ícone, e o nome encosta nele.
             s.marca, redondo && !disco ? s.marcaRedonda : {height: t.size.iconLg},
             capsula && s.marcaCapsula, expande && s.marcaExpande,
-            ativo && indicator === "circle" && {backgroundColor: comOpacidade(t.color.primary, 0.14)},
-            ativo && indicator === "circle-raised" && {
+            ativo && !pintaPele && indicator === "circle" && {backgroundColor: comOpacidade(t.color.primary, 0.14)},
+            ativo && !pintaPele && indicator === "circle-raised" && {
               backgroundColor: t.color.popover, boxShadow: [t.shadow.shadowMd],
             },
-            ativo && indicator === "circle-outline" && {
+            ativo && !pintaPele && indicator === "circle-outline" && {
               borderWidth: t.size.borderWidth, borderColor: "transparent",
               // O fundo sai do AMARELO (ADR-0083): do destaque, no claro, sairia cinza — o destaque é o grafite.
               backgroundColor: comOpacidade(t.color.primary, 0.10),
             },
-            ativo && capsula && {backgroundColor: t.color.primary},
+            ativo && !pintaPele && capsula && {backgroundColor: t.color.primary},
+            pintaPele && nomeForaDaForma && pinta(pele!),
           ]}>
             {/* O item escolhido desenha o ícone CHEIO (ADR-0053). */}
             {it.icon && <Icon name={it.icon} size="lg" color={corDoIcone} weight={ativo ? "fill" : undefined} />}
@@ -551,7 +589,7 @@ export function BottomNav({
             // nativo, que sobe para 14 (ADR-0050) com linha de 21: era o que mais engrossava a
             // barra. A linha é o tamanho mais `space1`, como na web: com a entrelinha justa (14,4)
             // a perna do "j" passava da caixa. No `expand` o nome vai ao lado do ícone, em 14.
-            ? <Text type={expande ? "body-sm" : "body-xs"} weight={500} numberOfLines={1}
+            ? <Text type={expande ? "body-sm" : "body-xs"} weight={ativo && pele?.negrito ? 600 : 500} numberOfLines={1}
                     style={[{color: corDoTexto, lineHeight: (expande ? t.size.textSm : t.size.textXs) + t.size.space1},
                       expande && {flexShrink: 1}]}>{it.label}</Text>
             : null)
@@ -569,7 +607,7 @@ export function BottomNav({
             style={[
               s.aba, justa && s.aba_content,
               indicator === "subtle" && {...canto(t.size.radiusCard - t.size.space1)},
-              ativo && (indicator === "subtle" || indicator === "pill")
+              ativo && !pintaPele && (indicator === "subtle" || indicator === "pill")
                 && {backgroundColor: comOpacidade(t.color.primary, 0.12)},
               disco && s.aba_disco,
               capsula && justa && s.aba_capsula_content,
@@ -581,11 +619,13 @@ export function BottomNav({
               expande && s.aba_expande,
               expande && !ativo && justa && s.aba_expande_outro_content,
               expande && ativo && s.aba_expande_escolhido,
+              pintaPele && (indicator === "subtle" || indicator === "pill" || expande) && pinta(pele!),
             ]}>
             {disco
               // O disco do `circle-bold`: 56 de largura em todos os itens, amarelo só no escolhido.
               // É o `.bottom-nav-disc` da web.
-              ? <View collapsable={false} style={[s.disco, ativo && {backgroundColor: t.color.primary}]}>{marca}{rotulo}</View>
+              ? <View collapsable={false} style={[s.disco, ativo && !pintaPele && {backgroundColor: t.color.primary},
+                  pintaPele && pinta(pele!)]}>{marca}{rotulo}</View>
               : <>{marca}{rotulo}</>}
           </Pressable>
         );

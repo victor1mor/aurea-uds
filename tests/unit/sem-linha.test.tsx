@@ -70,7 +70,10 @@ function anelFino(valor: string): boolean {
   });
 }
 
-const PROP_CSS = /(?<![\w-])(border(?:-(?:top|right|bottom|left|block|inline)(?:-(?:start|end))?)?(?:-color)?|box-shadow)\s*:\s*([^;{}]+?)\s*(?=;|})/gi;
+// E a VARIÁVEL que guarda um anel (27/10/2026, passo B): `--bn-ring: inset 0 0 0 1.5px …` e `--seg-shadow: …` pintam a
+// mesma linha por `box-shadow: var(--bn-ring)` — e a leitura antiga, que só via a propriedade, deixava passar. Toda
+// variável cujo nome termina em `-ring` ou `-shadow` é lida como `box-shadow`.
+const PROP_CSS = /(?<![\w-])(border(?:-(?:top|right|bottom|left|block|inline)(?:-(?:start|end))?)?(?:-color)?|box-shadow|--[\w-]*(?:-ring|-shadow))\s*:\s*([^;{}]+?)\s*(?=;|})/gi;
 
 // A ÚNICA linha que fica (o Victor, 16/10/2026: "caixa B, o resto tudo B"): o cartão de contorno — a caixa da
 // vitrine — com a linha clara, o texto a 10%. Só ela, só a cor da borda, só com esse seletor sozinho.
@@ -79,9 +82,19 @@ const PROP_CSS = /(?<![\w-])(border(?:-(?:top|right|bottom|left|block|inline)(?:
 // 3:1 da WCAG 1.4.11. Fora dessa preferência, o mesmo contorno reprova.
 const LINHA_PERMITIDA_CSS: {seletor: string; prop: string; valor?: string; media?: string}[] = [
   {seletor: ".card-outline", prop: "border-color"},
+  // O botão ligado CINZA (o `neutral`, ADR-0084) é o mais discreto, e ganha o contorno de 3:1 com "aumentar contraste" —
+  // a mesma exceção dos campos, só nessa preferência e só com a cor dela.
+  {seletor: ':is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"]):where(:not([data-brand="lory"],[data-brand="lory"] *))',
+    prop: "box-shadow", valor: "inset 0 0 0 var(--border-width) var(--input-strong)", media: "@media (prefers-contrast:more)"},
   {seletor: ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not([data-brand="lory"],[data-brand="lory"] *))',
     prop: "border-color", valor: "var(--input-strong)", media: "@media (prefers-contrast:more)"},
 ];
+
+// OS ESTILOS DE ARO (ADR-0084, 27/10/2026): o Victor aprovou em 26/10/2026, pelo nome, os estilos que SÃO um aro — o
+// segmento `ring`, o item `ring`, `white-ring` e `bar-ring` da barra de baixo e o ponto `ring` da linha do tempo. O aro
+// só existe quando o app escolhe o estilo. A exceção vale SÓ na regra cujo seletor nomeia um deles, e só no anel
+// (`box-shadow` ou a variável de anel) — borda continua reprovando.
+const ESTILO_DE_ARO = /\[data-(?:segment-style="ring"|current-style="(?:ring|white-ring|bar-ring)"|timeline-style="ring")\]/;
 
 /** O seletor da regra em que a declaração está (o texto entre a última `}` ou `{` e a `{` dela). */
 function seletorDe(css: string, pos: number): string {
@@ -113,7 +126,9 @@ export function linhasNoCss(css: string, origem: string): string[] {
     if (LINHA_PERMITIDA_CSS.some((p) => p.seletor === sel && p.prop === prop.toLowerCase()
       && (p.valor === undefined || p.valor === valor.trim())
       && (p.media === undefined || p.media === mediaDe(limpo, m.index!)))) continue;
-    const ruim = prop.toLowerCase() === "box-shadow" ? anelFino(valor) : bordaVisivel(prop, valor);
+    const anel = prop.toLowerCase() === "box-shadow" || prop.startsWith("--");
+    if (anel && ESTILO_DE_ARO.test(sel)) continue;
+    const ruim = anel ? anelFino(valor) : bordaVisivel(prop, valor);
     if (ruim) achadas.push(`${origem}:${linha} — ${prop}: ${valor.trim().slice(0, 80)}`);
   }
   return achadas;
@@ -159,6 +174,19 @@ export function linhasNoNativo(fonte: string, origem: string): string[] {
   return achadas;
 }
 
+// O ARO por SOMBRA POR DENTRO no nativo (`inset: true`, ADR-0084): a linha dos estilos de aro, sem mudar a medida da
+// peça. Ela só pode nascer no `aroDoEstilo` do `estilos.ts`; em qualquer outro lugar, é linha.
+export function aneisNoNativo(fonte: string, origem: string): string[] {
+  const limpo = semComentarioJs(fonte);
+  const achadas: string[] = [];
+  for (const m of limpo.matchAll(/\binset\s*:\s*true\b/g)) {
+    const linha = limpo.slice(limpo.lastIndexOf("\n", m.index!) + 1, limpo.indexOf("\n", m.index!));
+    if (origem === "estilos.ts" && /spreadDistance: vezes \* t\.size\.borderWidth, color: cor, inset: true/.test(linha)) continue;
+    achadas.push(`${origem}:${limpo.slice(0, m.index).split("\n").length} — ${linha.trim().slice(0, 80)}`);
+  }
+  return achadas;
+}
+
 describe("sem linha — nenhuma peça da Aurea desenha borda (ADR-0072)", () => {
   it("o CSS do core, em todo estado", () => {
     expect(linhasNoCss(ler("packages/core/src/aurea.css"), "aurea.css")).toEqual([]);
@@ -189,6 +217,13 @@ describe("sem linha — nenhuma peça da Aurea desenha borda (ADR-0072)", () => 
     const dir = join(RAIZ, "packages/native/src");
     const achadas = readdirSync(dir).filter((f) => /\.tsx?$/.test(f))
       .flatMap((f) => linhasNoNativo(readFileSync(join(dir, f), "utf8"), f));
+    expect(achadas).toEqual([]);
+  });
+
+  it("o nativo — a sombra por dentro (o aro) só nasce no `aroDoEstilo` (ADR-0084)", () => {
+    const dir = join(RAIZ, "packages/native/src");
+    const achadas = readdirSync(dir).filter((f) => /\.tsx?$/.test(f))
+      .flatMap((f) => aneisNoNativo(readFileSync(join(dir, f), "utf8"), f));
     expect(achadas).toEqual([]);
   });
 
@@ -230,5 +265,21 @@ describe("sem linha — nenhuma peça da Aurea desenha borda (ADR-0072)", () => 
     expect(linhasNoCss(`@media (min-width:600px) { ${campos} { border-color:var(--input-strong); } }`, "x")).toHaveLength(1);
     expect(linhasNoCss(`@media (prefers-contrast:more) { ${campos} { border-color:var(--border); } }`, "x")).toHaveLength(1);
     expect(linhasNoCss(`@media (prefers-contrast:more) { .input { border-color:var(--input-strong); } }`, "x")).toHaveLength(1);
+    // A VARIÁVEL DE ANEL (passo B): a leitura nova acha o anel guardado em variável — e a que não é anel passa.
+    expect(linhasNoCss(".a { --bn-ring:inset 0 0 0 calc(1.5 * var(--border-width)) var(--primary); }", "x")).toHaveLength(1);
+    expect(linhasNoCss(".a { --seg-shadow:inset 0 0 0 calc(1.5 * var(--border-width)) var(--primary), var(--shadow-sm); }", "x")).toHaveLength(1);
+    expect(linhasNoCss(".a { --seg-shadow:var(--shadow-sm); --bn-ring:none; --bottomnav-ring:2rem; }", "x")).toEqual([]);
+    // OS ESTILOS DE ARO: o anel passa SÓ na regra que nomeia um deles; a borda, nem lá; e o anel em outro estilo reprova.
+    expect(linhasNoCss('.bottom-nav[data-current-style="ring"] .x { --bn-ring:inset 0 0 0 calc(1.5 * var(--border-width)) var(--primary); }', "x")).toEqual([]);
+    expect(linhasNoCss('.timeline[data-timeline-style="ring"] .timeline-dot { box-shadow:inset 0 0 0 calc(2 * var(--border-width)) var(--primary); }', "x")).toEqual([]);
+    expect(linhasNoCss('.bottom-nav[data-current-style="ring"] .x { border-color:var(--primary); }', "x")).toHaveLength(1);
+    expect(linhasNoCss('.bottom-nav[data-current-style="brand"] .x { --bn-ring:inset 0 0 0 calc(1.5 * var(--border-width)) var(--primary); }', "x")).toHaveLength(1);
+    // O contorno do botão ligado cinza: só no "aumentar contraste".
+    const ligadoCinza = ':is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"]):where(:not([data-brand="lory"],[data-brand="lory"] *))';
+    expect(linhasNoCss(`@media (prefers-contrast:more) { ${ligadoCinza} { box-shadow:inset 0 0 0 var(--border-width) var(--input-strong); } }`, "x")).toEqual([]);
+    expect(linhasNoCss(`${ligadoCinza} { box-shadow:inset 0 0 0 var(--border-width) var(--input-strong); }`, "x")).toHaveLength(1);
+    // A sombra por dentro do nativo: só no `aroDoEstilo`.
+    expect(aneisNoNativo("  ({offsetX: 0, offsetY: 0, blurRadius: 0, spreadDistance: vezes * t.size.borderWidth, color: cor, inset: true} as const);", "estilos.ts")).toEqual([]);
+    expect(aneisNoNativo("  boxShadow: [{offsetX: 0, offsetY: 0, blurRadius: 0, spreadDistance: 1, color: cor, inset: true}],", "navigation.tsx")).toHaveLength(1);
   });
 });

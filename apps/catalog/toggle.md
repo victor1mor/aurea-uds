@@ -53,6 +53,16 @@ The button scale — sm, md and lg — so a toggle sits level with the controls 
 <Toggle size="lg">Large</Toggle>
 ```
 
+### The colour of the on state
+
+pressedStyle (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Each button below is pressed.
+
+```tsx
+<Toggle icon="text-b" label="Bold" defaultPressed pressedStyle="brand" />
+<Toggle icon="text-b" label="Bold" defaultPressed pressedStyle="neutral" />
+<Toggle icon="text-b" label="Bold" defaultPressed pressedStyle="contrast" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -68,3 +78,4 @@ The button scale — sm, md and lg — so a toggle sits level with the controls 
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `value` | `string` | — | What identifies this toggle inside a ToggleGroup — without it the group cannot tell which button changed. Standalone, it makes no difference. |
 | `variant` | `default \| ghost` | default | default has the neutral fill; ghost has none. Pressed uses Aurea's selected language on both. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. |

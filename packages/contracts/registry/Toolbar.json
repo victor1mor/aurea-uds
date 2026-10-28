@@ -76,6 +76,19 @@
       "type": "string",
       "default": "—",
       "description": "Extra classes on the surface."
+    },
+    {
+      "name": "pressedStyle",
+      "type": "\"brand\" | \"neutral\" | \"contrast\"",
+      "default": "\"brand\"",
+      "description": "The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's \"increase contrast\", neutral gets a 3:1 outline. For every pressed ToolbarButton inside; each may set its own."
     }
-  ]
+  ],
+  "axes": {
+    "pressedStyle": [
+      "brand",
+      "neutral",
+      "contrast"
+    ]
+  }
 }

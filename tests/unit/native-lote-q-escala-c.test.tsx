@@ -241,6 +241,10 @@ describe("Card · confirmação", () => {
 // 9a, 11/10/2026), em todas as combinações de `variant`, `width`, `indicator` e aba escolhida, no
 // confortável. Qualquer diferença reprova — a barra foi aprovada rodando pelo Victor (ADR-0055), e
 // mudar uma medida dela pede o "pode" dele, com a barra rodando na bancada.
+// 27/10/2026 — A PRIMEIRA MUDANÇA, com o "pode" e a barra rodando (ADR-0084, "A barra na mesma altura": *"B: o círculo e
+// a cápsula com 28, e todas as barras na altura de 54"*): o círculo 32 × 32 → 28 × 28 e a cápsula 56 × 32 → 56 × 28, os
+// dois com 2 para fora em cima e embaixo (`marginVertical=-2`); o contador da cápsula 10 → 12 do canto (o canto do ícone);
+// o disco do `circle-bold` sem a altura mínima, com 2 em cima e embaixo. Nada mais muda.
 describe("BottomNav · congelado: nenhuma medida muda", () => {
   const ITENS = [{id: "a", label: "Início", icon: "house"}, {id: "b", label: "Avisos", icon: "bell", badge: 3},
     {id: "c", label: "Perfil", icon: "user", badge: true},
@@ -275,14 +279,14 @@ describe("BottomNav · congelado: nenhuma medida muda", () => {
     "View|minHeight=16,flexDirection=row,paddingHorizontal=4,paddingVertical=0,gap=4,alignItems=center,justifyContent=center,borderRadius=999,borderWidth=0",
     "View|position=absolute,opacity=0",
     "View|position=absolute,top=-2,right=-2",
-    "View|position=absolute,top=-2,right=10",
+    "View|position=absolute,top=-2,right=12",
     "View|width=10,height=10,minHeight=16,flexDirection=row,paddingHorizontal=0,paddingVertical=0,gap=4,alignItems=center,justifyContent=center,borderRadius=999,borderWidth=0",
     "View|width=24,height=24,position=relative,alignItems=center,justifyContent=center,borderRadius=999",
+    "View|width=28,height=28,marginVertical=-2,position=relative,alignItems=center,justifyContent=center,borderRadius=999",
+    "View|width=28,height=28,marginVertical=-2,position=relative,alignItems=center,justifyContent=center,borderRadius=999,borderWidth=1",
     "View|width=32,height=24,position=relative,alignItems=center,justifyContent=center,borderRadius=999",
-    "View|width=32,height=32,position=relative,alignItems=center,justifyContent=center,borderRadius=999",
-    "View|width=32,height=32,position=relative,alignItems=center,justifyContent=center,borderRadius=999,borderWidth=1",
-    "View|width=56,height=32,position=relative,alignItems=center,justifyContent=center,borderRadius=999",
-    "View|width=56,minHeight=40,paddingHorizontal=4,paddingVertical=4,gap=0,alignItems=center,justifyContent=center,borderRadius=999",
+    "View|width=56,height=28,marginVertical=-2,position=relative,alignItems=center,justifyContent=center,borderRadius=999",
+    "View|width=56,paddingHorizontal=4,paddingVertical=2,gap=0,alignItems=center,justifyContent=center,borderRadius=999",
   ];
   const INDICADORES = ["none", "subtle", "pill", "circle", "circle-raised", "circle-outline", "circle-bold", "capsule", "expand"];
 
@@ -301,15 +305,17 @@ describe("BottomNav · congelado: nenhuma medida muda", () => {
   });
   // O que anda com a densidade é a altura de CONTROLE da web (`controlHLg`), e não a escala de toque
   // do nativo: a barra não passou a ela (ADR-0066, regra 3).
-  it.each(["compact", "spacious"] as const)("%s: a aba e o disco seguem no `controlHLg` da densidade", (density) => {
+  // ~~E o disco~~ (27/10/2026): o disco do `circle-bold` perdeu a altura mínima (ADR-0084); quem segura o alvo de toque na
+  // densidade é a aba, que continua no `controlHLg`.
+  it.each(["compact", "spacious"] as const)("%s: a aba segue no `controlHLg` da densidade, e o disco não tem altura mínima", (density) => {
     const d = resolverTokens("dark", density);
     for (const indicator of ["pill", "circle-bold"]) {
       montar(<BottomNav items={ITENS} current="a" indicator={indicator as never} />, density);
       for (const p of __instancias("Pressable")) expect(plano(p.style).minHeight).toBe(d.size.controlHLg);
-      const discos = __instancias("View").map((p) => plano(p.style)).filter((e) => e.width === 56 && e.minHeight !== undefined);
+      const discos = __instancias("View").map((p) => plano(p.style)).filter((e) => e.width === 56 && e.paddingVertical !== undefined);
       if (indicator === "circle-bold") {
         expect(discos).toHaveLength(4);
-        for (const e of discos) expect(e.minHeight).toBe(d.size.controlHLg);
+        for (const e of discos) expect(e.minHeight).toBeUndefined();
       }
       cleanup();
     }

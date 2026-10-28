@@ -9,7 +9,13 @@
     "web": "stable",
     "native": "stable"
   },
-  "variants": [],
+  "variants": [
+    "default",
+    "ring",
+    "latest",
+    "time",
+    "contrast"
+  ],
   "sizes": [],
   "states": [],
   "tokens": [
@@ -42,6 +48,13 @@
       "type": "Array<{title: ReactNode; description?: ReactNode; time?: ReactNode}>",
       "default": "—",
       "description": "The events, rendered as an <ol> because the order IS the information. `time` is a node, so an absolute date and a relative one are equally welcome."
+    },
+    {
+      "name": "variant",
+      "type": "\"default\" | \"ring\" | \"latest\" | \"time\" | \"contrast\"",
+      "default": "\"default\"",
+      "description": "The style (ADR-0084), all on the fixed rail that runs under the dots and stops at the last one: default (the solid yellow dot), ring (a hollow dot with a yellow ring), latest (muted dots, only the last one yellow with a halo), time (the time in a column on the left, right-aligned; the rail moves with the dot) or contrast (dots in the text colour). Written as data-timeline-style. Web and React Native; on React Native an item with an icon keeps its frame in every style."
     }
-  ]
+  ],
+  "variantProp": "variant"
 }

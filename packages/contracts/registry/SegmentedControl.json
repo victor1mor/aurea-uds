@@ -91,6 +91,22 @@
       "type": "\"sm\" | \"md\"",
       "default": "md",
       "description": "sm is the low capsule of the reference's documentation switch: 24 tabs, 14 text."
+    },
+    {
+      "name": "selectedStyle",
+      "type": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\"",
+      "default": "\"current\"",
+      "description": "The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native."
     }
-  ]
+  ],
+  "axes": {
+    "selectedStyle": [
+      "current",
+      "neutral",
+      "contrast",
+      "brand",
+      "ring",
+      "dot"
+    ]
+  }
 }

@@ -240,8 +240,13 @@ interface ToggleBase{pressed?:boolean;defaultPressed?:boolean;onPressedChange?:(
 value?:string;icon?:IconName;size?:Responsive<Extract<ComponentSize,"sm"|"md"|"lg">>;disabled?:boolean;id?:string;className?:string;
 /** 0.32.0, o `ToggleButton` da referência: `default` com o fundo neutro (o padrão), `ghost` sem fundo
  *  (o desenho de até a 0.31.0). O ligado é o idioma "selecionado" da Aurea nos dois. */
-variant?:ToggleVariant}
+variant?:ToggleVariant;
+/** A cor do LIGADO (ADR-0084, 27/10/2026): `brand` — o amarelo do botão primário, o padrão —, `neutral` (o cinza) ou
+ *  `contrast` (o grafite, invertido). Dentro de um `ToggleGroup` ou de um `Toolbar` com `pressedStyle`, o do botão vale. */
+pressedStyle?:TogglePressedStyle}
 export type ToggleVariant="default"|"ghost";
+/** As três cores do ligado aprovadas pelo Victor em 26/10/2026 (A cinza, B grafite, C amarelo — o padrão). */
+export type TogglePressedStyle="neutral"|"contrast"|"brand";
 type ToggleChildren=Exclude<React.ReactNode,boolean|null|undefined>;
 export type ToggleProps=ToggleBase&({children:ToggleChildren;label?:string}|{children?:never;label:string});
 // O ReactNode inclui false/null/undefined, mas nenhum deles nomeia um botão. Estes tipos somem
@@ -271,7 +276,7 @@ return itens.some(item=>{
 // entre os estados**. Se o texto vira "Mute"/"Unmute" ou "Play"/"Pause", não é toggle — é
 // botão de ação, porque quem lê tela ouve o rótulo NOVO e o estado ao mesmo tempo e não sabe
 // se o botão descreve o que é ou o que fará.
-export function Toggle({pressed,defaultPressed,onPressedChange,value,icon,label,size:sizePedido,disabled,id,className,children,variant="default"}:ToggleProps){
+export function Toggle({pressed,defaultPressed,onPressedChange,value,icon,label,size:sizePedido,disabled,id,className,children,variant="default",pressedStyle}:ToggleProps){
 const grupo=React.useContext(GrupoDeBotoesContext);
 const size=sizePedido??(grupo?.size as ToggleProps["size"]);
 // O tipo barra o consumidor TypeScript; este aviso barra o de JavaScript, que não tem tipo nenhum.
@@ -287,7 +292,7 @@ if(!textoVisivel&&!rotuloVisivel)console.error("Aurea: <Toggle> sem `children` v
 // sem `size` saía a classe `btn-undefined` (medido no catálogo, nos três botões do `ToggleGroup`); com
 // valor responsivo sairia `btn-[object Object]`.
 const tamanho=ehResponsivo(size)?classesResponsivas("size",size):((valorBase(size)??"md")!=="md"&&`btn-${valorBase(size)}`);
-return <BaseToggle id={id} value={value} disabled={disabled} pressed={pressed} defaultPressed={defaultPressed} onPressedChange={soOValor(onPressedChange)} aria-label={textoVisivel?undefined:(rotuloVisivel?label:undefined)} className={cx("btn",variant==="ghost"?"btn-ghost":"btn-tertiary",tamanho,!textoVisivel&&"btn-icon","toggle",className)}>{icon&&<Icon name={icon}/>}{children}</BaseToggle>}
+return <BaseToggle id={id} value={value} disabled={disabled} pressed={pressed} defaultPressed={defaultPressed} onPressedChange={soOValor(onPressedChange)} aria-label={textoVisivel?undefined:(rotuloVisivel?label:undefined)} data-pressed-style={pressedStyle} className={cx("btn",variant==="ghost"?"btn-ghost":"btn-tertiary",tamanho,!textoVisivel&&"btn-icon","toggle",className)}>{icon&&<Icon name={icon}/>}{children}</BaseToggle>}
 
 // O ícone do `IconButton` aceita também o DESENHO do app (15/10/2026), como o `Icon` (MNT-02, 0.30.0) e o
 // `IconButton` do nativo (R-11): a marca de um serviço, um glifo que o Phosphor não tem.
@@ -372,17 +377,20 @@ export function ButtonGroup({label,orientation,variant,size,fullWidth,disabled,d
 // atributo publicado. Nada de o CSS decidir a orientação por breakpoint enquanto o atributo
 // diz outra coisa — seriam duas fontes de verdade e uma janela em que visual e comportamento
 // divergem. Ver `decisions/0047-css-first-para-apresentacao-runtime-para-semantica.md`.
-export function Toolbar({orientation,label,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{orientation?:Responsive<Orientation>;label?:string}){
+// `pressedStyle` (ADR-0084): a cor do ligado de todos os botões de dentro; cada um pode trocar a sua.
+export function Toolbar({orientation,label,className,pressedStyle,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{orientation?:Responsive<Orientation>;label?:string;pressedStyle?:TogglePressedStyle}){
 const s=useAureaStrings();
 const ancora=useRef<HTMLDivElement|null>(null);
 const resolvida=useValorResponsivo(orientation,"horizontal",ancora);
-return <BaseToolbar.Root ref={ancora} orientation={resolvida} aria-label={label??s.toolbarLabel} className={cx("toolbar",className)} {...props}/>}
+return <BaseToolbar.Root ref={ancora} orientation={resolvida} aria-label={label??s.toolbarLabel} data-pressed-style={pressedStyle} className={cx("toolbar",className)} {...props}/>}
 export function ToolbarGroup({label,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{label?:string}){return <BaseToolbar.Group aria-label={label} className={cx("toolbar-group",className)} {...props}/>}
 export function ToolbarSeparator({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <BaseToolbar.Separator className={cx("toolbar-sep",className)} {...props}/>}
 // Sem `share` (GAR-14): o caminho pelo motor da barra não foi provado — entra quando for medido.
 // Interface com nome (e não o `Omit` solto no tipo): é o que o gerador da superfície da API lê.
-export interface ToolbarButtonProps extends Omit<ButtonProps,"share">{}
-export const ToolbarButton=forwardRef<HTMLButtonElement,ToolbarButtonProps>(function ToolbarButton({variant="ghost",...props},ref){return <BaseToolbar.Button ref={ref} disabled={props.disabled} render={<Button variant={variant} {...props}/>}/>});
+export interface ToolbarButtonProps extends Omit<ButtonProps,"share">{
+  /** A cor do ligado (ADR-0084): `brand` (o padrão), `neutral` ou `contrast`. Vale quando o botão está ligado (`aria-pressed`). */
+  pressedStyle?:TogglePressedStyle}
+export const ToolbarButton=forwardRef<HTMLButtonElement,ToolbarButtonProps>(function ToolbarButton({variant="ghost",pressedStyle,...props},ref){return <BaseToolbar.Button ref={ref} disabled={props.disabled} render={<Button variant={variant} data-pressed-style={pressedStyle} {...props}/>}/>});
 
 // TOGGLE GROUP — vários Toggle com estado compartilhado e navegação por seta entre eles.
 //
@@ -402,10 +410,13 @@ export interface ToggleGroupProps{value?:string[];defaultValue?:string[];onValue
   /** Ocupa a largura do pai, e os botões repartem em partes iguais. */
   fullWidth?:boolean;
   /** Botões soltos (vão de 4), em vez de colados. */
-  detached?:boolean}
-export function ToggleGroup({value,defaultValue,onValueChange,multiple,orientation,disabled,label,className,children,size,fullWidth,detached}:ToggleGroupProps){
+  detached?:boolean;
+  /** A cor do ligado de todos os botões de dentro (ADR-0084): `brand` (o padrão), `neutral` ou `contrast`; cada um pode
+   *  trocar a sua. */
+  pressedStyle?:TogglePressedStyle}
+export function ToggleGroup({value,defaultValue,onValueChange,multiple,orientation,disabled,label,className,children,size,fullWidth,detached,pressedStyle}:ToggleGroupProps){
   const ancora=useRef<HTMLDivElement|null>(null);
   const resolvida=useValorResponsivo(orientation,"horizontal",ancora);
   const grupo=React.useMemo(()=>({size}),[size]);
-  return <GrupoDeBotoesContext.Provider value={grupo}><BaseToggleGroup ref={ancora} value={value} defaultValue={defaultValue} onValueChange={soOValor(onValueChange)} multiple={multiple} orientation={resolvida} disabled={disabled} aria-label={label} className={cx("toggle-group",detached&&"toggle-group-detached",fullWidth&&"toggle-group-full",className)}>{children}</BaseToggleGroup></GrupoDeBotoesContext.Provider>;
+  return <GrupoDeBotoesContext.Provider value={grupo}><BaseToggleGroup ref={ancora} value={value} defaultValue={defaultValue} onValueChange={soOValor(onValueChange)} multiple={multiple} orientation={resolvida} disabled={disabled} aria-label={label} data-pressed-style={pressedStyle} className={cx("toggle-group",detached&&"toggle-group-detached",fullWidth&&"toggle-group-full",className)}>{children}</BaseToggleGroup></GrupoDeBotoesContext.Provider>;
 }

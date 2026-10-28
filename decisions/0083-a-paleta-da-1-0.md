@@ -1,9 +1,9 @@
 # ADR-0083 — A paleta da 1.0: o destaque grafite, a base Zinco profundo e o amarelo que não vira letra (passo A)
 
 - **Data:** 26/10/2026 (as decisões) · 27/10/2026 (o passo A construído)
-- **Estado:** aceita · o passo A na branch `claude/cores-a`, para a `0.45.0` — web e nativo. Os passos B (os estilos novos
-  do botão ligado, do segmento, da barra de baixo e da linha do tempo) e C (as marcas: a `lory` vira Aurea Ember, e as 11
-  marcas extras) acrescentam a esta ADR.
+- **Estado:** aceita · o passo A publicado na `0.45.0` (27/10/2026) — web e nativo. O passo B (os estilos novos do botão
+  ligado, do segmento, da barra de baixo e da linha do tempo) ficou na [ADR-0084](0084-os-estilos-novos-e-as-duas-excecoes.md),
+  porque abre duas exceções; o C (as marcas: a `lory` vira Aurea Ember, e as 11 marcas extras) acrescenta a esta.
 - **Origem:** a proposta de cores que o Victor preparou em outra conversa, *"definindo toda paleta vendo componente a
   componente"* (25 e 26/10/2026), aprovada família por família — seleção, campos, ações, navegação, avisos, dados,
   sobreposições e gráficos — numa bancada com os componentes reais da 0.43.0. Lida inteira aqui em 26/10/2026 (os oito

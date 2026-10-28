@@ -26,9 +26,24 @@ describe("BottomNav · a barra mais baixa", () => {
     expect(m).toHaveLength(2);
     for (const x of m) expect(x.height).toBe(t.size.iconLg);
   });
-  it.each(["circle", "circle-raised", "circle-outline"] as const)("%s: a moldura continua 32, é ela que vira o círculo", (indicator) => {
+  // ~~a moldura continua 32~~ → 28, passando 2 por fora da caixa (27/10/2026, a barra na mesma altura em todos os
+  // formatos — ADR-0084: *"B: o círculo e a cápsula com 28"*). O item fica com a altura do ícone, como nos outros.
+  it.each(["circle", "circle-raised", "circle-outline"] as const)("%s: o círculo tem 28 e passa 2 por fora da caixa", (indicator) => {
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" indicator={indicator} /></AureaProvider>);
-    for (const x of molduras()) expect(x.height).toBe(32);
+    const circulos = estilos().filter((e) => e.width === t.size.iconLg + t.size.space1 && e.height === t.size.iconLg + t.size.space1);
+    expect(circulos).toHaveLength(2);
+    for (const c of circulos) expect(c.marginVertical).toBe(-t.size.space05);
+    expect(molduras(), "nenhuma moldura de 32 sobra nos redondos").toHaveLength(0);
+  });
+  it("capsule: 56 × 28, passando 2 por fora da caixa; e o disco do circle-bold sem a altura mínima", () => {
+    render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" indicator="capsule" /></AureaProvider>);
+    const capsulas = estilos().filter((e) => e.width === 56 && e.height === t.size.iconLg + t.size.space1);
+    expect(capsulas).toHaveLength(2);
+    for (const c of capsulas) expect(c.marginVertical).toBe(-t.size.space05);
+    render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" indicator="circle-bold" /></AureaProvider>);
+    const discos = estilos().filter((e) => e.width === 56 && e.paddingVertical !== undefined);
+    expect(discos.length).toBeGreaterThan(0);
+    for (const d of discos) { expect(d.minHeight).toBeUndefined(); expect(d.paddingVertical).toBe(t.size.space05); }
   });
   // ~~O `circle-bold` estava na lista acima~~ — desde 03/10/2026 o círculo dele é o DISCO em volta
   // do ícone e do nome, e a moldura fica da altura do ícone, para o nome encostar nele.

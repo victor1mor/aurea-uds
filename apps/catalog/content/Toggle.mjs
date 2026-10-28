@@ -1,6 +1,6 @@
 import {createElement as h} from "react";
 import {Toggle} from "../../../packages/react/dist/index.js";
-import {eixo} from "./_eixos.mjs";
+import {eixo, cada} from "./_eixos.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-2)"};
 
@@ -72,5 +72,10 @@ export default {
       Comp: Toggle, nome: "Toggle", prop: "size", valores: ["sm", "md", "lg"],
       filho: (v) => ({sm: "Small", md: "Medium", lg: "Large"})[v],
     }),
+    cada({titulo: "The colour of the on state", descricao: "pressedStyle (ADR-0084): brand — the yellow of the primary button, "
+      + "the default — neutral (grey) or contrast (graphite, inverted). Each button below is pressed.",
+      valores: ["brand", "neutral", "contrast"],
+      codigo: v => `<Toggle icon="text-b" label="Bold" defaultPressed pressedStyle="${v}" />`,
+      peca: v => h(Toggle, {icon: "text-b", label: `Bold, ${v}`, defaultPressed: true, pressedStyle: v})}),
   ],
 };

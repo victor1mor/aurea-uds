@@ -1,7 +1,9 @@
 # ADR-0055 — A barra de baixo fica parada e mais baixa
 
 - **Data:** 03/10/2026
-- **Estado:** aceita · executada na `0.17.0`, publicada em 03/10/2026.
+- **Estado:** aceita · executada na `0.17.0`, publicada em 03/10/2026. **As alturas da tabela abaixo mudaram em 27/10/2026**
+  ([ADR-0084](0084-os-estilos-novos-e-as-duas-excecoes.md), "A barra na mesma altura"): os nove formatos medem 54 — o
+  círculo e a cápsula passaram a 28, e o disco do `circle-bold` perdeu a altura mínima.
 - **Autoria:** decisão do Victor, olhando a bancada com o código real rodando no navegador:
   *"me incomoda o bottom nav todo se mexer quando [clica] no botão, quero ele estático, apenas os
   botões dinâmicos"*; *"ainda acho ele muito largo comparado a bottomnav como do [a referência]"* —

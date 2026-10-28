@@ -115,6 +115,16 @@ The size step shared with Button.
 </Toolbar>
 ```
 
+### The colour of the on state
+
+pressedStyle (ADR-0084), when the button is pressed: brand — the default — neutral or contrast.
+
+```tsx
+<ToolbarButton pressed pressedStyle="brand">Bold</ToolbarButton>
+<ToolbarButton pressed pressedStyle="neutral">Bold</ToolbarButton>
+<ToolbarButton pressed pressedStyle="contrast">Bold</ToolbarButton>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -137,3 +147,4 @@ The size step shared with Button.
 | `download` | `boolean \| string` | — | Link attribute, only with `href`. |
 | `render` | `ReactElement` | — | Inherited from Button: the element that renders the button — the router's link, for example — receiving the Aurea skin and the content. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller — the Button's quiet. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. |

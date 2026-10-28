@@ -15,6 +15,11 @@ export type AureaBottomNavVariant = "floating" | "edge";
 /** Quanto a pílula ocupa: a tela menos a margem (`full`, o de sempre) ou só as abas (`content`). */
 export type AureaBottomNavWidth = "full" | "content";
 export type AureaBottomNavIndicator = "none" | "subtle" | "pill" | "circle" | "circle-raised" | "circle-outline" | "circle-bold" | "capsule" | "expand";
+/**
+ * A cor do item atual (ADR-0084, 27/10/2026) — o `indicator` escolhe a forma, o `currentStyle` a cor. Os treze estilos da
+ * web, aprovados pelo Victor em 26/10/2026, na barra flutuante e na fixa.
+ */
+export type AureaBottomNavCurrentStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "plain" | "brand-white" | "white-ring" | "brand-gradient" | "bar-ink" | "bar-ring" | "bar-plain" | "bar-light";
 export interface BottomNavProps extends ViewProps {
     items: AureaNavItem[];
     /** O `id` do item corrente. */
@@ -33,6 +38,16 @@ export interface BottomNavProps extends ViewProps {
     width?: AureaBottomNavWidth;
     /** Nome da barra para o leitor de tela. Sem ele, a frase do provider. */
     label?: string;
+    /**
+     * A COR do item atual (ADR-0084), a mesma da web: `current` (o de sempre — o padrão), `neutral` (o cinza), `contrast`
+     * (o grafite), `brand` (o amarelo cheio), `ring` (o aro amarelo), `plain` (só o ícone cheio e o nome em semibold);
+     * `brand-white` (o amarelo com o branco — ⚠ REPROVA a WCAG: 1,91:1), `white-ring` (o branco com o aro amarelo) e
+     * `brand-gradient` (o degradê; no React Native sem degradê, o amarelo cheio); e a barra inteira amarela: `bar-ink`,
+     * `bar-ring`, `bar-plain` e `bar-light`. A cor vai onde o formato pinta: o item no `pill`, no `subtle` e no `expand`; a
+     * moldura do ícone no `circle`, no `circle-outline`, no `circle-raised` e no `capsule`; o disco no `circle-bold`. O
+     * `none` não tem fundo, e não muda.
+     */
+    currentStyle?: AureaBottomNavCurrentStyle;
 }
 /**
  * A barra inferior — a pele da navegação, **não a navegação**.
@@ -107,7 +122,7 @@ export interface BottomNavProps extends ViewProps {
  * usa `Screen` (uma fileira de botões presa no pé, por exemplo), o número está em
  * `useBottomNavSpace()`. Fora de um provedor os dois valem zero, e nada muda.
  */
-export declare function BottomNav({ items, current, variant, indicator, width, label, style, ...rest }: BottomNavProps): React.JSX.Element;
+export declare function BottomNav({ items, current, variant, indicator, width, label, currentStyle, style, ...rest }: BottomNavProps): React.JSX.Element;
 export type AureaHeaderVariant = "floating" | "flush" | "pill";
 /** O recuo dos lados da `flush`: `bar` (20, o de sempre), `page` (16, o da `Screen`) ou `none`. */
 export type AureaHeaderInset = "bar" | "page" | "none";

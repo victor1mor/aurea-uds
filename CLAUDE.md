@@ -196,6 +196,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.42.0` | A lateral até o topo: `AppShell layout="sidebar"` (a lateral do alto até embaixo, com a marca nela, e a barra de cima só sobre o conteúdo, quando o app passa `topbar`), `AppShell.SidebarToggle` e `sidebarFooter` — o MNT-34 ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md)), pedido #95. **Publicada em 25/10/2026** (entre 08:32 e 08:39, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #96 (a auditoria de volta ao verde) |
 | `0.43.0` | O bloco 1, o catálogo fiel: toda peça com página e toda variação num exemplo vivo, o nativo no site (a chave Web \| Native e as 79 páginas do nativo), quatro travas novas na CI, `CodeBlock tabs`, `SegmentedControl` com `size` e `href`, as fichas das peças só do nativo e as decisões da bancada ([ADR-0081](decisions/0081-a-bancada-do-bloco-1.md)) — pedido #97. **Publicada em 25/10/2026** (entre 17:23 e 17:29, Brasília, medido no npm), pelo terminal do Victor |
 | `0.44.0` | O bloco 2, a lateral inteira: `Sidebar` com `collapsible`, `indicator` e `panel`, `Sidebar.Provider`, `Sidebar.Toggle` e `useSidebar` (o Ctrl+B), no item `avatar`, `action`, o grupo que dobra e o `"separator"`, o texto e o fio a 16 e a lateral solta do topo até embaixo ([ADR-0082](decisions/0082-a-lateral-inteira.md)) — pedido #99. **Publicada em 26/10/2026** (entre 19:50 e 19:55, Brasília, medido no npm), pelo terminal do Victor |
+| `0.45.0` | As cores, passo A — a paleta da 1.0: os neutros Zinco, no claro o amarelo nunca é letra (o destaque e o link na cor do texto, o link com marca-texto), as marcas brancas nos controles, o foco dos campos no amarelo, o campo branco em todo lugar, o botão ligado amarelo, a linha do tempo consertada, o "aumentar contraste" do sistema e quatro tokens novos; a `lory` congelada ([ADR-0083](decisions/0083-a-paleta-da-1-0.md)) — pedido #100. **Publicada em 27/10/2026** (entre 16:20 e 16:28, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -652,6 +653,21 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    **Publicada em 26/10/2026** (entre 19:50 e 19:55, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
    #99. O registro entrou no lote seguinte (as cores, passo A).
 
+43. **`0.45.0`, as cores, passo A — a paleta da 1.0, feita em 27/10/2026** ([ADR-0083](decisions/0083-a-paleta-da-1-0.md)) — a
+   proposta de cores que o Victor preparou componente a componente (25 e 26/10/2026) e as quatro decisões da bancada: o foco dos
+   campos no amarelo (*"1 C Amarelo"*), o texto de apoio `#5E5E65` (o `#686871` da proposta dava 3,88:1 nos fundos de 10% —
+   o axe achou), a linha do tempo consertada em todas as marcas e o cartão do escuro sem borda. Web e nativo; a `lory`
+   congelada, provada contra a 0.44.0 (`lory-congelada.spec.ts`). ⚠ **As lições:** (1) a fronteira do core recusou a classe
+   `link-underline` (o core só tem classe que um componente produz) — a variação virou o atributo `data-link="underline"`;
+   (2) a suíte inteira do Chromium achou o `rtl.spec` lendo o trilho antigo da linha do tempo, e a CI achou o `geometry.spec`
+   comparando a cor calculada ("86.046997", no WebKit) com o texto do token ("86.047") — cor se compara pelo MESMO caminho
+   nos dois lados; (3) a suíte de unidade estourou o tempo em dois testes com a máquina carregada (as fotos da CI sendo
+   baixadas e comparadas ao mesmo tempo): o que esgotou o tempo roda de novo sozinho antes de virar defeito; (4) a página de tokens cresce com
+   token novo — a foto dela muda de altura, e a altura se explica pelas linhas novas antes de aceitar. **Publicada em
+   27/10/2026** (entre 16:20 e 16:28, Brasília, medido no npm; o `native` apareceu no registro 6 minutos depois dos outros —
+   a saída do terminal do Victor já dizia `+ @aurea-uds/native@0.45.0`), pelo terminal do Victor, da junção do pedido #100.
+   O registro entrou no lote seguinte (as cores, passo B).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -822,7 +838,10 @@ no git.
   (`--success`, `--info`, `--warning`, `--destructive`) é a MESMA cor nos dois temas; letra, ícone,
   borda e barra sobre a tela usam o par `-400`. ⚠ Nunca pintar letra com a cor de fundo de estado:
   `paleta-adr0061.test.tsx` reprova.
-- Sem gradientes (nem funcionais).
+- Sem gradientes (nem funcionais) — com DUAS exceções estreitas, cada uma cobrada pelo check 4: pintar as cores que se
+  escolhem ([ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md), só no `color.ts`) e o item
+  atual da barra de baixo no estilo `brand-gradient` (o H — decisão do Victor, 26/10/2026, *"se não não conseguimos virar UDS
+  de verdade"*; [ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md), só na regra dele e só quando o app escolhe).
 - **Sem linha** (decisão do Victor, 16/10/2026, [ADR-0072](decisions/0072-sem-linha.md)): nenhuma peça desenha
   borda — a cor de toda borda é transparente (a espessura fica, nenhuma medida muda), e o anel fino de `box-shadow`
   não entra. O que só a linha separava do fundo ganha FUNDO translúcido da cor do texto (`--fill-1` 6%, `--fill-2`
@@ -831,7 +850,9 @@ no git.
   borda). As DUAS linhas: a do cartão de contorno, clara (o texto a 10%), e a de ponta a ponta embaixo das áreas do
   site (`Header` com `tabs` e `divider`, decisão do Victor de 17/10/2026, ADR-0072 item 9) — e a que SÓ o "aumentar
   contraste" do sistema acende: o contorno de 3:1 dos campos (`--input-strong`, ADR-0083), uma exceção nomeada na trava,
-  presa ao `@media (prefers-contrast:more)`. Quem cobra: `tests/unit/sem-linha.test.tsx`
+  presa ao `@media (prefers-contrast:more)` (e o do botão ligado cinza, ADR-0084). E os AROS dos estilos de aro, que o app
+  escolhe (o segmento `ring`, o item `ring`, `white-ring` e `bar-ring` da barra de baixo, o ponto `ring` da linha do tempo —
+  ADR-0084): sempre sombra por dentro, nunca borda, e só quando escolhidos. Quem cobra: `tests/unit/sem-linha.test.tsx`
   (o código, em todo estado) e a varredura "nenhuma peça desenha linha" (toda página, dois temas, três navegadores).
   **O CAMPO NO CLARO É BRANCO COM SOMBRA** (decisão do Victor, 22/10/2026, *"gostei Branco + sombra"*,
   [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)): solto na página, a cor do cartão e o `--shadow-sm`

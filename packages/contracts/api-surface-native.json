@@ -6,8 +6,8 @@
     "modulos": 33,
     "componentes": 90,
     "hooks": 16,
-    "aliasesLiterais": 65,
-    "propsDistintas": 204
+    "aliasesLiterais": 68,
+    "propsDistintas": 206
   },
   "aliases": {
     "AureaButtonAppearance": {
@@ -60,6 +60,17 @@
       "module": "data",
       "raw": "{ title: React.ReactNode; description?: React.ReactNode; time?: React.ReactNode; icon?: AureaIcon; tone?: Exclude<AureaBadgeTone, AureaBadgeCategory>; trailing?: React.ReactNode; between?: React.ReactNode; }",
       "union": null
+    },
+    "AureaTimelineVariant": {
+      "module": "data",
+      "raw": "\"default\" | \"ring\" | \"latest\" | \"time\" | \"contrast\"",
+      "union": [
+        "default",
+        "ring",
+        "latest",
+        "time",
+        "contrast"
+      ]
     },
     "AureaDataListItem": {
       "module": "data",
@@ -210,6 +221,21 @@
         "default",
         "surface"
       ]
+    },
+    "PeleDoSegmento": {
+      "module": "estilos",
+      "raw": "{ fundo: string; letra: string; sombra: boolean; aro: string | null; ponto: boolean; }",
+      "union": null
+    },
+    "PeleDoAtual": {
+      "module": "estilos",
+      "raw": "{ fundo: string; letra: string; aro: string | null; degrade: string | null; negrito: boolean; barra: boolean; }",
+      "union": null
+    },
+    "PeleDoPonto": {
+      "module": "estilos",
+      "raw": "{ fundo: string; aro: string | null; halo: string | null; }",
+      "union": null
     },
     "TomDeCor": {
       "module": "estilos",
@@ -1838,6 +1864,18 @@
         "card"
       ]
     },
+    "AureaSegmentedControlSelectedStyle": {
+      "module": "inputs",
+      "raw": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\"",
+      "union": [
+        "current",
+        "neutral",
+        "contrast",
+        "brand",
+        "ring",
+        "dot"
+      ]
+    },
     "AureaStackAlign": {
       "module": "layout",
       "raw": "\"start\" | \"center\" | \"end\" | \"stretch\"",
@@ -1958,6 +1996,25 @@
         "circle-bold",
         "capsule",
         "expand"
+      ]
+    },
+    "AureaBottomNavCurrentStyle": {
+      "module": "navigation",
+      "raw": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"plain\" | \"brand-white\" | \"white-ring\" | \"brand-gradient\" | \"bar-ink\" | \"bar-ring\" | \"bar-plain\" | \"bar-light\"",
+      "union": [
+        "current",
+        "neutral",
+        "contrast",
+        "brand",
+        "ring",
+        "plain",
+        "brand-white",
+        "white-ring",
+        "brand-gradient",
+        "bar-ink",
+        "bar-ring",
+        "bar-plain",
+        "bar-light"
       ]
     },
     "AureaHeaderVariant": {
@@ -3125,6 +3182,18 @@
               "optional": false,
               "type": "readonly AureaTimelineItem[]",
               "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "AureaTimelineVariant",
+              "values": [
+                "default",
+                "ring",
+                "latest",
+                "time",
+                "contrast"
+              ]
             },
             {
               "name": "style",
@@ -5132,6 +5201,19 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "selectedStyle",
+              "optional": true,
+              "type": "AureaSegmentedControlSelectedStyle",
+              "values": [
+                "current",
+                "neutral",
+                "contrast",
+                "brand",
+                "ring",
+                "dot"
+              ]
             }
           ]
         },
@@ -5981,6 +6063,26 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "currentStyle",
+              "optional": true,
+              "type": "AureaBottomNavCurrentStyle",
+              "values": [
+                "current",
+                "neutral",
+                "contrast",
+                "brand",
+                "ring",
+                "plain",
+                "brand-white",
+                "white-ring",
+                "brand-gradient",
+                "bar-ink",
+                "bar-ring",
+                "bar-plain",
+                "bar-light"
+              ]
             }
           ]
         },

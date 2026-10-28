@@ -310,7 +310,8 @@ export declare function OTPField({ length, value, defaultValue, onValueChange, m
     /** `secondary`: o fundo neutro do `Input` secundário, para o campo dentro de um cartão. */
     variant?: "primary" | "secondary";
 }): React.JSX.Element;
-export declare function SegmentedControl({ items, value, onChange, label, fullWidth, size }: {
+export type SegmentedControlSelectedStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "dot";
+export declare function SegmentedControl({ items, value, onChange, label, fullWidth, size, selectedStyle }: {
     items: Array<{
         value: string;
         label: ReactNode;
@@ -321,6 +322,7 @@ export declare function SegmentedControl({ items, value, onChange, label, fullWi
     label?: string;
     fullWidth?: boolean;
     size?: "sm" | "md";
+    selectedStyle?: SegmentedControlSelectedStyle;
 }): React.JSX.Element;
 export interface ComboboxOption {
     value: string;

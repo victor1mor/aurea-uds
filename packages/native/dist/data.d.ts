@@ -28,8 +28,17 @@ export type AureaTimelineItem = {
      */
     between?: React.ReactNode;
 };
+/** Os cinco estilos da linha do tempo (ADR-0084), os mesmos da web. */
+export type AureaTimelineVariant = "default" | "ring" | "latest" | "time" | "contrast";
 export interface TimelineProps extends Virtualizavel {
     items: readonly AureaTimelineItem[];
+    /**
+     * O estilo (ADR-0084, 27/10/2026), os cinco aprovados pelo Victor em 26/10/2026: `default` (o ponto amarelo cheio — o
+     * padrão), `ring` (o ponto vazado com o aro amarelo), `latest` (os pontos na cor fraca e só o último no amarelo, com
+     * halo), `time` (a hora numa coluna à esquerda, alinhada à direita; o trilho anda junto com o ponto) e `contrast` (os
+     * pontos na cor do texto). O item com `icon` continua com a moldura dele em todos.
+     */
+    variant?: AureaTimelineVariant;
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }
@@ -50,7 +59,7 @@ export interface TimelineProps extends Virtualizavel {
  * colavam na mesma linha — *"Shipped14:20"* (aurea.css:1240). Geometria de componente não muda
  * com o conteúdo.
  */
-export declare function Timeline({ items, virtualized, style, testID }: TimelineProps): React.JSX.Element;
+export declare function Timeline({ items, variant, virtualized, style, testID }: TimelineProps): React.JSX.Element;
 export type AureaDataListItem = {
     term: React.ReactNode;
     value: React.ReactNode;

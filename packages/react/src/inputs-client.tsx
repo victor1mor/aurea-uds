@@ -1114,11 +1114,15 @@ return <BaseOTPField.Root id={id} length={length} value={value} defaultValue={de
 // NAVEGAÇÃO (bloco 1, o 5-A — 23/10/2026): com `href` em TODOS os itens, a cápsula é um <nav> de links — o atual leva
 // `aria-current="page"` —, e não um grupo de escolha: ir para outra página é navegação, e o leitor de tela tem de ouvir
 // "link", não "opção". É a chave Web | Native do site. `size="sm"`: a cápsula baixa da referência (abas de 24).
-export function SegmentedControl({items,value,onChange,label,fullWidth,size="md"}:{items:Array<{value:string;label:ReactNode;href?:string}>;value:string;onChange?:(v:string)=>void;label?:string;fullWidth?:boolean;size?:"sm"|"md"}){
+// `selectedStyle` (ADR-0084, 27/10/2026): a cor do segmento aceso, em seis estilos aprovados pelo Victor em 26/10/2026 —
+// `current` (o de sempre, o padrão), `neutral`, `contrast`, `brand`, `ring` e `dot`. Vai como `data-segment-style` na
+// cápsula; o mesmo atributo num contêiner (ou no `<html>`) vale para todos os de dentro.
+export type SegmentedControlSelectedStyle="current"|"neutral"|"contrast"|"brand"|"ring"|"dot";
+export function SegmentedControl({items,value,onChange,label,fullWidth,size="md",selectedStyle}:{items:Array<{value:string;label:ReactNode;href?:string}>;value:string;onChange?:(v:string)=>void;label?:string;fullWidth?:boolean;size?:"sm"|"md";selectedStyle?:SegmentedControlSelectedStyle}){
 const s=useAureaStrings();
 const classe=cx("segmented",fullWidth&&"segmented-full",size==="sm"&&"segmented-sm");
-if(items.length>0&&items.every(i=>i.href!=null))return <nav className={classe} aria-label={label??s.optionsLabel}>{items.map(i=><a key={i.value} href={i.href} className={i.value===value?"active":undefined} aria-current={i.value===value?"page":undefined}>{i.label}</a>)}</nav>;
-return <BaseRadioGroup className={classe} aria-label={label??s.optionsLabel} value={value} onValueChange={v=>onChange?.(String(v))}>
+if(items.length>0&&items.every(i=>i.href!=null))return <nav className={classe} data-segment-style={selectedStyle} aria-label={label??s.optionsLabel}>{items.map(i=><a key={i.value} href={i.href} className={i.value===value?"active":undefined} aria-current={i.value===value?"page":undefined}>{i.label}</a>)}</nav>;
+return <BaseRadioGroup className={classe} data-segment-style={selectedStyle} aria-label={label??s.optionsLabel} value={value} onValueChange={v=>onChange?.(String(v))}>
 {items.map(i=><BaseRadio.Root key={i.value} value={i.value} className={i.value===value?"active":undefined} nativeButton render={<button type="button"/>}>{i.label}</BaseRadio.Root>)}
 </BaseRadioGroup>}
 

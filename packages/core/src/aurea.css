@@ -852,7 +852,7 @@ img,svg { display:block; }
    sistema faziam a pilula crescer para baixo e a barriga dela ficava atras dos botoes. A borda de
    baixo agora fica `--space-4` acima da area do sistema, em qualquer aparelho.
    A variante `edge` reverte isto mais abaixo, e la o recheio e' o certo. */
-.bottom-nav { --bottomnav-ring:2rem; --bottomnav-surface:var(--card); position:sticky; bottom:0; z-index:var(--z-sticky); display:flex; gap:var(--space-1); margin:var(--space-4); margin-bottom:calc(var(--space-4) + env(safe-area-inset-bottom)); padding:var(--space-1); border:1px solid transparent; border-radius:var(--radius-control); background:var(--card); color:var(--card-foreground); box-shadow:var(--shadow-md); }
+.bottom-nav { --bottomnav-ring:calc(var(--icon-lg) + var(--space-1)); --bottomnav-surface:var(--card); position:sticky; bottom:0; z-index:var(--z-sticky); display:flex; gap:var(--space-1); margin:var(--space-4); margin-bottom:calc(var(--space-4) + env(safe-area-inset-bottom)); padding:var(--space-1); border:1px solid transparent; border-radius:var(--radius-control); background:var(--card); color:var(--card-foreground); box-shadow:var(--shadow-md); }
 /* `--control-h-lg` e não `--control-h-md`: alvo de toque. O md dá 36px em comfortable e
    o alvo confortável de dedo é maior — com o recuo, o item renderiza acima de 44px. */
 .bottom-nav-item { flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--space-05); min-height:var(--control-h-lg); padding:var(--space-1); border:0; border-radius:var(--radius-control); background:transparent; color:var(--muted-foreground); font:inherit; font-size:var(--text-xs); text-align:center; text-decoration:none; cursor:pointer; }
@@ -888,7 +888,7 @@ img,svg { display:block; }
    O ALVO DE TOQUE não é este número e continua sendo o `min-height` do item: `--control-h-lg`
    entrega 42px em comfortable e 48 em spacious, contra os 44pt mínimos das diretrizes do iOS e
    os 48dp da mesma referência. A moldura é a caixa do DESENHO; o alvo é o item inteiro. */
-.bottom-nav-mark { position:relative; flex:none; display:inline-flex; align-items:center; justify-content:center; width:var(--bottomnav-ring); height:var(--bottomnav-ring); border-radius:var(--radius-control); }
+.bottom-nav-mark { position:relative; flex:none; display:inline-flex; align-items:center; justify-content:center; width:var(--space-8); height:var(--bottomnav-ring); border-radius:var(--radius-control); }
 /* A BARRA MAIS BAIXA — pedido do Victor, 30/09/2026, aprovado pela imagem: *"ele é muito largo, e
    é assim por conta da distância entre o ícone em cima e o texto embaixo"*. A moldura de 32 só
    serve aos quatro indicadores REDONDOS, em que ela vira o círculo. Nos outros três ela era folga
@@ -899,7 +899,14 @@ img,svg { display:block; }
    nativo (`navigation.tsx`). ~~A folga de 4dp da referência entre o indicador e o rótulo~~ vale só para
    os redondos agora. */
 .bottom-nav-mark { height:var(--icon-lg); }
-.bottom-nav-ind-circle .bottom-nav-mark, .bottom-nav-ind-circle-raised .bottom-nav-mark, .bottom-nav-ind-circle-outline .bottom-nav-mark { height:var(--bottomnav-ring); }
+/* A BARRA NA MESMA ALTURA EM TODOS OS FORMATOS — pedido do Victor, 27/10/2026 (*"todos esses tem a altura maior que o
+   restante ... quero todos da mesma altura do none, subtle, pill, expand"*), e a forma escolhida na bancada, entre duas
+   rodando: *"B: o círculo e a cápsula com 28"* (ADR-0084). O círculo e a cápsula tinham 32 em volta do ícone de 24, e a
+   barra media 62 (o `circle-bold`, 58) contra 54 nos outros. Agora são 28 (`--bottomnav-ring`), e passam 2 por fora da
+   caixa em cima e embaixo (a margem negativa): o item fica com a altura do ícone, como nos outros. A largura das molduras
+   que não são redondas continua 32 (`--space-8`): é ela que dá o canto ao contador. Igual no `navigation.tsx`. */
+.bottom-nav-ind-circle .bottom-nav-mark, .bottom-nav-ind-circle-raised .bottom-nav-mark, .bottom-nav-ind-circle-outline .bottom-nav-mark {
+  width:var(--bottomnav-ring); height:var(--bottomnav-ring); margin-block:calc((var(--icon-lg) - var(--bottomnav-ring)) / 2); }
 /* `inline-flex` no envoltório: como `<span>` solto ele é caixa de LINHA, e mede a entrelinha do
    item (18px) em vez do contador que carrega (16px). A diferença não aparece na tela — aparece
    na medição, e medição errada é o que faz a razão parecer 0,75 quando é 0,67. */
@@ -1023,7 +1030,9 @@ img,svg { display:block; }
    em todos os itens, e o recheio passa do item para ele: o item mede o mesmo escolhido ou não, e a
    altura da barra não muda. O mesmo no `navigation.tsx`. */
 .bottom-nav.bottom-nav-ind-circle-bold .bottom-nav-item { padding:0; }
-.bottom-nav-disc { display:flex; flex-direction:column; align-items:center; justify-content:center; inline-size:var(--bottomnav-bold,3.5rem); max-inline-size:100%; min-height:var(--control-h-lg); padding:var(--space-1); border-radius:var(--radius-full); }
+/* O disco perdeu a altura mínima e o recheio de cima e de baixo caiu para `--space-05` (27/10/2026, a barra na mesma
+   altura — acima): 56 × 44, e a barra fica em 54 como as outras. Era 56 × 48. */
+.bottom-nav-disc { display:flex; flex-direction:column; align-items:center; justify-content:center; inline-size:var(--bottomnav-bold,3.5rem); max-inline-size:100%; padding:var(--space-05) var(--space-1); border-radius:var(--radius-full); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] { color:var(--primary-mark); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .bottom-nav-disc { background:var(--primary); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .icon { opacity:1; }
@@ -1042,7 +1051,8 @@ img,svg { display:block; }
    O contador fica no canto do ÍCONE, e não da cápsula: sem a cápsula pintada ele ficaria solto,
    longe do sino. São os (56 − 32) / 2 a mais para dentro. E ele INVERTE sobre o amarelo, pela
    mesma razão medida do `circle-bold`, logo acima. */
-.bottom-nav-ind-capsule .bottom-nav-mark { width:var(--bottomnav-bold,3.5rem); height:var(--bottomnav-ring); border-radius:var(--radius-full); }
+/* 56 × 28 desde 27/10/2026 (a barra na mesma altura, acima): como o círculo, ela passa 2 por fora da caixa. */
+.bottom-nav-ind-capsule .bottom-nav-mark { width:var(--bottomnav-bold,3.5rem); height:var(--bottomnav-ring); margin-block:calc((var(--icon-lg) - var(--bottomnav-ring)) / 2); border-radius:var(--radius-full); }
 .bottom-nav-ind-capsule .bottom-nav-badge { inset-inline-end:calc((var(--bottomnav-bold,3.5rem) - var(--bottomnav-ring)) / 2 - var(--space-05)); }
 .bottom-nav-ind-capsule .bottom-nav-item[aria-current] .bottom-nav-mark { background:var(--primary); color:var(--primary-mark); }
 .bottom-nav-ind-capsule .bottom-nav-item[aria-current] .icon { opacity:1; }
@@ -4505,6 +4515,117 @@ button.graph-node-body { cursor:pointer; }
 /* A LINHA DO TEMPO: o trilho por baixo dos pontos é conserto de todas as marcas (na regra da linha do tempo, acima). Aqui
    só a cor: de `--border` para `--input` — na página do Zinco profundo, o `--border` quase não aparecia. */
 .timeline > li:not(:last-child):where(:not([data-brand="lory"],[data-brand="lory"] *))::before { background:var(--input); }
+
+/* ═══ AS CORES, passo B — os estilos novos (ADR-0084, 27/10/2026) ═════════════════════════════════════════════════
+   Os estilos que o Victor aprovou em 26/10/2026, todos para construir, cada um uma VARIAÇÃO (o padrão de cada peça não
+   muda): o botão ligado em três (`data-pressed-style`), o segmento aceso em seis (`data-segment-style`), a linha do tempo
+   em cinco (`data-timeline-style`) e o item atual da barra de baixo em treze (`data-current-style`), na barra flutuante e
+   na fixa. O atributo vai na própria peça (é o que o React escreve) ou num contêiner — até o `<html>`, para o app todo. A
+   peça com o seu atributo ganha do contêiner (`:not([data-…])` no caminho do contêiner); contêiner dentro de contêiner
+   vale o que vem depois aqui.
+   As cores ficam NA PEÇA, e não num token herdado da raiz: assim uma faixa com outro `data-theme` acerta.
+   A `lory` fica de fora, como no passo A (a marca congelada): toda regra leva o `:where(:not(…lory…))` de força zero.
+   As duas exceções desta seção, registradas na ADR-0084: o DEGRADÊ do `brand-gradient` (a segunda exceção à ADR-0007,
+   depois da escolha de cor da ADR-0069) e os AROS dos estilos de aro (o desenho que dá nome ao estilo — exceção nomeada à
+   ADR-0072, só quando o app escolhe o estilo). */
+
+/* 2.8 · O BOTÃO LIGADO (Toggle, ToggleGroup, ToolbarButton): o C, amarelo, é o padrão desde a 0.45.0 (a regra do passo A
+   já escreve as três variáveis). Aqui o A (`neutral`, o cinza) e o B (`contrast`, o grafite, invertido) trocam só as três. */
+:is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"]):where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  --pressed-bg:var(--input); --pressed-bg-hover:color-mix(in oklab, var(--foreground) 9%, var(--input)); --pressed-fg:var(--foreground); }
+:is([data-pressed-style="contrast"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="contrast"]):where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  --pressed-bg:var(--foreground); --pressed-bg-hover:color-mix(in oklab, var(--foreground) 84%, var(--background)); --pressed-fg:var(--background); }
+:is([data-pressed-style="brand"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="brand"]):where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  --pressed-bg:var(--primary); --pressed-bg-hover:var(--primary-hover); --pressed-fg:var(--primary-foreground); }
+/* O cinza é o mais discreto — o ligado fica perto do desligado. Quem pede mais contraste ganha o contorno de 3:1 (a mesma
+   exceção dos campos, ADR-0083: a linha que só o "aumentar contraste" acende). */
+@media (prefers-contrast:more) {
+  :is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"]):where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+    box-shadow:inset 0 0 0 var(--border-width) var(--input-strong); }
+}
+
+/* 2.9 · O SEGMENTO ACESO em seis: `current` (a cápsula elevada com o fio amarelo — o de sempre, o padrão), `neutral` (a
+   mesma cápsula, sem fio), `contrast` (o grafite), `brand` (o amarelo), `ring` (a cápsula neutra com o aro amarelo) e
+   `dot` (a cápsula neutra com um ponto amarelo antes do texto). Do `neutral` ao `dot`, o fio de baixo sai. */
+:is([data-segment-style="neutral"] .segmented:not([data-segment-style]),.segmented[data-segment-style="neutral"]) :is(button,a).active:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --seg-bg:var(--segment); --seg-fg:var(--foreground); --seg-shadow:var(--shadow-sm); }
+:is([data-segment-style="contrast"] .segmented:not([data-segment-style]),.segmented[data-segment-style="contrast"]) :is(button,a).active:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --seg-bg:var(--foreground); --seg-fg:var(--background); --seg-shadow:none; }
+:is([data-segment-style="brand"] .segmented:not([data-segment-style]),.segmented[data-segment-style="brand"]) :is(button,a).active:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --seg-bg:var(--primary); --seg-fg:var(--primary-foreground); --seg-shadow:none; }
+:is([data-segment-style="ring"] .segmented:not([data-segment-style]),.segmented[data-segment-style="ring"]) :is(button,a).active:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --seg-bg:var(--segment); --seg-fg:var(--foreground); --seg-shadow:inset 0 0 0 calc(1.5 * var(--border-width)) var(--primary), var(--shadow-sm); }
+:is([data-segment-style="dot"] .segmented:not([data-segment-style]),.segmented[data-segment-style="dot"]) :is(button,a).active:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --seg-bg:var(--segment); --seg-fg:var(--foreground); --seg-shadow:var(--shadow-sm); }
+:is([data-segment-style]:not([data-segment-style="current"]) .segmented:not([data-segment-style]),.segmented[data-segment-style]:not([data-segment-style="current"])) :is(button,a).active:where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  --btn-bg:var(--seg-bg); --btn-fg:var(--seg-fg); background:var(--seg-bg); color:var(--seg-fg); box-shadow:var(--seg-shadow); }
+:is([data-segment-style]:not([data-segment-style="current"]) .segmented:not([data-segment-style]),.segmented[data-segment-style]:not([data-segment-style="current"])) :is(button,a).active:where(:not([data-brand="lory"],[data-brand="lory"] *))::after { content:none; }
+/* O ponto do `dot` tem o lugar reservado em TODOS os segmentos, para a largura não pular quando a escolha muda. 6 de
+   diâmetro (a proposta) e 8 até o texto (a proposta dizia 7; o 8 é o `--space-2`, o vão de ícone e texto da escala). */
+:is([data-segment-style="dot"] .segmented:not([data-segment-style]),.segmented[data-segment-style="dot"]) :is(button,a):where(:not([data-brand="lory"],[data-brand="lory"] *))::before {
+  content:""; display:inline-block; inline-size:calc(var(--space-1) + var(--space-05)); block-size:calc(var(--space-1) + var(--space-05));
+  margin-inline-end:var(--space-2); border-radius:var(--radius-full); vertical-align:.1em; background:transparent; }
+:is([data-segment-style="dot"] .segmented:not([data-segment-style]),.segmented[data-segment-style="dot"]) :is(button,a).active:where(:not([data-brand="lory"],[data-brand="lory"] *))::before { background:var(--primary); }
+
+/* 2.12 · A LINHA DO TEMPO em cinco, todos sobre o conserto da ADR-0083: `default` (o ponto amarelo cheio — o padrão),
+   `ring` (o ponto vazado com o aro amarelo de 2), `latest` (os pontos na cor fraca e só o último no amarelo, com halo de
+   4), `time` (a hora numa coluna à esquerda, alinhada à direita) e `contrast` (os pontos na cor do texto). O `time` muda
+   o arranjo pela grade e `display:contents` no `<div>` de dentro — a marcação do componente não muda. */
+:is([data-timeline-style="ring"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="ring"]) .timeline-dot:where(:not([data-brand="lory"],[data-brand="lory"] *)) { background:transparent; box-shadow:inset 0 0 0 calc(2 * var(--border-width)) var(--primary); }
+:is([data-timeline-style="latest"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="latest"]) .timeline-dot:where(:not([data-brand="lory"],[data-brand="lory"] *)) { background:var(--muted-foreground); }
+:is([data-timeline-style="latest"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="latest"]) > li:last-child .timeline-dot:where(:not([data-brand="lory"],[data-brand="lory"] *)) { background:var(--primary); box-shadow:0 0 0 var(--space-1) color-mix(in oklab, var(--primary) 28%, transparent); }
+:is([data-timeline-style="contrast"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="contrast"]) .timeline-dot:where(:not([data-brand="lory"],[data-brand="lory"] *)) { background:var(--foreground); }
+/* A coluna da hora tem 52 (a proposta, medida com "10:02" e "Ontem"): `--space-12` + `--space-1`. */
+:is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li:where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  display:grid; grid-template-columns:calc(var(--space-12) + var(--space-1)) var(--space-3) minmax(0,1fr); column-gap:var(--space-3); row-gap:var(--space-05); align-items:start; }
+:is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li > div:where(:not([data-brand="lory"],[data-brand="lory"] *)) { display:contents; }
+:is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li > div > small:where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  grid-column:1; grid-row:1; text-align:end; font-variant-numeric:tabular-nums; line-height:calc(var(--text-sm) * var(--leading-normal)); }
+:is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) .timeline-dot:where(:not([data-brand="lory"],[data-brand="lory"] *)) { grid-column:2; grid-row:1; }
+:is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li > div > strong:where(:not([data-brand="lory"],[data-brand="lory"] *)) { grid-column:3; grid-row:1; }
+:is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li > div > p:where(:not([data-brand="lory"],[data-brand="lory"] *)) { grid-column:3; grid-row:2; }
+:is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li:not(:last-child):where(:not([data-brand="lory"],[data-brand="lory"] *))::before {
+  inset-inline-start:calc(var(--space-12) + var(--space-1) + var(--space-3) + var(--space-3) / 2 - var(--border-width) / 2); }
+
+/* 2.11 · O ITEM ATUAL DA BARRA DE BAIXO: o `indicator` escolhe a forma, o `currentStyle` a cor. O "fundo" é o do formato
+   — o item inteiro no `pill`, no `subtle` e no `expand`; a marca do ícone no `circle`, no `circle-outline`, no
+   `circle-raised` e no `capsule` (o nome fica embaixo, na cor do texto); o disco no `circle-bold`. O `none` não tem fundo:
+   só a cor da letra muda. Vale igual na barra flutuante e na fixa (`edge`).
+     neutral (A) o cinza · contrast (B) o grafite · brand (C) o amarelo cheio · ring (D) o aro amarelo, sem fundo ·
+     plain (E) só o ícone cheio e o nome em semibold.
+   2.11b · com amarelo e branco: brand-white (F) o amarelo com o branco — REPROVA a WCAG (1,91:1; aprovado pelo Victor
+   sabendo disso) · white-ring (G) o branco com o aro amarelo, a tinta por dentro · brand-gradient (H) o degradê do
+   amarelo até a ponta clara (a ponta é `--primary-gradient-end`, quando a marca define; sem ela, o amarelo com branco).
+   2.13 · a barra inteira AMARELA, com todos os ícones e nomes na tinta (sem transparência: a tinta clareada sobre o
+   amarelo vira marrom): bar-ink (I) a cápsula de tinta com o ícone amarelo · bar-ring (J) o aro de tinta · bar-plain (K)
+   só o ícone cheio e o nome em semibold · bar-light (L) a cápsula amarelo-clara com a tinta. */
+:is([data-current-style="neutral"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="neutral"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:var(--secondary); --bn-fg:var(--foreground); --bn-ring:none; }
+:is([data-current-style="contrast"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="contrast"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:var(--foreground); --bn-fg:var(--background); --bn-ring:none; }
+:is([data-current-style="brand"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="brand"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:var(--primary); --bn-fg:var(--primary-foreground); --bn-ring:none; }
+:is([data-current-style="ring"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="ring"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:transparent; --bn-fg:var(--foreground); --bn-ring:inset 0 0 0 calc(1.5 * var(--border-width)) var(--primary); }
+:is([data-current-style="plain"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="plain"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:transparent; --bn-fg:var(--foreground); --bn-ring:none; }
+:is([data-current-style="brand-white"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="brand-white"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:var(--primary); --bn-fg:var(--white); --bn-ring:none; }
+:is([data-current-style="white-ring"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="white-ring"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:var(--white); --bn-fg:var(--brand-yellow-ink); --bn-ring:inset 0 0 0 calc(1.5 * var(--border-width)) var(--primary); }
+:is([data-current-style="brand-gradient"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="brand-gradient"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:linear-gradient(135deg, var(--primary) 20%, var(--primary-gradient-end, color-mix(in oklab, var(--primary) 30%, var(--white)))); --bn-fg:var(--primary-foreground); --bn-ring:none; }
+:is([data-current-style="bar-ink"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="bar-ink"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:var(--primary-foreground); --bn-fg:var(--primary); --bn-ring:none; }
+:is([data-current-style="bar-ring"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="bar-ring"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:transparent; --bn-fg:var(--primary-foreground); --bn-ring:inset 0 0 0 calc(1.5 * var(--border-width)) var(--primary-foreground); }
+:is([data-current-style="bar-plain"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="bar-plain"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:transparent; --bn-fg:var(--primary-foreground); --bn-ring:none; }
+:is([data-current-style="bar-light"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="bar-light"]) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { --bn-bg:color-mix(in oklab, var(--primary) 45%, var(--white)); --bn-fg:var(--brand-yellow-ink); --bn-ring:none; }
+/* Onde vai a cor, por formato. O `:is()` com os dois caminhos (o atributo num contêiner, ou na barra) é o mesmo de cima. */
+:is([data-current-style]:not([data-current-style="current"]) .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style]:not([data-current-style="current"])):is(.bottom-nav-ind-pill,.bottom-nav-ind-subtle,.bottom-nav-ind-expand) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  background:var(--bn-bg); color:var(--bn-fg); box-shadow:var(--bn-ring); }
+:is([data-current-style]:not([data-current-style="current"]) .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style]:not([data-current-style="current"])):is(.bottom-nav-ind-circle,.bottom-nav-ind-circle-outline,.bottom-nav-ind-circle-raised,.bottom-nav-ind-capsule) .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  color:var(--foreground); }
+:is([data-current-style]:not([data-current-style="current"]) .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style]:not([data-current-style="current"])):is(.bottom-nav-ind-circle,.bottom-nav-ind-circle-outline,.bottom-nav-ind-circle-raised,.bottom-nav-ind-capsule) .bottom-nav-item[aria-current] .bottom-nav-mark:where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  background:var(--bn-bg); color:var(--bn-fg); box-shadow:var(--bn-ring); border-color:transparent; }
+:is([data-current-style]:not([data-current-style="current"]) .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style]:not([data-current-style="current"])).bottom-nav-ind-circle-bold .bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { color:var(--bn-fg); }
+:is([data-current-style]:not([data-current-style="current"]) .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style]:not([data-current-style="current"])).bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .bottom-nav-disc:where(:not([data-brand="lory"],[data-brand="lory"] *)) { background:var(--bn-bg); box-shadow:var(--bn-ring); }
+:is([data-current-style="plain"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="plain"],[data-current-style="bar-plain"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style="bar-plain"]) .bottom-nav-item[aria-current] .bottom-nav-label:where(:not([data-brand="lory"],[data-brand="lory"] *)) { font-weight:var(--weight-semibold); }
+/* A barra amarela (2.13): a barra inteira na marca, todos os itens na tinta e o ícone sem transparência. Na fixa (`edge`)
+   o core pinta `--background`; esta passa por cima. O ponto de selo vazio, que é amarelo, vai para a tinta. */
+:is([data-current-style^="bar-"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style^="bar-"]):where(:not([data-brand="lory"],[data-brand="lory"] *)) {
+  --bottomnav-surface:var(--primary); background:var(--primary); color:var(--primary-foreground); border-color:transparent; }
+:is([data-current-style^="bar-"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style^="bar-"]) .bottom-nav-item:where(:not([data-brand="lory"],[data-brand="lory"] *)) { color:var(--primary-foreground); }
+:is([data-current-style^="bar-"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style^="bar-"]) .bottom-nav-item .icon:where(:not([data-brand="lory"],[data-brand="lory"] *)) { opacity:1; }
+:is([data-current-style^="bar-"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style^="bar-"]) .bottom-nav-badge:empty:where(:not([data-brand="lory"],[data-brand="lory"] *)) { background:var(--primary-foreground); }
+/* A classe DOBRADA é força, de propósito: a regra do nome na cor do texto (o 2.11, acima) também casa com a barra amarela,
+   e no escuro pintaria o nome de branco sobre o amarelo. */
+:is([data-current-style^="bar-"] .bottom-nav.bottom-nav:not([data-current-style]),.bottom-nav.bottom-nav[data-current-style^="bar-"]):is(.bottom-nav-ind-circle,.bottom-nav-ind-circle-outline,.bottom-nav-ind-circle-raised,.bottom-nav-ind-capsule) .bottom-nav-item.bottom-nav-item[aria-current]:where(:not([data-brand="lory"],[data-brand="lory"] *)) { color:var(--primary-foreground); }
 
 /* >>> camada responsiva — GERADA por scripts/build-responsive-layer.mjs <<< */
 /* As variáveis de passo NÃO HERDAM. Ver o comentário de VARIAVEIS no gerador: um ícone dentro
