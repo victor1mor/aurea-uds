@@ -70,6 +70,13 @@
 11. **A `Toolbar` nas medidas da referência** (o Victor, vendo as duas lado a lado: *"Medidas da referência"*): 4 por
    dentro e 8 entre os botões, como a barra "colada" dela (era 7 e 6, escritos à mão).
 
+## O que a sessão decidiu sem perguntar, e o Victor manteve
+
+Mostradas lado a lado (como a proposta pedia × como ficou), o Victor manteve as cinco (28/10/2026: *"foram boas suas
+decisões vou manter todas 1 a 5"*): (1) no botão "Theme" do site, os nomes sem o "Aurea" da frente; (2) o fundo do aviso da
+Orange cheio, na proporção da Gold, e não o mel a 15% transparente do laboratório; (3) o ponto vazio escuro na barra inteira
+da marca (`bar-*`); (4) no escuro, o escolhido e o `.eyebrow` no `--primary-emphasis`; (5) o selo cheio da marca no primário.
+
 ## Como é obrigada
 
 - `tests/visual/marcas-passo-c.spec.ts`: o axe nos dois bancos das cores, nas 12 marcas (a Gold e as 11) e nos dois temas;
