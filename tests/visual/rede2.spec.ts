@@ -163,7 +163,12 @@ test("arrumar: o laço na área vazia escolhe o que pega, e Ctrl+A escolhe todos
   await abrir(p);
   await caber(p);
   const f = (await caixa(p, "fw"))!, i = (await caixa(p, "internet"))!;
-  await p.mouse.move(Math.min(f.x, i.x) - 30, i.y - 20);
+  // O laço começa na área VAZIA do mapa, acima do nó de cima — e ABAIXO da barra de ferramentas do modo de arrumar, que fica
+  // por cima do mapa no canto. Na 0.46.0 o começo caía 2 à direita da barra, por sorte; na 0.47.0 a `Toolbar` ganhou o vão
+  // de 8 da referência e ficou 22 mais larga, e o laço começava EM CIMA dela (medido em 28/10/2026: a barra até x = 611, o
+  // começo em x = 590, y = 130; a barra até y = 132). A peça não mudou; o teste dependia da medida da barra.
+  const barra = (await mapa(p).locator('[role="toolbar"]').first().boundingBox())!;
+  await p.mouse.move(Math.min(f.x, i.x) - 30, Math.max(i.y - 20, barra.y + barra.height + 4));
   await p.mouse.down();
   await p.mouse.move(Math.max(f.x + f.width, i.x + i.width) + 30, f.y + f.height + 10, {steps: 8});
   await p.mouse.up();
