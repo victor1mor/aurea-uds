@@ -884,7 +884,9 @@ no git.
   `lime`), com os neutros da Aurea. ⚠ **Regra para "qualquer marca" (`[data-brand]` sem nome) não se escreve:** ela valia só
   para a `lory` quando ela era a única, e com as 11 passou a valer para todas — o selo cheio saiu errado assim. Só sobra a da
   lateral; quem cobra é o `tests/unit/marcas-passo-c.test.tsx`. Toda marca nova passa pelo axe do
-  `tests/visual/marcas-passo-c.spec.ts`.
+  `tests/visual/marcas-passo-c.spec.ts`. **No nativo, a marca é a prop `brand` do `AureaProvider`** (os mesmos nomes); o
+  gerador emite o que cada marca muda sobre cada tema, e a folha memoizada tem a marca na chave — quem cobra é o
+  `tests/unit/native-marcas.test.tsx`.
 - **A Ember fica CONGELADA no padrão** (decisão do Victor, 26/10/2026 — ADR-0083): os tokens dela estão escritos com os
   valores de antes da paleta da 1.0, e toda regra nova da paleta (passo A) leva
   `:where(:not([data-brand="ember"],[data-brand="ember"] *))`. As

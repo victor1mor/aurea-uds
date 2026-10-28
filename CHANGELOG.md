@@ -181,7 +181,8 @@ como deveria funcionar"*.
 `lory` passa a se chamar **Aurea Ember**, e as 11 marcas da paleta da 1.0 entram, oficiais com o sim do Victor (*"As 11"*);
 junto, o que a bancada achou e ele decidiu olhando: a `Toolbar` nas medidas da referência, o contador e o ponto da barra de
 baixo vermelhos como no nativo, e a Ember com os estilos novos e as marcas dos controles brancas no escuro. Aprovado na
-bancada (28/10/2026): *"Aprovo"*. Só a web — o nativo não tem eixo de marca.
+bancada (28/10/2026): *"Aprovo"*. Web e nativo: o nativo recebe as marcas pelo `AureaProvider` (o Victor: *"ele precisa
+atualizar e receber também"*).
 
 ### ⚠ Muda a aparência
 
@@ -200,6 +201,8 @@ bancada (28/10/2026): *"Aprovo"*. Só a web — o nativo não tem eixo de marca.
 
 - **`data-brand="lory"` deixa de existir: troque por `data-brand="ember"`.** Sem apelido — a ordem do Victor (28/10/2026):
   *"mude 100% lory para ember"*. Um app que continuar com `lory` sai com a Aurea Gold.
+- **No nativo, o tipo `AureaTokens` ganhou o campo `brand`** (`AureaBrand | null`). Quem monta um `AureaTokens` à mão (num
+  teste, por exemplo) precisa do campo; quem só lê os tokens do provedor não muda nada.
 
 ### Acrescentado
 
@@ -211,6 +214,11 @@ bancada (28/10/2026): *"Aprovo"*. Só a web — o nativo não tem eixo de marca.
   como as outras marcas — muda o item 7 da [ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md). O padrão
   dela, sem estilo escolhido, continua o de antes.
 - **O site:** o botão "Theme" lista as 13 marcas (Gold, Ember, Sun…), e a página de marcas (Theming) mostra a tabela delas.
+  As páginas do nativo seguem a marca escolhida.
+- **No nativo, as marcas:** `brand` no `AureaProvider` (`"ember"` ou uma das 11), o tipo `AureaBrand`, e o quarto argumento
+  do `resolverTokens(theme, density, fontFamilies?, brand?)`. Os tokens saem do mesmo arquivo DTCG: o gerador emite o que
+  cada marca muda sobre cada tema — inclusive os tokens do tema que dependem do primário, que no CSS o `var()` resolve
+  sozinho. O cartão de contraste mantém a marca; a folha de estilo memoizada passou a ter a marca na chave.
 
 ### Corrigido
 

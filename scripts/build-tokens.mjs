@@ -227,6 +227,20 @@ const temas = Object.fromEntries(Object.entries(dtcg.theme).map(([k, g]) => {
   return [k, r.fora];
 }));
 const dens = Object.fromEntries(Object.entries(dtcg.density).map(([k, g]) => [k, grupoNativo(g, dtcg.base).fora]));
+// AS MARCAS NO NATIVO (passo C, 28/10/2026 — o Victor: o nativo "precisa atualizar e receber também"). Cada marca sai como
+// o que ela MUDA sobre cada tema. E não basta resolver os tokens da própria marca: no CSS, um token do TEMA que aponta para
+// `{primary}` segue o primário da marca sozinho (o `var()` resolve no uso); em JS não há ligação tardia. Então o tema
+// inteiro é resolvido de novo com a marca por cima, e sai tudo o que ficou diferente do tema puro — os tokens da marca e
+// os do tema que mudaram por causa dela. Marca só tem cor (ADR-0036): outra coisa morre aqui.
+const marcas = Object.fromEntries(Object.entries(dtcg.brand ?? {}).filter(([k]) => !k.startsWith("$")).map(([nome, m]) => [nome,
+  Object.fromEntries(Object.keys(dtcg.theme).map((tema) => {
+    for (const [n, tok] of Object.entries(m[tema])) if (!n.startsWith("$") && tok.$type !== "color")
+      throw new Error(`marca ${nome}.${tema}: o nativo só leva cor na marca (${n} é ${tok.$type})`);
+    const junto = grupoNativo({...dtcg.theme[tema], ...m[tema]}, dtcg.base, {extras: adiados}).fora;
+    const puro = temas[tema];
+    const muda = Object.fromEntries(Object.entries(junto).filter(([k, v]) => JSON.stringify(v) !== JSON.stringify(puro[k])));
+    return [tema, muda];
+  }))]));
 
 let js = `// Aurea — alvo NATIVO, gerado de aurea.tokens.json (DTCG 2025.10). NÃO EDITAR À MÃO.
 // Regravar: node scripts/build-tokens.mjs — e o check 36 do validador reprova se divergir.
@@ -256,6 +270,7 @@ export const breakpoints = ${j(b.breakpoints)};
 export const shadowLayers = ${j(b.camadas)};
 export const themes = ${j(temas)};
 export const densities = ${j(dens)};
+export const brands = ${j(marcas)};
 `;
 writeFileSync(P3_OUT, js);
 writeFileSync(P3_OUT.replace(/\.js$/, ".d.ts"),
@@ -269,6 +284,8 @@ export declare const breakpoints: Record<string, number>;
 export declare const shadowLayers: Record<string, AureaShadow[]>;
 export declare const themes: Record<"dark" | "light", Record<string, AureaColor | number>>;
 export declare const densities: Record<"compact" | "comfortable" | "spacious", Record<string, number>>;
+export type AureaBrandName = ${Object.keys(marcas).map((n) => JSON.stringify(n)).join(" | ")};
+export declare const brands: Record<AureaBrandName, Record<"dark" | "light", Record<string, AureaColor>>>;
 `);
 console.log("build-tokens: wrote", P3_OUT.replace(root + "\\", "").replace(root + "/", ""),
   `(${Object.keys(b.fora).length} base, ${Object.keys(b.tracking).length} tracking, ${Object.keys(b.breakpoints).length} breakpoints)`);

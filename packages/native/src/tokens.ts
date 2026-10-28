@@ -15,10 +15,16 @@
 //   • 1 nome existe no `base` E no tema — `warning400`. No CSS o tema ganha.
 // Logo: base < tema < densidade. Inverter isso devolve o app inteiro numa densidade só, e em
 // silêncio — o teste `tokens.test.ts` prova a ordem contra esse defeito.
-import {base, themes, densities, tracking, shadowLayers, REM_EM_DP} from "@aurea-uds/tokens/native";
+import {base, themes, densities, brands, tracking, shadowLayers, REM_EM_DP} from "@aurea-uds/tokens/native";
 
 export type AureaThemeName = "dark" | "light";
 export type AureaDensity = "compact" | "comfortable" | "spacious";
+/**
+ * As marcas (passo C das cores, ADR-0085): a Aurea Ember e as 11 da paleta da 1.0. Sem marca, é a Aurea Gold, a padrão.
+ * Os nomes são os mesmos do `data-brand` da web.
+ */
+export type AureaBrand = "ember" | "sun" | "honey" | "orange" | "magenta" | "violet" | "indigo" | "cobalt" | "cyan"
+  | "turquoise" | "emerald" | "lime";
 
 /** Sombra no formato do `boxShadow` do RN 0.76+, que a Etapa 2 mediu ser 1:1 com o CSS. */
 export type AureaShadow = {
@@ -53,6 +59,8 @@ export type AureaFontInput = Partial<Record<"400" | "500" | "600" | "700" | "800
 export type AureaTokens = {
   theme: AureaThemeName;
   density: AureaDensity;
+  /** A marca dos tokens; `null` é a Aurea Gold, a padrão. */
+  brand: AureaBrand | null;
   /** Cores em **hex**, e só hex. Ver a nota sobre a ADR-0027 abaixo. */
   color: Record<string, string>;
   /** Todo token numérico, em dp — espaçamento, raio, tipografia, altura, duração, camada. */
@@ -140,8 +148,13 @@ export function resolverTokens(
   theme: AureaThemeName,
   density: AureaDensity,
   fontFamilies?: AureaFontFamilies,
+  brand?: AureaBrand | null,
 ): AureaTokens {
-  const cru = mesclar(base as Record<string, unknown>, themes[theme], densities[density]);
+  // A MARCA vem depois do tema e antes da densidade, como na web (ela só muda cor). O gerador já emite o que ela muda
+  // sobre CADA tema — os tokens dela e os do tema que dependem do primário —, porque em JS não há o `var()` do CSS.
+  const marca = brand ? (brands as Record<string, Record<AureaThemeName, Record<string, unknown>>>)[brand]?.[theme] : undefined;
+  if (brand && !marca) throw new Error(`Aurea: a marca "${brand}" não existe nos tokens`);
+  const cru = mesclar(base as Record<string, unknown>, themes[theme], marca ?? {}, densities[density]);
 
   const color: Record<string, string> = {};
   const size: Record<string, number> = {};
@@ -169,5 +182,5 @@ export function resolverTokens(
     heading: normalizarEscala(fontFamilies?.heading ?? fontFamilies?.ui, texto.fontHeading ?? texto.fontUi ?? "System"),
   };
 
-  return {theme, density, color, size, font, shadow, shadowLayers: {...shadowLayers}, easing, tracking: {...tracking}, remInDp: REM_EM_DP};
+  return {theme, density, brand: brand ?? null, color, size, font, shadow, shadowLayers: {...shadowLayers}, easing, tracking: {...tracking}, remInDp: REM_EM_DP};
 }

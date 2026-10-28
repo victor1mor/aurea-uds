@@ -1,7 +1,7 @@
 # ADR-0085 — As treze marcas: a Aurea Ember e as 11 da paleta da 1.0
 
 - **Data:** 28/10/2026
-- **Estado:** aceita · na branch `claude/cores-c`, para a `0.47.0` — só a web (o nativo não tem eixo de marca). Aprovada
+- **Estado:** aceita · na branch `claude/cores-c`, para a `0.47.0` — web e nativo. Aprovada
   na bancada (28/10/2026): *"Aprovo"*.
 - **Origem:** a proposta de cores do Victor (25 e 26/10/2026, a mesma das [ADR-0083](0083-a-paleta-da-1-0.md) e
   [ADR-0084](0084-os-estilos-novos-e-as-duas-excecoes.md)), seções 0, 9b, 10 e a parte 3 do CSS: *"a `lory` passa a se
@@ -11,7 +11,8 @@
 
 ## O que se mediu
 
-- **O nativo não tem eixo de marca** (`data-brand` só existe no CSS da web, gerado pelo `scripts/build-tokens.mjs`). A
+- ~~**O nativo não tem eixo de marca**~~ (`data-brand` só existia no CSS da web) → **o nativo recebe as marcas** (o Victor,
+  28/10/2026, recusando essa decisão da sessão: *"ele precisa atualizar e receber também"*): `brand` no `AureaProvider`. A
   proposta diz que a Ember muda "no core, no native e nos tokens"; no nativo não há o que mudar.
 - **A parte 3 da proposta usa cinco tipos de valor:** hex, hex com transparência, `transparent`, `var(--x)` e duas
   misturas (`color-mix`). O arquivo de tokens não aceita mistura; as duas viram cor pronta com o MESMO valor — o fio do
@@ -69,6 +70,16 @@
    (`#C50F1F`, medido no print do site e na bancada).
 11. **A `Toolbar` nas medidas da referência** (o Victor, vendo as duas lado a lado: *"Medidas da referência"*): 4 por
    dentro e 8 entre os botões, como a barra "colada" dela (era 7 e 6, escritos à mão).
+
+## O nativo
+
+O `AureaProvider` do nativo aceita `brand`, com os nomes do `data-brand`. Os tokens saem do mesmo DTCG: o gerador emite, por
+marca e por tema, o que a marca MUDA — os tokens dela e os do tema que apontam para o primário (no CSS o `var()` resolve no
+uso; em JS não há ligação tardia, então o tema é resolvido de novo com a marca por cima). O `resolverTokens` recebe a marca
+como quarto argumento, o `AureaTokens` diz qual é (`brand`), o cartão de contraste a mantém, e a folha memoizada a tem na
+chave (sem isso, voltaria a cor da marca de antes). No nativo não há as regras antigas da `lory`: a Ember tem as cores dela
+com as regras da 1.0. Quem cobra: `tests/unit/native-marcas.test.tsx` (o primário de cada uma, os pares que passam, o
+provedor, o contraste e o cache).
 
 ## O que a sessão decidiu sem perguntar, e o Victor manteve
 

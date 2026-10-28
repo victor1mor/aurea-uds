@@ -44,7 +44,8 @@ const registro = new Proxy(criarRegistroDeIcones(ICONES_DO_SITE), {
   },
 });
 
-// `tema`: "light" ou "dark" — o do site, que a parte viva lê do `<html data-theme>`.
-export function Moldura({tema, children}) {
-  return h(AureaProvider, {theme: tema, fontFamilies: FONTES_NO_NAVEGADOR, icons: registro}, children);
+// `tema`: "light" ou "dark" — o do site, que a parte viva lê do `<html data-theme>`. `marca`: a do botão "Theme" do site
+// (o `<html data-brand>`), vazia na Aurea Gold — o nativo recebe as marcas desde a 0.47.0 (passo C das cores).
+export function Moldura({tema, marca, children}) {
+  return h(AureaProvider, {theme: tema, brand: marca || undefined, fontFamilies: FONTES_NO_NAVEGADOR, icons: registro}, children);
 }

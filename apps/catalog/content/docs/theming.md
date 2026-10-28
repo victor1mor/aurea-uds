@@ -105,7 +105,7 @@ Aurea ships thirteen palettes. The default needs no attribute; the other twelve 
 - **Aurea Orange moves the warning color to honey,** so a warning never looks like the brand.
 - **`currentStyle="brand-white"` on the bottom bar fails WCAG on the light primaries** (Gold, Sun, Honey, Orange, Cyan, Turquoise, Emerald, Lime), as it does on Aurea Gold.
 
-A brand lives in the token file, next to the themes, and the build emits it with them. Brands are web only today: the React Native package has no brand axis.
+A brand lives in the token file, next to the themes, and the build emits it with them — for the web and for React Native. In React Native the brand is a prop of the provider, with the same names: `<AureaProvider brand="cobalt">`.
 
 ## A theme for one part of the page
 
@@ -185,6 +185,7 @@ export function App() {
 
 - Names are camelCase: `--card-foreground` becomes `t.color.cardForeground`.
 - `t.color` holds hex strings. React Native does not read OKLCH, so the hex form is the one that works.
+- `brand` on `AureaProvider` picks one of the twelve brands (`"ember"`, `"cobalt"`…). Without it you get Aurea Gold. A card with `variant="contrast"` keeps the brand.
 - `t.size` holds every number in dp: space, radius, type, heights.
 - Outside an `AureaProvider`, the hooks throw. There is no cascade to fall back on.
 

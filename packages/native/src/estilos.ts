@@ -44,7 +44,9 @@ export function criarFolha<T extends NamedStyles<T> | NamedStyles<Record<string,
 ): (t: AureaTokens) => T {
   const cache = new Map<string, T>();
   return (t) => {
-    const chave = `${t.theme}:${t.density}`;
+    // A MARCA entra na chave (passo C, 28/10/2026): ela muda a cor sem mudar o par (tema, densidade), e a chave antiga
+    // devolveria a folha da marca de antes. São 2 temas × 3 densidades × 13 marcas: teto de 78 entradas por componente.
+    const chave = `${t.theme}:${t.density}:${t.brand ?? ""}`;
     let folha = cache.get(chave);
     if (!folha) {
       folha = StyleSheet.create(descrever(t));

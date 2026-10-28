@@ -6,7 +6,7 @@
     "modulos": 33,
     "componentes": 90,
     "hooks": 16,
-    "aliasesLiterais": 68,
+    "aliasesLiterais": 69,
     "propsDistintas": 206
   },
   "aliases": {
@@ -2252,7 +2252,7 @@
     },
     "AureaProviderProps": {
       "module": "theme",
-      "raw": "{ children: React.ReactNode; theme?: AureaThemeName; density?: AureaDensity; defaultTheme?: AureaThemeName; defaultDensity?: AureaDensity; fontFamilies?: AureaFontFamilies; icons?: AureaIconRegistry; strings?: AureaStrings; onThemeChange?: (t: AureaThemeName) => void; onDensityChange?: (d: AureaDensity) => void; }",
+      "raw": "{ children: React.ReactNode; theme?: AureaThemeName; density?: AureaDensity; brand?: AureaBrand; defaultTheme?: AureaThemeName; defaultDensity?: AureaDensity; fontFamilies?: AureaFontFamilies; icons?: AureaIconRegistry; strings?: AureaStrings; onThemeChange?: (t: AureaThemeName) => void; onDensityChange?: (d: AureaDensity) => void; }",
       "union": null
     },
     "AureaToastType": {
@@ -2277,6 +2277,24 @@
         "spacious"
       ]
     },
+    "AureaBrand": {
+      "module": "tokens",
+      "raw": "\"ember\" | \"sun\" | \"honey\" | \"orange\" | \"magenta\" | \"violet\" | \"indigo\" | \"cobalt\" | \"cyan\" | \"turquoise\" | \"emerald\" | \"lime\"",
+      "union": [
+        "ember",
+        "sun",
+        "honey",
+        "orange",
+        "magenta",
+        "violet",
+        "indigo",
+        "cobalt",
+        "cyan",
+        "turquoise",
+        "emerald",
+        "lime"
+      ]
+    },
     "AureaShadow": {
       "module": "tokens",
       "raw": "{ offsetX: number; offsetY: number; blurRadius: number; spreadDistance: number; color: string; }",
@@ -2294,7 +2312,7 @@
     },
     "AureaTokens": {
       "module": "tokens",
-      "raw": "{ theme: AureaThemeName; density: AureaDensity; color: Record<string, string>; size: Record<string, number>; font: { ui: AureaFontScale; editorial: AureaFontScale; code: AureaFontScale; heading: AureaFontScale; }; shadow: Record<string, AureaShadow>; shadowLayers: Record<string, readonly AureaShadow[]>; easing: Record<string, readonly [number, number, number, number]>; tracking: Record<string, number>; remInDp: number; }",
+      "raw": "{ theme: AureaThemeName; density: AureaDensity; brand: AureaBrand | null; color: Record<string, string>; size: Record<string, number>; font: { ui: AureaFontScale; editorial: AureaFontScale; code: AureaFontScale; heading: AureaFontScale; }; shadow: Record<string, AureaShadow>; shadowLayers: Record<string, readonly AureaShadow[]>; easing: Record<string, readonly [number, number, number, number]>; tracking: Record<string, number>; remInDp: number; }",
       "union": null
     },
     "AureaFontFamilies": {
@@ -7298,6 +7316,25 @@
                 "compact",
                 "comfortable",
                 "spacious"
+              ]
+            },
+            {
+              "name": "brand",
+              "optional": true,
+              "type": "AureaBrand",
+              "values": [
+                "ember",
+                "sun",
+                "honey",
+                "orange",
+                "magenta",
+                "violet",
+                "indigo",
+                "cobalt",
+                "cyan",
+                "turquoise",
+                "emerald",
+                "lime"
               ]
             },
             {

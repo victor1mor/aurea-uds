@@ -15,17 +15,18 @@ type Exemplo = {render: () => unknown};
 const modulos = import.meta.glob<{examples: Exemplo[]}>(["../content/native/*.mjs"], {import: "default", eager: true});
 const exemplo = (nome: string, indice: number) => modulos[`../content/native/${nome}.mjs`]?.examples?.[indice];
 
-// O tema do site mora no `<html data-theme>`; a caixa do nativo acompanha quando a chave do topo o troca.
+// O tema e a marca do site moram no `<html data-theme>` e no `<html data-brand>`; a caixa do nativo acompanha quando a
+// chave do topo ou o botão "Theme" os trocam (a marca desde a 0.47.0: o nativo recebe as 13).
 const assinaTema = (avisa: () => void) => {
   const o = new MutationObserver(avisa);
-  o.observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+  o.observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme", "data-brand"]});
   return () => o.disconnect();
 };
-const temaDoSite = () => (document.documentElement.dataset.theme === "light" ? "light" : "dark");
+const temaEMarca = () => `${document.documentElement.dataset.theme === "light" ? "light" : "dark"}|${document.documentElement.dataset.brand ?? ""}`;
 
 function CaixaNativa({ex}: {ex: Exemplo}) {
-  const tema = useSyncExternalStore(assinaTema, temaDoSite, () => "dark");
-  return h(Moldura, {tema}, ex.render() as never);
+  const [tema, marca] = useSyncExternalStore(assinaTema, temaEMarca, () => "dark|").split("|");
+  return h(Moldura, {tema, marca}, ex.render() as never);
 }
 
 montarSite();

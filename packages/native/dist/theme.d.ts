@@ -2,7 +2,7 @@ import type { AureaToastManager } from "./toast.js";
 import * as React from "react";
 import { type AureaIconRegistry } from "./icon.js";
 import { type AureaStrings } from "./strings.js";
-import { type AureaDensity, type AureaFontFamilies, type AureaThemeName, type AureaTokens } from "./tokens.js";
+import { type AureaBrand, type AureaDensity, type AureaFontFamilies, type AureaThemeName, type AureaTokens } from "./tokens.js";
 export type AureaThemeControl = {
     theme: AureaThemeName;
     density: AureaDensity;
@@ -16,6 +16,14 @@ export type AureaProviderProps = {
     theme?: AureaThemeName;
     /** Controlado: quando presente, manda, e `setDensity` só avisa. */
     density?: AureaDensity;
+    /**
+     * A marca (passo C das cores, ADR-0085): `"ember"` ou uma das 11 da paleta da 1.0 (`"sun"`, `"honey"`, `"orange"`,
+     * `"magenta"`, `"violet"`, `"indigo"`, `"cobalt"`, `"cyan"`, `"turquoise"`, `"emerald"`, `"lime"`). Ausente, é a Aurea
+     * Gold. O mesmo nome do `data-brand` da web. A marca muda só cor — tipo, canto, densidade e ícone continuam da Aurea.
+     *
+     *     <AureaProvider brand="cobalt">
+     */
+    brand?: AureaBrand;
     /**
      * Tema inicial do modo não controlado. Ausente, segue o **aparelho** (`useColorScheme`) até
      * alguém chamar `setTheme` — a partir daí a escolha da pessoa manda e o sistema não a desfaz.
@@ -65,7 +73,7 @@ export type AureaProviderProps = {
     onThemeChange?: (t: AureaThemeName) => void;
     onDensityChange?: (d: AureaDensity) => void;
 };
-export declare function AureaProvider({ children, theme, density, defaultTheme, defaultDensity, fontFamilies, icons, strings, onThemeChange, onDensityChange, }: AureaProviderProps): React.JSX.Element;
+export declare function AureaProvider({ children, theme, density, brand, defaultTheme, defaultDensity, fontFamilies, icons, strings, onThemeChange, onDensityChange, }: AureaProviderProps): React.JSX.Element;
 /** Os dois eixos e como trocá-los. Mesma forma do hook homônimo de `@aurea-uds/react`. */
 export declare function useAureaTheme(): AureaThemeControl;
 /** Os tokens já resolvidos para o par (tema, densidade) atual. Não tem par na web: lá o CSS resolve. */

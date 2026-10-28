@@ -15,7 +15,7 @@
 //   • 1 nome existe no `base` E no tema — `warning400`. No CSS o tema ganha.
 // Logo: base < tema < densidade. Inverter isso devolve o app inteiro numa densidade só, e em
 // silêncio — o teste `tokens.test.ts` prova a ordem contra esse defeito.
-import { base, themes, densities, tracking, shadowLayers, REM_EM_DP } from "@aurea-uds/tokens/native";
+import { base, themes, densities, brands, tracking, shadowLayers, REM_EM_DP } from "@aurea-uds/tokens/native";
 const ehCor = (v) => typeof v === "object" && v !== null && "hex" in v;
 const ehSombra = (v) => typeof v === "object" && v !== null && "blurRadius" in v;
 // Um objeto por grupo, na ordem em que ganham. `Object.assign` sobre um alvo novo — não sobre o
@@ -67,8 +67,13 @@ function normalizarEscala(entrada, familiaCrua) {
  * Android. Passar `p3` a um `style` faz a cor ser DESCARTADA, em silêncio. Os campos `p3` e
  * `oklch` seguem no alvo de tokens como intenção registrada; aqui eles não passam.
  */
-export function resolverTokens(theme, density, fontFamilies) {
-    const cru = mesclar(base, themes[theme], densities[density]);
+export function resolverTokens(theme, density, fontFamilies, brand) {
+    // A MARCA vem depois do tema e antes da densidade, como na web (ela só muda cor). O gerador já emite o que ela muda
+    // sobre CADA tema — os tokens dela e os do tema que dependem do primário —, porque em JS não há o `var()` do CSS.
+    const marca = brand ? brands[brand]?.[theme] : undefined;
+    if (brand && !marca)
+        throw new Error(`Aurea: a marca "${brand}" não existe nos tokens`);
+    const cru = mesclar(base, themes[theme], marca ?? {}, densities[density]);
     const color = {};
     const size = {};
     const shadow = {};
@@ -97,5 +102,5 @@ export function resolverTokens(theme, density, fontFamilies) {
         code: normalizarEscala(fontFamilies?.code, texto.fontCode ?? "System"),
         heading: normalizarEscala(fontFamilies?.heading ?? fontFamilies?.ui, texto.fontHeading ?? texto.fontUi ?? "System"),
     };
-    return { theme, density, color, size, font, shadow, shadowLayers: { ...shadowLayers }, easing, tracking: { ...tracking }, remInDp: REM_EM_DP };
+    return { theme, density, brand: brand ?? null, color, size, font, shadow, shadowLayers: { ...shadowLayers }, easing, tracking: { ...tracking }, remInDp: REM_EM_DP };
 }

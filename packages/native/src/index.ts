@@ -32,7 +32,7 @@ export {BottomNavProvider, useBottomNavSpace} from "./barranav.js";
 
 export {resolverTokens} from "./tokens.js";
 export type {
-  AureaDensity, AureaFontFamilies, AureaFontInput, AureaFontScale, AureaShadow,
+  AureaBrand, AureaDensity, AureaFontFamilies, AureaFontInput, AureaFontScale, AureaShadow,
   AureaThemeName, AureaTokens,
 } from "./tokens.js";
 
