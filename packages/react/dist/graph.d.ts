@@ -124,7 +124,9 @@ export interface DependencyGraphProps extends Omit<React.HTMLAttributes<HTMLDivE
     edges: GraphEdgeItem[];
     label?: string;
     selectedId?: string | null;
-    onSelect?: (id: string) => void;
+    /** Escolher um nó chama com o id dele. Com um nó escolhido, clicar na área vazia do desenho ou apertar Esc
+     *  dentro do mapa chama com `null`, nos dois modos (MNT-35). */
+    onSelect?: (id: string | null) => void;
     connectable?: boolean;
     onConnect?: (edge: {
         from: string;
@@ -207,4 +209,4 @@ export interface DependencyGraphProps extends Omit<React.HTMLAttributes<HTMLDivE
     /** O trabalhador que arruma FORA da tela principal (MNT-19.1). A receita de cada empacotador está no README. */
     layoutWorker?: () => Worker;
 }
-export declare function DependencyGraph({ nodes, edges, label, selectedId, onSelect, connectable, onConnect, onNodeMove, height, className, orientation, layout, rootId, edgeShape, groupParallel, minimap, controls, legend, legendCollapsible, defaultLegendOpen, minimapToggle, defaultMinimapOpen, focusId, highlight, highlightNeighbors, hiddenIds, onNodeHover, onNodeContextMenu, onEdgeSelect, textSize, highContrast, apiRef, editable, grid, onLayoutChange, onSelectionChange, collapsible, onCollapseChange, visibleOnly, layoutWorker, style, ...props }: DependencyGraphProps): React.JSX.Element;
+export declare function DependencyGraph({ nodes, edges, label, selectedId, onSelect, connectable, onConnect, onNodeMove, height, className, orientation, layout, rootId, edgeShape, groupParallel, minimap, controls, legend, legendCollapsible, defaultLegendOpen, minimapToggle, defaultMinimapOpen, focusId, highlight, highlightNeighbors, hiddenIds, onNodeHover, onNodeContextMenu, onEdgeSelect, textSize, highContrast, apiRef, editable, grid, onLayoutChange, onSelectionChange, collapsible, onCollapseChange, visibleOnly, layoutWorker, style, onKeyDown, ...props }: DependencyGraphProps): React.JSX.Element;

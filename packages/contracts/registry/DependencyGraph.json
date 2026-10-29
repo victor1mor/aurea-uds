@@ -91,12 +91,13 @@
       "Tab",
       "Enter",
       "Space",
+      "Escape",
       "ArrowUp",
       "ArrowDown",
       "ArrowLeft",
       "ArrowRight"
     ],
-    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter and Space, which select the focused node. The first run reported zero of three for the same reason as the Gallery — the bank started on the node that was already selected. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component. The arrow keys move focus from node to node: the nearest node in the arrow's direction, inside a 45-degree cone, and the canvas pans to it when it is off screen. They work on nodes that are buttons (with onSelect); a read-only node is not focusable, and giving focus to a span with no role would be worse than none."
+    "keyboardNote": "Escape measured in a browser on 29/10/2026 (apps/keyboard-probe rede.html and rede2.html + tests/visual/rede-desmarcar.spec.ts): with a node selected, Escape anywhere inside the map clears the selection — onSelect(null) — in both modes, and stops there; with nothing selected it passes on, so a dialog around the map still closes; inside a text field it belongs to the field. Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: Enter and Space, which select the focused node. The first run reported zero of three for the same reason as the Gallery — the bank started on the node that was already selected. Tab and Shift+Tab are out of the count on both sides by construction: Tab moves focus anywhere on a page, so it never distinguishes one component from another. What this measurement establishes is that there is no ENGINE keyboard here to measure — the keyboard is the document order, which is the correct answer for this component. The arrow keys move focus from node to node: the nearest node in the arrow's direction, inside a 45-degree cone, and the canvas pans to it when it is off screen. They work on nodes that are buttons (with onSelect); a read-only node is not focusable, and giving focus to a span with no role would be worse than none."
   },
   "related": {
     "components": [
@@ -130,9 +131,9 @@
     },
     {
       "name": "onSelect",
-      "type": "(id: string) => void",
+      "type": "(id: string | null) => void",
       "default": "—",
-      "description": "Without it nodes are plain text instead of buttons — a control that does nothing does not get drawn."
+      "description": "Without it nodes are plain text instead of buttons — a control that does nothing does not get drawn. Called with the node id when a node is chosen, and with `null` when the selection is cleared: with a node selected, a click on the empty area of the canvas or Escape inside the map clears it, in both modes (dragging to pan does not). The screen reader hears \"No node selected\"."
     },
     {
       "name": "connectable",

@@ -456,6 +456,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.49.0](https://aureauds.dev/release-v0-49-0.md): The network map lets go of the selected node when you click the empty canvas or press Escape.
 - [v0.48.0](https://aureauds.dev/release-v0-48-0.md): Two finishes you can choose — a glow under the primary button and a soft ring around tinted pieces — and a blurred header you can read over anything.
 - [v0.47.0](https://aureauds.dev/release-v0-47-0.md): Thirteen brands — Aurea Ember (formerly lory) and eleven new palettes — plus a tighter Toolbar and a red counter on the bottom bar.
 - [v0.46.0](https://aureauds.dev/release-v0-46-0.md): New styles for the pressed button, the selected segment, the timeline and the current item of the bottom bar — and a bottom bar of one height in every shape.
