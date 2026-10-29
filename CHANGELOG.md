@@ -183,9 +183,32 @@ como deveria funcionar"*.
 
 ---
 
+## [0.49.0] — 2026-10-29
+
+⏳ **Ainda não publicada.** **O mapa desmarca** (MNT-35, o app de rede): com um nó escolhido, clicar na área vazia do
+desenho ou apertar Esc dentro do mapa desmarca, no modo de leitura e no de arrumar — como a referência faz numa lista. O
+"nada escolhido" chega pelo MESMO `onSelect`, com `null` (a escolha do Victor, 29/10/2026: *"A: onSelect(null)"*).
+
+### ⚠ Pode quebrar a compilação
+
+- **O `onSelect` do `DependencyGraph` passa a receber `string | null`**: `null` quando a pessoa desmarca. Quem passa uma
+  função que só aceita texto (`(id: string) => …`, ou o `set` de um `useState<string>()`) compila com erro — é aceitar o
+  `null`, como o `selectedId` já aceita.
+- **`graphSelectionCleared`**, frase nova no `AureaStrings` ("No node selected" / "Nenhum nó escolhido"): o que o leitor
+  de tela ouve quando o mapa desmarca. Quem monta o dicionário inteiro precisa acrescentá-la.
+
+### Corrigido
+
+- **`DependencyGraph`: o clique na área vazia e o Esc desmarcam o nó escolhido** (MNT-35). Antes, só escolher outro nó
+  tirava a escolha, e o app não tinha como saber que a pessoa clicou fora. Arrastar para andar pelo mapa não desmarca. O
+  Esc que desmarcou para ali (a janela em volta não fecha); sem nada escolhido, ele segue como antes, e o Esc dentro de
+  um campo é do campo. No modo de arrumar, a escolha do motor também se apaga, e o `onSelectionChange` recebe a lista
+  vazia. O leitor de tela ouve "Nenhum nó escolhido".
+
 ## [0.48.0] — 2026-10-28
 
-⏳ **Ainda não publicada.** **Os acabamentos** ([ADR-0086](decisions/0086-os-acabamentos.md)): os três que a proposta
+✅ **Publicada em 29/10/2026, entre 10:42 e 10:48 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+#103.** **Os acabamentos** ([ADR-0086](decisions/0086-os-acabamentos.md)): os três que a proposta
 de cores deixou de fora, vistos na bancada, nos dois temas e nas treze marcas, e aprovados pelo Victor (*"Pode os três"*,
 28/10/2026) — o brilho e o fio como variações que o app escolhe, na web e no nativo, e o menu translúcido como correção do
 `blurred`, que não lia.

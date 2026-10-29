@@ -662,7 +662,10 @@ const semAlcasDeclaradas=(n:Node):Node=>{if(!n.measured?.width)return n;const {h
 // se lê sem a visão geral, e o pedido é de LEITURA. Ele entra como opção (`minimap`), desligada por
 // padrão, vestido pelas variáveis do próprio motor — nenhuma classe `.react-flow__*` no core.
 export interface DependencyGraphProps extends Omit<React.HTMLAttributes<HTMLDivElement>,"onSelect">{
-  nodes:GraphNodeItem[];edges:GraphEdgeItem[];label?:string;selectedId?:string|null;onSelect?:(id:string)=>void;
+  nodes:GraphNodeItem[];edges:GraphEdgeItem[];label?:string;selectedId?:string|null;
+  /** Escolher um nó chama com o id dele. Com um nó escolhido, clicar na área vazia do desenho ou apertar Esc
+   *  dentro do mapa chama com `null`, nos dois modos (MNT-35). */
+  onSelect?:(id:string|null)=>void;
   connectable?:boolean;onConnect?:(edge:{from:string;to:string;fromPort?:string;toPort?:string})=>void;
   onNodeMove?:(id:string,pos:{x:number;y:number})=>void;height?:string;className?:string;
   /** `vertical` desenha de cima para baixo: a linha entra por cima e sai por baixo (MNT-06). */
@@ -808,7 +811,7 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
   orientation="horizontal",layout="simple",rootId,edgeShape="curve",groupParallel,minimap,controls,legend,
   legendCollapsible,defaultLegendOpen=true,minimapToggle,defaultMinimapOpen=true,focusId,highlight,
   highlightNeighbors,hiddenIds,onNodeHover,onNodeContextMenu,onEdgeSelect,textSize="md",highContrast,apiRef,
-  editable,grid=true,onLayoutChange,onSelectionChange,collapsible,onCollapseChange,visibleOnly,layoutWorker,style,...props}:DependencyGraphProps){
+  editable,grid=true,onLayoutChange,onSelectionChange,collapsible,onCollapseChange,visibleOnly,layoutWorker,style,onKeyDown,...props}:DependencyGraphProps){
   const s=useAureaStrings();
   const m=React.useMemo(()=>medidasDoNo(textSize),[textSize]);
   const vertical=orientation==="vertical";
@@ -1212,6 +1215,30 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
   const escolhaMudou=React.useRef<(ids:string[])=>void>(()=>{});
   escolhaMudou.current=ids=>{onSelectionChange?.(ids);if(ids.length===1)onSelect?.(ids[0])};
   const aoMudarEscolha=React.useCallback(({nodes:sel}:{nodes:Node[]})=>escolhaMudou.current(sel.map(n=>n.id)),[]);
+  // ── DESMARCAR (MNT-35) ─────────────────────────────────────────────────────────────────────────
+  // Com um nó escolhido, o clique na área vazia do desenho e o Esc dentro do mapa chamam `onSelect(null)`,
+  // nos dois modos. A referência faz assim numa lista (o Esc limpa a escolha, e o "nada" vai pelo MESMO
+  // aviso da escolha); o motor faz assim no clique no fundo. Arrastar para andar pelo mapa não conta: o
+  // motor só chama o clique do fundo sem movimento. No modo de arrumar, a escolha do motor também se apaga.
+  // O Esc que desmarcou para aqui (não fecha a janela em volta); sem nada escolhido, ele segue.
+  const [aviso,setAviso]=React.useState("");
+  React.useEffect(()=>{if(selectedId!=null)setAviso("")},[selectedId]);
+  const desmarcar=React.useRef<()=>boolean>(()=>false);
+  desmarcar.current=()=>{
+    const doApp=selectedId!=null&&!!onSelect,doMotor=editavel&&escolhidos().length>0;
+    if(!doApp&&!doMotor)return false;
+    if(doMotor)setNosVivos(ns=>ns.map(n=>n.selected?{...n,selected:false}:n));
+    if(doApp)onSelect?.(null);
+    setAviso(s.graphSelectionCleared);
+    return true;
+  };
+  const aoClicarNoFundo=React.useCallback(()=>{desmarcar.current()},[]);
+  const aoTeclarNoMapa=(e:React.KeyboardEvent<HTMLDivElement>)=>{
+    onKeyDown?.(e);
+    if(e.defaultPrevented||e.key!=="Escape"||e.nativeEvent.isComposing)return;
+    if((e.target as HTMLElement).closest("input,textarea,select,[contenteditable]:not([contenteditable='false'])"))return;
+    if(desmarcar.current()){e.preventDefault();e.stopPropagation()}
+  };
   const barra:Barra={podeDesfazer:pilha.current.ponteiro>0,podeRefazer:pilha.current.ponteiro<pilha.current.lista.length,
     alinhaveis:alinhaveis().length,escolhidos:escolhidos().length,todosFixos:escolhidos().length>0&&escolhidos().every(id=>fixos.has(id))};
 
@@ -1465,7 +1492,8 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
   const estilo={...style,...(height?{blockSize:height}:null),"--graph-node-w":`${m.larg}px`} as React.CSSProperties;
   return <div ref={raiz} className={cx("dependency-graph",className)} style={estilo}
               data-text={textSize==="md"?undefined:textSize} data-contrast={highContrast?"high":undefined} data-editable={editavel||undefined}
-              role="group" aria-label={label??s.graphLabel} {...props}>
+              role="group" aria-label={label??s.graphLabel} {...props} onKeyDown={aoTeclarNoMapa}>
+    <span className="sr-only" role="status" aria-live="polite">{aviso}</span>
     <ReactFlowProvider initialNodes={nosDoMotor} initialEdges={arestasDoMotor} fitView
                        initialWidth={automatico.extensao.larg} initialHeight={automatico.extensao.alt}>
     {/* `elementsSelectable` fica FALSO no mapa de leitura: ele acende a seleção do MOTOR nas arestas
@@ -1482,7 +1510,7 @@ export function DependencyGraph({nodes,edges,label,selectedId,onSelect,connectab
                multiSelectionKeyCode={TECLAS_DE_SOMAR} deleteKeyCode={null}
                snapToGrid={editavel&&grid} snapGrid={[GRADE,GRADE]}
                onlyRenderVisibleElements={!!visibleOnly} ariaLabelConfig={rotulosDoMotor}
-               onSelectionChange={editavel?aoMudarEscolha:undefined}
+               onSelectionChange={editavel?aoMudarEscolha:undefined} onPaneClick={aoClicarNoFundo}
                onNodeMouseEnter={onNodeHover?(_,no)=>onNodeHover(no.id):undefined}
                onNodeMouseLeave={onNodeHover?()=>onNodeHover(null):undefined}
                onNodeContextMenu={onNodeContextMenu?(ev,no)=>{ev.preventDefault();onNodeContextMenu(no.id,{x:ev.clientX,y:ev.clientY})}:undefined}

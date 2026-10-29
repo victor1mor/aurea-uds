@@ -590,7 +590,7 @@ const ESPERA_DO_ARRUMADOR = 30;
 // inverso), e não foto do mapa inteiro: o mapa é controlado pelo app, e cada passo — para frente ou
 // para trás — vira um `onLayoutChange` com as posições, que o app guarda (decisão do Victor, 10/10/2026).
 const LIMITE_DO_DESFAZER = 100;
-export function DependencyGraph({ nodes, edges, label, selectedId, onSelect, connectable, onConnect, onNodeMove, height, className, orientation = "horizontal", layout = "simple", rootId, edgeShape = "curve", groupParallel, minimap, controls, legend, legendCollapsible, defaultLegendOpen = true, minimapToggle, defaultMinimapOpen = true, focusId, highlight, highlightNeighbors, hiddenIds, onNodeHover, onNodeContextMenu, onEdgeSelect, textSize = "md", highContrast, apiRef, editable, grid = true, onLayoutChange, onSelectionChange, collapsible, onCollapseChange, visibleOnly, layoutWorker, style, ...props }) {
+export function DependencyGraph({ nodes, edges, label, selectedId, onSelect, connectable, onConnect, onNodeMove, height, className, orientation = "horizontal", layout = "simple", rootId, edgeShape = "curve", groupParallel, minimap, controls, legend, legendCollapsible, defaultLegendOpen = true, minimapToggle, defaultMinimapOpen = true, focusId, highlight, highlightNeighbors, hiddenIds, onNodeHover, onNodeContextMenu, onEdgeSelect, textSize = "md", highContrast, apiRef, editable, grid = true, onLayoutChange, onSelectionChange, collapsible, onCollapseChange, visibleOnly, layoutWorker, style, onKeyDown, ...props }) {
     const s = useAureaStrings();
     const m = React.useMemo(() => medidasDoNo(textSize), [textSize]);
     const vertical = orientation === "vertical";
@@ -1085,6 +1085,39 @@ export function DependencyGraph({ nodes, edges, label, selectedId, onSelect, con
     escolhaMudou.current = ids => { onSelectionChange?.(ids); if (ids.length === 1)
         onSelect?.(ids[0]); };
     const aoMudarEscolha = React.useCallback(({ nodes: sel }) => escolhaMudou.current(sel.map(n => n.id)), []);
+    // ── DESMARCAR (MNT-35) ─────────────────────────────────────────────────────────────────────────
+    // Com um nó escolhido, o clique na área vazia do desenho e o Esc dentro do mapa chamam `onSelect(null)`,
+    // nos dois modos. A referência faz assim numa lista (o Esc limpa a escolha, e o "nada" vai pelo MESMO
+    // aviso da escolha); o motor faz assim no clique no fundo. Arrastar para andar pelo mapa não conta: o
+    // motor só chama o clique do fundo sem movimento. No modo de arrumar, a escolha do motor também se apaga.
+    // O Esc que desmarcou para aqui (não fecha a janela em volta); sem nada escolhido, ele segue.
+    const [aviso, setAviso] = React.useState("");
+    React.useEffect(() => { if (selectedId != null)
+        setAviso(""); }, [selectedId]);
+    const desmarcar = React.useRef(() => false);
+    desmarcar.current = () => {
+        const doApp = selectedId != null && !!onSelect, doMotor = editavel && escolhidos().length > 0;
+        if (!doApp && !doMotor)
+            return false;
+        if (doMotor)
+            setNosVivos(ns => ns.map(n => n.selected ? { ...n, selected: false } : n));
+        if (doApp)
+            onSelect?.(null);
+        setAviso(s.graphSelectionCleared);
+        return true;
+    };
+    const aoClicarNoFundo = React.useCallback(() => { desmarcar.current(); }, []);
+    const aoTeclarNoMapa = (e) => {
+        onKeyDown?.(e);
+        if (e.defaultPrevented || e.key !== "Escape" || e.nativeEvent.isComposing)
+            return;
+        if (e.target.closest("input,textarea,select,[contenteditable]:not([contenteditable='false'])"))
+            return;
+        if (desmarcar.current()) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
     const barra = { podeDesfazer: pilha.current.ponteiro > 0, podeRefazer: pilha.current.ponteiro < pilha.current.lista.length,
         alinhaveis: alinhaveis().length, escolhidos: escolhidos().length, todosFixos: escolhidos().length > 0 && escolhidos().every(id => fixos.has(id)) };
     // ── AS ROTAS (MNT-12.1 a 12.3) ─────────────────────────────────────────────────────────────
@@ -1384,11 +1417,11 @@ export function DependencyGraph({ nodes, edges, label, selectedId, onSelect, con
     // na primeira medição — passar `width`/`height` direto no ReactFlow fixaria o tamanho e mataria
     // a fluidez. O valor é a extensão do próprio layout, então no servidor o grafo cabe exato.
     const estilo = { ...style, ...(height ? { blockSize: height } : null), "--graph-node-w": `${m.larg}px` };
-    return _jsx("div", { ref: raiz, className: cx("dependency-graph", className), style: estilo, "data-text": textSize === "md" ? undefined : textSize, "data-contrast": highContrast ? "high" : undefined, "data-editable": editavel || undefined, role: "group", "aria-label": label ?? s.graphLabel, ...props, children: _jsx(ReactFlowProvider, { initialNodes: nosDoMotor, initialEdges: arestasDoMotor, fitView: true, initialWidth: automatico.extensao.larg, initialHeight: automatico.extensao.alt, children: _jsxs(ReactFlow, { nodes: nosVivos, onNodesChange: aoMudarNos, edges: arestasDoMotor, nodeTypes: TIPOS, edgeTypes: TIPOS_DE_ARESTA, fitView: true, proOptions: { hideAttribution: false }, minZoom: ESCALA_MINIMA, nodesDraggable: editavel || !!onNodeMove, nodesConnectable: !!connectable, elementsSelectable: editavel, nodesFocusable: editavel, edgesFocusable: !!onEdgeSelect, disableKeyboardA11y: !editavel, selectionOnDrag: editavel, panOnDrag: editavel ? BOTOES_DE_ARRASTAR : true, selectionMode: SelectionMode.Partial, multiSelectionKeyCode: TECLAS_DE_SOMAR, deleteKeyCode: null, snapToGrid: editavel && grid, snapGrid: [GRADE, GRADE], onlyRenderVisibleElements: !!visibleOnly, ariaLabelConfig: rotulosDoMotor, onSelectionChange: editavel ? aoMudarEscolha : undefined, onNodeMouseEnter: onNodeHover ? (_, no) => onNodeHover(no.id) : undefined, onNodeMouseLeave: onNodeHover ? () => onNodeHover(null) : undefined, onNodeContextMenu: onNodeContextMenu ? (ev, no) => { ev.preventDefault(); onNodeContextMenu(no.id, { x: ev.clientX, y: ev.clientY }); } : undefined, onEdgeClick: onEdgeSelect ? (_, a) => onEdgeSelect(a.id) : undefined, onConnect: onConnect ? c => { if (c.source && c.target)
-                    onConnect({ from: c.source, to: c.target, fromPort: c.sourceHandle ?? undefined, toPort: c.targetHandle ?? undefined }); } : undefined, children: [_jsx(Background, { gap: editavel && grid ? GRADE : undefined }), guias.length > 0 && _jsx(ViewportPortal, { children: guias.map(g => _jsx("div", { className: g.eixo === "x" ? "graph-guide graph-guide-x" : "graph-guide graph-guide-y", "aria-hidden": "true", style: g.eixo === "x" ? { transform: `translate(${g.em}px, ${g.de}px)`, blockSize: g.ate - g.de } : { transform: `translate(${g.de}px, ${g.em}px)`, inlineSize: g.ate - g.de } }, `${g.eixo}${g.em}`)) }), _jsx(Comandos, { raiz: raiz, teclado: teclado, focusId: focusId, pedidoDeCaber: pedidoDeCaber, controls: !!controls, minimapa: minimap && minimapToggle ? { aberto: minimapaAberto, alternar: () => setMinimapaAberto(a => !a), id: idDoMinimapa } : undefined, apiRef: apiRef, linhas: linhas, forma: edgeShape, titulo: label ?? s.graphLabel, desenho: tracados, editavel: editavel, barra: barra, acoes: acoes }), mostraMinimapa && (minimapToggle ? _jsx("div", { id: idDoMinimapa, children: _jsx(MiniMap, { pannable: true, zoomable: true, ariaLabel: s.graphOverview, className: "graph-minimap" }) })
-                        : _jsx(MiniMap, { pannable: true, zoomable: true, ariaLabel: s.graphOverview, className: "graph-minimap" })), temLegenda && (legendCollapsible
-                        ? _jsxs(Panel, { position: "bottom-left", className: "graph-dock", children: [legendaAberta && _jsx("div", { className: "graph-legend", id: `${idDaLegenda}-lista`, role: "group", "aria-label": s.graphLegend, children: listasDaLegenda }), _jsx("div", { className: "graph-controls", children: _jsx(Button, { variant: "ghost", leadingIcon: "list-bullets", trailingIcon: legendaAberta ? "caret-down" : "caret-up", "aria-expanded": legendaAberta, "aria-controls": legendaAberta ? `${idDaLegenda}-lista` : undefined, onClick: () => setLegendaAberta(a => !a), children: s.graphLegend }) })] })
-                        : _jsx(Panel, { position: "bottom-left", children: _jsx("div", { className: "graph-legend", role: "group", "aria-label": s.graphLegend, children: listasDaLegenda }) }))] }) }) });
+    return _jsxs("div", { ref: raiz, className: cx("dependency-graph", className), style: estilo, "data-text": textSize === "md" ? undefined : textSize, "data-contrast": highContrast ? "high" : undefined, "data-editable": editavel || undefined, role: "group", "aria-label": label ?? s.graphLabel, ...props, onKeyDown: aoTeclarNoMapa, children: [_jsx("span", { className: "sr-only", role: "status", "aria-live": "polite", children: aviso }), _jsx(ReactFlowProvider, { initialNodes: nosDoMotor, initialEdges: arestasDoMotor, fitView: true, initialWidth: automatico.extensao.larg, initialHeight: automatico.extensao.alt, children: _jsxs(ReactFlow, { nodes: nosVivos, onNodesChange: aoMudarNos, edges: arestasDoMotor, nodeTypes: TIPOS, edgeTypes: TIPOS_DE_ARESTA, fitView: true, proOptions: { hideAttribution: false }, minZoom: ESCALA_MINIMA, nodesDraggable: editavel || !!onNodeMove, nodesConnectable: !!connectable, elementsSelectable: editavel, nodesFocusable: editavel, edgesFocusable: !!onEdgeSelect, disableKeyboardA11y: !editavel, selectionOnDrag: editavel, panOnDrag: editavel ? BOTOES_DE_ARRASTAR : true, selectionMode: SelectionMode.Partial, multiSelectionKeyCode: TECLAS_DE_SOMAR, deleteKeyCode: null, snapToGrid: editavel && grid, snapGrid: [GRADE, GRADE], onlyRenderVisibleElements: !!visibleOnly, ariaLabelConfig: rotulosDoMotor, onSelectionChange: editavel ? aoMudarEscolha : undefined, onPaneClick: aoClicarNoFundo, onNodeMouseEnter: onNodeHover ? (_, no) => onNodeHover(no.id) : undefined, onNodeMouseLeave: onNodeHover ? () => onNodeHover(null) : undefined, onNodeContextMenu: onNodeContextMenu ? (ev, no) => { ev.preventDefault(); onNodeContextMenu(no.id, { x: ev.clientX, y: ev.clientY }); } : undefined, onEdgeClick: onEdgeSelect ? (_, a) => onEdgeSelect(a.id) : undefined, onConnect: onConnect ? c => { if (c.source && c.target)
+                        onConnect({ from: c.source, to: c.target, fromPort: c.sourceHandle ?? undefined, toPort: c.targetHandle ?? undefined }); } : undefined, children: [_jsx(Background, { gap: editavel && grid ? GRADE : undefined }), guias.length > 0 && _jsx(ViewportPortal, { children: guias.map(g => _jsx("div", { className: g.eixo === "x" ? "graph-guide graph-guide-x" : "graph-guide graph-guide-y", "aria-hidden": "true", style: g.eixo === "x" ? { transform: `translate(${g.em}px, ${g.de}px)`, blockSize: g.ate - g.de } : { transform: `translate(${g.de}px, ${g.em}px)`, inlineSize: g.ate - g.de } }, `${g.eixo}${g.em}`)) }), _jsx(Comandos, { raiz: raiz, teclado: teclado, focusId: focusId, pedidoDeCaber: pedidoDeCaber, controls: !!controls, minimapa: minimap && minimapToggle ? { aberto: minimapaAberto, alternar: () => setMinimapaAberto(a => !a), id: idDoMinimapa } : undefined, apiRef: apiRef, linhas: linhas, forma: edgeShape, titulo: label ?? s.graphLabel, desenho: tracados, editavel: editavel, barra: barra, acoes: acoes }), mostraMinimapa && (minimapToggle ? _jsx("div", { id: idDoMinimapa, children: _jsx(MiniMap, { pannable: true, zoomable: true, ariaLabel: s.graphOverview, className: "graph-minimap" }) })
+                            : _jsx(MiniMap, { pannable: true, zoomable: true, ariaLabel: s.graphOverview, className: "graph-minimap" })), temLegenda && (legendCollapsible
+                            ? _jsxs(Panel, { position: "bottom-left", className: "graph-dock", children: [legendaAberta && _jsx("div", { className: "graph-legend", id: `${idDaLegenda}-lista`, role: "group", "aria-label": s.graphLegend, children: listasDaLegenda }), _jsx("div", { className: "graph-controls", children: _jsx(Button, { variant: "ghost", leadingIcon: "list-bullets", trailingIcon: legendaAberta ? "caret-down" : "caret-up", "aria-expanded": legendaAberta, "aria-controls": legendaAberta ? `${idDaLegenda}-lista` : undefined, onClick: () => setLegendaAberta(a => !a), children: s.graphLegend }) })] })
+                            : _jsx(Panel, { position: "bottom-left", children: _jsx("div", { className: "graph-legend", role: "group", "aria-label": s.graphLegend, children: listasDaLegenda }) }))] }) })] });
 }
 /** O primeiro alvo de Tab de um nó no mapa de leitura: o botão dele; sem ele, o de fechar. */
 function ancoraDoNo(raiz, id) {

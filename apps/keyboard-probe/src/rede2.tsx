@@ -103,7 +103,7 @@ function Banco() {
       textSize={q.has("grande") ? "lg" : "md"} highContrast={q.has("contraste")} visibleOnly={q.has("visivel")}
       layoutWorker={q.get("trabalhador") === "publico" ? () => new Worker("./elk-worker.min.js")
         : q.has("trabalhador") ? () => new TrabalhadorDoElk() : undefined}
-      selectedId={escolhido} onSelect={setEscolhido}
+      selectedId={escolhido} onSelect={(id) => { setEscolhido(id); anotar(`selecao:${id}`); }}
       onLayoutChange={(l) => { window.__arrumacao2 = l; setPassos(p => p + 1); anotar(`arrumacao:${Object.keys(l.positions).length}:${l.pinned.join(",")}`); }}
       onSelectionChange={(ids) => anotar(`escolha:${ids.join(",")}`)}
       onCollapseChange={(id, fechado) => anotar(`${fechado ? "fechou" : "abriu"}:${id}`)}

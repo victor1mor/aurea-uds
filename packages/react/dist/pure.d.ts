@@ -203,6 +203,7 @@ export interface AureaStrings {
     graphHandle: string;
     graphNodeHelp: string;
     graphMoved: string;
+    graphSelectionCleared: string;
     agentState: Record<"idle" | "thinking" | "running" | "paused" | "error" | "completed", string>;
     codeEditor: string;
     chatLabel: string;

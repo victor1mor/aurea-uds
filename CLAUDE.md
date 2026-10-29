@@ -199,6 +199,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.45.0` | As cores, passo A — a paleta da 1.0: os neutros Zinco, no claro o amarelo nunca é letra (o destaque e o link na cor do texto, o link com marca-texto), as marcas brancas nos controles, o foco dos campos no amarelo, o campo branco em todo lugar, o botão ligado amarelo, a linha do tempo consertada, o "aumentar contraste" do sistema e quatro tokens novos; a `lory` congelada ([ADR-0083](decisions/0083-a-paleta-da-1-0.md)) — pedido #100. **Publicada em 27/10/2026** (entre 16:20 e 16:28, Brasília, medido no npm), pelo terminal do Victor |
 | `0.46.0` | As cores, passo B — os estilos novos: `pressedStyle` no botão ligado (só web), `selectedStyle` no `SegmentedControl`, `variant` na `Timeline` e `currentStyle` no `BottomNav` (13 valores), web e nativo; a barra de baixo na mesma altura nos nove formatos; as duas exceções, o degradê do `brand-gradient` e os aros por dentro ([ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md)) — pedido #101. **Publicada em 28/10/2026** (entre 09:55 e 10:02, Brasília, medido no npm), pelo terminal do Victor |
 | `0.47.0` | As cores, passo C — as treze marcas: a `lory` passa a se chamar Aurea Ember (só o nome, sem apelido) e as 11 marcas da paleta da 1.0 entram, na web (`data-brand`) e no nativo (`brand` no `AureaProvider`); a `Toolbar` nas medidas da referência; o contador e o ponto da barra de baixo vermelhos; a Ember com os estilos novos ([ADR-0085](decisions/0085-as-treze-marcas.md)) — pedido #102. **Publicada em 28/10/2026** (entre 19:35 e 19:41, Brasília, medido no npm), pelo terminal do Victor |
+| `0.48.0` | Os acabamentos: o brilho (`glow`, no `Button` e no `IconButton`) e o fio (`ring`, no `Button`, no `IconButton`, no `Badge` e no `Chip`), web e nativo, também por `data-glow`/`data-ring` num contêiner da web; e o `Header` `blurred` que se lê sobre qualquer coisa (o cartão a 72% com o desfoque, só na web) ([ADR-0086](decisions/0086-os-acabamentos.md)) — pedido #103. **Publicada em 29/10/2026** (entre 10:42 e 10:48, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -694,6 +695,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    teste que procurava o nome antigo e deixou dois textos dizendo o nome novo onde era o velho — conferir o que a troca
    alcança. **Publicada em 28/10/2026** (entre 19:35 e 19:41, Brasília, medido no npm), pelo terminal do Victor, da junção
    do pedido #102. O registro entrou no lote seguinte (os acabamentos).
+
+46. **`0.48.0`, os acabamentos, feita em 28/10/2026** ([ADR-0086](decisions/0086-os-acabamentos.md)) — os três que a
+   proposta de cores deixou de fora (*"Pode os três"*): o brilho (`glow`) e o fio (`ring`) como variações que o app
+   escolhe, web e nativo, e o menu translúcido como CORREÇÃO do `blurred`, que não lia (1,83:1 sobre o amarelo, no escuro;
+   agora, nunca menos de 9:1). Aprovada na bancada (*"Aprovado"*). ⚠ **As lições:** (1) as duas fotos `index` do Linux
+   mudaram no serrilhado do texto da abertura, e no Windows não — medido antes de aceitar (*"Medir antes"*): a Debian do
+   Hyper-V do notebook, com o contêiner da CI, tira a foto IGUAL byte a byte à da CI, e com a barra de cima de antes só o
+   selo da versão mudava; a causa era a barra translúcida nova; (2) o check 44 recusou o brilho repetido no
+   `:focus-visible` — a regra já tinha mais força que o foco geral, e o teste de navegador passou a MEDIR o brilho com a
+   peça focada pelo teclado; (3) `data-glow` e `data-ring` são ESCOLHA, não estado, e se registram como os estilos do
+   passo B. **Publicada em 29/10/2026** (entre 10:42 e 10:48, Brasília, medido no npm), pelo terminal do Victor, da junção
+   do pedido #103. O registro entrou no lote seguinte (o MNT-35).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
