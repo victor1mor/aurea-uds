@@ -25,7 +25,7 @@ const ACOES = `  <Cluster>
 export const apiDaBarra = {
   variant: "The skin. floating is a detached card with its own margin; flush merges into the background and frames the screen; pill is a centred capsule, as wide as what it holds.",
   inset: "Only on flush: the side padding. bar is 20, the default; page is 16, the Screen's, so the title lines up with the content below; none is for a bar that already sits inside padded content. floating and pill ignore it.",
-  brand: "What goes first — the app's name or mark.",
+  brand: "What goes first — the app's name or mark. When the bar is short of room it shrinks (a one-line title ends in an ellipsis); the actions beside it keep their size.",
   children: "Everything beside the brand: actions, a search, the account. The bar does not stick by itself (React Native has no sticky): put it outside the ScrollView, and it stays.",
 };
 
@@ -47,6 +47,19 @@ ${ACOES}
     valores: ["bar", "page", "none"], estilo: coluna,
     codigo: v => `<${nome} variant="flush" inset="${v}" brand={<Text weight={700}>inset ${v}</Text>}>\n${ACOES}\n</${nome}>`,
     peca: v => h(Comp, {variant: "flush", inset: v, brand: h(Text, {weight: 700}, `inset ${v}`)}, acoes())}),
+  {
+    title: "A long title",
+    description: "On a narrow screen the brand gives way: a one-line title ends in an ellipsis, and the actions beside it keep "
+      + "their size and stay on the screen.",
+    code: `<${nome} variant="flush" inset="page"
+  brand={<Text weight={700} numberOfLines={1}>Quarterly report for the north region</Text>}>
+  <IconButton name="dots-three" label="More options" />
+</${nome}>`,
+    render: () => h("div", {style: {width: "min(300px,100%)"}},
+      h(Comp, {variant: "flush", inset: "page",
+        brand: h(Text, {weight: 700, numberOfLines: 1}, "Quarterly report for the north region")},
+      h(IconButton, {name: "dots-three", label: "More options"}))),
+  },
   {
     title: "Staying on top",
     description: "The bar stays put because the screen puts it outside the ScrollView — the composition React Native has instead of sticky. Scroll the list: the bar does not move.",

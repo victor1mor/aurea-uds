@@ -28,7 +28,7 @@
   },
   "packages": {
     "@aurea-uds/contracts": {
-      "version": "0.49.0",
+      "version": "0.49.1",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -38,7 +38,7 @@
       ]
     },
     "@aurea-uds/core": {
-      "version": "0.49.0",
+      "version": "0.49.1",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -48,7 +48,7 @@
       ]
     },
     "@aurea-uds/fonts": {
-      "version": "0.49.0",
+      "version": "0.49.1",
       "license": "OFL-1.1",
       "dependencies": [],
       "optionalPeers": [],
@@ -58,7 +58,7 @@
       ]
     },
     "@aurea-uds/icons": {
-      "version": "0.49.0",
+      "version": "0.49.1",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -68,7 +68,7 @@
       ]
     },
     "@aurea-uds/native": {
-      "version": "0.49.0",
+      "version": "0.49.1",
       "license": "Apache-2.0",
       "dependencies": [
         "@aurea-uds/tokens"
@@ -87,7 +87,7 @@
       ]
     },
     "@aurea-uds/react": {
-      "version": "0.49.0",
+      "version": "0.49.1",
       "license": "Apache-2.0",
       "dependencies": [
         "@base-ui/react"
@@ -139,7 +139,7 @@
       ]
     },
     "@aurea-uds/tokens": {
-      "version": "0.49.0",
+      "version": "0.49.1",
       "license": "Apache-2.0",
       "dependencies": [],
       "optionalPeers": [],
@@ -317,13 +317,13 @@
     "fichas": 138,
     "fichas_so_nativo": 12,
     "hooks": 10,
-    "paginas_total": 595,
+    "paginas_total": 596,
     "paginas": {
       "component": 227,
       "pattern": 234,
       "block": 15,
       "recipe": 23,
-      "doc": 85,
+      "doc": 86,
       "area": 11
     },
     "conteudo_rico": 44,
@@ -343,9 +343,9 @@
       "Ready": 49,
       "Stable": 110
     },
-    "testes_unit": 2305,
+    "testes_unit": 2306,
     "componentes_citados_no_teste": 158,
-    "specs_visuais": 72,
+    "specs_visuais": 73,
     "baselines": 48,
     "baselines_linux": 24,
     "classes_core": 1018,
@@ -356,6 +356,6 @@
   },
   "gates": {
     "validate": 47,
-    "playwrightSpecs": 72
+    "playwrightSpecs": 73
   }
 }

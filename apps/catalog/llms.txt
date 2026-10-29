@@ -456,6 +456,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.49.1](https://aureauds.dev/release-v0-49-1.md): On native, a full-width button keeps its size's height, and a long title in the Header no longer pushes the actions off the screen.
 - [v0.49.0](https://aureauds.dev/release-v0-49-0.md): The network map lets go of the selected node when you click the empty canvas or press Escape.
 - [v0.48.0](https://aureauds.dev/release-v0-48-0.md): Two finishes you can choose — a glow under the primary button and a soft ring around tinted pieces — and a blurred header you can read over anything.
 - [v0.47.0](https://aureauds.dev/release-v0-47-0.md): Thirteen brands — Aurea Ember (formerly lory) and eleven new palettes — plus a tighter Toolbar and a red counter on the bottom bar.
