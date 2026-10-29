@@ -252,11 +252,13 @@ function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size =
                 : tone && tone !== "neutral" ? comOpacidade(cor.solido, 0.16) : preenchimento(t, 2))
                 : "transparent",
         borderColor: "transparent",
-        ...(fullWidth ? { flex: 1 } : null),
+        // E18 (29/10/2026): o de largura inteira NÃO leva `flex: 1`. Dentro do alvo (uma coluna com o mínimo de 44), ele zerava
+        // a base e a caixa ficava com a altura do alvo — 44 em todo tamanho. Como na referência, a altura é a do tamanho, e quem
+        // estica de lado é o `alignSelf: "stretch"` do alvo (`alvoLargura`).
         // A regra do botão-link da referência: `height: auto; padding: 0`, e a do botão dela já
         // tem `border-width: 0`. A borda transparente de 1 empurraria o texto 1 para dentro.
         ...(semRecuo ? { height: undefined, paddingHorizontal: 0, borderWidth: 0 } : null),
-    }), [medida.altura, medida.recheio, medida.vao, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo, marca, tone, t]);
+    }), [medida.altura, medida.recheio, medida.vao, appearance, cor.solido, cor.contorno, corDaBorda, semRecuo, marca, tone, t]);
     const corDoTexto = appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre);
     const { acabamento, marcaDoAcabamento } = acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDoTexto);
     return (_jsx(Pressable, { disabled: disabled, onPress: aoTocar, accessibilityRole: "button", accessibilityLabel: accessibilityLabel, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [

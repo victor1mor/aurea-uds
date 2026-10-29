@@ -51,6 +51,14 @@ export default {
         h(Button, {key: 2, appearance: "outline", tone: "brand", ring: true}, "Upgrade"),
         h(Button, {key: 3, appearance: "outline", tone: "success", ring: true}, "Approve")]),
     },
+    {
+      title: "Full width",
+      description: "Stretched to the container for a form footer or a sign-in screen — only the width changes: each size keeps "
+        + "its height.",
+      code: ["sm", "md", "lg"].map(v => `<Button size="${v}" tone="brand" fullWidth onPress={signIn}>Sign in</Button>`).join("\n"),
+      render: () => h(View, {style: {width: "100%", maxWidth: 320, gap: 12}},
+        ...["sm", "md", "lg"].map(v => h(Button, {key: v, size: v, tone: "brand", fullWidth: true}, "Sign in"))),
+    },
   ],
 };
 // `cada` fica para os exemplos que mudam mais de uma prop por valor.

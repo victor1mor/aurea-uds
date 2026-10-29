@@ -52,6 +52,11 @@ const folha = criarFolha((t: AureaTokens) => ({
     flexDirection: "row", alignItems: "center", justifyContent: "space-between",
     gap: t.size.space4, minHeight: t.size.topbarHeight,
   },
+  // E17 (29/10/2026): o `brand` encolhe e as ações não — como na fila de texto + ação da referência, onde o texto encolhe
+  // e o fim fica do tamanho dele. Sem isto, um título comprido empurrava a ação da direita para fora da tela. Não cresce:
+  // com espaço sobrando, a barra fica como sempre (o `space-between`). O `minWidth: 0` é para o navegador, onde o mínimo
+  // de um item flexível é o conteúdo; no Yoga ele já é zero.
+  marcaDoTopo: {flexShrink: 1, minWidth: 0},
   topo_floating: {
     marginHorizontal: t.size.space4, marginTop: t.size.space4,
     paddingVertical: t.size.space2, paddingHorizontal: t.size.space4,
@@ -691,7 +696,7 @@ export function Header({variant = "floating", inset = "bar", brand, children, st
         style,
       ]}
       {...rest}>
-      {brand != null && <View>{brand}</View>}
+      {brand != null && <View style={s.marcaDoTopo}>{brand}</View>}
       {/* ADR-0078 (0.40.1): a barra flutuante e a de pílula pintam a cor do cartão — a busca dentro delas fica cinza. */}
       {variant === "flush" ? children : <NaSuperficie.Provider value>{children}</NaSuperficie.Provider>}
     </View>

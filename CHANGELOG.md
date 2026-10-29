@@ -17,6 +17,21 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.49.0 (29/10/2026)
+
+- **A 0.49.0 publicada entre 14:40 e 14:50 de 29/10/2026** (Brasília, medido no npm; o `tokens` às 14:40 e o `native`,
+  o último a aparecer no registro, às 14:50): o `released-surface.json` do commit do publish (`127c7e61`) — nenhum nome
+  novo; uma frase nova na web (`graphSelectionCleared`) e nenhuma no nativo. O CHANGELOG ([0.49.0] publicada) e o
+  CLAUDE.md (a linha na tabela e o item 47).
+- Não muda nenhum pacote publicado.
+
+### O registro da 0.48.0 (29/10/2026, completado em 29/10/2026)
+
+- **A 0.48.0 publicada entre 10:42 e 10:48 de 29/10/2026** (Brasília, medido no npm). O CHANGELOG e o CLAUDE.md foram
+  registrados no lote da 0.49.0; o `released-surface.json` ficou para trás, na 0.47.0 — medido depois: a 0.48.0 não trouxe
+  nome nem frase nova, e o arquivo vai direto à 0.49.0.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.47.0 (28/10/2026)
 
 - **A 0.47.0 publicada entre 19:35 e 19:41 de 28/10/2026** (Brasília, medido no npm; o `tokens` às 19:35 e o `native`,
@@ -183,9 +198,36 @@ como deveria funcionar"*.
 
 ---
 
+## [0.49.1] — 2026-10-29
+
+⏳ **Ainda não publicada.** **Dois encaixes do nativo e uma ficha** (achados do app, E17, E18 e E19): o botão de largura
+inteira com a altura do tamanho, o título do `Header` que encolhe, e a ficha que diz para que serve o tom `link`. O
+conserto dos dois encaixes é o que a referência do celular faz.
+
+### ⚠ Muda a aparência
+
+- **O `Button` do nativo com `fullWidth` muda de altura** (E18): passa a ter a do tamanho — `sm` 40, `md` 48, `lg` 56
+  (`xs` 32, `xl` 64) —, e não mais 44 em todos. As telas com botão de largura inteira mudam de altura; o alvo de toque
+  continua com o mínimo de 44.
+
+### Corrigido
+
+- **`Button` do nativo, `fullWidth`: a altura do tamanho valia só no botão comum** (E18). A caixa ganhava `flex: 1` dentro
+  do alvo de toque, e numa coluna isso zera a base: ela ficava com a altura do alvo. Agora só a largura muda, como diz a
+  ficha.
+- **`Header` do nativo: o `brand` encolhe, e as ações não** (E17). Com um título comprido numa tela estreita, a ação da
+  direita saía da tela (medido no navegador: de 41 a 97 além da borda). Agora o título de uma linha termina em reticências e as ações
+  ficam do tamanho delas; com espaço sobrando, nada muda. Na web, a barra quebra em duas linhas abaixo de 1024, e não tinha
+  o defeito.
+- **A ficha do tom `link` dizia o contrário da paleta da 1.0** (E19) — no `Text`, no `Heading`, no `Paragraph` e no
+  `Code`: ainda dizia que o `link` era "o amarelo feito para texto" e que o `primary` quase sumia no claro. Desde a 0.45.0,
+  o `link` é só para link de verdade (o marca-texto no claro, o amarelo sublinhado no escuro), e o destaque que não é link
+  é o `primary`.
+
 ## [0.49.0] — 2026-10-29
 
-⏳ **Ainda não publicada.** **O mapa desmarca** (MNT-35, o app de rede): com um nó escolhido, clicar na área vazia do
+✅ **Publicada em 29/10/2026, entre 14:40 e 14:50 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+#104.** **O mapa desmarca** (MNT-35, o app de rede): com um nó escolhido, clicar na área vazia do
 desenho ou apertar Esc dentro do mapa desmarca, no modo de leitura e no de arrumar — como a referência faz numa lista. O
 "nada escolhido" chega pelo MESMO `onSelect`, com `null` (a escolha do Victor, 29/10/2026: *"A: onSelect(null)"*).
 

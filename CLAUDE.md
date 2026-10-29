@@ -200,6 +200,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.46.0` | As cores, passo B — os estilos novos: `pressedStyle` no botão ligado (só web), `selectedStyle` no `SegmentedControl`, `variant` na `Timeline` e `currentStyle` no `BottomNav` (13 valores), web e nativo; a barra de baixo na mesma altura nos nove formatos; as duas exceções, o degradê do `brand-gradient` e os aros por dentro ([ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md)) — pedido #101. **Publicada em 28/10/2026** (entre 09:55 e 10:02, Brasília, medido no npm), pelo terminal do Victor |
 | `0.47.0` | As cores, passo C — as treze marcas: a `lory` passa a se chamar Aurea Ember (só o nome, sem apelido) e as 11 marcas da paleta da 1.0 entram, na web (`data-brand`) e no nativo (`brand` no `AureaProvider`); a `Toolbar` nas medidas da referência; o contador e o ponto da barra de baixo vermelhos; a Ember com os estilos novos ([ADR-0085](decisions/0085-as-treze-marcas.md)) — pedido #102. **Publicada em 28/10/2026** (entre 19:35 e 19:41, Brasília, medido no npm), pelo terminal do Victor |
 | `0.48.0` | Os acabamentos: o brilho (`glow`, no `Button` e no `IconButton`) e o fio (`ring`, no `Button`, no `IconButton`, no `Badge` e no `Chip`), web e nativo, também por `data-glow`/`data-ring` num contêiner da web; e o `Header` `blurred` que se lê sobre qualquer coisa (o cartão a 72% com o desfoque, só na web) ([ADR-0086](decisions/0086-os-acabamentos.md)) — pedido #103. **Publicada em 29/10/2026** (entre 10:42 e 10:48, Brasília, medido no npm), pelo terminal do Victor |
+| `0.49.0` | O mapa desmarca (MNT-35): com um nó escolhido, o clique na área vazia e o Esc chamam `onSelect(null)`, no modo de leitura e no de arrumar, e o leitor de tela ouve `graphSelectionCleared` — pedido #104. **Publicada em 29/10/2026** (entre 14:40 e 14:50, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -708,6 +709,16 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    passo B. **Publicada em 29/10/2026** (entre 10:42 e 10:48, Brasília, medido no npm), pelo terminal do Victor, da junção
    do pedido #103. O registro entrou no lote seguinte (o MNT-35).
 
+47. **`0.49.0`, o mapa desmarca, feita em 29/10/2026** — o MNT-35 do app de rede, com a escolha do Victor (*"A:
+   onSelect(null)"*): com um nó escolhido, o clique na área vazia do desenho e o Esc dentro do mapa chamam `onSelect(null)`,
+   nos dois modos; arrastar não desmarca; o Esc que desmarcou para ali, e o de dentro de um campo é do campo; o leitor de
+   tela ouve "Nenhum nó escolhido". Aprovada na bancada (*"Aprovado"*). ⚠ **As lições:** (1) as fotos `index` do Linux
+   foram tiradas ANTES do envio, na Debian do Hyper-V com o contêiner da CI, e a CI do pedido passou de primeira; (2) o
+   registro da 0.48.0, feito neste lote, esqueceu de regravar o `released-surface.json` — achado no lote seguinte, que o
+   levou direto à 0.49.0; o registro de uma versão publicada tem TRÊS partes: o CHANGELOG, o CLAUDE.md e esse arquivo.
+   **Publicada em 29/10/2026** (entre 14:40 e 14:50, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+   #104. O registro entrou no lote seguinte (o E17 e o E18).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -921,6 +932,11 @@ no git.
   controles brancas no escuro (*"Brancos, como as outras"*, 28/10/2026); e os estilos novos do passo B, que a alcançam quando
   o app os escolhe (*"Sim, como as outras"*, 28/10/2026). Quem cobra: `tests/visual/ember-congelada.spec.ts` (contra a
   0.44.0).
+  - **E é a ÚNICA marca fechada a mudança de cor** (ordem do Victor, 29/10/2026: *"Ember deve sempre ter a cor original
+    onde foi criado no Lory pois essa paleta pertence so meu trabalho a a unica que não esta aberta a mudança de cor"*):
+    as cores dela são as do sistema onde a `lory` nasceu — o laranja base `#f76500` e os neutros de lá. Ela não segue
+    paleta de outro lugar (uma paleta âmbar de um app foi a pergunta, e a resposta foi não). O que entra nela é só o que
+    vem desse mesmo sistema de origem, como a lateral escura dele (MNT-36, as cores medidas em 29/10).
 - ~~Proibido: a aparência de outro design system~~ (trocado em 11/10/2026, ordem do Victor): **a peça
   é a da referência principal, quase idêntica, com as características desta seção por cima** (seção
   2, "quase idêntica"). Nome de componente igual ao dela é permitido. Continua proibido: o nome da

@@ -19,6 +19,11 @@ const folha = criarFolha((t) => ({
         flexDirection: "row", alignItems: "center", justifyContent: "space-between",
         gap: t.size.space4, minHeight: t.size.topbarHeight,
     },
+    // E17 (29/10/2026): o `brand` encolhe e as ações não — como na fila de texto + ação da referência, onde o texto encolhe
+    // e o fim fica do tamanho dele. Sem isto, um título comprido empurrava a ação da direita para fora da tela. Não cresce:
+    // com espaço sobrando, a barra fica como sempre (o `space-between`). O `minWidth: 0` é para o navegador, onde o mínimo
+    // de um item flexível é o conteúdo; no Yoga ele já é zero.
+    marcaDoTopo: { flexShrink: 1, minWidth: 0 },
     topo_floating: {
         marginHorizontal: t.size.space4, marginTop: t.size.space4,
         paddingVertical: t.size.space2, paddingHorizontal: t.size.space4,
@@ -501,7 +506,7 @@ export function Header({ variant = "floating", inset = "bar", brand, children, s
             s.topo, s[`topo_${variant}`],
             variant === "flush" && inset !== "bar" && s[`topo_recuo_${inset}`],
             style,
-        ], ...rest, children: [brand != null && _jsx(View, { children: brand }), variant === "flush" ? children : _jsx(NaSuperficie.Provider, { value: true, children: children })] }));
+        ], ...rest, children: [brand != null && _jsx(View, { style: s.marcaDoTopo, children: brand }), variant === "flush" ? children : _jsx(NaSuperficie.Provider, { value: true, children: children })] }));
 }
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
 export function Topbar(props) {
