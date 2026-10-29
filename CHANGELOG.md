@@ -17,6 +17,14 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.47.0 (28/10/2026)
+
+- **A 0.47.0 publicada entre 19:35 e 19:41 de 28/10/2026** (Brasília, medido no npm; o `tokens` às 19:35 e o `native`,
+  o último a aparecer no registro, às 19:41): o `released-surface.json` do commit do publish (`a30fc547`) — nenhum nome
+  novo e nenhuma frase nova, nem na web nem no nativo. O CHANGELOG ([0.47.0] publicada) e o CLAUDE.md (a linha na tabela
+  e o item 45). E dois textos do `marcas-passo-c.test.tsx` que a troca de nome deixou dizendo `ember` onde era `lory`.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.46.0 (28/10/2026)
 
 - **A 0.46.0 publicada entre 09:55 e 10:02 de 28/10/2026** (Brasília, medido no npm; o `icons` às 09:55 e o `native`,
@@ -175,9 +183,34 @@ como deveria funcionar"*.
 
 ---
 
+## [0.48.0] — 2026-10-28
+
+⏳ **Ainda não publicada.** **Os acabamentos** ([ADR-0086](decisions/0086-os-acabamentos.md)): os três que a proposta
+de cores deixou de fora, vistos na bancada, nos dois temas e nas treze marcas, e aprovados pelo Victor (*"Pode os três"*,
+28/10/2026) — o brilho e o fio como variações que o app escolhe, na web e no nativo, e o menu translúcido como correção do
+`blurred`, que não lia.
+
+### Novo
+
+- **`glow`, o brilho** (`Button` e `IconButton`, web e nativo; `ToolbarButton`, só web): embaixo do botão principal, uma sombra difusa na cor dele
+  a 40%. O foco continua o anel. Nos outros botões, não desenha nada.
+- **`ring`, o fio** (`Button`, `IconButton`, `Badge` e `Chip`, web e nativo; `ToolbarButton`, só web): em volta do fundo suave — o selo que não é
+  cheio e o botão `soft` ou de contorno (no nativo, o `outline`) —, o tom a 30%, por dentro; a medida não muda. É linha:
+  exceção nomeada à ADR-0072, só quando o app escolhe.
+- **`data-glow` e `data-ring` num contêiner** (ou no `<html>`) ligam o acabamento para tudo o que está dentro; a peça com
+  a sua prop ganha (`glow={false}`, `ring={false}`).
+
+### ⚠ Muda a aparência
+
+- **O `Header` com `blurred`** passa de transparente à cor do cartão a 72%, com a cor de trás mais viva. Transparente, a
+  letra da barra ficava direto sobre o conteúdo que passa por baixo e caía a 1,83:1 (sobre o amarelo, no escuro); agora,
+  nunca menos de 9:1. Sem desfoque no navegador, ou com "reduzir transparência" no sistema, o cartão cheio (era a cor
+  da página). A página inicial do site usa o `blurred`.
+
 ## [0.47.0] — 2026-10-28
 
-⏳ **Ainda não publicada.** As cores, passo C — **as treze marcas** ([ADR-0085](decisions/0085-as-treze-marcas.md)): a
+✅ **Publicada em 28/10/2026, entre 19:35 e 19:41 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+#102.** As cores, passo C — **as treze marcas** ([ADR-0085](decisions/0085-as-treze-marcas.md)): a
 `lory` passa a se chamar **Aurea Ember**, e as 11 marcas da paleta da 1.0 entram, oficiais com o sim do Victor (*"As 11"*);
 junto, o que a bancada achou e ele decidiu olhando: a `Toolbar` nas medidas da referência, o contador e o ponto da barra de
 baixo vermelhos como no nativo, e a Ember com os estilos novos e as marcas dos controles brancas no escuro. Aprovado na

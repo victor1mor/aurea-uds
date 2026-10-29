@@ -113,7 +113,14 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>,Ref
    * Sem `url`, é o endereço da página. O aviso precisa do `AureaProvider` (ou do `aurea.js` na página).
    * Só vale no `<button>`: com `href` ou `render`, é ignorado.
    */
-  share?:ButtonShareData}
+  share?:ButtonShareData;
+  /** O brilho (ADR-0086, 28/10/2026): no botão principal (`primary`), uma sombra difusa embaixo, na cor dele a 40%. É
+   *  acabamento que o app escolhe; o foco continua o anel. Escreve `data-glow` — o mesmo atributo num contêiner vale para
+   *  os botões de dentro, e `glow={false}` tira um deles. Nos outros botões, não desenha nada. */
+  glow?:boolean;
+  /** O fio (ADR-0086): em volta do botão de fundo suave (`soft` e de contorno), o tom a 30%, por dentro. É linha — a
+   *  exceção nomeada à ADR-0072, só quando o app escolhe. Escreve `data-ring`, com a mesma regra do contêiner. */
+  ring?:boolean}
 /** O que o `Button share` compartilha (GAR-14). Os nomes são os do `navigator.share` da web. */
 export interface ButtonShareData{url?:string;title?:string;text?:string}
 // GAR-14 (0.28.0) · o compartilhar do `Button`, a contraparte React do `share` do `aurea.js` — a mesma
@@ -161,7 +168,7 @@ const NOME_DA_TECLA:Record<string,string>={ctrl:"Control",control:"Control","⌃
   shift:"Shift","⇧":"Shift",alt:"Alt",option:"Alt","⌥":"Alt",enter:"Enter","↵":"Enter",esc:"Escape",escape:"Escape"};
 const atalhoAnunciado=(kbd:string|readonly string[]|undefined)=>typeof kbd==="string"?(kbd||undefined)
   :kbd&&kbd.length>0?kbd.map(k=>NOME_DA_TECLA[k.toLowerCase()]??k).join("+"):undefined;
-export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant:variantPedida,appearance,tone,size:sizePedido,quiet,loading,leadingIcon,trailingIcon,className,children,disabled:disabledPedido,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onClick,onClickCapture,"aria-disabled":ariaDisabled,render,share,...props},ref){
+export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant:variantPedida,appearance,tone,size:sizePedido,quiet,loading,leadingIcon,trailingIcon,className,children,disabled:disabledPedido,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onClick,onClickCapture,"aria-disabled":ariaDisabled,render,share,glow,ring,...props},ref){
 const grupo=React.useContext(GrupoDeBotoesContext);
 const variant=variantPedida??grupo?.variant;
 const size=sizePedido??grupo?.size??"md";
@@ -195,7 +202,8 @@ const inner=<>{loading?<span className="spinner"/>:leadingIcon&&<Icon name={lead
 // Mesmo remendo do AUD-0004, que já barrava o link desabilitado; aqui ele alcança o <button>.
 const inerte=ariaDisabled===true||ariaDisabled==="true";
 const off=disabled||loading;
-const shared={"aria-keyshortcuts":atalhoAnunciado(kbd),"aria-busy":loading||undefined};
+const shared={"aria-keyshortcuts":atalhoAnunciado(kbd),"aria-busy":loading||undefined,
+  "data-glow":glow===undefined?undefined:String(glow),"data-ring":ring===undefined?undefined:String(ring)};
 // GAR-14: o `share` emite a mesma marcação que o `aurea.js` lê ([data-aurea-share]) — o catálogo
 // estático não hidrata, e é ela que faz o botão funcionar lá. Os textos vão junto, na língua do app.
 const s=useAureaStrings();
@@ -309,7 +317,7 @@ export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function I
 // dela). O nome acessível vem sozinho ("Close"/"Fechar"), e quem fecha outra coisa diz o quê
 // (`label="Fechar aviso"`). No toque, a área continua de 44 (`--target-min`) sem o círculo crescer.
 // Fechado como o dela: sem cor, tamanho nem ícone de fora — `children` troca o X, como lá.
-export interface CloseButtonProps extends Omit<ButtonProps,"quiet"|"variant"|"appearance"|"tone"|"size"|"loading"|"leadingIcon"|"trailingIcon"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"fullWidth"|"grow"|"pressed"|"share">{
+export interface CloseButtonProps extends Omit<ButtonProps,"quiet"|"variant"|"appearance"|"tone"|"size"|"loading"|"leadingIcon"|"trailingIcon"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"fullWidth"|"grow"|"pressed"|"share"|"glow"|"ring">{
   /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
   label?:string}
 export const CloseButton=forwardRef<HTMLButtonElement,CloseButtonProps>(function CloseButton({label,className,children,...props},ref){
@@ -323,7 +331,7 @@ export const CloseButton=forwardRef<HTMLButtonElement,CloseButtonProps>(function
 // isso que não existe a combinação inversa. Quem troca é o `useAureaTheme`, com ou sem provider.
 // Fechado como a referência faria: tamanho e desligado. Sem cor (variant, appearance, tone) — a cor é a
 // do glifo, e é a razão de a peça existir —, sem link, sem atalho e sem ícone extra.
-export interface ThemeToggleProps extends Omit<IconButtonProps,"quiet"|"icon"|"label"|"onClick"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth"|"share">{
+export interface ThemeToggleProps extends Omit<IconButtonProps,"quiet"|"icon"|"label"|"onClick"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth"|"share"|"glow"|"ring">{
   /** `"light-dark"` (o padrão): o botão que alterna. `"light-dark-system"` (15/10/2026): a chave de três posições do
    *  topo da referência — claro, escuro e sistema (seguir o do computador, e mudar junto). */
   mode?:"light-dark"|"light-dark-system"}

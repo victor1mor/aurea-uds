@@ -392,7 +392,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
             // `ring`, `white-ring` e `bar-ring` da barra de baixo, o ponto `ring` da linha do tempo. Na web e no nativo
             // (o nativo marca o mesmo atributo no navegador). Só o anel passa: a borda, nem aqui (`linhas` mede as duas,
             // e o filtro abaixo descarta só o anel).
-            const deAro = !!e.closest('[data-segment-style="ring"],[data-current-style="ring"],[data-current-style="white-ring"],[data-current-style="bar-ring"],[data-timeline-style="ring"]');
+            const deAro = !!e.closest('[data-segment-style="ring"],[data-current-style="ring"],[data-current-style="white-ring"],[data-current-style="bar-ring"],[data-timeline-style="ring"],[data-ring="true"]');
             const conta = (x: string) => !(deAro && x.startsWith("anel"));
             for (const x of linhas(getComputedStyle(e))) if (conta(x)) out.push(`${nome(e)}: ${x}`);
             for (const ps of ["::before", "::after"]) {
@@ -755,19 +755,23 @@ test.describe("catálogo · contratos do modelo de página", () => {
     // O fundo que embaça respeita quem pede MENOS TRANSPARÊNCIA ao sistema (o Windows com "Efeitos de transparência"
     // desligado, medido nesta máquina em 15/10/2026): aí o fundo é cheio. O teste confere o que vale na máquina, e no
     // Chromium força as duas preferências (o Playwright 1.61 não emula essa; o protocolo do navegador emula).
+    // 28/10/2026 (ADR-0086): o fundo deixou de ser transparente — a letra caía a 1,83:1 sobre o amarelo no escuro. Agora é
+    // o cartão a 72%, com a cor de trás mais viva (`saturate`); quem pede menos transparência continua com o fundo cheio.
     const transparente = /^(transparent|rgba\(0, 0, 0, 0\))$/;
+    const translucido = /\/ 0\.72\)$/;
+    const vidro = "blur(16px) saturate(1.6)";
     const menos = await page.evaluate(() => matchMedia("(prefers-reduced-transparency: reduce)").matches);
     if (menos) { expect(m.fundo).not.toMatch(transparente); expect(m.desfoque).toBe("none"); }
-    else { expect(m.fundo).toMatch(transparente); expect(m.desfoque).toBe("blur(16px)"); }
+    else { expect(m.fundo).toMatch(translucido); expect(m.desfoque).toBe(vidro); }
     if (browserName === "chromium") {
       const cdp = await page.context().newCDPSession(page);
       const topo = () => page.locator(".site-top").evaluate((e) => [getComputedStyle(e).backgroundColor, getComputedStyle(e).backdropFilter]);
       await cdp.send("Emulation.setEmulatedMedia", {features: [{name: "prefers-reduced-transparency", value: "no-preference"}]});
       const [f1, d1] = await topo();
-      expect(f1).toMatch(transparente); expect(d1).toBe("blur(16px)");
+      expect(f1).toMatch(translucido); expect(d1).toBe(vidro);
       await cdp.send("Emulation.setEmulatedMedia", {features: [{name: "prefers-reduced-transparency", value: "reduce"}]});
       const [f2, d2] = await topo();
-      expect(f2).not.toMatch(transparente); expect(d2).toBe("none");
+      expect(f2).not.toMatch(transparente); expect(f2).not.toMatch(translucido); expect(d2).toBe("none");
       await cdp.send("Emulation.setEmulatedMedia", {features: []});
     }
     expect(m.vaoAcoes).toBe(6);

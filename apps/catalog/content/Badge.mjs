@@ -161,5 +161,25 @@ export default {
         h(Badge, {tone: "info"}, "Follows the column"),
         h(Badge, {tone: "info", fit: "content"}, "As wide as its text"))),
     },
+    {
+      title: "ring — a finish",
+      description: "A finish the app chooses: the tone at 30% around a badge that is not solid, inside the edge, so the "
+        + "size never changes. data-ring=\"true\" on a container turns it on for every badge inside, and ring={false} takes one out.",
+      code: `<Badge tone="primary" ring>Brand</Badge>
+<Badge tone="success" ring>Paid</Badge>
+<Badge tone="danger" ring>Overdue</Badge>
+<Badge tone="info" emphasis="outline" ring>New</Badge>
+
+<div data-ring="true">
+  <Badge tone="warning">Review</Badge>
+  <Badge tone="warning" ring={false}>Without ring</Badge>
+</div>`,
+      render: () => h(Stack, null,
+        h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-2)"}},
+          h(Badge, {tone: "primary", ring: true}, "Brand"), h(Badge, {tone: "success", ring: true}, "Paid"),
+          h(Badge, {tone: "danger", ring: true}, "Overdue"), h(Badge, {tone: "info", emphasis: "outline", ring: true}, "New")),
+        h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-2)"}, "data-ring": "true"},
+          h(Badge, {tone: "warning"}, "Review"), h(Badge, {tone: "warning", ring: false}, "Without ring"))),
+    },
   ],
 };

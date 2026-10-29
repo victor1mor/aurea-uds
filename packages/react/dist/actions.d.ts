@@ -66,6 +66,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Re
      * Só vale no `<button>`: com `href` ou `render`, é ignorado.
      */
     share?: ButtonShareData;
+    /** O brilho (ADR-0086, 28/10/2026): no botão principal (`primary`), uma sombra difusa embaixo, na cor dele a 40%. É
+     *  acabamento que o app escolhe; o foco continua o anel. Escreve `data-glow` — o mesmo atributo num contêiner vale para
+     *  os botões de dentro, e `glow={false}` tira um deles. Nos outros botões, não desenha nada. */
+    glow?: boolean;
+    /** O fio (ADR-0086): em volta do botão de fundo suave (`soft` e de contorno), o tom a 30%, por dentro. É linha — a
+     *  exceção nomeada à ADR-0072, só quando o app escolhe. Escreve `data-ring`, com a mesma regra do contêiner. */
+    ring?: boolean;
 }
 /** O que o `Button share` compartilha (GAR-14). Os nomes são os do `navigator.share` da web. */
 export interface ButtonShareData {
@@ -109,12 +116,12 @@ export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     icon: AureaIcon;
 }
 export declare const IconButton: React.ForwardRefExoticComponent<Omit<IconButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
-export interface CloseButtonProps extends Omit<ButtonProps, "quiet" | "variant" | "appearance" | "tone" | "size" | "loading" | "leadingIcon" | "trailingIcon" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "fullWidth" | "grow" | "pressed" | "share"> {
+export interface CloseButtonProps extends Omit<ButtonProps, "quiet" | "variant" | "appearance" | "tone" | "size" | "loading" | "leadingIcon" | "trailingIcon" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "fullWidth" | "grow" | "pressed" | "share" | "glow" | "ring"> {
     /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
     label?: string;
 }
 export declare const CloseButton: React.ForwardRefExoticComponent<Omit<CloseButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
-export interface ThemeToggleProps extends Omit<IconButtonProps, "quiet" | "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share"> {
+export interface ThemeToggleProps extends Omit<IconButtonProps, "quiet" | "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share" | "glow" | "ring"> {
     /** `"light-dark"` (o padrão): o botão que alterna. `"light-dark-system"` (15/10/2026): a chave de três posições do
      *  topo da referência — claro, escuro e sistema (seguir o do computador, e mudar junto). */
     mode?: "light-dark" | "light-dark-system";

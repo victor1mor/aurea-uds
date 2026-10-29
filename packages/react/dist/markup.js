@@ -142,13 +142,13 @@ export function Code({ align, color, tone, weight, truncate, className, ...props
 // `max` com `+` é o idioma universal do contador (três das referências o usam). Exportada porque quem
 // escreve o nome acessível precisa do MESMO texto — "99+ unread" tem de bater com o que se vê.
 export function formatBadgeCount(count, max = 99) { return count > max ? `${max}+` : String(count); }
-export function Badge({ variant: variantProp = "neutral", tone, emphasis = "soft", size = "md", dot, leading, trailing, image, imageAlt, count, max = 99, showZero, fit = "auto", anchor, anchorShape = "square", invisible, badgeContent, children, className, ...props }) {
+export function Badge({ variant: variantProp = "neutral", tone, emphasis = "soft", size = "md", dot, leading, trailing, image, imageAlt, count, max = 99, showZero, fit = "auto", anchor, anchorShape = "square", invisible, badgeContent, ring, children, className, ...props }) {
     const variant = tone ?? variantProp;
     const numero = count != null ? formatBadgeCount(count, max) : undefined;
     const miolo = anchor ? (numero ?? badgeContent) : (numero ?? children);
     // Ponto puro: `dot` sem nada para mostrar. Aí o badge não tem conteúdo, e ganha medida própria.
     const soPonto = !!dot && miolo == null;
-    const chip = _jsxs("span", { className: cx("badge", variant !== "neutral" && `badge-${variant}`, emphasis !== "soft" && `badge-${emphasis}`, size !== "md" && `badge-${size}`, fit === "content" && !anchor && "badge-fit", anchor && `badge-overlay badge-at-${anchor}`, anchor && anchorShape === "circle" && "badge-on-circle", anchor && soPonto && "badge-is-dot", className), ...props, children: [dot && !soPonto && _jsx("span", { className: "badge-dot" }), image && _jsx("img", { className: "badge-image", src: image, alt: imageAlt ?? "" }), leading, miolo, trailing] });
+    const chip = _jsxs("span", { className: cx("badge", variant !== "neutral" && `badge-${variant}`, emphasis !== "soft" && `badge-${emphasis}`, size !== "md" && `badge-${size}`, fit === "content" && !anchor && "badge-fit", anchor && `badge-overlay badge-at-${anchor}`, anchor && anchorShape === "circle" && "badge-on-circle", anchor && soPonto && "badge-is-dot", className), "data-ring": ring === undefined ? undefined : String(ring), ...props, children: [dot && !soPonto && _jsx("span", { className: "badge-dot" }), image && _jsx("img", { className: "badge-image", src: image, alt: imageAlt ?? "" }), leading, miolo, trailing] });
     if (!anchor)
         return chip;
     // Some em zero por padrão, como na referência: caixa de entrada zerada não merece um "0" no canto.

@@ -496,8 +496,12 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>,RefAttribute
   /** Conteúdo do badge no modo sobreposto (no modo chip, quem manda é `children`).
    *  Chama-se assim, e não `content`, porque este colide com o atributo HTML de mesmo nome. */
   badgeContent?:ReactNode;
+  /** O fio (ADR-0086, 28/10/2026): em volta do selo que não é cheio, o tom a 30%, por dentro. É linha — a exceção
+   *  nomeada à ADR-0072, só quando o app escolhe. Escreve `data-ring`; o mesmo atributo num contêiner vale para os selos
+   *  de dentro, e `ring={false}` tira um deles. No `solid`, não desenha nada. */
+  ring?:boolean;
 }
-export function Badge({variant:variantProp="neutral",tone,emphasis="soft",size="md",dot,leading,trailing,image,imageAlt,count,max=99,showZero,fit="auto",anchor,anchorShape="square",invisible,badgeContent,children,className,...props}:BadgeProps){
+export function Badge({variant:variantProp="neutral",tone,emphasis="soft",size="md",dot,leading,trailing,image,imageAlt,count,max=99,showZero,fit="auto",anchor,anchorShape="square",invisible,badgeContent,ring,children,className,...props}:BadgeProps){
   const variant=tone??variantProp;
   const numero=count!=null?formatBadgeCount(count,max):undefined;
   const miolo=anchor?(numero??badgeContent):(numero??children);
@@ -508,6 +512,7 @@ export function Badge({variant:variantProp="neutral",tone,emphasis="soft",size="
       size!=="md"&&`badge-${size}`,fit==="content"&&!anchor&&"badge-fit",
       anchor&&`badge-overlay badge-at-${anchor}`,anchor&&anchorShape==="circle"&&"badge-on-circle",
       anchor&&soPonto&&"badge-is-dot",className)}
+    data-ring={ring===undefined?undefined:String(ring)}
     {...props}>
     {dot&&!soPonto&&<span className="badge-dot"/>}
     {image&&<img className="badge-image" src={image} alt={imageAlt??""}/>}

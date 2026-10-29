@@ -94,7 +94,8 @@ const LINHA_PERMITIDA_CSS: {seletor: string; prop: string; valor?: string; media
 // segmento `ring`, o item `ring`, `white-ring` e `bar-ring` da barra de baixo e o ponto `ring` da linha do tempo. O aro
 // só existe quando o app escolhe o estilo. A exceção vale SÓ na regra cujo seletor nomeia um deles, e só no anel
 // (`box-shadow` ou a variável de anel) — borda continua reprovando.
-const ESTILO_DE_ARO = /\[data-(?:segment-style="ring"|current-style="(?:ring|white-ring|bar-ring)"|timeline-style="ring")\]/;
+// E o FIO dos acabamentos (ADR-0086, 28/10/2026): `data-ring="true"`, que o app escolhe no selo e no botão de fundo suave.
+const ESTILO_DE_ARO = /\[data-(?:segment-style="ring"|current-style="(?:ring|white-ring|bar-ring)"|timeline-style="ring"|ring="true")\]/;
 
 /** O seletor da regra em que a declaração está (o texto entre a última `}` ou `{` e a `{` dela). */
 function seletorDe(css: string, pos: number): string {

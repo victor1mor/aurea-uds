@@ -22,6 +22,8 @@ export default {
     pressed: "Toggle state, announced to the screen reader as checked. It paints nothing by itself: change the appearance or the tone with it.",
     share: "The button shares {url, title, text}. On a phone it opens the system share sheet; in the browser it follows the web rule — share where the browser can, otherwise copy the link and say \"Link copied\" through the ToastHost.",
     label: "REQUIRED. The name the screen reader announces: an icon alone says nothing to whoever does not see it.",
+    glow: "A finish the app chooses: under the solid brand button, a soft glow in its own colour at 40%. On any other, nothing.",
+    ring: "A finish the app chooses: around the outline button (the tone at 16%), the tone at 30%, inside the edge — the size never changes. On any other, nothing.",
   },
   examples: [
     {

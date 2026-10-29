@@ -3,7 +3,7 @@
 // core não escreve mais regra para "qualquer marca" sem querer — `[data-brand]` sem nome valia só para a `ember` quando
 // ela era a única, e com as 11 passou a valer para todas (o selo cheio saiu errado assim). As cores no navegador estão em
 // `tests/visual/marcas-passo-c.spec.ts`.
-// Provado contra o defeito (28/10/2026): com o DTCG da 0.46.0 (só `ember`), reprovam os quatro primeiros; com o selo cheio
+// Provado contra o defeito (28/10/2026): com o DTCG da 0.46.0 (só `lory`), reprovam os quatro primeiros; com o selo cheio
 // ainda em `[data-brand]`, reprova o último.
 import {readFileSync} from "node:fs";
 import {describe, expect, it} from "vitest";
@@ -19,7 +19,7 @@ const PRIMARIO: Record<string, string> = {
 };
 
 describe("a fonte dos tokens", () => {
-  it("as marcas são a Ember e as 11, nessa ordem, e a ember não existe mais como marca", () => {
+  it("as marcas são a Ember e as 11, nessa ordem, e a lory não existe mais como marca", () => {
     expect(Object.keys(fonte.brand).filter((k) => !k.startsWith("$"))).toEqual(["ember", ...Object.keys(PRIMARIO)]);
   });
   it("o primário de cada uma é o da proposta, nos dois temas", () => {

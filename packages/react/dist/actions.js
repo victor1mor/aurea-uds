@@ -109,7 +109,7 @@ const NOME_DA_TECLA = { ctrl: "Control", control: "Control", "⌃": "Control", c
     shift: "Shift", "⇧": "Shift", alt: "Alt", option: "Alt", "⌥": "Alt", enter: "Enter", "↵": "Enter", esc: "Escape", escape: "Escape" };
 const atalhoAnunciado = (kbd) => typeof kbd === "string" ? (kbd || undefined)
     : kbd && kbd.length > 0 ? kbd.map(k => NOME_DA_TECLA[k.toLowerCase()] ?? k).join("+") : undefined;
-export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, quiet, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, share, ...props }, ref) {
+export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, quiet, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, share, glow, ring, ...props }, ref) {
     const grupo = React.useContext(GrupoDeBotoesContext);
     const variant = variantPedida ?? grupo?.variant;
     const size = sizePedido ?? grupo?.size ?? "md";
@@ -141,7 +141,8 @@ export const Button = forwardRef(function Button({ variant: variantPedida, appea
     // Mesmo remendo do AUD-0004, que já barrava o link desabilitado; aqui ele alcança o <button>.
     const inerte = ariaDisabled === true || ariaDisabled === "true";
     const off = disabled || loading;
-    const shared = { "aria-keyshortcuts": atalhoAnunciado(kbd), "aria-busy": loading || undefined };
+    const shared = { "aria-keyshortcuts": atalhoAnunciado(kbd), "aria-busy": loading || undefined,
+        "data-glow": glow === undefined ? undefined : String(glow), "data-ring": ring === undefined ? undefined : String(ring) };
     // GAR-14: o `share` emite a mesma marcação que o `aurea.js` lê ([data-aurea-share]) — o catálogo
     // estático não hidrata, e é ela que faz o botão funcionar lá. Os textos vão junto, na língua do app.
     const s = useAureaStrings();

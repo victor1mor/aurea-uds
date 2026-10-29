@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 10,
     "aliasesLiterais": 118,
-    "propsDistintas": 390
+    "propsDistintas": 392
   },
   "aliases": {
     "ButtonVariant": {
@@ -2951,6 +2951,18 @@
               "optional": true,
               "type": "ButtonShareData",
               "values": null
+            },
+            {
+              "name": "glow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "ring",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -3188,6 +3200,18 @@
               "name": "share",
               "optional": true,
               "type": "ButtonShareData",
+              "values": null
+            },
+            {
+              "name": "glow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "ring",
+              "optional": true,
+              "type": "boolean",
               "values": null
             },
             {
@@ -3609,6 +3633,18 @@
               "name": "kbd",
               "optional": true,
               "type": "string | readonly string[]",
+              "values": null
+            },
+            {
+              "name": "glow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "ring",
+              "optional": true,
+              "type": "boolean",
               "values": null
             },
             {
@@ -7920,6 +7956,12 @@
               "optional": true,
               "type": "ReactNode",
               "values": null
+            },
+            {
+              "name": "ring",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -8150,6 +8192,12 @@
               "name": "badgeContent",
               "optional": true,
               "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "ring",
+              "optional": true,
+              "type": "boolean",
               "values": null
             }
           ]
