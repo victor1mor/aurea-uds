@@ -21,7 +21,7 @@
 //                 do Lote 3. Aparência sem consumidor é a ADR-0034 ("ter a variante não é usar").
 import * as React from "react";
 import {AccessibilityInfo, Platform, Pressable, Share, View, type GestureResponderEvent, type PressableProps} from "react-native";
-import {canto, comOpacidade, criarFolha, misturaOpaca, preenchimento, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
+import {brilhoDoBotao, canto, comOpacidade, criarFolha, fioDoAcabamento, misturaOpaca, preenchimento, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
 import {Icon, type AureaIconRegistry, type AureaIcon, type IconWeight} from "./icon.js";
 import {Text} from "./text.js";
 import {AvisosContext, useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
@@ -221,6 +221,16 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
    * "Link copiado" pelo `ToastHost`, e dizer ao leitor de tela.
    */
   share?: AureaShareData;
+  /**
+   * O brilho (ADR-0086, 28/10/2026), o mesmo da web: no botão principal (`appearance="solid" tone="brand"`), uma
+   * sombra difusa embaixo, na cor dele a 40%. É acabamento que o app escolhe. Nos outros botões, não desenha nada.
+   */
+  glow?: boolean;
+  /**
+   * O fio (ADR-0086), o mesmo da web: em volta do botão de fundo suave (`outline`, que no "sem linha" é o tom a 16%), o
+   * tom a 30%, por dentro — a sombra por dentro do `aroDoEstilo`, que não muda a medida. Nos outros, não desenha nada.
+   */
+  ring?: boolean;
 }
 
 /** O que o `Button share` compartilha (GAR-14). Os nomes são os da web. */
@@ -287,11 +297,26 @@ export function Button(props: ButtonProps) {
   return <CorpoDoBotao {...props} />;
 }
 
+/** Os acabamentos (ADR-0086) do `Button` e do `IconButton`: o brilho só no principal, o fio só no de fundo suave. A marca
+ *  no navegador (`dataSet`) é a mesma da web (`data-glow`, `data-ring`), e a varredura do site reconhece o fio. */
+function acabamentoDoBotao(t: AureaTokens, glow: boolean | undefined, ring: boolean | undefined,
+  appearance: AureaButtonAppearance, tone: AureaButtonTone, disabled: boolean | null | undefined, corDoTexto: string) {
+  const comBrilho = !!glow && appearance === "solid" && tone === "brand" && !disabled;
+  const comFio = !!ring && appearance === "outline";
+  const acabamento = comBrilho || comFio
+    ? {boxShadow: [...(comBrilho ? [brilhoDoBotao(t)] : []), ...(comFio ? [fioDoAcabamento(t, tone, corDoTexto)] : [])]}
+    : null;
+  const marcaDoAcabamento: object = glow !== undefined || ring !== undefined
+    ? {dataSet: {...(glow !== undefined ? {glow: String(glow)} : null), ...(ring !== undefined ? {ring: String(ring)} : null)}}
+    : {};
+  return {acabamento, marcaDoAcabamento};
+}
+
 /** O corpo do `Button`. `semRecuo` é só do `LinkButton`: sem recuo, sem borda e sem altura. */
 function CorpoDoBotao({
   children, appearance = "solid", tone = "neutral", size = "md",
   leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed,
-  disabled, accessibilityLabel, semRecuo = false, share, onPress, ...rest
+  disabled, accessibilityLabel, semRecuo = false, share, glow, ring, onPress, ...rest
 }: ButtonProps & {semRecuo?: boolean}) {
   const t = useAureaTokens();
   const aoTocar = useToqueComShare(share, onPress);
@@ -320,6 +345,7 @@ function CorpoDoBotao({
   }), [medida.altura, medida.recheio, medida.vao, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo, marca, tone, t]);
 
   const corDoTexto = appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre);
+  const {acabamento, marcaDoAcabamento} = acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDoTexto);
 
   return (
     <Pressable
@@ -333,7 +359,7 @@ function CorpoDoBotao({
         tocando && s.pressionado, disabled && s.inerte,
       ]}
       {...rest}>
-      <View style={[s.caixa, caixa]}>
+      <View style={[s.caixa, caixa, acabamento]} {...marcaDoAcabamento}>
         {leading ?? null}
         {leadingIcon ? <Icon name={leadingIcon} size={ICONE[size]} color={corDoTexto} icons={icons} /> : null}
         {typeof children === "string"
@@ -364,7 +390,7 @@ function CorpoDoBotao({
 // perde o recuo. ⚠ Como todo `Button`, ele obedece o pai (E2): numa coluna que estica, o texto vai
 // para o meio; encostado na margem é `Stack align="start"`.
 
-export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth"> {}
+export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth" | "glow" | "ring"> {}
 
 /** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` da referência. */
 export function LinkButton(props: LinkButtonProps) {
@@ -410,7 +436,7 @@ export function folgaDoToque(t: AureaTokens, size: AureaButtonSize = "md"): numb
  *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
 function BotaoDeIcone({
   name, label, appearance = "ghost", tone = "neutral", size = "md",
-  icons, pressed, disabled, corDoIcone, pesoDoIcone, share, onPress, ...comSobras
+  icons, pressed, disabled, corDoIcone, pesoDoIcone, share, glow, ring, onPress, ...comSobras
 }: IconButtonProps & {corDoIcone?: string; pesoDoIcone?: IconWeight}) {
   // Quem chama de JavaScript, sem o tipo, ainda pode mandar `leading`/`trailing`: elas não descem ao `Pressable`.
   const {leading: _antes, trailing: _depois, ...rest} = comSobras as typeof comSobras & {leading?: unknown; trailing?: unknown};
@@ -422,6 +448,8 @@ function BotaoDeIcone({
   const corDaBorda = marca?.tinta ?? t.color.border;
   // O círculo tem a altura do botão do mesmo tamanho (o só-ícone da referência: `aspect-ratio: 1`).
   const lado = MEDIDA[size](t.size).altura;
+  const corDaLetraDoIcone = corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre);
+  const {acabamento, marcaDoAcabamento} = acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDaLetraDoIcone);
 
   const caixa = React.useMemo(() => ({
     height: lado, width: lado, paddingHorizontal: 0,
@@ -448,9 +476,9 @@ function BotaoDeIcone({
         tocando && s.pressionado, disabled && s.inerte,
       ]}
       {...rest}>
-      <View style={[s.caixa, caixa]}>
+      <View style={[s.caixa, caixa, acabamento]} {...marcaDoAcabamento}>
         <Icon name={name} size={ICONE[size]} icons={icons} weight={pesoDoIcone}
-              color={corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre)} />
+              color={corDaLetraDoIcone} />
       </View>
     </Pressable>
   );
@@ -462,7 +490,7 @@ function BotaoDeIcone({
 // do texto; no escuro o SOL, no amarelo da marca. ⚠ Os glifos `moon` e `sun` (na forma cheia, `moon-fill` e `sun-fill`) saem do registro do
 // app, como os do `Alert`: sem eles o ícone não desenha, e o `Icon` avisa no desenvolvimento.
 /** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
-export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone" | "share"> {}
+export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone" | "share" | "glow" | "ring"> {}
 export function ThemeToggle(props: ThemeToggleProps) {
   const {theme, toggleTheme} = useAureaTheme();
   const t = useAureaTokens();

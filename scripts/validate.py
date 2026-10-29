@@ -2569,6 +2569,10 @@ NAO_E_ESTADO = {
     "segment-style": "é o ESTILO do segmento aceso que o app escolhe (`selectedStyle`, ADR-0084), não estado",
     "timeline-style": "é o ESTILO da linha do tempo que o app escolhe (`variant`, ADR-0084), não estado",
     "current-style": "é a COR do item atual da barra de baixo que o app escolhe (`currentStyle`, ADR-0084), não estado",
+    # Os acabamentos (ADR-0086, 28/10/2026): o brilho do botão principal e o fio do fundo suave, que o app escolhe — na
+    # peça, num contêiner ou no `<html>`, no molde dos estilos do passo B. Escolha, não estado.
+    "glow": "é o BRILHO do botão principal que o app escolhe (`glow`, ADR-0086), não estado",
+    "ring": "é o FIO do fundo suave que o app escolhe (`ring`, ADR-0086), não estado",
 }
 _css_sem_comentario = re.sub(r"/\*.*?\*/", "", core_src, flags=re.S)
 _pintados = {m for m in re.findall(r"\[data-([a-z-]+)", _css_sem_comentario)}

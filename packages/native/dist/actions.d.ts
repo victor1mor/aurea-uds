@@ -47,6 +47,16 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
      * "Link copiado" pelo `ToastHost`, e dizer ao leitor de tela.
      */
     share?: AureaShareData;
+    /**
+     * O brilho (ADR-0086, 28/10/2026), o mesmo da web: no botão principal (`appearance="solid" tone="brand"`), uma
+     * sombra difusa embaixo, na cor dele a 40%. É acabamento que o app escolhe. Nos outros botões, não desenha nada.
+     */
+    glow?: boolean;
+    /**
+     * O fio (ADR-0086), o mesmo da web: em volta do botão de fundo suave (`outline`, que no "sem linha" é o tom a 16%), o
+     * tom a 30%, por dentro — a sombra por dentro do `aroDoEstilo`, que não muda a medida. Nos outros, não desenha nada.
+     */
+    ring?: boolean;
 }
 /** O que o `Button share` compartilha (GAR-14). Os nomes são os da web. */
 export interface AureaShareData {
@@ -64,7 +74,7 @@ export interface AureaShareData {
  * lida por ninguém. Aqui não há o dilema, então não há o par `aria-disabled` — um só basta.
  */
 export declare function Button(props: ButtonProps): React.JSX.Element;
-export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth"> {
+export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth" | "glow" | "ring"> {
 }
 /** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` da referência. */
 export declare function LinkButton(props: LinkButtonProps): React.JSX.Element;
@@ -93,7 +103,7 @@ export declare function IconButton(props: IconButtonProps): React.JSX.Element;
  */
 export declare function folgaDoToque(t: AureaTokens, size?: AureaButtonSize): number;
 /** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
-export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone" | "share"> {
+export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone" | "share" | "glow" | "ring"> {
 }
 export declare function ThemeToggle(props: ThemeToggleProps): React.JSX.Element;
 export interface CloseButtonProps {

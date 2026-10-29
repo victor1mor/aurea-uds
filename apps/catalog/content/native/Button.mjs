@@ -39,6 +39,18 @@ export default {
       code: ["xs", "sm", "md", "lg", "xl"].map(v => `<Button size="${v}">${v}</Button>`).join("\n"),
       render: () => emLinha(["xs", "sm", "md", "lg", "xl"].map(v => h(Button, {key: v, size: v}, v))),
     },
+    {
+      title: "Finishes",
+      description: "Two finishes the app chooses, the same as the web: glow under the brand button, and ring — the tone at 30%, "
+        + "inside the edge — around the outline one (the tone at 16%). Neither changes the button's size.",
+      code: `<Button tone="brand" glow onPress={start}>Get started</Button>
+<Button appearance="outline" tone="brand" ring onPress={upgrade}>Upgrade</Button>
+<Button appearance="outline" tone="success" ring onPress={approve}>Approve</Button>`,
+      render: () => emLinha([
+        h(Button, {key: 1, tone: "brand", glow: true}, "Get started"),
+        h(Button, {key: 2, appearance: "outline", tone: "brand", ring: true}, "Upgrade"),
+        h(Button, {key: 3, appearance: "outline", tone: "success", ring: true}, "Approve")]),
+    },
   ],
 };
 // `cada` fica para os exemplos que mudam mais de uma prop por valor.

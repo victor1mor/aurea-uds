@@ -192,6 +192,20 @@ export const aroDoEstilo = (t: AureaTokens, cor: string, vezes = 1.5) =>
   ({offsetX: 0, offsetY: 0, blurRadius: 0, spreadDistance: vezes * t.size.borderWidth, color: cor, inset: true} as const);
 
 /**
+ * OS ACABAMENTOS (ADR-0086, 28/10/2026), os mesmos da web — só quando o app escolhe.
+ * O FIO (`ring`): em volta do fundo suave, o tom CHEIO a 30%, por dentro — uma largura de borda, pelo `aroDoEstilo`. Sem
+ * tom (o neutro), a cor da letra, como o `currentColor` da web.
+ */
+export const fioDoAcabamento = (t: AureaTokens, tom: TomDeCor | "brand", corDaLetra: string) => aroDoEstilo(t, comOpacidade(
+  tom === "primary" || tom === "brand" ? t.color.primary : tom === "success" ? t.color.success
+    : tom === "danger" ? t.color.destructive : tom === "info" ? t.color.info : tom === "warning" ? t.color.warning
+    : corDaLetra, 0.3), 1);
+/** O BRILHO (`glow`): embaixo do botão principal, a cor dele a 40%, difusa — 4 para baixo e 14 de desfoque (12 + 2). */
+export const brilhoDoBotao = (t: AureaTokens) =>
+  ({offsetX: 0, offsetY: t.size.space1, blurRadius: t.size.space3 + t.size.space05, spreadDistance: 0,
+    color: comOpacidade(t.color.primary, 0.4)} as const);
+
+/**
  * A MARCA do estilo escolhido, para o navegador (`react-native-web`): o `dataSet` vira o mesmo atributo da web
  * (`data-current-style`, `data-segment-style`, `data-timeline-style`), e a varredura do site reconhece o estilo de aro como
  * na web. No aparelho o `dataSet` não existe e é ignorado — como a marca do cartão de contorno (`layout.tsx`).

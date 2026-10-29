@@ -73,6 +73,30 @@ The muted letter, one step smaller: a secondary control that sits beside the mai
 <Button size="sm" quiet leadingIcon="paint-bucket">Theme</Button>
 ```
 
+### Finishes
+
+Two finishes the app chooses — nothing changes unless asked. glow puts a soft glow in the button's own colour under the primary button; ring draws the tone at 30% around a soft-filled button (soft and outline). Focus is still the ring of every button.
+
+```tsx
+<Button variant="primary" glow>Get started</Button>
+<Button appearance="soft" tone="brand" ring>Upgrade</Button>
+<Button appearance="soft" tone="success" ring>Approve</Button>
+<Button variant="danger-outline" ring>Remove</Button>
+```
+
+### Finishes for a whole area
+
+The same attributes on a container — or on <html> — turn a finish on for every button inside; the button with its own prop wins, so glow={false} or ring={false} takes one out.
+
+```tsx
+<div data-glow="true" data-ring="true">
+  <Button variant="primary">Save</Button>
+  <Button appearance="soft" tone="brand">With ring</Button>
+  <Button appearance="soft" tone="brand" ring={false}>Without ring</Button>
+  <Button variant="primary" glow={false}>Without glow</Button>
+</div>
+```
+
 ### Link appearance
 
 Text with no capsule, for inline actions. The underline is there at rest — revealing it on hover would hide the affordance.
@@ -190,3 +214,5 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 | `download` | `boolean \| string` | — | Link attribute, only with `href`. |
 | `render` | `ReactElement` | — | The element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href="/reports" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link. |
 | `share` | `{ url?: string; title?: string; text?: string }` | — | The button shares. It asks the browser whether it can share this link (navigator.canShare) — detecting the capability, not guessing the device. If it can (phones; Chrome, Edge and Safari on desktop), the device's share sheet opens, and cancelling is not an error. If it cannot, it copies the link and shows "Link copied" anchored to the button, at the button's size. If the copy fails, it says so and shows the link selected. The notice speaks to the screen reader. Without url, it is the page's address. Needs the AureaProvider (or aurea.js on the page) to give the notice; it emits [data-aurea-share], which aurea.js also reads. Only on a <button> (ignored with href or render). On native, the same name opens the system share sheet. |
+| `glow` | `boolean` | — | A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native. |
+| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to "no line", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing. |

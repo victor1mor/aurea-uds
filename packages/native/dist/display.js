@@ -25,7 +25,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Image, View } from "react-native";
 import { IconButton, folgaDoToque } from "./actions.js";
-import { canto, acentoDoTom, comOpacidade, criarFolha, fundoDoTom, misturaOpaca, preenchimentoDoTom } from "./estilos.js";
+import { canto, acentoDoTom, comOpacidade, criarFolha, fioDoAcabamento, fundoDoTom, misturaOpaca, preenchimentoDoTom } from "./estilos.js";
 import { Card } from "./layout.js";
 import { gravidadeDoEstado } from "./strings.js";
 import { Icon } from "./icon.js";
@@ -112,7 +112,7 @@ export const formatarContagem = (count, max = 99) => count > max ? `${max}+` : S
 const LETRA_DO_SELO = (t, size) => size === "lg" ? { fontSize: t.size.textBase, lineHeight: t.size.space6 }
     : size === "md" ? { fontSize: t.size.textSm, lineHeight: t.size.space5 }
         : { fontSize: t.size.textXs, lineHeight: t.size.space4 };
-export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, count, max = 99, showZero, leading, trailing, fit = "auto", anchor, badgeContent, invisible, children, style, ...rest }) {
+export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, count, max = 99, showZero, leading, trailing, fit = "auto", anchor, badgeContent, invisible, ring, children, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const categoria = ehCategoria(tone) ? coresDaCategoria(t)[tone] : null;
@@ -136,6 +136,10 @@ export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, c
         // azul no claro, desde a ADR-0076) — misturado ao texto, o amarelo virava mostarda só nesta peça. O nativo não tem
         // marca (`data-brand`), então vale sempre.
         : emphasis === "outline" && tone !== "primary" ? misturaOpaca(letra, t.color.foreground, 0.8) : letra;
+    // O fio (ADR-0086): o tom cheio a 30% — a categoria, que não tem tom de estado, usa a cor da letra dela.
+    const fio = ring && emphasis !== "solid"
+        ? { boxShadow: [fioDoAcabamento(t, categoria ? "neutral" : tone, letra)] } : null;
+    const marcaDoFio = ring !== undefined ? { dataSet: { ring: String(ring) } } : {};
     const numero = count != null ? formatarContagem(count, max) : undefined;
     const miolo = anchor ? (numero ?? badgeContent) : (numero ?? children);
     // Ponto puro: `dot` sem nada para mostrar. Aí o selo não tem conteúdo e ganha medida própria.
@@ -166,8 +170,9 @@ export function Badge({ tone = "neutral", emphasis = "soft", size = "md", dot, c
             anchor && posicaoDaAncora(anchor, folga, medida?.w ?? minimo, medida?.h ?? minimo),
             soPonto && { width: ladoDoPonto, height: ladoDoPonto, paddingHorizontal: 0, paddingVertical: 0,
                 backgroundColor: acento, borderWidth: anchor ? t.size.borderWidth : 0 },
+            fio,
             style,
-        ], ...(anchor ? { accessibilityElementsHidden: true,
+        ], ...marcaDoFio, ...(anchor ? { accessibilityElementsHidden: true,
             importantForAccessibility: "no-hide-descendants" } : rest), children: [dot && !soPonto && _jsx(View, { style: [s.ponto, { backgroundColor: corDoTexto }] }), !soPonto && leading, typeof miolo === "string" || typeof miolo === "number"
                 ? _jsx(Text, { weight: 500, style: [LETRA_DO_SELO(t, size),
                         // Preso, a linha cabe no mínimo menos o fio: a letra fica no meio do círculo de 16.

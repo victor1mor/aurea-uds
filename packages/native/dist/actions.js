@@ -22,7 +22,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 //                 do Lote 3. Aparência sem consumidor é a ADR-0034 ("ter a variante não é usar").
 import * as React from "react";
 import { AccessibilityInfo, Platform, Pressable, Share, View } from "react-native";
-import { canto, comOpacidade, criarFolha, misturaOpaca, preenchimento, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.js";
+import { brilhoDoBotao, canto, comOpacidade, criarFolha, fioDoAcabamento, misturaOpaca, preenchimento, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { Text } from "./text.js";
 import { AvisosContext, useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca } from "./theme.js";
@@ -218,8 +218,21 @@ function useToqueComShare(share, onPress) {
 export function Button(props) {
     return _jsx(CorpoDoBotao, { ...props });
 }
+/** Os acabamentos (ADR-0086) do `Button` e do `IconButton`: o brilho só no principal, o fio só no de fundo suave. A marca
+ *  no navegador (`dataSet`) é a mesma da web (`data-glow`, `data-ring`), e a varredura do site reconhece o fio. */
+function acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDoTexto) {
+    const comBrilho = !!glow && appearance === "solid" && tone === "brand" && !disabled;
+    const comFio = !!ring && appearance === "outline";
+    const acabamento = comBrilho || comFio
+        ? { boxShadow: [...(comBrilho ? [brilhoDoBotao(t)] : []), ...(comFio ? [fioDoAcabamento(t, tone, corDoTexto)] : [])] }
+        : null;
+    const marcaDoAcabamento = glow !== undefined || ring !== undefined
+        ? { dataSet: { ...(glow !== undefined ? { glow: String(glow) } : null), ...(ring !== undefined ? { ring: String(ring) } : null) } }
+        : {};
+    return { acabamento, marcaDoAcabamento };
+}
 /** O corpo do `Button`. `semRecuo` é só do `LinkButton`: sem recuo, sem borda e sem altura. */
-function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size = "md", leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed, disabled, accessibilityLabel, semRecuo = false, share, onPress, ...rest }) {
+function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size = "md", leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed, disabled, accessibilityLabel, semRecuo = false, share, glow, ring, onPress, ...rest }) {
     const t = useAureaTokens();
     const aoTocar = useToqueComShare(share, onPress);
     const s = folha(t);
@@ -245,10 +258,11 @@ function CorpoDoBotao({ children, appearance = "solid", tone = "neutral", size =
         ...(semRecuo ? { height: undefined, paddingHorizontal: 0, borderWidth: 0 } : null),
     }), [medida.altura, medida.recheio, medida.vao, appearance, cor.solido, cor.contorno, corDaBorda, fullWidth, semRecuo, marca, tone, t]);
     const corDoTexto = appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre);
+    const { acabamento, marcaDoAcabamento } = acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDoTexto);
     return (_jsx(Pressable, { disabled: disabled, onPress: aoTocar, accessibilityRole: "button", accessibilityLabel: accessibilityLabel, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [
             s.alvo, fullWidth && s.alvoLargura,
             tocando && s.pressionado, disabled && s.inerte,
-        ], ...rest, children: _jsxs(View, { style: [s.caixa, caixa], children: [leading ?? null, leadingIcon ? _jsx(Icon, { name: leadingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, typeof children === "string"
+        ], ...rest, children: _jsxs(View, { style: [s.caixa, caixa, acabamento], ...marcaDoAcabamento, children: [leading ?? null, leadingIcon ? _jsx(Icon, { name: leadingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, typeof children === "string"
                     // E1 (25/09/2026): entrelinha NORMAL (1,5), como o rótulo do botão da referência
                     // (a folha do botão dela usa a entrelinha de cada degrau da escala). Era `none` (1,0), e a letra
                     // precisa de 1,3 em para caber inteira — a IBM Plex subia 1,025 e descia 0,275; a
@@ -292,7 +306,7 @@ export function folgaDoToque(t, size = "md") {
 }
 /** O corpo do `IconButton`. A cor própria do ícone (`corDoIcone`) é só do `ThemeToggle`: o
  *  `IconButton` público não tem cor solta, e dentro do cartão da marca ela não vale (a tinta vence). */
-function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, corDoIcone, pesoDoIcone, share, onPress, ...comSobras }) {
+function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", size = "md", icons, pressed, disabled, corDoIcone, pesoDoIcone, share, glow, ring, onPress, ...comSobras }) {
     // Quem chama de JavaScript, sem o tipo, ainda pode mandar `leading`/`trailing`: elas não descem ao `Pressable`.
     const { leading: _antes, trailing: _depois, ...rest } = comSobras;
     const t = useAureaTokens();
@@ -303,6 +317,8 @@ function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", siz
     const corDaBorda = marca?.tinta ?? t.color.border;
     // O círculo tem a altura do botão do mesmo tamanho (o só-ícone da referência: `aspect-ratio: 1`).
     const lado = MEDIDA[size](t.size).altura;
+    const corDaLetraDoIcone = corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre);
+    const { acabamento, marcaDoAcabamento } = acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDaLetraDoIcone);
     const caixa = React.useMemo(() => ({
         height: lado, width: lado, paddingHorizontal: 0,
         ...canto(t.size.radiusControl),
@@ -318,7 +334,7 @@ function BotaoDeIcone({ name, label, appearance = "ghost", tone = "neutral", siz
             // nem numa coluna sem alinhamento. O alvo é o maior entre o desenho e o `targetMin`.
             s.alvo, { width: Math.max(lado, t.size.targetMin), alignItems: "center" },
             tocando && s.pressionado, disabled && s.inerte,
-        ], ...rest, children: _jsx(View, { style: [s.caixa, caixa], children: _jsx(Icon, { name: name, size: ICONE[size], icons: icons, weight: pesoDoIcone, color: corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre) }) }) }));
+        ], ...rest, children: _jsx(View, { style: [s.caixa, caixa, acabamento], ...marcaDoAcabamento, children: _jsx(Icon, { name: name, size: ICONE[size], icons: icons, weight: pesoDoIcone, color: corDaLetraDoIcone }) }) }));
 }
 export function ThemeToggle(props) {
     const { theme, toggleTheme } = useAureaTheme();

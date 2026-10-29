@@ -106,6 +106,41 @@ export default {
       render: () => h("div", {style: row}, h(Button, {size: "sm", quiet: true, leadingIcon: "paint-bucket"}, "Theme")),
     },
     {
+      title: "Finishes",
+      description: "Two finishes the app chooses — nothing changes unless asked. glow puts a soft glow in the button's own "
+        + "colour under the primary button; ring draws the tone at 30% around a soft-filled button (soft and outline). "
+        + "Focus is still the ring of every button.",
+      code: [
+        '<Button variant="primary" glow>Get started</Button>',
+        '<Button appearance="soft" tone="brand" ring>Upgrade</Button>',
+        '<Button appearance="soft" tone="success" ring>Approve</Button>',
+        '<Button variant="danger-outline" ring>Remove</Button>',
+      ].join("\n"),
+      render: () => h("div", {style: row},
+        h(Button, {variant: "primary", glow: true}, "Get started"),
+        h(Button, {appearance: "soft", tone: "brand", ring: true}, "Upgrade"),
+        h(Button, {appearance: "soft", tone: "success", ring: true}, "Approve"),
+        h(Button, {variant: "danger-outline", ring: true}, "Remove")),
+    },
+    {
+      title: "Finishes for a whole area",
+      description: "The same attributes on a container — or on <html> — turn a finish on for every button inside; "
+        + "the button with its own prop wins, so glow={false} or ring={false} takes one out.",
+      code: [
+        '<div data-glow="true" data-ring="true">',
+        '  <Button variant="primary">Save</Button>',
+        '  <Button appearance="soft" tone="brand">With ring</Button>',
+        '  <Button appearance="soft" tone="brand" ring={false}>Without ring</Button>',
+        '  <Button variant="primary" glow={false}>Without glow</Button>',
+        '</div>',
+      ].join("\n"),
+      render: () => h("div", {style: row, "data-glow": "true", "data-ring": "true"},
+        h(Button, {variant: "primary"}, "Save"),
+        h(Button, {appearance: "soft", tone: "brand"}, "With ring"),
+        h(Button, {appearance: "soft", tone: "brand", ring: false}, "Without ring"),
+        h(Button, {variant: "primary", glow: false}, "Without glow")),
+    },
+    {
       title: "Link appearance",
       description: "Text with no capsule, for inline actions. The underline is there at rest — revealing it on hover would hide the affordance.",
       code: [

@@ -143,6 +143,22 @@ Inside a column a badge follows the column's width. `fit="content"` keeps it as 
 </Stack>
 ```
 
+### ring — a finish
+
+A finish the app chooses: the tone at 30% around a badge that is not solid, inside the edge, so the size never changes. data-ring="true" on a container turns it on for every badge inside, and ring={false} takes one out.
+
+```tsx
+<Badge tone="primary" ring>Brand</Badge>
+<Badge tone="success" ring>Paid</Badge>
+<Badge tone="danger" ring>Overdue</Badge>
+<Badge tone="info" emphasis="outline" ring>New</Badge>
+
+<div data-ring="true">
+  <Badge tone="warning">Review</Badge>
+  <Badge tone="warning" ring={false}>Without ring</Badge>
+</div>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -161,3 +177,4 @@ Inside a column a badge follows the column's width. `fit="content"` keeps it as 
 | `invisible` | `boolean` | false | Hides the overlay without moving the child. Use it when the count is loading rather than absent. |
 | `children` | `ReactNode` | — | The label — or, with `anchor`, the element being decorated. Short by construction: it is a pill, and a badge that wraps to a second line is a sentence in the wrong component. |
 | `badgeContent` | `ReactNode` | — | What the overlay shows when it is not a number. Named after a reference library's prop and not `content`, which collides with the HTML attribute of that name. |
+| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a badge that is not solid, its tone at 30%, inside the edge — it never changes the size. It is a line — the named exception to "no line", only when chosen. Writes data-ring; the same attribute on a container (or <html>) covers the badges inside, and ring={false} takes one out. On solid it draws nothing. Web and native. |

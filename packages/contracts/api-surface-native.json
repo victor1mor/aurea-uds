@@ -7,7 +7,7 @@
     "componentes": 90,
     "hooks": 16,
     "aliasesLiterais": 69,
-    "propsDistintas": 206
+    "propsDistintas": 208
   },
   "aliases": {
     "AureaButtonAppearance": {
@@ -2417,6 +2417,18 @@
               "optional": true,
               "type": "AureaShareData",
               "values": null
+            },
+            {
+              "name": "glow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "ring",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -2519,6 +2531,18 @@
               "name": "share",
               "optional": true,
               "type": "AureaShareData",
+              "values": null
+            },
+            {
+              "name": "glow",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "ring",
+              "optional": true,
+              "type": "boolean",
               "values": null
             },
             {
@@ -3396,6 +3420,12 @@
               "values": null
             },
             {
+              "name": "ring",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "children",
               "optional": true,
               "type": "React.ReactNode",
@@ -3514,6 +3544,12 @@
             },
             {
               "name": "invisible",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "ring",
               "optional": true,
               "type": "boolean",
               "values": null

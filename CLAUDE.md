@@ -198,6 +198,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.44.0` | O bloco 2, a lateral inteira: `Sidebar` com `collapsible`, `indicator` e `panel`, `Sidebar.Provider`, `Sidebar.Toggle` e `useSidebar` (o Ctrl+B), no item `avatar`, `action`, o grupo que dobra e o `"separator"`, o texto e o fio a 16 e a lateral solta do topo até embaixo ([ADR-0082](decisions/0082-a-lateral-inteira.md)) — pedido #99. **Publicada em 26/10/2026** (entre 19:50 e 19:55, Brasília, medido no npm), pelo terminal do Victor |
 | `0.45.0` | As cores, passo A — a paleta da 1.0: os neutros Zinco, no claro o amarelo nunca é letra (o destaque e o link na cor do texto, o link com marca-texto), as marcas brancas nos controles, o foco dos campos no amarelo, o campo branco em todo lugar, o botão ligado amarelo, a linha do tempo consertada, o "aumentar contraste" do sistema e quatro tokens novos; a `lory` congelada ([ADR-0083](decisions/0083-a-paleta-da-1-0.md)) — pedido #100. **Publicada em 27/10/2026** (entre 16:20 e 16:28, Brasília, medido no npm), pelo terminal do Victor |
 | `0.46.0` | As cores, passo B — os estilos novos: `pressedStyle` no botão ligado (só web), `selectedStyle` no `SegmentedControl`, `variant` na `Timeline` e `currentStyle` no `BottomNav` (13 valores), web e nativo; a barra de baixo na mesma altura nos nove formatos; as duas exceções, o degradê do `brand-gradient` e os aros por dentro ([ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md)) — pedido #101. **Publicada em 28/10/2026** (entre 09:55 e 10:02, Brasília, medido no npm), pelo terminal do Victor |
+| `0.47.0` | As cores, passo C — as treze marcas: a `lory` passa a se chamar Aurea Ember (só o nome, sem apelido) e as 11 marcas da paleta da 1.0 entram, na web (`data-brand`) e no nativo (`brand` no `AureaProvider`); a `Toolbar` nas medidas da referência; o contador e o ponto da barra de baixo vermelhos; a Ember com os estilos novos ([ADR-0085](decisions/0085-as-treze-marcas.md)) — pedido #102. **Publicada em 28/10/2026** (entre 19:35 e 19:41, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -682,6 +683,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    de mexer. **Publicada em 28/10/2026** (entre 09:55 e 10:02, Brasília, medido no npm), pelo terminal do Victor, da junção
    do pedido #101. O registro entrou no lote seguinte (as cores, passo C).
 
+45. **`0.47.0`, as cores, passo C — as treze marcas, feita em 28/10/2026** ([ADR-0085](decisions/0085-as-treze-marcas.md)) —
+   o começo (*"Pode começar"*, *"As 11"*): a Aurea Ember (a antiga `lory`) e as 11 marcas da paleta da 1.0 com os neutros
+   da Aurea; o que a bancada achou e o Victor decidiu olhando (a `Toolbar` nas medidas da referência, o contador e o ponto da
+   barra de baixo vermelhos como no nativo, a Ember com os estilos novos e as marcas brancas no escuro); e o nativo também
+   (*"ele precisa atualizar e receber também"*). Aprovada (*"Aprovo"*). ⚠ **As lições:** (1) SUGESTÃO do documento não é
+   ordem — o apelido `lory` foi adotado sem perguntar, e o Victor mandou tirar (*"pare com paliativo mude de verdade"*,
+   *"mude 100% lory para ember"*); (2) decisão que a sessão tomou sozinha se mostra VISUAL, lado a lado (como a proposta
+   pedia × como ficou), e não em número — ele manteve as cinco olhando; (3) a troca automática de nome quebrou o próprio
+   teste que procurava o nome antigo e deixou dois textos dizendo o nome novo onde era o velho — conferir o que a troca
+   alcança. **Publicada em 28/10/2026** (entre 19:35 e 19:41, Brasília, medido no npm), pelo terminal do Victor, da junção
+   do pedido #102. O registro entrou no lote seguinte (os acabamentos).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -866,7 +879,8 @@ no git.
   contraste" do sistema acende: o contorno de 3:1 dos campos (`--input-strong`, ADR-0083), uma exceção nomeada na trava,
   presa ao `@media (prefers-contrast:more)` (e o do botão ligado cinza, ADR-0084). E os AROS dos estilos de aro, que o app
   escolhe (o segmento `ring`, o item `ring`, `white-ring` e `bar-ring` da barra de baixo, o ponto `ring` da linha do tempo —
-  ADR-0084): sempre sombra por dentro, nunca borda, e só quando escolhidos. Quem cobra: `tests/unit/sem-linha.test.tsx`
+  ADR-0084) e o FIO dos acabamentos (`ring`, o tom a 30% em volta do fundo suave — ADR-0086): sempre sombra por dentro,
+  nunca borda, e só quando escolhidos. Quem cobra: `tests/unit/sem-linha.test.tsx`
   (o código, em todo estado) e a varredura "nenhuma peça desenha linha" (toda página, dois temas, três navegadores).
   **O CAMPO NO CLARO É BRANCO COM SOMBRA** (decisão do Victor, 22/10/2026, *"gostei Branco + sombra"*,
   [ADR-0078](decisions/0078-no-claro-o-campo-e-branco-com-sombra.md)): solto na página, a cor do cartão e o `--shadow-sm`

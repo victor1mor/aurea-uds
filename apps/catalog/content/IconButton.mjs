@@ -122,5 +122,13 @@ export default {
         valores: ["xs", "sm", "md", "lg", "xl"], estilo: row,
         codigo: v => `<IconButton icon="star" label="Size ${v}" size="${v}" />`,
         peca: v => h(IconButton, {icon: "star", label: `Size ${v}`, size: v})}),
+      {
+        title: "Finishes",
+        description: "The Button's finishes, chosen by the app: glow under the primary one, ring around a soft-filled one.",
+        code: '<IconButton icon="plus" label="Add" variant="primary" glow />\n<IconButton icon="star" label="Favourite" appearance="soft" tone="brand" ring />',
+        render: () => h("div", {style: row},
+          h(IconButton, {icon: "plus", label: "Add", variant: "primary", glow: true}),
+          h(IconButton, {icon: "star", label: "Favourite", appearance: "soft", tone: "brand", ring: true})),
+      },
   ],
 };

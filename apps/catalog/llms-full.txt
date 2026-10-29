@@ -3087,6 +3087,22 @@ Inside a column a badge follows the column's width. `fit="content"` keeps it as 
 </Stack>
 ```
 
+### ring — a finish
+
+A finish the app chooses: the tone at 30% around a badge that is not solid, inside the edge, so the size never changes. data-ring="true" on a container turns it on for every badge inside, and ring={false} takes one out.
+
+```tsx
+<Badge tone="primary" ring>Brand</Badge>
+<Badge tone="success" ring>Paid</Badge>
+<Badge tone="danger" ring>Overdue</Badge>
+<Badge tone="info" emphasis="outline" ring>New</Badge>
+
+<div data-ring="true">
+  <Badge tone="warning">Review</Badge>
+  <Badge tone="warning" ring={false}>Without ring</Badge>
+</div>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -3105,6 +3121,7 @@ Inside a column a badge follows the column's width. `fit="content"` keeps it as 
 | `invisible` | `boolean` | false | Hides the overlay without moving the child. Use it when the count is loading rather than absent. |
 | `children` | `ReactNode` | — | The label — or, with `anchor`, the element being decorated. Short by construction: it is a pill, and a badge that wraps to a second line is a sentence in the wrong component. |
 | `badgeContent` | `ReactNode` | — | What the overlay shows when it is not a number. Named after a reference library's prop and not `content`, which collides with the HTML attribute of that name. |
+| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a badge that is not solid, its tone at 30%, inside the edge — it never changes the size. It is a line — the named exception to "no line", only when chosen. Writes data-ring; the same attribute on a container (or <html>) covers the badges inside, and ring={false} takes one out. On solid it draws nothing. Web and native. |
 </page>
 
 <page url="https://aureauds.dev/banner.html">
@@ -3520,6 +3537,30 @@ The muted letter, one step smaller: a secondary control that sits beside the mai
 <Button size="sm" quiet leadingIcon="paint-bucket">Theme</Button>
 ```
 
+### Finishes
+
+Two finishes the app chooses — nothing changes unless asked. glow puts a soft glow in the button's own colour under the primary button; ring draws the tone at 30% around a soft-filled button (soft and outline). Focus is still the ring of every button.
+
+```tsx
+<Button variant="primary" glow>Get started</Button>
+<Button appearance="soft" tone="brand" ring>Upgrade</Button>
+<Button appearance="soft" tone="success" ring>Approve</Button>
+<Button variant="danger-outline" ring>Remove</Button>
+```
+
+### Finishes for a whole area
+
+The same attributes on a container — or on <html> — turn a finish on for every button inside; the button with its own prop wins, so glow={false} or ring={false} takes one out.
+
+```tsx
+<div data-glow="true" data-ring="true">
+  <Button variant="primary">Save</Button>
+  <Button appearance="soft" tone="brand">With ring</Button>
+  <Button appearance="soft" tone="brand" ring={false}>Without ring</Button>
+  <Button variant="primary" glow={false}>Without glow</Button>
+</div>
+```
+
 ### Link appearance
 
 Text with no capsule, for inline actions. The underline is there at rest — revealing it on hover would hide the affordance.
@@ -3637,6 +3678,8 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 | `download` | `boolean \| string` | — | Link attribute, only with `href`. |
 | `render` | `ReactElement` | — | The element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href="/reports" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link. |
 | `share` | `{ url?: string; title?: string; text?: string }` | — | The button shares. It asks the browser whether it can share this link (navigator.canShare) — detecting the capability, not guessing the device. If it can (phones; Chrome, Edge and Safari on desktop), the device's share sheet opens, and cancelling is not an error. If it cannot, it copies the link and shows "Link copied" anchored to the button, at the button's size. If the copy fails, it says so and shows the link selected. The notice speaks to the screen reader. Without url, it is the page's address. Needs the AureaProvider (or aurea.js on the page) to give the notice; it emits [data-aurea-share], which aurea.js also reads. Only on a <button> (ignored with href or render). On native, the same name opens the system share sheet. |
+| `glow` | `boolean` | — | A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native. |
+| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to "no line", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing. |
 </page>
 
 <page url="https://aureauds.dev/buttongroup.html">
@@ -4178,6 +4221,7 @@ import {Chip} from "@aurea-uds/react";
 | `invisible` | `boolean` | false | Hides the overlay without moving the child. Use it when the count is loading rather than absent. |
 | `children` | `ReactNode` | — | The label — or, with `anchor`, the element being decorated. Short by construction: it is a pill, and a badge that wraps to a second line is a sentence in the wrong component. |
 | `badgeContent` | `ReactNode` | — | What the overlay shows when it is not a number. Named after a reference library's prop and not `content`, which collides with the HTML attribute of that name. |
+| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a badge that is not solid, its tone at 30%, inside the edge — it never changes the size. It is a line — the named exception to "no line", only when chosen. Writes data-ring; the same attribute on a container (or <html>) covers the badges inside, and ring={false} takes one out. On solid it draws nothing. Web and native. |
 </page>
 
 <page url="https://aureauds.dev/closebutton.html">
@@ -6845,6 +6889,15 @@ The control scale; on a touch screen every size keeps a 44 target.
 <IconButton icon="star" label="Size xl" size="xl" />
 ```
 
+### Finishes
+
+The Button's finishes, chosen by the app: glow under the primary one, ring around a soft-filled one.
+
+```tsx
+<IconButton icon="plus" label="Add" variant="primary" glow />
+<IconButton icon="star" label="Favourite" appearance="soft" tone="brand" ring />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -6869,6 +6922,8 @@ The control scale; on a touch screen every size keeps a 44 target.
 | `pressed` | `boolean` | — | Deprecated, removed in 1.0: paints and announces aria-pressed while YOU keep the state. Use Toggle, which keeps the state and demands an accessible name when it is icon-only. |
 | `share` | `{ url?: string; title?: string; text?: string }` | — | The button shares. It asks the browser whether it can share this link (navigator.canShare) — detecting the capability, not guessing the device. If it can (phones; Chrome, Edge and Safari on desktop), the device's share sheet opens, and cancelling is not an error. If it cannot, it copies the link and shows "Link copied" anchored to the button, at the button's size. If the copy fails, it says so and shows the link selected. The notice speaks to the screen reader. Without url, it is the page's address. Needs the AureaProvider (or aurea.js on the page) to give the notice; it emits [data-aurea-share], which aurea.js also reads. Only on a <button> (ignored with href or render). On native, the same name opens the system share sheet. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller — the Button's quiet. |
+| `glow` | `boolean` | — | A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native. |
+| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to "no line", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing. |
 </page>
 
 <page url="https://aureauds.dev/image.html">
@@ -10781,6 +10836,8 @@ pressedStyle (ADR-0084), when the button is pressed: brand — the default — n
 | `render` | `ReactElement` | — | Inherited from Button: the element that renders the button — the router's link, for example — receiving the Aurea skin and the content. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller — the Button's quiet. |
 | `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. |
+| `glow` | `boolean` | — | A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native. |
+| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to "no line", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing. |
 </page>
 
 <page url="https://aureauds.dev/toolbargroup.html">
@@ -17361,6 +17418,38 @@ import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
   <LogStream lines={tail} />
   <Button variant="outline">Pause live tail</Button>
 </Card>
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-48-0.html">
+# v0.48.0
+
+Two finishes you can choose — a glow under the primary button and a soft ring around tinted pieces — and a blurred header you can read over anything.
+
+Two new finishes, off unless you ask for them, and a fix to the blurred header. Read "Look and feel" if you use `Header` with `blurred`.
+
+## Look and feel
+
+- **`Header` with `blurred`** is no longer transparent: it is the card colour at 72%, with the colours behind it a little more vivid. Transparent, the header text sat straight on whatever scrolled underneath and could drop to 1.83:1 over a yellow block in dark mode; now it never goes below 9:1. When the browser cannot blur, or the system asks for reduced transparency, the header is the solid card colour (it was the page colour).
+
+## New
+
+- **`glow`** on `Button` and `IconButton` (web and React Native) and `ToolbarButton` (web): a soft glow in the primary button's own colour at 40%, under it. Focus is still the ring. On any other button it draws nothing.
+- **`ring`** on `Button`, `IconButton`, `Badge` and `Chip` (web and React Native) and `ToolbarButton` (web): around a tinted piece — a badge that is not solid, a `soft` or outline button (on React Native, `outline`) — its tone at 30%, inside the edge, so the size never changes.
+- **`data-glow="true"` and `data-ring="true"` on a container** (or on `<html>`) turn a finish on for everything inside. A piece with its own prop wins, so `glow={false}` or `ring={false}` takes one out.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.48.0 @aurea-uds/core@0.48.0 @aurea-uds/fonts@0.48.0 @aurea-uds/icons@0.48.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.48.0
 ```
 </page>
 

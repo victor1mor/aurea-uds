@@ -240,6 +240,18 @@
       "type": "boolean",
       "default": "false",
       "description": "Less weight: muted text one step smaller — the Button's quiet."
+    },
+    {
+      "name": "glow",
+      "type": "boolean",
+      "default": "—",
+      "description": "A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native."
+    },
+    {
+      "name": "ring",
+      "type": "boolean",
+      "default": "—",
+      "description": "A finish the app chooses (ADR-0086): around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to \"no line\", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing."
     }
   ]
 }

@@ -311,11 +311,14 @@ img,svg { display:block; }
    segunda exceção ao sem linha (ADR-0072), desenhada, de uma ponta à outra da barra, na cor da linha. */
 .topbar-divider::after { content:""; position:absolute; inset-inline:0; inset-block-end:0; block-size:var(--border-width);
   background:var(--border); pointer-events:none; }
-/* blurred (15/10/2026), só na `flush`: o fundo transparente que embaça o que passa por baixo — o desfoque de 16 da
-   referência. Quem pede menos transparência ao sistema, e o navegador sem desfoque, ficam com o fundo cheio. */
-.topbar-flush.topbar-blurred { background:transparent; -webkit-backdrop-filter:blur(var(--space-4)); backdrop-filter:blur(var(--space-4)); }
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) { .topbar-flush.topbar-blurred { background:var(--background); } }
-@media (prefers-reduced-transparency:reduce) { .topbar-flush.topbar-blurred { background:var(--background); -webkit-backdrop-filter:none; backdrop-filter:none; } }
+/* blurred (15/10/2026), só na `flush`: o fundo que embaça o que passa por baixo — o desfoque de 16 da referência.
+   ~~O fundo transparente~~ → a cor do CARTÃO a 72%, com a cor de trás mais viva (ADR-0086, 28/10/2026): transparente,
+   a letra da barra ficava direto sobre a cor desfocada — 1,83:1 sobre o amarelo no escuro e 3,28:1 sobre o vermelho no
+   claro, medido na bancada; a 72%, nunca menos de 9:1. Quem pede menos transparência ao sistema, e o navegador sem
+   desfoque, ficam com o cartão cheio. */
+.topbar-flush.topbar-blurred { background:color-mix(in oklab, var(--card) 72%, transparent); -webkit-backdrop-filter:blur(var(--space-4)) saturate(160%); backdrop-filter:blur(var(--space-4)) saturate(160%); }
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) { .topbar-flush.topbar-blurred { background:var(--card); } }
+@media (prefers-reduced-transparency:reduce) { .topbar-flush.topbar-blurred { background:var(--card); -webkit-backdrop-filter:none; backdrop-filter:none; } }
 /* menuActions (15/10/2026): o que só o menu do celular leva (o GitHub, na referência), embaixo dos links, depois de uma
    linha. */
 .topbar-menu-actions { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); margin-block-start:var(--space-4); padding-block-start:var(--space-4); border-block-start:var(--border-width) solid transparent; }
@@ -4656,6 +4659,25 @@ button.graph-node-body { cursor:pointer; }
 /* A classe DOBRADA é força, de propósito: a regra do nome na cor do texto (o 2.11, acima) também casa com a barra amarela,
    e no escuro pintaria o nome de branco sobre o amarelo. */
 :is([data-current-style^="bar-"] .bottom-nav.bottom-nav:not([data-current-style]),.bottom-nav.bottom-nav[data-current-style^="bar-"]):is(.bottom-nav-ind-circle,.bottom-nav-ind-circle-outline,.bottom-nav-ind-circle-raised,.bottom-nav-ind-capsule) .bottom-nav-item.bottom-nav-item[aria-current] { color:var(--primary-foreground); }
+
+/* ═══ OS ACABAMENTOS (ADR-0086, 28/10/2026) ═══════════════════════════════════════════════════════════════════════
+   Dois acabamentos que o APP escolhe — nenhuma peça muda sem pedir. Cada um é uma prop que escreve um atributo na peça
+   (`glow` → `data-glow`, `ring` → `data-ring`); o mesmo atributo num contêiner, ou no `<html>`, vale para todos os de
+   dentro, e a peça com o seu atributo ganha do contêiner — o molde dos estilos do passo B (ADR-0084, item 6).
+   1. O BRILHO (`data-glow="true"`): no botão principal, uma sombra difusa embaixo, na cor dele a 40%. O foco continua o
+      anel (`outline`), e o brilho fica: esta regra tem mais força que o `:focus-visible` geral, que zera a sombra.
+   2. O FIO (`data-ring="true"`): em volta do fundo suave — o selo que não é cheio e o botão `soft` ou de contorno —, o
+      tom a 30%, POR DENTRO. É linha: exceção nomeada à ADR-0072, como os estilos de aro, e só existe quando o app escolhe.
+      Fica abaixo de 3:1 de propósito: é acabamento, e quem separa a peça do fundo continua sendo o fundo dela. */
+:is([data-glow="true"] .btn-primary:not([data-glow]),.btn-primary[data-glow="true"]):not(:disabled):not([aria-disabled="true"]) {
+  box-shadow:0 var(--space-1) calc(var(--space-3) + var(--space-05)) 0 color-mix(in oklab, var(--primary) 40%, transparent); }
+:is(.badge-primary,.btn-tone-brand,.btn-primary-outline) { --ring-tone:var(--primary); }
+:is(.badge-success,.btn-tone-success) { --ring-tone:var(--success); }
+:is(.badge-danger,.btn-tone-danger,.btn-danger-outline,.btn-danger-soft) { --ring-tone:var(--destructive); }
+:is(.badge-info,.btn-tone-info) { --ring-tone:var(--info); }
+:is(.badge-warning,.btn-tone-warning) { --ring-tone:var(--warning); }
+:is([data-ring="true"] :is(.badge:not(.badge-solid),.btn-soft,.btn-outline,.btn-primary-outline,.btn-danger-outline):not([data-ring]),:is(.badge:not(.badge-solid),.btn-soft,.btn-outline,.btn-primary-outline,.btn-danger-outline)[data-ring="true"]) {
+  box-shadow:inset 0 0 0 var(--border-width) color-mix(in oklab, var(--ring-tone, currentColor) 30%, transparent); }
 
 /* >>> camada responsiva — GERADA por scripts/build-responsive-layer.mjs <<< */
 /* As variáveis de passo NÃO HERDAM. Ver o comentário de VARIAVEIS no gerador: um ícone dentro

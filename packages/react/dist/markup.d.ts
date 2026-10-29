@@ -277,8 +277,12 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, RefAttribut
     /** Conteúdo do badge no modo sobreposto (no modo chip, quem manda é `children`).
      *  Chama-se assim, e não `content`, porque este colide com o atributo HTML de mesmo nome. */
     badgeContent?: ReactNode;
+    /** O fio (ADR-0086, 28/10/2026): em volta do selo que não é cheio, o tom a 30%, por dentro. É linha — a exceção
+     *  nomeada à ADR-0072, só quando o app escolhe. Escreve `data-ring`; o mesmo atributo num contêiner vale para os selos
+     *  de dentro, e `ring={false}` tira um deles. No `solid`, não desenha nada. */
+    ring?: boolean;
 }
-export declare function Badge({ variant: variantProp, tone, emphasis, size, dot, leading, trailing, image, imageAlt, count, max, showZero, fit, anchor, anchorShape, invisible, badgeContent, children, className, ...props }: BadgeProps): React.JSX.Element;
+export declare function Badge({ variant: variantProp, tone, emphasis, size, dot, leading, trailing, image, imageAlt, count, max, showZero, fit, anchor, anchorShape, invisible, badgeContent, ring, children, className, ...props }: BadgeProps): React.JSX.Element;
 /** `Chip` é outro nome do `Badge` (GAR-20, 19/10/2026): o nome que a referência dá à mesma peça. Igual em tudo. */
 export type ChipProps = BadgeProps;
 /** `Chip` é outro nome do `Badge` (GAR-20, 19/10/2026): o nome que a referência dá à mesma peça. Igual em tudo. */

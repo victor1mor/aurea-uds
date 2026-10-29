@@ -33,5 +33,15 @@ export default {
       valores: ["top-end", "top-start", "bottom-end", "bottom-start"],
       codigo: v => `<Badge anchor="${v}" count={3} tone="danger" emphasis="solid">\n  <IconButton name="star" label="Starred, 3 new" />\n</Badge>`,
       peca: v => h(Badge, {anchor: v, count: 3, tone: "danger", emphasis: "solid"}, h(IconButton, {name: "star", label: `Starred, 3 new (${v})`}))}),
+    {
+      title: "ring — a finish",
+      description: "A finish the app chooses, the same as the web: the tone at 30% around a badge that is not solid, inside the edge, so the size never changes.",
+      code: `<Badge tone="primary" ring>Brand</Badge>
+<Badge tone="success" ring>Paid</Badge>
+<Badge tone="danger" emphasis="outline" ring>Overdue</Badge>`,
+      render: () => h("div", {style: {display: "flex", gap: "var(--space-3)", flexWrap: "wrap", alignItems: "center"}},
+        h(Badge, {tone: "primary", ring: true}, "Brand"), h(Badge, {tone: "success", ring: true}, "Paid"),
+        h(Badge, {tone: "danger", emphasis: "outline", ring: true}, "Overdue")),
+    },
   ],
 };
