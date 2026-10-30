@@ -55,7 +55,7 @@ Many components take other elements through named props. The component places th
 
 | Component | Slots |
 |---|---|
-| `AppShell` | `brand`, `navigation`, `topbar`, `aside`, `children` |
+| `AppShell` | `brand`, `navigation`, `topbar`, `sidebarFooter`, `aside`, `children` |
 | `Header` | `brand`, `actions`, `menuActions`, `children` |
 | `Button` | `leadingIcon`, `trailingIcon`, `kbd` |
 | `Badge` | `leading`, `trailing` |

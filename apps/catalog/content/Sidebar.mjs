@@ -157,6 +157,7 @@ export default {
     "Groups that fold (collapsible), an action beside a group or an item (action), a gap between sections (\"separator\"), "
     + "a photo in place of the icon (avatar), sections with a panel (panel) and five ways to draw the current item "
     + "(indicator).",
+    "A dark sidebar on any page (contrast): dark on the light theme, darker than the page on the dark one.",
   ],
   examples: [
     {
@@ -356,6 +357,45 @@ export default {
         ...INDICADORES.map(([valor, rotulo]) => h(Sidebar, {key: valor, indicator: valor, label: rotulo, "aria-label": rotulo, current: "button", items: ITENS,
           style: {position: "static", height: "auto", margin: 0}})),
         h("main", null)),
+    },
+    // MNT-36 (0.50.0): a lateral de contraste — a forma A da bancada das 13 marcas.
+    {
+      title: "Dark on any page",
+      description: "contrast keeps the sidebar dark in both themes: it carries the dark theme inside, like the contrast card. "
+        + "On a light page it is the dark card; on a dark page it goes darker than the page, so it still stands apart. "
+        + "AppShell forwards it as sidebarContrast.",
+      code: `<Sidebar
+  contrast
+  label="Components"
+  current="button"
+  items={items}
+  header={<Sidebar.Brand logo="A" name="Acme Plans" description="Workspace" />}
+  footer={<Sidebar.User avatar={<Avatar fallback="KM" alt="" />} name="Kate Moore" description="Admin"
+    action={<IconButton icon="sign-out" label="Log out" size="sm" />} />}
+/>`,
+      embed: true,
+      layoutProprio: true,
+      render: () => moldura({label: "Components on a dark sidebar", contrast: true, current: "button", items: ITENS,
+        header: marcaDoApp, footer: pessoa}),
+    },
+    {
+      title: "Dark, against the edge",
+      description: "contrast works with every arrangement. With variant=\"flush\" the dark sidebar sits against the edge, "
+        + "full height, with square corners; in the AppShell, sidebarVariant=\"flush\" sidebarContrast.",
+      code: `<Sidebar
+  contrast
+  variant="flush"
+  label="Components"
+  current="button"
+  items={items}
+  header={<Sidebar.Brand logo="A" name="Acme Plans" description="Workspace" />}
+  footer={<Sidebar.User avatar={<Avatar fallback="KM" alt="" />} name="Kate Moore" description="Admin"
+    action={<IconButton icon="sign-out" label="Log out" size="sm" />} />}
+/>`,
+      embed: true,
+      layoutProprio: true,
+      render: () => moldura({label: "Components on a dark flush sidebar", contrast: true, variant: "flush", current: "button",
+        items: ITENS, header: marcaDoApp, footer: pessoa}),
     },
     {
       title: "Collapsed into a capsule",

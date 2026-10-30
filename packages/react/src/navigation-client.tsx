@@ -540,7 +540,7 @@ return <BasePopover.Root>
 <nav className="sidebar-nav" aria-labelledby={tituloId}>{sidebarList(sec.items??[],{...ctx,collapsed:false})}</nav>
 </BasePopover.Popup></BasePopover.Positioner></BasePopover.Portal>
 </BasePopover.Root>}
-export function Sidebar({items,current,collapsed,collapsible,indicator="brand",panel,variant="floating",placement="left",scrollbar="hover",label,header,footer,children,className,onClick,id,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items?:SidebarEntry[];current?:string;collapsed?:boolean;variant?:SidebarVariant;placement?:SidebarPlacement;scrollbar?:SidebarScrollbar;label?:string;
+export function Sidebar({items,current,collapsed,collapsible,indicator="brand",panel,contrast=false,variant="floating",placement="left",scrollbar="hover",label,header,footer,children,className,onClick,id,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items?:SidebarEntry[];current?:string;collapsed?:boolean;variant?:SidebarVariant;placement?:SidebarPlacement;scrollbar?:SidebarScrollbar;label?:string;
   /** O jeito de recolher (4-A): `icon` (a trilha, o padrão), `capsule` (a trilha em cápsula) ou `offcanvas` (sai da tela).
    *  Dentro de um `Sidebar.Provider`, vem dele. */
   collapsible?:SidebarCollapsible;
@@ -549,6 +549,9 @@ export function Sidebar({items,current,collapsed,collapsible,indicator="brand",p
   /** A trilha das seções com o painel (4-F e 4-G): os itens do primeiro nível viram seções, e a lista da seção mora num
    *  painel — `docked`, ao lado da trilha (recolher esconde só o painel), ou `overlay`, por cima, ao lado do ícone. */
   panel?:"docked"|"overlay";
+  /** A lateral de contraste (MNT-36): escura nas duas telas. Leva o tema escuro por dentro, como o `Card variant="contrast"`;
+   *  numa página clara, o fundo é o cartão do escuro; numa página escura, mais escuro que a página. */
+  contrast?:boolean;
   /** O topo fixo (4-C): a marca do app (`Sidebar.Brand`), a busca. Não rola com a lista. */
   header?:ReactNode;
   /** O pé fixo (4-C): a pessoa e o sair (`Sidebar.User`), a lista curta (`Sidebar.Nav`), o cartão de destaque. Não rola com a lista. */
@@ -572,12 +575,12 @@ if(panel){
   const trilha=<nav className="sidebar-nav" aria-label={label??s.sidebarLabel}><ul className="sidebar-list">{secoes.map(sec=><li key={sec.id}>{panel==="overlay"
     ?<SidebarSectionFlyout sec={sec} ctx={ctxTrilha}/>
     :<SidebarSectionButton sec={sec} ctx={ctxTrilha} aberta={sec.id===secao?.id} painelId={painelId} recolhida={recolhida} onEscolher={()=>{setEscolhida(sec.id);if(recolhida)estado?.setCollapsed(false)}}/>}</li>)}</ul></nav>;
-  return <aside id={id??estado?.id} className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,`sidebar-panel-${panel}`,recolhida&&"sidebar-collapsed",indicator!=="brand"&&`sidebar-indicator-${indicator}`,placement==="right"&&"sidebar-right",scrollbar==="visible"&&"sidebar-scrollbar-visible",className)} data-placement={placement} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
+  return <aside id={id??estado?.id} className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,`sidebar-panel-${panel}`,contrast&&"sidebar-contrast",recolhida&&"sidebar-collapsed",indicator!=="brand"&&`sidebar-indicator-${indicator}`,placement==="right"&&"sidebar-right",scrollbar==="visible"&&"sidebar-scrollbar-visible",className)} data-placement={placement} {...(contrast?{"data-theme":"dark"}:null)} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
   <div className="sidebar-rail-box"><SidebarContext.Provider value={naTrilha}>{header!=null&&<div className="sidebar-header">{header}</div>}<div className="sidebar-body">{trilha}{children}</div>{footer!=null&&<div className="sidebar-footer">{footer}</div>}</SidebarContext.Provider></div>
   {panel==="docked"&&secao&&<div className="sidebar-panel" id={painelId} hidden={recolhida}><p className="sidebar-panel-title" id={painelId+"-titulo"}>{secao.label}</p><nav className="sidebar-nav" aria-labelledby={painelId+"-titulo"}>{sidebarList(secao.items??[],{baseId,current,collapsed:false})}</nav></div>}
   </aside>;
 }
-return <aside id={id??estado?.id} className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,recolhida&&"sidebar-collapsed",forma!=="icon"&&`sidebar-collapse-${forma}`,indicator!=="brand"&&`sidebar-indicator-${indicator}`,placement==="right"&&"sidebar-right",scrollbar==="visible"&&"sidebar-scrollbar-visible",partes&&"sidebar-with-parts",className)} data-placement={placement} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
+return <aside id={id??estado?.id} className={cx("sidebar",variant!=="floating"&&`sidebar-${variant}`,contrast&&"sidebar-contrast",recolhida&&"sidebar-collapsed",forma!=="icon"&&`sidebar-collapse-${forma}`,indicator!=="brand"&&`sidebar-indicator-${indicator}`,placement==="right"&&"sidebar-right",scrollbar==="visible"&&"sidebar-scrollbar-visible",partes&&"sidebar-with-parts",className)} data-placement={placement} {...(contrast?{"data-theme":"dark"}:null)} onClick={e=>{onClick?.(e);fecharGavetaAoEscolher(e)}} {...props}>
 <SidebarContext.Provider value={contexto}>
 {partes
 ?<>{header!=null&&<div className="sidebar-header">{header}</div>}<div className="sidebar-body">{lista}{children}</div>{footer!=null&&<div className="sidebar-footer">{footer}</div>}</>

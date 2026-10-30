@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 10,
     "aliasesLiterais": 118,
-    "propsDistintas": 392
+    "propsDistintas": 394
   },
   "aliases": {
     "ButtonVariant": {
@@ -7671,6 +7671,12 @@
               ]
             },
             {
+              "name": "sidebarContrast",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "defaultSidebarCollapsed",
               "optional": true,
               "type": "boolean",
@@ -10184,6 +10190,12 @@
                 "docked",
                 "overlay"
               ]
+            },
+            {
+              "name": "contrast",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             },
             {
               "name": "header",

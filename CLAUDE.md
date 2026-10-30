@@ -201,6 +201,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.47.0` | As cores, passo C — as treze marcas: a `lory` passa a se chamar Aurea Ember (só o nome, sem apelido) e as 11 marcas da paleta da 1.0 entram, na web (`data-brand`) e no nativo (`brand` no `AureaProvider`); a `Toolbar` nas medidas da referência; o contador e o ponto da barra de baixo vermelhos; a Ember com os estilos novos ([ADR-0085](decisions/0085-as-treze-marcas.md)) — pedido #102. **Publicada em 28/10/2026** (entre 19:35 e 19:41, Brasília, medido no npm), pelo terminal do Victor |
 | `0.48.0` | Os acabamentos: o brilho (`glow`, no `Button` e no `IconButton`) e o fio (`ring`, no `Button`, no `IconButton`, no `Badge` e no `Chip`), web e nativo, também por `data-glow`/`data-ring` num contêiner da web; e o `Header` `blurred` que se lê sobre qualquer coisa (o cartão a 72% com o desfoque, só na web) ([ADR-0086](decisions/0086-os-acabamentos.md)) — pedido #103. **Publicada em 29/10/2026** (entre 10:42 e 10:48, Brasília, medido no npm), pelo terminal do Victor |
 | `0.49.0` | O mapa desmarca (MNT-35): com um nó escolhido, o clique na área vazia e o Esc chamam `onSelect(null)`, no modo de leitura e no de arrumar, e o leitor de tela ouve `graphSelectionCleared` — pedido #104. **Publicada em 29/10/2026** (entre 14:40 e 14:50, Brasília, medido no npm), pelo terminal do Victor |
+| `0.49.1` | Dois encaixes do nativo e uma ficha: o `Button` com `fullWidth` na altura do tamanho (E18), o `brand` do `Header` que encolhe e deixa as ações na tela (E17) e a ficha do tom `link` (E19) — pedido #105. **Publicada em 29/10/2026** (entre 22:28 e 22:35, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -719,6 +720,16 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    **Publicada em 29/10/2026** (entre 14:40 e 14:50, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
    #104. O registro entrou no lote seguinte (o E17 e o E18).
 
+48. **`0.49.1`, os encaixes do nativo, feita em 29/10/2026** — o E17 e o E18 do app, com o conserto que a referência do
+   celular faz: o botão de largura inteira na altura do tamanho (o `flex: 1` dentro do alvo de toque zerava a base, e a caixa
+   ficava com 44 em todo tamanho) e o título do `Header` que encolhe, com as ações do tamanho delas; e o E19, a ficha do tom
+   `link`, que ainda dizia o contrário da paleta da 1.0. Aprovada na bancada (*"Aprovado"*). Junto, a regra da Ember no §5:
+   a única paleta fechada a mudança de cor. ⚠ **As lições:** (1) a altura se provou no navegador, nas páginas do nativo do
+   site — o dublê do React Native do teste de unidade não calcula o layout; (2) as fotos `index` do Linux, tiradas antes do
+   envio na Debian, fizeram a CI passar de primeira outra vez. **Publicada em 29/10/2026** (entre 22:28 e 22:35, Brasília,
+   medido no npm), pelo terminal do Victor, da junção do pedido #105. O registro entrou no lote seguinte (a lateral de
+   contraste, 0.50.0).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -1093,6 +1104,10 @@ sessão não chega à outra; este arquivo chega. O que já estava nas seções a
   dividida assim mora no documento de achados ("ORDEM NOVA"). O que encolhe é o lote, nunca a conferência.
 - **Qualidade extrema, sem refazer** (06/10/2026): prazo curto encolhe o ESCOPO, nunca a verificação.
   Se não cabe tudo, dizer quanto cabe, com números, e ele escolhe.
+- **Muitas opções: o esboço vem antes da bancada** (decisão do Victor, 29/10/2026, *"Sim, para explorar"*): quando uma
+  escolha tem MUITAS opções, elas saem primeiro como esboço no FigCraft (o programa de desenho da máquina dele, que se
+  roteiriza pela linha de comando — uma tela em segundos); ele escolhe as finalistas, e só elas viram bancada funcional,
+  com a peça real. A aprovação continua sendo SÓ na bancada. Com uma ou duas opções, direto na bancada.
 - **O caminho até a `1.0`** (08 e 09/10/2026): terminar a fila do documento de achados → auditar a
   referência principal peça a peça, com as variações, e adotar o jeito dela → a `1.0` só quando a
   sessão disser que está pronta, com aprovação visual dele, e com mais duas marcas além de `aurea` e

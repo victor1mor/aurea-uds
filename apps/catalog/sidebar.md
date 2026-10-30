@@ -40,6 +40,8 @@ import {Sidebar} from "@aurea-uds/react";
 
 - Groups that fold (collapsible), an action beside a group or an item (action), a gap between sections ("separator"), a photo in place of the icon (avatar), sections with a panel (panel) and five ways to draw the current item (indicator).
 
+- A dark sidebar on any page (contrast): dark on the light theme, darker than the page on the dark one.
+
 ## Examples
 
 ### Groups and one level of nesting
@@ -176,6 +178,39 @@ indicator sets how the item you are on is drawn. brand is the default. segment i
 <Sidebar indicator="subtle" label="Subtle" current="button" items={items} />
 ```
 
+### Dark on any page
+
+contrast keeps the sidebar dark in both themes: it carries the dark theme inside, like the contrast card. On a light page it is the dark card; on a dark page it goes darker than the page, so it still stands apart. AppShell forwards it as sidebarContrast.
+
+```tsx
+<Sidebar
+  contrast
+  label="Components"
+  current="button"
+  items={items}
+  header={<Sidebar.Brand logo="A" name="Acme Plans" description="Workspace" />}
+  footer={<Sidebar.User avatar={<Avatar fallback="KM" alt="" />} name="Kate Moore" description="Admin"
+    action={<IconButton icon="sign-out" label="Log out" size="sm" />} />}
+/>
+```
+
+### Dark, against the edge
+
+contrast works with every arrangement. With variant="flush" the dark sidebar sits against the edge, full height, with square corners; in the AppShell, sidebarVariant="flush" sidebarContrast.
+
+```tsx
+<Sidebar
+  contrast
+  variant="flush"
+  label="Components"
+  current="button"
+  items={items}
+  header={<Sidebar.Brand logo="A" name="Acme Plans" description="Workspace" />}
+  footer={<Sidebar.User avatar={<Avatar fallback="KM" alt="" />} name="Kate Moore" description="Admin"
+    action={<IconButton icon="sign-out" label="Log out" size="sm" />} />}
+/>
+```
+
 ### Collapsed into a capsule
 
 collapsible="capsule": the rail of icons keeps the control radius instead of the card radius. In the AppShell it is sidebarCollapsible="capsule".
@@ -264,6 +299,7 @@ The string "separator" between items splits the list with a gap — no line. ava
 | `collapsible` | `"icon" \| "capsule" \| "offcanvas"` | icon | How the sidebar looks when collapsed. icon is the rail of icons (the default, as before). capsule is the same rail with the control radius (a capsule) instead of the card radius. offcanvas takes the sidebar off the screen on the desktop — the name the reference uses. Inside Sidebar.Provider it comes from the provider. |
 | `indicator` | `"brand" \| "segment" \| "segment-dot" \| "segment-line" \| "subtle"` | brand | How the current item is drawn. brand is today's: in the light theme, the primary button; in the dark one, the grey capsule with the yellow text and the line. segment is the capsule of the selected tab (--segment + --shadow-sm), the text in the text colour and regular weight, with no line — the current item of the reference's documentation. segment-dot adds a yellow dot before the name; segment-line adds the yellow line underneath. subtle is the grey alone (the same grey as hover: only the text weight and the filled icon set the current item apart). |
 | `panel` | `"docked" \| "overlay"` | — | Sections with a panel. The first level of items becomes sections: the rail shows one icon per section, and the list of the chosen section lives in a panel. docked puts the panel beside the rail (collapsing hides only the panel); overlay opens it over the page, next to the icon, in a popover that takes focus and closes with Escape or a click outside. The section that contains the current page gets aria-current="true". |
+| `contrast` | `boolean` | false | A dark sidebar on any page. It carries the dark theme inside, like the contrast card: the text, the icons and the current item come from the brand's dark theme. Only the surface follows the page: on a light page it is the dark card; on a dark page it goes darker than the page, so the two still stand apart. The Ember brand keeps its own measured colours (the sidebar-contrast tokens, which only Ember defines). |
 | `label` | `string` | "Sidebar" | Accessible name of the <nav> that `items` renders. Two navigation landmarks with the same name fail axe, so name it when a page has more than one. |
 | `children` | `ReactNode` | — | Escape hatch, not legacy: when the list comes from a router or a CMS, pass your own markup and the <nav> and its label are yours. Rendered after `items` when both are given. |
 | `header` | `ReactNode` | — | The fixed top of the sidebar: the app brand (Sidebar.Brand), a search. It does not scroll with the list. With header or footer, only the middle (the list and children) scrolls. |

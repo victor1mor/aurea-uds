@@ -91,6 +91,7 @@ asideVariant="flush" glues the right column to the edge of the window, like the 
 | `sidebarShortcut` | `boolean` | true | Ctrl+B (Cmd+B on a Mac) collapses and expands the sidebar; below 1024 it opens and closes the drawer. On with sidebarCollapsible, as in the reference. It does not act while the person is typing in a field. |
 | `sidebarIndicator` | `"brand" \| "segment" \| "segment-dot" \| "segment-line" \| "subtle"` | brand | How the current item of the sidebar is drawn — the indicator of the Sidebar: brand (the default), segment, segment-dot, segment-line or subtle. |
 | `sidebarPanel` | `"docked" \| "overlay"` | — | Sections with a panel — the panel of the Sidebar: the first level of navItems becomes sections. docked puts the list beside the rail (collapsing hides the list); overlay opens it over the page. |
+| `sidebarContrast` | `boolean` | false | A dark sidebar on any page — the contrast of the Sidebar, forwarded to it: dark on a light page, darker than the page on a dark one. |
 | `defaultSidebarCollapsed` | `boolean` | — | Starts collapsed without controlling it. The person's choice holds until the window crosses 1280px; then the width decides again. |
 | `onSidebarCollapsedChange` | `(collapsed: boolean) => void` | — | Called on every change — the button, or the width crossing 1280px. Keeping the preference is the app's job, as before. |
 | `children` | `ReactNode` | — | Page content. Rendered inside the <main> the shell owns. |

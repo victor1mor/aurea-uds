@@ -1758,6 +1758,26 @@ export const brands = {
         "p3": "color(display-p3 0.9354 0.4975 0.2145)",
         "oklch": "oklch(0.72 0.19 48)"
       },
+      "sidebarContrast": {
+        "hex": "#04080d",
+        "p3": "color(display-p3 0.0157 0.0314 0.051)",
+        "oklch": null
+      },
+      "sidebarContrastAccent": {
+        "hex": "#0d151c",
+        "p3": "color(display-p3 0.051 0.0824 0.1098)",
+        "oklch": null
+      },
+      "sidebarContrastForeground": {
+        "hex": "#e1e5ea",
+        "p3": "color(display-p3 0.8823 0.898 0.9176)",
+        "oklch": null
+      },
+      "sidebarContrastMuted": {
+        "hex": "#7a8188",
+        "p3": "color(display-p3 0.4784 0.5059 0.5333)",
+        "oklch": null
+      },
       "brandYellowInk": {
         "hex": "#242424",
         "p3": "color(display-p3 0.1412 0.1412 0.1412)",
@@ -2144,6 +2164,26 @@ export const brands = {
         "hex": "#e98d35",
         "p3": "color(display-p3 0.8653 0.5711 0.2835)",
         "oklch": "oklch(0.727 0.149 60)"
+      },
+      "sidebarContrast": {
+        "hex": "#0e141c",
+        "p3": "color(display-p3 0.0549 0.0784 0.1098)",
+        "oklch": null
+      },
+      "sidebarContrastAccent": {
+        "hex": "#182029",
+        "p3": "color(display-p3 0.0941 0.1255 0.1608)",
+        "oklch": null
+      },
+      "sidebarContrastForeground": {
+        "hex": "#e4e8ed",
+        "p3": "color(display-p3 0.8941 0.9098 0.9294)",
+        "oklch": null
+      },
+      "sidebarContrastMuted": {
+        "hex": "#8c939b",
+        "p3": "color(display-p3 0.549 0.5765 0.6078)",
+        "oklch": null
       },
       "brandYellowInk": {
         "hex": "#242424",

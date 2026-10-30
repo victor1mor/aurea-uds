@@ -145,7 +145,7 @@ declare function SidebarProvider({ collapsed, defaultCollapsed, onCollapsedChang
 declare function SidebarToggle({ variant, className, onClick, ...props }: Omit<IconButtonProps, "icon" | "label" | "variant" | "children"> & {
     variant?: "icon" | "item";
 }): React.JSX.Element | null;
-export declare function Sidebar({ items, current, collapsed, collapsible, indicator, panel, variant, placement, scrollbar, label, header, footer, children, className, onClick, id, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
+export declare function Sidebar({ items, current, collapsed, collapsible, indicator, panel, contrast, variant, placement, scrollbar, label, header, footer, children, className, onClick, id, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
     items?: SidebarEntry[];
     current?: string;
     collapsed?: boolean;
@@ -161,6 +161,9 @@ export declare function Sidebar({ items, current, collapsed, collapsible, indica
     /** A trilha das seções com o painel (4-F e 4-G): os itens do primeiro nível viram seções, e a lista da seção mora num
      *  painel — `docked`, ao lado da trilha (recolher esconde só o painel), ou `overlay`, por cima, ao lado do ícone. */
     panel?: "docked" | "overlay";
+    /** A lateral de contraste (MNT-36): escura nas duas telas. Leva o tema escuro por dentro, como o `Card variant="contrast"`;
+     *  numa página clara, o fundo é o cartão do escuro; numa página escura, mais escuro que a página. */
+    contrast?: boolean;
     /** O topo fixo (4-C): a marca do app (`Sidebar.Brand`), a busca. Não rola com a lista. */
     header?: ReactNode;
     /** O pé fixo (4-C): a pessoa e o sair (`Sidebar.User`), a lista curta (`Sidebar.Nav`), o cartão de destaque. Não rola com a lista. */

@@ -3,7 +3,7 @@ import { type Orientation, type Responsive } from "./pure.js";
 import { type IconButtonProps } from "./actions.js";
 import { type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarEntry, type SidebarCollapsible, type SidebarIndicator } from "./navigation.js";
 declare function AppShellSidebarToggle(props: Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant">): React.JSX.Element;
-export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, sidebarToggle, sidebarShortcut, sidebarIndicator, sidebarPanel, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, sidebarToggle, sidebarShortcut, sidebarIndicator, sidebarPanel, sidebarContrast, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     brand: ReactNode;
     navigation?: ReactNode;
     navItems?: SidebarEntry[];
@@ -60,6 +60,8 @@ export declare function AppShell({ brand, navigation, navItems, currentNavId, na
     /** 4-F e 4-G: a trilha das seções com o painel (o `panel` da `Sidebar`) — os itens do primeiro nível de `navItems` viram
      *  seções. `docked`: o painel ao lado (recolher esconde o painel); `overlay`: o painel abre por cima. */
     sidebarPanel?: "docked" | "overlay";
+    /** A lateral de contraste (MNT-36): o `contrast` da `Sidebar` — escura nas duas telas. */
+    sidebarContrast?: boolean;
     /** AN-01: começa recolhida, sem controlar. A escolha vale até a janela cruzar 1280. */
     defaultSidebarCollapsed?: boolean;
     /** AN-01: avisa cada troca — pelo botão, ou pela largura cruzando 1280. Guardar a preferência é do app. */
