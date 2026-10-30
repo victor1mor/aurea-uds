@@ -180,7 +180,7 @@ export default [
   {
     variant: "Sidebar to the top, with a bar",
     name: "A bar over the content alone",
-    description: "Pass `topbar` and the bar comes back over the content column only, with the collapse button first in it. The sidebar keeps running from top to bottom.",
+    description: "Pass `topbar` and the bar comes back over the content column only, with the collapse button first in it. What goes in `topbarActions` sits at its far end, away from the title — search, the theme switch, the account. The sidebar keeps running from top to bottom.",
     uses: ["AppShell", "Sidebar", "SearchField"],
     embed: true,
     layoutProprio: true,
@@ -190,7 +190,8 @@ export default [
   sidebarVariant="flush"
   sidebarCollapsible
   brand={<Sidebar.Brand logo="A" name="Acme" description="Workspace" />}
-  topbar={<><strong>Reports</strong><SearchField aria-label="Search" placeholder="Search…" /></>}
+  topbar={<strong>Reports</strong>}
+  topbarActions={<SearchField aria-label="Search" placeholder="Search…" />}
   navItems={items}
   currentNavId="reports"
 >
@@ -199,8 +200,10 @@ export default [
     render: () => h(A.AppShell, {
       layout: "sidebar", sidebarVariant: "flush", sidebarCollapsible: true,
       brand: h(A.Sidebar.Brand, {logo: "A", name: "Acme", description: "Workspace"}),
-      topbar: h("div", {style: {display: "flex", alignItems: "center", gap: "var(--space-3)", flex: 1}}, h("strong", null, "Reports"),
-        h("div", {style: {minWidth: "180px", marginInlineStart: "auto"}}, h(A.SearchField, {"aria-label": "Search", placeholder: "Search…"}))),
+      // MNT-37: a busca vai na ponta (`topbarActions`). Antes, o exemplo empurrava a busca com `margin-inline-start: auto` no
+      // `render`, e o código mostrado (sem o empurrão) a deixava colada no título.
+      topbar: h("strong", null, "Reports"),
+      topbarActions: h("div", {style: {minWidth: "180px"}}, h(A.SearchField, {"aria-label": "Search", placeholder: "Search…"})),
       navItems: [{id: "overview", label: "Overview", icon: "house", href: "#"}, {id: "reports", label: "Reports", icon: "file-text", href: "#"},
         {id: "exports", label: "Exports", icon: "export", href: "#"}],
       currentNavId: "reports",

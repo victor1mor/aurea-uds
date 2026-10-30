@@ -1,6 +1,6 @@
 # A bar over the content alone
 
-Pass `topbar` and the bar comes back over the content column only, with the collapse button first in it. The sidebar keeps running from top to bottom.
+Pass `topbar` and the bar comes back over the content column only, with the collapse button first in it. What goes in `topbarActions` sits at its far end, away from the title — search, the theme switch, the account. The sidebar keeps running from top to bottom.
 
 ## Usage
 
@@ -14,7 +14,8 @@ import {AppShell, Sidebar, SearchField} from "@aurea-uds/react";
   sidebarVariant="flush"
   sidebarCollapsible
   brand={<Sidebar.Brand logo="A" name="Acme" description="Workspace" />}
-  topbar={<><strong>Reports</strong><SearchField aria-label="Search" placeholder="Search…" /></>}
+  topbar={<strong>Reports</strong>}
+  topbarActions={<SearchField aria-label="Search" placeholder="Search…" />}
   navItems={items}
   currentNavId="reports"
 >

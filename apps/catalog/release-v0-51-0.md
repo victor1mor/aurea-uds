@@ -1,0 +1,27 @@
+# v0.51.0
+
+The far end of the top bar of AppShell — where the theme switch, notifications and the account go.
+
+A new slot on `AppShell`, on the web. Nothing changes unless you use it.
+
+## New
+
+- **`AppShell topbarActions`** — the `actions` of the `Header`, forwarded. What you pass sits at the far end of the top bar, away from the brand and from `topbar`: the theme switch, notifications, the account. With `layout="sidebar"` the content bar lines up from the start, so anything passed in `topbar` used to sit next to the collapse button; now the end of the bar has its own slot, 20 from the edge and on the line of the page title (at the start, in right-to-left). Pass `topbarActions` alone and the content bar still appears. With the default and the `"docs"` layouts it comes after `topbar`; in `"docs"` the drawer button stays last.
+
+## Fixed
+
+- **The "A bar over the content alone" example** put the search in `topbar` and only drew it at the end with a nudge written into the example; copying its code gave you the search next to the title. It now uses `topbarActions`.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.51.0 @aurea-uds/core@0.51.0 @aurea-uds/fonts@0.51.0 @aurea-uds/icons@0.51.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.51.0
+```

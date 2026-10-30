@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 10,
     "aliasesLiterais": 118,
-    "propsDistintas": 394
+    "propsDistintas": 395
   },
   "aliases": {
     "ButtonVariant": {
@@ -7587,6 +7587,12 @@
             },
             {
               "name": "topbarTabsEnd",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "topbarActions",
               "optional": true,
               "type": "ReactNode",
               "values": null

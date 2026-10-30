@@ -222,6 +222,29 @@ como deveria funcionar"*.
 
 ---
 
+## [0.51.0] — 2026-10-30
+
+**A ponta da barra de cima** (MNT-37, de um app da web): o `AppShell` passa a ter o encaixe da outra ponta da barra, longe
+da marca e do título — onde fica a chave de tema, o sino, a conta. Só na web.
+
+### Adicionado
+
+- **`AppShell topbarActions`** — o `actions` do `Header`, repassado. No `layout="sidebar"` (a lateral até o topo), o que o
+  app passava em `topbar` ficava todo à esquerda, colado no botão de recolher (a barra do conteúdo alinha pelo começo, desde
+  a 0.42.0), e a chave de tema não tinha como ir para o canto: o shell não repassava o encaixe da ponta. Agora ela vai no
+  `topbarActions` e encosta no fim da barra (a 20 da borda, na linha do título; da direita para a esquerda, no começo). Só
+  com o `topbarActions`, a barra do conteúdo também aparece. No arranjo de sempre e no `"docs"`, a ponta vem depois do
+  `topbar` (no `"docs"`, o botão da gaveta continua o último). A [ADR-0080](decisions/0080-a-lateral-ate-o-topo.md) já
+  dizia "as ações podem ir para a direita"; faltava o encaixe. Quem cobra: `tests/unit/appshell-ponta-da-barra.test.tsx`
+  e `tests/visual/appshell-ponta-da-barra.spec.ts`.
+
+### Corrigido
+
+- **O exemplo "A bar over the content alone" do site** mostrava a busca no `topbar`, e só a desenhava na ponta com um
+  empurrão escrito no exemplo; quem copiasse o código teria a busca colada no título. Agora ela vai no `topbarActions`.
+
+---
+
 ## [0.50.0] — 2026-10-29
 
 ✅ **Publicada em 30/10/2026, entre 10:02 e 10:09 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido

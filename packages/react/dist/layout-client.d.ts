@@ -3,7 +3,7 @@ import { type Orientation, type Responsive } from "./pure.js";
 import { type IconButtonProps } from "./actions.js";
 import { type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarEntry, type SidebarCollapsible, type SidebarIndicator } from "./navigation.js";
 declare function AppShellSidebarToggle(props: Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant">): React.JSX.Element;
-export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, sidebarToggle, sidebarShortcut, sidebarIndicator, sidebarPanel, sidebarContrast, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, topbarActions, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, sidebarToggle, sidebarShortcut, sidebarIndicator, sidebarPanel, sidebarContrast, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     brand: ReactNode;
     navigation?: ReactNode;
     navItems?: SidebarEntry[];
@@ -30,6 +30,10 @@ export declare function AppShell({ brand, navigation, navItems, currentNavId, na
     topbarTabsLabel?: string;
     /** A ponta da linha das áreas (o `tabsEnd` do `Header`): a chave Web | Native da documentação. */
     topbarTabsEnd?: ReactNode;
+    /** A PONTA DA BARRA DE CIMA (MNT-37): o que fica na outra ponta, longe da marca e do `topbar` — a chave de tema, a
+     *  conta, o sino. É o `actions` do `Header`. No `layout="sidebar"` a barra do conteúdo passa a existir também quando o app
+     *  passa só isto; no `"docs"`, o botão da gaveta continua o último, depois delas. */
+    topbarActions?: ReactNode;
     /** 0.32.0: a barra de rolagem da lateral da esquerda — o `scrollbar` da `Sidebar`. Padrão `hover` (clara, só com o
      *  ponteiro em cima); `visible` é a barra sempre à vista. */
     sidebarScrollbar?: SidebarScrollbar;
