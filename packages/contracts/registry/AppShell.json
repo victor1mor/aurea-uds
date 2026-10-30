@@ -113,6 +113,12 @@
       "description": "Sections with a panel — the panel of the Sidebar: the first level of navItems becomes sections. docked puts the list beside the rail (collapsing hides the list); overlay opens it over the page."
     },
     {
+      "name": "sidebarContrast",
+      "type": "boolean",
+      "default": "false",
+      "description": "A dark sidebar on any page — the contrast of the Sidebar, forwarded to it: dark on a light page, darker than the page on a dark one."
+    },
+    {
       "name": "defaultSidebarCollapsed",
       "type": "boolean",
       "default": "—",

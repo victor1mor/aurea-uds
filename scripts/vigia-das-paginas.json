@@ -24,7 +24,7 @@
     "css:--card*": "e4782bea7c2659ff",
     "css:--fill-*": "a2658d78c94cba5c",
     "css:--foreground": "783a22ac3ade5f11",
-    "css:--muted-foreground": "0a6ef1fb1808685d",
+    "css:--muted-foreground": "9de44fd55e1ecdef",
     "css:--accent*": "b183385e8a4094f5",
     "css:--success*": "f07ef43f82cc2564",
     "css:--warning*": "422ce37b6c893c81",
@@ -35,7 +35,7 @@
   "composition": {
     "ts:Card": "8db73ade7d093995",
     "ts:Header": "646693ff53f98171",
-    "ts:AppShell": "687af64e34104192",
+    "ts:AppShell": "aa69a17de9997379",
     "ts:RadioGroup": "4e594ff9064d0a23"
   },
   "dark-mode": {

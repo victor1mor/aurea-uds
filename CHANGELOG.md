@@ -17,6 +17,14 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.49.1 (29/10/2026)
+
+- **A 0.49.1 publicada entre 22:28 e 22:35 de 29/10/2026** (Brasília, medido no npm; o `fonts` às 22:28 e o `native`, o
+  último a aparecer no registro, às 22:35): o `released-surface.json` do commit do publish (`b28d7059`) — nenhum nome novo
+  e nenhuma frase nova, nem na web nem no nativo. O CHANGELOG ([0.49.1] publicada) e o CLAUDE.md (a linha na tabela e o
+  item 48), as três partes juntas.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.49.0 (29/10/2026)
 
 - **A 0.49.0 publicada entre 14:40 e 14:50 de 29/10/2026** (Brasília, medido no npm; o `tokens` às 14:40 e o `native`,
@@ -198,9 +206,29 @@ como deveria funcionar"*.
 
 ---
 
+## [0.50.0] — 2026-10-29
+
+⏳ **Ainda não publicada.** **A lateral de contraste** (MNT-36, de um app da web): uma lateral escura nas duas telas —
+escura na página clara e mais escura que a página na escura —, a forma "A, escura neutra" que o Victor escolheu na bancada
+das 13 marcas ([ADR-0087](decisions/0087-a-lateral-de-contraste.md)). Só na web.
+
+### Adicionado
+
+- **`Sidebar contrast`** e **`AppShell sidebarContrast`** (que repassa à lateral de navegação). A lateral traz o tema escuro
+  por dentro, como o `Card variant="contrast"`: a letra, os ícones e o item atual saem do escuro da marca. Só o fundo segue
+  a página: na clara, o cartão do escuro; na escura, a página do escuro misturada com preto. A página que conta é a do
+  ancestral — uma faixa escura numa página clara conta como escura. Vale em todo arranjo: a flutuante, a de canto reto
+  (`variant="flush"`), a trilha e o painel; a sem caixa (`plain`) pinta o fundo quando é de contraste.
+- **Os tokens `sidebar-contrast`, `sidebar-contrast-accent`, `sidebar-contrast-foreground` e `sidebar-contrast-muted`, só
+  na marca Ember**, nos dois temas: as cores medidas do app onde a Ember nasceu (a paleta dela é a única fechada a mudança
+  de cor). Nas outras marcas o token não existe, e a lateral faz a conta.
+
+---
+
 ## [0.49.1] — 2026-10-29
 
-⏳ **Ainda não publicada.** **Dois encaixes do nativo e uma ficha** (achados do app, E17, E18 e E19): o botão de largura
+✅ **Publicada em 29/10/2026, entre 22:28 e 22:35 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+#105.** **Dois encaixes do nativo e uma ficha** (achados do app, E17, E18 e E19): o botão de largura
 inteira com a altura do tamanho, o título do `Header` que encolhe, e a ficha que diz para que serve o tom `link`. O
 conserto dos dois encaixes é o que a referência do celular faz.
 

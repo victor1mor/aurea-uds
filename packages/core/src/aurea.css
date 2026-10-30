@@ -773,6 +773,22 @@ img,svg { display:block; }
 /* O painel por cima (4-G): a janelinha da Aurea, da largura da lateral, com a pele da lista dela. Os tokens da lateral passam a
    ser os da janelinha: sob uma marca de lateral escura, a janelinha é clara, e a letra da lateral sumiria nela. */
 .popover.sidebar-flyout { --sidebar-item-x:var(--space-4); --sidebar-foreground:var(--popover-foreground); --sidebar-accent:var(--fill-1); --sidebar-primary:var(--primary-emphasis); inline-size:var(--sidebar-width); max-inline-size:calc(100vw - var(--space-8)); padding:var(--space-1); gap:var(--space-1); }
+/* MNT-36 (29/10/2026, ADR-0087): A LATERAL DE CONTRASTE, `Sidebar contrast` — a forma A ("escura neutra"), que o Victor
+   escolheu na bancada das 13 marcas (*"A, escura neutra"*). Como o `Card variant="contrast"` (ADR-0063), ela traz
+   `data-theme="dark"` no próprio elemento: a letra, os ícones, o item atual e tudo de dentro saem do tema escuro DA MARCA.
+   Só o FUNDO depende da página: numa página clara, o cartão do escuro; numa página escura, a página do escuro misturada com
+   preto — mais escura que a página, para continuar se separando dela (o jeito do app que pediu). O "está numa página
+   escura?" é o do ANCESTRAL, com a guarda do GAR-05: o atributo da própria lateral não conta.
+   A EMBER não segue a conta (o Victor, 29/10/2026: a paleta dela é a única fechada a mudança de cor): ela traz as cores
+   medidas do app onde nasceu nos tokens `sidebar-contrast*` — só ela os define, um valor para a página clara e outro
+   para a escura. O `inherit` traz para dentro da lateral o valor da PÁGINA: o da própria lateral seria sempre o do escuro.
+   Nas outras marcas o token não existe, e vale a conta. */
+.sidebar.sidebar-contrast { --sidebar-contrast:inherit; --sidebar-contrast-accent:inherit; --sidebar-contrast-foreground:inherit; --sidebar-contrast-muted:inherit; --sidebar:var(--sidebar-contrast,var(--card)); --sidebar-accent:var(--sidebar-contrast-accent,var(--secondary)); }
+[data-theme="dark"] .sidebar.sidebar-contrast:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { --sidebar:var(--sidebar-contrast,color-mix(in oklch,var(--background) 55%,black)); --sidebar-accent:var(--sidebar-contrast-accent,var(--card)); }
+.sidebar.sidebar-contrast:where([data-brand="ember"] *) { --sidebar-foreground:var(--sidebar-contrast-foreground); --sidebar-accent-foreground:var(--sidebar-contrast-foreground); --muted-foreground:var(--sidebar-contrast-muted); }
+/* A `plain` não tem caixa nem fundo; escura, a letra clara ficaria sobre a página clara (ilegível). Com `contrast`, ela pinta
+   o fundo da lateral — a flutuante sem a sombra. As outras (a flutuante, a de canto reto, a trilha e o painel) já pintam. */
+.sidebar-plain.sidebar-contrast { background:var(--sidebar); }
 /* Estas regras tocam `.app-shell` porque a coluna do grid é do shell: a
    lateral não consegue encolher a própria trilha. `--sidebar-rail` continua sendo a largura
    do PAINEL; a flutuante soma as margens na trilha, a rente usa o token cru.

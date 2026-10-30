@@ -131,6 +131,8 @@ Surfaces float over the page: cards, dialogs, menus, panels.
 | `--sidebar-primary` | The current item in the sidebar |
 | `--sidebar-accent` | A sidebar item under the pointer |
 
+The dark sidebar (`Sidebar contrast`) carries the dark theme inside and paints `--sidebar` and `--sidebar-accent` from the page's theme: the dark card on a light page, darker than the page on a dark one. On the Ember brand it uses Ember's own measured colours instead, `--sidebar-contrast`, `--sidebar-contrast-accent`, `--sidebar-contrast-foreground` and `--sidebar-contrast-muted`; no other brand defines them.
+
 ## Form field
 
 Fields (input, textarea, select, number field) have no border. In the light theme they are white with a soft shadow; in the dark theme they are filled with `--fill-2`. When the system asks for more contrast (`prefers-contrast: more`), they get a 3:1 outline, `--input-strong`.

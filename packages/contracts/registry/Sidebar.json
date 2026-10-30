@@ -24,10 +24,13 @@
     "drawer"
   ],
   "tokens": [
+    "--background",
+    "--card",
     "--control-h-md",
     "--control-h-sm",
     "--control-h-xs",
     "--foreground",
+    "--muted-foreground",
     "--overlay",
     "--popover",
     "--primary",
@@ -39,7 +42,12 @@
     "--shadow-sm",
     "--sidebar",
     "--sidebar-accent",
+    "--sidebar-accent-foreground",
     "--sidebar-border",
+    "--sidebar-contrast",
+    "--sidebar-contrast-accent",
+    "--sidebar-contrast-foreground",
+    "--sidebar-contrast-muted",
     "--sidebar-foreground",
     "--sidebar-primary",
     "--sidebar-rail",
@@ -135,6 +143,12 @@
       "type": "\"docked\" | \"overlay\"",
       "default": "—",
       "description": "Sections with a panel. The first level of items becomes sections: the rail shows one icon per section, and the list of the chosen section lives in a panel. docked puts the panel beside the rail (collapsing hides only the panel); overlay opens it over the page, next to the icon, in a popover that takes focus and closes with Escape or a click outside. The section that contains the current page gets aria-current=\"true\"."
+    },
+    {
+      "name": "contrast",
+      "type": "boolean",
+      "default": "false",
+      "description": "A dark sidebar on any page. It carries the dark theme inside, like the contrast card: the text, the icons and the current item come from the brand's dark theme. Only the surface follows the page: on a light page it is the dark card; on a dark page it goes darker than the page, so the two still stand apart. The Ember brand keeps its own measured colours (the sidebar-contrast tokens, which only Ember defines)."
     },
     {
       "name": "label",

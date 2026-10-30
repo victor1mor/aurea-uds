@@ -3983,6 +3983,55 @@
             ]
           }
         },
+        "sidebar-contrast": {
+          "$type": "color",
+          "$description": "A lateral de contraste (MNT-36, `Sidebar contrast`) numa página ESCURA da Ember: o fundo, mais escuro que a página. A cor MEDIDA do app onde a Ember nasceu (29/10/2026); nas outras marcas, a conta (a página do escuro com preto).",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.01569,
+              0.03137,
+              0.05098
+            ],
+            "hex": "#04080d"
+          }
+        },
+        "sidebar-contrast-accent": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.05098,
+              0.08235,
+              0.1098
+            ],
+            "hex": "#0d151c"
+          }
+        },
+        "sidebar-contrast-foreground": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.88235,
+              0.89804,
+              0.91765
+            ],
+            "hex": "#e1e5ea"
+          }
+        },
+        "sidebar-contrast-muted": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.47843,
+              0.50588,
+              0.53333
+            ],
+            "hex": "#7a8188"
+          }
+        },
         "success-400": {
           "$type": "color",
           "$value": {
@@ -4707,6 +4756,55 @@
               0.197,
               44.5
             ]
+          }
+        },
+        "sidebar-contrast": {
+          "$type": "color",
+          "$description": "A lateral de contraste (MNT-36, `Sidebar contrast`) numa página CLARA da Ember: o fundo. É a cor MEDIDA do app onde a Ember nasceu (29/10/2026) — a paleta dela é a única fechada a mudança de cor (o Victor, 29/10/2026). Só a Ember define os `sidebar-contrast*`; nas outras marcas a lateral de contraste faz a conta (o cartão do escuro). O core lê o valor da PÁGINA (`inherit`), porque a lateral traz o tema escuro por dentro.",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0549,
+              0.07843,
+              0.1098
+            ],
+            "hex": "#0e141c"
+          }
+        },
+        "sidebar-contrast-accent": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.09412,
+              0.12549,
+              0.16078
+            ],
+            "hex": "#182029"
+          }
+        },
+        "sidebar-contrast-foreground": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.89412,
+              0.9098,
+              0.92941
+            ],
+            "hex": "#e4e8ed"
+          }
+        },
+        "sidebar-contrast-muted": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.54902,
+              0.57647,
+              0.60784
+            ],
+            "hex": "#8c939b"
           }
         },
         "success-400": {
