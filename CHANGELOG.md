@@ -17,6 +17,22 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O site não para num erro passageiro do GitHub (30/10/2026)
+
+- **A página de saúde tenta de novo** (`scripts/saude-rodadas.mjs`, que roda na publicação do site): ela faz 30 consultas
+  à API do GitHub, e parava no primeiro erro. Em 30/10/2026 a API respondeu 502 a uma delas, duas vezes seguidas, e o site
+  da 0.50.0 só saiu na terceira tentativa. Agora, nos erros que passam sozinhos (5xx, 429 e a rede que cai), ela espera 2,
+  5 e 10 segundos e tenta de novo; nos outros (404…), para na hora. Quem cobra: `tests/unit/saude-rodadas.test.tsx`.
+- Não muda nenhum pacote publicado.
+
+### O registro da 0.50.0 (30/10/2026)
+
+- **A 0.50.0 publicada entre 10:02 e 10:09 de 30/10/2026** (Brasília, medido no npm; o `tokens` às 10:02 e o `native`, o
+  último a aparecer no registro, às 10:09): o `released-surface.json` do commit do publish (`66a90c72`) — nenhum nome novo
+  e nenhuma frase nova, nem na web nem no nativo. O CHANGELOG ([0.50.0] publicada) e o CLAUDE.md (a linha na tabela e o
+  item 49).
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.49.1 (29/10/2026)
 
 - **A 0.49.1 publicada entre 22:28 e 22:35 de 29/10/2026** (Brasília, medido no npm; o `fonts` às 22:28 e o `native`, o
@@ -208,7 +224,8 @@ como deveria funcionar"*.
 
 ## [0.50.0] — 2026-10-29
 
-⏳ **Ainda não publicada.** **A lateral de contraste** (MNT-36, de um app da web): uma lateral escura nas duas telas —
+✅ **Publicada em 30/10/2026, entre 10:02 e 10:09 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+#106.** **A lateral de contraste** (MNT-36, de um app da web): uma lateral escura nas duas telas —
 escura na página clara e mais escura que a página na escura —, a forma "A, escura neutra" que o Victor escolheu na bancada
 das 13 marcas ([ADR-0087](decisions/0087-a-lateral-de-contraste.md)). Só na web.
 
