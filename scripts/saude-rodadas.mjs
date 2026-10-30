@@ -37,17 +37,36 @@ export function preencher(html, rodadas) {
   return saida;
 }
 
-async function api(caminho) {
-  const r = await fetch(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}${caminho}`, {
-    headers: {Authorization: `Bearer ${process.env.GH_TOKEN}`, Accept: "application/vnd.github+json"}});
-  if (!r.ok) throw new Error(`saude-rodadas: ${caminho} respondeu ${r.status}`);
-  return r.json();
+// UM ERRO PASSAGEIRO DO GITHUB NÃO DERRUBA O SITE (30/10/2026). A API respondeu 502 a uma das 30 consultas, e o script
+// parava no primeiro erro: o site da 0.50.0 ficou sem publicar duas vezes seguidas (a mesma consulta, medida daqui, falhava
+// 3 em 5 vezes e, minutos depois, passava 5 em 5; a página de situação do GitHub dizia que estava tudo normal). Nos erros
+// que passam sozinhos — 5xx, 429 e a rede que cai —, tenta de novo, esperando 2, 5 e 10 segundos; o resto (401, 404…)
+// para na hora, porque não é passageiro. `buscar` e `esperar` existem para o teste.
+const ESPERAS = [2000, 5000, 10000];
+const esperarDeVerdade = (ms) => new Promise((r) => setTimeout(r, ms));
+export async function api(caminho, {buscar = fetch, esperar = esperarDeVerdade} = {}) {
+  for (let tentativa = 1; ; tentativa++) {
+    const ultima = tentativa > ESPERAS.length;
+    let r;
+    try {
+      r = await buscar(`https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}${caminho}`, {
+        headers: {Authorization: `Bearer ${process.env.GH_TOKEN}`, Accept: "application/vnd.github+json"}});
+    } catch (erro) {
+      if (ultima) throw erro;
+      await esperar(ESPERAS[tentativa - 1]);
+      continue;
+    }
+    if (r.ok) return r.json();
+    if (ultima || !(r.status >= 500 || r.status === 429))
+      throw new Error(`saude-rodadas: ${caminho} respondeu ${r.status}${tentativa > 1 ? ` (na tentativa ${tentativa})` : ""}`);
+    await esperar(ESPERAS[tentativa - 1]);
+  }
 }
 
-export async function lerRodadas() {
-  const {workflow_runs: runs} = await api("/actions/workflows/ci.yml/runs?branch=main&event=push&per_page=30");
+export async function lerRodadas(opcoes = {}) {
+  const {workflow_runs: runs} = await api("/actions/workflows/ci.yml/runs?branch=main&event=push&per_page=30", opcoes);
   return Promise.all(runs.map(async (run) => {
-    const {jobs} = await api(`/actions/runs/${run.id}/jobs?per_page=50`);
+    const {jobs} = await api(`/actions/runs/${run.id}/jobs?per_page=50`, opcoes);
     // em ordem de nome: a API devolve na ordem em que terminaram, e cada linha sairia diferente da de cima
     const feitos = jobs.filter((j) => j.conclusion !== "skipped").sort((a, b) => a.name.localeCompare(b.name));
     return {

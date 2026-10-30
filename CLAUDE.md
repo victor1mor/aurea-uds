@@ -202,6 +202,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.48.0` | Os acabamentos: o brilho (`glow`, no `Button` e no `IconButton`) e o fio (`ring`, no `Button`, no `IconButton`, no `Badge` e no `Chip`), web e nativo, também por `data-glow`/`data-ring` num contêiner da web; e o `Header` `blurred` que se lê sobre qualquer coisa (o cartão a 72% com o desfoque, só na web) ([ADR-0086](decisions/0086-os-acabamentos.md)) — pedido #103. **Publicada em 29/10/2026** (entre 10:42 e 10:48, Brasília, medido no npm), pelo terminal do Victor |
 | `0.49.0` | O mapa desmarca (MNT-35): com um nó escolhido, o clique na área vazia e o Esc chamam `onSelect(null)`, no modo de leitura e no de arrumar, e o leitor de tela ouve `graphSelectionCleared` — pedido #104. **Publicada em 29/10/2026** (entre 14:40 e 14:50, Brasília, medido no npm), pelo terminal do Victor |
 | `0.49.1` | Dois encaixes do nativo e uma ficha: o `Button` com `fullWidth` na altura do tamanho (E18), o `brand` do `Header` que encolhe e deixa as ações na tela (E17) e a ficha do tom `link` (E19) — pedido #105. **Publicada em 29/10/2026** (entre 22:28 e 22:35, Brasília, medido no npm), pelo terminal do Victor |
+| `0.50.0` | A lateral de contraste (MNT-36): `Sidebar contrast` e `AppShell sidebarContrast` — escura nas duas telas, na flutuante e na de canto reto, com as cores medidas da Ember em tokens só dela ([ADR-0087](decisions/0087-a-lateral-de-contraste.md)) — pedido #106. **Publicada em 30/10/2026** (entre 10:02 e 10:09, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -729,6 +730,20 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    envio na Debian, fizeram a CI passar de primeira outra vez. **Publicada em 29/10/2026** (entre 22:28 e 22:35, Brasília,
    medido no npm), pelo terminal do Victor, da junção do pedido #105. O registro entrou no lote seguinte (a lateral de
    contraste, 0.50.0).
+
+49. **`0.50.0`, a lateral de contraste, feita de 29 a 30/10/2026** ([ADR-0087](decisions/0087-a-lateral-de-contraste.md)) — o
+   MNT-36 de um app da web, a forma *"A, escura neutra"* da bancada das 13 marcas: `Sidebar contrast` (o tema escuro por
+   dentro, como o cartão `contrast`; na página clara, o cartão do escuro; na escura, mais escura que a página, pelo tema do
+   ANCESTRAL) e `AppShell sidebarContrast`; a Ember com as cores medidas do app onde nasceu, em tokens que só ela define
+   (o `inherit` traz o valor da página). Aprovada na bancada do `AppShell` de verdade (*"Aprovado"*). ⚠ **As lições:**
+   (1) a primeira bancada mostrou só a flutuante, e o Victor cobrou: *"não fez o de canto reto conforme o sistema que
+   mostrei"* — a bancada mostra o arranjo que o app usa, não só o padrão da Aurea; (2) a pergunta "quem mais?" achou a
+   `plain` (sem caixa), que com `contrast` deixaria a letra clara sobre a página clara; (3) pedi a aprovação com o painel do
+   navegador ESCONDIDO (*"aprovar sem ver?"*) — antes de pedir, conferir que o painel está à vista e mandar o endereço
+   completo; (4) a Debian do Hyper-V não respondeu, e as fotos do Linux saíram do minipc, com o mesmo contêiner da CI;
+   (5) a publicação do site caiu duas vezes num 502 passageiro da API do GitHub — o conserto entrou no lote seguinte.
+   **Publicada em 30/10/2026** (entre 10:02 e 10:09, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+   #106. O registro entrou no lote seguinte (o site que não para num erro passageiro).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
