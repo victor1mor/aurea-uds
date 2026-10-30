@@ -34,6 +34,16 @@
 6. **Abaixo de 1024** a lateral continua gaveta. O botão de recolher some; quem abre é o botão da gaveta — na barra, ou,
    sem barra, numa faixa de 56 com ele e a marca.
 
+## A ponta da barra (MNT-37, 30/10/2026, na 0.51.0)
+
+- **O que se mediu:** a regra 2 dizia "as ações podem ir para a direita", mas o shell não repassava o `actions` do `Header`,
+  e a barra do conteúdo alinha pelo começo. O app de rede pôs a chave de tema no `topbar` e ela ficou colada no botão de
+  recolher (x 415–451 a 1280; com `margin-inline-start: auto` escrito pelo app, 1224–1260).
+- **A regra:** `topbarActions` é o encaixe da ponta — o `actions` do `Header`, em todo arranjo. No `"sidebar"`, a barra do
+  conteúdo existe com `topbar` OU `topbarActions`. No `"docs"`, o botão da gaveta continua o último, depois da ponta.
+- **A referência principal não tem moldura de aplicativo** (conferido de novo na versão atual dela): a anatomia — a marca e
+  o título numa ponta, as ações na outra — é a do `Header`, que já segue o guia de barra dela.
+
 ## O que fica para depois
 
 - O resto da série da lateral: **4-A** (os modos de recolher "some" e "cápsula", a cápsula fixa), **4-B** (o botão de

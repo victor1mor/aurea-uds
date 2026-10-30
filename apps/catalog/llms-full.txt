@@ -1574,7 +1574,7 @@ Many components take other elements through named props. The component places th
 
 | Component | Slots |
 |---|---|
-| `AppShell` | `brand`, `navigation`, `topbar`, `sidebarFooter`, `aside`, `children` |
+| `AppShell` | `brand`, `navigation`, `topbar`, `topbarActions`, `sidebarFooter`, `aside`, `children` |
 | `Header` | `brand`, `actions`, `menuActions`, `children` |
 | `Button` | `leadingIcon`, `trailingIcon`, `kbd` |
 | `Badge` | `leading`, `trailing` |
@@ -2645,7 +2645,7 @@ asideVariant="flush" glues the right column to the edge of the window, like the 
 | `navItems` | `SidebarEntry[]` | — | The sidebar list, handed to the Sidebar the shell already creates — same shape as Sidebar items. Use this instead of passing a second <Sidebar> as navigation: that nests two panels, two borders and two 22px radii, and the inner one clips its text. When navigation is also given, the list comes first. |
 | `currentNavId` | `string` | — | The id of the current item in navItems. Marked with aria-current="page" and the selected skin. |
 | `navLabel` | `string` | — | Accessible name of the <nav> built from navItems. Falls back to the sidebarLabel string. |
-| `topbar` | `ReactNode` | — | What sits in the topbar next to the brand: sections, search, actions. |
+| `topbar` | `ReactNode` | — | What sits in the topbar next to the brand: the page title, sections, search. What belongs at the far end goes in topbarActions. |
 | `topbarVariant` | `"floating" \| "flush"` | "floating" | Skin of the topbar. flush removes the outer gap, and the sidebar rises to meet it. |
 | `sidebarVariant` | `"floating" \| "flush" \| "plain"` | "floating" | Skin of the sidebar, forwarded to it. flush is the one exception this design system makes to its floating surfaces: the panel sits against the edges, takes the full height and is separated from the content by a single rule. Without this prop the variant would be unreachable for anyone composing through the shell, which is the normal path. |
 | `sidebarScrollbar` | `hover \| visible` | hover | The left sidebar's scrollbar, forwarded to it: hover (light, shown with the pointer over it, with focus inside and on touch screens) or visible (always on screen). |
@@ -2662,7 +2662,7 @@ asideVariant="flush" glues the right column to the edge of the window, like the 
 | `onSidebarCollapsedChange` | `(collapsed: boolean) => void` | — | Called on every change — the button, or the width crossing 1280px. Keeping the preference is the app's job, as before. |
 | `children` | `ReactNode` | — | Page content. Rendered inside the <main> the shell owns. |
 | `topbarDivider` | `boolean` | false | Passes Topbar's `divider` to the flush bar the shell builds. |
-| `layout` | `"app" \| "docs" \| "sidebar"` | "app" | The arrangement. docs is the one of the reference documentation: one block of 1400 in the middle of the screen with the sidebar (220), the text and, from 1280 up, the table of contents (240 at the start of a 268 column); the bar on top is the small one, on the same block. Both columns start 16 below the bar and stop 32 above the bottom of the screen; inside the sidebar, 16 on both sides and 8 inside each item; the table of contents shows no scrollbar. From 768 up the sidebar is a column; below, it is a drawer that opens from the end of the bar, where its button goes (after the bar's actions). Below 1280 the table of contents is a sticky bar under the top bar, 40 high, with the name of the section in view; it opens the list as a drawer. On a phone the text keeps 24 from the edge and 32 below that bar. "sidebar": the sidebar runs from the top of the window to the bottom, with the brand at its top (the sidebar header); the topbar exists only when you pass `topbar`, and then it sits over the content column alone. With sidebarVariant, floating or flush. The collapse button is AppShell.SidebarToggle, beside the page title. |
+| `layout` | `"app" \| "docs" \| "sidebar"` | "app" | The arrangement. docs is the one of the reference documentation: one block of 1400 in the middle of the screen with the sidebar (220), the text and, from 1280 up, the table of contents (240 at the start of a 268 column); the bar on top is the small one, on the same block. Both columns start 16 below the bar and stop 32 above the bottom of the screen; inside the sidebar, 16 on both sides and 8 inside each item; the table of contents shows no scrollbar. From 768 up the sidebar is a column; below, it is a drawer that opens from the end of the bar, where its button goes (after the bar's actions). Below 1280 the table of contents is a sticky bar under the top bar, 40 high, with the name of the section in view; it opens the list as a drawer. On a phone the text keeps 24 from the edge and 32 below that bar. "sidebar": the sidebar runs from the top of the window to the bottom, with the brand at its top (the sidebar header); the topbar exists only when you pass `topbar` or `topbarActions`, and then it sits over the content column alone. With sidebarVariant, floating or flush. The collapse button is AppShell.SidebarToggle, beside the page title. |
 | `topbarTabs` | `HeaderTab[]` | — | The second row of the bar on top: the site's areas, forwarded as the Header's tabs. |
 | `topbarCurrentTab` | `string` | — | The id of the current area, forwarded as the Header's currentTab. |
 | `topbarTabsLabel` | `string` | "Sections" | The accessible name of the second row, forwarded as the Header's tabsLabel. |
@@ -2671,6 +2671,7 @@ asideVariant="flush" glues the right column to the edge of the window, like the 
 | `asideLabel` | `string` | strings.tocLabel | The right column's name for screen readers. |
 | `asideVariant` | `"floating" \| "flush" \| "plain"` | sidebarVariant | Skin of the right-hand column. Without it, the same as the left sidebar. plain removes the box — the items sit loose on the page, like a documentation page's "On this page". |
 | `topbarTabsEnd` | `ReactNode` | — | The end of the areas row (the Header's tabsEnd): the Web \| Native switch of a documentation site. |
+| `topbarActions` | `ReactNode` | — | The far end of the topbar, away from the brand and from topbar: the theme switch, the account, notifications. It is the Header's actions. With layout="sidebar" the content bar also appears when only this is passed; with layout="docs" the drawer button stays last, after them. |
 </page>
 
 <page url="https://aureauds.dev/aspectratio.html">
@@ -11645,7 +11646,7 @@ import {AppShell, Sidebar, Avatar, IconButton} from "@aurea-uds/react";
 <page url="https://aureauds.dev/pattern-appshell-a-bar-over-the-content-alone.html">
 # A bar over the content alone
 
-Pass `topbar` and the bar comes back over the content column only, with the collapse button first in it. The sidebar keeps running from top to bottom.
+Pass `topbar` and the bar comes back over the content column only, with the collapse button first in it. What goes in `topbarActions` sits at its far end, away from the title — search, the theme switch, the account. The sidebar keeps running from top to bottom.
 
 ## Usage
 
@@ -11659,7 +11660,8 @@ import {AppShell, Sidebar, SearchField} from "@aurea-uds/react";
   sidebarVariant="flush"
   sidebarCollapsible
   brand={<Sidebar.Brand logo="A" name="Acme" description="Workspace" />}
-  topbar={<><strong>Reports</strong><SearchField aria-label="Search" placeholder="Search…" /></>}
+  topbar={<strong>Reports</strong>}
+  topbarActions={<SearchField aria-label="Search" placeholder="Search…" />}
   navItems={items}
   currentNavId="reports"
 >
@@ -17457,6 +17459,36 @@ import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
   <LogStream lines={tail} />
   <Button variant="outline">Pause live tail</Button>
 </Card>
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-51-0.html">
+# v0.51.0
+
+The far end of the top bar of AppShell — where the theme switch, notifications and the account go.
+
+A new slot on `AppShell`, on the web. Nothing changes unless you use it.
+
+## New
+
+- **`AppShell topbarActions`** — the `actions` of the `Header`, forwarded. What you pass sits at the far end of the top bar, away from the brand and from `topbar`: the theme switch, notifications, the account. With `layout="sidebar"` the content bar lines up from the start, so anything passed in `topbar` used to sit next to the collapse button; now the end of the bar has its own slot, 20 from the edge and on the line of the page title (at the start, in right-to-left). Pass `topbarActions` alone and the content bar still appears. With the default and the `"docs"` layouts it comes after `topbar`; in `"docs"` the drawer button stays last.
+
+## Fixed
+
+- **The "A bar over the content alone" example** put the search in `topbar` and only drew it at the end with a nudge written into the example; copying its code gave you the search next to the title. It now uses `topbarActions`.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.51.0 @aurea-uds/core@0.51.0 @aurea-uds/fonts@0.51.0 @aurea-uds/icons@0.51.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.51.0
 ```
 </page>
 
