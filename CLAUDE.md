@@ -203,6 +203,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.49.0` | O mapa desmarca (MNT-35): com um nó escolhido, o clique na área vazia e o Esc chamam `onSelect(null)`, no modo de leitura e no de arrumar, e o leitor de tela ouve `graphSelectionCleared` — pedido #104. **Publicada em 29/10/2026** (entre 14:40 e 14:50, Brasília, medido no npm), pelo terminal do Victor |
 | `0.49.1` | Dois encaixes do nativo e uma ficha: o `Button` com `fullWidth` na altura do tamanho (E18), o `brand` do `Header` que encolhe e deixa as ações na tela (E17) e a ficha do tom `link` (E19) — pedido #105. **Publicada em 29/10/2026** (entre 22:28 e 22:35, Brasília, medido no npm), pelo terminal do Victor |
 | `0.50.0` | A lateral de contraste (MNT-36): `Sidebar contrast` e `AppShell sidebarContrast` — escura nas duas telas, na flutuante e na de canto reto, com as cores medidas da Ember em tokens só dela ([ADR-0087](decisions/0087-a-lateral-de-contraste.md)) — pedido #106. **Publicada em 30/10/2026** (entre 10:02 e 10:09, Brasília, medido no npm), pelo terminal do Victor |
+| `0.51.0` | A ponta da barra de cima (MNT-37): `AppShell topbarActions`, o `actions` do `Header` repassado em todo arranjo — no `layout="sidebar"`, a chave de tema vai para o fim da barra do conteúdo ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md), seção do MNT-37) — pedido #108. **Publicada em 30/10/2026** (entre 18:20 e 18:23, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -744,6 +745,13 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    (5) a publicação do site caiu duas vezes num 502 passageiro da API do GitHub — o conserto entrou no lote seguinte.
    **Publicada em 30/10/2026** (entre 10:02 e 10:09, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
    #106. O registro entrou no lote seguinte (o site que não para num erro passageiro).
+
+50. **`0.51.0`, a ponta da barra de cima, feita em 30/10/2026** — o MNT-37 de um app da web: no `layout="sidebar"` a chave
+   de tema que o app punha no `topbar` ficava colada no botão de recolher, porque o shell não repassava o encaixe da ponta
+   do `Header`. Agora é o `AppShell topbarActions`, em todo arranjo (no `"docs"`, o botão da gaveta continua o último). A
+   bancada foi o `AppShell` de verdade (`apps/keyboard-probe/ponta.html`). Das 24 fotos do Linux, só as duas `index`
+   mudaram, no selo da versão. **Publicada em 30/10/2026** (entre 18:20 e 18:23, Brasília, medido no npm), pelo terminal do
+   Victor, da junção do pedido #108. O registro entrou no lote seguinte (as peças do site B, 0.52.0).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

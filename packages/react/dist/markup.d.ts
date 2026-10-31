@@ -346,7 +346,8 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
     current?: string;
     /** O que fica do lado direito: busca, botão de ação, conta. Fica na barra também no celular. */
     actions?: ReactNode;
-    /** Até onde o miolo da barra cresce, pela escala do `Container` (`sm` 640 … `2xl` 1536, `full`). */
+    /** Até onde o miolo da barra cresce, pela escala do `Container` (`sm` 640 … `2xl` 1536, `full`). Na `pill` (o site B,
+     *  30/10/2026), a cápsula passa a ser o miolo, da largura do `Container`, e não do conteúdo. */
     maxWidth?: ContainerSize;
     /**
      * Onde ficam os links (14/10/2026): `"end"` (o padrão) logo antes das ações, na outra ponta da marca; `"start"`
@@ -360,8 +361,9 @@ export interface HeaderProps extends HTMLAttributes<HTMLElement>, RefAttributes<
      */
     size?: "md" | "sm";
     /**
-     * Só na `flush` (15/10/2026): o fundo transparente que EMBAÇA o que passa por baixo, como o topo da página inicial
-     * da referência. Quem pede menos transparência no sistema, ou o navegador sem desfoque, recebe o fundo cheio.
+     * Na `flush` (15/10/2026) e na `pill` (o site B, 30/10/2026): o fundo transparente que EMBAÇA o que passa por baixo,
+     * como o topo da página inicial da referência. Quem pede menos transparência no sistema, ou o navegador sem desfoque,
+     * recebe o fundo cheio.
      */
     blurred?: boolean;
     /** O que entra no MENU DO CELULAR, embaixo dos links (15/10/2026): o GitHub, a conta. Na barra larga não aparece. */

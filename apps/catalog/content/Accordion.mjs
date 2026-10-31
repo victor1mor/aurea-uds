@@ -22,6 +22,7 @@ export default {
     "The hover highlight is a capsule — Aurea's corner on the reference's measures.",
     "multiple lets several stay open; defaultValue opens items from the start.",
     "variant=\"surface\" puts it in a card. A disabled item is announced and skipped by Tab.",
+    "indicator=\"plus\" and size=\"lg\" make the FAQ row: a plus that turns into ×, 60 tall.",
   ],
 
   examples: [
@@ -47,6 +48,14 @@ export default {
       description: "multiple keeps each item independent.",
       code: '<Accordion multiple defaultValue={["ship", "native"]} items={items} />',
       render: () => h("div", {style: wide}, h(Accordion, {multiple: true, defaultValue: ["ship", "native"], items: ITENS})),
+    },
+    {
+      title: "Plus, large",
+      description: "indicator=\"plus\" swaps the arrow for a plus in a circle, which turns into a yellow × when the item " +
+        "opens; size=\"lg\" is the 60-tall row with body-size text. One accordion per question, as in a FAQ.",
+      code: '<Accordion variant="surface" indicator="plus" size="lg" defaultValue={["ship"]} items={[item]} />',
+      render: () => h("div", {style: {...wide, display: "grid", gap: "var(--space-2)"}}, ...ITENS.map((i) =>
+        h(Accordion, {key: i.id, variant: "surface", indicator: "plus", size: "lg", defaultValue: i.id === "ship" ? ["ship"] : undefined, items: [i]}))),
     },
   ],
 };

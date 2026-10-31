@@ -456,6 +456,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.52.0](https://aureauds.dev/release-v0-52-0.md): The pill on AppShell, a reading ring on TableOfContents and a plus on Accordion — the pieces of the new site.
 - [v0.51.0](https://aureauds.dev/release-v0-51-0.md): The far end of the top bar of AppShell — where the theme switch, notifications and the account go.
 - [v0.50.0](https://aureauds.dev/release-v0-50-0.md): A dark sidebar on any page — dark on the light theme, darker than the page on the dark one.
 - [v0.49.1](https://aureauds.dev/release-v0-49-1.md): On native, a full-width button keeps its size's height, and a long title in the Header no longer pushes the actions off the screen.

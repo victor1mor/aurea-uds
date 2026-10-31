@@ -8,9 +8,11 @@ import { Collapsible as BaseCollapsible } from "@base-ui/react/collapsible";
 import { cx } from "./internal.js";
 import { soOValor } from "./pure.js";
 import { Icon } from "./system.js";
-export function Accordion({ items, variant = "default", multiple = false, defaultValue, className }) {
+// O SITE B (30/10/2026, protótipo): `indicator="plus"` troca a setinha pelo "+" numa bolinha, que gira e vira o "×"
+// amarelo quando abre; `size="lg"` é a linha de 60 com a letra do texto (16), a das perguntas do desenho aprovado.
+export function Accordion({ items, variant = "default", multiple = false, defaultValue, indicator = "chevron", size = "md", className }) {
     const grupo = React.useId();
-    return _jsx("div", { className: cx("accordion", variant === "surface" && "accordion-surface", className), children: items.map(i => _jsxs("details", { className: "accordion-item", name: multiple ? undefined : grupo, open: defaultValue?.includes(i.id) || undefined, children: [_jsxs("summary", { "aria-disabled": i.disabled || undefined, tabIndex: i.disabled ? -1 : undefined, onClick: i.disabled ? (e) => e.preventDefault() : undefined, children: [_jsx("span", { className: "accordion-title", children: i.title }), _jsx("span", { className: "accordion-chevron", "aria-hidden": "true" })] }), _jsx("div", { className: "accordion-content", children: i.content })] }, i.id)) });
+    return _jsx("div", { className: cx("accordion", variant === "surface" && "accordion-surface", indicator === "plus" && "accordion-plus", size === "lg" && "accordion-lg", className), children: items.map(i => _jsxs("details", { className: "accordion-item", name: multiple ? undefined : grupo, open: defaultValue?.includes(i.id) || undefined, children: [_jsxs("summary", { "aria-disabled": i.disabled || undefined, tabIndex: i.disabled ? -1 : undefined, onClick: i.disabled ? (e) => e.preventDefault() : undefined, children: [_jsx("span", { className: "accordion-title", children: i.title }), _jsx("span", { className: "accordion-chevron", "aria-hidden": "true" })] }), _jsx("div", { className: "accordion-content", children: i.content })] }, i.id)) });
 }
 // COLLAPSIBLE — uma seção que abre e fecha, com o estado do lado de quem usa.
 //

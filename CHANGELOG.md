@@ -17,6 +17,14 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.51.0 (31/10/2026)
+
+- **A 0.51.0 publicada entre 18:20 e 18:23 de 30/10/2026** (Brasília, medido no npm; o `tokens` às 18:20 e o `native`, o
+  último a aparecer no registro, às 18:23): o `released-surface.json` do commit do publish (`7cffd0df`) — nenhum nome novo
+  e nenhuma frase nova, nem na web nem no nativo. O CHANGELOG ([0.51.0] publicada) e o CLAUDE.md (a linha na tabela e o
+  item 50).
+- Não muda nenhum pacote publicado.
+
 ### O site não para num erro passageiro do GitHub (30/10/2026)
 
 - **A página de saúde tenta de novo** (`scripts/saude-rodadas.mjs`, que roda na publicação do site): ela faz 30 consultas
@@ -222,9 +230,42 @@ como deveria funcionar"*.
 
 ---
 
+## [0.52.0] — 2026-10-31
+
+**As peças do site B** ([ADR-0088](decisions/0088-o-site-b.md)): o que a página Introduction do desenho aprovado pediu às
+peças, aprovado pelo Victor na bancada da página inteira (*"pode"*, 31/10/2026). Tudo só acrescenta; sem as props novas,
+nada muda. Só na web.
+
+### Adicionado
+
+- **`AppShell topbarVariant="pill"`** (o tipo recusava a `pill`) e **`AppShell topbarBlurred`**: a barra de cima é a
+  cápsula de 64 a 14 do alto, da largura do bloco; no `layout="docs"` as colunas encostam no bloco com 28 de vão, a
+  lateral, o texto e o índice começam a 96 (14 + 64 + 18), o índice tem 236 e a altura do que mostra, e a lateral vai até
+  16 do pé da tela. Fora do arranjo de documentação, a cápsula vai de ponta a ponta. O `topbarBlurred` é o `blurred` do
+  `Header`.
+- **`Header blurred` na `pill`** (era só na `flush`), e o `maxWidth` da `pill` faz a própria cápsula ter a largura do
+  `Container`, em vez de abraçar o conteúdo.
+- **`TableOfContents progress`** — o anel de leitura no lugar do ícone do nome: quanto da página já rolou, no anel e em
+  número na ponta da linha (fora do leitor de tela, que já ouve a seção atual pelo `aria-current`); no HTML puro quem
+  escreve é o `aurea.js`. E **`indicator="segment"`**, o item atual na cápsula levantada, como o da `Sidebar` (o padrão,
+  `"line"`, é o traço de sempre).
+- **`Accordion indicator="plus"`** — o "+" numa bolinha de 32, que gira e vira o "×" amarelo quando abre — e
+  **`size="lg"`**, a linha de 60 com a letra do texto (16), a 22 da borda: as perguntas do site.
+
+### Mudado
+
+- **O grupo que dobra da `Sidebar`**: a seta vai para a ponta do nome, e os itens ficam um passo (28) para dentro; a lista
+  leva a classe `sidebar-group-list`. Na página sem React, o `aurea.js` abre e fecha o grupo e vira a seta.
+
+Quem cobra: `tests/unit/site-b-pecas.test.tsx` e `tests/visual/site-b-pecas.spec.ts` (com as peças e a folha da 0.51.0,
+reprovam 9 dos 11 e os 2).
+
+---
+
 ## [0.51.0] — 2026-10-30
 
-**A ponta da barra de cima** (MNT-37, de um app da web): o `AppShell` passa a ter o encaixe da outra ponta da barra, longe
+✅ **Publicada em 30/10/2026, entre 18:20 e 18:23 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+#108.** **A ponta da barra de cima** (MNT-37, de um app da web): o `AppShell` passa a ter o encaixe da outra ponta da barra, longe
 da marca e do título — onde fica a chave de tema, o sino, a conta. Só na web.
 
 ### Adicionado

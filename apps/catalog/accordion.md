@@ -25,6 +25,8 @@ import {Accordion} from "@aurea-uds/react";
 
 - variant="surface" puts it in a card. A disabled item is announced and skipped by Tab.
 
+- indicator="plus" and size="lg" make the FAQ row: a plus that turns into ×, 60 tall.
+
 ## Examples
 
 ### Surface
@@ -43,6 +45,14 @@ multiple keeps each item independent.
 <Accordion multiple defaultValue={["ship", "native"]} items={items} />
 ```
 
+### Plus, large
+
+indicator="plus" swaps the arrow for a plus in a circle, which turns into a yellow × when the item opens; size="lg" is the 60-tall row with body-size text. One accordion per question, as in a FAQ.
+
+```tsx
+<Accordion variant="surface" indicator="plus" size="lg" defaultValue={["ship"]} items={[item]} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -51,4 +61,6 @@ multiple keeps each item independent.
 | `variant` | `default \| surface` | default | surface puts the items in a card, with the line at 94% and the neutral hover. |
 | `multiple` | `boolean` | false | Lets several items stay open. Without it, opening one closes the other, as in the reference. |
 | `defaultValue` | `string[]` | — | The ids of the items that start open. |
+| `indicator` | `chevron \| plus` | chevron | How opening is drawn: the arrow at the end, or a plus in a circle that turns 45° into a yellow × when the item opens (the FAQ of this site). |
+| `size` | `md \| lg` | md | lg is the 60-tall row with body-size (16) text, 22 from the edge, for questions that stand alone. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin. |

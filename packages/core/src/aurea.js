@@ -263,16 +263,53 @@
     }, {rootMargin: "0px 0px -75% 0px"});
     for (var k = 0; k < targets.length; k++) observer.observe(targets[k]);
   }
+  // O ANEL DE LEITURA (`TableOfContents progress`, o site B — 30/10/2026, protótipo): quanto da página já rolou, no anel
+  // e no número da linha do nome. Na página estática quem escreve é este caminho; no React, o próprio componente.
+  function tocProgress(toc) {
+    var anel = toc.querySelector(".toc-progress .progress-circle");
+    var fio = toc.querySelector(".toc-progress .progress-circle-fill");
+    var numero = toc.querySelector(".toc-progress-value");
+    if (!anel || !numero) return;
+    function ler() {
+      var alto = document.documentElement.scrollHeight - window.innerHeight;
+      var v = alto > 0 ? Math.round(Math.min(1, Math.max(0, window.scrollY / alto)) * 100) : 100;
+      numero.textContent = v + "%";
+      anel.setAttribute("aria-valuenow", String(v));
+      if (fio) fio.setAttribute("stroke-dashoffset", String(100 - v));
+    }
+    ler();
+    window.addEventListener("scroll", ler, {passive: true});
+    window.addEventListener("resize", ler);
+  }
   function initTocs() {
     // `[data-toc-spy="react"]` fica de fora: o componente React observa por conta própria desde
     // 21/08/2026, e dois observadores escrevendo o mesmo `aria-current` com faixas diferentes é
     // pior que nenhum. Numa página estática — o catálogo, os docs — a marca não aparece e este
     // caminho segue sendo o único.
     var tocs = document.querySelectorAll('.toc:not([data-toc-spy="react"])');
-    for (var t = 0; t < tocs.length; t++) tocSpy(tocs[t]);
+    for (var t = 0; t < tocs.length; t++) { tocSpy(tocs[t]); tocProgress(tocs[t]); }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initTocs);
   else initTocs();
+
+  // O GRUPO QUE DOBRA da lateral (4-D), na página sem React (o site B — 30/10/2026, protótipo): o botão abre e fecha a
+  // lista dele e vira a seta. No React quem faz é o próprio componente; se os dois rodam, chegam ao mesmo estado, porque
+  // os dois partem do mesmo "aberto".
+  document.addEventListener("click", function (e) {
+    var botao = e.target.closest ? e.target.closest(".sidebar-group-toggle[aria-controls]") : null;
+    if (!botao) return;
+    var lista = document.getElementById(botao.getAttribute("aria-controls"));
+    if (!lista) return;
+    var abrir = botao.getAttribute("aria-expanded") !== "true";
+    botao.setAttribute("aria-expanded", abrir ? "true" : "false");
+    lista.hidden = !abrir;
+    var seta = botao.querySelector(".sidebar-group-caret use");
+    if (!seta) return;
+    var rtl = getComputedStyle(botao).direction === "rtl";
+    var nome = abrir ? "caret-down" : rtl ? "caret-left" : "caret-right";
+    var href = seta.getAttribute("href") || "";
+    seta.setAttribute("href", href.replace(/#i-caret-[a-z]+$/, "#i-" + nome));
+  });
 
   // ── Gaveta de navegação do AppShell: o foco ────────────────────────────────────────────
   // O popover nativo NÃO entrega a mesma gestão de foco nos dois motores, e isto foi MEDIDO no

@@ -222,8 +222,9 @@ img,svg { display:block; }
 /* A base do topo carrega só o ARRANJO; cada variante traz a própria superfície.
    floating = caixa solta (a que já estava) · flush = faixa encostada nas bordas com fio
    embaixo, para o topo virar moldura da janela · pill = cápsula centrada, de cabeçalho
-   de site. Só floating e flush entram no grid do AppShell; a pill é peça avulsa (numa
-   pílula não cabem busca + densidade + tema + comando). */
+   de site. ~~Só floating e flush entram no grid do AppShell; a pill é peça avulsa (numa
+   pílula não cabem busca + densidade + tema + comando).~~ Desde o site B (30/10/2026) a pill
+   entra no AppShell: com `maxWidth`, a cápsula é o miolo, da largura do bloco, e cabe tudo. */
 .topbar { grid-column:1/-1; position:sticky; z-index:var(--z-sticky); display:flex; align-items:center; justify-content:space-between; gap:var(--space-4); min-height:var(--topbar-height); }
 .topbar-floating { top:var(--space-4); margin:var(--space-4) var(--space-4) 0; padding:var(--space-2) var(--space-4); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); color:var(--card-foreground); }
 /* flush: encostada nas bordas. SEM fio embaixo (pedido do Victor — a referência não tem)
@@ -233,6 +234,19 @@ img,svg { display:block; }
 /* divider (B-07): a linha que separa a barra grudada do conteúdo que passa por baixo. */
 .topbar-divider { border-block-end:var(--border-width) solid transparent; }
 .topbar-pill { top:var(--space-4); width:max-content; max-width:calc(100% - var(--space-8)); margin:var(--space-4) auto 0; justify-content:flex-start; gap:var(--space-2); padding:var(--space-2); border:1px solid transparent; border-radius:var(--radius-control); background:var(--card); color:var(--card-foreground); }
+/* A PÍLULA LARGA (`pill` com `maxWidth` — o topo do site B, aprovado em 26/10/2026; no `AppShell`, `topbarVariant="pill"`):
+   a cápsula é o MIOLO, da largura do `Container`, e não do conteúdo. O cabeçalho em volta vira a faixa transparente que
+   gruda no alto, com a cápsula a --space-4 da borda da tela; a cápsula tem a altura da barra (64), o fundo do cartão e a
+   sombra das superfícies que flutuam (`--shadow-md`). A marca fica a --space-5 da ponta da cápsula; os botões redondos
+   da outra ponta, a --space-2 (o canto da cápsula já afasta o círculo). Entre as partes, --space-3 (o desenho tem 14): com 16,
+   a pílula do site não cabia na tela de 1280 (medido, 30/10/2026). */
+.topbar-pill.topbar-contained { top:0; width:auto; max-width:none; margin:0; padding:calc(var(--space-3) + var(--space-05)) var(--space-4) 0; border-width:0; border-radius:0; background:transparent; }
+.topbar-pill.topbar-contained > .topbar-inner { flex-wrap:nowrap; gap:var(--space-3); padding-inline:var(--space-5) var(--space-2); border-radius:var(--radius-control); background:var(--card); color:var(--card-foreground); box-shadow:var(--shadow-md); }
+/* O desfoque na pílula (`blurred`): na solta, a própria cápsula; na larga, o miolo. A mesma mistura da `flush` (o cartão a
+   72%, ADR-0086), e o fundo cheio para quem pede menos transparência ou não tem o desfoque. */
+:is(.topbar-pill.topbar-blurred:not(.topbar-contained),.topbar-pill.topbar-blurred > .topbar-inner) { background:color-mix(in oklab, var(--card) 72%, transparent); -webkit-backdrop-filter:blur(var(--space-4)) saturate(160%); backdrop-filter:blur(var(--space-4)) saturate(160%); }
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) { :is(.topbar-pill.topbar-blurred:not(.topbar-contained),.topbar-pill.topbar-blurred > .topbar-inner) { background:var(--card); } }
+@media (prefers-reduced-transparency:reduce) { :is(.topbar-pill.topbar-blurred:not(.topbar-contained),.topbar-pill.topbar-blurred > .topbar-inner) { background:var(--card); -webkit-backdrop-filter:none; backdrop-filter:none; } }
 /* .brand nasceu como cabeçalho VERTICAL da lateral (borda embaixo + respiro); no topo
    ele deita, então some com a borda e a margem — o lockup em si continua o mesmo. */
 .topbar .brand { min-height:auto; margin:0; padding:0; border:0; }
@@ -435,6 +449,21 @@ img,svg { display:block; }
    `:not`): mais fraca, ou antes dela, a lateral grudava a 66 do topo, por baixo da barra (medido). A linha de baixo
    fica pendurada fora da barra, como a da referência, e não entra na conta. */
 .app-shell-docs { --docs-top:calc(var(--space-12) + var(--space-2) + var(--space-1) + var(--space-10)); }
+/* Com a PÍLULA (`topbarVariant="pill"`, o site B — 30/10/2026), a cápsula (64) fica a 14 do alto e a página começa 18
+   abaixo dela, a 96, como no desenho aprovado (medido em 31/10/2026). A lateral e o índice grudam a 96: esta conta é a
+   altura em que eles grudam menos o --space-4 que o arranjo soma, e não a altura da barra. */
+.app-shell-docs.app-shell-pill { --docs-top:calc(var(--space-4) + var(--topbar-height)); }
+/* E sem a barra do índice abaixo de 1280: no desenho aprovado o índice só existe na coluna da direita (protótipo). */
+.app-shell-docs.app-shell-pill > .docs-toc-bar { display:none; }
+/* As colunas ficam a --space-4 das bordas da tela, alinhadas com a pílula (sem isto, abaixo de 1432 a lateral e o índice
+   encostavam na borda — medido a 1280). */
+@media (min-width:1024px) { .app-shell-docs.app-shell-pill { padding-inline:var(--space-4); } .app-shell-docs.app-shell-pill > .topbar { padding-inline:0; }
+  /* A lateral com caixa vai até 16 do pé da tela, e não mais (o desenho, medido em 31/10/2026). */
+  .app-shell-docs.app-shell-pill > .sidebar:not(.app-shell-aside, .sidebar-plain) { block-size:auto; max-block-size:calc(100vh - var(--shell-top) - var(--space-4)); } }
+/* O conteúdo começa a 18 da pílula, como a lateral (78 + 18 = 96); de 1024 a 1279, sem o índice, ele vai até a borda do
+   bloco; no celular, o bloco fica a 16 das bordas. */
+@media (min-width:1024px) and (max-width:1279px) { .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) 0 0 var(--space-7); } }
+@media (max-width:767px) { .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) var(--space-4) 0; } }
 .app-shell-docs > .content > * { max-inline-size:var(--docs-text-width); }
 /* O texto a 24 da borda também no celular (o da página da referência a 375 e a 768; com o recheio de sempre do
    `AppShell`, ele encostava a 16 — a bancada do lote T pegou). */
@@ -476,6 +505,16 @@ img,svg { display:block; }
      ponta direita dele fica alinhada com a da barra de cima (o Victor, 17/10/2026: "componentes não alinhados"). */
   .app-shell-docs > .sidebar.app-shell-aside { grid-column:4; grid-row:2; justify-self:start; inline-size:var(--docs-toc-width);
     block-size:calc(100vh - var(--shell-top) - var(--space-8)); padding-block-start:0; padding-inline:var(--space-4); }
+  /* O índice COM CAIXA (o site B, 30/10/2026, protótipo): a caixa tem a altura do que ela mostra — até a da tela, e aí
+     rola —, e um respiro em cima; sem caixa, a coluna inteira, como na referência. */
+  .app-shell-docs > .sidebar.app-shell-aside:not(.sidebar-plain) { block-size:auto; max-block-size:calc(100vh - var(--shell-top) - var(--space-8));
+    padding-block:var(--space-4) var(--space-3); padding-inline:var(--space-3); }
+  /* E O ARRANJO COM A PÍLULA (o site B, protótipo): as colunas encostam no bloco com 28 de vão, como no desenho — o texto
+     começa a 28 da lateral e vai até 28 do índice, que tem 236 e fica na ponta do bloco. */
+  .app-shell-docs.app-shell-pill { --docs-aside-width:calc(var(--docs-toc-width) + var(--space-6)); }
+  .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) 0 0 var(--space-7); }
+  /* Também o índice que abre por cima (`[popover]`): a regra dele, mais adiante, devolvia os 240. */
+  .app-shell-docs.app-shell-pill > .sidebar.app-shell-aside, .app-shell-docs.app-shell-pill > .sidebar.app-shell-aside[popover] { justify-self:end; inline-size:calc(var(--docs-toc-width) - var(--space-1)); }
 }
 /* A margem é LÓGICA desde 03/10/2026 (AN-01): era `margin:space-4 space-4 space-4 0`, física, e na
    escrita da direita para a esquerda o conteúdo encostava na borda da página e deixava 32 de vão na
@@ -731,6 +770,10 @@ img,svg { display:block; }
 .sidebar-group-toggle { display:flex; align-items:center; gap:var(--space-1); min-block-size:var(--control-h-xs); padding:0; border:0; border-radius:var(--radius-control); background:transparent; font:inherit; font-size:var(--text-sm); font-weight:var(--weight-medium); text-align:start; cursor:pointer; }
 .sidebar-group-toggle > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .sidebar-group-caret { flex:none; opacity:.8; }
+/* O SITE B (30/10/2026, protótipo): no grupo que dobra, a seta vai para a PONTA da linha e os itens ficam um passo para
+   dentro do nome do grupo, como no desenho aprovado. */
+.sidebar-group-toggle > span { flex:1; min-inline-size:0; }
+.sidebar-group-list > .sidebar-list { padding-inline-start:var(--space-7); }
 .sidebar-group-action { display:flex; align-items:center; gap:var(--space-1); flex:none; }
 /* 4-A — A LATERAL SOLTA vai do topo da janela até embaixo, como a da referência: fora do `AppShell` não há barra de cima
    para reservar (o item 106 mediu: solta, a lateral ficava 56 mais baixa e mais curta, e o app tinha de zerar o
@@ -2760,6 +2803,18 @@ button.tag-main { cursor:pointer; }
 .accordion-item[open] > summary .accordion-chevron { transform:rotate(-180deg); }
 .accordion-content { padding-block:0 var(--space-4); padding-inline:var(--space-4); color:var(--muted-foreground); font-size:var(--text-sm); }
 .accordion-surface { border-radius:var(--radius-card); background:var(--card); }
+/* O SITE B (30/10/2026, protótipo): o "+" numa bolinha (`indicator="plus"`), que gira 45 e vira o "×" no amarelo da
+   marca quando abre; e a linha de 60 com a letra do texto (`size="lg"`) — as perguntas do desenho aprovado. */
+.accordion-plus { --accordion-mais:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z'/%3E%3C/svg%3E"); }
+.accordion-plus .accordion-chevron { display:grid; place-items:center; flex:none; inline-size:var(--space-8); block-size:var(--space-8); border-radius:var(--radius-full);
+  background:var(--fill-2); color:var(--foreground); -webkit-mask:none; mask:none; transition:transform var(--duration-base) var(--ease-standard), background-color var(--duration-base); }
+.accordion-plus .accordion-chevron::before { content:""; inline-size:var(--icon-sm); block-size:var(--icon-sm); background:currentColor;
+  -webkit-mask:var(--accordion-mais) center/contain no-repeat; mask:var(--accordion-mais) center/contain no-repeat; }
+.accordion-plus .accordion-item[open] > summary .accordion-chevron { transform:rotate(45deg); background:var(--primary); color:var(--primary-foreground); }
+.accordion-lg .accordion-item > summary { min-block-size:calc(var(--space-12) + var(--space-3)); gap:calc(var(--space-3) + var(--space-05)); padding-block:0;
+  padding-inline:calc(var(--space-5) + var(--space-05)) var(--space-4); font-size:var(--text-base); font-weight:var(--weight-semibold); line-height:normal; }
+.accordion-lg .accordion-content { padding-inline:calc(var(--space-5) + var(--space-05)); padding-block-end:var(--space-5); font-size:var(--text-base); line-height:var(--leading-relaxed); }
+.accordion-lg .accordion-content > p { margin:0; }
 .accordion-surface > .accordion-item::after { inset-inline-start:3%; inline-size:94%; }
 .accordion-surface > .accordion-item:not([open]) > summary:hover:not([aria-disabled="true"]) { background:var(--secondary); }
 @media (prefers-reduced-motion:reduce) { .accordion-chevron { transition:none; } }
@@ -2869,6 +2924,16 @@ button.tag-main { cursor:pointer; }
 .toc a { position:relative; }
 .toc a[aria-current]::before { content:""; position:absolute; inset-block:0; inset-inline-start:calc(-1 * var(--space-05)); inline-size:var(--space-05); background:var(--primary); }
 .toc a.toc-sub { padding-inline-start:var(--space-6); }
+/* O SITE B (30/10/2026, protótipo): o ANEL DE LEITURA (`progress`) no lugar do ícone do nome, com o número na ponta; e o
+   item atual na CÁPSULA LEVANTADA (`indicator="segment"`), o mesmo desenho do `segment` da `Sidebar` (ADR-0082). */
+.toc-label-progress { color:var(--foreground); font-weight:var(--weight-semibold); }
+.toc-progress { display:inline-flex; flex:none; }
+.toc-progress .progress-circle-track { stroke:var(--fill-3); }
+.toc-progress-value { margin-inline-start:auto; font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); color:var(--muted-foreground); }
+.toc-segment a { display:flex; align-items:center; min-block-size:var(--space-10); padding-inline:var(--space-3); border-radius:var(--radius-control); }
+.toc-segment a:hover { background:var(--fill-1); }
+.toc-segment a[aria-current] { background:var(--segment); box-shadow:var(--shadow-sm); font-weight:var(--weight-semibold); }
+.toc-segment a[aria-current]::before { content:none; }
 /* `--log-h` é a QUINTA válvula de altura do core, no idioma de `--chart-h` (I4), `--qr-size` (B6),
    `--datagrid-max-h` (F6) e `--media-h` (I7). Default 240px — o de antes —, então nada muda para
    quem não passa nada. A causa é medida em 11/08/2026: a altura era FIXA, e por isso três prévias
@@ -4267,6 +4332,11 @@ button.graph-node-body { cursor:pointer; }
   /* Sem linha (ADR-0072, 16/10/2026): a rodinha do `Spinner` e o visto do `Checkbox` deixaram de ser linha (que o alto
      contraste pinta) e viraram desenho por máscara — fundo, que a troca apaga. Saem da troca, na cor do texto. */
   .spinner,.checkbox input:checked + .control-mark::after { forced-color-adjust:none; background:CanvasText; }
+  /* O "+" das perguntas (`Accordion indicator="plus"`, o site B — 31/10/2026): o glifo é o `::before` por máscara, e a
+     bolinha em volta é fundo. A bolinha sai (aberta ou fechada: o amarelo da aberta, fora da troca, ficaria sob o glifo na
+     cor do texto), e o glifo pinta na cor do texto. */
+  .accordion-plus .accordion-chevron, .accordion-plus .accordion-item[open] > summary .accordion-chevron { background:transparent; }
+  .accordion-plus .accordion-chevron::before { forced-color-adjust:none; background:CanvasText; }
 }
 
 

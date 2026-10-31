@@ -121,7 +121,7 @@
       "name": "maxWidth",
       "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\" | \"docs\" | \"full\"",
       "default": "—",
-      "description": "How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding. docs is the documentation block, 1400 (--docs-width), with 24 of padding from 768 up."
+      "description": "How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding. docs is the documentation block, 1400 (--docs-width), with 24 of padding from 768 up. On pill, the capsule itself takes that width, instead of hugging its content."
     },
     {
       "name": "itemsJustify",
@@ -139,7 +139,7 @@
       "name": "blurred",
       "type": "boolean",
       "default": "false",
-      "description": "Only on flush: a transparent background that blurs what scrolls under it, as the reference's home page. With reduced transparency asked by the system, or a browser without backdrop blur, the background is solid."
+      "description": "On flush and pill: a transparent background that blurs what scrolls under it, as the reference's home page. With reduced transparency asked by the system, or a browser without backdrop blur, the background is solid."
     },
     {
       "name": "menuActions",

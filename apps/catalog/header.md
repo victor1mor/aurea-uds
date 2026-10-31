@@ -50,6 +50,14 @@ How far the bar's content grows, on the Container's scale, so the bar lines up w
 <Header variant="flush" brand={<strong>Acme</strong>} maxWidth="full" />
 ```
 
+### A wide pill that blurs
+
+On the pill, maxWidth makes the capsule itself as wide as the Container, and blurred lets what scrolls under it show through, blurred. With reduced transparency, or no blur in the browser, the fill is solid.
+
+```tsx
+<Header variant="pill" maxWidth="full" blurred brand={<strong>Acme</strong>} />
+```
+
 ### Links at the start
 
 itemsJustify="start" puts the links right after the brand; end, the default, puts them just before the actions.
@@ -77,10 +85,10 @@ itemsJustify="start" puts the links right after the brand; end, the default, put
 | `items` | `SidebarItem[]` | — | The website's links — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href and render (the router link); sub-items, icon and onClick are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel. |
 | `current` | `string` | — | The id of the current page's item: it gets aria-current="page", the highlight colour and the medium weight, in the bar and in the menu panel. |
 | `actions` | `ReactNode` | — | What sits on the right: search, a call to action, the account. It stays in the bar on a phone too. |
-| `maxWidth` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl" \| "docs" \| "full"` | — | How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding. docs is the documentation block, 1400 (--docs-width), with 24 of padding from 768 up. |
+| `maxWidth` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl" \| "docs" \| "full"` | — | How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding. docs is the documentation block, 1400 (--docs-width), with 24 of padding from 768 up. On pill, the capsule itself takes that width, instead of hugging its content. |
 | `itemsJustify` | `"start" \| "end"` | "end" | Where the links sit: end (just before the actions, at the other end from the brand) or start (right after the brand, with the actions at the other end — the reference's home page). |
 | `size` | `"md" \| "sm"` | "md" | The bar's height: md is 64 (the reference's bar guide), sm is 56 (the reference's home page), with 6 between the actions instead of 8. |
-| `blurred` | `boolean` | false | Only on flush: a transparent background that blurs what scrolls under it, as the reference's home page. With reduced transparency asked by the system, or a browser without backdrop blur, the background is solid. |
+| `blurred` | `boolean` | false | On flush and pill: a transparent background that blurs what scrolls under it, as the reference's home page. With reduced transparency asked by the system, or a browser without backdrop blur, the background is solid. |
 | `menuActions` | `ReactNode` | — | What only the phone menu carries, under the links (the GitHub link, the account). Not shown in the wide bar. |
 | `navLabel` | `string` | "Main" | The navigation's name for screen readers. Pass it in the page's language. |
 | `menuLabel` | `string` | "Menu" | The phone menu button's name for screen readers. Pass it in the page's language. In an app with client-side routing the panel does not close by itself on a page change: give the Header a key that changes with the route. |

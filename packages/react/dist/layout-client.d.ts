@@ -3,14 +3,14 @@ import { type Orientation, type Responsive } from "./pure.js";
 import { type IconButtonProps } from "./actions.js";
 import { type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarEntry, type SidebarCollapsible, type SidebarIndicator } from "./navigation.js";
 declare function AppShellSidebarToggle(props: Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant">): React.JSX.Element;
-export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, topbarActions, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, sidebarToggle, sidebarShortcut, sidebarIndicator, sidebarPanel, sidebarContrast, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, topbarActions, topbarBlurred, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, sidebarToggle, sidebarShortcut, sidebarIndicator, sidebarPanel, sidebarContrast, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     brand: ReactNode;
     navigation?: ReactNode;
     navItems?: SidebarEntry[];
     currentNavId?: string;
     navLabel?: string;
     topbar?: ReactNode;
-    topbarVariant?: Exclude<HeaderVariant, "pill">;
+    topbarVariant?: HeaderVariant;
     topbarDivider?: boolean;
     sidebarVariant?: SidebarVariant;
     /** O arranjo (lote T, 17/10/2026): `"app"` (o padrão, o de sempre) ou `"docs"`, o da documentação da referência — um
@@ -34,6 +34,9 @@ export declare function AppShell({ brand, navigation, navItems, currentNavId, na
      *  conta, o sino. É o `actions` do `Header`. No `layout="sidebar"` a barra do conteúdo passa a existir também quando o app
      *  passa só isto; no `"docs"`, o botão da gaveta continua o último, depois delas. */
     topbarActions?: ReactNode;
+    /** O site B (30/10/2026): o fundo da barra de cima que EMBAÇA o que passa por baixo — o `blurred` do `Header`, na
+     *  `flush` e na `pill`. */
+    topbarBlurred?: boolean;
     /** 0.32.0: a barra de rolagem da lateral da esquerda — o `scrollbar` da `Sidebar`. Padrão `hover` (clara, só com o
      *  ponteiro em cima); `visible` é a barra sempre à vista. */
     sidebarScrollbar?: SidebarScrollbar;

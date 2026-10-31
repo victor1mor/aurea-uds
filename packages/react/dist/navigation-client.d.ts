@@ -64,10 +64,14 @@ export interface TocItem {
     label: string;
     sub?: boolean;
 }
-export declare function TableOfContents({ items, current, label, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
+export declare function TableOfContents({ items, current, label, progress, indicator, className, ...props }: HTMLAttributes<HTMLElement> & RefAttributes<HTMLElement> & {
     items: TocItem[];
     current?: string;
     label?: string;
+    /** O anel de leitura no lugar do ícone do nome: quanto da página já rolou, em anel e em número. */
+    progress?: boolean;
+    /** O desenho do item atual: `"line"` (o padrão, o traço do lado) ou `"segment"` (a cápsula levantada, como a da `Sidebar`). */
+    indicator?: "line" | "segment";
 }): React.JSX.Element;
 export interface TreeNode {
     id: string;

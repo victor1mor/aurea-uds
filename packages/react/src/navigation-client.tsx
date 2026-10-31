@@ -11,7 +11,7 @@ import {Popover as BasePopover} from "@base-ui/react/popover";
 import {useValorResponsivo} from "./responsivo-runtime.js";
 import {type Responsive} from "./pure.js";
 import {cx, fundirRender, useAureaStrings, usePortalContainer} from "./internal.js";
-import {Kbd} from "./markup.js";
+import {Kbd, ProgressCircle} from "./markup.js";
 import {Icon, type IconName} from "./system.js";
 import {Button, IconButton, type IconButtonProps} from "./actions.js";
 import {Badge, Spinner} from "./feedback.js";
@@ -153,18 +153,39 @@ export function Pagination({page,total,onPageChange,variant="numbers",summary,hr
 // Isto voltou em 29/08/2026: o merge das duas linhagens ficou com a versão que não observa, e os
 // seis testes do `toc-spy.test.tsx` foram o que pegou.
 export interface TocItem{id:string;label:string;sub?:boolean}
-export function TableOfContents({items,current,label,className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items:TocItem[];current?:string;label?:string}){
+//
+// O SITE B (30/10/2026, protótipo): `progress` troca o ícone do nome pelo ANEL DE LEITURA — quanto da página já rolou, no
+// anel (o `ProgressCircle`) e em número, na ponta da linha. É enfeite de leitura: o anel e o número ficam fora do leitor
+// de tela (o que importa a ele é a seção atual, que o `aria-current` já diz).
+export function TableOfContents({items,current,label,progress,indicator="line",className,...props}:HTMLAttributes<HTMLElement>&RefAttributes<HTMLElement>&{items:TocItem[];current?:string;label?:string;
+  /** O anel de leitura no lugar do ícone do nome: quanto da página já rolou, em anel e em número. */
+  progress?:boolean;
+  /** O desenho do item atual: `"line"` (o padrão, o traço do lado) ou `"segment"` (a cápsula levantada, como a da `Sidebar`). */
+  indicator?:"line"|"segment"}){
 const s=useAureaStrings();
 const meu=React.useRef<HTMLElement|null>(null);
 const observado=useSecaoEmVista(items,current===undefined,meu);
 const atual=current??observado;
+const [lido,setLido]=React.useState(0);
+const Rotulo=progress?"div":"p";
+React.useEffect(()=>{
+  if(!progress||typeof window==="undefined")return;
+  const ler=()=>{const alto=document.documentElement.scrollHeight-window.innerHeight;
+    setLido(alto>0?Math.round(Math.min(1,Math.max(0,window.scrollY/alto))*100):100)};
+  ler();window.addEventListener("scroll",ler,{passive:true});window.addEventListener("resize",ler);
+  return ()=>{window.removeEventListener("scroll",ler);window.removeEventListener("resize",ler)};
+},[progress]);
 // O `ref` do consumidor continua chegando: em React 19 ele é prop comum, então espalhá-lo por
 // `...props` depois do nosso o sobrescreveria em silêncio. Os dois são atendidos aqui.
 const refDele=(props as {ref?:React.Ref<HTMLElement>}).ref;
 const {ref:_ignorado,...resto}=props as {ref?:React.Ref<HTMLElement>}&HTMLAttributes<HTMLElement>;
 return <nav ref={n=>{meu.current=n;if(typeof refDele==="function")refDele(n);else if(refDele)(refDele as React.RefObject<HTMLElement|null>).current=n;}}
-  className={cx("toc",className)} aria-label={label??s.tocLabel} {...resto}>
-<p className="toc-label"><span className="toc-label-icon" aria-hidden="true"/>{label??s.tocLabel}</p>
+  className={cx("toc",indicator==="segment"&&"toc-segment",className)} aria-label={label??s.tocLabel} {...resto}>
+{/* Com o anel, a linha do nome é um <div>: o anel é um <div> (o `ProgressCircle`), e um <div> dentro de <p> faz o
+    navegador fechar o <p> antes dele (medido: o anel e o nome saíam da linha). */}
+<Rotulo className={cx("toc-label",progress&&"toc-label-progress")}>{progress
+  ?<span className="toc-progress" aria-hidden="true"><ProgressCircle value={lido} size="lg" label={label??s.tocLabel}/></span>
+  :<span className="toc-label-icon" aria-hidden="true"/>}{label??s.tocLabel}{progress&&<span className="toc-progress-value" aria-hidden="true">{lido}%</span>}</Rotulo>
 {items.map(i=><a key={i.id} href={`#${i.id}`} className={cx(i.sub&&"toc-sub")} {...(i.id===atual?{"aria-current":"true" as const}:{})}>{i.label}</a>)}
 </nav>
 }
@@ -401,7 +422,7 @@ const nome=dobra
 const lista=sidebarList(filhos,ctx,false,lid);
 return <li>
 {acao||dobra?<div className="sidebar-group-head">{nome}{acao&&<span className="sidebar-group-action">{item.action}</span>}</div>:nome}
-{dobra?<div id={lid+"-lista"} hidden={!aberto}>{lista}</div>:lista}
+{dobra?<div id={lid+"-lista"} className="sidebar-group-list" hidden={!aberto}>{lista}</div>:lista}
 </li>}
 // `variant` entrou em 18/08/2026, e nasceu com o PADRÃO TROCADO: a lateral virou rente para todo
 // mundo. O Victor separou as duas coisas em 20/08/2026 — a exceção que ele abriu é para a lateral

@@ -20,13 +20,19 @@ export type AccordionVariant="default"|"surface";
 export interface AccordionItem{id:string;title:ReactNode;content:ReactNode;
   /** O item que não abre: anunciado como desligado e fora do Tab. */
   disabled?:boolean}
-export function Accordion({items,variant="default",multiple=false,defaultValue,className}:{items:AccordionItem[];variant?:AccordionVariant;
+// O SITE B (30/10/2026, protótipo): `indicator="plus"` troca a setinha pelo "+" numa bolinha, que gira e vira o "×"
+// amarelo quando abre; `size="lg"` é a linha de 60 com a letra do texto (16), a das perguntas do desenho aprovado.
+export function Accordion({items,variant="default",multiple=false,defaultValue,indicator="chevron",size="md",className}:{items:AccordionItem[];variant?:AccordionVariant;
+  /** O desenho de abrir: `"chevron"` (o padrão, a setinha) ou `"plus"` (o "+" numa bolinha, que vira "×" quando abre). */
+  indicator?:"chevron"|"plus";
+  /** A altura da linha: `"md"` (o padrão) ou `"lg"` (60, com a letra do texto). */
+  size?:"md"|"lg";
   /** Deixa vários itens abertos ao mesmo tempo. Sem isto, abrir um fecha o outro. */
   multiple?:boolean;
   /** Os itens que começam abertos (o `id` de cada um). */
   defaultValue?:string[];className?:string}){
   const grupo=React.useId();
-  return <div className={cx("accordion",variant==="surface"&&"accordion-surface",className)}>{items.map(i=>
+  return <div className={cx("accordion",variant==="surface"&&"accordion-surface",indicator==="plus"&&"accordion-plus",size==="lg"&&"accordion-lg",className)}>{items.map(i=>
     <details key={i.id} className="accordion-item" name={multiple?undefined:grupo} open={defaultValue?.includes(i.id)||undefined}>
       <summary aria-disabled={i.disabled||undefined} tabIndex={i.disabled?-1:undefined}
         onClick={i.disabled?(e:React.MouseEvent)=>e.preventDefault():undefined}>

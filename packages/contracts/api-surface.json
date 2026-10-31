@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 10,
     "aliasesLiterais": 118,
-    "propsDistintas": 395
+    "propsDistintas": 397
   },
   "aliases": {
     "ButtonVariant": {
@@ -5023,6 +5023,24 @@
               ]
             },
             {
+              "name": "indicator",
+              "optional": true,
+              "type": "\"chevron\" | \"plus\"",
+              "values": [
+                "chevron",
+                "plus"
+              ]
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "\"md\" | \"lg\"",
+              "values": [
+                "md",
+                "lg"
+              ]
+            },
+            {
               "name": "multiple",
               "optional": true,
               "type": "boolean",
@@ -7529,10 +7547,11 @@
             {
               "name": "topbarVariant",
               "optional": true,
-              "type": "Exclude<HeaderVariant, \"pill\">",
+              "type": "HeaderVariant",
               "values": [
                 "floating",
-                "flush"
+                "flush",
+                "pill"
               ]
             },
             {
@@ -7595,6 +7614,12 @@
               "name": "topbarActions",
               "optional": true,
               "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "topbarBlurred",
+              "optional": true,
+              "type": "boolean",
               "values": null
             },
             {
@@ -10264,6 +10289,21 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "progress",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "indicator",
+              "optional": true,
+              "type": "\"line\" | \"segment\"",
+              "values": [
+                "line",
+                "segment"
+              ]
             }
           ]
         },

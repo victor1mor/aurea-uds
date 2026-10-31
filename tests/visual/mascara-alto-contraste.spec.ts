@@ -30,6 +30,8 @@ const GLIFOS: Record<string, string> = {
   // A rodinha do `Spinner` e o visto do `Checkbox` (sem linha, ADR-0072, 16/10/2026): eram linha (borda), que o alto
   // contraste pinta; viraram máscara, que ele apagava.
   ".spinner": `<p style="display:flex;align-items:center;gap:8px"><span class="spinner" data-glifo></span><span class="spinner-texto">Carregando</span></p>`,
+  // O "+" das perguntas (`Accordion indicator="plus"`, o site B — 31/10/2026): o glifo é o `::before`, e a bolinha é fundo.
+  ".accordion-chevron::before": `<div class="accordion accordion-plus"><details class="accordion-item"><summary><span class="accordion-title mais-texto">Pergunta</span><span class="accordion-chevron" data-glifo></span></summary></details></div>`,
   ".control-mark::after": `<label class="checkbox"><input type="checkbox" checked aria-label="Aceito"><span class="control-mark" data-glifo></span><span class="checkbox-texto">Aceito</span></label>`,
   ".color-swatch-option::after": `<div class="color-swatch-picker" role="radiogroup" aria-label="Cor"><label class="color-swatch-option color-swatch-option-dark" data-glifo style="--color-swatch-current:#0485f7"><input type="radio" class="color-swatch-input" name="g" value="#0485f7" aria-label="Oceano" checked><span class="color-swatch" aria-hidden="true"></span></label></div>`,
 };
@@ -134,6 +136,25 @@ test("no alto contraste, o visto do Checkbox tem a cor do texto ao lado", async 
   expect(m.visto).toBe(m.texto);
 });
 
+// O "+" DAS PERGUNTAS também é `::before`: mede-se aqui, aberto e fechado. Provado contra o defeito (31/10/2026): sem a regra
+// do alto contraste, a bolinha virava um disco na cor do texto, com o glifo na mesma cor por cima.
+test("no alto contraste, o \"+\" das perguntas tem a cor do texto, sem a bolinha", async ({page: p}) => {
+  await montar(p);
+  await altoContraste(p);
+  for (const aberta of [false, true]) {
+    await p.evaluate((a) => { (document.querySelector(".accordion-plus details") as HTMLDetailsElement).open = a; }, aberta);
+    const medir = () => p.evaluate(() => {
+      const b = document.querySelector(".accordion-plus .accordion-chevron")!;
+      return {mais: getComputedStyle(b, "::before").backgroundColor, bolinha: getComputedStyle(b).backgroundColor,
+        texto: getComputedStyle(document.querySelector(".mais-texto")!).color};
+    });
+    // A bolinha troca de fundo com transição: mede-se depois de ela terminar (a lição da 0.25.0).
+    await expect.poll(async () => (await medir()).bolinha, {message: `aberta: ${aberta}`}).toBe("rgba(0, 0, 0, 0)");
+    const m = await medir();
+    expect(m.mais, `aberta: ${aberta}`).toBe(m.texto);
+  }
+});
+
 // A AMOSTRA DE COR NÃO É GLIFO SOBRE TEXTO: a cor É o conteúdo dela. Medido em 14/10/2026 com o alto contraste
 // ligado: as amostras viravam círculos brancos de contorno preto, e o "visto" sumia (branco sobre branco) — e o teste
 // de "tinta" de baixo PASSAVA, porque o contorno preto conta como tinta. Aqui se mede o que importa: a cor e a tinta
@@ -159,7 +180,8 @@ for (const modo of ["normal", "alto contraste"] as const) {
     const medido: Record<string, number> = {};
     for (let i = 0; i < Object.keys(GLIFOS).length; i++) {
       const g = glifos.nth(i);
-      medido[(await g.getAttribute("class"))!.split(" ")[0]] = await tinta(p, g);
+      // A posição entra no nome: dois glifos podem ter a mesma classe (a seta e o "+" do `Accordion`).
+      medido[`${i}:${(await g.getAttribute("class"))!.split(" ")[0]}`] = await tinta(p, g);
     }
     for (const [glifo, pontos] of Object.entries(medido)) expect(pontos, `${glifo}: ${JSON.stringify(medido)}`).toBeGreaterThan(10);
   });
