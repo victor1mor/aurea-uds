@@ -1,7 +1,7 @@
 "use client";
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
-import {peleDoEixo, type Responsive} from "./pure.js";
+import {peleDoEixo, proprio, type Responsive} from "./pure.js";
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, {type HTMLAttributes, type RefAttributes, type ReactNode} from "react";
 import {Popover as BasePopover} from "@base-ui/react/popover";
@@ -31,7 +31,7 @@ export type StatusVariant="neutral"|"online"|"offline"|"busy"|"away"|"running"|"
 // seis caem na gravidade. Quem passa os dois manda, porque só o consumidor sabe se aquele
 // "esperando" dele é grave. E o rótulo é o do consumidor, como sempre foi: a string universal
 // entra só quando não há filho, para o componente não passar a inventar texto.
-export function Status({variant,state,children,className,...props}:HTMLAttributes<HTMLSpanElement>&RefAttributes<HTMLSpanElement>&{variant?:StatusVariant;state?:UniversalState}){const s=useAureaStrings();const v=variant??(state?(state==="offline"?"offline":stateSeverity(state)):"neutral");return <span className={cx("status",v!=="neutral"&&`status-${v}`,className)} data-state={state} {...props}><i className="status-dot" aria-hidden="true"/><span className="status-label">{children??(state?s.universalState[state]:null)}</span></span>}
+export function Status({variant,state,children,className,...props}:HTMLAttributes<HTMLSpanElement>&RefAttributes<HTMLSpanElement>&{variant?:StatusVariant;state?:UniversalState}){const s=useAureaStrings();const v=variant??(state?(state==="offline"?"offline":stateSeverity(state)):"neutral");return <span className={cx("status",v!=="neutral"&&`status-${v}`,className)} data-state={state} {...props}><i className="status-dot" aria-hidden="true"/><span className="status-label">{children??(state?proprio(s.universalState,state):null)}</span></span>}
 
 // 0.32.0: `accent`, o "acento" da referência — na Aurea, a cor de link (o amarelo como letra). O `info`
 // continua (é o azul de informação, que ela não separa do acento).
@@ -62,7 +62,7 @@ success:"check-circle",warning:"warning",danger:"x-circle",accent:"info"};
 // para baixo do texto, na mesma coluna (a referência repete o botão; aqui ele só muda de lugar).
 export function Alert({variant,state,title,icon,onDismiss,action,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:AlertVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void;
   /** O botão do aviso ("Atualizar", "Desfazer"): depois do texto, antes do X. No celular, embaixo do texto. */
-  action?:ReactNode}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("alert",`alert-${v}`,action!=null&&"alert-has-action",className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??ICONE_DA_VARIANTE[v]} weight={icon?undefined:"fill"}/><div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{action!=null&&<div className="alert-action">{action}</div>}{onDismiss?<CloseButton onClick={onDismiss}/>:<span/>}</div>}
+  action?:ReactNode}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("alert",`alert-${v}`,action!=null&&"alert-has-action",className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??proprio(ICONE_DA_VARIANTE,v)??"info"} weight={icon?undefined:"fill"}/><div>{title&&<strong>{title}</strong>}{children??(state?proprio(s.universalState,state):null)}</div>{action!=null&&<div className="alert-action">{action}</div>}{onDismiss?<CloseButton onClick={onDismiss}/>:<span/>}</div>}
 // 0.32.0 (o Alert da referência): o X de dispensar é o `CloseButton` (HER-12), e a pele mudou no core —
 // fundo de cartão, sem borda, sombra, 12/16, o ícone de 16 numa caixa de 24 e o título na cor do estado.
 // Banner: aviso de largura de página, opcionalmente dispensável. Os <span/> vazios
@@ -100,7 +100,7 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>,"title"
 export function Banner(props:BannerProps){
   if(props.variant==="consent")return <BannerConsent {...props}/>;
   const {variant,state,title,icon,onDismiss,children,className,categories:_c,value:_v,onConsent:_o,...rest}=props;
-  const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("banner",`banner-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...rest}>{icon?<Icon name={icon}/>:<span/>}<div>{title&&<strong>{title}</strong>}{children??(state?s.universalState[state]:null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="x" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
+  const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("banner",`banner-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...rest}>{icon?<Icon name={icon}/>:<span/>}<div>{title&&<strong>{title}</strong>}{children??(state?proprio(s.universalState,state):null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="x" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
 // GAR-19 (lote U, 19/10/2026): o aviso de cookies é uma VARIAÇÃO do Banner (decisão do Victor). Nenhuma referência da fila
 // tem a peça aberta; as regras vêm de duas fontes primárias, lidas em 19/10/2026:
 // - o guia de cookies da ANPD (págs. 30–33): no primeiro nível, o botão de rejeitar os não necessários, tão fácil de ver
@@ -250,7 +250,7 @@ function CorpoDoDataState({state,message,skeleton,emptyTitle,emptyIcon,action,ch
   if(state)return caixa(<><Alert variant={stateSeverity(state)} state={state}>{message}</Alert>{conteudo()}</>);
   return caixa(conteudo());
 }
-export function EmptyState({icon="file",title,titleAs:TitleTag="h3",description,action,state}:{icon?:IconName;title:ReactNode;titleAs?:"h2"|"h3"|"h4"|"p";description?:ReactNode;action?:ReactNode;state?:UniversalState}){const s=useAureaStrings();const desc=description??(state?s.universalState[state]:null);return <div className="empty-state" data-state={state}><Icon name={icon} size="xl"/><TitleTag className="empty-title">{title}</TitleTag>{desc&&<p className="muted">{desc}</p>}{action}</div>}
+export function EmptyState({icon="file",title,titleAs:TitleTag="h3",description,action,state}:{icon?:IconName;title:ReactNode;titleAs?:"h2"|"h3"|"h4"|"p";description?:ReactNode;action?:ReactNode;state?:UniversalState}){const s=useAureaStrings();const desc=description??(state?proprio(s.universalState,state):null);return <div className="empty-state" data-state={state}><Icon name={icon} size="xl"/><TitleTag className="empty-title">{title}</TitleTag>{desc&&<p className="muted">{desc}</p>}{action}</div>}
 
 
 

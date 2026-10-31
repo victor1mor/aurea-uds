@@ -8,6 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from "react";
 import { useReactTable, getCoreRowModel, getSortedRowModel, getFilteredRowModel, getPaginationRowModel, getFacetedRowModel, getFacetedUniqueValues, flexRender } from "@tanstack/react-table";
 import { cx, useAureaStrings, stateSeverity } from "./internal.js";
+import { proprio } from "./pure.js";
 import { Icon } from "./system.js";
 import { Button, Toolbar, ToolbarButton, ToolbarSeparator } from "./actions.js";
 import { Input, SearchField, MultiCombobox } from "./inputs.js";
@@ -152,9 +153,29 @@ export function DataGrid({ data, columns, label, filterable, pageSize, selectabl
     // A função acima precisa da tabela, e a tabela é o que esta chamada devolve: a referência fecha o
     // círculo. Ela é lida só quando o motor filtra, que é sempre depois da primeira montagem.
     const tabelaRef = React.useRef(null);
+    // Um nome de coluna que vem de fora (o link, `?sort=constructor`) e é nome do `Object.prototype` derrubava o motor, que
+    // procura a coluna num objeto comum (31/10/2026, a auditoria de segurança). Do estado que o motor recebe sai só o que
+    // é um desses nomes E não é coluna declarada; o nome que não existe continua com o aviso do próprio motor.
+    const idsDeclarados = React.useMemo(() => {
+        const ids = new Set();
+        const ver = (cs) => {
+            for (const c of cs) {
+                const d = c;
+                const id = d.id ?? d.accessorKey ?? (typeof d.header === "string" ? d.header : undefined);
+                if (id)
+                    ids.add(id);
+                if (d.columns)
+                    ver(d.columns);
+            }
+        };
+        ver(colunas);
+        return ids;
+    }, [colunas]);
+    const sortingDoMotor = React.useMemo(() => sorting.filter(o => idsDeclarados.has(o.id) || !(o.id in Object.prototype)), [sorting, idsDeclarados]);
+    const filtrosDoMotor = React.useMemo(() => columnFilters.filter(f => idsDeclarados.has(f.id) || !(f.id in Object.prototype)), [columnFilters, idsDeclarados]);
     const table = useReactTable({
         data, columns: colunas, getRowId,
-        state: { sorting, globalFilter, rowSelection, columnFilters, columnVisibility, columnSizing, ...(paginated ? { pagination } : {}) },
+        state: { sorting: sortingDoMotor, globalFilter, rowSelection, columnFilters: filtrosDoMotor, columnVisibility, columnSizing, ...(paginated ? { pagination } : {}) },
         onSortingChange: setSorting,
         onGlobalFilterChange: setGlobalFilter,
         onColumnFiltersChange: setColumnFilters,
@@ -375,7 +396,7 @@ export function DataGrid({ data, columns, label, filterable, pageSize, selectabl
     // ganha de mais geral; o universal entra para os quatro estados que a grade não tinha.
     const carregando = state === "loading";
     const universal = state && state !== "loading" && state !== "error" ? state : null;
-    const recado = state && !carregando ? (stateMessage ?? (state === "stale" ? s.dataGridStale : state === "partial" ? s.dataGridPartial : state === "error" ? s.dataGridError : s.universalState[state])) : null;
+    const recado = state && !carregando ? (stateMessage ?? (state === "stale" ? s.dataGridStale : state === "partial" ? s.dataGridPartial : state === "error" ? s.dataGridError : proprio(s.universalState, state))) : null;
     // O marcador vai na GRADE, não no recado: quem está obsoleto é a tabela, e o `Alert` é só
     // como ela conta isso. Achado pelo check 30 na primeira execução dele — eu tinha marcado o
     // recado, e com `state="loading"` não há recado nenhum, então o estado não chegava ao DOM.

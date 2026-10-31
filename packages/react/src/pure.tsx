@@ -17,6 +17,12 @@
 import {cloneElement, createElement, type ReactElement} from "react";
 export const cx=(...v:Array<string|false|null|undefined>)=>v.filter(Boolean).join(" ");
 
+// O valor de uma tabela só quando a chave é DELA (31/10/2026, a auditoria de segurança). Tabela escrita como objeto
+// comum herda o `Object.prototype`: uma chave que vem de fora ("constructor", "__proto__", "toString") devolvia a
+// função dele — no realce do `CodeBlock`, isso derrubava a tela. Interno: o barril não o publica.
+export const proprio=<V,>(tabela:Readonly<Partial<Record<string,V>>>,chave:string|null|undefined):V|undefined=>
+  chave!=null&&Object.hasOwn(tabela,chave)?tabela[chave]:undefined;
+
 // ── `render`: a superfície é da Aurea, o ELEMENTO é de quem consome ───────────────────────────
 //
 // Nasceu do `G-A11Y-11`. O `Card` oferecia `variant="interactive"` — ponteiro de mão, elevação

@@ -18,6 +18,7 @@
 // verbal. Aqui as ações entram como nó, e quem monta o botão sabe o que ele faz.
 import React, {type HTMLAttributes, type OlHTMLAttributes, type ReactNode, type RefAttributes} from "react";
 import {cx, useAureaStrings} from "./internal.js";
+import {proprio} from "./pure.js";
 import {Icon, type IconName} from "./system.js";
 import {Status, Badge, Progress, Alert} from "./feedback.js";
 import {Avatar} from "./identity.js";
@@ -44,7 +45,7 @@ const ESTADO:Record<AgentState,"neutral"|"info"|"success"|"warning"|"danger">={
 // exatamente o que a Parte J existe para impedir, um nível acima.
 export function AgentStatus({state="idle",label,className,...props}:HTMLAttributes<HTMLSpanElement>&RefAttributes<HTMLSpanElement>&{state?:AgentState;label?:ReactNode}){
   const s=useAureaStrings();
-  return <Status variant={ESTADO[state]} className={className} data-state={state} {...props}>{label??s.agentState[state]}</Status>;
+  return <Status variant={proprio(ESTADO,state)} className={className} data-state={state} {...props}>{label??proprio(s.agentState,state)}</Status>;
 }
 
 export interface AgentCapability{name:string;description?:string;icon?:IconName}
@@ -156,7 +157,7 @@ export function TaskQueue({tasks,label,onRetry,className,...props}:OlHTMLAttribu
       <div className="task-line">
         <span className="task-title">{t.title}</span>
         {t.priority&&<Badge variant={t.priority==="high"?"warning":"neutral"}>{s.taskPriority[t.priority]}</Badge>}
-        <Status variant={TAREFA[t.state]}>{s.taskState[t.state]}</Status>
+        <Status variant={proprio(TAREFA,t.state)}>{proprio(s.taskState,t.state)}</Status>
         {t.state==="failed"&&onRetry&&<IconButton variant="ghost" size="sm" icon="arrow-counter-clockwise" label={`${s.uploadRetry} ${t.title}`} onClick={()=>onRetry(t)}/>}
       </div>
       {t.description&&<p className="task-desc">{t.description}</p>}
@@ -335,7 +336,7 @@ export function HealthMatrix({entries,label,className,...props}:HTMLAttributes<H
   return <ul className={cx("health-matrix",className)} aria-label={label??s.healthLabel} {...props}>
     {entries.map(e=><li key={e.id} className="health-cell" data-state={e.state}>
       <span className="health-name">{e.name}</span>
-      <Status variant={SAUDE[e.state]}>{s.healthState[e.state]}</Status>
+      <Status variant={proprio(SAUDE,e.state)}>{proprio(s.healthState,e.state)}</Status>
       {e.detail&&<span className="hint">{e.detail}</span>}
     </li>)}
   </ul>;
@@ -488,8 +489,8 @@ export function MemoryLedger({records,label,className,...props}:OlHTMLAttributes
   return <ol className={cx("memory-ledger",className)} aria-label={label??s.memoryLabel} {...props}>
     {records.map(r=><li key={r.id} className="memory-entry" data-operation={r.operation} data-scope={r.scope}>
       <div className="memory-line">
-        <Badge variant={LANCAMENTO[r.operation]}>{s.memoryOperation[r.operation]}</Badge>
-        <Badge>{s.memoryScope[r.scope]}</Badge>
+        <Badge variant={proprio(LANCAMENTO,r.operation)}>{proprio(s.memoryOperation,r.operation)}</Badge>
+        <Badge>{proprio(s.memoryScope,r.scope)}</Badge>
         <span className="memory-content">{r.content}</span>
         {r.time&&<time className="memory-time">{r.time}</time>}
       </div>
@@ -548,7 +549,7 @@ export function InterAgentMessage({messages,label,className,...props}:OlHTMLAttr
             <Icon name="arrow-right" size="sm" className="agent-message-arrow"/>
             {m.to?<strong>{m.to}</strong>:<span className="hint">{destino}</span>}
           </span>
-          <Badge variant={RECADO[m.kind??"handoff"]}>{s.agentMessageKind[m.kind??"handoff"]}</Badge>
+          <Badge variant={proprio(RECADO,m.kind??"handoff")}>{proprio(s.agentMessageKind,m.kind??"handoff")}</Badge>
           {m.time&&<time className="agent-message-time">{m.time}</time>}
         </div>
         <p className="agent-message-body">{m.body}</p>
@@ -593,7 +594,7 @@ export function AutomationCard({name,description,trigger,action,enabled,onToggle
     </header>
     <DataList items={[{term:s.automationWhen,value:trigger},{term:s.automationThen,value:action},...(details??[])]}/>
     {(lastRun||lastResult)&&<footer className="automation-foot">
-      {lastResult&&<Status variant={lastResult==="success"?"success":"danger"}>{s.automationResult[lastResult]}</Status>}
+      {lastResult&&<Status variant={lastResult==="success"?"success":"danger"}>{proprio(s.automationResult,lastResult)}</Status>}
       {lastRun&&<span className="hint">{s.automationLastRun}: {lastRun}</span>}
       {actions}
     </footer>}

@@ -920,6 +920,13 @@ export interface ColorSwatchPickerProps{
 // Transparente quando o texto diz alfa abaixo de 1 (hex de 4 ou 8 dígitos, `rgba()`, `hsla()`…). Cor de token ou
 // `oklch()` a marcação não lê: fica sem xadrez.
 const transparente=(cor:string)=>{const c=parseColor(cor);return c!==null&&c.a<1;};
+// A cor só entra no estilo quando É uma cor (31/10/2026, a auditoria de segurança): o texto ia cru para a variável, e
+// no HTML do servidor um ";" abria regras novas (cobrir a tela, buscar imagem de outro endereço). Aceita o que a ficha
+// promete — hex, nome, as funções de cor do CSS e `var(--token)` — e nada com ";", chaves, barra invertida, aspas,
+// comentário ou outra função (`url(`). Recusada, a variável não se escreve: a amostra fica sem cor, e o nome continua.
+// (O `parseColor` não serve de filtro: ele não lê `oklch()` nem `var()`, que a ficha promete.)
+const COR_DE_CSS=/^(?:#[0-9a-f]{3,8}|[a-z]+|(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\([^;{}\\"'()]*\)|var\(--[\w-]+\))$/i;
+const corDeCss=(cor:string)=>{const c=cor.trim();return COR_DE_CSS.test(c)&&!c.includes("/*")?c:undefined;};
 export function ColorSwatch(props:ColorSwatchBase&(ColorSwatchProps|ColorSwatchPickerProps)){
   if("options" in props){
     const {options,name,label,value,defaultValue,onChange,layout="grid",indicator,showLabels,size="md",disabled,id,className}=props;
@@ -934,7 +941,7 @@ export function ColorSwatch(props:ColorSwatchBase&(ColorSwatchProps|ColorSwatchP
         const op:ColorSwatchOption=typeof o==="string"?{color:o}:o;
         const cor=parseColor(op.color),rgb=cor&&hsbToRgb(cor);
         const circulo=(Tag:"label"|"span",key?:string)=><Tag key={key} className={cx("color-swatch-option",rgb&&contrastingInk(rgb)==="dark"&&"color-swatch-option-dark")}
-          style={{["--color-swatch-current" as string]:op.color}}>
+          style={{["--color-swatch-current" as string]:corDeCss(op.color)}}>
           <input type="radio" className="color-swatch-input" name={name} value={op.color} aria-label={op.label??op.color}
             checked={value===undefined?undefined:value===op.color} defaultChecked={value===undefined?defaultValue===op.color:undefined}
             disabled={disabled||op.disabled} {...(onChange?{onChange}:{})}/>
@@ -949,7 +956,7 @@ export function ColorSwatch(props:ColorSwatchBase&(ColorSwatchProps|ColorSwatchP
   }
   const {color,size="md",label,className,style,...resto}=props;
   return <span role="img" aria-label={label??color} className={cx("color-swatch",size!=="md"&&`color-swatch-${size}`,transparente(color)&&"color-swatch-alpha",className)}
-    style={{...style,["--color-swatch-current" as string]:color}} {...resto}/>;
+    style={{...style,["--color-swatch-current" as string]:corDeCss(color)}} {...resto}/>;
 }
 
 // ProgressCircle — o progresso em círculo da referência: um anel de 4 num quadro de 36 (a geometria

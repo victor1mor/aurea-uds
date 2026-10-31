@@ -7,7 +7,7 @@ import React from "react";
 import { Toast as BaseToast } from "@base-ui/react/toast";
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 import { DirectionProvider } from "@base-ui/react/direction-provider";
-import { peleDoEixo } from "./pure.js";
+import { peleDoEixo, proprio } from "./pure.js";
 import { cx, StringsContext, SpriteContext, PortalContext, ThemeContext, DensityContext, DentroDoProviderContext, avisosAncorados, usePortalContainer, defaultStrings, defaultSpriteUrl, useSpriteUrl, useAureaStrings } from "./internal.js";
 // `theme` e `density` seguem a convenção controlado/não-controlado do resto da biblioteca
 // (`Toggle`, `ToggleGroup`): passe `theme` para mandar, `defaultTheme` para semear, e ouça por
@@ -186,7 +186,7 @@ function AureaToastList({ placement }) {
     const arrasto = [placement.startsWith("top") ? "up" : "down", "right"];
     return _jsx(_Fragment, { children: toasts.map(t => {
             const tipo = t.type === "error" ? "danger" : t.type;
-            return _jsxs(BaseToast.Root, { toast: t, swipeDirection: arrasto, className: cx("toast", tipo && `toast-${tipo}`), children: [_jsxs(BaseToast.Content, { className: "toast-content", children: [_jsx("span", { className: "toast-indicator", "aria-hidden": "true", children: tipo === "loading" ? _jsx("span", { className: "spinner" }) : _jsx(Icon, { name: ICONE_DO_AVISO[tipo ?? ""] ?? "info" }) }), _jsxs("div", { className: "toast-text", children: [_jsx(BaseToast.Title, { className: "toast-title", render: _jsx("strong", {}) }), t.description ? _jsx(BaseToast.Description, { className: "toast-description" }) : null] }), t.actionProps ? _jsx(BaseToast.Action, { className: "btn btn-tertiary btn-sm toast-action" }) : null] }), _jsx(BaseToast.Close, { className: "btn btn-tertiary close-button toast-close", "aria-label": s.dismissNotification, children: _jsx("span", { children: _jsx(Icon, { name: "x", weight: "bold" }) }) })] }, t.id);
+            return _jsxs(BaseToast.Root, { toast: t, swipeDirection: arrasto, className: cx("toast", tipo && `toast-${tipo}`), children: [_jsxs(BaseToast.Content, { className: "toast-content", children: [_jsx("span", { className: "toast-indicator", "aria-hidden": "true", children: tipo === "loading" ? _jsx("span", { className: "spinner" }) : _jsx(Icon, { name: proprio(ICONE_DO_AVISO, tipo) ?? "info" }) }), _jsxs("div", { className: "toast-text", children: [_jsx(BaseToast.Title, { className: "toast-title", render: _jsx("strong", {}) }), t.description ? _jsx(BaseToast.Description, { className: "toast-description" }) : null] }), t.actionProps ? _jsx(BaseToast.Action, { className: "btn btn-tertiary btn-sm toast-action" }) : null] }), _jsx(BaseToast.Close, { className: "btn btn-tertiary close-button toast-close", "aria-label": s.dismissNotification, children: _jsx("span", { children: _jsx(Icon, { name: "x", weight: "bold" }) }) })] }, t.id);
         }) });
 }
 function AureaToastViewport({ placement }) {

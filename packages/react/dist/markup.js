@@ -291,6 +291,13 @@ export function Link({ external, disabled, href, target, rel, className, childre
 // Transparente quando o texto diz alfa abaixo de 1 (hex de 4 ou 8 dígitos, `rgba()`, `hsla()`…). Cor de token ou
 // `oklch()` a marcação não lê: fica sem xadrez.
 const transparente = (cor) => { const c = parseColor(cor); return c !== null && c.a < 1; };
+// A cor só entra no estilo quando É uma cor (31/10/2026, a auditoria de segurança): o texto ia cru para a variável, e
+// no HTML do servidor um ";" abria regras novas (cobrir a tela, buscar imagem de outro endereço). Aceita o que a ficha
+// promete — hex, nome, as funções de cor do CSS e `var(--token)` — e nada com ";", chaves, barra invertida, aspas,
+// comentário ou outra função (`url(`). Recusada, a variável não se escreve: a amostra fica sem cor, e o nome continua.
+// (O `parseColor` não serve de filtro: ele não lê `oklch()` nem `var()`, que a ficha promete.)
+const COR_DE_CSS = /^(?:#[0-9a-f]{3,8}|[a-z]+|(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\([^;{}\\"'()]*\)|var\(--[\w-]+\))$/i;
+const corDeCss = (cor) => { const c = cor.trim(); return COR_DE_CSS.test(c) && !c.includes("/*") ? c : undefined; };
 export function ColorSwatch(props) {
     if ("options" in props) {
         const { options, name, label, value, defaultValue, onChange, layout = "grid", indicator, showLabels, size = "md", disabled, id, className } = props;
@@ -302,14 +309,14 @@ export function ColorSwatch(props) {
         return _jsx("div", { role: "radiogroup", "aria-label": label, id: id, "aria-disabled": disabled || undefined, className: cx("color-swatch-picker", size !== "md" && `color-swatch-picker-${size}`, layout === "stack" && "color-swatch-picker-stack", showLabels && "color-swatch-picker-labels", className), children: options.map((o) => {
                 const op = typeof o === "string" ? { color: o } : o;
                 const cor = parseColor(op.color), rgb = cor && hsbToRgb(cor);
-                const circulo = (Tag, key) => _jsxs(Tag, { className: cx("color-swatch-option", rgb && contrastingInk(rgb) === "dark" && "color-swatch-option-dark"), style: { ["--color-swatch-current"]: op.color }, children: [_jsx("input", { type: "radio", className: "color-swatch-input", name: name, value: op.color, "aria-label": op.label ?? op.color, checked: value === undefined ? undefined : value === op.color, defaultChecked: value === undefined ? defaultValue === op.color : undefined, disabled: disabled || op.disabled, ...(onChange ? { onChange } : {}) }), _jsx("span", { className: cx("color-swatch", cor && cor.a < 1 && "color-swatch-alpha"), "aria-hidden": "true" }), indicator != null && _jsx("span", { className: "color-swatch-indicator", "aria-hidden": "true", children: indicator })] }, key);
+                const circulo = (Tag, key) => _jsxs(Tag, { className: cx("color-swatch-option", rgb && contrastingInk(rgb) === "dark" && "color-swatch-option-dark"), style: { ["--color-swatch-current"]: corDeCss(op.color) }, children: [_jsx("input", { type: "radio", className: "color-swatch-input", name: name, value: op.color, "aria-label": op.label ?? op.color, checked: value === undefined ? undefined : value === op.color, defaultChecked: value === undefined ? defaultValue === op.color : undefined, disabled: disabled || op.disabled, ...(onChange ? { onChange } : {}) }), _jsx("span", { className: cx("color-swatch", cor && cor.a < 1 && "color-swatch-alpha"), "aria-hidden": "true" }), indicator != null && _jsx("span", { className: "color-swatch-indicator", "aria-hidden": "true", children: indicator })] }, key);
                 return showLabels
                     ? _jsxs("label", { className: "color-swatch-item", children: [circulo("span"), _jsx("span", { className: "color-swatch-name", "aria-hidden": "true", children: op.label ?? op.color })] }, op.color)
                     : circulo("label", op.color);
             }) });
     }
     const { color, size = "md", label, className, style, ...resto } = props;
-    return _jsx("span", { role: "img", "aria-label": label ?? color, className: cx("color-swatch", size !== "md" && `color-swatch-${size}`, transparente(color) && "color-swatch-alpha", className), style: { ...style, ["--color-swatch-current"]: color }, ...resto });
+    return _jsx("span", { role: "img", "aria-label": label ?? color, className: cx("color-swatch", size !== "md" && `color-swatch-${size}`, transparente(color) && "color-swatch-alpha", className), style: { ...style, ["--color-swatch-current"]: corDeCss(color) }, ...resto });
 }
 export function ProgressCircle({ value, min = 0, max = 100, size = "md", tone = "brand", label, className, ...props }) {
     const semTotal = value == null || Number.isNaN(value);

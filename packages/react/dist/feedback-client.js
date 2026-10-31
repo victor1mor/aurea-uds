@@ -2,7 +2,7 @@
 import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
-import { peleDoEixo } from "./pure.js";
+import { peleDoEixo, proprio } from "./pure.js";
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React from "react";
 import { Popover as BasePopover } from "@base-ui/react/popover";
@@ -30,7 +30,7 @@ import { Skeleton, Badge, Switch } from "./markup.js";
 // seis caem na gravidade. Quem passa os dois manda, porque só o consumidor sabe se aquele
 // "esperando" dele é grave. E o rótulo é o do consumidor, como sempre foi: a string universal
 // entra só quando não há filho, para o componente não passar a inventar texto.
-export function Status({ variant, state, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? (state === "offline" ? "offline" : stateSeverity(state)) : "neutral"); return _jsxs("span", { className: cx("status", v !== "neutral" && `status-${v}`, className), "data-state": state, ...props, children: [_jsx("i", { className: "status-dot", "aria-hidden": "true" }), _jsx("span", { className: "status-label", children: children ?? (state ? s.universalState[state] : null) })] }); }
+export function Status({ variant, state, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? (state === "offline" ? "offline" : stateSeverity(state)) : "neutral"); return _jsxs("span", { className: cx("status", v !== "neutral" && `status-${v}`, className), "data-state": state, ...props, children: [_jsx("i", { className: "status-dot", "aria-hidden": "true" }), _jsx("span", { className: "status-label", children: children ?? (state ? proprio(s.universalState, state) : null) })] }); }
 // O ícone é FUNÇÃO da variante, como o `role` já era. A referência congelada desenha o alerta
 // com ele em toda variante, e um sistema que faz o consumidor lembrar qual glifo significa
 // "perigo" acaba com quatro respostas diferentes para a mesma pergunta. `icon` sobrepõe quando o
@@ -55,14 +55,14 @@ const ICONE_DA_VARIANTE = { info: "info",
 // "esperando" dele é grave.
 // `action` (15/10/2026, o "Upgrade" da referência): o botão do aviso, depois do texto e antes do X; no celular ele desce
 // para baixo do texto, na mesma coluna (a referência repete o botão; aqui ele só muda de lugar).
-export function Alert({ variant, state, title, icon, onDismiss, action, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? stateSeverity(state) : "info"); return _jsxs("div", { className: cx("alert", `alert-${v}`, action != null && "alert-has-action", className), role: v === "danger" ? "alert" : "status", "data-state": state, ...props, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], weight: icon ? undefined : "fill" }), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? s.universalState[state] : null)] }), action != null && _jsx("div", { className: "alert-action", children: action }), onDismiss ? _jsx(CloseButton, { onClick: onDismiss }) : _jsx("span", {})] }); }
+export function Alert({ variant, state, title, icon, onDismiss, action, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? stateSeverity(state) : "info"); return _jsxs("div", { className: cx("alert", `alert-${v}`, action != null && "alert-has-action", className), role: v === "danger" ? "alert" : "status", "data-state": state, ...props, children: [_jsx(Icon, { name: icon ?? proprio(ICONE_DA_VARIANTE, v) ?? "info", weight: icon ? undefined : "fill" }), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? proprio(s.universalState, state) : null)] }), action != null && _jsx("div", { className: "alert-action", children: action }), onDismiss ? _jsx(CloseButton, { onClick: onDismiss }) : _jsx("span", {})] }); }
 export function Banner(props) {
     if (props.variant === "consent")
         return _jsx(BannerConsent, { ...props });
     const { variant, state, title, icon, onDismiss, children, className, categories: _c, value: _v, onConsent: _o, ...rest } = props;
     const s = useAureaStrings();
     const v = variant ?? (state ? stateSeverity(state) : "info");
-    return _jsxs("div", { className: cx("banner", `banner-${v}`, className), role: v === "danger" ? "alert" : "status", "data-state": state, ...rest, children: [icon ? _jsx(Icon, { name: icon }) : _jsx("span", {}), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? s.universalState[state] : null)] }), onDismiss ? _jsx(IconButton, { variant: "ghost", size: "sm", icon: "x", label: s.close, onClick: onDismiss }) : _jsx("span", {})] });
+    return _jsxs("div", { className: cx("banner", `banner-${v}`, className), role: v === "danger" ? "alert" : "status", "data-state": state, ...rest, children: [icon ? _jsx(Icon, { name: icon }) : _jsx("span", {}), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? proprio(s.universalState, state) : null)] }), onDismiss ? _jsx(IconButton, { variant: "ghost", size: "sm", icon: "x", label: s.close, onClick: onDismiss }) : _jsx("span", {})] });
 }
 // GAR-19 (lote U, 19/10/2026): o aviso de cookies é uma VARIAÇÃO do Banner (decisão do Victor). Nenhuma referência da fila
 // tem a peça aberta; as regras vêm de duas fontes primárias, lidas em 19/10/2026:
@@ -144,7 +144,7 @@ function CorpoDoDataState({ state, message, skeleton, emptyTitle, emptyIcon, act
         return caixa(_jsxs(_Fragment, { children: [_jsx(Alert, { variant: stateSeverity(state), state: state, children: message }), conteudo()] }));
     return caixa(conteudo());
 }
-export function EmptyState({ icon = "file", title, titleAs: TitleTag = "h3", description, action, state }) { const s = useAureaStrings(); const desc = description ?? (state ? s.universalState[state] : null); return _jsxs("div", { className: "empty-state", "data-state": state, children: [_jsx(Icon, { name: icon, size: "xl" }), _jsx(TitleTag, { className: "empty-title", children: title }), desc && _jsx("p", { className: "muted", children: desc }), action] }); }
+export function EmptyState({ icon = "file", title, titleAs: TitleTag = "h3", description, action, state }) { const s = useAureaStrings(); const desc = description ?? (state ? proprio(s.universalState, state) : null); return _jsxs("div", { className: "empty-state", "data-state": state, children: [_jsx(Icon, { name: icon, size: "xl" }), _jsx(TitleTag, { className: "empty-title", children: title }), desc && _jsx("p", { className: "muted", children: desc }), action] }); }
 function groupNotifications(items) {
     const out = [];
     for (const it of items) {

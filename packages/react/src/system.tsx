@@ -6,7 +6,7 @@ import React, {type ReactNode} from "react";
 import {Toast as BaseToast} from "@base-ui/react/toast";
 import {Tooltip as BaseTooltip} from "@base-ui/react/tooltip";
 import {DirectionProvider} from "@base-ui/react/direction-provider";
-import {peleDoEixo, type Responsive} from "./pure.js";
+import {peleDoEixo, proprio, type Responsive} from "./pure.js";
 import {cx, StringsContext, SpriteContext, PortalContext, ThemeContext, DensityContext, DentroDoProviderContext, avisosAncorados, usePortalContainer, defaultStrings, defaultSpriteUrl, useSpriteUrl, useAureaStrings, type AureaStrings, type AureaTheme, type AureaThemePreference, type AureaDensity} from "./internal.js";
 
 // `theme` e `density` seguem a convenção controlado/não-controlado do resto da biblioteca
@@ -199,7 +199,7 @@ function AureaToastList({placement}:{placement:ToastPlacement}){
     const tipo=t.type==="error"?"danger":t.type;
     return <BaseToast.Root key={t.id} toast={t} swipeDirection={arrasto} className={cx("toast",tipo&&`toast-${tipo}`)}>
       <BaseToast.Content className="toast-content">
-        <span className="toast-indicator" aria-hidden="true">{tipo==="loading"?<span className="spinner"/>:<Icon name={ICONE_DO_AVISO[tipo??""]??"info"}/>}</span>
+        <span className="toast-indicator" aria-hidden="true">{tipo==="loading"?<span className="spinner"/>:<Icon name={proprio(ICONE_DO_AVISO,tipo)??"info"}/>}</span>
         <div className="toast-text"><BaseToast.Title className="toast-title" render={<strong/>}/>{t.description?<BaseToast.Description className="toast-description"/>:null}</div>
         {t.actionProps?<BaseToast.Action className="btn btn-tertiary btn-sm toast-action"/>:null}
       </BaseToast.Content>
