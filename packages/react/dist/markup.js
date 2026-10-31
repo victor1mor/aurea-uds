@@ -217,7 +217,7 @@ export function Header({ variant = "floating", divider, brand, items, current, a
                 // Sem o encaixe, a marcação de sempre; com ele, a linha das áreas e a ponta numa mesma faixa.
                 return tabsEnd == null ? abas : _jsxs("div", { className: "topbar-tabs-row", children: [abas, _jsx("div", { className: "topbar-tabs-end", children: tabsEnd })] });
             })()] });
-    return _jsx("header", { className: cx("topbar", `topbar-${variant}`, divider && variant === "flush" && "topbar-divider", site && "topbar-site", site && itemsJustify === "start" && "topbar-items-start", size === "sm" && "topbar-sm", blurred && variant === "flush" && "topbar-blurred", maxWidth && "topbar-contained", comAbas && "topbar-with-tabs", className), ...props, children: maxWidth ? _jsx("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`, "topbar-inner"), children: miolo }) : miolo });
+    return _jsx("header", { className: cx("topbar", `topbar-${variant}`, divider && variant === "flush" && "topbar-divider", site && "topbar-site", site && itemsJustify === "start" && "topbar-items-start", size === "sm" && "topbar-sm", blurred && (variant === "flush" || variant === "pill") && "topbar-blurred", maxWidth && "topbar-contained", comAbas && "topbar-with-tabs", className), ...props, children: maxWidth ? _jsx("div", { className: cx("container", maxWidth !== "xl" && `container-${maxWidth}`, "topbar-inner"), children: miolo }) : miolo });
 }
 /** @deprecated `Topbar` é o nome antigo do `Header` (07/10/2026). Continua funcionando, igual; use `Header`. */
 export function Topbar(props) { return _jsx(Header, { ...props }); }

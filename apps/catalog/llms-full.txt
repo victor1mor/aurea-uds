@@ -2353,6 +2353,8 @@ import {Accordion} from "@aurea-uds/react";
 
 - variant="surface" puts it in a card. A disabled item is announced and skipped by Tab.
 
+- indicator="plus" and size="lg" make the FAQ row: a plus that turns into ×, 60 tall.
+
 ## Examples
 
 ### Surface
@@ -2371,6 +2373,14 @@ multiple keeps each item independent.
 <Accordion multiple defaultValue={["ship", "native"]} items={items} />
 ```
 
+### Plus, large
+
+indicator="plus" swaps the arrow for a plus in a circle, which turns into a yellow × when the item opens; size="lg" is the 60-tall row with body-size text. One accordion per question, as in a FAQ.
+
+```tsx
+<Accordion variant="surface" indicator="plus" size="lg" defaultValue={["ship"]} items={[item]} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -2379,6 +2389,8 @@ multiple keeps each item independent.
 | `variant` | `default \| surface` | default | surface puts the items in a card, with the line at 94% and the neutral hover. |
 | `multiple` | `boolean` | false | Lets several items stay open. Without it, opening one closes the other, as in the reference. |
 | `defaultValue` | `string[]` | — | The ids of the items that start open. |
+| `indicator` | `chevron \| plus` | chevron | How opening is drawn: the arrow at the end, or a plus in a circle that turns 45° into a yellow × when the item opens (the FAQ of this site). |
+| `size` | `md \| lg` | md | lg is the 60-tall row with body-size (16) text, 22 from the edge, for questions that stand alone. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin. |
 </page>
 
@@ -2636,6 +2648,23 @@ asideVariant="flush" glues the right column to the edge of the window, like the 
 </AppShell>
 ```
 
+### The pill on top
+
+topbarVariant="pill" puts the top bar in a capsule that floats over the page, as wide as the block; with layout="docs" the columns sit 28 apart and the aside is as tall as what it shows. topbarBlurred blurs what scrolls under the capsule.
+
+```tsx
+<AppShell
+  layout="docs"
+  topbarVariant="pill"
+  sidebarIndicator="segment-dot"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+  aside={<p>On this page</p>}
+>
+  <h1>Inbox</h1>
+</AppShell>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -2646,7 +2675,8 @@ asideVariant="flush" glues the right column to the edge of the window, like the 
 | `currentNavId` | `string` | — | The id of the current item in navItems. Marked with aria-current="page" and the selected skin. |
 | `navLabel` | `string` | — | Accessible name of the <nav> built from navItems. Falls back to the sidebarLabel string. |
 | `topbar` | `ReactNode` | — | What sits in the topbar next to the brand: the page title, sections, search. What belongs at the far end goes in topbarActions. |
-| `topbarVariant` | `"floating" \| "flush"` | "floating" | Skin of the topbar. flush removes the outer gap, and the sidebar rises to meet it. |
+| `topbarVariant` | `"floating" \| "flush" \| "pill"` | "floating" | Skin of the topbar. flush removes the outer gap, and the sidebar rises to meet it; pill is a capsule that floats over the page, as wide as the block, and with layout="docs" the columns sit 28 apart. |
+| `topbarBlurred` | `boolean` | false | The top bar's background blurs what scrolls under it — the Header's blurred, on flush and pill. |
 | `sidebarVariant` | `"floating" \| "flush" \| "plain"` | "floating" | Skin of the sidebar, forwarded to it. flush is the one exception this design system makes to its floating surfaces: the panel sits against the edges, takes the full height and is separated from the content by a single rule. Without this prop the variant would be unreachable for anyone composing through the shell, which is the normal path. |
 | `sidebarScrollbar` | `hover \| visible` | hover | The left sidebar's scrollbar, forwarded to it: hover (light, shown with the pointer over it, with focus inside and on touch screens) or visible (always on screen). |
 | `sidebarFooter` | `ReactNode` | — | The fixed bottom of the sidebar (Sidebar footer): the person and the sign-out (Sidebar.User), a short list (Sidebar.Nav). Only the list in the middle scrolls. Works in every layout. |
@@ -6461,6 +6491,14 @@ How far the bar's content grows, on the Container's scale, so the bar lines up w
 <Header variant="flush" brand={<strong>Acme</strong>} maxWidth="full" />
 ```
 
+### A wide pill that blurs
+
+On the pill, maxWidth makes the capsule itself as wide as the Container, and blurred lets what scrolls under it show through, blurred. With reduced transparency, or no blur in the browser, the fill is solid.
+
+```tsx
+<Header variant="pill" maxWidth="full" blurred brand={<strong>Acme</strong>} />
+```
+
 ### Links at the start
 
 itemsJustify="start" puts the links right after the brand; end, the default, puts them just before the actions.
@@ -6488,10 +6526,10 @@ itemsJustify="start" puts the links right after the brand; end, the default, put
 | `items` | `SidebarItem[]` | — | The website's links — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href and render (the router link); sub-items, icon and onClick are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel. |
 | `current` | `string` | — | The id of the current page's item: it gets aria-current="page", the highlight colour and the medium weight, in the bar and in the menu panel. |
 | `actions` | `ReactNode` | — | What sits on the right: search, a call to action, the account. It stays in the bar on a phone too. |
-| `maxWidth` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl" \| "docs" \| "full"` | — | How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding. docs is the documentation block, 1400 (--docs-width), with 24 of padding from 768 up. |
+| `maxWidth` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl" \| "docs" \| "full"` | — | How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding. docs is the documentation block, 1400 (--docs-width), with 24 of padding from 768 up. On pill, the capsule itself takes that width, instead of hugging its content. |
 | `itemsJustify` | `"start" \| "end"` | "end" | Where the links sit: end (just before the actions, at the other end from the brand) or start (right after the brand, with the actions at the other end — the reference's home page). |
 | `size` | `"md" \| "sm"` | "md" | The bar's height: md is 64 (the reference's bar guide), sm is 56 (the reference's home page), with 6 between the actions instead of 8. |
-| `blurred` | `boolean` | false | Only on flush: a transparent background that blurs what scrolls under it, as the reference's home page. With reduced transparency asked by the system, or a browser without backdrop blur, the background is solid. |
+| `blurred` | `boolean` | false | On flush and pill: a transparent background that blurs what scrolls under it, as the reference's home page. With reduced transparency asked by the system, or a browser without backdrop blur, the background is solid. |
 | `menuActions` | `ReactNode` | — | What only the phone menu carries, under the links (the GitHub link, the account). Not shown in the wide bar. |
 | `navLabel` | `string` | "Main" | The navigation's name for screen readers. Pass it in the page's language. |
 | `menuLabel` | `string` | "Menu" | The phone menu button's name for screen readers. Pass it in the page's language. In an app with client-side routing the panel does not close by itself on a page change: give the Header a key that changes with the route. |
@@ -10023,6 +10061,16 @@ import {TableOfContents} from "@aurea-uds/react";
 ]} />
 ```
 
+## Examples
+
+### Reading ring, raised current item
+
+progress puts a ring in place of the heading icon, with how much of the page has been read, in ring and number; indicator="segment" raises the current item in a capsule, like the Sidebar's.
+
+```tsx
+<TableOfContents progress indicator="segment" current="preview" items={items} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -10030,6 +10078,8 @@ import {TableOfContents} from "@aurea-uds/react";
 | `items` | `TocItem[]` | — | The entries: {id, label, sub?}. `sub` indents one level and there is no level below that — a contents list that mirrors five heading levels is a second document. |
 | `current` | `string` | — | The id of the section you are in; it gets aria-current. Which one that is depends on scroll, and scroll is the page's business, not the component's. |
 | `label` | `string` | "On this page" | Both the visible heading and the accessible name of the <nav> — one string, so they cannot say different things. |
+| `progress` | `boolean` | false | A reading ring in place of the heading icon: how much of the page has been scrolled, in the ring and as a number at the end of the line. Decoration for reading — the ring and the number are hidden from screen readers, which already hear the current section through aria-current. |
+| `indicator` | `line \| segment` | line | How the current item is marked: line, the stroke at the side, or segment, the raised capsule of the Sidebar. |
 </page>
 
 <page url="https://aureauds.dev/tabs.html">
@@ -17459,6 +17509,40 @@ import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
   <LogStream lines={tail} />
   <Button variant="outline">Pause live tail</Button>
 </Card>
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-52-0.html">
+# v0.52.0
+
+The pill on AppShell, a reading ring on TableOfContents and a plus on Accordion — the pieces of the new site.
+
+New options on five web components. Nothing changes unless you use them.
+
+## New
+
+- **`AppShell topbarVariant="pill"`** — the top bar is a capsule, 64 tall and 14 from the top, as wide as the block. With `layout="docs"` the sidebar, the text and the table of contents start at 96, 28 apart; the table of contents is 236 wide and as tall as what it shows, and the sidebar ends 16 above the bottom of the window. Outside `"docs"`, the capsule runs edge to edge. **`topbarBlurred`** blurs what scrolls under the bar.
+- **`Header blurred`** now works on `variant="pill"` too, and `maxWidth` on the pill makes the capsule itself that wide instead of hugging its content.
+- **`TableOfContents progress`** — a reading ring in place of the heading icon: how much of the page has been read, in the ring and as a number. It is hidden from screen readers, which already hear the current section. On plain HTML pages, `aurea.js` keeps it up to date.
+- **`TableOfContents indicator="segment"`** — the current item in a raised capsule, like the `Sidebar`'s. The default, `"line"`, is the stroke at the side.
+- **`Accordion indicator="plus"`** — a plus in a 32 circle that turns into a yellow × when the item opens — and **`size="lg"`**, a 60-tall row with body-size text, 22 from the edge.
+
+## Changed
+
+- **Collapsible groups in `Sidebar`**: the arrow sits at the end of the group name, and the items are indented one step (28). On plain HTML pages, `aurea.js` opens and closes the group.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.52.0 @aurea-uds/core@0.52.0 @aurea-uds/fonts@0.52.0 @aurea-uds/icons@0.52.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.52.0
 ```
 </page>
 

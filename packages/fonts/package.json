@@ -1,6 +1,6 @@
 {
   "name": "@aurea-uds/fonts",
-  "version": "0.51.0",
+  "version": "0.52.0",
   "description": "As fontes da Aurea: Inter (texto), Sora (títulos) e IBM Plex Mono (código), em WOFF2 para a web (@aurea-uds/fonts/css). Para o React Native (@aurea-uds/fonts/native), as mesmas três em TTF estático, um arquivo por peso.",
   "keywords": [
     "aurea",

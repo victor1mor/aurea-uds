@@ -69,6 +69,24 @@
       "type": "string",
       "default": "\"On this page\"",
       "description": "Both the visible heading and the accessible name of the <nav> — one string, so they cannot say different things."
+    },
+    {
+      "name": "progress",
+      "type": "boolean",
+      "default": "false",
+      "description": "A reading ring in place of the heading icon: how much of the page has been scrolled, in the ring and as a number at the end of the line. Decoration for reading — the ring and the number are hidden from screen readers, which already hear the current section through aria-current."
+    },
+    {
+      "name": "indicator",
+      "type": "line | segment",
+      "default": "line",
+      "description": "How the current item is marked: line, the stroke at the side, or segment, the raised capsule of the Sidebar."
     }
-  ]
+  ],
+  "axes": {
+    "indicator": [
+      "line",
+      "segment"
+    ]
+  }
 }

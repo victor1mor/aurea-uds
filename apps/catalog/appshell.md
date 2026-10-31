@@ -70,6 +70,23 @@ asideVariant="flush" glues the right column to the edge of the window, like the 
 </AppShell>
 ```
 
+### The pill on top
+
+topbarVariant="pill" puts the top bar in a capsule that floats over the page, as wide as the block; with layout="docs" the columns sit 28 apart and the aside is as tall as what it shows. topbarBlurred blurs what scrolls under the capsule.
+
+```tsx
+<AppShell
+  layout="docs"
+  topbarVariant="pill"
+  sidebarIndicator="segment-dot"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+  aside={<p>On this page</p>}
+>
+  <h1>Inbox</h1>
+</AppShell>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -80,7 +97,8 @@ asideVariant="flush" glues the right column to the edge of the window, like the 
 | `currentNavId` | `string` | — | The id of the current item in navItems. Marked with aria-current="page" and the selected skin. |
 | `navLabel` | `string` | — | Accessible name of the <nav> built from navItems. Falls back to the sidebarLabel string. |
 | `topbar` | `ReactNode` | — | What sits in the topbar next to the brand: the page title, sections, search. What belongs at the far end goes in topbarActions. |
-| `topbarVariant` | `"floating" \| "flush"` | "floating" | Skin of the topbar. flush removes the outer gap, and the sidebar rises to meet it. |
+| `topbarVariant` | `"floating" \| "flush" \| "pill"` | "floating" | Skin of the topbar. flush removes the outer gap, and the sidebar rises to meet it; pill is a capsule that floats over the page, as wide as the block, and with layout="docs" the columns sit 28 apart. |
+| `topbarBlurred` | `boolean` | false | The top bar's background blurs what scrolls under it — the Header's blurred, on flush and pill. |
 | `sidebarVariant` | `"floating" \| "flush" \| "plain"` | "floating" | Skin of the sidebar, forwarded to it. flush is the one exception this design system makes to its floating surfaces: the panel sits against the edges, takes the full height and is separated from the content by a single rule. Without this prop the variant would be unreachable for anyone composing through the shell, which is the normal path. |
 | `sidebarScrollbar` | `hover \| visible` | hover | The left sidebar's scrollbar, forwarded to it: hover (light, shown with the pointer over it, with focus inside and on touch screens) or visible (always on screen). |
 | `sidebarFooter` | `ReactNode` | — | The fixed bottom of the sidebar (Sidebar footer): the person and the sign-out (Sidebar.User), a short list (Sidebar.Nav). Only the list in the middle scrolls. Works in every layout. |

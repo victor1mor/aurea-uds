@@ -271,6 +271,9 @@ export default {
         {asideVariant: "floating", sidebarScrollbar: "visible"}),
       cascaDeApp("A flush aside", "asideVariant=\"flush\" glues the right column to the edge of the window, like the flush sidebar.",
         {asideVariant: "flush", sidebarVariant: "flush"}),
+      cascaDeApp("The pill on top", "topbarVariant=\"pill\" puts the top bar in a capsule that floats over the page, as wide as "
+        + "the block; with layout=\"docs\" the columns sit 28 apart and the aside is as tall as what it shows. topbarBlurred "
+        + "blurs what scrolls under the capsule.", {layout: "docs", topbarVariant: "pill", sidebarIndicator: "segment-dot"}),
     ],
   },
   AureaProvider: {
@@ -1556,6 +1559,15 @@ export function Actions() {
       {id: "preview", label: "Preview"}, {id: "installation", label: "Installation"},
       {id: "reference", label: "Reference"},
     ]})),
+    examples: [{
+      title: "Reading ring, raised current item",
+      description: "progress puts a ring in place of the heading icon, with how much of the page has been read, in ring and "
+        + "number; indicator=\"segment\" raises the current item in a capsule, like the Sidebar's.",
+      code: `<TableOfContents progress indicator="segment" current="preview" items={items} />`,
+      render: () => h("div", null, h(A.TableOfContents, {label: "Sections, with the ring", progress: true, indicator: "segment",
+        current: "preview", items: [{id: "preview", label: "Preview"}, {id: "installation", label: "Installation"},
+          {id: "reference", label: "Reference"}]})),
+    }],
   },
   AvatarGroup: {
     code: `<AvatarGroup max={3} total={9} label="Reviewers">
@@ -1980,6 +1992,14 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
         Comp: A.Header, nome: "Header", prop: "maxWidth", valores: ["sm", "md", "lg", "xl", "2xl", "docs", "full"],
         baseCodigo: "variant=\"flush\" brand={<strong>Acme</strong>}", base: {variant: "flush", brand: h("strong", null, "Acme")},
         estilo: {display: "grid", gap: "var(--space-2)", width: "100%"}}),
+      {
+        title: "A wide pill that blurs",
+        description: "On the pill, maxWidth makes the capsule itself as wide as the Container, and blurred lets what scrolls "
+          + "under it show through, blurred. With reduced transparency, or no blur in the browser, the fill is solid.",
+        code: `<Header variant="pill" maxWidth="full" blurred brand={<strong>Acme</strong>} />`,
+        render: () => h("div", {style: {width: "100%", position: "relative"}}, h(A.Header, {variant: "pill", maxWidth: "full",
+          blurred: true, brand: h("strong", null, "Acme")})),
+      },
       {
         title: "Links at the start",
         description: "itemsJustify=\"start\" puts the links right after the brand; end, the default, puts them just before the actions.",

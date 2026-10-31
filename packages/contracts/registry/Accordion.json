@@ -13,7 +13,10 @@
     "default",
     "surface"
   ],
-  "sizes": [],
+  "sizes": [
+    "md",
+    "lg"
+  ],
   "states": [
     "default",
     "expanded",
@@ -76,10 +79,28 @@
       "description": "The ids of the items that start open."
     },
     {
+      "name": "indicator",
+      "type": "chevron | plus",
+      "default": "chevron",
+      "description": "How opening is drawn: the arrow at the end, or a plus in a circle that turns 45° into a yellow × when the item opens (the FAQ of this site)."
+    },
+    {
+      "name": "size",
+      "type": "md | lg",
+      "default": "md",
+      "description": "lg is the 60-tall row with body-size (16) text, 22 from the edge, for questions that stand alone."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",
       "description": "Merged onto the outermost element, after the Aurea skin."
     }
-  ]
+  ],
+  "axes": {
+    "indicator": [
+      "chevron",
+      "plus"
+    ]
+  }
 }

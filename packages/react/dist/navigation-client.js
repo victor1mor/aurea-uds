@@ -11,7 +11,7 @@ import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { Popover as BasePopover } from "@base-ui/react/popover";
 import { useValorResponsivo } from "./responsivo-runtime.js";
 import { cx, fundirRender, useAureaStrings, usePortalContainer } from "./internal.js";
-import { Kbd } from "./markup.js";
+import { Kbd, ProgressCircle } from "./markup.js";
 import { Icon } from "./system.js";
 import { Button, IconButton } from "./actions.js";
 import { Badge, Spinner } from "./feedback.js";
@@ -62,11 +62,29 @@ export function Pagination({ page, total, onPageChange, variant = "numbers", sum
                         ? _jsx("li", { children: _jsx("span", { className: "pagination-ellipsis", "aria-hidden": "true", children: "\u2026" }) }, `e${i}`)
                         : _jsx("li", { children: item(p, p, { atual: p === page, rotulo: `${s.paginationPage} ${p}` }) }, p)), _jsx("li", { children: proxima })] })] });
 }
-export function TableOfContents({ items, current, label, className, ...props }) {
+//
+// O SITE B (30/10/2026, protótipo): `progress` troca o ícone do nome pelo ANEL DE LEITURA — quanto da página já rolou, no
+// anel (o `ProgressCircle`) e em número, na ponta da linha. É enfeite de leitura: o anel e o número ficam fora do leitor
+// de tela (o que importa a ele é a seção atual, que o `aria-current` já diz).
+export function TableOfContents({ items, current, label, progress, indicator = "line", className, ...props }) {
     const s = useAureaStrings();
     const meu = React.useRef(null);
     const observado = useSecaoEmVista(items, current === undefined, meu);
     const atual = current ?? observado;
+    const [lido, setLido] = React.useState(0);
+    const Rotulo = progress ? "div" : "p";
+    React.useEffect(() => {
+        if (!progress || typeof window === "undefined")
+            return;
+        const ler = () => {
+            const alto = document.documentElement.scrollHeight - window.innerHeight;
+            setLido(alto > 0 ? Math.round(Math.min(1, Math.max(0, window.scrollY / alto)) * 100) : 100);
+        };
+        ler();
+        window.addEventListener("scroll", ler, { passive: true });
+        window.addEventListener("resize", ler);
+        return () => { window.removeEventListener("scroll", ler); window.removeEventListener("resize", ler); };
+    }, [progress]);
     // O `ref` do consumidor continua chegando: em React 19 ele é prop comum, então espalhá-lo por
     // `...props` depois do nosso o sobrescreveria em silêncio. Os dois são atendidos aqui.
     const refDele = props.ref;
@@ -74,7 +92,9 @@ export function TableOfContents({ items, current, label, className, ...props }) 
     return _jsxs("nav", { ref: n => { meu.current = n; if (typeof refDele === "function")
             refDele(n);
         else if (refDele)
-            refDele.current = n; }, className: cx("toc", className), "aria-label": label ?? s.tocLabel, ...resto, children: [_jsxs("p", { className: "toc-label", children: [_jsx("span", { className: "toc-label-icon", "aria-hidden": "true" }), label ?? s.tocLabel] }), items.map(i => _jsx("a", { href: `#${i.id}`, className: cx(i.sub && "toc-sub"), ...(i.id === atual ? { "aria-current": "true" } : {}), children: i.label }, i.id))] });
+            refDele.current = n; }, className: cx("toc", indicator === "segment" && "toc-segment", className), "aria-label": label ?? s.tocLabel, ...resto, children: [_jsxs(Rotulo, { className: cx("toc-label", progress && "toc-label-progress"), children: [progress
+                        ? _jsx("span", { className: "toc-progress", "aria-hidden": "true", children: _jsx(ProgressCircle, { value: lido, size: "lg", label: label ?? s.tocLabel }) })
+                        : _jsx("span", { className: "toc-label-icon", "aria-hidden": "true" }), label ?? s.tocLabel, progress && _jsxs("span", { className: "toc-progress-value", "aria-hidden": "true", children: [lido, "%"] })] }), items.map(i => _jsx("a", { href: `#${i.id}`, className: cx(i.sub && "toc-sub"), ...(i.id === atual ? { "aria-current": "true" } : {}), children: i.label }, i.id))] });
 }
 /** Qual dos `items` está na faixa de leitura, observando o documento. Devolve `undefined` até o
  *  primeiro cálculo — e em SSR, onde não há documento para observar.
@@ -270,7 +290,7 @@ function SidebarGroup({ item, filhos, lid, ctx }) {
         ? _jsxs("button", { id: lid, type: "button", className: "sidebar-group-label sidebar-group-toggle", "aria-expanded": aberto, "aria-controls": lid + "-lista", onClick: () => setAberto(v => !v), children: [_jsx("span", { children: item.label }), _jsx(Icon, { name: aberto ? "caret-down" : direita ? "caret-left" : "caret-right", size: "sm", className: "sidebar-group-caret" })] })
         : _jsx("p", { id: lid, className: cx("sidebar-group-label", ctx.collapsed && "sr-only"), children: item.label });
     const lista = sidebarList(filhos, ctx, false, lid);
-    return _jsxs("li", { children: [acao || dobra ? _jsxs("div", { className: "sidebar-group-head", children: [nome, acao && _jsx("span", { className: "sidebar-group-action", children: item.action })] }) : nome, dobra ? _jsx("div", { id: lid + "-lista", hidden: !aberto, children: lista }) : lista] });
+    return _jsxs("li", { children: [acao || dobra ? _jsxs("div", { className: "sidebar-group-head", children: [nome, acao && _jsx("span", { className: "sidebar-group-action", children: item.action })] }) : nome, dobra ? _jsx("div", { id: lid + "-lista", className: "sidebar-group-list", hidden: !aberto, children: lista }) : lista] });
 }
 // A GAVETA FECHA AO ESCOLHER (A-06, 23/09/2026). Abaixo de lg a lateral do `AppShell` é popover,
 // e a biblioteca a abria e NUNCA a fechava por código: `hidePopover` tinha zero ocorrências. O

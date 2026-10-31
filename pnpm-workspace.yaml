@@ -32,6 +32,13 @@ overrides:
   # que apareceu quando a auditoria voltou a rodar, e o gate da CI reprova em `high`.
   # 3.3.17 e' o patch e cabe no intervalo que o postcss pede — sem bump maior.
   nanoid: '^3.3.17'
+  # 31/10/2026: cinco `high` novos no node-forge <=1.4.0 (GHSA-7wch-p9px-956x, GHSA-jc66-7q78-782g,
+  # GHSA-8hrf-8g6f-7xwp, GHSA-hqq3-7jhf-c5jx, GHSA-5x38-2vff-x55p), achados pela CI do pedido #109.
+  # Corrigidos na 1.4.1; a ultima publicada e' a 1.4.2 (medido com `npm view`), e ela cabe no `^1.3.3`
+  # que o @expo/code-signing-certificates pede. So' devDependencies do @aurea-uds/native (> expo >
+  # @expo/cli); nenhum tarball a contem. Com isto sai o aceite de 01/10/2026 (GHSA-86w9-cpqp-85rv, a
+  # faixa dele e' <=1.4.0), como o registro dele previa.
+  node-forge: '^1.4.2'
   # GHSA-6j4f-fj2g-mc7p e GHSA-qhr7-859c-m2p7 (altos, 30/09/2026): brace-expansion >=4.0.0
   # <5.0.11. Chega por UM caminho, de ferramenta — @aurea-uds/native (devDependencies) >
   # @react-native-community/datetimepicker > expo > @expo/cli > ... > minimatch 10 > brace-expansion.
@@ -96,14 +103,8 @@ auditConfig:
   ignoreGhsas:
     - GHSA-w3rx-r6r6-pgpr
     - GHSA-5p2g-fcmc-qvqq
-    # node-forge (high, CWE-347), aceita pelo Victor em 01/10/2026, com o mesmo registro
-    # das duas de cima. Publicada no meio da CI do pedido #24; o `main` reprovou junto.
-    #   • sem correcao: "patched: none", e a ultima publicada (1.4.0) esta' na faixa <=1.4.0;
-    #   • so' devDependencies do @aurea-uds/native (expo-image-picker e datetimepicker > expo >
-    #     @expo/cli > node-forge); o `check-pack.mjs` passa e nenhum tarball a contem;
-    #   • roda no Expo CLI do APP (assinatura de build iOS e de atualizacao), nunca na Aurea.
-    # SAI quando o node-forge publicar a correcao e o Expo subir — ai vira override.
-    - GHSA-86w9-cpqp-85rv
+    # ~~node-forge (GHSA-86w9-cpqp-85rv), aceita em 01/10/2026~~ — saiu em 31/10/2026: virou o override
+    # node-forge '^1.4.2' (ver `overrides`), fora da faixa <=1.4.0 do alerta.
     # braces (high, CVE-2026-93687), achada pela CI do pedido #32 em 03/10/2026; o `main`
     # reprova junto. Mesmo registro das de cima:
     #   • sem correcao: "patched: none", e a ultima publicada (3.0.3) esta' na faixa <=3.0.3;

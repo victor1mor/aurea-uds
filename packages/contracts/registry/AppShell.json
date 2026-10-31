@@ -48,9 +48,15 @@
     },
     {
       "name": "topbarVariant",
-      "type": "\"floating\" | \"flush\"",
+      "type": "\"floating\" | \"flush\" | \"pill\"",
       "default": "\"floating\"",
-      "description": "Skin of the topbar. flush removes the outer gap, and the sidebar rises to meet it."
+      "description": "Skin of the topbar. flush removes the outer gap, and the sidebar rises to meet it; pill is a capsule that floats over the page, as wide as the block, and with layout=\"docs\" the columns sit 28 apart."
+    },
+    {
+      "name": "topbarBlurred",
+      "type": "boolean",
+      "default": "false",
+      "description": "The top bar's background blurs what scrolls under it — the Header's blurred, on flush and pill."
     },
     {
       "name": "sidebarVariant",
@@ -257,7 +263,8 @@
     ],
     "topbarVariant": [
       "floating",
-      "flush"
+      "flush",
+      "pill"
     ],
     "contentVariant": [
       "plain",
