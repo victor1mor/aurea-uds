@@ -44,16 +44,18 @@ Five is the limit. At this width it already asks to become a Select — which is
 
 ### Sizes
 
-sm is the low capsule — the switch at the end of this site's areas row; md, the default, is the control height.
+sm (34) is the low capsule of a documentation switch; md (40), the default, is the control height; lg (44) and xl (48) are the tall capsules — the Web | Native switch and the area switch of this site.
 
 ```tsx
 <SegmentedControl size="sm" label="View" value={view} onChange={setView} items={views} />
 <SegmentedControl size="md" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl size="lg" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl size="xl" label="View" value={view} onChange={setView} items={views} />
 ```
 
 ### As navigation
 
-With href on every item it is a <nav> of links: going to another page is navigation, and the current one is marked with aria-current="page" — the Web | Native switch at the top of this site.
+With href on every item it is a <nav> of links: going to another page is navigation, and the current one is marked with aria-current="page" — like the Web | Native switch of this site.
 
 ```tsx
 <SegmentedControl size="sm" label="Platform" value="web" items={[
@@ -84,5 +86,5 @@ selectedStyle (ADR-0084): current — the raised capsule with the yellow line, t
 | `onChange` | `(v: string) => void` | — | Fires with the new value. Not needed when the items are links (href). |
 | `label` | `string` | — | Accessible name of the set. |
 | `fullWidth` | `boolean` | false | Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control scrolls, as without the prop. The name the reference library gives this prop on its toggle-button group; the same prop on native. |
-| `size` | `"sm" \| "md"` | md | sm is the low capsule of the reference's documentation switch: 24 tabs, 14 text. |
+| `size` | `"sm" \| "md" \| "lg" \| "xl"` | md | sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web \| Native switch and the area switch of this site. Web only. |
 | `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot"` | "current" | The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |

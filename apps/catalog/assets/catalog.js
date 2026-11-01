@@ -494,6 +494,12 @@ document.addEventListener("click", e => {
   try { texto = JSON.parse(fonte.textContent); } catch (err) { return; }
   copiarNoBotao(botao, texto);
 });
+// -- O "Copy" das linhas de instalar (o site B, 30/10/2026): o comando vem no próprio botão. --------------
+document.addEventListener("click", e => {
+  const botao = e.target.closest("[data-copiar]");
+  if (!botao || !navigator.clipboard) return;
+  copiarNoBotao(botao, botao.dataset.copiar);
+});
 // -- "Copy Prompt" (lote U, SITE-06) ---------------------------------------------------------
 // O texto que prepara um assistente de IA para a Aurea: instalar a skill e ler o llms.txt. O endereco
 // sai da propria pagina (o site, a bancada ou o disco), e nao escrito aqui.
@@ -583,3 +589,16 @@ const enquadrarGrafos = () => {
 };
 enquadrarGrafos();
 addEventListener("resize", enquadrarGrafos);
+// -- O SITE B (30/10/2026) -------------------------------------------------------------------
+// AS PEÇAS QUE FLUTUAM no palco da abertura seguem o ponteiro, cada uma com a sua profundidade (data-fundo). Paradas
+// para quem pede menos movimento.
+const palcoDaAbertura = document.querySelector("[data-palco]");
+if (palcoDaAbertura && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const pecasDoPalco = [...palcoDaAbertura.querySelectorAll("[data-fundo]")];
+  palcoDaAbertura.addEventListener("mousemove", e => {
+    const r = palcoDaAbertura.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width - 0.5) * 2, y = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    pecasDoPalco.forEach(p => { const f = Number(p.dataset.fundo) || 1; p.style.transform = "translate3d(" + (x * 10 * f) + "px," + (y * 8 * f) + "px,0)"; });
+  });
+  palcoDaAbertura.addEventListener("mouseleave", () => pecasDoPalco.forEach(p => { p.style.transform = ""; }));
+}

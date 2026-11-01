@@ -14,7 +14,7 @@ const VERSAO: string = JSON.parse(readFileSync("packages/react/package.json", "u
 
 test("All Releases mostra a última no alto e leva cada versão à nota dela", async ({page}) => {
   await page.goto(`${base}/apps/catalog/releases.html`);
-  await expect(page.locator(".topbar-tab[aria-current]")).toHaveText("Releases");
+  await expect(page.locator(".site-areas a[aria-current]")).toHaveText("Releases");
   const ultima = page.locator("#latest-release ~ h3").first();
   await expect(ultima).toHaveText(`v${VERSAO}`);
   await expect(page.getByRole("link", {name: "Read full release notes →"}).first()).toHaveAttribute("href", `./release-v${VERSAO.replaceAll(".", "-")}.html`);
@@ -45,5 +45,5 @@ test("o Início não leva a área Releases, como o Início da referência", asyn
   await expect(page.locator("header nav a", {hasText: "Releases"})).toHaveCount(0);
   // E toda outra página leva a aba.
   await page.goto(`${base}/apps/catalog/button.html`);
-  await expect(page.locator(".topbar-tab", {hasText: "Releases"})).toHaveAttribute("href", "./releases.html");
+  await expect(page.locator(".site-areas a", {hasText: "Releases"})).toHaveAttribute("href", "./releases.html");
 });

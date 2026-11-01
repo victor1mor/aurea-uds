@@ -492,8 +492,11 @@ test.describe("catálogo · contratos do modelo de página", () => {
 
   test("o item ativo da lateral e a área ativa do topo se marcam com aria-current", async ({page}) => {
     await page.goto("/apps/catalog/button.html");
-    await expect(page.locator('.app-shell > .sidebar a[aria-current="page"]')).toContainText("Button");
-    await expect(page.locator('.topbar-tab[aria-current="page"]')).toHaveText("Components");
+    await expect(page.locator('.app-shell > .sidebar .sidebar-item[aria-current="page"]')).toContainText("Button");
+    // O site B (31/10/2026): as áreas são a `SegmentedControl` de links da pílula, e a chave Web | Native, no alto da
+    // lateral, também marca a página em que se está.
+    await expect(page.locator('.site-areas a[aria-current="page"]')).toHaveText("Components");
+    await expect(page.locator('.site-plataforma a[aria-current="page"]')).toHaveText("Web");
   });
 
   // ADR-0067: o menu é o da referência — ordem alfabética, sem glifo em cada item, com os selos de novidade.
@@ -501,7 +504,8 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await page.goto("/apps/catalog/button.html");
     const lateral = page.locator(".app-shell > .sidebar");
     const nomes = await lateral.locator('[aria-labelledby] a, .sidebar-group a').allTextContents();
-    expect(await lateral.locator("a svg").count()).toBe(0);
+    // Só o MENU (a `nav` "Contents"): no site B a chave Web | Native e as áreas da gaveta moram na mesma lateral, com ícone.
+    expect(await lateral.locator('nav[aria-label="Contents"] a svg').count()).toBe(0);
     const grupo = await page.evaluate(() => {
       const t = [...document.querySelectorAll(".app-shell > .sidebar .sidebar-group-label")].find((e) => e.textContent === "Components");
       const lista = t?.parentElement?.querySelectorAll("a .sidebar-label");
@@ -521,16 +525,24 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await expect(lateral.getByText("New", {exact: true})).toHaveCount(novos.length);
   });
 
-  // As duas laterais SEM CAIXA, como as da referência (lote T, 17/10/2026, o Victor: "quero sidebar como da referência, que
-  // não seja mais flutuante" — troca a ordem de 13/10/2026, "sidebar precisa ser o nosso flutuante"). Nenhum dos três à
-  // vista, nas duas: fundo, linha, sombra. Medido a 1440, onde a coluna da direita aparece.
-  test("as duas laterais não têm caixa, como as da referência", async ({page}) => {
+  // ~~As duas laterais SEM CAIXA, como as da referência (lote T, 17/10/2026).~~ O SITE B (ADR-0088, aprovado em 31/10/2026)
+  // troca isso: as duas laterais são BLOCOS de canto 22 na cor do palco (o cartão no escuro, o cinza no claro), sem linha
+  // (ADR-0072) e sem sombra — as mesmas do palco da abertura. Medido a 1440, onde a coluna da direita aparece.
+  test("as duas laterais são blocos do palco: canto 22, a cor do palco, sem linha e sem sombra", async ({page}) => {
     await page.setViewportSize({width: 1440, height: 900});
     await page.goto("/apps/catalog/getting-started.html");
-    const caixas = await page.evaluate(() => [".app-shell > .sidebar:not(.app-shell-aside)", ".app-shell > .app-shell-aside"]
-      .map((s) => { const c = getComputedStyle(document.querySelector(s)!); return {fundo: c.backgroundColor, linha: c.borderTopColor, sombra: c.boxShadow}; }));
-    const sem = {fundo: "rgba(0, 0, 0, 0)", linha: "rgba(0, 0, 0, 0)", sombra: "none"};
-    expect(caixas).toEqual([sem, sem]);
+    for (const tema of ["dark", "light"]) {
+      await page.evaluate((t) => { document.documentElement.dataset.theme = t; }, tema);
+      await esperarTransicoes(page);
+      const r = await page.evaluate(() => {
+        const palco = getComputedStyle(document.querySelector(".intro-palco")!).backgroundColor;
+        return {palco, caixas: [".app-shell > .sidebar:not(.app-shell-aside)", ".app-shell > .app-shell-aside"].map((s) => {
+          const c = getComputedStyle(document.querySelector(s)!);
+          return {fundo: c.backgroundColor, linha: c.borderTopColor, sombra: c.boxShadow, canto: c.borderTopLeftRadius}; })};
+      });
+      const bloco = {fundo: r.palco, linha: "rgba(0, 0, 0, 0)", sombra: "none", canto: "22px"};
+      expect(r.caixas, tema).toEqual([bloco, bloco]);
+    }
   });
 
   // O Victor, 13/10/2026, comparando com o Início da referência: a busca do Início é SÓ o ícone, e a caixa

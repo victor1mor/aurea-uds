@@ -151,9 +151,12 @@ const PAGES = readdirSync(DIR).filter(f => f.endsWith(".html")).sort();
 // 20 que cabe no botão pequeno; a solta é a de 24 da referência. Era sobrescrita por contexto (`.btn .kbd`), e esta
 // trava a pegou quando o botão de busca do site passou a estar em toda página (14/10/2026).
 // O `SegmentedControl` tem dois tamanhos desde o bloco 1 (23/10/2026): o `sm` é a chave Web | Native do topo do site, de 34;
-// o de sempre, de 40. Cada tamanho é um grupo — como os do `Badge`.
+// o de sempre, de 40. Cada tamanho é um grupo — como os do `Badge`. O `lg` (44) e o `xl` (48), da 0.52.1, são as duas chaves
+// do site B: o site as esticava à força, e esta trava pegou (31/10/2026).
 const UNICA = [".badge:not(.badge-xs):not(.badge-sm):not(.badge-lg):not(.badge-overlay)", ".chip", ".tabs:not(.tabs-secondary)",
-               ".segmented:not(.segmented-sm)", ".segmented.segmented-sm", ".tab", ".segmented:not(.segmented-sm) button",
+               ".segmented:not(.segmented-sm):not(.segmented-lg):not(.segmented-xl)", ".segmented.segmented-sm", ".segmented.segmented-lg",
+               ".segmented.segmented-xl", ".tab", ".segmented:not(.segmented-sm):not(.segmented-lg):not(.segmented-xl) button",
+               ".segmented.segmented-lg :is(button,a)", ".segmented.segmented-xl :is(button,a)",
                ".kbd:not(.btn-kbd)", ".pagination button:not(.btn)"];
 
 test.describe("catálogo · geometria de todas as páginas", () => {
@@ -172,7 +175,9 @@ test.describe("catálogo · geometria de todas as páginas", () => {
         const r = await p.evaluate((sels) => {
           const out: Record<string, number[]> = {};
           for (const s of sels) {
-            const els = [...document.querySelectorAll(s)].filter(e => (e as HTMLElement).offsetParent !== null);
+            // A miniatura do cartão do catálogo (`.cat-card-preview`) é a peça com `zoom: 0.8`, e o navegador devolve a altura
+            // dela com o arredondamento do zoom (40,47 para a de 40, medido em 01/11/2026): não é outro tamanho. Fica de fora.
+            const els = [...document.querySelectorAll(s)].filter(e => (e as HTMLElement).offsetParent !== null && !e.closest(".cat-card-preview"));
             if (els.length < 2) continue;
             const hs = [...new Set(els.map(e => Math.round(parseFloat(getComputedStyle(e).height) * 100) / 100))];
             if (hs.length > 1) out[s] = hs.sort((a, b) => a - b);

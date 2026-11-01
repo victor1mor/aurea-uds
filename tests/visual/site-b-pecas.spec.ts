@@ -22,8 +22,8 @@ const pagina = () => renderToStaticMarkup(h(A.AppShell, {brand: h("strong", null
   h("div", {id: "pergunta"}, h(A.Accordion, {variant: "surface", indicator: "plus", size: "lg", items: [{id: "q", title: "Is Aurea free?", content: "Yes."}]})),
   ...SECOES.map((s) => h("section", {key: s.id, id: s.id, style: {minHeight: "900px"}}, h("h2", null, s.label)))));
 
-async function abrir(p: Page, baseURL: string | undefined) {
-  await p.setViewportSize({width: 1440, height: 900});
+async function abrir(p: Page, baseURL: string | undefined, largura = 1440) {
+  await p.setViewportSize({width: largura, height: 900});
   const url = `${baseURL}/__site-b-pecas`;
   await p.route(url, (r) => r.fulfill({contentType: "text/html; charset=utf-8",
     body: `<!doctype html><html data-theme="dark"><head><meta charset="utf-8">
@@ -76,4 +76,58 @@ test("site B · o anel acompanha a leitura e o grupo dobra, no HTML puro", async
   await grupo.click();
   await expect(grupo).toHaveAttribute("aria-expanded", "false");
   await expect(p.locator(".sidebar-group-list").first()).toBeHidden();
+});
+
+// A 0.52.1 · `SegmentedControl` `lg` e `xl`: a escada das alturas de controle — a cápsula de 44 (a chave Web | Native do site
+// B) e a de 48 (as áreas no topo). O `sm` (34) e o `md` (40) continuam.
+// Provado contra o defeito: sem as classes `segmented-lg` e `segmented-xl` (ou sem as regras delas), os dois saem com 40, e o
+// teste reprova.
+test("site B · a SegmentedControl em quatro tamanhos: sm 34, md 40, lg 44 e xl 48", async ({page: p, baseURL}) => {
+  const itens = [{value: "a", label: "Getting Started"}, {value: "b", label: "Components"}];
+  const html = ["sm", "md", "lg", "xl"].map((size) => `<div id="t-${size}">${renderToStaticMarkup(h(A.AureaProvider, null,
+    h(A.SegmentedControl, {size: size as never, label: size, value: "a", items: itens.map((i) => ({...i, href: `#${i.value}`}))})))}</div>`).join("");
+  const url = `${baseURL}/__site-b-segmentos`;
+  await p.route(url, (r) => r.fulfill({contentType: "text/html; charset=utf-8",
+    body: `<!doctype html><html data-theme="dark"><head><meta charset="utf-8">
+      <link rel="stylesheet" href="/packages/fonts/dist/fonts.css"><link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+      <body style="margin:0">${html}</body></html>`}));
+  await p.goto(url, {waitUntil: "networkidle"});
+  const alturas = await p.evaluate(() => Object.fromEntries(["sm", "md", "lg", "xl"].map((s) => {
+    const cap = document.querySelector(`#t-${s} .segmented`)!.getBoundingClientRect();
+    const seg = document.querySelector(`#t-${s} .segmented a`)!.getBoundingClientRect();
+    return [s, {capsula: Math.round(cap.height), segmento: Math.round(seg.height)}];
+  })));
+  expect(alturas).toEqual({sm: {capsula: 34, segmento: 26}, md: {capsula: 40, segmento: 32}, lg: {capsula: 44, segmento: 36},
+    xl: {capsula: 48, segmento: 40}});
+});
+
+// A 0.52.1 · de 768 a 1023 a lateral do arranjo com a pílula fica a 16 da borda, alinhada com a cápsula (aprovado pela imagem,
+// 01/11/2026). Provado contra o defeito: com a regra só de 1024 para cima (a 0.52.0), a lateral fica em 0 e o teste reprova.
+test("site B · a 768, a lateral a 16 da borda, como a cápsula", async ({page: p, baseURL}) => {
+  await abrir(p, baseURL, 768);
+  const m = await medir(p);
+  expect(m.capsula!.x, "a cápsula a 16").toBe(16);
+  expect(m.lateral!.x, "a lateral também a 16").toBe(16);
+  expect(m.titulo!.x - m.lateral!.dir, "o texto a 28 da lateral").toBe(28);
+  expect(m.ladoRola, "nada rola de lado").toBe(false);
+});
+
+// A 0.52.1 · na `DataList`, a palavra que não cabe quebra dentro da célula (aprovado pela imagem, 01/11/2026). Provado contra o
+// defeito: sem o `overflow-wrap`, o nome de código longo sai da célula e a lista fica mais larga que a caixa.
+test("site B · a DataList numa coluna estreita: a palavra longa quebra dentro da célula", async ({page: p, baseURL}) => {
+  const lista = renderToStaticMarkup(h(A.AureaProvider, null, h(A.DataList, {items: [
+    {term: "Theme", value: h("code", null, "window.Aurea.setTheme.withAVeryLongName")},
+    {term: "AureaToastType", value: "info · success · warning · danger"}]})));
+  const url = `${baseURL}/__site-b-datalist`;
+  await p.route(url, (r) => r.fulfill({contentType: "text/html; charset=utf-8",
+    body: `<!doctype html><html data-theme="dark"><head><meta charset="utf-8">
+      <link rel="stylesheet" href="/packages/fonts/dist/fonts.css"><link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+      <body style="margin:0"><div id="caixa" style="inline-size:220px">${lista}</div></body></html>`}));
+  await p.goto(url, {waitUntil: "networkidle"});
+  const m = await p.evaluate(() => {
+    const dl = document.querySelector("#caixa .data-list")!;
+    return {dl: [dl.scrollWidth, dl.clientWidth], dd: [...dl.querySelectorAll("dd")].map((d) => d.scrollWidth - d.clientWidth)};
+  });
+  expect(m.dl[0], "a lista não passa da caixa").toBeLessThanOrEqual(m.dl[1]);
+  expect(m.dd, "nenhuma célula transborda").toEqual([0, 0]);
 });

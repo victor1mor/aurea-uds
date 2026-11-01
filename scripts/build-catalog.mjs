@@ -454,11 +454,12 @@ function chipLink(label, href) { return h("a", {key: label, className: "chip chi
 // Introduction e na Quick Start. O Victor perguntou o padrão do mercado: o menu de copiar a página fica em toda página; o
 // texto de configuração, onde se configura (decisão: "Só nas duas").
 const PAGINAS_COM_PROMPT = new Set(["getting-started.html", "docs-quick-start.html"]);
-const acoesDaPagina = (prompt = false) => h(A.Cluster, {gap: "tight"},
-  prompt ? h(A.Button, {variant: "tertiary", size: "sm", leadingIcon: "sparkle", "data-copy-prompt": "", type: "button"}, "Copy Prompt") : null,
-  h(A.ButtonGroup, {variant: "tertiary", size: "sm", label: "Page as Markdown"},
-    h(A.Button, {variant: "tertiary", size: "sm", leadingIcon: "copy", "data-copy-page": "", type: "button"}, "Copy Markdown"),
-    h(A.IconButton, {variant: "tertiary", size: "sm", icon: "caret-down", label: "More page actions", "data-page-menu": ""})));
+// `tamanho`: o site B põe os dois botões da abertura da Introduction no tamanho de sempre (44 de toque), como no desenho.
+const acoesDaPagina = (prompt = false, tamanho = "sm") => h(A.Cluster, {gap: "tight"},
+  prompt ? h(A.Button, {variant: "tertiary", size: tamanho, leadingIcon: "sparkle", "data-copy-prompt": "", type: "button"}, "Copy Prompt") : null,
+  h(A.ButtonGroup, {variant: "tertiary", size: tamanho, label: "Page as Markdown"},
+    h(A.Button, {variant: "tertiary", size: tamanho, leadingIcon: "copy", "data-copy-page": "", type: "button"}, "Copy Markdown"),
+    h(A.IconButton, {variant: "tertiary", size: tamanho, icon: "caret-down", label: "More page actions", "data-page-menu": ""})));
 const cabecaDaPagina = (title, lede, pills = [], prompt = false) => h("header", {className: "page-head"},
   h("div", {className: "page-head-row"}, h("h1", null, title), acoesDaPagina(prompt)),
   h("p", {className: "page-lede"}, lede),
@@ -938,6 +939,131 @@ function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) 
     anteriorProximo(prev, next),
     textoParaCopiar(markdown ?? paraTexto(doc.texto)));
   return {node, toc};
+}
+
+// ── A INTRODUCTION DO SITE B (aprovada em 26/10/2026; "eu quero idêntico", 30/10/2026) ─────────────────────────────
+// A página no desenho aprovado, com as peças da Aurea e as cores de hoje: a abertura num palco com quatro peças que
+// flutuam, e cada seção com o número e a frase de título, em cartões. O texto é o do `introduction.md` (o "Copy
+// Markdown" continua copiando o arquivo); a página só o arruma como o desenho.
+const luminanciaRelativa = hex => {
+  const c = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+};
+const contrasteEntre = (a, b) => { const [x, y] = [luminanciaRelativa(a), luminanciaRelativa(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+// O número da peça "Text" da abertura é medido nos tokens de hoje (o texto sobre o fundo, nos dois temas).
+const razaoDoTexto = tema => contrasteEntre(hexDoToken(tokensDoc.theme[tema].foreground), hexDoToken(tokensDoc.theme[tema].background)).toFixed(2);
+const linhaMd = (texto, chave) => pedacos(lerLinha(texto, "introdução"), chave);
+const blocoDeTile = (icone, cor, extra = "") => h("span", {className: `intro-tile ${extra}`.trim(), "data-cor": cor}, h(A.Icon, {name: icone}));
+const secaoB = (id, num, olho, titulo, ...filhos) => h("section", {className: "intro-sec", id, key: id},
+  h("p", {className: "intro-olho"}, `${num} · ${olho}`), h("h2", {className: "intro-h2"}, titulo), ...filhos);
+function introducaoB(doc) {
+  const toc = [{id: "why", label: "Why Aurea?"}, {id: "identity", label: "The identity"}, {id: "packages", label: "The packages"},
+    {id: "faq", label: "FAQ"}, {id: "involved", label: "Get involved"}];
+  const motivos = [
+    ["Readable first.", "eye", "blue", "Contrast is measured by tests in both themes, focus is always visible, and touch targets are at least 44px on touch screens. Text uses Inter, titles use Sora, and code uses IBM Plex Mono."],
+    ["One look, two platforms.", "devices", "orange", "The web and the native packages share the same tokens. A button on a phone and a button in a browser have the same color, shape and spacing."],
+    ["Every value is a token.", "hexagon", "green", "Color, radius, type and space come from tokens in the DTCG format, and the components read their values from them."],
+    ["Two themes, three densities.", "moon", "pink", "Light and dark are equal citizens. Each one comes in compact, comfortable and spacious."],
+    ["Typed.", "code", "teal", "The React and React Native packages ship TypeScript types. On the web, even icon names are checked by the compiler."],
+    ["Light to import.", "package", "red", "The web package is ESM. Components with a heavy engine (charts, data grid, code editor, calendar, QR code, dependency graph) live in their own entry points, with optional peer dependencies, so importing a `Button` never pulls them in."],
+  ];
+  const pacotes = [
+    ["@aurea-uds/react", "The React components, typed."],
+    ["@aurea-uds/core", "The CSS (tokens and components) and a small plain-JavaScript behavior layer."],
+    ["@aurea-uds/fonts", "Inter, Sora and IBM Plex Mono for the web, and the files for React Native."],
+    ["@aurea-uds/icons", "The Phosphor icon sprite."],
+    ["@aurea-uds/tokens", "The tokens in DTCG format, as CSS, JSON and a native module."],
+    ["@aurea-uds/native", "The React Native components."],
+    ["@aurea-uds/contracts", "The contract and the API surface of every component."],
+  ];
+  const coresDosPacotes = ["blue", "orange", "green", "pink", "teal", "red", "blue"];
+  const perguntas = [
+    ["Is Aurea free?", "Yes. It is open source under the Apache License 2.0, free for everyone. The fonts are under the SIL Open Font License 1.1 and the icons under MIT."],
+    ["Is it stable?", "Aurea is still in `0.x`. A minor release can break the API, and every break is written in the changelog. The road to `1.0` is on the [Roadmap](./docs-roadmap.html)."],
+    ["Can I use it without React?", "Yes. Install `@aurea-uds/core` and `@aurea-uds/fonts` and use the CSS classes in plain HTML. See [Frameworks](./docs-frameworks.html)."],
+    ["Does it work with Server Components?", "Yes. The main entry point can be imported from a Server Component, and the interactive modules carry `\"use client\"` themselves. Two proof apps, one with Server Components and one client-only, are built on every check."],
+    ["Is React Native the same package?", "No. `@aurea-uds/native` is a separate package with its own list of components and its own dependencies. It is not the web list with fewer items."],
+    ["What language are the built-in texts in?", "English by default. A Portuguese table ships with the packages, and any single sentence can be replaced through the provider."],
+  ];
+  const ajuda = [
+    ["Questions, requests and bugs", "chat-circle", "blue", `${REPO}/issues`, "Open an issue. Every issue is read; what makes sense joins the queue, with no promised date."],
+    ["Contributing", "git-pull-request", "green", `${REPO}/blob/main/CONTRIBUTING.md`, "Read CONTRIBUTING.md before the first pull request."],
+    ["Security", "shield-check", "red", `${REPO}/blob/main/SECURITY.md`, "Follow SECURITY.md and do not open a public issue."],
+  ];
+  const {next} = vizinhos("start", doc.arquivo);
+  // A ABERTURA: o palco (a cor do cartão, canto 22) com o texto à esquerda e as quatro peças à direita, que flutuam
+  // devagar e seguem o ponteiro (o `catalog.js`; parado para quem pede menos movimento).
+  const abertura = h("section", {className: "intro-palco", "aria-labelledby": "intro-h1", "data-palco": ""},
+    h("div", {className: "intro-palco-texto"},
+      h("span", {className: "intro-trilha"}, "Getting Started ", h("span", {"aria-hidden": "true"}, "/"), " ", h("b", null, "Overview")),
+      h("h1", {className: "intro-h1", id: "intro-h1"}, doc.title),
+      h("p", {className: "intro-lede"}, doc.description),
+      h("div", {className: "intro-acoes"}, acoesDaPagina(true, "md"))),
+    h("div", {className: "intro-pecas", "aria-hidden": "true"},
+      h("div", {className: "intro-peca intro-peca-1", "data-fundo": "0.8"}, h("div", {className: "intro-boia"},
+        h(A.Card, {className: "intro-cartao"}, h("span", {className: "intro-aa"}, "Aa"),
+          h("span", {className: "intro-mini"}, "Inter · Sora", h("br"), "IBM Plex Mono")))),
+      h("div", {className: "intro-peca intro-peca-2", "data-fundo": "1.4"}, h("div", {className: "intro-boia"},
+        h(A.Card, {className: "intro-cartao"}, h("span", {className: "intro-amarelo"}),
+          h("span", {className: "intro-mini"}, h("b", null, "One yellow"), h("br"), "light and dark")))),
+      h("div", {className: "intro-peca intro-peca-3", "data-fundo": "1.8"}, h("div", {className: "intro-boia"},
+        h(A.Card, {className: "intro-cartao"}, h("span", {className: "intro-mini intro-forte"}, "Text"),
+          h(A.Badge, {tone: "success", className: "intro-razao"},
+            h("span", {className: "intro-so-escuro"}, `${razaoDoTexto("dark")} : 1`),
+            h("span", {className: "intro-so-claro"}, `${razaoDoTexto("light")} : 1`))))),
+      h("div", {className: "intro-peca intro-peca-4", "data-fundo": "1.1"}, h("div", {className: "intro-boia"},
+        h(A.Card, {className: "intro-cartao intro-cartao-capsula"}, h("span", {className: "intro-capsula"}, "22 · 32 · capsule"))))));
+  const node = h(Fragment, null,
+    abertura,
+    h("div", {className: "intro-corpo"},
+      ...doc.blocos.filter(b => b.tipo === "p").slice(0, 2).map((b, n) => h("p", {key: n, className: "intro-p"}, ...pedacos(b.texto, `p${n}`))),
+      secaoB("why", "01", "Why Aurea?", "Six reasons, one look.",
+        h("div", {className: "intro-grade-3"}, ...motivos.map(([titulo, icone, cor, texto], n) => h(A.Card, {key: titulo, className: "intro-motivo"},
+          h("div", {className: "intro-motivo-topo"}, blocoDeTile(icone, cor), h("span", {className: "intro-numero"}, `0${n + 1}`)),
+          h("h3", null, titulo), h("p", null, ...linhaMd(texto, `m${n}`)))))),
+      secaoB("identity", "02", "The identity", "What makes it look like Aurea.",
+        h("div", {className: "intro-grade-3"},
+          identidade("Floating surfaces", "Cards, dialogs and panels have a 22px radius; the bottom sheet has 32px.",
+            h(Fragment, null, h("span", {className: "intro-mini-cartao"}), h("span", {className: "intro-mini-cartao intro-mini-cartao-2"}))),
+          identidade("Capsules", "Buttons with text, fields, filters and tabs are capsules.",
+            h(Fragment, null, h("span", {className: "intro-capsula"}, "Capsule"), h("span", {className: "intro-capsula-vazia"})), "coluna"),
+          identidade("One yellow", "The primary color is a yellow that stays the same in light and dark.",
+            h(Fragment, null, h("span", {className: "intro-metade", "data-theme": "dark"}, h("span", {className: "intro-amarelo"})),
+              h("span", {className: "intro-metade", "data-theme": "light"}, h("span", {className: "intro-amarelo"}))), "metades"),
+          identidade("No borders", "Pieces are set apart by fill. The one exception is the outline card, on the right.",
+            h(Fragment, null, h("span", {className: "intro-mini-fundo"}), h(A.Card, {variant: "outline", className: "intro-mini-contorno"}))),
+          identidade("No gradients", "Every surface is one solid color.",
+            h(Fragment, null, h("span", {className: "intro-solido", "data-cor": "primary"}), h("span", {className: "intro-solido", "data-cor": "fill"}),
+              h("span", {className: "intro-solido", "data-cor": "card"}))),
+          identidade("Phosphor icons", "Regular everywhere; the filled form on the selected item.",
+            h(Fragment, null, h(A.Icon, {name: "house", size: "xl"}), h(A.Icon, {name: "house", weight: "fill", size: "xl", className: "intro-icone-cheio"}))))),
+      secaoB("packages", "03", "The packages", "Seven packages, one version.",
+        h("div", {className: "intro-grade-2"}, ...pacotes.map(([nome, texto], n) => h(A.Card, {key: nome, className: "intro-pacote"},
+          h("div", {className: "intro-pacote-topo"}, blocoDeTile("cube", coresDosPacotes[n], "intro-tile-sm"), h("span", {className: "intro-pacote-nome"}, nome)),
+          h("p", null, texto),
+          // A linha de instalar do desenho: o comando numa cápsula com o fundo da página, e o "Copy" na ponta.
+          h("div", {className: "intro-instalar"}, h("code", null, `pnpm add ${nome}`),
+            h(A.Button, {variant: "tertiary", size: "sm", type: "button", "data-copiar": `pnpm add ${nome}`,
+              "aria-label": `Copy the install command for ${nome}`}, "Copy"))))),
+        h(A.Alert, {variant: "info", className: "intro-nota"}, ...linhaMd("All seven packages are released together, with the same version number. What changed in each release is in the [changelog](./releases.html).", "nota"))),
+      secaoB("faq", "04", "FAQ", "Questions people ask first.",
+        h("div", {className: "intro-perguntas"}, ...perguntas.map(([q, a], n) => h(A.Accordion, {key: q, variant: "surface", indicator: "plus", size: "lg", className: "intro-pergunta",
+          items: [{id: `q${n}`, title: q, content: h("p", null, ...linhaMd(a, `f${n}`))}], ...(n === 0 ? {defaultValue: ["q0"]} : {})})))),
+      secaoB("involved", "05", "Get involved", "Ask, help, report.",
+        h("div", {className: "intro-grade-3"}, ...ajuda.map(([titulo, icone, cor, href, texto]) => h(A.Card, {key: titulo, variant: "interactive", className: "intro-ajuda",
+          render: h("a", {href})},
+          blocoDeTile(icone, cor), h("b", null, titulo, " ", h(A.Icon, {name: "arrow-up-right", size: "sm"})), h("p", null, texto))))),
+      next ? h("a", {className: "intro-proxima", href: next.href},
+        h("div", null, h("span", {className: "intro-proxima-k"}, "Next"), h("b", null, next.name), h("p", null, next.summary || "")),
+        h("span", {className: "intro-proxima-seta"}, h(A.Icon, {name: "arrow-right"}))) : null),
+    textoParaCopiar(paraTexto(doc.texto)));
+  return {node, toc};
+}
+// Um cartão da identidade: o desenho numa caixa com o fundo da página, e embaixo o nome e a frase.
+function identidade(nome, texto, desenho, jeito = "") {
+  return h(A.Card, {key: nome, className: "intro-identidade"},
+    h("div", {className: "intro-identidade-desenho", "data-jeito": jeito || undefined}, desenho),
+    h("p", null, h("b", null, nome), texto));
 }
 
 // ── AS PÁGINAS DO NATIVO (bloco 1, o 5-A — 23/10/2026) ──────────────────────────────────────────────────────────────────
@@ -1465,8 +1591,15 @@ const alfabetico = list => [...list].sort((a, b) => a.name.localeCompare(b.name)
 // CADA ÁREA COM A SUA LATERAL, como na documentação da referência, onde cada área do topo tem a sua árvore (lote T,
 // 17/10/2026 — o Victor, com as fotos de Tokens e Hooks mostrando a lista de componentes: "adivinha?"). Docs, Hooks e
 // Tokens usavam o menu de Components. A área Getting Started sai da lista `DOCS` (SITE-03, lote U).
-const menuDocs = () => DOCS.map(g => ({id: g.id, label: g.label,
-  items: g.paginas.map(nome => docs.find(d => d.nome === nome)).map(d => ({...item(d.title, d.arquivo), ...(d.icon ? {icon: d.icon} : {})}))}));
+// O SITE B (aprovado em 26/10/2026): cada grupo é numerado (01, 02…), com o ícone numa bolinha na cor da categoria, e
+// abre e fecha; os itens vão sem ícone, só o nome, como no desenho.
+const GRUPOS_DOCS_B = {overview: ["compass", "blue"], handbook: ["book-open", "orange"], agents: ["robot", "green"]};
+const nomeDoGrupoB = (n, rotulo, [icone, cor]) => h(Fragment, null,
+  h("span", {className: "site-grupo-num"}, String(n).padStart(2, "0")),
+  h("span", {className: "site-grupo-tile", "data-cor": cor}, h(A.Icon, {name: icone})),
+  h("span", {className: "site-grupo-nome"}, rotulo));
+const menuDocs = () => DOCS.map((g, n) => ({id: g.id, label: nomeDoGrupoB(n + 1, g.label, GRUPOS_DOCS_B[g.id]), collapsible: true,
+  items: g.paginas.map(nome => docs.find(d => d.nome === nome)).map(d => item(d.title, d.arquivo))}));
 const menuComponentes = () => [
   {id: "overview", label: "Overview", items: [item("All Components", "components.html")]},
   {id: "components", label: "Components", items: alfabetico(fichas.filter(f => f.kind !== "hook"))
@@ -1520,7 +1653,12 @@ const MARCAS = [{id: "", label: "Gold", color: hexDoToken(tokensDoc.base["brand-
 // referência põe 12 e a letra apagada nesse botão com um ajuste só dela; na Aurea é o `quiet` do `Button` (15/10/2026).
 // Abaixo de 1024 ele é só o ícone (15/10/2026): com a palavra, o topo do Início não cabia numa linha entre 768 e 1023. O
 // botão parado sai nas DUAS formas, cada uma na sua largura, para a barra não pular quando o vivo entra.
-const botaoTema = () => h("span", {id: "site-theme-root", className: "site-theme", "data-brands": JSON.stringify(MARCAS)},
+// Na pílula do site B (30/10/2026) ele é SÓ o ícone em toda largura, como no desenho: com a palavra, a pílula não cabia
+// na tela de 1280 (medido). O vivo lê o `data-icon-only`.
+const botaoTema = (somenteIcone = false) => somenteIcone
+  ? h("span", {id: "site-theme-root", className: "site-theme", "data-brands": JSON.stringify(MARCAS), "data-icon-only": ""},
+    h(A.IconButton, {icon: "palette", label: "Design theme", variant: "tertiary", size: "sm"}))
+  : h("span", {id: "site-theme-root", className: "site-theme", "data-brands": JSON.stringify(MARCAS)},
   h(A.Button, {size: "sm", variant: "tertiary", quiet: true, leadingIcon: "paint-bucket", "aria-label": "Design theme",
     className: "hide-below-lg"}, "Theme"),
   h(A.IconButton, {icon: "paint-bucket", label: "Design theme", variant: "tertiary", size: "sm", className: "site-so-estreito"}));
@@ -1575,17 +1713,21 @@ function topoDoSite(section) {
     // NO CELULAR (lote U, 19/10/2026, "tudo como ela"): a busca larga sai e entra a lupa, depois do GitHub, como no topo
     // da referência a 375; a chave claro/escuro desce para o alto da gaveta; o GitHub fica. O botão da gaveta, o `AppShell`
     // põe por último. Tudo numa linha, com os 44 de toque da Aurea.
-    h(A.Button, {variant: "tertiary", leadingIcon: "magnifying-glass", kbd: ["Ctrl", "K"],
-      className: "site-search hide-below-md", href: "./components.html", "data-site-search": ""}, "Search"),
+    // NO SITE B (31/10/2026) a busca é a primeira das ações, a 6 da paleta, como no desenho.
+    // O nome "Search" também no `aria-label` (31/10/2026): de 1121 a 1334 a palavra some e fica a lupa, e o link ficava
+    // sem nome (o axe pegou em toda página). O nome falado é o mesmo da palavra escrita (WCAG 2.5.3).
     h("span", {className: "site-actions"},
+      h(A.Button, {variant: "tertiary", leadingIcon: "magnifying-glass", kbd: ["Ctrl", "K"], "aria-label": "Search",
+        className: "site-search hide-below-md", href: "./components.html", "data-site-search": ""}, "Search"),
+      // NO CELULAR DO SITE B (30/10/2026): a lupa, a marca e o menu, nessa ordem, e o GitHub sai da barra — o desenho.
+      h(A.IconButton, {icon: "magnifying-glass", label: "Search", variant: "tertiary", size: "sm", href: "./components.html",
+        "data-site-search": "", className: "site-so-celular"}),
       // A MARCA (20/08/2026, ADR-0036) ao lado do tema, porque são o mesmo tipo de chave — desde 14/10/2026 no botão
       // "Theme" da referência, e não mais numa caixa de seleção.
-      botaoTema(),
+      botaoTema(true),
       // A chave de três posições do topo da referência (15/10/2026): claro, escuro e sistema.
       chaveDeTema("hide-below-md"),
-      botaoGitHub(""),
-      h(A.IconButton, {icon: "magnifying-glass", label: "Search", variant: "tertiary", size: "sm", href: "./components.html",
-        "data-site-search": "", className: "site-so-celular"})),
+      botaoGitHub("hide-below-md")),
     // AS ÁREAS são a segunda linha do `Header` (`topbarTabs`, lote T): elas saíram daqui. O `Header` as põe por último na
     // ordem do Tab, depois das ações — a regra da `ordem-de-foco.spec.ts` (WCAG 2.4.3, 14/10/2026) continua valendo.
   );
@@ -1636,9 +1778,13 @@ function shell(activeHref, inner, section = "components") {
   const nomeAqui = activeHref ? activeHref.replace(/^native-/, "").replace(/\.html$/, "") : null;
   const daWeb = activeHref && section === "native" ? fichas.find(f => slug(f.name) === nomeAqui && f.platforms?.web && f.platforms.web !== "planned") : null;
   const doNativo = activeHref && section !== "native" ? nativos.find(n => slug(n) === nomeAqui) : null;
-  const chavePlataforma = h(A.SegmentedControl, {label: "Platform", size: "sm", value: section === "native" ? "native" : "web",
+  // No nativo, "Components" leva à lista do nativo: a chave troca o site, e as áreas acompanham.
+  const areaAtual = section === "native" ? "components" : section;
+  const areasDoSite = AREAS.map(([label, href, id]) => ({value: id, label, href: `./${section === "native" && id === "components" ? "native.html" : href}`}));
+  // No site B (31/10/2026), a chave do desenho: o escolhido levantado, sem o fio, e a janela do navegador no "Web".
+  const chavePlataforma = h(A.SegmentedControl, {label: "Platform", size: "lg", fullWidth: true, selectedStyle: "neutral", value: section === "native" ? "native" : "web",
     items: [
-      {value: "web", label: h(Fragment, null, h(A.Icon, {name: "globe"}), "Web"),
+      {value: "web", label: h(Fragment, null, h(A.Icon, {name: "browser"}), "Web"),
         href: section === "native" ? (daWeb ? `./${slug(daWeb.name)}.html` : "./components.html") : `./${activeHref || "components.html"}`},
       {value: "native", label: h(Fragment, null, h(A.Icon, {name: "device-mobile"}), "Native"),
         href: section === "native" ? `./${activeHref}` : doNativo ? `./${paginaNativa(doNativo)}` : "./native.html"}]});
@@ -1649,17 +1795,40 @@ function shell(activeHref, inner, section = "components") {
     // As áreas do site são a segunda linha da barra (`topbarTabs`), com o ícone, e a linha de ponta a ponta embaixo
     // (`topbarDivider`). Variantes do componente, e não regra do site (o Victor, 13/10/2026: "não edite componente
     // nosso, deve sempre criar novas variações").
-    h(A.AppShell, {brand, topbar, topbarVariant: "flush", contentVariant: "plain", layout: "docs", sidebarVariant: "plain",
-      topbarDivider: true, topbarTabsLabel: "Sections", topbarCurrentTab: section === "native" ? "components" : section,
-      topbarTabsEnd: chavePlataforma,
-      // No nativo, "Components" leva à lista do nativo: a chave troca o site, e as áreas acompanham.
-      topbarTabs: AREAS.map(([label, href, id]) => ({id, label, href: `./${section === "native" && id === "components" ? "native.html" : href}`,
-        icon: h(A.Icon, {name: ICONE_DA_AREA[id]})})),
-      navItems: menu, currentNavId: activeHref || undefined, navLabel: "Contents", className: "site-shell",
+    // O TOPO DO SITE B (aprovado em 26/10/2026): a pílula que flutua, com as áreas NA linha da marca, numa cápsula com a
+    // atual levantada (a `SegmentedControl` com links), e o fundo que embaça. Abaixo de 1024 as áreas saem da pílula e
+    // entram na gaveta; a chave Web | Native sobe para o alto da lateral, como no desenho.
+    h(A.AppShell, {brand, topbar: h(Fragment, null,
+        h("div", {className: "site-areas"}, h(A.SegmentedControl, {label: "Sections", size: "xl", value: areaAtual, items: areasDoSite, selectedStyle: "neutral"})),
+        topbar),
+      // A LATERAL DO SITE B: o bloco de canto 22 (a `Sidebar` flutuante, a de sempre da Aurea), com o item atual na
+      // cápsula levantada e o ponto amarelo (`segment-dot`, ADR-0082).
+      topbarVariant: "pill", topbarBlurred: true, contentVariant: "plain", layout: "docs", sidebarIndicator: "segment-dot",
+      className: "site-shell",
       // A chave claro/escuro no alto da gaveta do celular, como a da referência (lote U, 19/10/2026): no topo ela não cabe.
-      navigation: h("div", {className: "site-gaveta-topo"}, chaveDeTema()),
-      ...(toc.length ? {aside: h(A.TableOfContents, {items: toc}), asideLabel: "On this page", asideVariant: "plain"} : {})},
-      node)));
+      // A ORDEM É A DO HTML (31/10/2026): a chave Web | Native e as áreas da gaveta vêm ANTES da lista, e a lista é a
+      // `Sidebar.Nav` aqui dentro, e não o `navItems` (que a lateral põe primeiro). Subir a chave com `order:-1` mudava o
+      // que se vê e não o que se tabula — a `ordem-de-foco.spec.ts` (WCAG 2.4.3) reprovou em toda página.
+      navigation: h(Fragment, null, h("div", {className: "site-gaveta-topo"}, chaveDeTema()),
+        h("div", {className: "site-plataforma"}, chavePlataforma),
+        h("div", {className: "site-gaveta-areas"}, h(A.NavList, {"aria-label": "Sections",
+          items: areasDoSite.map(a => ({id: a.value, label: a.label, href: a.href, icon: ICONE_DA_AREA[a.value]}))})),
+        h(A.Sidebar.Nav, {items: menu, current: activeHref || undefined, label: "Contents"})),
+      // O ÍNDICE DO SITE B: o mesmo bloco, com o anel de leitura e o item atual na cápsula levantada (as duas variações do
+      // `TableOfContents`, protótipo) e o "Back to top" no pé.
+      ...(toc.length ? {aside: h(Fragment, null,
+        h(A.TableOfContents, {items: toc, progress: true, indicator: "segment"}),
+        h("a", {className: "site-toc-topo", href: "#"}, h(A.Icon, {name: "arrow-up"}), "Back to top")),
+        asideLabel: "On this page"} : {})},
+      node),
+    // O RODAPÉ DO SITE B: uma linha, na largura do bloco — o texto à esquerda, os links à direita.
+    h("footer", {className: "site-rodape"},
+      h("p", null, `© ${ANO} Aurea UDS. Open source under Apache-2.0.`),
+      // "Site footer", e não "Footer" (31/10/2026): a página do rodapé de exemplo tem o próprio menu "Footer", e dois
+      // menus com o mesmo nome confundem o leitor de tela (o axe pegou: `landmark-unique`).
+      h("nav", {className: "site-rodape-links", "aria-label": "Site footer"},
+        h("a", {href: `${REPO}/blob/main/CHANGELOG.md`}, "Changelog"), h("a", {href: `${REPO}/blob/main/LICENSE`}, "License"),
+        h("a", {href: REPO}, "GitHub")))));
 }
 
 // ── assets: catalog.css (fontes+core+chrome) e catalog.js (abas+tema) ─────────
@@ -1796,7 +1965,8 @@ a.chip-link:hover { color:var(--primary); border-color:transparent; }
 .site-actions { display:flex; align-items:center; gap:var(--space-2); }
 /* A busca ENCOLHE antes de empurrar as ações para a linha de baixo, como a da referência (a 768 ela tem 255 lá): parte de
    zero, cresce até 400 e, com a sobra, fica no meio (lote T — a 768, com a largura fixa, as ações desciam). */
-.site-search { flex:1 1 0; max-inline-size:25rem; margin-inline:auto; justify-content:flex-start; }
+/* Na pílula do site B a busca tem o tamanho dela (o desenho): "Search" e as teclas. */
+.site-search { flex:none; justify-content:flex-start; }
 /* As teclas na PONTA do botão, como a busca da referência. Desde que são uma caixinha por tecla (15/10/2026), elas moram
    num invólucro (".btn-kbds"): é ELE que vai para a ponta — a regra só na tecla parou de alcançar (o Victor viu). */
 .site-search > .kbd, .site-search > .btn-kbds { margin-inline-start:auto; }
@@ -1853,8 +2023,306 @@ a.related-card:hover { border-color:transparent; }
 @media (max-width:767px) { .site-so-celular { display:inline-flex !important; }
   /* Sem a busca larga no meio, as ações vão para a ponta, junto do botão da gaveta, como na referência. */
   .site-shell .site-actions { margin-inline-start:auto; }
-  .site-gaveta-topo { display:flex; order:-1; justify-content:flex-end; padding:var(--space-2) var(--space-2) var(--space-4); } }
+  .site-gaveta-topo { display:flex; justify-content:flex-end; padding:var(--space-2) var(--space-2) var(--space-4); } }
 @media (max-width:1023px) { .site-so-estreito { display:inline-flex !important; } }
+/* O TOPO DO SITE B (30/10/2026): as áreas no meio da pílula, entre a marca e a busca, como no desenho aprovado. A chave
+   Web | Native no alto da lateral, na largura dela. As oito áreas só cabem na pílula de 1280 para cima (medido: na tela de
+   1280 sobram 5); abaixo disso elas saem da pílula e sobem para o alto da lateral (de 1024 a 1279) ou da gaveta (abaixo
+   de 1024), logo depois da chave. */
+/* A fileira das áreas QUEBRA quando não cabe (31/10/2026): com o "nowrap", o texto a 200% fazia toda página rolar de lado
+   (WCAG 1.4.4). Cada nome continua inteiro numa linha. */
+.site-areas { margin-inline:auto; min-inline-size:0; max-inline-size:100%; }
+.site-areas .segmented { flex-wrap:wrap; }
+.site-areas .segmented a { white-space:nowrap; }
+/* A chave Web | Native com o trilho translúcido do desenho (o texto a 10%): o --muted de sempre é o cinza do palco, e o
+   trilho sumia na lateral do claro. */
+.site-plataforma { padding-block-end:var(--space-3); --muted:var(--fill-2); }
+.site-gaveta-areas { display:none; padding-block-end:var(--space-3); }
+@media (max-width:1279px) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
+/* A LATERAL DO SITE B: o nome do grupo numerado, com o ícone numa bolinha na cor da categoria (o desenho aprovado). */
+.site-grupo-num { display:inline-block; inline-size:var(--space-5); margin-inline-end:var(--space-2); text-align:end; vertical-align:middle;
+  font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); color:var(--muted-foreground); }
+.site-grupo-tile, .intro-tile { display:inline-grid; place-items:center; flex:none; vertical-align:middle; border-radius:var(--radius-full); }
+.site-grupo-tile { inline-size:var(--space-8); block-size:var(--space-8); margin-inline-end:var(--space-2); }
+.site-grupo-nome { vertical-align:middle; font-size:var(--text-base); font-weight:var(--weight-semibold); color:var(--foreground);
+  text-transform:none; letter-spacing:var(--tracking-normal); }
+:is(.site-grupo-tile,.intro-tile)[data-cor="blue"] { background:var(--category-blue-bg); color:var(--category-blue); }
+:is(.site-grupo-tile,.intro-tile)[data-cor="orange"] { background:var(--category-orange-bg); color:var(--category-orange); }
+:is(.site-grupo-tile,.intro-tile)[data-cor="green"] { background:var(--category-green-bg); color:var(--category-green); }
+:is(.site-grupo-tile,.intro-tile)[data-cor="pink"] { background:var(--category-pink-bg); color:var(--category-pink); }
+:is(.site-grupo-tile,.intro-tile)[data-cor="teal"] { background:var(--category-teal-bg); color:var(--category-teal); }
+:is(.site-grupo-tile,.intro-tile)[data-cor="red"] { background:var(--category-red-bg); color:var(--category-red); }
+/* A LATERAL DO SITE B tem 268 (a do desenho): o índice de 240 e mais 28. O PALCO (a lateral, o índice, a abertura e o
+   "Next") tem a cor do cartão no escuro e o cinza claro no claro (o --secondary), como o do desenho; os cartões de
+   dentro continuam brancos. A lateral e o índice recebem a cor pelo token deles. */
+.site-shell { --docs-sidebar-width:calc(var(--docs-toc-width) + var(--space-7)); --site-palco:var(--card); --sidebar:var(--site-palco); }
+[data-theme="light"] .site-shell { --site-palco:var(--secondary); }
+/* O "Back to top" no pé do índice. */
+.site-toc-topo { display:flex; align-items:center; gap:var(--space-2); min-block-size:var(--space-10); margin-block-start:var(--space-2);
+  padding-inline:var(--space-3); border-radius:var(--radius-full); color:var(--muted-foreground); font-size:var(--text-sm); text-decoration:none; }
+.site-toc-topo:hover { background:var(--fill-1); color:var(--foreground); }
+/* O RODAPÉ DO SITE B: o texto à esquerda, os links à direita, na largura do bloco. */
+.site-rodape { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-4); max-inline-size:var(--docs-width);
+  margin-inline:auto; padding:calc(var(--space-12) + var(--space-2)) var(--space-4) var(--space-10); color:var(--muted-foreground); font-size:var(--text-sm); }
+.site-rodape p { margin:0; }
+.site-rodape-links { display:flex; gap:var(--space-1); }
+.site-rodape-links a { display:inline-flex; align-items:center; min-block-size:calc(var(--space-10) + var(--space-1)); padding-inline:var(--space-3);
+  border-radius:var(--radius-full); color:inherit; text-decoration:none; }
+.site-rodape-links a:hover { background:var(--fill-2); color:var(--foreground); }
+/* A INTRODUCTION DO SITE B: a abertura num palco (a cor do cartão, canto 22), com quatro peças que flutuam. */
+.intro-palco { position:relative; overflow:hidden; min-block-size:calc(var(--space-12) * 8); padding:var(--space-10) calc(var(--space-10) + var(--space-1));
+  border-radius:var(--radius-card); background:var(--site-palco); color:var(--card-foreground); }
+/* Dentro do palco, o fundo dos botões é o da peça que flutua (o --segment, branco no claro): com o --secondary de
+   sempre, no claro eles sumiam no cinza do palco (medido na foto). */
+.intro-palco { --secondary:var(--segment); }
+.intro-palco-texto { position:relative; z-index:1; inline-size:58%; }
+.intro-trilha { display:inline-flex; align-items:center; gap:var(--space-2); min-block-size:var(--space-8); padding-inline:var(--space-3);
+  border-radius:var(--radius-full); background:var(--segment); box-shadow:var(--shadow-sm); font-family:var(--font-code); font-size:var(--text-xs);
+  color:var(--muted-foreground); }
+.intro-trilha b { color:var(--foreground); font-weight:var(--weight-semibold); }
+.intro-h1 { margin:var(--space-5) 0 0; font-family:var(--font-heading); font-weight:var(--weight-extrabold); font-size:clamp(var(--text-4xl), 4vw, var(--text-6xl));
+  line-height:var(--leading-none); letter-spacing:calc(var(--tracking-tight) * 3); }
+.intro-lede { margin:var(--space-4) 0 0; font-size:var(--text-lg); line-height:var(--leading-relaxed); color:var(--muted-foreground); }
+.intro-acoes { margin-block-start:var(--space-6); }
+.intro-pecas { position:absolute; inset-block:0; inset-inline-end:0; inset-inline-start:60%; }
+.intro-peca { position:absolute; transition:transform var(--duration-slow); }
+.intro-peca-1 { inset-inline-start:2%; inset-block-start:7%; } .intro-peca-1 > .intro-boia { rotate:-5deg; }
+.intro-peca-2 { inset-inline-end:4%; inset-block-start:30%; } .intro-peca-2 > .intro-boia { rotate:4deg; animation-delay:-2s; }
+.intro-peca-3 { inset-inline-start:0; inset-block-start:55%; } .intro-peca-3 > .intro-boia { rotate:3deg; animation-delay:-4s; }
+.intro-peca-4 { inset-inline-end:6%; inset-block-start:76%; } .intro-peca-4 > .intro-boia { rotate:-3deg; animation-delay:-5s; }
+.intro-boia { animation:intro-boia 7s ease-in-out infinite; }
+@keyframes intro-boia { 50% { translate:0 calc(-1 * var(--space-2)); } }
+@media (prefers-reduced-motion:reduce) { .intro-boia { animation:none; } .intro-peca { transition:none; } }
+.intro-cartao { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) var(--space-4); background:var(--segment); box-shadow:var(--shadow-md); }
+.intro-cartao-capsula { padding:var(--space-2); border-radius:var(--radius-full); }
+.intro-aa { font-family:var(--font-heading); font-weight:var(--weight-extrabold); font-size:var(--text-5xl); line-height:var(--leading-none); }
+.intro-mini { font-size:var(--text-xs); line-height:var(--leading-tight); color:var(--muted-foreground); }
+.intro-mini b, .intro-forte { color:var(--foreground); font-weight:var(--weight-semibold); }
+/* No escuro, a letra de apoio das peças que flutuam fica a meio caminho entre a de apoio e a do texto (31/10/2026): o
+   --muted-foreground sobre o --segment do escuro dava 4,07:1, e o axe pegou. Assim, 6,6:1; no claro, a de sempre (7:1). */
+:is(.intro-trilha, .intro-mini:not(.intro-forte)) { color:color-mix(in oklab, var(--muted-foreground), var(--foreground)); }
+[data-theme="light"] :is(.intro-trilha, .intro-mini:not(.intro-forte)) { color:var(--muted-foreground); }
+.intro-forte { font-size:var(--text-sm); }
+.intro-amarelo { flex:none; inline-size:calc(var(--space-10) + var(--space-1)); block-size:calc(var(--space-10) + var(--space-1)); border-radius:var(--radius-full); background:var(--primary); }
+.intro-razao { font-family:var(--font-code); }
+.intro-so-claro { display:none; }
+[data-theme="light"] .intro-so-claro { display:inline; } [data-theme="light"] .intro-so-escuro { display:none; }
+.intro-capsula { display:inline-flex; align-items:center; min-block-size:calc(var(--space-8) + var(--space-1)); padding-inline:var(--space-4);
+  border-radius:var(--radius-full); background:var(--primary); color:var(--primary-foreground); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+/* O corpo: cada seção com o número e a frase de título, e os cartões em grade. */
+.intro-corpo { padding:var(--space-2) var(--space-1) 0; }
+.intro-p { margin:var(--space-4) 0 0; font-size:var(--text-lg); line-height:var(--leading-relaxed); }
+.intro-sec { padding-block-start:var(--space-16); scroll-margin-block-start:calc(var(--topbar-height) + var(--space-8)); }
+.intro-olho { margin:0; font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); letter-spacing:var(--tracking-wider);
+  text-transform:uppercase; color:var(--primary-emphasis); }
+.intro-h2 { margin:var(--space-2) 0 0; font-family:var(--font-heading); font-weight:var(--weight-bold); font-size:var(--text-4xl); line-height:var(--leading-tight);
+  letter-spacing:calc(var(--tracking-tight) * 2); }
+.intro-grade-3, .intro-grade-2 { display:grid; gap:var(--space-3); margin-block-start:var(--space-6); }
+.intro-grade-3 { grid-template-columns:repeat(3, minmax(0, 1fr)); } .intro-grade-2 { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+.intro-motivo, .intro-ajuda { display:flex; flex-direction:column; gap:var(--space-2); padding:var(--space-5); transition:translate var(--duration-base), box-shadow var(--duration-base); }
+.intro-motivo:hover, .intro-ajuda:hover { translate:0 calc(-1 * var(--space-1)); box-shadow:var(--shadow-md); }
+.intro-motivo-topo { display:flex; align-items:center; gap:var(--space-3); }
+.intro-tile { inline-size:calc(var(--space-10) + var(--space-1)); block-size:calc(var(--space-10) + var(--space-1)); }
+.intro-tile-sm { inline-size:calc(var(--space-8) + var(--space-1)); block-size:calc(var(--space-8) + var(--space-1)); }
+.intro-numero { margin-inline-start:auto; font-family:var(--font-code); font-size:var(--text-xl); font-weight:var(--weight-semibold); color:var(--muted-foreground); }
+.intro-motivo h3 { margin:var(--space-1) 0 0; font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); line-height:var(--leading-tight); }
+.intro-motivo p, .intro-ajuda p, .intro-pacote p { margin:0; font-size:var(--text-sm); line-height:var(--leading-relaxed); color:var(--muted-foreground); }
+.intro-identidade { display:flex; flex-direction:column; gap:var(--space-3); padding:var(--space-4); }
+.intro-identidade-desenho { position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; gap:var(--space-3);
+  block-size:calc(var(--space-12) * 2 + var(--space-8) + var(--space-1)); border-radius:var(--radius-card); background:var(--background); }
+.intro-identidade-desenho[data-jeito="coluna"] { flex-direction:column; gap:var(--space-2); }
+.intro-identidade-desenho[data-jeito="metades"] { gap:0; }
+.intro-identidade p { margin:0; font-size:var(--text-sm); line-height:var(--leading-relaxed); }
+.intro-identidade b { display:block; margin-block-end:var(--space-1); font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); }
+.intro-mini-cartao { inline-size:calc(var(--space-12) * 2 - var(--space-1)); block-size:calc(var(--space-12) + var(--space-6)); border-radius:var(--radius-card);
+  background:var(--segment); box-shadow:var(--shadow-md); }
+.intro-mini-cartao-2 { position:absolute; translate:var(--space-6) calc(-1 * var(--space-4)); rotate:6deg; opacity:.8; }
+.intro-capsula-vazia { inline-size:calc(var(--space-12) * 2 + var(--space-6)); block-size:calc(var(--space-8) + var(--space-1)); border-radius:var(--radius-full); background:var(--fill-2); }
+.intro-metade { flex:1; align-self:stretch; display:grid; place-items:center; background:var(--background); }
+.intro-metade > .intro-amarelo { inline-size:var(--space-10); block-size:var(--space-10); }
+.intro-mini-fundo, .intro-mini-contorno { inline-size:calc(var(--space-12) * 2); block-size:var(--space-16); min-block-size:0; padding:0; border-radius:var(--radius-card); }
+.intro-mini-fundo { background:var(--fill-2); }
+.intro-solido { inline-size:calc(var(--space-12) + var(--space-1)); block-size:calc(var(--space-12) + var(--space-1)); border-radius:var(--radius-lg); }
+.intro-solido[data-cor="primary"] { background:var(--primary); } .intro-solido[data-cor="fill"] { background:var(--fill-3); }
+.intro-solido[data-cor="card"] { background:var(--segment); box-shadow:var(--shadow-sm); }
+.intro-icone-cheio { color:var(--primary); }
+.intro-pacote { display:flex; flex-direction:column; gap:var(--space-2); padding:var(--space-4) var(--space-4) var(--space-3); }
+.intro-pacote-topo { display:flex; align-items:center; gap:var(--space-3); }
+.intro-pacote-nome { font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+.intro-pacote p { flex:1; }
+.intro-instalar { display:flex; align-items:center; gap:var(--space-2); padding:var(--space-1) var(--space-1) var(--space-1) var(--space-3);
+  border-radius:var(--radius-full); background:var(--background); }
+.intro-instalar code { flex:1; min-inline-size:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:var(--font-code);
+  font-size:var(--text-xs); font-weight:var(--weight-medium); }
+.intro-nota { margin-block-start:var(--space-4); }
+.intro-perguntas { display:flex; flex-direction:column; gap:var(--space-2); margin-block-start:var(--space-6); }
+.intro-ajuda { color:inherit; text-decoration:none; }
+.intro-ajuda b { display:flex; align-items:center; gap:var(--space-2); font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); }
+.intro-proxima { display:flex; align-items:center; gap:var(--space-4); margin-block-start:calc(var(--space-12) + var(--space-2)); padding:var(--space-5) var(--space-6);
+  border-radius:var(--radius-card); background:var(--site-palco); color:var(--card-foreground); text-decoration:none; transition:translate var(--duration-base); }
+.intro-proxima:hover { translate:var(--space-1) 0; }
+.intro-proxima-k { font-family:var(--font-code); font-size:var(--text-xs); letter-spacing:var(--tracking-wider); text-transform:uppercase; color:var(--muted-foreground); }
+.intro-proxima b { display:block; font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold); }
+.intro-proxima p { margin:var(--space-1) 0 0; font-size:var(--text-base); color:var(--muted-foreground); }
+.intro-proxima-seta { flex:none; display:grid; place-items:center; margin-inline-start:auto; inline-size:calc(var(--space-12) + var(--space-2));
+  block-size:calc(var(--space-12) + var(--space-2)); border-radius:var(--radius-full); background:var(--primary); color:var(--primary-foreground); }
+@media (prefers-reduced-motion:reduce) { .intro-motivo, .intro-ajuda, .intro-proxima { transition:none; } }
+@media (max-width:767px) {
+  .intro-palco { padding:var(--space-6) var(--space-5); }
+  .intro-palco-texto { inline-size:auto; }
+  .intro-pecas { position:relative; inset:auto; display:flex; flex-wrap:wrap; gap:var(--space-3); margin-block-start:var(--space-6); }
+  .intro-peca { position:static; transform:none !important; }
+  .intro-grade-3, .intro-grade-2 { grid-template-columns:minmax(0, 1fr); } }
+/* O SITE B MEDIDO NO DESENHO (31/10/2026). O Victor viu os itens da lateral fora do lugar ("precisa alinhar os itens"): a
+   página tinha sido comparada só pelas caixas grandes. Agora cada medida do desenho aprovado está aqui, escrita com os
+   tokens (a conta entre tokens quando o número do desenho não é um degrau), e cada texto foi comparado com o do desenho
+   — posição, largura, letra, peso, entrelinha. A letra é a da escala da Aurea (ADR-0050): onde o desenho usa 13, 15, 17,
+   19, 22, 34 e 44, aqui é o degrau mais perto (no empate, o maior). */
+
+/* O topo: 14 entre a marca, as áreas e as ações; os botões com o toque de 44 (--target-min). */
+.site-shell > .topbar-pill > .topbar-inner { gap:calc(var(--space-3) + var(--space-05)); padding-inline:var(--space-5) calc(var(--space-2) + var(--space-05)); }
+.site-shell .site-brand { gap:calc(var(--space-2) + var(--space-05)); }
+.site-shell .site-brand > svg { inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
+.site-shell .site-brand strong { font-family:var(--font-heading); font-size:var(--text-xl); font-weight:var(--weight-bold); line-height:normal; }
+.site-shell .site-areas .segmented { gap:var(--space-05); padding:var(--space-1); border:0; background:var(--fill-1); }
+.site-shell .site-areas .segmented a { padding-inline:calc(var(--space-3) + var(--space-05) / 2); font-size:var(--text-sm); }
+.site-shell .site-areas .segmented a.active { font-weight:var(--weight-semibold); color:var(--primary-emphasis); }
+.site-shell .site-actions { gap:calc(var(--space-1) + var(--space-05)); }
+.site-shell .site-search { --step-h:var(--target-min); gap:var(--space-2);
+  padding-inline:calc(var(--space-3) + var(--space-05) - var(--border-width)) calc(var(--space-2) - var(--border-width));
+  background:var(--fill-2); color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); }
+.site-shell .site-search > span:not([class]) { margin-inline-end:calc(var(--space-3) + var(--space-05)); }
+.site-shell .site-search > .btn-kbds { gap:var(--space-2); margin:0; }
+.site-shell .site-search .kbd { inline-size:auto; min-inline-size:0; block-size:calc(var(--space-5) + var(--space-05));
+  padding-inline:calc(var(--space-2) - var(--space-05) / 2); background:var(--fill-2); color:var(--muted-foreground);
+  font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); }
+.site-shell .site-actions :is(.site-theme .btn, a[aria-label="GitHub"]) { --step-h:var(--target-min); inline-size:var(--target-min); background:transparent; }
+.site-shell .site-actions :is(.site-theme .btn, a[aria-label="GitHub"]) .icon { inline-size:var(--icon-md); block-size:var(--icon-md); }
+.site-shell .site-actions .theme-switch { gap:var(--space-05); padding:var(--space-1); border:0; background:var(--fill-2); }
+.site-shell .site-actions .theme-switch-option { inline-size:var(--control-h-md); block-size:var(--control-h-md); }
+
+/* A lateral: 12 de recheio e 6 entre as partes; a chave Web | Native de 44; o grupo de 48 (número, bolinha, nome e seta,
+   10 entre eles); os itens a 30 do grupo, com 40 de altura e 2 entre eles; o atual com o ponto a 10 da borda. */
+.site-shell > .sidebar:not(.app-shell-aside) { padding:var(--space-3); gap:calc(var(--space-1) + var(--space-05)); }
+.site-shell .site-plataforma { padding-block-end:0; }
+.site-shell .site-plataforma .segmented { gap:var(--space-05); padding:var(--space-1); border:0; background:var(--fill-2); }
+/* No claro o trilho fica no --fill-1 (31/10/2026): com o --fill-2 sobre o cinza do palco, o "Native" dava 4,34:1 (o axe
+   pegou); com o --fill-1, 4,74:1. */
+[data-theme="light"] .site-shell .site-plataforma .segmented { background:var(--fill-1); }
+.site-shell .site-plataforma .segmented a { flex:1 1 0; gap:calc(var(--space-1) + var(--space-05));
+  padding-inline:calc(var(--space-3) + var(--space-05)); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+.site-shell .site-plataforma .segmented a.active { color:var(--primary-emphasis); }
+.site-shell .site-plataforma .segmented .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+.site-shell > .sidebar .sidebar-nav { gap:0; }
+.site-shell > .sidebar .sidebar-nav > .sidebar-list { gap:calc(var(--space-1) + var(--space-05)); }
+.site-shell > .sidebar .sidebar-group-head { margin:0; }
+.site-shell > .sidebar .sidebar-group-toggle { inline-size:100%; min-block-size:var(--space-12); gap:calc(var(--space-2) + var(--space-05)); margin:0;
+  padding-inline:calc(var(--space-1) + var(--space-05)) calc(var(--space-2) + var(--space-05)); border-radius:var(--radius-full); color:var(--foreground); }
+.site-shell > .sidebar .sidebar-group-toggle > span { display:flex; align-items:center; gap:calc(var(--space-2) + var(--space-05)); }
+.site-shell > .sidebar .sidebar-group-toggle:hover { background:var(--fill-1); }
+.site-shell > .sidebar .sidebar-group-caret { color:var(--muted-foreground); opacity:1; }
+.site-shell .site-grupo-num { inline-size:var(--space-5); margin:0; line-height:normal; }
+.site-shell .site-grupo-tile { margin:0; }
+.site-shell .site-grupo-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+.site-shell .site-grupo-nome { font-size:var(--text-sm); line-height:normal; }
+.site-shell > .sidebar .sidebar-group-list > .sidebar-list { gap:var(--space-05); padding-inline-start:calc(var(--space-7) + var(--space-05));
+  margin-block-end:calc(var(--space-1) + var(--space-05)); }
+.site-shell > .sidebar .sidebar-item { min-block-size:var(--control-h-lg); gap:calc(var(--space-2) + var(--space-05)); padding:0 calc(var(--space-3) + var(--space-05));
+  border-radius:var(--radius-full); color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); }
+/* O ponto do item atual: o recuo sai do item, e não de uma margem negativa — o rótulo corta o que sai dele. */
+.site-shell > .sidebar .sidebar-item[aria-current] { padding-inline-start:calc(var(--space-2) + var(--space-05)); color:var(--foreground); font-weight:var(--weight-semibold); }
+.site-shell > .sidebar .sidebar-item[aria-current] > .sidebar-label::before { margin-inline:0 calc(var(--space-2) + var(--space-05)); }
+/* O nome do grupo SEM número (as áreas que não são a Getting Started) começa na linha do texto dos itens, como antes do
+   site B (01/11/2026): com a margem de sempre ele ficava 6 à esquerda (medido: 40 contra 46). */
+.site-shell > .sidebar p.sidebar-group-label { margin-inline:calc(var(--space-3) + var(--space-05)); }
+
+/* O índice: 16 em cima e 12 nos lados e embaixo; a cabeça a 6 dos lados e 8 acima dos itens; os itens de 40, 2 entre eles. */
+.site-shell > .app-shell-aside { padding:var(--space-4) var(--space-3) var(--space-3); gap:var(--space-05); }
+.site-shell > .app-shell-aside .toc { gap:var(--space-05); padding:0; }
+.site-shell > .app-shell-aside .toc-label { gap:calc(var(--space-2) + var(--space-05)); margin:0 calc(var(--space-1) + var(--space-05)) var(--space-2); padding:0;
+  color:var(--foreground); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+.site-shell .toc-progress-value { line-height:normal; }
+.site-shell > .app-shell-aside .toc a { min-block-size:var(--control-h-lg); padding:0 calc(var(--space-3) + var(--space-05)); border:0; border-radius:var(--radius-full); font-size:var(--text-sm); }
+.site-shell .site-toc-topo { min-block-size:var(--control-h-lg); margin-block-start:var(--space-2); gap:var(--space-2); padding-inline:calc(var(--space-3) + var(--space-05)); }
+.site-shell .site-toc-topo .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+
+/* A abertura: o palco de 380; a trilha a 14 dos lados; o resumo em 20; os botões de 44, a 26 do texto, 10 entre eles. */
+.intro-palco { min-block-size:calc(var(--space-12) * 8 - var(--space-1)); }
+.intro-trilha { padding-inline:calc(var(--space-3) + var(--space-05)); font-weight:var(--weight-medium); line-height:normal; }
+.intro-lede { font-size:var(--text-xl); line-height:var(--leading-normal); }
+.intro-acoes { margin-block-start:calc(var(--space-6) + var(--space-05)); }
+.intro-acoes > .cluster { gap:calc(var(--space-2) + var(--space-05)); }
+.intro-acoes .btn { --step-h:var(--target-min); font-weight:var(--weight-semibold); }
+.intro-acoes .btn .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+.intro-acoes > .cluster > .btn { padding-inline:calc(var(--space-4) + var(--space-05) - var(--border-width)); background:var(--segment); box-shadow:var(--shadow-sm); }
+.intro-acoes .btn-group { border-radius:var(--radius-full); background:var(--segment); box-shadow:var(--shadow-sm); }
+.intro-acoes .btn-group > .btn { padding-inline:calc(var(--space-4) + var(--space-05) - var(--border-width)); background:transparent; }
+.intro-acoes .btn-group > .btn-icon { inline-size:auto; padding-inline:calc(var(--space-3) - var(--border-width)); }
+.intro-cartao, .intro-cartao-capsula { padding:calc(var(--space-3) + var(--space-05) - var(--border-width)) calc(var(--space-4) - var(--border-width)); }
+.intro-peca-3 .intro-cartao, .intro-peca-4 .intro-cartao { gap:calc(var(--space-2) + var(--space-05)); }
+.intro-mini { line-height:var(--leading-normal); }
+.intro-mini b { font-weight:var(--weight-bold); }
+.intro-razao { min-block-size:0; padding:calc(var(--space-1) - 2 * var(--border-width)) calc(var(--space-2) + var(--space-05) - var(--border-width));
+  font-weight:var(--weight-semibold); line-height:normal; }
+
+/* O corpo: 14 entre os parágrafos e entre os cartões; os cartões com o recheio e o vão do desenho; os títulos de cartão com
+   a entrelinha da própria fonte (o desenho escreve a letra com "font:", que zera a entrelinha). */
+.intro-p { margin-block-start:calc(var(--space-3) + var(--space-05)); }
+.intro-p a, .intro-nota a { font-weight:var(--weight-semibold); }
+.intro-olho, .intro-identidade b, .intro-pacote-nome, .intro-proxima b, .intro-motivo-topo { line-height:normal; }
+.intro-grade-3, .intro-grade-2 { gap:calc(var(--space-3) + var(--space-05)); }
+.intro-motivo, .intro-ajuda { gap:calc(var(--space-2) + var(--space-05)); padding:calc(var(--space-5) - var(--border-width)); }
+.intro-numero { font-size:var(--text-2xl); line-height:normal; letter-spacing:var(--tracking-tight); }
+.intro-motivo p, .intro-ajuda p, .intro-pacote p, .intro-identidade p { line-height:var(--leading-normal); }
+/* No desenho, nome de peça e versão no meio do texto são texto comum. */
+.intro-motivo code, .intro-pergunta code { font:inherit; }
+.intro-identidade { gap:calc(var(--space-3) + var(--space-05)); padding:calc(var(--space-4) + var(--space-05) - var(--border-width)); }
+.intro-identidade-desenho { gap:calc(var(--space-3) + var(--space-05)); }
+.intro-identidade-desenho[data-jeito="coluna"] { gap:calc(var(--space-2) + var(--space-05)); }
+.intro-identidade-desenho[data-jeito="metades"] { gap:0; }
+.intro-identidade-desenho > .icon { inline-size:var(--space-10); block-size:var(--space-10); }
+.intro-pacote .intro-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+.intro-pacote { gap:calc(var(--space-2) + var(--space-05));
+  padding:calc(var(--space-4) + var(--space-05) - var(--border-width)) calc(var(--space-4) + var(--space-05) - var(--border-width)) calc(var(--space-3) + var(--space-05) - var(--border-width)); }
+.intro-instalar { padding-inline-start:calc(var(--space-3) + var(--space-05)); }
+.intro-instalar .btn { --step-h:var(--control-h-md); padding-inline:calc(var(--space-3) + var(--space-05) - var(--border-width)); font-weight:var(--weight-semibold); }
+.intro-nota { grid-template-columns:auto minmax(0,1fr); gap:var(--space-3); margin-block-start:calc(var(--space-3) + var(--space-05));
+  padding:calc(var(--space-3) + var(--space-05)) calc(var(--space-4) + var(--space-05)); line-height:var(--leading-normal); }
+.intro-nota > span:empty { display:none; }
+.intro-nota > .icon { inline-size:var(--icon-md); block-size:var(--icon-md); margin:var(--space-05) 0 0; }
+.intro-perguntas { margin-block-start:calc(var(--space-5) + var(--space-05)); }
+.intro-ajuda b { font-size:var(--text-lg); line-height:normal; }
+.intro-proxima { gap:calc(var(--space-4) + var(--space-05)); padding:calc(var(--space-5) + var(--space-05)) var(--space-6); }
+.intro-proxima > div { font-size:var(--text-base); line-height:var(--leading-normal); }
+.intro-proxima b { margin-block-start:var(--space-05); }
+.intro-proxima-k { font-weight:var(--weight-medium); }
+.site-rodape { max-inline-size:calc(var(--docs-width) + var(--space-8)); }
+
+/* AS LARGURAS. A pílula cheia precisa de 1302 (medido); com as margens de 16, cabe de 1335 para cima. Abaixo disso, o topo
+   APERTADO do desenho (o dele abaixo de 1240): a busca só com a lupa e as áreas mais juntas — precisa de 1089 e cabe de
+   1121 para cima. Abaixo de 1121 as áreas saem da pílula e vão para o alto da lateral, e abaixo de 1024 para a gaveta. */
+@media (max-width:1334px) {
+  .site-shell .site-search > span:not([class]), .site-shell .site-search > .btn-kbds { display:none; }
+  .site-shell .site-areas .segmented a { padding-inline:calc(var(--space-2) + var(--space-05) / 2); }
+}
+@media (min-width:1121px) and (max-width:1279px) { .site-areas { display:block; } .site-gaveta-areas { display:none !important; } }
+@media (max-width:1120px) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
+/* De 1024 a 1279, sem o índice: a lateral de 248 do desenho e o conteúdo até a borda do bloco. */
+@media (min-width:1024px) and (max-width:1279px) {
+  .site-shell { --docs-sidebar-width:calc(var(--docs-toc-width) + var(--space-2)); }
+  .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) 0 0 var(--space-7); }
+}
+/* O celular do desenho: o bloco a 16 das bordas; os botões do topo com 44, 6 entre eles (a lupa na cápsula de 38). */
+@media (max-width:767px) {
+  .site-shell > .topbar-pill > .topbar-inner { gap:calc(var(--space-1) + var(--space-05)); }
+  .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) var(--space-4) 0; }
+  .site-shell .site-so-celular { --step-h:var(--target-min); inline-size:auto; border-radius:var(--radius-full); background:var(--fill-2);
+    padding-inline:calc(var(--space-3) + var(--space-05) - var(--border-width)) calc(var(--space-2) - var(--border-width)); }
+  .site-shell .site-so-celular .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+  .site-shell .nav-toggle { --step-h:var(--target-min); inline-size:var(--target-min); }
+  .intro-palco { padding:calc(var(--space-6) + var(--space-1)) var(--space-5); }
+  .intro-pecas { gap:calc(var(--space-3) + var(--space-05)); margin-block-start:calc(var(--space-6) + var(--space-1)); }
+}
 /* A aba "Components" (15/10/2026), na composição da vitrine da referência, lida no código dela: três colunas de até 360
    (o --breakpoint-2xs), 32 entre elas e 40 entre as peças de cada uma; no celular uma coluna só, a do meio primeiro;
    de 768 a 1023, duas, com os cartões da direita embaixo das duas. As larguras dela: 256 nos campos (o --space-16
@@ -1952,6 +2420,12 @@ document.addEventListener("click", e => {
   try { texto = JSON.parse(fonte.textContent); } catch (err) { return; }
   copiarNoBotao(botao, texto);
 });
+// -- O "Copy" das linhas de instalar (o site B, 30/10/2026): o comando vem no próprio botão. --------------
+document.addEventListener("click", e => {
+  const botao = e.target.closest("[data-copiar]");
+  if (!botao || !navigator.clipboard) return;
+  copiarNoBotao(botao, botao.dataset.copiar);
+});
 // -- "Copy Prompt" (lote U, SITE-06) ---------------------------------------------------------
 // O texto que prepara um assistente de IA para a Aurea: instalar a skill e ler o llms.txt. O endereco
 // sai da propria pagina (o site, a bancada ou o disco), e nao escrito aqui.
@@ -2040,7 +2514,20 @@ const enquadrarGrafos = () => {
   }
 };
 enquadrarGrafos();
-addEventListener("resize", enquadrarGrafos);`;
+addEventListener("resize", enquadrarGrafos);
+// -- O SITE B (30/10/2026) -------------------------------------------------------------------
+// AS PEÇAS QUE FLUTUAM no palco da abertura seguem o ponteiro, cada uma com a sua profundidade (data-fundo). Paradas
+// para quem pede menos movimento.
+const palcoDaAbertura = document.querySelector("[data-palco]");
+if (palcoDaAbertura && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const pecasDoPalco = [...palcoDaAbertura.querySelectorAll("[data-fundo]")];
+  palcoDaAbertura.addEventListener("mousemove", e => {
+    const r = palcoDaAbertura.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width - 0.5) * 2, y = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    pecasDoPalco.forEach(p => { const f = Number(p.dataset.fundo) || 1; p.style.transform = "translate3d(" + (x * 10 * f) + "px," + (y * 8 * f) + "px,0)"; });
+  });
+  palcoDaAbertura.addEventListener("mouseleave", () => pecasDoPalco.forEach(p => { p.style.transform = ""; }));
+}`;
 
 // ── emitir ────────────────────────────────────────────────────────────────────
 mkdirSync(join(outDir, "assets"), {recursive: true});
@@ -2137,7 +2624,7 @@ ${TEMA_SALVO}</head>
 // instalação, uma vez, em `getting-started.html`.
 const paginas = [
   ["index.html", pageHtml("Aurea Universal Design System", null, homePage(), "home")],
-  ...docs.map(d => [d.arquivo, pageHtml(d.title, d.arquivo, docPage(d), "start")]),
+  ...docs.map(d => [d.arquivo, pageHtml(d.title, d.arquivo, d.nome === "introduction" ? introducaoB(d) : docPage(d), "start")]),
   ["releases.html", pageHtml("All Releases", "releases.html", releasesPage(), "releases")],
   ["saude.html", pageHtml("Health", "saude.html", saudePage(), "releases")],
   ["native.html", pageHtml("All Components", "native.html", nativeIndex(), "native")],

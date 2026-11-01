@@ -321,7 +321,7 @@ export declare function SegmentedControl({ items, value, onChange, label, fullWi
     onChange?: (v: string) => void;
     label?: string;
     fullWidth?: boolean;
-    size?: "sm" | "md";
+    size?: "sm" | "md" | "lg" | "xl";
     selectedStyle?: SegmentedControlSelectedStyle;
 }): React.JSX.Element;
 export interface ComboboxOption {

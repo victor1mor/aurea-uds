@@ -17,6 +17,32 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O site B: a moldura e a Introduction (31/10/2026)
+
+- **O site no desenho B aprovado** ([ADR-0088](decisions/0088-o-site-b.md); *"pode"*, 31/10/2026): a pílula que flutua com as
+  áreas numa `SegmentedControl`, a lateral e o índice em blocos de canto 22, a chave Web | Native no alto da lateral, os
+  grupos numerados, o índice com o anel de leitura, o rodapé de uma linha, e a página Introduction com o palco das quatro
+  peças que flutuam, os cartões e as perguntas. As cores são as de hoje (*"Cores de hoje"*).
+- **O que a suíte achou na moldura, consertado antes de sair:** com o texto a 200%, toda página rolava de lado (a fileira das
+  áreas não quebrava; agora quebra); a busca ficava sem nome de 1121 a 1334 (`aria-label`); o
+  "Native" do claro dava 4,34:1 (o trilho no `--fill-1`: 4,74:1); a letra pequena das peças da abertura, no escuro, dava
+  4,07:1 (6,6:1); o menu do rodapé do site tinha o mesmo nome do menu do rodapé de exemplo ("Site footer"); e a chave
+  Web | Native subia por `order:-1` — agora ela vem antes da lista no próprio HTML (a lista é a `Sidebar.Nav`), e o Tab
+  segue a ordem da tela.
+- As mudanças de PEÇA que a moldura pediu estão na 0.52.1, cada uma aprovada pela imagem (antes e depois) em 01/11/2026. A
+  cápsula que quebraria linha com o texto a 200% saiu: medido, com a fileira das áreas quebrando, a página já não rola de
+  lado.
+- **A lateral do claro mais escura que a página** (235 contra 245) é a do desenho aprovado: o `marca.spec.ts` deixa de
+  cobrar isso só na moldura do site B (o Victor, sem preferência; a sessão seguiu o desenho).
+- Não muda nenhum pacote publicado.
+
+### O registro da 0.52.0 (31/10/2026)
+
+- **A 0.52.0 publicada por volta das 21:53 de 31/10/2026** (Brasília, medido no npm), da junção do pedido #110 (o #109, as
+  peças, foi juntado antes): o `released-surface.json` do commit do publish (`d085a363`) — nenhum nome novo e nenhuma frase
+  nova, nem na web nem no nativo. O CHANGELOG ([0.52.0] publicada) e o CLAUDE.md (a linha na tabela e o item 51).
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.51.0 (31/10/2026)
 
 - **A 0.51.0 publicada entre 18:20 e 18:23 de 30/10/2026** (Brasília, medido no npm; o `tokens` às 18:20 e o `native`, o
@@ -230,9 +256,36 @@ como deveria funcionar"*.
 
 ---
 
+## [0.52.1] — 2026-11-01
+
+**O que a moldura do site B pediu às peças**, cada mudança aprovada pelo Victor olhando a imagem do antes e do depois
+(01/11/2026). Só na web.
+
+### Consertado
+
+- **O arranjo de documentação com a pílula, de 768 a 1023**: a lateral é coluna nessa faixa e encostava na borda da tela,
+  com a cápsula a 16. Agora as colunas ficam a 16 das bordas de 768 para cima (era de 1024), e o texto começa a 28 da
+  lateral.
+- **`DataList`**: a palavra que não cabe (um nome de código longo, como `window.Aurea.setTheme`) saía da célula, e numa
+  coluna estreita a página rolava de lado. Agora ela quebra dentro da célula (`overflow-wrap:anywhere`).
+
+### Adicionado
+
+- **`SegmentedControl size="lg"` e `size="xl"`** — variação nova: a cápsula de 44, com os segmentos de 36 (o
+  `--control-h-md`), e a de 48, com os de 40 (o `--control-h-lg`) — as duas chaves do site B, que o site esticava à força.
+  O `sm` (34) e o `md` (40) não mudam. A referência não tem tamanho nessa peça.
+
+Quem cobra: `tests/visual/site-b-pecas.spec.ts` — os quatro tamanhos (sem as classes `segmented-lg` e `segmented-xl`, os
+dois saem com 40), a lateral a 16 a 768 (com a regra só de 1024, ela fica em 0) e a `DataList` numa coluna de 220 (sem o
+`overflow-wrap`, a célula transborda); e a trava de geometria (`geometry.spec.ts`), que conta o `lg` e o `xl` como grupos à
+parte.
+
+---
+
 ## [0.52.0] — 2026-10-31
 
-**As peças do site B** ([ADR-0088](decisions/0088-o-site-b.md)): o que a página Introduction do desenho aprovado pediu às
+✅ **Publicada em 31/10/2026, por volta das 21:53 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+#110** (o #109, as peças, foi juntado antes). **As peças do site B** ([ADR-0088](decisions/0088-o-site-b.md)): o que a página Introduction do desenho aprovado pediu às
 peças, aprovado pelo Victor na bancada da página inteira (*"pode"*, 31/10/2026). Tudo só acrescenta; sem as props novas,
 nada muda. Só na web. Junto, os consertos da auditoria de segurança de 31/10/2026 (*"Junto da 0.52.0"*).
 

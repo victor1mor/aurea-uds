@@ -204,6 +204,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.49.1` | Dois encaixes do nativo e uma ficha: o `Button` com `fullWidth` na altura do tamanho (E18), o `brand` do `Header` que encolhe e deixa as ações na tela (E17) e a ficha do tom `link` (E19) — pedido #105. **Publicada em 29/10/2026** (entre 22:28 e 22:35, Brasília, medido no npm), pelo terminal do Victor |
 | `0.50.0` | A lateral de contraste (MNT-36): `Sidebar contrast` e `AppShell sidebarContrast` — escura nas duas telas, na flutuante e na de canto reto, com as cores medidas da Ember em tokens só dela ([ADR-0087](decisions/0087-a-lateral-de-contraste.md)) — pedido #106. **Publicada em 30/10/2026** (entre 10:02 e 10:09, Brasília, medido no npm), pelo terminal do Victor |
 | `0.51.0` | A ponta da barra de cima (MNT-37): `AppShell topbarActions`, o `actions` do `Header` repassado em todo arranjo — no `layout="sidebar"`, a chave de tema vai para o fim da barra do conteúdo ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md), seção do MNT-37) — pedido #108. **Publicada em 30/10/2026** (entre 18:20 e 18:23, Brasília, medido no npm), pelo terminal do Victor |
+| `0.52.0` | As peças do site B: `AppShell topbarVariant="pill"` e `topbarBlurred`, o `blurred` e o `maxWidth` do `Header` `pill`, `TableOfContents progress` e `indicator="segment"`, o grupo que dobra da `Sidebar` com a seta na ponta, `Accordion indicator="plus"` e `size="lg"` ([ADR-0088](decisions/0088-o-site-b.md)) — pedido #109; e os consertos da auditoria de segurança de 31/10/2026 (`CodeBlock`, `ColorSwatch`, `DataGrid`) — pedido #110. **Publicada em 31/10/2026** (por volta das 21:53, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -476,8 +477,8 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    suíte INTEIRA de navegador (843 testes, três navegadores), rodada no fechamento, pegou sete defeitos que
    ninguém tinha visto — o foco de duas linhas e a cor que some no alto contraste nas amostras, o Tab que
    descia e voltava no cabeçalho do site, o título quebrado no meio da palavra no celular, o `Kbd` de duas
-   alturas e as peças de cor fora das travas de inválido e de máscara. A suíte inteira roda ANTES de pedir o
-   "pode", sempre; e mais de uma vez no lote, não só no fim. **Publicada em 14/10/2026** (entre 17:56 e 18:07,
+   alturas e as peças de cor fora das travas de inválido e de máscara. A suíte inteira roda uma vez, no fim do
+   lote (a regra de 01/11/2026, em "Como a fila anda"). **Publicada em 14/10/2026** (entre 17:56 e 18:07,
    Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #66.
 
 29. **`0.33.0`, o lote R, feito de 14 a 16/10/2026** na branch `claude/lote-r` — a página inicial contra a da
@@ -752,6 +753,19 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    bancada foi o `AppShell` de verdade (`apps/keyboard-probe/ponta.html`). Das 24 fotos do Linux, só as duas `index`
    mudaram, no selo da versão. **Publicada em 30/10/2026** (entre 18:20 e 18:23, Brasília, medido no npm), pelo terminal do
    Victor, da junção do pedido #108. O registro entrou no lote seguinte (as peças do site B, 0.52.0).
+
+51. **`0.52.0`, as peças do site B, feita em 31/10/2026** ([ADR-0088](decisions/0088-o-site-b.md)) — as cinco mudanças de
+   peça que a página Introduction do desenho B pediu, aprovadas na bancada da página inteira em tamanho real (*"pode"*): a
+   pílula do `AppShell`, o `Header` `pill` largo e translúcido, o anel de leitura do `TableOfContents`, o grupo que dobra da
+   `Sidebar` e o "+" do `Accordion`. Junto, os consertos da auditoria de segurança do mesmo dia (*"Junto da 0.52.0"*): a
+   língua do `CodeBlock` e as tabelas de nomes só leem chave própria (`proprio()`, no `pure.tsx`), a cor do `ColorSwatch`
+   só entra no estilo se for cor, e a `DataGrid` descarta a ordem e o filtro de link com nome do `Object.prototype`.
+   ⚠ **As lições:** (1) a bancada do site B mostra a página INTEIRA igual ao desenho, em tamanho real, medida texto por
+   texto — a primeira, só com o topo, foi reprovada, e a segunda dizia "igual" medindo só as caixas grandes; (2) o conserto
+   da auditoria foi enviado DEPOIS de o pedido #109 ter sido juntado e ficou fora do `main` — antes de enviar para uma
+   branch com pedido aberto, conferir que o pedido continua aberto (`gh pr view`). **Publicada em 31/10/2026** (por volta
+   das 21:53, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #110 (o #109 foi juntado antes). O
+   registro entrou no lote seguinte (o site B, 1b).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
@@ -1121,10 +1135,14 @@ sessão não chega à outra; este arquivo chega. O que já estava nas seções a
 **Como a fila anda**
 - ~~**Rodadas maiores** (ordem de 10/10/2026): juntar mais componentes em cada versão.~~ → **Lotes de até 3 horas**
   (ordem do Victor, 21/10/2026: *"não ultrapassa 3hrs ... pelo menos 3 atualizações por dia"*): o ciclo inteiro —
-  construir (até 1h15, com a versão, o CHANGELOG e a nota), a conferência rápida, a bancada AO MESMO TEMPO que a suíte
-  do Chromium (39 min), a CI (34 min), juntar e publicar — cabe em ~2h50. Cada lote vira uma versão; o registro da
+  construir (até 1h15, com a versão, o CHANGELOG e a nota), a conferência rápida, a bancada (o Victor aprova olhando),
+  a suíte do Chromium uma vez (39 min), a CI (34 min), juntar e publicar — cabe em ~2h50. Cada lote vira uma versão; o registro da
   publicada vai dentro do lote seguinte. Lote que passar de 1h15 de construção se divide ANTES de começar. A fila
   dividida assim mora no documento de achados ("ORDEM NOVA"). O que encolhe é o lote, nunca a conferência.
+- **A suíte inteira roda UMA vez, no fim do lote** (ordem do Victor, 01/11/2026: *"precisa de todos esses suites? a toda
+  hora?"* e *"pare de rodar tantas CI, deixe pra fazer depois que aprovo"*): durante o trabalho, só os testes do que mudou;
+  nada de suíte antes de o Victor aprovar olhando; no fim, uma rodada da suíte do Chromium com o código final; o que
+  reprovar, consertar e rodar de novo SÓ o que reprovou. Depois, a CI roda tudo nos três navegadores.
 - **Qualidade extrema, sem refazer** (06/10/2026): prazo curto encolhe o ESCOPO, nunca a verificação.
   Se não cabe tudo, dizer quanto cabe, com números, e ele escolhe.
 - **Muitas opções: o esboço vem antes da bancada** (decisão do Victor, 29/10/2026, *"Sim, para explorar"*): quando uma

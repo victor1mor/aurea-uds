@@ -6,8 +6,10 @@ import {test, expect} from "@playwright/test";
 // e que a área marcada no topo é a da página (a página de um hook marca "Hooks").
 // Provado contra o defeito (17/10/2026): contra a 0.34.0 publicada (`BASE_SITE=http://127.0.0.1:8128`), reprova.
 const base = process.env.BASE_SITE ?? "";
+// No site B (31/10/2026) os grupos da Getting Started levam o número e o ladrilho do ícone: o nome é o `.site-grupo-nome`.
 const grupos = (page: import("@playwright/test").Page) =>
-  page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-group-label").allTextContents();
+  page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-group-label").evaluateAll((l) =>
+    l.map((e) => (e.querySelector(".site-grupo-nome") ?? e).textContent));
 
 const CASOS = [
   // A área Getting Started com a árvore da referência (lote U, SITE-03 e SITE-06, 18/10/2026): Overview, Handbook e UI for Agents.
@@ -24,7 +26,7 @@ const CASOS = [
 for (const c of CASOS) {
   test(`a lateral de ${c.pagina} é a da área ${c.area}`, async ({page}) => {
     await page.goto(`${base}/apps/catalog/${c.pagina}`);
-    await expect(page.locator(".topbar-tab[aria-current]")).toHaveText(c.area);
+    await expect(page.locator(".site-areas a[aria-current]")).toHaveText(c.area);
     expect(await grupos(page)).toEqual(c.grupos);
     const nomes = await page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-label").allTextContents();
     for (const item of c.itens) expect(nomes, `"${item}" está na lateral`).toContain(item);
