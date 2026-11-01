@@ -14,6 +14,7 @@
 // (o check 19 do `validate.py` cobra que só este arquivo e o do editor importam o `@lezer/`).
 import {highlightCode as colorirArvore, tagHighlighter, tags as t} from "@lezer/highlight";
 import {parser as js} from "@lezer/javascript";
+import {proprio} from "./pure.js";
 import {parser as css} from "@lezer/css";
 import {parser as html} from "@lezer/html";
 import {parser as json} from "@lezer/json";
@@ -45,11 +46,13 @@ const ANALISADORES:Record<string,Analisador>={
   css,html,json,
 };
 let bash:Analisador|undefined;
+// A língua vem de fora (a cerca de um texto em markdown): só vale a que é chave DA tabela — "constructor" devolvia a
+// função do `Object.prototype` e derrubava a tela (31/10/2026, a auditoria de segurança).
 // O bash vem do modo antigo do CodeMirror (o Lezer não tem gramática de shell); ele só é montado quando pedido.
 function analisador(lingua:string):Analisador|undefined{
   const l=lingua.toLowerCase();
   if(l==="bash"||l==="sh"||l==="shell")return bash??=StreamLanguage.define(shell).parser;
-  return ANALISADORES[l];
+  return proprio(ANALISADORES,l);
 }
 
 /** As línguas que `highlightCode` colore. Com outra, ele devolve `null` e o `CodeBlock` mostra o texto puro. */

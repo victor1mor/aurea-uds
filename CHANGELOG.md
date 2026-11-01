@@ -234,7 +234,7 @@ como deveria funcionar"*.
 
 **As peças do site B** ([ADR-0088](decisions/0088-o-site-b.md)): o que a página Introduction do desenho aprovado pediu às
 peças, aprovado pelo Victor na bancada da página inteira (*"pode"*, 31/10/2026). Tudo só acrescenta; sem as props novas,
-nada muda. Só na web.
+nada muda. Só na web. Junto, os consertos da auditoria de segurança de 31/10/2026 (*"Junto da 0.52.0"*).
 
 ### Adicionado
 
@@ -257,8 +257,23 @@ nada muda. Só na web.
 - **O grupo que dobra da `Sidebar`**: a seta vai para a ponta do nome, e os itens ficam um passo (28) para dentro; a lista
   leva a classe `sidebar-group-list`. Na página sem React, o `aurea.js` abre e fecha o grupo e vira a seta.
 
+### Consertado — a auditoria de segurança de 31/10/2026
+
+- **`CodeBlock`**: a língua `"constructor"` ou `"__proto__"` (a que vem da cerca de um texto em markdown) achava a função
+  do `Object.prototype` na tabela das línguas, e o realce lançava no meio da renderização — a tela caía, no servidor e no
+  cliente. Agora só vale a língua que é chave da tabela; a outra mostra o texto puro, como qualquer língua desconhecida.
+- **`ColorSwatch`** (e o `ColorPicker`, que passa as amostras por ele): o texto da cor ia cru para a variável do estilo, e
+  no HTML do servidor um `;` abria regras novas (cobrir a tela, buscar imagem de outro endereço). Agora só entra cor —
+  hex, nome, as funções de cor do CSS e `var(--token)`, tudo o que a ficha promete; com `;`, chaves, barra invertida,
+  aspas, comentário ou outra função (`url(`), a variável não se escreve, e a amostra fica sem cor, com o nome.
+- **`DataGrid`**: um link com `?sort=constructor` ou `f.constructor=x` (pelo `gridStateFromParams`) derrubava o motor da
+  tabela. Agora o nome que é do `Object.prototype` e não é coluna declarada sai do estado que o motor recebe; a coluna
+  que se chama mesmo assim continua valendo.
+- **O reforço da mesma causa**: as outras tabelas de nomes das peças (os estados dos agentes, as frases dos estados, o
+  ícone do aviso e do `Alert`, o traço do `.drawio` do `DependencyGraph`) só leem a chave que é delas.
+
 Quem cobra: `tests/unit/site-b-pecas.test.tsx` e `tests/visual/site-b-pecas.spec.ts` (com as peças e a folha da 0.51.0,
-reprovam 9 dos 11 e os 2).
+reprovam 9 dos 11 e os 2); e `tests/unit/seguranca-tabelas-e-cor.test.tsx` (com o código de antes, reprovam 15 dos 28).
 
 ---
 

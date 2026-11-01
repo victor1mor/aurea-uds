@@ -73,7 +73,7 @@
       "name": "color",
       "type": "string",
       "default": "—",
-      "description": "REQUIRED without options. Any CSS colour: #f0c200, oklch(…), var(--primary)."
+      "description": "REQUIRED without options. Any CSS colour: hex (#f0c200), a name, the CSS colour functions (rgb(), hsl(), oklch(), color()…) or var(--primary). Anything else (with ;, braces, quotes, a comment or url()) is not written into the style."
     },
     {
       "name": "size",

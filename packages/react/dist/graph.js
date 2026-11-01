@@ -41,6 +41,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import React from "react";
 import { ReactFlow, ReactFlowProvider, Background, BaseEdge, EdgeLabelRenderer, EdgeText, Handle, MiniMap, Panel, Position, SelectionMode, ViewportPortal, applyNodeChanges, getBezierPath, getSmoothStepPath, useNodesInitialized, useOnViewportChange, useReactFlow, useStore } from "@xyflow/react";
 import { cx, useAureaStrings } from "./internal.js";
+import { proprio } from "./pure.js";
 import { Icon } from "./system.js";
 import { Badge } from "./markup.js";
 import { Button, IconButton, Toolbar, ToolbarButton, ToolbarSeparator } from "./actions.js";
@@ -537,7 +538,7 @@ function paraDrawio(nos, linhas, forma, titulo) {
         if (!ids.has(e.from) || !ids.has(e.to))
             return;
         const id = `e-${i}`;
-        const estilo = `endArrow=none;html=0;${forma === "step" ? "edgeStyle=orthogonalEdgeStyle;rounded=1;" : "curved=1;"}${TRACO_DRAWIO[e.pattern ?? "solid"]}strokeWidth=${PESO_DRAWIO[e.weight ?? "regular"]};`;
+        const estilo = `endArrow=none;html=0;${forma === "step" ? "edgeStyle=orthogonalEdgeStyle;rounded=1;" : "curved=1;"}${proprio(TRACO_DRAWIO, e.pattern ?? "solid") ?? ""}strokeWidth=${proprio(PESO_DRAWIO, e.weight ?? "regular") ?? 1};`;
         const dobras = rota && rota.length > 2 ? `<Array as="points">${rota.slice(1, -1).map(p => `<mxPoint x="${Math.round(p.x)}" y="${Math.round(p.y)}"/>`).join("")}</Array>` : "";
         celulas.push(`<mxCell id="${id}" value="${XML(e.label ?? "")}" style="${estilo}" edge="1" parent="1" source="${XML(`n-${e.from}`)}" target="${XML(`n-${e.to}`)}"><mxGeometry relative="1" as="geometry">${dobras}</mxGeometry></mxCell>`);
         // O nome da porta na ponta: o rótulo-filho da linha, a 80% do caminho para cada lado (o idioma do draw.io).
