@@ -18,7 +18,7 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Hooks públicos com ficha | 10 |
 | Maturidade declarada nas fichas | Deprecated 1 · Ready 49 · Stable 110 |
 | Receitas de arquétipo (`patterns/*.md`) | 23 |
-| Classes declaradas no CSS do core | 1027 |
+| Classes declaradas no CSS do core | 1029 |
 
 ## Tokens
 
@@ -37,9 +37,9 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Pattern | 234 |
 | Block | 15 |
 | Recipe | 23 |
-| Documentação | 89 |
+| Documentação | 90 |
 | Índice de área | 11 |
-| **Total** | **599** |
+| **Total** | **600** |
 
 ## Cobertura das fichas
 

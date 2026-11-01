@@ -46,8 +46,9 @@ function Tema({marcas}: {marcas: Marca[]}) {
   // `IconButton`). O nome falado contém o escrito ("Theme: Ember"), como pede a WCAG 2.5.3.
   // "Design theme", como o da referência: a chave claro/escuro/sistema ao lado já se chama "Theme" (15/10/2026).
   const nome = padrao ? "Design theme" : `Design theme: ${atual.label}`;
-  const icone = padrao ? "paint-bucket" : amostra(atual.color);
-  const gatilho = estreito
+  // Na pílula do site B o balde dá lugar à paleta, como no desenho.
+  const icone = padrao ? (somenteIcone ? "palette" : "paint-bucket") : amostra(atual.color);
+  const gatilho = estreito || somenteIcone
     // `sm` (32), como a busca e a setinha ao lado: sem ele saía com 36 (medido, 15/10/2026).
     ? h(IconButton, {icon: icone, label: nome, variant: "tertiary", size: "sm"})
     // `sm` (32), a caixa dos outros botões do topo (15/10/2026; ver `botaoTema` no gerador).
@@ -66,6 +67,8 @@ function Tema({marcas}: {marcas: Marca[]}) {
 // O lugar vem do gerador com o botão parado (igual ao vivo, para a barra não pular); ele sai antes de o vivo entrar.
 const lugar = document.getElementById("site-theme-root");
 const marcas = lugar ? JSON.parse(lugar.dataset.brands || "[]") as Marca[] : [];
+// Na pílula do site B o botão é só o ícone em toda largura (o gerador marca o lugar com `data-icon-only`).
+const somenteIcone = lugar?.dataset.iconOnly != null;
 if (lugar && marcas.length) lugar.replaceChildren();
 
 /** O botão "Theme" no lugar dele, dentro do provedor da busca. Sem o lugar (ou sem marcas), nada. */

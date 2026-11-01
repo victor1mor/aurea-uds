@@ -151,10 +151,10 @@ test("toda moldura tem o fundo da caixa de prévia, e a peça no centro, com fol
 const FORA_DO_CENTRO: Record<string, string> = {
   "Accordion:0": "o bloco está no centro; a medida conta o espaço que o item fechado reserva embaixo",
   "Accordion:1": "o bloco está no centro; a medida conta o espaço que o item fechado reserva embaixo",
-  "Prose:0": "texto corrido ocupa a largura; a última linha curta puxa a tinta para a esquerda",
   "Skeleton:0": "linhas de larguras diferentes, de propósito (70% e 90%)",
   "Skeleton:1": "as linhas de 70% do texto que carrega, alinhadas como texto — o mesmo motivo da de cima",
   "Tabs:1": "na referência as abas esticam até encher a fila; as nossas (secondary) não — é da peça, lote 2",
+  // ~~"Prose:0"~~ saiu em 31/10/2026: na coluna do site B a caixa ficou do tamanho do texto, e ele está no centro.
 };
 const REG = join(process.cwd(), "packages/contracts/registry");
 const slug = (n: string) => n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");

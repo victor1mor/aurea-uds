@@ -732,7 +732,7 @@ export function OTPField({ length, value, defaultValue, onValueChange, mask, dis
 }
 export function SegmentedControl({ items, value, onChange, label, fullWidth, size = "md", selectedStyle }) {
     const s = useAureaStrings();
-    const classe = cx("segmented", fullWidth && "segmented-full", size === "sm" && "segmented-sm");
+    const classe = cx("segmented", fullWidth && "segmented-full", size === "sm" && "segmented-sm", size === "lg" && "segmented-lg", size === "xl" && "segmented-xl");
     if (items.length > 0 && items.every(i => i.href != null))
         return _jsx("nav", { className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, children: items.map(i => _jsx("a", { href: i.href, className: i.value === value ? "active" : undefined, "aria-current": i.value === value ? "page" : undefined, children: i.label }, i.value)) });
     return _jsx(BaseRadioGroup, { className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, value: value, onValueChange: v => onChange?.(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: i.label }, i.value)) });

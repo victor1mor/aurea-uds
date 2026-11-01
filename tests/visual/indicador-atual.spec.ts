@@ -6,10 +6,12 @@ import {test, expect} from "@playwright/test";
 // o indicador, como o das abas (ADR-0072, item 5), e voltaram como desenho cheio. As fotos do catálogo mostraram a falta;
 // este teste a cobra sem foto.
 // Provado contra o defeito (16/10/2026): com o CSS de antes do conserto, os dois reprovam.
-const marca = (sel: string, ps: "::before" | "::after") => ({sel, ps});
-
+// O SITE B (31/10/2026, ADR-0088): o marcador das duas passou a ser a CÁPSULA LEVANTADA — o fundo do segmento e a sombra —,
+// na área atual da pílula (a `SegmentedControl` de links) e no item atual do índice (`indicator="segment"`). O que o teste
+// cobra continua o mesmo: o atual tem marcador desenhado, com cor, e quem não é o atual não tem.
 for (const tema of ["dark", "light"] as const) {
   test(`o item atual tem marcador desenhado — área do topo e "On this page" · ${tema}`, async ({page}) => {
+    await page.setViewportSize({width: 1440, height: 900});
     await page.goto("/apps/catalog/button.html");
     await page.evaluate((t) => {
       document.documentElement.dataset.theme = t;
@@ -17,21 +19,20 @@ for (const tema of ["dark", "light"] as const) {
       const toc = document.querySelector(".toc a");
       if (toc && !document.querySelector(".toc a[aria-current]")) toc.setAttribute("aria-current", "true");
     }, tema);
-    for (const {sel, ps} of [marca('.topbar-tab[aria-current="page"]', "::after"), marca(".toc a[aria-current]", "::before")]) {
-      const m = await page.evaluate(([s, p]) => {
-        const e = document.querySelector(s);
-        if (!e) return null;
-        const c = getComputedStyle(e, p);
+    for (const [atual, outro] of [['.site-areas a[aria-current="page"]', ".site-areas a:not([aria-current])"],
+      [".toc a[aria-current]", ".toc a:not([aria-current])"]]) {
+      const m = await page.evaluate(([a, o]) => {
         const cv = document.createElement("canvas").getContext("2d")!;
-        cv.fillStyle = c.backgroundColor; cv.fillRect(0, 0, 1, 1);
-        return {conteudo: c.content, alfa: cv.getImageData(0, 0, 1, 1).data[3], borda: getComputedStyle(e).borderTopColor};
-      }, [sel, ps] as const);
-      expect(m, `${sel} existe na página`).not.toBeNull();
-      expect(m!.conteudo, `${sel}${ps}: o marcador é desenhado`).not.toBe("none");
-      expect(m!.alfa, `${sel}${ps}: e tem cor`).toBeGreaterThan(0);
+        const medir = (s: string) => { const e = document.querySelector(s); if (!e) return null;
+          const c = getComputedStyle(e);
+          cv.clearRect(0, 0, 1, 1); cv.fillStyle = c.backgroundColor; cv.fillRect(0, 0, 1, 1);
+          return {alfa: cv.getImageData(0, 0, 1, 1).data[3], sombra: c.boxShadow}; };
+        return {atual: medir(a), outro: medir(o)};
+      }, [atual, outro] as const);
+      expect(m.atual, `${atual} existe na página`).not.toBeNull();
+      expect(m.atual!.alfa, `${atual}: a cápsula tem cor`).toBeGreaterThan(0);
+      expect(m.atual!.sombra, `${atual}: e é levantada`).not.toBe("none");
+      expect(m.outro!.alfa, `${outro}: quem não é o atual não tem cápsula`).toBe(0);
     }
-    // E quem não é o atual não tem marcador.
-    const outro = await page.evaluate(() => getComputedStyle(document.querySelector(".topbar-tab:not([aria-current])")!, "::after").content);
-    expect(outro, "a área que não é a atual não tem marcador").toBe("none");
   });
 }

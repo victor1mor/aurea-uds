@@ -456,6 +456,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.52.1](https://aureauds.dev/release-v0-52-1.md): The docs layout with the pill keeps its gap from 768, DataList wraps long words, and SegmentedControl gets two tall sizes.
 - [v0.52.0](https://aureauds.dev/release-v0-52-0.md): The pill on AppShell, a reading ring on TableOfContents and a plus on Accordion — the pieces of the new site.
 - [v0.51.0](https://aureauds.dev/release-v0-51-0.md): The far end of the top bar of AppShell — where the theme switch, notifications and the account go.
 - [v0.50.0](https://aureauds.dev/release-v0-50-0.md): A dark sidebar on any page — dark on the light theme, darker than the page on the dark one.

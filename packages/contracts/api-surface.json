@@ -7143,10 +7143,12 @@
             {
               "name": "size",
               "optional": true,
-              "type": "\"sm\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
               "values": [
                 "sm",
-                "md"
+                "md",
+                "lg",
+                "xl"
               ]
             },
             {
