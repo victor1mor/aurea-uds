@@ -184,7 +184,7 @@ function MenuDoCelular() {
           onChange: (v: string) => setTheme(v as never), items: TEMAS_DA_CHAVE as never}),
         marcasDoMenu.length > 0 && h(Fragment, null,
           h("p", {className: "site-menu-rotulo"}, "Design theme"),
-          h(ToggleGroup, {label: "Design theme", detached: true, size: "xl", pressedStyle: "contrast", className: "site-menu-marcas",
+          h(ToggleGroup, {label: "Design theme", detached: true, size: "xl", pressedStyle: "neutral", className: "site-menu-marcas",
             value: [marca || "gold"], onValueChange: escolherMarca},
             ...marcasDoMenu.map((m) => h(Toggle, {key: m.id || "gold", value: m.id || "gold"},
               h(ColorSwatch, {color: m.color, size: "sm", "aria-hidden": true}), m.label)))),
