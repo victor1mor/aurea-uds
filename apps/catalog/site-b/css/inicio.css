@@ -1,0 +1,187 @@
+/* A PÁGINA INICIAL DO SITE B (02/11/2026) — o arranjo do desenho aprovado ("inicio-B"). As peças são as da Aurea; aqui
+   mora só o lugar de cada uma, as letras dos títulos e os efeitos do site (a flutuação, o baralho). Toda medida é token:
+   o número do desenho que não é token virou o token mais perto (ao lado, entre parênteses, o número do desenho). */
+
+/* O palco usa a mesma cor das outras páginas do site B: o cartão no escuro, o cinza do secundário no claro. O Início não
+   está dentro da `.site-shell`, que é quem define a variável nas outras páginas. */
+.site-home { --site-palco:var(--card); }
+[data-theme="light"] .site-home { --site-palco:var(--secondary); }
+/* O desenho cola o palco no topo (18 do topo à caixa): o miolo do Início tinha 48 em cima. */
+.site-home main:has(> .inicio) { padding-block-start:var(--space-4); }
+/* As cartas de trás do baralho saem tortas pela direita (como no desenho): cortadas na borda da tela, sem rolar de lado.
+   `clip`, e não `hidden`: não cria caixa de rolagem, e o topo continua preso. */
+.site-home:has(.inicio) { overflow-x:clip; }
+
+/* A largura do desenho: 1240 (1280 da escala menos 40). */
+.inicio { display:grid; inline-size:min(100%, calc(var(--breakpoint-xl) - var(--space-10))); }
+
+/* ── O PALCO ─────────────────────────────────────────────────────────────────────────────────────────────────────── */
+/* 720 de altura (`--space-12` × 15); o texto preso embaixo, à esquerda, a 56; as peças na metade da direita. Dentro dele,
+   o fundo dos botões cinza do TEXTO é o da peça que flutua (o --segment), como no palco da Introduction. Só no texto: dentro
+   das peças que flutuam (que já são --segment), o cinza de sempre, ou o botão some na peça. */
+.inicio-palco { position:relative; overflow:hidden; min-block-size:calc(var(--space-12) * 15);
+  border-radius:var(--radius-card); background:var(--site-palco); color:var(--card-foreground); }
+.inicio-palco-texto { position:absolute; z-index:3; inset-inline-start:calc(var(--space-12) + var(--space-2)); inset-block-end:calc(var(--space-12) + var(--space-2));
+  inline-size:46%; }
+/* O selo do que mudou: a cápsula que flutua (36), a versão na cápsula amarela, em letra de código. */
+.inicio-novo { display:inline-flex; align-items:center; gap:calc(var(--space-2) + var(--space-05)); min-block-size:var(--control-h-md);
+  padding-inline:calc(var(--space-1) + var(--space-05)) calc(var(--space-3) + var(--space-05)); border-radius:var(--radius-full);
+  background:var(--segment); color:var(--foreground); box-shadow:var(--shadow-sm); font-size:var(--text-sm); font-weight:var(--weight-medium); text-decoration:none; }
+.inicio-novo:hover { color:var(--foreground); }
+.inicio-versao { font-family:var(--font-code); }
+/* O título: Sora 800, de 36 a 60 com a largura da tela (o desenho, de 40 a 62); a segunda linha no cinza de apoio. */
+.inicio-h1 { margin:var(--space-6) 0 0; font-family:var(--font-heading); font-weight:var(--weight-extrabold);
+  font-size:clamp(var(--text-4xl), 4.4vw, var(--text-6xl)); line-height:var(--leading-none); letter-spacing:calc(var(--tracking-tight) * 3); }
+.inicio-h1 span { display:block; color:var(--muted-foreground); }
+.inicio-lede { margin:var(--space-5) 0 0; max-inline-size:31em; font-size:var(--text-lg); line-height:var(--leading-relaxed); color:var(--muted-foreground); }
+.inicio-acoes { --secondary:var(--segment); display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); margin-block-start:var(--space-7); }
+.inicio-gh { display:inline-flex; align-items:center; gap:var(--space-2); min-block-size:var(--target-min); padding-inline:var(--space-2);
+  color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); text-decoration:none; }
+.inicio-gh:hover { color:var(--foreground); }
+
+/* AS PEÇAS QUE FLUTUAM, nos lugares do desenho (em % da metade da direita), cada uma levemente torta. */
+.inicio-pecas { position:absolute; inset-block:0; inset-inline-end:0; inset-inline-start:50%; }
+.inicio-peca-perfil { inset-inline-start:0; inset-block-start:7%; inline-size:calc(var(--space-24) * 3 - var(--space-3)); }
+.inicio-peca-perfil > .intro-boia { rotate:-4deg; animation-delay:-2s; }
+.inicio-peca-kpi { inset-inline-end:5%; inset-block-start:8%; inline-size:calc(var(--space-24) * 3 + var(--space-3)); }
+.inicio-peca-kpi > .intro-boia { rotate:4deg; }
+.inicio-peca-chave { inset-inline-start:1%; inset-block-start:42%; inline-size:calc(var(--space-24) * 3 - var(--space-4)); }
+.inicio-peca-chave > .intro-boia { rotate:-2deg; animation-delay:-4s; }
+.inicio-peca-aviso { inset-inline-end:9%; inset-block-start:60%; }
+.inicio-peca-aviso > .intro-boia { rotate:3deg; animation-delay:-1s; }
+.inicio-peca-barra { inset-inline-start:6%; inset-block-start:61%; inline-size:calc(var(--space-24) * 3 + var(--space-1)); }
+.inicio-peca-barra > .intro-boia { animation-delay:-3s; }
+.inicio-peca-preco { inset-inline-start:3%; inset-block-start:80%; inline-size:calc(var(--space-24) * 3 - var(--space-6)); }
+.inicio-peca-preco > .intro-boia { rotate:2deg; animation-delay:-5s; }
+.inicio-peca-clube { inset-inline-end:2%; inset-block-start:80%; }
+.inicio-peca-clube > .intro-boia { rotate:-3deg; animation-delay:-6s; }
+/* O cartão que flutua: a cor da peça levantada e a sombra média (o mesmo da Introduction). */
+.inicio-flutua { background:var(--segment); box-shadow:var(--shadow-md); }
+.inicio-capsula { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-2) var(--space-3) var(--space-2) var(--space-4); border-radius:var(--radius-full); }
+.inicio-aviso { padding-inline:var(--space-2) var(--space-4); font-size:var(--text-sm); font-weight:var(--weight-semibold); white-space:nowrap; }
+.inicio-chave { flex:1; font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+.inicio-linha { display:flex; align-items:center; gap:var(--space-3); }
+.inicio-quem { flex:1; min-inline-size:0; }
+.inicio-selo { inline-size:var(--icon-sm); block-size:var(--icon-sm); margin-inline-start:var(--space-1); vertical-align:-0.15em; color:var(--primary-emphasis); }
+.inicio-bio { margin:var(--space-3) 0 0; font-size:var(--text-sm); }
+/* O `BottomNav` no palco: o lugar é do palco (a peça traz a margem e o "preso embaixo" de quando mora no pé da tela). */
+.inicio-peca .inicio-barra { position:static; margin:0; }
+.inicio-kpi { inline-size:100%; }
+
+/* ── AS SEÇÕES ───────────────────────────────────────────────────────────────────────────────────────────────────── */
+.inicio-sec { padding-block-start:calc(var(--space-24) + var(--space-6)); }
+.inicio-sec-cabeca { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:var(--space-6) var(--space-12);
+  margin-block-end:calc(var(--space-8) + var(--space-1)); }
+/* O título de seção: Sora 700, de 30 a 48 (o desenho, de 32 a 52). */
+.inicio-h2 { margin:var(--space-3) 0 0; font-family:var(--font-heading); font-weight:var(--weight-bold);
+  font-size:clamp(var(--text-3xl), 3.6vw, var(--text-5xl)); line-height:var(--text-4xl-leading); letter-spacing:calc(var(--tracking-tight) * 3); }
+.inicio-sec-p { margin:0 0 var(--space-3); max-inline-size:26em; font-size:var(--text-lg); color:var(--muted-foreground); }
+.inicio-sec-lado .inicio-mais { display:inline-flex; align-items:center; min-block-size:var(--target-min); font-weight:var(--weight-semibold); }
+
+/* AS CINCO FAMÍLIAS: o acordeão de lado tem a altura do pai — 600 (`--space-24` × 6 + `--space-6`). Quando vira o de pé
+   (o contêiner até 47.5rem, a regra da peça), a altura é a do conteúdo. */
+.inicio-familias-lugar { container-type:inline-size; }
+.inicio-familias { block-size:calc(var(--space-24) * 6 + var(--space-6)); }
+@container (max-width:47.5rem) { .inicio-familias { block-size:auto; } }
+/* O nome de cada família (o `title` do item): o número, o ladrilho e o nome em pé; aberta, deitado e com a lista ao lado. */
+.inicio-familias .accordion-title { display:contents; }
+.inicio-fam-n { font-family:var(--font-code); font-weight:var(--weight-semibold); font-size:var(--text-4xl); line-height:var(--leading-none);
+  letter-spacing:calc(var(--tracking-tight) * 4); color:var(--muted-foreground); }
+.inicio-familias .accordion-item[open] .inicio-fam-n { color:var(--foreground); }
+.inicio-familias .inicio-fam-tile { inline-size:var(--space-12); block-size:var(--space-12); }
+.inicio-fam-nome { font-family:var(--font-heading); font-weight:var(--weight-bold); font-size:var(--text-2xl); line-height:var(--leading-tight);
+  letter-spacing:calc(var(--tracking-tight) * 2); writing-mode:vertical-rl; rotate:180deg; white-space:nowrap; }
+.inicio-familias .accordion-item[open] .inicio-fam-nome { writing-mode:horizontal-tb; rotate:none; font-size:var(--text-3xl); }
+.inicio-fam-lista { display:none; margin-inline-start:auto; font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-regular);
+  color:var(--muted-foreground); text-align:end; }
+.inicio-familias .accordion-item[open] .inicio-fam-lista { display:block; }
+.inicio-fam-corpo { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); grid-auto-rows:min-content; align-content:start; align-items:start; gap:var(--space-3); }
+@container (max-width:47.5rem) {
+  .inicio-fam-nome, .inicio-familias .accordion-item[open] .inicio-fam-nome { writing-mode:horizontal-tb; rotate:none; font-size:var(--text-2xl); }
+  .inicio-familias .accordion-item[open] .inicio-fam-lista { display:none; }
+  .inicio-fam-n { font-size:var(--text-3xl); }
+  .inicio-fam-corpo { grid-template-columns:minmax(0, 1fr); }
+}
+/* Cada demonstração numa caixa de canto 22 sobre o cartão da família (a bancada aprovada: o texto a 6%). */
+.inicio-dm { display:flex; flex-direction:column; gap:var(--space-3); min-inline-size:0; padding:var(--space-4); border-radius:var(--radius-card); background:var(--fill-1); }
+.inicio-dm-largo { grid-column:1 / -1; }
+.inicio-dm-rot { margin:0; font-family:var(--font-code); font-size:var(--text-xs); color:var(--muted-foreground); }
+.inicio-nota { margin:0; font-size:var(--text-sm); color:var(--muted-foreground); }
+.inicio-forte { margin:0; font-weight:var(--weight-semibold); }
+.inicio-fila { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2) var(--space-3); }
+.inicio-fila-entre { justify-content:space-between; }
+.inicio-fila-fim { justify-content:flex-end; }
+.inicio-fila-meio { justify-content:center; }
+.inicio-grupos { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:var(--space-3); }
+@container (max-width:47.5rem) { .inicio-grupos { grid-template-columns:minmax(0, 1fr); } }
+.inicio-dm .card .inicio-fila { flex-wrap:nowrap; }
+
+/* ── O BARALHO: a lista à esquerda (5 partes), as cartas à direita (7). O embaralhar é efeito do site (D-7.2): as de trás
+   deslocadas, giradas 3, 6 e 9 graus e menores; a de cima vai para o fim na curva enfática. ──────────────────────── */
+.inicio-baralho { display:grid; grid-template-columns:minmax(0, 5fr) minmax(0, 7fr); gap:var(--space-12); align-items:center; }
+.inicio-baralho-lista { margin-block:var(--space-7) var(--space-5); }
+.inicio-baralho-lista > * { inline-size:100%; }
+.inicio-baralho-lista :is(button, a) { display:flex; align-items:center; justify-content:flex-start; padding-inline:var(--space-5); text-align:start; }
+.inicio-baralho-item { display:inline-flex; align-items:center; gap:var(--space-4); }
+.inicio-baralho-n { font-family:var(--font-code); font-size:var(--text-xs); color:var(--muted-foreground); }
+.inicio-cartas { container-type:inline-size; position:relative; block-size:calc(var(--space-24) * 6 + var(--space-6)); }
+.inicio-carta { position:absolute; inset-inline:0 calc(var(--space-16) + var(--space-2)); inset-block-start:var(--space-16);
+  block-size:calc(var(--space-24) * 5 + var(--space-10)); overflow:hidden; padding:var(--space-7); box-shadow:var(--shadow-md);
+  transform-origin:50% 100%; transition:transform calc(2 * var(--duration-slow)) var(--ease-emphasized), opacity var(--duration-slow); }
+.inicio-carta[data-pos="0"] { z-index:4; transform:none; }
+.inicio-carta[data-pos="1"] { z-index:3; transform:translate(calc(var(--space-6) + var(--space-05)), calc(-1 * (var(--space-5) + var(--space-05)))) rotate(3deg) scale(.96); }
+.inicio-carta[data-pos="2"] { z-index:2; transform:translate(calc(var(--space-12) + var(--space-05)), calc(-1 * (var(--space-10) + var(--space-05)))) rotate(6deg) scale(.92); }
+.inicio-carta[data-pos="3"] { z-index:1; transform:translate(calc(var(--space-16) + var(--space-2)), calc(-1 * (var(--space-16) - var(--space-1)))) rotate(9deg) scale(.88); opacity:.55; }
+.inicio-carta-cabeca { display:flex; align-items:center; justify-content:space-between; gap:var(--space-3); margin-block-end:var(--space-4); }
+.inicio-carta-t { margin:0; font-family:var(--font-heading); font-size:var(--text-xl); font-weight:var(--weight-bold); }
+.inicio-carta-n { font-family:var(--font-code); font-size:var(--text-xs); color:var(--muted-foreground); }
+.inicio-carta:not([data-pos="0"]) .inicio-carta-cabeca { visibility:hidden; }
+.inicio-fantasma { display:grid; gap:var(--space-3); }
+.inicio-fantasma span { block-size:var(--target-min); border-radius:var(--radius-full); background:var(--fill-1); }
+.inicio-fantasma span:nth-child(2) { inline-size:70%; }
+.inicio-fantasma span:last-child { block-size:calc(var(--space-16) * 2 + var(--space-3)); border-radius:var(--radius-card); }
+.inicio-pilha { display:grid; gap:var(--space-3); }
+.inicio-kpis { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:var(--space-3); }
+.inicio-quem-linha { display:inline-flex; align-items:center; gap:var(--space-3); }
+/* A legenda da tabela dá o nome à região que rola; à vista, ela repetiria o "Workspace members" da linha de cima. */
+.inicio-membros caption { position:absolute; inline-size:1px; block-size:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.inicio-membros-topo { min-block-size:calc(var(--control-h-xl) + var(--space-05)); }
+/* Na carta estreita (até 30rem), a coluna de ações sai, como no desenho do celular. */
+@container (max-width:30rem) { .inicio-col-acoes { display:none; } }
+@media (prefers-reduced-motion:reduce) { .inicio-carta { transition:none; } }
+
+/* ── O FECHO: o texto (7 partes) e o "Try it here" (5), num palco com 56 de recheio ───────────────────────────────── */
+.inicio-fim { display:grid; grid-template-columns:minmax(0, 7fr) minmax(0, 5fr); gap:var(--space-8); align-items:center;
+  padding:calc(var(--space-12) + var(--space-2)); border-radius:var(--radius-card); background:var(--site-palco); color:var(--card-foreground); }
+.inicio-fim-p { margin-block-start:var(--space-4); }
+.inicio-teste { display:flex; flex-direction:column; gap:var(--space-4); padding:var(--space-7); background:var(--segment); box-shadow:var(--shadow-md); }
+.inicio-teste-rot { text-transform:uppercase; letter-spacing:var(--tracking-wider); }
+/* O tema em dois ladrilhos: a ÁREA com fundo (o `Toggle area`, D-7.4), o ícone de 32 em cima e o nome embaixo. */
+.inicio-temas { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:calc(var(--space-2) + var(--space-05)); }
+.inicio-tema { inline-size:100%; }
+.inicio-tema-miolo { display:flex; flex-direction:column; align-items:center; gap:calc(var(--space-2) + var(--space-05));
+  padding:calc(var(--space-5) + var(--space-05)) var(--space-3); font-size:var(--text-base); font-weight:var(--weight-semibold); }
+/* A marca em cápsulas (D-7.5): o `ToggleGroup` com o ligado cinza; a bolinha na cor da própria marca e o visto dentro da
+   escolhida, na tinta da própria marca. */
+.inicio-marcas { flex-wrap:wrap; gap:var(--space-2); }
+.inicio-marca { gap:var(--space-2); padding-inline:var(--space-2) var(--space-4); }
+.inicio-cor { position:relative; display:inline-grid; place-items:center; }
+.inicio-cor > * { grid-area:1 / 1; }
+.inicio-visto { visibility:hidden; color:var(--inicio-tinta); }
+[aria-pressed="true"] .inicio-visto { visibility:visible; }
+
+/* ── ABAIXO DE 1024 (o desenho: 1100): as peças descem para baixo do texto, em fluxo; o baralho e o fecho em coluna ── */
+@media (max-width:1023px) {
+  .inicio-palco { min-block-size:0; padding:var(--space-10) var(--space-8) var(--space-8); }
+  .inicio-palco-texto { position:static; inline-size:auto; }
+  .inicio-pecas { position:relative; inset:auto; display:flex; flex-wrap:wrap; align-items:flex-start; gap:var(--space-5); margin-block-start:var(--space-10); }
+  /* `!important`: o `catalog.js` escreve o deslocamento do ponteiro no `style` da peça. No fluxo, ela fica parada. */
+  .inicio-peca { position:static; transform:none !important; }
+  .inicio-baralho, .inicio-fim { grid-template-columns:minmax(0, 1fr); }
+}
+/* ABAIXO DE 768 (o desenho: 760): menos recheio. */
+@media (max-width:767px) {
+  .inicio-palco { padding:var(--space-7) var(--space-4); }
+  .inicio-fim { padding:var(--space-7) var(--space-5); }
+  .inicio-carta { inset-inline:0 var(--space-6); padding:var(--space-4); }
+}
