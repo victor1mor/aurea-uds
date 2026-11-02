@@ -1,0 +1,80 @@
+/* O MOLDE DAS PÁGINAS DO HANDBOOK NO DESENHO B (02/11/2026) — Dark Mode, Styling, Animation, Composition, Density e
+   Icons (`site-b/paginas/docs-b/comum.mjs`). O arranjo é o da Introduction (`intro-*`); aqui só o que ela não tinha: o
+   código no meio do texto, as listas, o bloco de código, a tabela, os avisos e os cartões de "Next steps". Medidas do
+   desenho: o número que não é degrau vira o token mais perto (no empate, o maior), como no resto do site B. */
+
+/* O código no meio do texto: a cápsula do desenho (recheio 2/8, o texto a 10%), na fonte de código. */
+.docb-corpo :is(.docb-p, .docb-lista, .docb-aviso, .docb-tabela, .docb-h3) code {
+  padding:var(--space-05) var(--space-2); border-radius:var(--radius-full); background:var(--fill-2);
+  font-family:var(--font-code); font-size:.875em; font-weight:var(--weight-medium); white-space:nowrap; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+.docb-corpo .docb-tabela code { white-space:normal; overflow-wrap:anywhere; }
+/* O nome da primeira coluna (a prop, o token) não se parte no meio: a tabela rola dentro da caixa dela, se precisar. */
+.docb-corpo .docb-tabela td:first-child code { white-space:nowrap; }
+.docb-h3 { margin:calc(var(--space-8) - var(--space-05)) 0 0; font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold);
+  line-height:var(--leading-tight); letter-spacing:var(--tracking-tight); }
+
+/* As listas: o ponto amarelo de 8 (a de pontos) e o número na bolinha de 32 (a numerada). */
+.docb-lista { display:flex; flex-direction:column; gap:calc(var(--space-2) + var(--space-05)); margin:calc(var(--space-3) + var(--space-05)) 0 0; padding:0;
+  list-style:none; font-size:var(--text-lg); line-height:var(--leading-relaxed); }
+.docb-lista > li { display:flex; gap:var(--space-3); }
+.docb-lista > li > span { min-inline-size:0; }
+.docb-lista:not(.docb-lista-n) > li::before { content:""; flex:none; inline-size:var(--space-2); block-size:var(--space-2); margin-block-start:calc(var(--space-3) - var(--space-05) / 2);
+  border-radius:var(--radius-full); background:var(--primary); }
+.docb-lista-n { counter-reset:docb; }
+.docb-lista-n > li { counter-increment:docb; }
+.docb-lista-n > li::before { content:counter(docb); flex:none; display:grid; place-items:center; inline-size:var(--space-8); block-size:var(--space-8);
+  border-radius:var(--radius-full); background:var(--fill-2); font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+
+/* O bloco de código: 18 acima, como o desenho. */
+.docb-corpo .docb-codigo { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+
+/* A tabela: o cartão do desenho (recheio 8, canto 22) com a tabela de linhas em cápsula dentro; as linhas pares no texto
+   a 6%, como o desenho; a legenda fica só para o leitor de tela (ela também é o nome da região). */
+.docb-tabela { margin-block-start:calc(var(--space-4) + var(--space-05)); padding:var(--space-2); border-radius:var(--radius-card); background:var(--card); }
+.docb-tabela caption { position:absolute; inline-size:1px; block-size:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.docb-tabela .table-rows tbody tr:nth-child(odd) > td { background:var(--fill-1); }
+.docb-tabela .table-rows td { font-size:var(--text-base); }
+.docb-tabela .table-rows tbody td:first-child { padding-inline-start:var(--space-3); }
+
+/* Os avisos: o arranjo da Introduction (`intro-nota`), 18 acima; o título forte em bloco, como o desenho. */
+.docb-corpo .docb-aviso { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.docb-aviso strong { display:block; }
+
+/* Os cartões de "Next steps": duas colunas; o ladrilho, o nome e a frase, e a seta na ponta. */
+.docb-links { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:var(--space-3); margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.docb-link { display:flex; flex-direction:row; align-items:center; gap:calc(var(--space-3) + var(--space-05)); min-block-size:calc(var(--space-16) + var(--space-2));
+  padding:calc(var(--space-3) + var(--space-05)) calc(var(--space-4) + var(--space-05)); color:inherit; text-decoration:none; }
+.docb-link-texto { display:flex; flex-direction:column; gap:var(--space-05); min-inline-size:0; }
+.docb-link-texto > b { font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); line-height:normal; }
+.docb-link-texto > span { color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--leading-normal); }
+.docb-link-seta { flex:none; margin-inline-start:auto; color:var(--primary-emphasis); }
+
+/* As peças pequenas do palco: o número grande, o texto em fonte de código e a etiqueta amarela. */
+.docb-numero { font-family:var(--font-code); font-size:var(--text-4xl); font-weight:var(--weight-semibold); line-height:var(--leading-none); letter-spacing:calc(var(--tracking-tight) * 2); }
+.docb-mono { font-family:var(--font-code); font-size:var(--text-sm); }
+.docb-amarela { font-family:var(--font-code); }
+
+/* Os cartões soltos das páginas (o recheio e o canto do desenho). */
+.docb-caixa { display:flex; flex-direction:column; gap:calc(var(--space-3) + var(--space-05)); padding:var(--space-5); border-radius:var(--radius-card); background:var(--card); color:var(--card-foreground); }
+.docb-rotulo { margin:0; color:var(--muted-foreground); font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); letter-spacing:var(--tracking-wider); text-transform:uppercase; }
+.docb-grade-2, .docb-grade-3, .docb-grade-4 { display:grid; gap:var(--space-3); margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.docb-grade-2 { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+.docb-grade-3 { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+.docb-grade-4 { grid-template-columns:repeat(4, minmax(0, 1fr)); }
+/* O número numa bolinha amarela (os passos). */
+.docb-bolinha { flex:none; display:grid; place-items:center; inline-size:var(--space-8); block-size:var(--space-8); border-radius:var(--radius-full);
+  background:var(--primary); color:var(--primary-foreground); font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+
+@media (max-width:900px) {
+  /* No celular, o código do meio do texto quebra, como o desenho (ele quebra de 900 para baixo). */
+  .docb-corpo :is(.docb-p, .docb-lista, .docb-aviso, .docb-h3) code { white-space:normal; overflow-wrap:anywhere; }
+  .docb-links, .docb-grade-2, .docb-grade-3 { grid-template-columns:minmax(0, 1fr); }
+  .docb-grade-4 { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width:479px) {
+  .docb-grade-4 { grid-template-columns:minmax(0, 1fr); }
+  /* No celular estreito, o nome longo da primeira coluna e a etiqueta do palco quebram, para a página não rolar de lado. */
+  .docb-corpo .docb-tabela td:nth-child(n) code { white-space:normal; overflow-wrap:anywhere; }
+  .docb-palco .intro-peca { max-inline-size:100%; }
+  .docb-palco .docb-amarela { white-space:normal; overflow-wrap:anywhere; }
+}
