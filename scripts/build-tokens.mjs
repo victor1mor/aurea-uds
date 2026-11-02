@@ -219,11 +219,13 @@ const j = o => JSON.stringify(o, null, 2).replace(/\n/g, "\n");
 const b = grupoNativo(dtcg.base, dtcg.base, {tolerante: true});
 // Os adiados do `base` entram em CADA tema, resolvidos contra ele — ver DEPENDE_DE_TEMA.
 const adiados = Object.fromEntries(b.adiados.map(n => [n, dtcg.base[n]]));
+// A SOMBRA QUE MUDA POR TEMA (o site B, 01/11/2026: a `shadow-sm` do escuro): as camadas de cada tema saem em
+// `themeShadowLayers`, e o nativo as põe por cima das do `base` (`resolverTokens`). A primeira camada continua no tema,
+// como no `base`, para quem lê o objeto. Antes o gerador recusava: o nativo só lia sombra do `base`.
+const sombrasDosTemas = {};
 const temas = Object.fromEntries(Object.entries(dtcg.theme).map(([k, g]) => {
   const r = grupoNativo(g, dtcg.base, {extras: adiados});
-  // Sombra que muda por tema não tem caminho no nativo ainda: `shadowLayers` sai só do `base`.
-  // Melhor morrer aqui do que o tema perder a sombra dele em silêncio.
-  if (Object.keys(r.camadas).length) throw new Error(`sombra no tema ${k} (${Object.keys(r.camadas)}): o alvo nativo só lê sombra do base`);
+  sombrasDosTemas[k] = r.camadas;
   return [k, r.fora];
 }));
 const dens = Object.fromEntries(Object.entries(dtcg.density).map(([k, g]) => [k, grupoNativo(g, dtcg.base).fora]));
@@ -269,6 +271,7 @@ export const tracking = ${j(b.tracking)};
 export const breakpoints = ${j(b.breakpoints)};
 export const shadowLayers = ${j(b.camadas)};
 export const themes = ${j(temas)};
+export const themeShadowLayers = ${j(sombrasDosTemas)};
 export const densities = ${j(dens)};
 export const brands = ${j(marcas)};
 `;
@@ -282,7 +285,8 @@ export declare const base: Record<string, number | string | number[] | AureaColo
 export declare const tracking: Record<string, number>;
 export declare const breakpoints: Record<string, number>;
 export declare const shadowLayers: Record<string, AureaShadow[]>;
-export declare const themes: Record<"dark" | "light", Record<string, AureaColor | number>>;
+export declare const themes: Record<"dark" | "light", Record<string, AureaColor | number | AureaShadow>>;
+export declare const themeShadowLayers: Record<"dark" | "light", Record<string, AureaShadow[]>>;
 export declare const densities: Record<"compact" | "comfortable" | "spacious", Record<string, number>>;
 export type AureaBrandName = ${Object.keys(marcas).map((n) => JSON.stringify(n)).join(" | ")};
 export declare const brands: Record<AureaBrandName, Record<"dark" | "light", Record<string, AureaColor>>>;

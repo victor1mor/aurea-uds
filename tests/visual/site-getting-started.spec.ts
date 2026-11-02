@@ -14,12 +14,17 @@ const PAGINAS = ["getting-started", "docs-quick-start", "docs-design-principles"
   // UI for Agents (SITE-06)
   "docs-llms-txt", "docs-agent-skills", "docs-agents-md"];
 
-test("cada item da lateral da área tem o seu ícone, como os da referência", async ({page}) => {
+// ~~Cada item da lateral com o seu ícone (lote U).~~ No site B (31/10/2026, ADR-0088) o ícone vai no GRUPO, como no
+// desenho: o número (01, 02, 03) e o ladrilho com o ícone na cor da categoria; os itens ficam só com o nome.
+test("cada grupo da lateral da área tem o número e o ícone, e os itens ficam só com o nome, como no desenho B", async ({page}) => {
   await page.goto(`${base}/apps/catalog/docs-quick-start.html`);
-  await expect(page.locator(".topbar-tab[aria-current]")).toHaveText("Getting Started");
+  await expect(page.locator(".site-areas a[aria-current]")).toHaveText("Getting Started");
   const itens = page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-item");
   await expect(itens).toHaveCount(PAGINAS.length);
-  for (const item of await itens.all()) await expect(item.locator("svg"), await item.innerText()).toHaveCount(1);
+  for (const item of await itens.all()) await expect(item.locator("svg"), await item.innerText()).toHaveCount(0);
+  const grupos = page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-group-label");
+  await expect(grupos.locator(".site-grupo-num")).toHaveText(["01", "02", "03"]);
+  for (const g of await grupos.all()) await expect(g.locator(".site-grupo-tile svg")).toHaveCount(1);
 });
 
 test("no Início a área se chama Docs, como no Início da referência, e o topo fica numa linha de 768 a 1023", async ({page}) => {
@@ -34,7 +39,8 @@ test("no Início a área se chama Docs, como no Início da referência, e o topo
 
 test("nenhuma caixa de exemplo das páginas rola por dentro (ADR-0002)", async ({page}) => {
   await page.setViewportSize({width: 1280, height: 663});
-  for (const p of PAGINAS) {
+  // A Introduction do site B (31/10/2026) não tem texto corrido nem caixa de exemplo: o palco, os cartões e as perguntas.
+  for (const p of PAGINAS.filter((x) => x !== "getting-started")) {
     await page.goto(`${base}/apps/catalog/${p}.html`);
     await expect(page.locator(".prose").first(), p).toBeVisible();
     const caixas = await page.locator('.prose .demo-panel[data-panel="preview"]').evaluateAll((ps) =>

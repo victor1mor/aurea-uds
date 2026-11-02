@@ -16,39 +16,42 @@ const caixa = (page: Page, sel: string) => page.locator(sel).first().evaluate((e
 });
 const perto = (a: number, b: number, nome: string) => expect(Math.abs(a - b), `${nome}: ${a} (esperado ${b})`).toBeLessThanOrEqual(1);
 
-test("1440 × 900: o bloco de 1400 no centro, e as distâncias de cima e de baixo da referência", async ({page}) => {
+// O SITE B (31/10/2026, ADR-0088): o arranjo passou a ser o do desenho B aprovado, medido contra ele na bancada (a pílula, a
+// lateral e o índice em blocos, tudo a 96 do alto). ~~As medidas do lote T (a barra de 100, a lateral de 220 a 116, o índice
+// de 240)~~ saíram com ele. A régua (1440 × 900): a cápsula de 20 a 1420, a lateral de 20 a 288, o texto a 316, o índice de
+// 1184 a 1420 — os números do desenho.
+test("1440 × 900: a cápsula de 1400 no centro, e a lateral, o texto e o índice a 96, como no desenho B", async ({page}) => {
   await abrir(page, 1440, 900);
   const cw = await page.evaluate(() => document.documentElement.clientWidth);
-  const topo = await caixa(page, ".topbar");
-  perto(topo.h, 100, "a barra de cima tem 100 (a linha fica pendurada embaixo)");
+  const capsula = await caixa(page, ".topbar-inner");
+  perto(capsula.x, (cw - 1400) / 2, "a cápsula de 1400 começa no meio");
+  perto(capsula.w, 1400, "e tem 1400");
+  perto(capsula.y, 14, "a 14 do alto");
+  perto(capsula.h, 64, "com 64");
   const lateral = await caixa(page, ".app-shell > .sidebar:not(.app-shell-aside)");
   const indice = await caixa(page, ".app-shell-aside");
-  perto(lateral.x, (cw - 1400) / 2, "o bloco de 1400 começa no meio");
-  perto(lateral.w, 220, "a lateral tem 220");
-  perto(lateral.y, 116, "a lateral começa 16 abaixo da barra");
-  perto(lateral.baixo, 900 - 32, "e para 32 acima da borda de baixo");
-  perto(indice.y, 116, "o índice também");
-  perto(indice.x, (cw - 1400) / 2 + 220 + 912, "o índice começa depois do texto de 912");
-  perto(indice.w, 240, "o índice tem 240");
-  // O primeiro grupo da lateral (com ela no começo) e o título do índice ficam a 24 da barra; o título da página, a 32.
-  await page.locator(".app-shell > .sidebar:not(.app-shell-aside)").evaluate((e) => { e.scrollTop = 0; });
-  perto((await caixa(page, ".app-shell > .sidebar:not(.app-shell-aside) .sidebar-group-label")).y, 124, "o primeiro grupo");
-  perto((await caixa(page, ".app-shell-aside .toc-label")).y, 124, "o título do índice");
-  perto((await caixa(page, ".content h1")).y, 132, "o título da página");
+  perto(lateral.x, capsula.x, "a lateral na ponta da cápsula");
+  perto(lateral.w, 268, "a lateral tem 268");
+  perto(lateral.y, 96, "a lateral começa a 96 (14 + 64 + 18)");
+  perto(lateral.baixo, 900 - 16, "e vai até 16 do pé da tela");
+  perto(indice.y, 96, "o índice também a 96");
+  perto(indice.w, 236, "o índice tem 236");
+  perto(indice.direita, capsula.direita, "e termina na ponta da cápsula");
+  perto((await caixa(page, ".content h1")).y, 96, "o título da página a 96");
+  perto((await caixa(page, ".content h1")).x, lateral.direita + 28, "o texto a 28 da lateral");
 });
 
-test("1280 × 663: os lados — a cápsula a 16, o texto a 24, o índice alinhado", async ({page}) => {
+test("1280 × 663: a cápsula a 16 das bordas, e a lateral e o índice nas pontas dela", async ({page}) => {
   await abrir(page, 1280, 663);
   const cw = await page.evaluate(() => document.documentElement.clientWidth);
-  const item = await caixa(page, ".app-shell > .sidebar:not(.app-shell-aside) .sidebar-item");
-  perto(item.x, 16, "a cápsula do item começa a 16");
-  const recheio = await page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-item").first()
-    .evaluate((e) => parseFloat(getComputedStyle(e).paddingInlineStart));
-  perto(item.x + recheio, 24, "o texto do item começa a 24");
-  perto((await caixa(page, ".brand")).x, 24, "a marca também a 24");
-  const toc = await caixa(page, ".app-shell-aside .toc");
-  perto(toc.x, cw - 268 + 16, "o índice começa 16 dentro da coluna de 268");
-  perto(toc.w, 240 - 32, "e ocupa os 240 menos os 16 de cada lado");
+  const capsula = await caixa(page, ".topbar-inner");
+  perto(capsula.x, 16, "a cápsula a 16 da borda esquerda");
+  perto(capsula.direita, cw - 16, "e a 16 da direita");
+  const lateral = await caixa(page, ".app-shell > .sidebar:not(.app-shell-aside)");
+  perto(lateral.x, 16, "a lateral a 16");
+  perto(lateral.baixo, 663 - 16, "e até 16 do pé da tela");
+  perto((await caixa(page, ".app-shell > .sidebar:not(.app-shell-aside) .sidebar-item")).x, 16 + 12, "o item 12 dentro do bloco");
+  perto((await caixa(page, ".app-shell-aside")).direita, cw - 16, "o índice termina a 16 da borda");
 });
 
 test("o índice não mostra barra de rolagem, nem a da coluna nem a dele", async ({page}) => {
@@ -58,24 +61,26 @@ test("o índice não mostra barra de rolagem, nem a da coluna nem a dele", async
   expect(barras).toEqual(["none", "none"]);
 });
 
-test("768: a marca, a busca e as ações numa linha só", async ({page}) => {
+test("768: a marca e as ações numa linha só, dentro da cápsula", async ({page}) => {
   await abrir(page, 768, 900);
   const marca = await caixa(page, ".brand");
   const acoes = await caixa(page, ".site-actions");
+  const capsula = await caixa(page, ".topbar-inner");
   expect(acoes.y, "as ações não descem para outra linha").toBeLessThan(marca.baixo);
-  perto(marca.x, 24, "a barra tem 24 de recheio de 768 para cima");
-  // Desde 19/10/2026 a lateral é coluna a 768, como a da referência (o título dela a 244 nessa largura, medido): o texto
-  // fica a 24 da lateral.
-  perto((await caixa(page, ".content h1")).x, 220 + 24, "e o texto, 24 depois da lateral");
+  perto(capsula.x, 16, "a cápsula a 16 da borda");
+  perto(marca.x, 16 + 20, "a marca a 20 dentro da cápsula");
+  perto(capsula.h, 64, "a cápsula com 64");
 });
 
-test("375: a linha das áreas rola de lado, e a página não", async ({page}) => {
+test("375: a página não rola de lado, e o botão da gaveta é o último da cápsula", async ({page}) => {
   await abrir(page, 375, 812);
   const pagina = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
   expect(pagina[0], "a página não rola de lado").toBeLessThanOrEqual(pagina[1]);
-  const linha = await page.locator(".topbar-tabs").evaluate((e) => [e.scrollWidth, e.clientWidth, getComputedStyle(e).overflowX]);
-  expect(linha[2]).toBe("auto");
-  expect(linha[0], "as áreas que não cabem ficam na linha que rola").toBeGreaterThan(linha[1]);
+  const capsula = await caixa(page, ".topbar-inner");
+  const gaveta = await caixa(page, ".nav-toggle");
+  perto(capsula.x, 16, "a cápsula a 16 da borda");
+  expect(gaveta.direita, "o botão da gaveta dentro da cápsula").toBeLessThanOrEqual(capsula.direita);
+  expect(capsula.direita - gaveta.direita, "e na ponta dela").toBeLessThanOrEqual(12);
 });
 
 test("o anterior e o próximo ficam lado a lado, e o texto longo termina em reticências", async ({page}) => {

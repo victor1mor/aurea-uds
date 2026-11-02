@@ -88,14 +88,16 @@ export type TopbarVariant=HeaderVariant;
 // 0.32.0: `variant="outline"` é o cartão da cor de onde ele está, só com a linha em volta — a caixa
 // grande do Início da documentação da referência. O nome é o dela para "sem fundo, com contorno".
 export type CardAccent="brand"|"success"|"info"|"warning"|"danger";
-type CardBase=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{padding?:"normal"|"none";orientation?:"vertical"|"horizontal";accent?:CardAccent};
+// `lift` (o site B, aprovado pela bancada em 01/11/2026): no cartão clicável, ao passar o mouse ele SOBE com sombra em vez de
+// trocar o fundo. Só vale com `variant="interactive"`; nos outros, não faz nada.
+type CardBase=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{padding?:"normal"|"none";orientation?:"vertical"|"horizontal";accent?:CardAccent;lift?:boolean};
 // Os literais são escritos NOS DOIS RAMOS, sem `Exclude<Alias,…>`: quem lê a assinatura pública
 // vê os valores em vez de seguir dois aliases, e o `api-surface` os enxerga sem ginástica.
 export type CardProps=CardBase&(
   {variant?:"base"|"raised"|"inset"|"outline"|"selected"|"danger"|"contrast";render?:ReactElement}|
   {variant:"interactive";render:ReactElement});
-export function Card({variant="base",padding="normal",orientation="vertical",accent,className,render,...props}:CardProps){
-return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${variant}`,accent&&`card-accent card-accent-${accent}`,padding==="none"&&"card-flush",orientation==="horizontal"&&"card-horizontal",className),...(variant==="contrast"?{"data-theme":"dark"}:null),...props})}
+export function Card({variant="base",padding="normal",orientation="vertical",accent,lift,className,render,...props}:CardProps){
+return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${variant}`,lift&&variant==="interactive"&&"card-lift",accent&&`card-accent card-accent-${accent}`,padding==="none"&&"card-flush",orientation==="horizontal"&&"card-horizontal",className),...(variant==="contrast"?{"data-theme":"dark"}:null),...props})}
 /** A mídia do cartão — a primeira das partes da especificação do `Card` (A-14). No vertical,
  *  primeira filha, ela SANGRA até a borda de cima e dos lados; no horizontal, fica à esquerda com a
  *  largura de miniatura, dentro do respiro, com o raio que sai da conta da casa (ADR-0033: raio do

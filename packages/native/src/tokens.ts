@@ -15,7 +15,7 @@
 //   • 1 nome existe no `base` E no tema — `warning400`. No CSS o tema ganha.
 // Logo: base < tema < densidade. Inverter isso devolve o app inteiro numa densidade só, e em
 // silêncio — o teste `tokens.test.ts` prova a ordem contra esse defeito.
-import {base, themes, densities, brands, tracking, shadowLayers, REM_EM_DP} from "@aurea-uds/tokens/native";
+import {base, themes, densities, brands, tracking, shadowLayers, themeShadowLayers, REM_EM_DP} from "@aurea-uds/tokens/native";
 
 export type AureaThemeName = "dark" | "light";
 export type AureaDensity = "compact" | "comfortable" | "spacious";
@@ -182,5 +182,5 @@ export function resolverTokens(
     heading: normalizarEscala(fontFamilies?.heading ?? fontFamilies?.ui, texto.fontHeading ?? texto.fontUi ?? "System"),
   };
 
-  return {theme, density, brand: brand ?? null, color, size, font, shadow, shadowLayers: {...shadowLayers}, easing, tracking: {...tracking}, remInDp: REM_EM_DP};
+  return {theme, density, brand: brand ?? null, color, size, font, shadow, shadowLayers: {...shadowLayers, ...themeShadowLayers[theme]}, easing, tracking: {...tracking}, remInDp: REM_EM_DP};
 }

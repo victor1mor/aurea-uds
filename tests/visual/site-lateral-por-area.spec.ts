@@ -6,8 +6,10 @@ import {test, expect} from "@playwright/test";
 // e que a área marcada no topo é a da página (a página de um hook marca "Hooks").
 // Provado contra o defeito (17/10/2026): contra a 0.34.0 publicada (`BASE_SITE=http://127.0.0.1:8128`), reprova.
 const base = process.env.BASE_SITE ?? "";
+// No site B (31/10/2026) os grupos da Getting Started levam o número e o ladrilho do ícone: o nome é o `.site-grupo-nome`.
 const grupos = (page: import("@playwright/test").Page) =>
-  page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-group-label").allTextContents();
+  page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-group-label").evaluateAll((l) =>
+    l.map((e) => (e.querySelector(".site-grupo-nome") ?? e).textContent));
 
 const CASOS = [
   // A área Getting Started com a árvore da referência (lote U, SITE-03 e SITE-06, 18/10/2026): Overview, Handbook e UI for Agents.
@@ -18,13 +20,16 @@ const CASOS = [
   {pagina: "release-v0-35-0.html", area: "Releases", grupos: ["Overview", "Releases"], itens: ["All Releases", "v0.35.0", "v0.1.0"]},
   {pagina: "hooks.html", area: "Hooks", grupos: ["Overview", "Hooks"], itens: ["All Hooks"]},
   {pagina: "usetoast.html", area: "Hooks", grupos: ["Overview", "Hooks"], itens: ["All Hooks", "useToast"]},
-  {pagina: "button.html", area: "Components", grupos: ["Overview", "Components"], itens: ["All Components", "Button"]},
+  // O site B (01/11/2026): a lateral de Components no padrão da Getting Started — as famílias, numeradas.
+  {pagina: "button.html", area: "Components", grupos: ["Buttons", "Collections", "Colors", "Controls", "Data Display", "Date and Time",
+    "Feedback", "Forms", "Layout", "Media", "Navigation", "Overlays", "Pickers", "Typography", "Utilities", "AI & Agents", "Code",
+    "Communication"], itens: ["All Components", "Button"]},
 ];
 
 for (const c of CASOS) {
   test(`a lateral de ${c.pagina} é a da área ${c.area}`, async ({page}) => {
     await page.goto(`${base}/apps/catalog/${c.pagina}`);
-    await expect(page.locator(".topbar-tab[aria-current]")).toHaveText(c.area);
+    await expect(page.locator(".site-areas a[aria-current]")).toHaveText(c.area);
     expect(await grupos(page)).toEqual(c.grupos);
     const nomes = await page.locator(".app-shell > .sidebar:not(.app-shell-aside) .sidebar-label").allTextContents();
     for (const item of c.itens) expect(nomes, `"${item}" está na lateral`).toContain(item);
@@ -35,7 +40,8 @@ for (const c of CASOS) {
 }
 
 test("o anterior e o próximo são os vizinhos na lateral da área", async ({page}) => {
-  for (const [pagina, antes, depois] of [["carousel.html", "Card", "Chart"], ["accessgate.html", "All Components", "Accordion"],
+  // Em Components, a ordem das famílias (o site B, 01/11/2026): o Carousel é da Media; "All Components" vem antes do Button.
+  for (const [pagina, antes, depois] of [["carousel.html", "AvatarGroup", "Gallery"], ["button.html", "All Components", "ButtonGroup"],
     // Na área Getting Started o vizinho atravessa o grupo, como na referência: depois do último do Overview, o primeiro do Handbook.
     ["docs-roadmap.html", "Showcase", "Colors"], ["docs-quick-start.html", "Introduction", "Design Principles"],
     // Nas notas, da mais nova para a mais velha, como na lateral.

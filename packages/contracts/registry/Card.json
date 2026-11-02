@@ -104,6 +104,12 @@
       "description": "`horizontal` is the list mode: Card.Media on the left at thumbnail width (96, --space-24) and the content beside it."
     },
     {
+      "name": "lift",
+      "type": "boolean",
+      "default": "false",
+      "description": "With `variant=\"interactive\"`, the card RISES on hover: it lifts 4px and takes a medium shadow, instead of changing its fill. Still for people who ask for less motion. Web only; on the other variants it does nothing."
+    },
+    {
       "name": "Card.Media",
       "type": "component",
       "default": "—",

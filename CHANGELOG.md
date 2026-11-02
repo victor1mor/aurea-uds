@@ -17,6 +17,50 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O site B: a All Components e a lateral de Components no padrão da Docs (01/11/2026)
+
+- **A página All Components no desenho B** (aprovada pelo Victor na bancada da página inteira, *"Pode"*, 01/11/2026): o palco
+  da Introduction com a trilha "Components / Web", o título, o texto, a busca (`SearchField lg`, até 400) e a chave Grid |
+  List; as três peças que flutuam (os componentes, "Live" e as famílias; somem no celular); "Showing N of 148"; as 18
+  famílias, cada uma com o número, o ladrilho na cor e a contagem, quatro cartões e o "Show all"; o cartão que sobe
+  (`Card lift`) com a prévia torta (a peça de verdade, parada); a Lista (a linha em cápsula com a inicial na cor da família);
+  e o vazio da busca com a moldura (`EmptyState framed`) e o título maior. A busca, a Lista e o "Show all" são o
+  `catalog.js`; sem ele, tudo aparece, em grade. Sem o índice da direita, a página ocupa a coluna dele.
+- **A lateral de Components no padrão da Getting Started** (o Victor: *"quero padronizar o sidebar ... como padrão com da
+  docs"*): em toda página da área, cada família é um grupo numerado, com o ícone na bolinha da cor dela, que abre e fecha; os
+  itens são os componentes da família; "All Components" fica no alto. O anterior e o próximo de cada página seguem essa
+  ordem.
+- **O lado Native igual** (*"e o nativo?"*): a lateral por famílias (as 14 do pacote nativo, pela categoria da ficha, com a
+  cor e o ícone da web) e a página All Components do nativo, a mesma da web (a prévia do cartão é o ícone da ficha: a peça
+  do nativo roda na página de cada uma).
+- Os números são os de hoje: 148 componentes na web e 79 peças no nativo.
+
+### O site B: a moldura e a Introduction (31/10/2026)
+
+- **O site no desenho B aprovado** ([ADR-0088](decisions/0088-o-site-b.md); *"pode"*, 31/10/2026): a pílula que flutua com as
+  áreas numa `SegmentedControl`, a lateral e o índice em blocos de canto 22, a chave Web | Native no alto da lateral, os
+  grupos numerados, o índice com o anel de leitura, o rodapé de uma linha, e a página Introduction com o palco das quatro
+  peças que flutuam, os cartões e as perguntas. As cores são as de hoje (*"Cores de hoje"*).
+- **O que a suíte achou na moldura, consertado antes de sair:** com o texto a 200%, toda página rolava de lado (a fileira das
+  áreas não quebrava; agora quebra); a busca ficava sem nome de 1121 a 1334 (`aria-label`); o
+  "Native" do claro dava 4,34:1 (o trilho no `--fill-1`: 4,74:1); a letra pequena das peças da abertura, no escuro, dava
+  4,07:1 (6,6:1); o menu do rodapé do site tinha o mesmo nome do menu do rodapé de exemplo ("Site footer"); e a chave
+  Web | Native subia por `order:-1` — agora ela vem antes da lista no próprio HTML (a lista é a `Sidebar.Nav`), e o Tab
+  segue a ordem da tela.
+- As mudanças de PEÇA que a moldura pediu estão na 0.52.1, cada uma aprovada pela imagem (antes e depois) em 01/11/2026. A
+  cápsula que quebraria linha com o texto a 200% saiu: medido, com a fileira das áreas quebrando, a página já não rola de
+  lado.
+- **A lateral do claro mais escura que a página** (235 contra 245) é a do desenho aprovado: o `marca.spec.ts` deixa de
+  cobrar isso só na moldura do site B (o Victor, sem preferência; a sessão seguiu o desenho).
+- Não muda nenhum pacote publicado.
+
+### O registro da 0.52.0 (31/10/2026)
+
+- **A 0.52.0 publicada por volta das 21:53 de 31/10/2026** (Brasília, medido no npm), da junção do pedido #110 (o #109, as
+  peças, foi juntado antes): o `released-surface.json` do commit do publish (`d085a363`) — nenhum nome novo e nenhuma frase
+  nova, nem na web nem no nativo. O CHANGELOG ([0.52.0] publicada) e o CLAUDE.md (a linha na tabela e o item 51).
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.51.0 (31/10/2026)
 
 - **A 0.51.0 publicada entre 18:20 e 18:23 de 30/10/2026** (Brasília, medido no npm; o `tokens` às 18:20 e o `native`, o
@@ -230,9 +274,74 @@ como deveria funcionar"*.
 
 ---
 
+## [0.53.0] — 2026-11-01
+
+**O que a página All Components do site B pediu às peças e aos tokens**, cada mudança aprovada pelo Victor olhando a imagem
+(01/11/2026). Tudo só acrescenta, menos a sombra pequena no escuro, que muda a aparência de quem a usa. Leva junto a 0.52.1,
+que não saiu sozinha.
+
+### Adicionado
+
+- **`Card lift`** — variação nova do cartão clicável (`variant="interactive"`): ao passar o mouse ele SOBE 4 (`--space-1`),
+  fica na cor do cartão e ganha a `--shadow-md`, em vez de trocar o fundo; parado para quem pede menos movimento. Nos outros
+  cartões, não faz nada. Só na web (é o passar do mouse). O item 7 da bancada (a sombra "A", a da Aurea).
+- **`EmptyState framed`** — variação nova na web: o ícone dentro da moldura redonda de 64 (`--space-16`), a mesma do
+  `EmptyState` do nativo (R-15), com o fundo e a cor dele (`muted`). Sem ela, o ícone continua solto. O item 9 da bancada.
+
+### Mudado
+
+- **A sombra pequena (`--shadow-sm`) aparece no escuro** (*"B, em toda peça"*): no escuro ela passa a ser uma camada, 1px
+  para baixo, 3 de desfoque, preto a 45% — a do desenho aprovado; no claro continua a de antes (três camadas a 4–6%). Muda
+  toda peça que a usa no escuro: a cápsula escolhida das abas e dos segmentos, o item atual da lateral, o campo e o acordeão
+  de superfície. Web e nativo. **Na Aurea Ember também** (o Victor: *"adicione sombra na ember também"*): é a terceira
+  exceção ao congelamento dela, e a única mudança — 3 peças, só no escuro, contadas no `ember-congelada.spec.ts`. A descrição da `shadow-sm` deixa de dizer que no escuro ela "quase não aparece, de
+  propósito" (ADR-0059).
+- **O nativo lê sombra por tema**: o gerador de tokens recusava sombra que muda com o tema; agora ele emite
+  `themeShadowLayers` (de `@aurea-uds/tokens/native`), e o `resolverTokens` põe as camadas do tema por cima das do `base`
+  (`t.shadowLayers.shadowSm` e `t.shadow.shadowSm` no escuro são as do escuro).
+
+### ⚠ Pode quebrar a compilação
+
+- **`themes` de `@aurea-uds/tokens/native`**: o tipo de cada valor passa a incluir `AureaShadow` (o escuro tem a
+  `shadowSm`). Código que lia os valores do tema como só cor ou número precisa tratar a sombra.
+
+Quem cobra: `tests/unit/site-b-componentes.test.tsx` — a classe e a regra do `lift`, a moldura do `framed` e a sombra do escuro
+no DTCG e no `resolverTokens` (sem cada mudança, reprovam seis dos sete).
+
+---
+
+## [0.52.1] — 2026-11-01
+
+✅ **Não sai sozinha: vai dentro da `0.53.0`.**
+
+**O que a moldura do site B pediu às peças**, cada mudança aprovada pelo Victor olhando a imagem do antes e do depois
+(01/11/2026). Só na web.
+
+### Consertado
+
+- **O arranjo de documentação com a pílula, de 768 a 1023**: a lateral é coluna nessa faixa e encostava na borda da tela,
+  com a cápsula a 16. Agora as colunas ficam a 16 das bordas de 768 para cima (era de 1024), e o texto começa a 28 da
+  lateral.
+- **`DataList`**: a palavra que não cabe (um nome de código longo, como `window.Aurea.setTheme`) saía da célula, e numa
+  coluna estreita a página rolava de lado. Agora ela quebra dentro da célula (`overflow-wrap:anywhere`).
+
+### Adicionado
+
+- **`SegmentedControl size="lg"` e `size="xl"`** — variação nova: a cápsula de 44, com os segmentos de 36 (o
+  `--control-h-md`), e a de 48, com os de 40 (o `--control-h-lg`) — as duas chaves do site B, que o site esticava à força.
+  O `sm` (34) e o `md` (40) não mudam. A referência não tem tamanho nessa peça.
+
+Quem cobra: `tests/visual/site-b-pecas.spec.ts` — os quatro tamanhos (sem as classes `segmented-lg` e `segmented-xl`, os
+dois saem com 40), a lateral a 16 a 768 (com a regra só de 1024, ela fica em 0) e a `DataList` numa coluna de 220 (sem o
+`overflow-wrap`, a célula transborda); e a trava de geometria (`geometry.spec.ts`), que conta o `lg` e o `xl` como grupos à
+parte.
+
+---
+
 ## [0.52.0] — 2026-10-31
 
-**As peças do site B** ([ADR-0088](decisions/0088-o-site-b.md)): o que a página Introduction do desenho aprovado pediu às
+✅ **Publicada em 31/10/2026, por volta das 21:53 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido
+#110** (o #109, as peças, foi juntado antes). **As peças do site B** ([ADR-0088](decisions/0088-o-site-b.md)): o que a página Introduction do desenho aprovado pediu às
 peças, aprovado pelo Victor na bancada da página inteira (*"pode"*, 31/10/2026). Tudo só acrescenta; sem as props novas,
 nada muda. Só na web. Junto, os consertos da auditoria de segurança de 31/10/2026 (*"Junto da 0.52.0"*).
 

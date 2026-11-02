@@ -100,6 +100,11 @@ async function medir(page: Page, marca: string, tema: string): Promise<Medida> {
       rotulo: razao(rgb(getComputedStyle(rotulo).color, painelHex), painel),
       lumPagina: lum(rgb(getComputedStyle(document.body).backgroundColor)),
       lumPainel: lum(painel),
+      // O SITE B (31/10/2026): a lateral é o PALCO do desenho aprovado — a mesma cor do bloco do índice e da abertura.
+      palco: (() => { const s = document.createElement("div"); s.style.background = "var(--site-palco)";
+        document.querySelector(".site-shell")!.append(s); const c = getComputedStyle(s).backgroundColor; s.remove();
+        return `rgb(${rgb(c, painelHex).join(",")})`; })(),
+      painelHex,
     };
   });
 }
@@ -127,7 +132,12 @@ test.describe("marca · a lateral se lê em toda combinação", () => {
         // contra ELE MESMO. O defeito estava na RELAÇÃO — eu tinha mapeado a lateral para o
         // trilho escuro do app deles (`--side`) em vez de mapear para superfície, e ela saiu
         // MAIS ESCURA que a página, o contrário do que a Aurea faz nos dois temas.
-        expect.soft(m.lumPainel, `${nome}/${tema}: a lateral é superfície — não pode ser mais `
+        // ⚠ A EXCEÇÃO DO SITE B (31/10/2026): no desenho aprovado, a lateral do claro é o cinza do palco (235 contra a
+        // página de 245) — o Victor, perguntado, ficou sem preferência, e a sessão seguiu o desenho. Então, no claro, a
+        // lateral do site é o PALCO, e não superfície; o defeito que esta trava pegou (o painel azulado da Ember no escuro)
+        // continua cobrado no escuro, e nas outras páginas a regra é a de sempre.
+        if (tema === "light") expect.soft(m.painelHex, `${nome}/${tema}: a lateral do site B é o palco do desenho`).toBe(m.palco);
+        else expect.soft(m.lumPainel, `${nome}/${tema}: a lateral é superfície — não pode ser mais `
           + "escura que a página. Medir cor isolada não pega isto; só a relação pega")
           .toBeGreaterThanOrEqual(m.lumPagina);
       });

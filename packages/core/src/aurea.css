@@ -456,13 +456,14 @@ img,svg { display:block; }
 /* E sem a barra do índice abaixo de 1280: no desenho aprovado o índice só existe na coluna da direita (protótipo). */
 .app-shell-docs.app-shell-pill > .docs-toc-bar { display:none; }
 /* As colunas ficam a --space-4 das bordas da tela, alinhadas com a pílula (sem isto, abaixo de 1432 a lateral e o índice
-   encostavam na borda — medido a 1280). */
-@media (min-width:1024px) { .app-shell-docs.app-shell-pill { padding-inline:var(--space-4); } .app-shell-docs.app-shell-pill > .topbar { padding-inline:0; }
+   encostavam na borda — medido a 1280). De 768 para cima, e não de 1024 (0.52.1, aprovado pela imagem em 01/11/2026): de
+   768 a 1023 a lateral é coluna, e encostava na borda com a cápsula a 16. */
+@media (min-width:768px) { .app-shell-docs.app-shell-pill { padding-inline:var(--space-4); } .app-shell-docs.app-shell-pill > .topbar { padding-inline:0; }
   /* A lateral com caixa vai até 16 do pé da tela, e não mais (o desenho, medido em 31/10/2026). */
   .app-shell-docs.app-shell-pill > .sidebar:not(.app-shell-aside, .sidebar-plain) { block-size:auto; max-block-size:calc(100vh - var(--shell-top) - var(--space-4)); } }
-/* O conteúdo começa a 18 da pílula, como a lateral (78 + 18 = 96); de 1024 a 1279, sem o índice, ele vai até a borda do
-   bloco; no celular, o bloco fica a 16 das bordas. */
-@media (min-width:1024px) and (max-width:1279px) { .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) 0 0 var(--space-7); } }
+/* O conteúdo começa a 18 da pílula, como a lateral (78 + 18 = 96); de 768 a 1279, sem o índice, ele vai até a borda do
+   bloco, a 28 da lateral; no celular, o bloco fica a 16 das bordas. */
+@media (min-width:768px) and (max-width:1279px) { .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) 0 0 var(--space-7); } }
 @media (max-width:767px) { .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) var(--space-4) 0; } }
 .app-shell-docs > .content > * { max-inline-size:var(--docs-text-width); }
 /* O texto a 24 da borda também no celular (o da página da referência a 375 e a 768; com o recheio de sempre do
@@ -2039,6 +2040,11 @@ img,svg { display:block; }
 .segmented a { display:inline-flex; align-items:center; justify-content:center; gap:var(--space-1); text-decoration:none; }
 /* `size="sm"`: a da referência (abas de 24 numa cápsula de 32, letra 14) — a altura do controle `xs` da densidade. */
 .segmented-sm :is(button,a) { min-block-size:var(--control-h-xs); padding:0 var(--space-4); font-size:var(--text-sm); }
+/* `size="lg"` e `size="xl"` (0.52.1, variação nova aprovada pela imagem em 01/11/2026): os segmentos na altura do controle
+   `md` (36; a cápsula de 44, a chave Web | Native do site B) e na do `lg` (40; a cápsula de 48, as áreas no topo). O `sm` e
+   o `md` não mudam. A referência não tem tamanho nessa peça. */
+.segmented-lg :is(button,a) { min-block-size:var(--control-h-md); }
+.segmented-xl :is(button,a) { min-block-size:var(--control-h-lg); }
 /* Toggle (Lote 1): pressionado usa o MESMO par de tokens do segmento aceso, logo acima. Um
    toggle solto e um segmento selecionado dizem a mesma coisa — se parecessem diferentes, o
    sistema teria dois idiomas para "isto está ligado". O estado vem do motor (`data-pressed`),
@@ -2297,6 +2303,12 @@ img,svg { display:block; }
    não. Quem cobra é o `link-sem-sublinhado.spec.ts`. */
 .card-interactive { cursor:pointer; inline-size:100%; text-decoration:none; font:inherit; text-align:inherit; color:inherit; transition:transform var(--duration-fast),border-color var(--duration-fast),background var(--duration-fast); }
 .card-interactive:hover { transform:translateY(-2px); border-color:transparent; background:var(--surface-2); }
+/* O LEVANTAR (`lift`, o site B — aprovado pela bancada em 01/11/2026): o cartão clicável que SOBE com sombra, em vez de
+   trocar o fundo. Sobe 4 (`--space-1`), fica na cor do cartão e ganha a `--shadow-md`; parado para quem pede menos
+   movimento. Variação: sem `lift`, o cartão clicável continua o de sempre (sobe 2 e troca o fundo). */
+.card-interactive.card-lift { transition:transform var(--duration-base),box-shadow var(--duration-base),background var(--duration-fast); }
+.card-interactive.card-lift:hover { transform:translateY(calc(-1 * var(--space-1))); background:var(--card); box-shadow:var(--shadow-md); }
+@media (prefers-reduced-motion:reduce) { .card-interactive.card-lift:hover { transform:none; } }
 .card-selected { border-color:transparent; background:color-mix(in oklab,var(--primary) 12%,var(--card)); }
 .card-danger { border-color:transparent; background:var(--danger-bg); }
 /* MT-01 (10/10/2026, ADR-0063): o cartão `contrast` traz `data-theme="dark"` no próprio elemento —
@@ -2748,8 +2760,10 @@ button.tag-main { cursor:pointer; }
    179px para 90px em vez de zerar. `minmax(0,max-content)` é o que encolhe: com espaço mede
    igual ao que media antes (nenhuma baseline mudou), sem espaço o termo quebra. */
 .data-list { display:grid; grid-template-columns:minmax(0,max-content) minmax(0,1fr); gap:var(--space-2) var(--space-6); margin:0; }
-.data-list dt { min-width:0; color:var(--muted-foreground); }
-.data-list dd { min-width:0; margin:0; }
+/* A palavra que não cabe QUEBRA dentro da célula (0.52.1, aprovado pela imagem em 01/11/2026): um nome de código longo
+   (`window.Aurea.setTheme`) saía da célula, e numa coluna estreita a página rolava de lado. */
+.data-list dt { min-width:0; color:var(--muted-foreground); overflow-wrap:anywhere; }
+.data-list dd { min-width:0; margin:0; overflow-wrap:anywhere; }
 /* E no ESTREITO ele empilha — a outra metade da correção. Medido a 320px com termos de frase
    inteira: duas colunas não cabem, o termo resolvia em 164px, a calha comia o resto e a coluna do
    valor ficava com `0px`, jogando o texto para fora da PÁGINA. Mesmo remédio que `.message` e
@@ -3829,6 +3843,9 @@ button.notification-item:hover { background:var(--surface-3); }
    REFERENCES.md; a pele é Aurea. O título vinha com o h3 do NAVEGADOR (16,38px). */
 .empty-state { display:flex; flex-direction:column; align-items:center; gap:var(--space-3); padding:var(--space-10) var(--space-6); color:var(--muted-foreground); text-align:center; }
 .empty-state > .icon { color:var(--subtle-foreground); }
+/* A MOLDURA (`framed`, o site B — aprovada pela bancada em 01/11/2026): o ícone num círculo de 64 (`--space-16`), a
+   mesma do `EmptyState` do nativo (R-15, `IconeEmMoldura`): o fundo e a cor do ícone são os dele (`muted`). */
+.empty-state-frame { display:grid; place-items:center; flex:none; inline-size:var(--space-16); block-size:var(--space-16); border-radius:var(--radius-full); background:var(--muted); color:var(--muted-foreground); }
 .empty-state p { max-width:46ch; margin:0; }
 .empty-title { margin:0; color:var(--foreground); font-size:var(--text-base); font-weight:var(--weight-semibold); line-height:var(--leading-tight); }
 

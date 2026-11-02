@@ -494,6 +494,12 @@ document.addEventListener("click", e => {
   try { texto = JSON.parse(fonte.textContent); } catch (err) { return; }
   copiarNoBotao(botao, texto);
 });
+// -- O "Copy" das linhas de instalar (o site B, 30/10/2026): o comando vem no próprio botão. --------------
+document.addEventListener("click", e => {
+  const botao = e.target.closest("[data-copiar]");
+  if (!botao || !navigator.clipboard) return;
+  copiarNoBotao(botao, botao.dataset.copiar);
+});
 // -- "Copy Prompt" (lote U, SITE-06) ---------------------------------------------------------
 // O texto que prepara um assistente de IA para a Aurea: instalar a skill e ler o llms.txt. O endereco
 // sai da propria pagina (o site, a bancada ou o disco), e nao escrito aqui.
@@ -583,3 +589,76 @@ const enquadrarGrafos = () => {
 };
 enquadrarGrafos();
 addEventListener("resize", enquadrarGrafos);
+// -- O SITE B (30/10/2026) -------------------------------------------------------------------
+// AS PEÇAS QUE FLUTUAM no palco da abertura seguem o ponteiro, cada uma com a sua profundidade (data-fundo). Paradas
+// para quem pede menos movimento.
+const palcoDaAbertura = document.querySelector("[data-palco]");
+if (palcoDaAbertura && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const pecasDoPalco = [...palcoDaAbertura.querySelectorAll("[data-fundo]")];
+  palcoDaAbertura.addEventListener("mousemove", e => {
+    const r = palcoDaAbertura.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width - 0.5) * 2, y = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    pecasDoPalco.forEach(p => { const f = Number(p.dataset.fundo) || 1; p.style.transform = "translate3d(" + (x * 10 * f) + "px," + (y * 8 * f) + "px,0)"; });
+  });
+  palcoDaAbertura.addEventListener("mouseleave", () => pecasDoPalco.forEach(p => { p.style.transform = ""; }));
+}
+// A "ALL COMPONENTS" DO SITE B (01/11/2026): a busca, a chave Grade | Lista e o
+// "Show all". Sem este script a página mostra tudo, em grade.
+const catalogo = document.querySelector("[data-catalogo]");
+if (catalogo) {
+  const estado = {q: "", abertas: new Set()};
+  const busca = catalogo.querySelector("[data-cat-busca]");
+  const secoes = [...catalogo.querySelectorAll("[data-familia]")];
+  const total = catalogo.querySelectorAll("[data-cat-item]").length;
+  const mostrando = catalogo.querySelector("[data-cat-mostrando]");
+  const vazio = catalogo.querySelector("[data-cat-vazio]");
+  const tituloDoVazio = catalogo.querySelector("[data-cat-vazio-titulo]");
+  const aplicar = () => {
+    const q = estado.q.trim().toLowerCase();
+    let vistos = 0;
+    secoes.forEach(secao => {
+      const cartoes = [...secao.querySelectorAll("[data-cat-item]")];
+      const acham = cartoes.filter(c => !q || c.dataset.nome.includes(q));
+      // Só os quatro primeiros, até o "Show all" — menos quando se busca: aí aparece tudo o que acha.
+      const resumida = !q && !estado.abertas.has(secao.dataset.familia);
+      cartoes.forEach(c => { c.hidden = !acham.includes(c) || (resumida && c.hasAttribute("data-mais")); });
+      secao.hidden = acham.length === 0;
+      const mais = secao.querySelector(".cat-mais");
+      if (mais) {
+        mais.hidden = Boolean(q);
+        const botao = mais.querySelector("[data-cat-mais]");
+        const aberta = estado.abertas.has(secao.dataset.familia);
+        botao.setAttribute("aria-expanded", String(aberta));
+        const rotulo = botao.querySelector(".btn-label") || botao;
+        if (!botao.dataset.rotulo) botao.dataset.rotulo = rotulo.textContent;
+        rotulo.textContent = aberta ? "Show less" : botao.dataset.rotulo;
+      }
+      vistos += cartoes.filter(c => !c.hidden).length;
+    });
+    if (mostrando) mostrando.textContent = String(vistos);
+    if (vazio) {
+      vazio.hidden = vistos > 0;
+      if (tituloDoVazio) tituloDoVazio.textContent = "No component called “" + estado.q.trim() + "”";
+    }
+  };
+  if (busca) busca.addEventListener("input", () => { estado.q = busca.value; aplicar(); });
+  catalogo.querySelectorAll("[data-cat-limpar]").forEach(b => b.addEventListener("click", () => {
+    estado.q = ""; if (busca) { busca.value = ""; busca.focus(); } aplicar();
+  }));
+  catalogo.querySelectorAll("[data-cat-mais]").forEach(b => b.addEventListener("click", () => {
+    const f = b.closest("[data-familia]").dataset.familia;
+    if (estado.abertas.has(f)) estado.abertas.delete(f); else estado.abertas.add(f);
+    aplicar();
+  }));
+  // A chave Grade | Lista: troca o arranjo; a escolhida fica marcada como as outras chaves de segmentos.
+  catalogo.querySelectorAll("[data-cat-vista] .segmented :is(button,a)").forEach((b, n) => b.addEventListener("click", e => {
+    e.preventDefault();
+    catalogo.dataset.vista = n === 0 ? "grid" : "list";
+    b.parentElement.querySelectorAll(":scope > :is(button,a)").forEach(x => {
+      const on = x === b; x.classList.toggle("active", on);
+      if (x.hasAttribute("aria-pressed")) x.setAttribute("aria-pressed", String(on));
+      if (x.hasAttribute("aria-checked")) x.setAttribute("aria-checked", String(on));
+    });
+  }));
+  aplicar();
+}

@@ -10,10 +10,16 @@
 // O que se espera são as animações FINITAS: as rodinhas (`.spinner`) giram para sempre, e o
 // `finished` delas nunca resolve. O `getAnimations()` já força o recálculo de estilo, então as
 // transições disparadas pela troca de tema já estão na lista quando ele responde.
+//
+// E só as de quem está DESENHADO (01/11/2026, pedido #111): a Introduction do site B tem links dentro das perguntas
+// fechadas (`<details>`). No Firefox e no WebKit, a transição de quem está no conteúdo fechado começa e não anda
+// (`currentTime` parado em 0), e o `finished` dela nunca resolve — a varredura travou 15 minutos em cada um. O
+// `checkVisibility()` diz quem não está desenhado; ali não há cor para o axe medir.
 import type {Page} from "@playwright/test";
 
 export async function esperarTransicoes(page: Page): Promise<void> {
   await page.evaluate(() => Promise.all(document.getAnimations()
     .filter(a => a.effect && Number.isFinite(a.effect.getComputedTiming().endTime as number))
+    .filter(a => { const t = (a.effect as KeyframeEffect).target; return !t || t.checkVisibility(); })
     .map(a => a.finished.catch(() => undefined))));
 }

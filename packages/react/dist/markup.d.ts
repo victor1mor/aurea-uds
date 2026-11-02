@@ -13,6 +13,7 @@ type CardBase = HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> &
     padding?: "normal" | "none";
     orientation?: "vertical" | "horizontal";
     accent?: CardAccent;
+    lift?: boolean;
 };
 export type CardProps = CardBase & ({
     variant?: "base" | "raised" | "inset" | "outline" | "selected" | "danger" | "contrast";
@@ -21,7 +22,7 @@ export type CardProps = CardBase & ({
     variant: "interactive";
     render: ReactElement;
 });
-export declare function Card({ variant, padding, orientation, accent, className, render, ...props }: CardProps): ReactElement<unknown, string | React.JSXElementConstructor<any>>;
+export declare function Card({ variant, padding, orientation, accent, lift, className, render, ...props }: CardProps): ReactElement<unknown, string | React.JSXElementConstructor<any>>;
 export declare namespace Card {
     export { CardMedia as Media };
     export { CardHeader as Header };

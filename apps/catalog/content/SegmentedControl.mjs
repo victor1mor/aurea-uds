@@ -56,17 +56,20 @@ export default {
     },
     {
       title: "Sizes",
-      description: "sm is the low capsule — the switch at the end of this site's areas row; md, the default, is the control height.",
+      description: "sm (34) is the low capsule of a documentation switch; md (40), the default, is the control height; lg (44) "
+        + "and xl (48) are the tall capsules — the Web | Native switch and the area switch of this site.",
       code: `<SegmentedControl size="sm" label="View" value={view} onChange={setView} items={views} />
-<SegmentedControl size="md" label="View" value={view} onChange={setView} items={views} />`,
+<SegmentedControl size="md" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl size="lg" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl size="xl" label="View" value={view} onChange={setView} items={views} />`,
       render: () => h("div", {style: {display: "grid", gap: "var(--space-3)", justifyItems: "start"}},
-        ...["sm", "md"].map(s => h(ComValor, {key: s, componente: SegmentedControl, valor: "value", aviso: "onChange", size: s,
+        ...["sm", "md", "lg", "xl"].map(s => h(ComValor, {key: s, componente: SegmentedControl, valor: "value", aviso: "onChange", size: s,
           label: `View, ${s}`, value: "list", items: [{value: "list", label: "List"}, {value: "grid", label: "Grid"}]}))),
     },
     {
       title: "As navigation",
       description: "With href on every item it is a <nav> of links: going to another page is navigation, and the current "
-        + "one is marked with aria-current=\"page\" — the Web | Native switch at the top of this site.",
+        + "one is marked with aria-current=\"page\" — like the Web | Native switch of this site.",
       code: `<SegmentedControl size="sm" label="Platform" value="web" items={[
   {value: "web", label: "Web", href: "/button.html"},
   {value: "native", label: "Native", href: "/native-button.html"},

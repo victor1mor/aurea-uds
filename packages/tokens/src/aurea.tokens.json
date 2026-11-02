@@ -488,7 +488,7 @@
     },
     "shadow-sm": {
       "$type": "shadow",
-      "$description": "A sombra pequena da cápsula escolhida sobre o trilho (`Tabs`, `SegmentedControl`) — ADR-0059, 08/10/2026. As três camadas são as da referência principal para o mesmo papel. No escuro ela quase não aparece, e é de propósito: lá quem separa a cápsula do trilho é a cor (--segment).",
+      "$description": "A sombra pequena da cápsula escolhida sobre o trilho (`Tabs`, `SegmentedControl`) — ADR-0059, 08/10/2026. As três camadas são as da referência principal para o mesmo papel. No ESCURO ela é outra (o `theme.dark`): estas três camadas, pretas a 4–6%, não aparecem sobre o fundo escuro — o site B (aprovado em 01/11/2026, a forma B) pediu a sombra visível em toda peça pequena que levanta.",
       "$value": [
         {
           "color": {
@@ -2368,6 +2368,40 @@
       "link-underline": {
         "$type": "color",
         "$value": "{primary}"
+      },
+      "shadow-sm": {
+        "$type": "shadow",
+        "$description": "A sombra pequena NO ESCURO — o site B, aprovado pela imagem em 01/11/2026 (o Victor: \"B, em toda peça\"). A do claro (três camadas a 4–6%) some sobre o fundo escuro; esta é a do desenho aprovado: uma camada, 1px para baixo, 3 de desfoque, preto a 45%. Vale para toda peça que usa a --shadow-sm: a cápsula escolhida (abas, segmentos, o item atual da lateral), o campo e o acordeão de superfície.",
+        "$value": [
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "hex": "#000000",
+              "alpha": 0.45
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 1,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 3,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 0,
+              "unit": "px"
+            }
+          }
+        ]
       }
     },
     "light": {
@@ -3360,6 +3394,96 @@
           ],
           "hex": "#d07612"
         }
+      },
+      "shadow-sm": {
+        "$type": "shadow",
+        "$description": "A sombra pequena NO CLARO: a mesma do `base` (três camadas a 4–6%), escrita também aqui para uma faixa clara DENTRO de uma página escura (a `Section theme`, o cartão de contraste) não herdar a do escuro — a variável do tema mais perto ganha.",
+        "$value": [
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "hex": "#000000",
+              "alpha": 0.04
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 2,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 4,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 0,
+              "unit": "px"
+            }
+          },
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "hex": "#000000",
+              "alpha": 0.06
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 1,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 2,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 0,
+              "unit": "px"
+            }
+          },
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0,
+                0,
+                0
+              ],
+              "hex": "#000000",
+              "alpha": 0.06
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 1,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 0,
+              "unit": "px"
+            }
+          }
+        ]
       }
     }
   },

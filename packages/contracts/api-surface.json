@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 10,
     "aliasesLiterais": 118,
-    "propsDistintas": 397
+    "propsDistintas": 398
   },
   "aliases": {
     "ButtonVariant": {
@@ -5396,6 +5396,12 @@
                 "partial",
                 "degraded"
               ]
+            },
+            {
+              "name": "framed",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },
@@ -7143,10 +7149,12 @@
             {
               "name": "size",
               "optional": true,
-              "type": "\"sm\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
               "values": [
                 "sm",
-                "md"
+                "md",
+                "lg",
+                "xl"
               ]
             },
             {

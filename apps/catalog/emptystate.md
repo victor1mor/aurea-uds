@@ -52,4 +52,5 @@ The heading level belongs to the page, not to the component: h3 by default, the 
 | `description` | `ReactNode` | — | One line on why it is empty, or on what fills it. |
 | `action` | `ReactNode` | — | The way out — usually a Button. An empty state with nothing to do next is a dead end. |
 | `icon` | `IconName` | — | Glyph above the title, rendered at size xl. Defaults to `document--blank`. |
+| `framed` | `boolean` | false | Puts the icon inside a round frame of 64, the same one the native EmptyState always has. Without it, the icon stands alone, as before. |
 | `state` | `waiting_user \| waiting_approval \| waiting_dependency \| offline \| stale \| partial \| degraded` | — | Universal state (Part J). It derives no colour on purpose — an empty view is already neutral, and colouring it would be an alarm where there is only absence. What it does is set `data-state` and supply the default description, so “no connection” is not seven different sentences on seven screens. |

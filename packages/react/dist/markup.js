@@ -39,8 +39,8 @@ import React, { forwardRef } from "react";
 import { cx, fundirRender, peleDoEixo } from "./pure.js";
 // As contas de cor são funções puras, sem estado e sem navegador (ADR-0069): o `ColorSwatch` usa a do contraste.
 import { contrastingInk, hsbToRgb, parseColor } from "./color.js";
-export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, className, render, ...props }) {
-    return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, accent && `card-accent card-accent-${accent}`, padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...(variant === "contrast" ? { "data-theme": "dark" } : null), ...props });
+export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, lift, className, render, ...props }) {
+    return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, lift && variant === "interactive" && "card-lift", accent && `card-accent card-accent-${accent}`, padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...(variant === "contrast" ? { "data-theme": "dark" } : null), ...props });
 }
 /** A mídia do cartão — a primeira das partes da especificação do `Card` (A-14). No vertical,
  *  primeira filha, ela SANGRA até a borda de cima e dos lados; no horizontal, fica à esquerda com a

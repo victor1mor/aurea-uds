@@ -250,7 +250,9 @@ function CorpoDoDataState({state,message,skeleton,emptyTitle,emptyIcon,action,ch
   if(state)return caixa(<><Alert variant={stateSeverity(state)} state={state}>{message}</Alert>{conteudo()}</>);
   return caixa(conteudo());
 }
-export function EmptyState({icon="file",title,titleAs:TitleTag="h3",description,action,state}:{icon?:IconName;title:ReactNode;titleAs?:"h2"|"h3"|"h4"|"p";description?:ReactNode;action?:ReactNode;state?:UniversalState}){const s=useAureaStrings();const desc=description??(state?proprio(s.universalState,state):null);return <div className="empty-state" data-state={state}><Icon name={icon} size="xl"/><TitleTag className="empty-title">{title}</TitleTag>{desc&&<p className="muted">{desc}</p>}{action}</div>}
+// `framed` (o site B, aprovado pela bancada em 01/11/2026): o ícone dentro da moldura redonda, a mesma do nativo (R-15).
+// Variação: sem ele, o ícone continua solto, como sempre.
+export function EmptyState({icon="file",title,titleAs:TitleTag="h3",description,action,state,framed}:{icon?:IconName;title:ReactNode;titleAs?:"h2"|"h3"|"h4"|"p";description?:ReactNode;action?:ReactNode;state?:UniversalState;framed?:boolean}){const s=useAureaStrings();const desc=description??(state?proprio(s.universalState,state):null);const glifo=<Icon name={icon} size="xl"/>;return <div className="empty-state" data-state={state}>{framed?<span className="empty-state-frame">{glifo}</span>:glifo}<TitleTag className="empty-title">{title}</TitleTag>{desc&&<p className="muted">{desc}</p>}{action}</div>}
 
 
 

@@ -12,7 +12,9 @@
   "variants": [],
   "sizes": [
     "md",
-    "sm"
+    "sm",
+    "lg",
+    "xl"
   ],
   "states": [
     "default",
@@ -88,9 +90,9 @@
     },
     {
       "name": "size",
-      "type": "\"sm\" | \"md\"",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
       "default": "md",
-      "description": "sm is the low capsule of the reference's documentation switch: 24 tabs, 14 text."
+      "description": "sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web | Native switch and the area switch of this site. Web only."
     },
     {
       "name": "selectedStyle",

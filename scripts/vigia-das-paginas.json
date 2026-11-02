@@ -54,7 +54,7 @@
   "design-principles": {
     "css:--radius-*": "5afbde8236612bf7",
     "css:--fill-*": "a2658d78c94cba5c",
-    "css:--shadow-sm": "f54ab9ee1a9fdc19"
+    "css:--shadow-sm": "8cfa1e111bdf4a10"
   },
   "frameworks": {
     "pkg:core": "d3ffb7033c64dc05",

@@ -69,13 +69,14 @@ export type DataStateProps = Omit<HTMLAttributes<HTMLDivElement>, "children"> & 
     onCatch?: (error: unknown, info: React.ErrorInfo) => void;
 };
 export declare function DataState({ catchErrors, onCatch, ...props }: DataStateProps): React.JSX.Element;
-export declare function EmptyState({ icon, title, titleAs: TitleTag, description, action, state }: {
+export declare function EmptyState({ icon, title, titleAs: TitleTag, description, action, state, framed }: {
     icon?: IconName;
     title: ReactNode;
     titleAs?: "h2" | "h3" | "h4" | "p";
     description?: ReactNode;
     action?: ReactNode;
     state?: UniversalState;
+    framed?: boolean;
 }): React.JSX.Element;
 export interface NotificationItem {
     id: string;

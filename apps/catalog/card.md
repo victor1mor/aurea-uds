@@ -51,6 +51,7 @@ base is the floating surface; raised lifts it with a shadow; interactive answers
 | `accent` | `brand \| success \| info \| warning \| danger` | — | A colour stroke on the top edge, --accent-width (4) tall, in the tone's FILL colour, the same in both themes. It is decoration: the card's own title says the subject, so the stroke carries no information of its own. The other sides keep the regular 1px border, and the stroke wins over `selected`, `danger` and the `contrast` outline. |
 | `padding` | `"normal" \| "none"` | "normal" | none removes the inner padding so media bleeds to the edge; the 22 radius stays and clips the media. |
 | `orientation` | `"vertical" \| "horizontal"` | "vertical" | `horizontal` is the list mode: Card.Media on the left at thumbnail width (96, --space-24) and the content beside it. |
+| `lift` | `boolean` | false | With `variant="interactive"`, the card RISES on hover: it lifts 4px and takes a medium shadow, instead of changing its fill. Still for people who ask for less motion. Web only; on the other variants it does nothing. |
 | `Card.Media` | `component` | — | The card's media part. Vertical, as first child, it bleeds to the top and side edges; horizontal, it sits on the left inside the padding, with the house's concentric radius (ADR-0033). |
 | `Card.Header` | `component` | — | The header: the title and the description, together. 12 between the parts. |
 | `Card.Title` | `component` | — | The card's title — an h3, 14/24 medium, as the reference. 12 between the parts. |

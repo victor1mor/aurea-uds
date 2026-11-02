@@ -75,18 +75,26 @@ for (const marca of ["ember"]) for (const tema of ["light", "dark"]) {
     // (`oklch(0.16 0.02 250)`) e passaram ao branco, como nas outras marcas e na referência. Medido: 9 propriedades, em 4
     // peças, só no escuro.
     const marcaDoControle = (antes: string, depois: string) => tema === "dark" && antes === "oklch(0.16 0.02 250)" && depois === "oklch(1 0 0)";
-    let permitidas = 0;
+    // A SEGUNDA (site B, 01/11/2026, o Victor: "adicione sombra na ember também"): no escuro, a sombra pequena
+    // (`--shadow-sm`) que aparece — a do `theme.dark`, uma camada a 45% — no lugar das três camadas a 4–6%, que sumiam no
+    // fundo escuro. Medido: 3 peças (a cápsula escolhida, o botão e a caixa com a sombra), só no escuro.
+    const SOMBRA_ANTIGA = "rgba(0, 0, 0, 0.04) 0px 2px 4px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px, rgba(0, 0, 0, 0.06) 0px 0px 1px 0px";
+    const sombraDoEscuro = (prop: string, antes: string, depois: string) => tema === "dark" && prop.endsWith("box-shadow")
+      && antes === SOMBRA_ANTIGA && depois === "rgba(0, 0, 0, 0.45) 0px 1px 3px 0px";
+    let permitidas = 0, sombras = 0;
     for (const [chave, linha] of Object.entries(ref)) {
       const hoje = agora[chave];
       if (!hoje) { diferencas.push(`${chave}: sumiu`); continue; }
       for (const [prop, valor] of Object.entries(linha)) {
         if (hoje[prop] === valor) continue;
         if (marcaDoControle(valor, hoje[prop])) { permitidas++; continue; }
+        if (sombraDoEscuro(prop, valor, hoje[prop])) { sombras++; continue; }
         diferencas.push(`${chave} ${prop}: ${valor} → ${hoje[prop]}`);
       }
     }
     expect(diferencas.slice(0, 40), `${diferencas.length} diferenças`).toEqual([]);
     if (tema === "dark") expect(permitidas, "as marcas brancas do escuro estão lá").toBe(9);
+    if (tema === "dark") expect(sombras, "a sombra pequena do escuro está lá").toBe(3);
     expect(Object.keys(agora).length, "o banco tem as mesmas peças").toBe(Object.keys(ref).length);
   });
 }

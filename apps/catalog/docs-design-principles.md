@@ -45,7 +45,7 @@ Aurea components do not draw borders. Every border colour is transparent. The bo
 
 What a line used to separate is separated by a fill instead. The fills are the text colour, made translucent: `--fill-1` at 6%, `--fill-2` at 10%, `--fill-3` at 20%. Because they are translucent, they stay visible on any surface. Where something passes behind a piece, the opaque version is used (`--fill-2-solid`, `--fill-3-solid`).
 
-Fields are the one exception in the light theme: a field on the page is white, with a soft shadow (`--shadow-sm`). Inside a white surface it keeps the translucent fill, and in the dark theme nothing changes.
+Fields are the one exception in the light theme: a field is white, with a soft shadow (`--shadow-sm`), on the page and inside white surfaces too (the Aurea Ember brand keeps the translucent fill inside them). In the dark theme a field keeps the translucent fill, with no shadow.
 
 Two lines remain, by decision:
 
