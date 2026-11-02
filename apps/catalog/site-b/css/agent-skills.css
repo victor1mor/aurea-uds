@@ -1,0 +1,50 @@
+/* A PÁGINA "Agent Skills" NO DESENHO B (02/11/2026, o grupo 5). */
+
+/* Onde a skill vai: os dois cartões de escolha lado a lado, o título em Sora. */
+.skills-onde { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.skills-onde > .radio-group-cards { margin-block-start:0; }
+.skills-onde .radio strong { font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); }
+.skills-onde .radio .muted { display:block; margin-block-start:var(--space-1); font-size:var(--text-sm); line-height:var(--leading-normal); }
+[data-skills-comando] > .g5-codigo { margin-block-start:var(--space-3); }
+
+/* Os gatilhos: o `TagGroup` grande, em mono. */
+.skills-gatilhos { margin-block-start:calc(var(--space-3) + var(--space-05)); }
+.skills-gatilhos .tag-label { font-family:var(--font-code); font-size:var(--text-sm); }
+/* O gatilho longo ("Aurea components, tokens or themes") passava da tela a 320: a etiqueta quebra a linha dentro da
+   largura (a altura dela é mínima, então cresce). */
+.skills-gatilhos .tag { max-inline-size:100%; }
+.skills-gatilhos .tag-label { white-space:normal; overflow-wrap:anywhere; }
+
+/* Os pedidos: a linha em cápsula com o ícone num círculo de 32 e o "Copy". */
+.skills-pedidos { display:flex; flex-direction:column; gap:var(--space-2); margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.skills-pedido { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-2) var(--space-2) var(--space-2) calc(var(--space-4) + var(--space-05));
+  border-radius:var(--radius-full); background:var(--card); }
+.skills-pedido-icone { flex:none; display:grid; place-items:center; inline-size:var(--space-8); block-size:var(--space-8); border-radius:var(--radius-full); background:var(--fill-2); }
+.skills-pedido-icone .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+.skills-pedido-texto { flex:1; min-inline-size:0; font-size:var(--text-base); }
+
+/* O que vem dentro: o ladrilho ao lado do título e do texto. */
+.skills-dentro { display:flex; flex-direction:row; gap:calc(var(--space-3) + var(--space-05)); padding:calc(var(--space-4) + var(--space-05)); }
+.skills-dentro .intro-tile { flex:none; }
+.skills-dentro b { display:block; font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); }
+.skills-dentro p { margin:var(--space-1) 0 0; font-size:var(--text-sm); line-height:var(--leading-normal); color:var(--muted-foreground); }
+.skills-dentro a { font-weight:var(--weight-semibold); }
+
+/* A pasta: a árvore em mono ao lado do começo do arquivo (1 : 1,4), o começo com 280 de altura (--space-12 * 6 - --space-2). */
+.skills-pasta { display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1.4fr); gap:calc(var(--space-3) + var(--space-05)); align-items:start;
+  margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.skills-pasta > .g5-codigo { margin-block-start:0; }
+.skills-arvore { padding:calc(var(--space-4) + var(--space-05)); }
+.skills-arvore-lista, .skills-arvore-lista ul { margin:0; padding:0; list-style:none; }
+.skills-arvore-lista li { font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-medium); line-height:var(--leading-relaxed); }
+.skills-arvore-lista ul > li { padding-inline-start:var(--space-7); font-weight:var(--weight-semibold); }
+.skills-arvore-linha { display:flex; align-items:center; gap:calc(var(--space-2) + var(--space-05)); }
+.skills-arvore-lista .icon { flex:none; inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+.skills-arvore > p { margin:var(--space-3) 0 0; font-size:var(--text-sm); line-height:var(--leading-normal); color:var(--muted-foreground); }
+.skills-arvore > p a { font-weight:var(--weight-semibold); }
+.skills-comeco pre { max-block-size:calc(var(--space-12) * 6 - var(--space-2)); overflow:auto; color:var(--muted-foreground); }
+
+@media (max-width:900px) {
+  .skills-onde .radio-group-cards { grid-auto-flow:row; grid-auto-columns:auto; }
+  .skills-pasta { grid-template-columns:minmax(0, 1fr); }
+}
