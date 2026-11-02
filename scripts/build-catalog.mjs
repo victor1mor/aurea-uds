@@ -530,7 +530,8 @@ const resumoDaPagina = arquivo => fichas.find(f => `${slug(f.name)}.html` === ar
   ?? docs.find(d => d.arquivo === arquivo)?.description
   ?? releases.find(r => r.arquivo === arquivo)?.description ?? null;
 const vizinhos = (area, arquivo) => {
-  const linha = MENUS[area]().flatMap(g => g.items);
+  // Um item solto no alto da lateral (o "All Components") entra como ele mesmo.
+  const linha = MENUS[area]().flatMap(g => g.items ?? [g]);
   const k = linha.findIndex(x => x.id === arquivo);
   const um = x => x ? {name: x.label, href: x.href, summary: resumoDaPagina(x.id)} : null;
   return k < 0 ? {prev: null, next: null} : {prev: um(linha[k - 1]), next: um(linha[k + 1])};
@@ -703,25 +704,94 @@ function previaDoCartao(f) {
   if (!bruto?.render || bruto.embed) return null;
   return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, bruto.render()), {identifierPrefix: `card-${slug(f.name)}-`});
 }
-function componentsIndex() {
-  const toc = cats.map(cat => ({id: `cat-${slug(cat)}`, label: cat}));
-  const node = h(Fragment, null,
-    h("header", {className: "page-head"},
-      h("div", {className: "page-head-row"}, h("h1", null, "All Components")),
-      h("p", {className: "page-lede"}, `Explore the full list of ${fichas.length} components, rendered with the Aurea components themselves.`)),
-    ...cats.map(cat => h("section", {className: "block", key: cat},
-      h("h2", {id: `cat-${slug(cat)}`}, cat),
-      h("div", {className: "cat-grid"}, ...byCat[cat].map(f => {
-        const previa = previaDoCartao(f), selo = seloDe(f.name);
-        return h("div", {className: "cat-card", key: f.name},
-          previa
-            ? h("div", {className: "cat-card-preview", inert: true, "aria-hidden": "true", dangerouslySetInnerHTML: {__html: previa}})
-            : h("div", {className: "cat-card-preview cat-card-icon", "aria-hidden": "true"}, h(A.Icon, {name: f.icon || "cube", size: "xl"})),
-          h("div", {className: "cat-card-foot"},
-            h("a", {className: "cat-card-name", href: `./${slug(f.name)}.html`}, f.name),
-            selo ? h(A.Badge, {size: "xs", tone: selo === "New" ? "primary" : "neutral"}, selo) : null));
-      })))));
-  return {node, toc};
+// O SITE B (aprovado pela bancada em 01/11/2026): a página no desenho B — o palco com a busca, a chave Grade | Lista e as
+// três peças que flutuam; a contagem; as famílias numeradas, cada uma com o ladrilho na cor da categoria e no máximo
+// quatro cartões até o "Show all"; e a lateral no padrão da Docs, com as famílias (`menuComponentes`). O cartão é o `Card` clicável que SOBE
+// (`lift`, o item 7) com a prévia torta (efeito do site, o "torto" do item 7); a prévia continua a peça de verdade,
+// parada. A busca, a lista e o "Show all" são o `catalog.js` (sem ele, tudo aparece, em grade).
+const COR_DA_FAMILIA = ["blue", "orange", "green", "pink", "teal", "red"];
+const ICONE_DA_FAMILIA = {Buttons: "cursor-click", Collections: "list-bullets", Colors: "palette", Controls: "toggle-left",
+  "Data Display": "table", "Date and Time": "calendar-blank", Feedback: "bell", Forms: "textbox", Layout: "layout", Media: "image",
+  Navigation: "compass", Overlays: "stack", Pickers: "caret-circle-down", Typography: "text-aa", Utilities: "brackets-curly",
+  "AI & Agents": "robot", Code: "code", Communication: "chat-circle"};
+const PRIMEIROS = 4;
+// A cor e o ícone de uma família são os MESMOS na web e no nativo: a cor sai da posição dela na lista da web.
+const corDaFamilia = cat => COR_DA_FAMILIA[Math.max(0, cats.indexOf(cat)) % COR_DA_FAMILIA.length];
+const familiaB = (cat, n, itens) => ({cat, n, num: String(n + 1).padStart(2, "0"), slug: slug(cat), cor: corDaFamilia(cat),
+  icone: ICONE_DA_FAMILIA[cat] || "cube", itens});
+// O item de cada lado: o nome, o endereço, a prévia (a peça de verdade, parada — só a web tem) e o ícone da ficha.
+const itemWeb = f => ({name: f.name, kind: f.kind, href: `./${slug(f.name)}.html`, icon: f.icon, previa: () => previaDoCartao(f)});
+const familiasB = () => cats.map((cat, n) => familiaB(cat, n, byCat[cat].map(itemWeb)));
+// O NATIVO (o Victor, 01/11/2026: "e o nativo?"): as peças do pacote nativo nas famílias da ficha de cada uma, na ordem
+// da web; peça sem ficha cai em "Utilities".
+const familiasNativasB = () => {
+  const por = {};
+  for (const n of nativos) {
+    const ficha = todasAsFichas.find(f => f.name === n);
+    (por[ficha?.category || "Utilities"] ??= []).push({name: n, href: `./${paginaNativa(n)}`, icon: ficha?.icon, previa: () => null});
+  }
+  return CAT_ORDER.filter(c => por[c]).map((cat, n) => familiaB(cat, n, por[cat]));
+};
+function componentsIndex(lado = "web") {
+  const nativo = lado === "native";
+  const fams = nativo ? familiasNativasB() : familiasB(), total = fams.reduce((t, f) => t + f.itens.length, 0);
+  const palco = h("section", {className: "intro-palco cat-palco", "aria-labelledby": "cat-h1", "data-palco": ""},
+    h("div", {className: "intro-palco-texto cat-palco-texto"},
+      h("span", {className: "intro-trilha"}, "Components ", h("span", {"aria-hidden": "true"}, "/"), " ", h("b", null, nativo ? "Native" : "Web")),
+      h("h1", {className: "intro-h1", id: "cat-h1"}, "All Components"),
+      h("p", {className: "intro-lede"}, nativo
+        ? `Every one of the ${total} pieces of @aurea-uds/native, the React Native package — each page runs it through react-native-web.`
+        : `Explore the full list of ${total} components, rendered with the Aurea components themselves.`),
+      h("div", {className: "cat-busca"},
+        h(A.SearchField, {size: "lg", className: "cat-campo", "aria-label": "Find a component", placeholder: "Find a component — try “tab”, “date” or “agent”",
+          "data-cat-busca": "", autoComplete: "off"}),
+        // A chave Grade | Lista: a pele da "SegmentedControl" (lg, sem o fio) com botões de ligar — a página não hidrata a
+        // peça (ela carrega só o "search.js"), e o grupo de dois botões com "aria-pressed" funciona sem React.
+        h("div", {className: "cat-vista", "data-cat-vista": ""}, h("span", {className: "segmented segmented-lg", "data-segment-style": "neutral",
+          role: "group", "aria-label": "View"},
+          h("button", {type: "button", className: "active", "aria-pressed": "true"}, h(A.Icon, {name: "squares-four"}), "Grid"),
+          h("button", {type: "button", "aria-pressed": "false"}, h(A.Icon, {name: "list-bullets"}), "List"))))),
+    h("div", {className: "intro-pecas cat-pecas", "aria-hidden": "true"},
+      h("div", {className: "intro-peca cat-peca-1", "data-fundo": "1.2"}, h("div", {className: "intro-boia"},
+        h("span", {className: "cat-numerao"}, h("b", null, total), "pieces"))),
+      h("div", {className: "intro-peca cat-peca-2", "data-fundo": "1.6"}, h("div", {className: "intro-boia"},
+        h(A.Card, {className: "intro-cartao intro-cartao-capsula cat-capsula"},
+          h("span", {className: "cat-chave", inert: true}, h(A.Switch, {label: "Live", labelHidden: true, defaultChecked: true, tabIndex: -1})), "Live"))),
+      h("div", {className: "intro-peca cat-peca-3", "data-fundo": "0.9"}, h("div", {className: "intro-boia"},
+        h(A.Card, {className: "intro-cartao intro-cartao-capsula cat-capsula"},
+          h("span", {className: "cat-visto"}, h(A.Icon, {name: "check"})), `${fams.length} families`)))));
+  const cartao = (f, fam, k) => {
+    const previa = f.previa(), selo = nativo ? null : seloDe(f.name);
+    return h(A.Card, {key: f.name, variant: "interactive", lift: true, render: h("div"), className: "cat-cartao",
+      "data-cat-item": "", "data-nome": f.name.toLowerCase(), "data-mais": k >= PRIMEIROS ? "" : undefined},
+      h("div", {className: "cat-previa", "aria-hidden": "true"},
+        previa ? h("div", {className: "cat-previa-torta", inert: true, dangerouslySetInnerHTML: {__html: previa}})
+          : h("div", {className: "cat-previa-torta cat-previa-icone"}, h(A.Icon, {name: f.icon || "cube", size: "xl"}))),
+      h("span", {className: "cat-ini", "data-cor": fam.cor, "aria-hidden": "true"}, f.name.slice(0, 1)),
+      h("a", {className: "cat-nome", href: f.href}, f.name),
+      h("span", {className: "cat-da-familia"}, fam.cat),
+      selo ? h(A.Badge, {size: "xs", tone: selo === "New" ? "primary" : "neutral"}, selo) : null,
+      h(A.Icon, {name: "arrow-right", size: "sm", className: "cat-seta"}));
+  };
+  const node = h("div", {className: "cat-b", "data-catalogo": "", "data-vista": "grid"},
+    palco,
+    h("p", {className: "cat-conta", role: "status"}, "Showing ", h("b", {"data-cat-mostrando": ""}, total), ` of ${total}`),
+    ...fams.map(fam => h("section", {key: fam.cat, className: "cat-familia", id: `fam-${fam.slug}`, "data-familia": fam.slug, "aria-labelledby": `fam-${fam.slug}-h`},
+      h("div", {className: "cat-familia-topo"},
+        h("span", {className: "cat-familia-num"}, fam.num),
+        blocoDeTile(fam.icone, fam.cor, "cat-familia-tile"),
+        h("h2", {id: `fam-${fam.slug}-h`}, fam.cat),
+        h("span", {className: "cat-familia-conta"}, `${fam.itens.length} component${fam.itens.length > 1 ? "s" : ""}`)),
+      h("div", {className: "cat-cartoes"}, ...fam.itens.map((f, k) => cartao(f, fam, k))),
+      fam.itens.length > PRIMEIROS ? h("div", {className: "cat-mais"},
+        h(A.Button, {variant: "secondary", type: "button", trailingIcon: "caret-down", "data-cat-mais": "", "aria-expanded": "false"},
+          `Show all ${fam.itens.length}`)) : null)),
+    // O VAZIO da busca: a moldura do nativo (`framed`, o item 9) e o título maior do site (o B do item 9).
+    h("div", {className: "card cat-vazio", "data-cat-vazio": "", hidden: true},
+      h(A.EmptyState, {framed: true, icon: "magnifying-glass", titleAs: "h2", title: h("span", {"data-cat-vazio-titulo": ""}, "No component found"),
+        description: "Try a shorter word, or look through the families on the left.",
+        action: h(A.Button, {variant: "primary", type: "button", "data-cat-limpar": ""}, "Clear the search")})));
+  return {node, toc: []};
 }
 
 // ── Início (index.html) ──────────────────────────────────────────────────────
@@ -1103,14 +1173,8 @@ function nativePage(nome) {
     ...vizinhos("native", paginaNativa(nome)),
   });
 }
-function nativeIndex() {
-  const node = h(Fragment, null,
-    cabecaDaPagina("All Components", "Every piece of @aurea-uds/native, the React Native package, running here through "
-      + "react-native-web — the same look as the web, in a phone's own components."),
-    h("div", {className: "related-grid"}, ...nativos.map(n => h("a", {key: n, className: "related-card", href: `./${paginaNativa(n)}`},
-      h("strong", null, n), h("span", null, todasAsFichas.find(f => f.name === n)?.summary || nativo.conteudo[n].description || "")))));
-  return {node, toc: []};
-}
+// O nativo usa a mesma página da web (o site B), com as peças dele.
+const nativeIndex = () => componentsIndex("native");
 
 // ── A SAÚDE (`saude.html`, o 1-F — bloco 1, 23/10/2026) ─────────────────────────
 // Decisão do Victor (19/10/2026): uma página no site, feita com a Aurea, com letra grande, "OK"/"FAILED" em palavra, o
@@ -1600,11 +1664,13 @@ const nomeDoGrupoB = (n, rotulo, [icone, cor]) => h(Fragment, null,
   h("span", {className: "site-grupo-nome"}, rotulo));
 const menuDocs = () => DOCS.map((g, n) => ({id: g.id, label: nomeDoGrupoB(n + 1, g.label, GRUPOS_DOCS_B[g.id]), collapsible: true,
   items: g.paginas.map(nome => docs.find(d => d.nome === nome)).map(d => item(d.title, d.arquivo))}));
-const menuComponentes = () => [
-  {id: "overview", label: "Overview", items: [item("All Components", "components.html")]},
-  {id: "components", label: "Components", items: alfabetico(fichas.filter(f => f.kind !== "hook"))
-    .map(f => item(f.name, `${slug(f.name)}.html`, seloBadge(f.name)))},
-].filter(g => g.items.length);
+// O SITE B (01/11/2026, o Victor: "quero padronizar o sidebar ... como padrão com da docs"): a lateral de Components no
+// padrão da Getting Started — cada FAMÍLIA é um grupo numerado, com o ícone na bolinha da cor dela, que abre e fecha; os
+// itens são os componentes da família (sem os hooks, que moram na área Hooks). "All Components" fica no alto, sozinho.
+const menuComponentes = () => [item("All Components", "components.html"),
+  ...familiasB().map(f => ({id: `fam-${f.slug}`, label: nomeDoGrupoB(f.n + 1, f.cat, [f.icone, f.cor]), collapsible: true,
+    items: f.itens.filter(x => x.kind !== "hook").map(x => item(x.name, `${slug(x.name)}.html`, seloBadge(x.name)))}))
+    .filter(g => g.items.length)];
 // Os hooks moram na área Hooks: a página de cada um marca "Hooks" no topo, e não "Components".
 const menuHooks = () => [
   {id: "overview", label: "Overview", items: [item("All Hooks", "hooks.html")]},
@@ -1625,8 +1691,10 @@ const menuRecipes = () => [{id: "overview", label: "Overview", items: [item("All
 const menuReleases = () => [{id: "overview", label: "Overview", items: [item("All Releases", "releases.html"), item("Health", "saude.html")]},
   {id: "releases", label: "Releases", items: releases.map(r => item(r.title, r.arquivo))}];
 // O menu do nativo: as peças do `@aurea-uds/native` que o site mostra, em ordem alfabética, como o dos componentes.
-const menuNativo = () => [{id: "overview", label: "Overview", items: [item("All Components", "native.html")]},
-  {id: "native", label: "Components", items: nativos.map(n => item(n, paginaNativa(n)))}];
+// No padrão da Docs, como a de Components (o Victor, 01/11/2026: "e o nativo?"): as famílias numeradas, que abrem e fecham.
+const menuNativo = () => [item("All Components", "native.html"),
+  ...familiasNativasB().map(f => ({id: `fam-${f.slug}`, label: nomeDoGrupoB(f.n + 1, f.cat, [f.icone, f.cor]), collapsible: true,
+    items: f.itens.map(x => item(x.name, paginaNativa(x.name)))}))];
 const MENUS = {native: menuNativo, start: menuDocs, releases: menuReleases, components: menuComponentes, hooks: menuHooks, tokens: menuTokens,
   patterns: menuPatterns, blocks: menuBlocks, recipes: menuRecipes};
 
@@ -1987,6 +2055,92 @@ a.related-card:hover { border-color:transparent; }
 .cat-card:hover .cat-card-preview { border-color:transparent; }
 .cat-card-name:focus-visible { outline:none; }
 .cat-card-name:focus-visible::after { outline:var(--focus-width) solid var(--focus); outline-offset:var(--focus-offset); }
+/* A "ALL COMPONENTS" NO SITE B (aprovada pela bancada em 01/11/2026). O palco é o da Introduction ("intro-palco"), com a
+   busca e a chave Grade | Lista; as três peças que flutuam são as dela ("intro-peca", "intro-boia"). */
+/* Sem o índice da direita (o desenho não tem): a página ocupa também a coluna dele, e o bloco não para nos 900 do texto. */
+@media (min-width:1280px) { .site-shell:has(.cat-b) > .content.content { grid-column:3 / 5; } }
+.app-shell-docs > .content > .cat-b { max-inline-size:none; }
+.cat-vista .segmented :is(button,a) { display:inline-flex; align-items:center; gap:var(--space-2); }
+.cat-vista .segmented .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+/* O trilho no --fill-1 (no claro, o --fill-2 deixava o "List" a menos de 4,5:1 — o mesmo achado da chave Web | Native). */
+.cat-vista .segmented { background:var(--fill-1); }
+.cat-palco { min-block-size:calc(var(--space-12) * 6 + var(--space-3)); }
+.cat-palco-texto { inline-size:64%; }
+.cat-busca { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); margin-block-start:var(--space-6); }
+/* A busca um pouco mais estreita que a do desenho (o Victor, 01/11/2026): cresce até 25rem (400). */
+.cat-campo { flex:0 1 25rem; min-inline-size:0; }
+.cat-pecas { inset-inline-start:66%; }
+.cat-peca-1 { inset-inline-start:4%; inset-block-start:9%; } .cat-peca-1 > .intro-boia { rotate:-6deg; }
+.cat-peca-2 { inset-inline-end:4%; inset-block-start:38%; } .cat-peca-2 > .intro-boia { rotate:5deg; animation-delay:-3s; }
+.cat-peca-3 { inset-inline-start:0; inset-block-start:68%; } .cat-peca-3 > .intro-boia { rotate:2deg; animation-delay:-5s; }
+.cat-numerao { display:flex; align-items:baseline; gap:var(--space-2); padding:var(--space-3) var(--space-5); border-radius:var(--radius-card);
+  background:var(--primary); color:var(--primary-foreground); box-shadow:var(--shadow-md); font-weight:var(--weight-semibold); font-size:var(--text-sm); }
+.cat-numerao b { font-family:var(--font-code); font-size:var(--text-5xl); line-height:1; letter-spacing:-.05em; }
+.cat-capsula { display:flex; align-items:center; gap:var(--space-2); font-weight:var(--weight-semibold); font-size:var(--text-sm); }
+.cat-chave { display:inline-flex; }
+.cat-visto { display:grid; place-items:center; inline-size:var(--space-6); block-size:var(--space-6); border-radius:var(--radius-full); background:var(--primary); color:var(--primary-foreground); }
+.cat-visto .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+.cat-conta { margin:var(--space-4) var(--space-1) 0; font-family:var(--font-code); font-size:var(--text-sm); color:var(--muted-foreground); }
+.cat-conta b { color:var(--foreground); font-weight:var(--weight-medium); }
+/* AS FAMÍLIAS: o número, o ladrilho na cor da categoria, o nome e a contagem; a grade de quatro. */
+.cat-familia { padding-block-start:var(--space-10); scroll-margin-block-start:var(--space-24); }
+.cat-familia[hidden] { display:none; }
+.cat-familia-topo { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); margin-block-end:var(--space-4); }
+.cat-familia-num { font-family:var(--font-code); font-weight:var(--weight-semibold); font-size:var(--text-3xl); line-height:1; letter-spacing:-.04em; color:var(--muted-foreground); }
+.cat-familia-tile { inline-size:var(--space-10); block-size:var(--space-10); }
+.cat-familia-topo h2 { margin:0; font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold); letter-spacing:-.02em; }
+.cat-familia-conta { font-family:var(--font-code); font-size:var(--text-xs); color:var(--muted-foreground); }
+.cat-cartoes { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:var(--space-3); }
+/* O CARTÃO: o "Card" clicável que sobe ("lift"); o link cobre o cartão inteiro por um pseudo-elemento (a prévia tem botão de
+   verdade dentro, e botão dentro de <a> é HTML inválido). */
+.cat-cartao { position:relative; min-inline-size:0; display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center; column-gap:var(--space-2);
+  row-gap:var(--space-3); padding:var(--space-2) var(--space-2) var(--space-3); }
+.cat-cartao[hidden] { display:none; }
+.cat-previa { position:relative; contain:paint; grid-column:1 / -1; display:grid; place-items:center; block-size:8.5rem; overflow:hidden; border-radius:var(--radius-lg); background:var(--background); }
+/* O "TORTO" (o item 7, efeito do site): a prévia inclinada; com o mouse no cartão, endireita, cresce e sobe. */
+.cat-previa-torta { display:flex; align-items:center; justify-content:center; zoom:.8; transform:rotate(-3deg) scale(.96); transition:transform var(--duration-slow) var(--ease-emphasized); }
+.cat-cartao:hover .cat-previa-torta { transform:translateY(calc(-1 * var(--space-05))) scale(1.06); }
+@media (prefers-reduced-motion:reduce) { .cat-previa-torta { transition:none; } }
+.cat-previa-icone { color:var(--muted-foreground); }
+.cat-ini, .cat-da-familia { display:none; }
+.cat-nome { grid-column:1 / 3; min-inline-size:0; overflow-wrap:anywhere; padding-inline:var(--space-2); color:var(--foreground); font-weight:var(--weight-semibold); text-decoration:none; }
+.cat-nome::after { content:""; position:absolute; inset:0; border-radius:var(--radius-card); }
+.cat-nome:focus-visible { outline:none; }
+.cat-nome:focus-visible::after { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
+.cat-seta { color:var(--muted-foreground); opacity:0; transition:opacity var(--duration-fast), translate var(--duration-fast); margin-inline-end:var(--space-2); }
+.cat-cartao:hover .cat-seta { opacity:1; translate:var(--space-05) 0; }
+.cat-mais { display:flex; justify-content:center; margin-block-start:var(--space-3); }
+.cat-mais[hidden] { display:none; }
+.cat-mais [aria-expanded="true"] .icon { rotate:180deg; }
+/* A LISTA (a chave Grade | Lista): o mesmo cartão vira a linha em cápsula — a inicial na cor da família, o nome, a família e a
+   seta; a prévia some. */
+[data-vista="list"] .cat-cartoes { grid-template-columns:minmax(0,1fr); gap:var(--space-2); }
+[data-vista="list"] .cat-cartao { grid-template-columns:auto auto minmax(0,1fr) auto auto; min-block-size:calc(var(--space-12) + var(--space-2)); padding:0 var(--space-4) 0 var(--space-2); border-radius:var(--radius-full); }
+[data-vista="list"] .cat-cartao.card-lift:hover { transform:translateX(var(--space-1)); }
+[data-vista="list"] .cat-previa { display:none; }
+[data-vista="list"] .cat-ini { display:grid; place-items:center; inline-size:var(--space-10); block-size:var(--space-10); border-radius:var(--radius-full); font-weight:var(--weight-semibold); }
+[data-vista="list"] .cat-nome { grid-column:auto; padding:0; }
+[data-vista="list"] .cat-nome::after { border-radius:var(--radius-full); }
+[data-vista="list"] .cat-da-familia { display:block; color:var(--muted-foreground); font-size:var(--text-sm); }
+[data-vista="list"] .cat-seta { opacity:1; }
+.cat-ini[data-cor="blue"] { background:var(--category-blue-bg); color:var(--category-blue); }
+.cat-ini[data-cor="orange"] { background:var(--category-orange-bg); color:var(--category-orange); }
+.cat-ini[data-cor="green"] { background:var(--category-green-bg); color:var(--category-green); }
+.cat-ini[data-cor="pink"] { background:var(--category-pink-bg); color:var(--category-pink); }
+.cat-ini[data-cor="teal"] { background:var(--category-teal-bg); color:var(--category-teal); }
+.cat-ini[data-cor="red"] { background:var(--category-red-bg); color:var(--category-red); }
+/* O VAZIO DA BUSCA: o "EmptyState" com a moldura ("framed"), no cartão; o título maior é do site (o B do item 9). */
+.cat-vazio { margin-block-start:var(--space-8); padding:0; }
+.cat-vazio[hidden] { display:none; }
+.cat-vazio .empty-title { font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold); }
+.cat-vazio .empty-state p { font-size:var(--text-base); }
+@media (max-width:1240px) { .cat-cartoes { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+@media (max-width:900px) {
+  .cat-cartoes { grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .cat-palco-texto { inline-size:auto; }
+  /* No celular, como o desenho: as peças que flutuam saem (e a página não rola de lado). */
+  .cat-pecas { display:none; }
+}
 /* O Início: o título centralizado em duas linhas (a segunda esmaecida), o texto, dois botões e a vitrine. */
 .site-home main { display:grid; justify-items:center; padding:var(--space-12) var(--space-4); }
 /* A vitrine com os 1200 da referência (15/10/2026): o 1280 da escala menos o --space-20. */
@@ -2527,6 +2681,66 @@ if (palcoDaAbertura && !matchMedia("(prefers-reduced-motion: reduce)").matches) 
     pecasDoPalco.forEach(p => { const f = Number(p.dataset.fundo) || 1; p.style.transform = "translate3d(" + (x * 10 * f) + "px," + (y * 8 * f) + "px,0)"; });
   });
   palcoDaAbertura.addEventListener("mouseleave", () => pecasDoPalco.forEach(p => { p.style.transform = ""; }));
+}
+// A "ALL COMPONENTS" DO SITE B (01/11/2026): a busca, a chave Grade | Lista e o
+// "Show all". Sem este script a página mostra tudo, em grade.
+const catalogo = document.querySelector("[data-catalogo]");
+if (catalogo) {
+  const estado = {q: "", abertas: new Set()};
+  const busca = catalogo.querySelector("[data-cat-busca]");
+  const secoes = [...catalogo.querySelectorAll("[data-familia]")];
+  const total = catalogo.querySelectorAll("[data-cat-item]").length;
+  const mostrando = catalogo.querySelector("[data-cat-mostrando]");
+  const vazio = catalogo.querySelector("[data-cat-vazio]");
+  const tituloDoVazio = catalogo.querySelector("[data-cat-vazio-titulo]");
+  const aplicar = () => {
+    const q = estado.q.trim().toLowerCase();
+    let vistos = 0;
+    secoes.forEach(secao => {
+      const cartoes = [...secao.querySelectorAll("[data-cat-item]")];
+      const acham = cartoes.filter(c => !q || c.dataset.nome.includes(q));
+      // Só os quatro primeiros, até o "Show all" — menos quando se busca: aí aparece tudo o que acha.
+      const resumida = !q && !estado.abertas.has(secao.dataset.familia);
+      cartoes.forEach(c => { c.hidden = !acham.includes(c) || (resumida && c.hasAttribute("data-mais")); });
+      secao.hidden = acham.length === 0;
+      const mais = secao.querySelector(".cat-mais");
+      if (mais) {
+        mais.hidden = Boolean(q);
+        const botao = mais.querySelector("[data-cat-mais]");
+        const aberta = estado.abertas.has(secao.dataset.familia);
+        botao.setAttribute("aria-expanded", String(aberta));
+        const rotulo = botao.querySelector(".btn-label") || botao;
+        if (!botao.dataset.rotulo) botao.dataset.rotulo = rotulo.textContent;
+        rotulo.textContent = aberta ? "Show less" : botao.dataset.rotulo;
+      }
+      vistos += cartoes.filter(c => !c.hidden).length;
+    });
+    if (mostrando) mostrando.textContent = String(vistos);
+    if (vazio) {
+      vazio.hidden = vistos > 0;
+      if (tituloDoVazio) tituloDoVazio.textContent = "No component called “" + estado.q.trim() + "”";
+    }
+  };
+  if (busca) busca.addEventListener("input", () => { estado.q = busca.value; aplicar(); });
+  catalogo.querySelectorAll("[data-cat-limpar]").forEach(b => b.addEventListener("click", () => {
+    estado.q = ""; if (busca) { busca.value = ""; busca.focus(); } aplicar();
+  }));
+  catalogo.querySelectorAll("[data-cat-mais]").forEach(b => b.addEventListener("click", () => {
+    const f = b.closest("[data-familia]").dataset.familia;
+    if (estado.abertas.has(f)) estado.abertas.delete(f); else estado.abertas.add(f);
+    aplicar();
+  }));
+  // A chave Grade | Lista: troca o arranjo; a escolhida fica marcada como as outras chaves de segmentos.
+  catalogo.querySelectorAll("[data-cat-vista] .segmented :is(button,a)").forEach((b, n) => b.addEventListener("click", e => {
+    e.preventDefault();
+    catalogo.dataset.vista = n === 0 ? "grid" : "list";
+    b.parentElement.querySelectorAll(":scope > :is(button,a)").forEach(x => {
+      const on = x === b; x.classList.toggle("active", on);
+      if (x.hasAttribute("aria-pressed")) x.setAttribute("aria-pressed", String(on));
+      if (x.hasAttribute("aria-checked")) x.setAttribute("aria-checked", String(on));
+    });
+  }));
+  aplicar();
 }`;
 
 // ── emitir ────────────────────────────────────────────────────────────────────

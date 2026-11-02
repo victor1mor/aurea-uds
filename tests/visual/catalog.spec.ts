@@ -12,7 +12,8 @@ import {esperarTransicoes} from "./esperar-transicoes";
 const PAGES = [
   // ADR-0067 (13/10/2026): o `index.html` é o Início, e o catálogo de componentes mora em `components.html`.
   {name: "index", url: "/apps/catalog/index.html", clip: ".home-hero"},
-  {name: "componentes", url: "/apps/catalog/components.html", clip: ".content > .block:nth-of-type(1)"},
+  // O site B (01/11/2026): a All Components é o palco e as famílias; a foto é a PRIMEIRA família (o cabeçalho e os cartões).
+  {name: "componentes", url: "/apps/catalog/components.html", clip: ".cat-familia"},
   {name: "componente", url: "/apps/catalog/button.html", clip: "#usage"},
   {name: "pattern", url: "/apps/catalog/pattern-button-with-kbd.html", clip: "#usage"},
   {name: "block", url: "/apps/catalog/block-stats-row.html", clip: "#usage"},
@@ -47,8 +48,7 @@ for (const theme of ["dark", "light"] as const) {
         // tokens não muda de altura com a tela (medido: 18.892px com 1.000 e com 20.000 de altura).
         const caixa = await p.locator(page.clip).first().boundingBox();
         if (caixa && caixa.y + caixa.height > 1000) {
-          await p.setViewportSize({width: 1440, height: Math.ceil(caixa.y + caixa.height)});
-        }
+          await p.setViewportSize({width: 1440, height: Math.ceil(caixa.y + caixa.height)});        }
         await expect(p.locator(page.clip).first()).toHaveScreenshot(`${theme}-catalogo-${page.name}.png`, {mask});
       });
     }

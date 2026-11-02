@@ -243,6 +243,7 @@
   --control-thumb:#ffffff;
   --link-mark:rgba(0,0,0,0);
   --link-underline:var(--primary);
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.45);
 }
 [data-theme="light"]{
   --background:#f5f5f5;
@@ -342,6 +343,7 @@
   --link-underline:var(--primary);
   --control-thumb:#ffffff;
   --warning-500:#d07612;
+  --shadow-sm:0 2px 4px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06), 0 0 1px rgba(0,0,0,0.06);
 }
 [data-brand="ember"][data-theme="dark"],[data-brand="ember"] [data-theme="dark"]{
   --background:oklch(0.16 0.018 250);
@@ -3399,6 +3401,12 @@ img,svg { display:block; }
    não. Quem cobra é o `link-sem-sublinhado.spec.ts`. */
 .card-interactive { cursor:pointer; inline-size:100%; text-decoration:none; font:inherit; text-align:inherit; color:inherit; transition:transform var(--duration-fast),border-color var(--duration-fast),background var(--duration-fast); }
 .card-interactive:hover { transform:translateY(-2px); border-color:transparent; background:var(--surface-2); }
+/* O LEVANTAR (`lift`, o site B — aprovado pela bancada em 01/11/2026): o cartão clicável que SOBE com sombra, em vez de
+   trocar o fundo. Sobe 4 (`--space-1`), fica na cor do cartão e ganha a `--shadow-md`; parado para quem pede menos
+   movimento. Variação: sem `lift`, o cartão clicável continua o de sempre (sobe 2 e troca o fundo). */
+.card-interactive.card-lift { transition:transform var(--duration-base),box-shadow var(--duration-base),background var(--duration-fast); }
+.card-interactive.card-lift:hover { transform:translateY(calc(-1 * var(--space-1))); background:var(--card); box-shadow:var(--shadow-md); }
+@media (prefers-reduced-motion:reduce) { .card-interactive.card-lift:hover { transform:none; } }
 .card-selected { border-color:transparent; background:color-mix(in oklab,var(--primary) 12%,var(--card)); }
 .card-danger { border-color:transparent; background:var(--danger-bg); }
 /* MT-01 (10/10/2026, ADR-0063): o cartão `contrast` traz `data-theme="dark"` no próprio elemento —
@@ -4933,6 +4941,9 @@ button.notification-item:hover { background:var(--surface-3); }
    REFERENCES.md; a pele é Aurea. O título vinha com o h3 do NAVEGADOR (16,38px). */
 .empty-state { display:flex; flex-direction:column; align-items:center; gap:var(--space-3); padding:var(--space-10) var(--space-6); color:var(--muted-foreground); text-align:center; }
 .empty-state > .icon { color:var(--subtle-foreground); }
+/* A MOLDURA (`framed`, o site B — aprovada pela bancada em 01/11/2026): o ícone num círculo de 64 (`--space-16`), a
+   mesma do `EmptyState` do nativo (R-15, `IconeEmMoldura`): o fundo e a cor do ícone são os dele (`muted`). */
+.empty-state-frame { display:grid; place-items:center; flex:none; inline-size:var(--space-16); block-size:var(--space-16); border-radius:var(--radius-full); background:var(--muted); color:var(--muted-foreground); }
 .empty-state p { max-width:46ch; margin:0; }
 .empty-title { margin:0; color:var(--foreground); font-size:var(--text-base); font-weight:var(--weight-semibold); line-height:var(--leading-tight); }
 

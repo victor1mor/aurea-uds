@@ -43,7 +43,7 @@ test.describe("shell · gaveta de navegação", () => {
     test.skip(browserName !== "chromium", "a árvore de acessibilidade só se lê por CDP, que é do Chromium");
     await page.setViewportSize(MOVEL);
     await page.goto(PAGINA);
-    const botao = page.getByRole("button", {name: "Navigation"});
+    const botao = page.getByRole("button", {name: "Navigation", exact: true});
     await expect(botao).toBeVisible();
     // `aria-expanded` NÃO existe como atributo no DOM — o popover o entrega na ÁRVORE DE
     // ACESSIBILIDADE, derivado do `popovertarget`. Medido em 30/07/2026, e por isso este teste
@@ -66,7 +66,7 @@ test.describe("shell · gaveta de navegação", () => {
   test("Escape fecha a gaveta e devolve o foco ao disparador", async ({page}) => {
     await page.setViewportSize(MOVEL);
     await page.goto(PAGINA);
-    const botao = page.getByRole("button", {name: "Navigation"});
+    const botao = page.getByRole("button", {name: "Navigation", exact: true});
     await botao.click();
     await expect(page.locator(NAV)).toBeVisible();
     await page.keyboard.press("Escape");
@@ -77,7 +77,7 @@ test.describe("shell · gaveta de navegação", () => {
   test("o teclado alcança a navegação depois de abrir", async ({page}) => {
     await page.setViewportSize(MOVEL);
     await page.goto(PAGINA);
-    await page.getByRole("button", {name: "Navigation"}).click();
+    await page.getByRole("button", {name: "Navigation", exact: true}).click();
     const dentro = () => page.evaluate(() =>
       document.querySelector(".sidebar:not(.app-shell-aside)")!.contains(document.activeElement));
     // A GARANTIA MUDOU NO K1. Era "o primeiro Tab depois de abrir cai dentro" — o que dependia
@@ -99,11 +99,13 @@ test.describe("shell · gaveta de navegação", () => {
     // gate vermelho permanente. Fica o que é verdade nos três.
   });
 
+  // O nome EXATO (site B, 01/11/2026): a lateral de Components tem a família "Navigation", com o botão que a abre e fecha
+  // ("11 Navigation"); por pedaço do nome, o teste achava esse botão e não o da gaveta.
   test("a partir de lg não há gaveta: a lateral é a lateral", async ({page}) => {
     await page.setViewportSize({width: 1024, height: 900});
     await page.goto(PAGINA);
     await expect(page.locator(NAV)).toBeVisible();
-    await expect(page.getByRole("button", {name: "Navigation"})).toBeHidden();
+    await expect(page.getByRole("button", {name: "Navigation", exact: true})).toBeHidden();
     // e ela continua sendo uma coluna do grid, não um popup encostado na tela
     expect(await page.locator(NAV).evaluate(el => getComputedStyle(el).position)).toBe("sticky");
   });

@@ -144,7 +144,9 @@ function CorpoDoDataState({ state, message, skeleton, emptyTitle, emptyIcon, act
         return caixa(_jsxs(_Fragment, { children: [_jsx(Alert, { variant: stateSeverity(state), state: state, children: message }), conteudo()] }));
     return caixa(conteudo());
 }
-export function EmptyState({ icon = "file", title, titleAs: TitleTag = "h3", description, action, state }) { const s = useAureaStrings(); const desc = description ?? (state ? proprio(s.universalState, state) : null); return _jsxs("div", { className: "empty-state", "data-state": state, children: [_jsx(Icon, { name: icon, size: "xl" }), _jsx(TitleTag, { className: "empty-title", children: title }), desc && _jsx("p", { className: "muted", children: desc }), action] }); }
+// `framed` (o site B, aprovado pela bancada em 01/11/2026): o ícone dentro da moldura redonda, a mesma do nativo (R-15).
+// Variação: sem ele, o ícone continua solto, como sempre.
+export function EmptyState({ icon = "file", title, titleAs: TitleTag = "h3", description, action, state, framed }) { const s = useAureaStrings(); const desc = description ?? (state ? proprio(s.universalState, state) : null); const glifo = _jsx(Icon, { name: icon, size: "xl" }); return _jsxs("div", { className: "empty-state", "data-state": state, children: [framed ? _jsx("span", { className: "empty-state-frame", children: glifo }) : glifo, _jsx(TitleTag, { className: "empty-title", children: title }), desc && _jsx("p", { className: "muted", children: desc }), action] }); }
 function groupNotifications(items) {
     const out = [];
     for (const it of items) {

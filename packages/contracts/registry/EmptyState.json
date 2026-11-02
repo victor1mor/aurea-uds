@@ -79,6 +79,12 @@
       "description": "Glyph above the title, rendered at size xl. Defaults to `document--blank`."
     },
     {
+      "name": "framed",
+      "type": "boolean",
+      "default": "false",
+      "description": "Puts the icon inside a round frame of 64, the same one the native EmptyState always has. Without it, the icon stands alone, as before."
+    },
+    {
       "name": "state",
       "type": "waiting_user | waiting_approval | waiting_dependency | offline | stale | partial | degraded",
       "default": "—",

@@ -845,6 +845,13 @@ export const themes = {
       "p3": "color(display-p3 0.9037 0.7031 0.0745)",
       "oklch": "oklch(0.795 0.184 86.047)"
     },
+    "shadowSm": {
+      "offsetX": 0,
+      "offsetY": 1,
+      "blurRadius": 3,
+      "spreadDistance": 0,
+      "color": "rgba(0,0,0,0.45)"
+    },
     "textMuted": {
       "hex": "#a1a1aa",
       "p3": "color(display-p3 0.6314 0.6314 0.6667)",
@@ -1362,6 +1369,13 @@ export const themes = {
       "p3": "color(display-p3 0.8157 0.4627 0.0706)",
       "oklch": null
     },
+    "shadowSm": {
+      "offsetX": 0,
+      "offsetY": 2,
+      "blurRadius": 4,
+      "spreadDistance": 0,
+      "color": "rgba(0,0,0,0.04)"
+    },
     "textMuted": {
       "hex": "#5e5e65",
       "p3": "color(display-p3 0.3686 0.3686 0.3961)",
@@ -1382,6 +1396,44 @@ export const themes = {
       "p3": "color(display-p3 0.0471 0.1412 0.6392)",
       "oklch": null
     }
+  }
+};
+export const themeShadowLayers = {
+  "dark": {
+    "shadowSm": [
+      {
+        "offsetX": 0,
+        "offsetY": 1,
+        "blurRadius": 3,
+        "spreadDistance": 0,
+        "color": "rgba(0,0,0,0.45)"
+      }
+    ]
+  },
+  "light": {
+    "shadowSm": [
+      {
+        "offsetX": 0,
+        "offsetY": 2,
+        "blurRadius": 4,
+        "spreadDistance": 0,
+        "color": "rgba(0,0,0,0.04)"
+      },
+      {
+        "offsetX": 0,
+        "offsetY": 1,
+        "blurRadius": 2,
+        "spreadDistance": 0,
+        "color": "rgba(0,0,0,0.06)"
+      },
+      {
+        "offsetX": 0,
+        "offsetY": 0,
+        "blurRadius": 1,
+        "spreadDistance": 0,
+        "color": "rgba(0,0,0,0.06)"
+      }
+    ]
   }
 };
 export const densities = {

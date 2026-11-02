@@ -500,19 +500,22 @@ test.describe("catálogo · contratos do modelo de página", () => {
   });
 
   // ADR-0067: o menu é o da referência — ordem alfabética, sem glifo em cada item, com os selos de novidade.
+  // O SITE B (01/11/2026, o Victor: "quero deixar como padrão com da docs"): a lista é dividida nas FAMÍLIAS, como a
+  // Getting Started — cada família é um grupo numerado (o ícone fica no rótulo do grupo, não nos itens), e DENTRO de cada
+  // uma a ordem continua alfabética. "All Components" fica no alto, fora dos grupos.
   test("o menu de componentes é alfabético, sem glifo nos itens, e leva os selos New e Updated", async ({page}) => {
     await page.goto("/apps/catalog/button.html");
     const lateral = page.locator(".app-shell > .sidebar");
     const nomes = await lateral.locator('[aria-labelledby] a, .sidebar-group a').allTextContents();
     // Só o MENU (a `nav` "Contents"): no site B a chave Web | Native e as áreas da gaveta moram na mesma lateral, com ícone.
     expect(await lateral.locator('nav[aria-label="Contents"] a svg').count()).toBe(0);
-    const grupo = await page.evaluate(() => {
-      const t = [...document.querySelectorAll(".app-shell > .sidebar .sidebar-group-label")].find((e) => e.textContent === "Components");
-      const lista = t?.parentElement?.querySelectorAll("a .sidebar-label");
-      return lista ? [...lista].map((s) => (s.textContent ?? "").trim()) : [];
-    });
-    expect(grupo.length).toBeGreaterThan(50);
-    expect(grupo).toEqual([...grupo].sort((a, b) => a.localeCompare(b)));
+    const familias = await page.evaluate(() =>
+      [...document.querySelectorAll(".app-shell > .sidebar .sidebar-group")].map((g) =>
+        [...g.querySelectorAll("a .sidebar-label")].map((s) => (s.textContent ?? "").trim())));
+    expect(familias.length).toBeGreaterThan(10);
+    expect(familias.flat().length).toBeGreaterThan(100);
+    for (const grupo of familias) expect(grupo).toEqual([...grupo].sort((a, b) => a.localeCompare(b)));
+    await expect(lateral.locator('nav[aria-label="Contents"] a').first()).toHaveText("All Components");
     expect(nomes.length).toBeGreaterThan(0);
     // "New" é o que ainda não está na superfície publicada (`released-surface.json`). Contado, e não "pelo menos um":
     // logo depois de uma publicação NADA é novo — o registro da 0.32.0 reprovou na CI por exigir um (14/10/2026).

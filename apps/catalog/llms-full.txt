@@ -245,7 +245,7 @@ Aurea components do not draw borders. Every border colour is transparent. The bo
 
 What a line used to separate is separated by a fill instead. The fills are the text colour, made translucent: `--fill-1` at 6%, `--fill-2` at 10%, `--fill-3` at 20%. Because they are translucent, they stay visible on any surface. Where something passes behind a piece, the opaque version is used (`--fill-2-solid`, `--fill-3-solid`).
 
-Fields are the one exception in the light theme: a field on the page is white, with a soft shadow (`--shadow-sm`). Inside a white surface it keeps the translucent fill, and in the dark theme nothing changes.
+Fields are the one exception in the light theme: a field is white, with a soft shadow (`--shadow-sm`), on the page and inside white surfaces too (the Aurea Ember brand keeps the translucent fill inside them). In the dark theme a field keeps the translucent fill, with no shadow.
 
 Two lines remain, by decision:
 
@@ -3958,6 +3958,7 @@ base is the floating surface; raised lifts it with a shadow; interactive answers
 | `accent` | `brand \| success \| info \| warning \| danger` | — | A colour stroke on the top edge, --accent-width (4) tall, in the tone's FILL colour, the same in both themes. It is decoration: the card's own title says the subject, so the stroke carries no information of its own. The other sides keep the regular 1px border, and the stroke wins over `selected`, `danger` and the `contrast` outline. |
 | `padding` | `"normal" \| "none"` | "normal" | none removes the inner padding so media bleeds to the edge; the 22 radius stays and clips the media. |
 | `orientation` | `"vertical" \| "horizontal"` | "vertical" | `horizontal` is the list mode: Card.Media on the left at thumbnail width (96, --space-24) and the content beside it. |
+| `lift` | `boolean` | false | With `variant="interactive"`, the card RISES on hover: it lifts 4px and takes a medium shadow, instead of changing its fill. Still for people who ask for less motion. Web only; on the other variants it does nothing. |
 | `Card.Media` | `component` | — | The card's media part. Vertical, as first child, it bleeds to the top and side edges; horizontal, it sits on the left inside the padding, with the house's concentric radius (ADR-0033). |
 | `Card.Header` | `component` | — | The header: the title and the description, together. 12 between the parts. |
 | `Card.Title` | `component` | — | The card's title — an h3, 14/24 medium, as the reference. 12 between the parts. |
@@ -6094,6 +6095,7 @@ The heading level belongs to the page, not to the component: h3 by default, the 
 | `description` | `ReactNode` | — | One line on why it is empty, or on what fills it. |
 | `action` | `ReactNode` | — | The way out — usually a Button. An empty state with nothing to do next is a dead end. |
 | `icon` | `IconName` | — | Glyph above the title, rendered at size xl. Defaults to `document--blank`. |
+| `framed` | `boolean` | false | Puts the icon inside a round frame of 64, the same one the native EmptyState always has. Without it, the icon stands alone, as before. |
 | `state` | `waiting_user \| waiting_approval \| waiting_dependency \| offline \| stale \| partial \| degraded` | — | Universal state (Part J). It derives no colour on purpose — an empty view is already neutral, and colouring it would be an alarm where there is only absence. What it does is set `data-state` and supply the default description, so “no connection” is not seven different sentences on seven screens. |
 </page>
 
@@ -17514,19 +17516,37 @@ import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
 ```
 </page>
 
-<page url="https://aureauds.dev/release-v0-52-1.html">
-# v0.52.1
+<page url="https://aureauds.dev/release-v0-53-0.html">
+# v0.53.0
 
-The docs layout with the pill keeps its gap from 768, DataList wraps long words, and SegmentedControl gets two tall sizes.
+Clickable cards that lift on hover, a framed icon for EmptyState on the web, and the small shadow now shows in the dark theme. Also ships v0.52.1.
+
+Two new options and one visible change in the dark theme. This release also ships v0.52.1 (the docs layout gap from 768, `DataList` wrapping long words, and two tall `SegmentedControl` sizes).
+
+## New
+
+- **`Card lift`** — on a clickable card (`variant="interactive"`), the card rises 4px with a medium shadow on hover, instead of changing its fill. It stays still for people who ask for less motion. Web only.
+- **`EmptyState framed`** — the icon sits inside a round frame of 64, the same one the React Native `EmptyState` always has. Without it, the icon stands alone, as before.
+
+## Changed
+
+- **The small shadow (`--shadow-sm`) now shows in the dark theme.** In dark it is one layer, 1px down, 3px blur, black at 45%; in light it stays the same. Every piece that uses it changes in dark: the selected capsule of tabs and segmented controls, the current sidebar item, fields and the surface accordion. Web and React Native.
+- **React Native reads shadows per theme**: `@aurea-uds/tokens/native` exports `themeShadowLayers`, and the provider applies the theme's layers over the base ones.
+
+## Breaking changes
+
+- **`themes` from `@aurea-uds/tokens/native`**: a theme value can now be an `AureaShadow` (the dark theme has `shadowSm`). Code that read theme values as only colors or numbers has to handle it.
+
+## Includes v0.52.1
 
 Two fixes and two new sizes, all on the web.
 
-## Fixed
+### Fixed
 
 - **`AppShell layout="docs"` with the pill**, from 768 to 1023 wide: the sidebar no longer touches the edge of the window. The columns sit 16 from the edges, lined up with the capsule, as they already did from 1024.
 - **`DataList`**: a long word that does not fit (a long code name, for example) now wraps inside its cell instead of spilling out and making a narrow page scroll sideways.
 
-## New
+### New
 
 - **`SegmentedControl size="lg"` and `size="xl"`** — a 44 and a 48 capsule, for a switch that sits in a tall bar. `sm` (34) and `md` (40) stay as they were.
 
@@ -17535,13 +17555,13 @@ Two fixes and two new sizes, all on the web.
 On the web:
 
 ```bash
-pnpm add @aurea-uds/react@0.52.1 @aurea-uds/core@0.52.1 @aurea-uds/fonts@0.52.1 @aurea-uds/icons@0.52.1
+pnpm add @aurea-uds/react@0.53.0 @aurea-uds/core@0.53.0 @aurea-uds/fonts@0.53.0 @aurea-uds/icons@0.53.0
 ```
 
 On React Native:
 
 ```bash
-pnpm add @aurea-uds/native@0.52.1
+pnpm add @aurea-uds/native@0.53.0
 ```
 </page>
 

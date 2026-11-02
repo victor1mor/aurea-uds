@@ -17,6 +17,24 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O site B: a All Components e a lateral de Components no padrão da Docs (01/11/2026)
+
+- **A página All Components no desenho B** (aprovada pelo Victor na bancada da página inteira, *"Pode"*, 01/11/2026): o palco
+  da Introduction com a trilha "Components / Web", o título, o texto, a busca (`SearchField lg`, até 400) e a chave Grid |
+  List; as três peças que flutuam (os componentes, "Live" e as famílias; somem no celular); "Showing N of 148"; as 18
+  famílias, cada uma com o número, o ladrilho na cor e a contagem, quatro cartões e o "Show all"; o cartão que sobe
+  (`Card lift`) com a prévia torta (a peça de verdade, parada); a Lista (a linha em cápsula com a inicial na cor da família);
+  e o vazio da busca com a moldura (`EmptyState framed`) e o título maior. A busca, a Lista e o "Show all" são o
+  `catalog.js`; sem ele, tudo aparece, em grade. Sem o índice da direita, a página ocupa a coluna dele.
+- **A lateral de Components no padrão da Getting Started** (o Victor: *"quero padronizar o sidebar ... como padrão com da
+  docs"*): em toda página da área, cada família é um grupo numerado, com o ícone na bolinha da cor dela, que abre e fecha; os
+  itens são os componentes da família; "All Components" fica no alto. O anterior e o próximo de cada página seguem essa
+  ordem.
+- **O lado Native igual** (*"e o nativo?"*): a lateral por famílias (as 14 do pacote nativo, pela categoria da ficha, com a
+  cor e o ícone da web) e a página All Components do nativo, a mesma da web (a prévia do cartão é o ícone da ficha: a peça
+  do nativo roda na página de cada uma).
+- Os números são os de hoje: 148 componentes na web e 79 peças no nativo.
+
 ### O site B: a moldura e a Introduction (31/10/2026)
 
 - **O site no desenho B aprovado** ([ADR-0088](decisions/0088-o-site-b.md); *"pode"*, 31/10/2026): a pílula que flutua com as
@@ -256,7 +274,45 @@ como deveria funcionar"*.
 
 ---
 
+## [0.53.0] — 2026-11-01
+
+**O que a página All Components do site B pediu às peças e aos tokens**, cada mudança aprovada pelo Victor olhando a imagem
+(01/11/2026). Tudo só acrescenta, menos a sombra pequena no escuro, que muda a aparência de quem a usa. Leva junto a 0.52.1,
+que não saiu sozinha.
+
+### Adicionado
+
+- **`Card lift`** — variação nova do cartão clicável (`variant="interactive"`): ao passar o mouse ele SOBE 4 (`--space-1`),
+  fica na cor do cartão e ganha a `--shadow-md`, em vez de trocar o fundo; parado para quem pede menos movimento. Nos outros
+  cartões, não faz nada. Só na web (é o passar do mouse). O item 7 da bancada (a sombra "A", a da Aurea).
+- **`EmptyState framed`** — variação nova na web: o ícone dentro da moldura redonda de 64 (`--space-16`), a mesma do
+  `EmptyState` do nativo (R-15), com o fundo e a cor dele (`muted`). Sem ela, o ícone continua solto. O item 9 da bancada.
+
+### Mudado
+
+- **A sombra pequena (`--shadow-sm`) aparece no escuro** (*"B, em toda peça"*): no escuro ela passa a ser uma camada, 1px
+  para baixo, 3 de desfoque, preto a 45% — a do desenho aprovado; no claro continua a de antes (três camadas a 4–6%). Muda
+  toda peça que a usa no escuro: a cápsula escolhida das abas e dos segmentos, o item atual da lateral, o campo e o acordeão
+  de superfície. Web e nativo. **Na Aurea Ember também** (o Victor: *"adicione sombra na ember também"*): é a terceira
+  exceção ao congelamento dela, e a única mudança — 3 peças, só no escuro, contadas no `ember-congelada.spec.ts`. A descrição da `shadow-sm` deixa de dizer que no escuro ela "quase não aparece, de
+  propósito" (ADR-0059).
+- **O nativo lê sombra por tema**: o gerador de tokens recusava sombra que muda com o tema; agora ele emite
+  `themeShadowLayers` (de `@aurea-uds/tokens/native`), e o `resolverTokens` põe as camadas do tema por cima das do `base`
+  (`t.shadowLayers.shadowSm` e `t.shadow.shadowSm` no escuro são as do escuro).
+
+### ⚠ Pode quebrar a compilação
+
+- **`themes` de `@aurea-uds/tokens/native`**: o tipo de cada valor passa a incluir `AureaShadow` (o escuro tem a
+  `shadowSm`). Código que lia os valores do tema como só cor ou número precisa tratar a sombra.
+
+Quem cobra: `tests/unit/site-b-componentes.test.tsx` — a classe e a regra do `lift`, a moldura do `framed` e a sombra do escuro
+no DTCG e no `resolverTokens` (sem cada mudança, reprovam seis dos sete).
+
+---
+
 ## [0.52.1] — 2026-11-01
+
+✅ **Não sai sozinha: vai dentro da `0.53.0`.**
 
 **O que a moldura do site B pediu às peças**, cada mudança aprovada pelo Victor olhando a imagem do antes e do depois
 (01/11/2026). Só na web.

@@ -758,6 +758,7 @@ svg.react-flow__connectionline {
   --control-thumb:#ffffff;
   --link-mark:rgba(0,0,0,0);
   --link-underline:var(--primary);
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.45);
 }
 [data-theme="light"]{
   --background:#f5f5f5;
@@ -857,6 +858,7 @@ svg.react-flow__connectionline {
   --link-underline:var(--primary);
   --control-thumb:#ffffff;
   --warning-500:#d07612;
+  --shadow-sm:0 2px 4px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06), 0 0 1px rgba(0,0,0,0.06);
 }
 [data-brand="ember"][data-theme="dark"],[data-brand="ember"] [data-theme="dark"]{
   --background:oklch(0.16 0.018 250);
@@ -3914,6 +3916,12 @@ img,svg { display:block; }
    não. Quem cobra é o `link-sem-sublinhado.spec.ts`. */
 .card-interactive { cursor:pointer; inline-size:100%; text-decoration:none; font:inherit; text-align:inherit; color:inherit; transition:transform var(--duration-fast),border-color var(--duration-fast),background var(--duration-fast); }
 .card-interactive:hover { transform:translateY(-2px); border-color:transparent; background:var(--surface-2); }
+/* O LEVANTAR (`lift`, o site B — aprovado pela bancada em 01/11/2026): o cartão clicável que SOBE com sombra, em vez de
+   trocar o fundo. Sobe 4 (`--space-1`), fica na cor do cartão e ganha a `--shadow-md`; parado para quem pede menos
+   movimento. Variação: sem `lift`, o cartão clicável continua o de sempre (sobe 2 e troca o fundo). */
+.card-interactive.card-lift { transition:transform var(--duration-base),box-shadow var(--duration-base),background var(--duration-fast); }
+.card-interactive.card-lift:hover { transform:translateY(calc(-1 * var(--space-1))); background:var(--card); box-shadow:var(--shadow-md); }
+@media (prefers-reduced-motion:reduce) { .card-interactive.card-lift:hover { transform:none; } }
 .card-selected { border-color:transparent; background:color-mix(in oklab,var(--primary) 12%,var(--card)); }
 .card-danger { border-color:transparent; background:var(--danger-bg); }
 /* MT-01 (10/10/2026, ADR-0063): o cartão `contrast` traz `data-theme="dark"` no próprio elemento —
@@ -5448,6 +5456,9 @@ button.notification-item:hover { background:var(--surface-3); }
    REFERENCES.md; a pele é Aurea. O título vinha com o h3 do NAVEGADOR (16,38px). */
 .empty-state { display:flex; flex-direction:column; align-items:center; gap:var(--space-3); padding:var(--space-10) var(--space-6); color:var(--muted-foreground); text-align:center; }
 .empty-state > .icon { color:var(--subtle-foreground); }
+/* A MOLDURA (`framed`, o site B — aprovada pela bancada em 01/11/2026): o ícone num círculo de 64 (`--space-16`), a
+   mesma do `EmptyState` do nativo (R-15, `IconeEmMoldura`): o fundo e a cor do ícone são os dele (`muted`). */
+.empty-state-frame { display:grid; place-items:center; flex:none; inline-size:var(--space-16); block-size:var(--space-16); border-radius:var(--radius-full); background:var(--muted); color:var(--muted-foreground); }
 .empty-state p { max-width:46ch; margin:0; }
 .empty-title { margin:0; color:var(--foreground); font-size:var(--text-base); font-weight:var(--weight-semibold); line-height:var(--leading-tight); }
 
@@ -6553,6 +6564,92 @@ a.related-card:hover { border-color:transparent; }
 .cat-card:hover .cat-card-preview { border-color:transparent; }
 .cat-card-name:focus-visible { outline:none; }
 .cat-card-name:focus-visible::after { outline:var(--focus-width) solid var(--focus); outline-offset:var(--focus-offset); }
+/* A "ALL COMPONENTS" NO SITE B (aprovada pela bancada em 01/11/2026). O palco é o da Introduction ("intro-palco"), com a
+   busca e a chave Grade | Lista; as três peças que flutuam são as dela ("intro-peca", "intro-boia"). */
+/* Sem o índice da direita (o desenho não tem): a página ocupa também a coluna dele, e o bloco não para nos 900 do texto. */
+@media (min-width:1280px) { .site-shell:has(.cat-b) > .content.content { grid-column:3 / 5; } }
+.app-shell-docs > .content > .cat-b { max-inline-size:none; }
+.cat-vista .segmented :is(button,a) { display:inline-flex; align-items:center; gap:var(--space-2); }
+.cat-vista .segmented .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+/* O trilho no --fill-1 (no claro, o --fill-2 deixava o "List" a menos de 4,5:1 — o mesmo achado da chave Web | Native). */
+.cat-vista .segmented { background:var(--fill-1); }
+.cat-palco { min-block-size:calc(var(--space-12) * 6 + var(--space-3)); }
+.cat-palco-texto { inline-size:64%; }
+.cat-busca { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); margin-block-start:var(--space-6); }
+/* A busca um pouco mais estreita que a do desenho (o Victor, 01/11/2026): cresce até 25rem (400). */
+.cat-campo { flex:0 1 25rem; min-inline-size:0; }
+.cat-pecas { inset-inline-start:66%; }
+.cat-peca-1 { inset-inline-start:4%; inset-block-start:9%; } .cat-peca-1 > .intro-boia { rotate:-6deg; }
+.cat-peca-2 { inset-inline-end:4%; inset-block-start:38%; } .cat-peca-2 > .intro-boia { rotate:5deg; animation-delay:-3s; }
+.cat-peca-3 { inset-inline-start:0; inset-block-start:68%; } .cat-peca-3 > .intro-boia { rotate:2deg; animation-delay:-5s; }
+.cat-numerao { display:flex; align-items:baseline; gap:var(--space-2); padding:var(--space-3) var(--space-5); border-radius:var(--radius-card);
+  background:var(--primary); color:var(--primary-foreground); box-shadow:var(--shadow-md); font-weight:var(--weight-semibold); font-size:var(--text-sm); }
+.cat-numerao b { font-family:var(--font-code); font-size:var(--text-5xl); line-height:1; letter-spacing:-.05em; }
+.cat-capsula { display:flex; align-items:center; gap:var(--space-2); font-weight:var(--weight-semibold); font-size:var(--text-sm); }
+.cat-chave { display:inline-flex; }
+.cat-visto { display:grid; place-items:center; inline-size:var(--space-6); block-size:var(--space-6); border-radius:var(--radius-full); background:var(--primary); color:var(--primary-foreground); }
+.cat-visto .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+.cat-conta { margin:var(--space-4) var(--space-1) 0; font-family:var(--font-code); font-size:var(--text-sm); color:var(--muted-foreground); }
+.cat-conta b { color:var(--foreground); font-weight:var(--weight-medium); }
+/* AS FAMÍLIAS: o número, o ladrilho na cor da categoria, o nome e a contagem; a grade de quatro. */
+.cat-familia { padding-block-start:var(--space-10); scroll-margin-block-start:var(--space-24); }
+.cat-familia[hidden] { display:none; }
+.cat-familia-topo { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); margin-block-end:var(--space-4); }
+.cat-familia-num { font-family:var(--font-code); font-weight:var(--weight-semibold); font-size:var(--text-3xl); line-height:1; letter-spacing:-.04em; color:var(--muted-foreground); }
+.cat-familia-tile { inline-size:var(--space-10); block-size:var(--space-10); }
+.cat-familia-topo h2 { margin:0; font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold); letter-spacing:-.02em; }
+.cat-familia-conta { font-family:var(--font-code); font-size:var(--text-xs); color:var(--muted-foreground); }
+.cat-cartoes { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:var(--space-3); }
+/* O CARTÃO: o "Card" clicável que sobe ("lift"); o link cobre o cartão inteiro por um pseudo-elemento (a prévia tem botão de
+   verdade dentro, e botão dentro de <a> é HTML inválido). */
+.cat-cartao { position:relative; min-inline-size:0; display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center; column-gap:var(--space-2);
+  row-gap:var(--space-3); padding:var(--space-2) var(--space-2) var(--space-3); }
+.cat-cartao[hidden] { display:none; }
+.cat-previa { position:relative; contain:paint; grid-column:1 / -1; display:grid; place-items:center; block-size:8.5rem; overflow:hidden; border-radius:var(--radius-lg); background:var(--background); }
+/* O "TORTO" (o item 7, efeito do site): a prévia inclinada; com o mouse no cartão, endireita, cresce e sobe. */
+.cat-previa-torta { display:flex; align-items:center; justify-content:center; zoom:.8; transform:rotate(-3deg) scale(.96); transition:transform var(--duration-slow) var(--ease-emphasized); }
+.cat-cartao:hover .cat-previa-torta { transform:translateY(calc(-1 * var(--space-05))) scale(1.06); }
+@media (prefers-reduced-motion:reduce) { .cat-previa-torta { transition:none; } }
+.cat-previa-icone { color:var(--muted-foreground); }
+.cat-ini, .cat-da-familia { display:none; }
+.cat-nome { grid-column:1 / 3; min-inline-size:0; overflow-wrap:anywhere; padding-inline:var(--space-2); color:var(--foreground); font-weight:var(--weight-semibold); text-decoration:none; }
+.cat-nome::after { content:""; position:absolute; inset:0; border-radius:var(--radius-card); }
+.cat-nome:focus-visible { outline:none; }
+.cat-nome:focus-visible::after { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
+.cat-seta { color:var(--muted-foreground); opacity:0; transition:opacity var(--duration-fast), translate var(--duration-fast); margin-inline-end:var(--space-2); }
+.cat-cartao:hover .cat-seta { opacity:1; translate:var(--space-05) 0; }
+.cat-mais { display:flex; justify-content:center; margin-block-start:var(--space-3); }
+.cat-mais[hidden] { display:none; }
+.cat-mais [aria-expanded="true"] .icon { rotate:180deg; }
+/* A LISTA (a chave Grade | Lista): o mesmo cartão vira a linha em cápsula — a inicial na cor da família, o nome, a família e a
+   seta; a prévia some. */
+[data-vista="list"] .cat-cartoes { grid-template-columns:minmax(0,1fr); gap:var(--space-2); }
+[data-vista="list"] .cat-cartao { grid-template-columns:auto auto minmax(0,1fr) auto auto; min-block-size:calc(var(--space-12) + var(--space-2)); padding:0 var(--space-4) 0 var(--space-2); border-radius:var(--radius-full); }
+[data-vista="list"] .cat-cartao.card-lift:hover { transform:translateX(var(--space-1)); }
+[data-vista="list"] .cat-previa { display:none; }
+[data-vista="list"] .cat-ini { display:grid; place-items:center; inline-size:var(--space-10); block-size:var(--space-10); border-radius:var(--radius-full); font-weight:var(--weight-semibold); }
+[data-vista="list"] .cat-nome { grid-column:auto; padding:0; }
+[data-vista="list"] .cat-nome::after { border-radius:var(--radius-full); }
+[data-vista="list"] .cat-da-familia { display:block; color:var(--muted-foreground); font-size:var(--text-sm); }
+[data-vista="list"] .cat-seta { opacity:1; }
+.cat-ini[data-cor="blue"] { background:var(--category-blue-bg); color:var(--category-blue); }
+.cat-ini[data-cor="orange"] { background:var(--category-orange-bg); color:var(--category-orange); }
+.cat-ini[data-cor="green"] { background:var(--category-green-bg); color:var(--category-green); }
+.cat-ini[data-cor="pink"] { background:var(--category-pink-bg); color:var(--category-pink); }
+.cat-ini[data-cor="teal"] { background:var(--category-teal-bg); color:var(--category-teal); }
+.cat-ini[data-cor="red"] { background:var(--category-red-bg); color:var(--category-red); }
+/* O VAZIO DA BUSCA: o "EmptyState" com a moldura ("framed"), no cartão; o título maior é do site (o B do item 9). */
+.cat-vazio { margin-block-start:var(--space-8); padding:0; }
+.cat-vazio[hidden] { display:none; }
+.cat-vazio .empty-title { font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold); }
+.cat-vazio .empty-state p { font-size:var(--text-base); }
+@media (max-width:1240px) { .cat-cartoes { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+@media (max-width:900px) {
+  .cat-cartoes { grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .cat-palco-texto { inline-size:auto; }
+  /* No celular, como o desenho: as peças que flutuam saem (e a página não rola de lado). */
+  .cat-pecas { display:none; }
+}
 /* O Início: o título centralizado em duas linhas (a segunda esmaecida), o texto, dois botões e a vitrine. */
 .site-home main { display:grid; justify-items:center; padding:var(--space-12) var(--space-4); }
 /* A vitrine com os 1200 da referência (15/10/2026): o 1280 da escala menos o --space-20. */
