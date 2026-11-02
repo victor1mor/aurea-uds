@@ -18,7 +18,8 @@ const PAGES = [
   {name: "pattern", url: "/apps/catalog/pattern-button-with-kbd.html", clip: "#usage"},
   {name: "block", url: "/apps/catalog/block-stats-row.html", clip: "#usage"},
   {name: "recipe", url: "/apps/catalog/recipe-saas-admin.html", clip: ".page-head"},
-  {name: "tokens", url: "/apps/catalog/tokens.html", clip: ".content > .block:nth-of-type(1)"},
+  // O site B (02/11/2026): a página Tokens no desenho; a foto é a PRIMEIRA parte, os papéis de cor.
+  {name: "tokens", url: "/apps/catalog/tokens.html", clip: "#color-roles"},
   {name: "lateral", url: "/apps/catalog/button.html", clip: ".app-shell > .sidebar"},
   {name: "topo", url: "/apps/catalog/button.html", clip: ".topbar"},
 ];

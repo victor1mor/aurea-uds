@@ -1758,6 +1758,19 @@ const botaoGitHub = (classe = "hide-below-md") => h(A.IconButton, {icon: GitHub,
 const setinhaDoTopo = () => h("span", {id: "site-more-root", className: "site-more", "data-github": DESENHO_GITHUB, "data-repo": REPO},
   h(A.IconButton, {icon: "caret-down", label: "More", variant: "tertiary", size: "sm"}));
 
+// AS ÁREAS NA FOLHA DO MENU DO CELULAR (o item 10): o ícone num círculo tingido de 40, nas cores e com os ícones da
+// bancada aprovada; a área atual com o selo "You are here". As cores são as de categoria da Aurea.
+const AREA_NO_MENU = {start: ["book-open", "green"], components: ["squares-four", "blue"], releases: ["rocket-launch", "pink"],
+  patterns: ["puzzle-piece", "orange"], blocks: ["sidebar-simple", "green"], recipes: ["cooking-pot", "pink"],
+  hooks: ["brackets-curly", "teal"], tokens: ["file", "blue"]};
+const lugarDoMenu = section => {
+  const atual = section === "native" ? "components" : section;
+  const areas = AREAS.map(([label, href, id]) => ({id, label, icon: AREA_NO_MENU[id][0], tone: AREA_NO_MENU[id][1],
+    href: `./${section === "native" && id === "components" ? "native.html" : href}`, ...(id === atual ? {current: true} : {})}));
+  return h("span", {id: "site-menu-root", className: "site-menu-lugar", "data-areas": JSON.stringify(areas),
+    "data-repo": REPO, "data-changelog": `${REPO}/blob/main/CHANGELOG.md`});
+};
+
 function topoDoSite(section) {
   // SEM a versão ao lado da logo (o Victor, 15/10/2026: "do topo retire a versão"), como na referência; ela continua
   // no selo da abertura do Início. O nome, com 16 em peso 600, como o dela.
@@ -1778,7 +1791,9 @@ function topoDoSite(section) {
         // de 1024 para cima, na linha, como a da referência; de 768 a 1023, dentro da setinha; abaixo, no menu
         chaveDeTema("hide-below-lg"),
         botaoGitHub("hide-below-lg"),
-        setinhaDoTopo())}};
+        setinhaDoTopo(),
+        // O menu do celular do site B (o item 10) também no Início, no lugar do menu do `Header` (ver `lugarDoMenu`).
+        lugarDoMenu(section))}};
   }
   const topbar = h(Fragment, null,
     // A BUSCA (ADR-0067; o Victor, 13/10/2026: "faltou o buscar"): o botão da referência, com o atalho
@@ -1803,7 +1818,11 @@ function topoDoSite(section) {
       botaoTema(true),
       // A chave de três posições do topo da referência (15/10/2026): claro, escuro e sistema.
       chaveDeTema("hide-below-md"),
-      botaoGitHub("hide-below-md")),
+      botaoGitHub("hide-below-md"),
+      // O MENU DO CELULAR DO SITE B (o item 10, aprovado em 01/11/2026): abaixo de 768, a folha que sobe de baixo
+      // (`Drawer side="bottom"`), viva no `search.js` (`site.tsx`). Aqui sai só o lugar, vazio, com os dados; o vivo põe
+      // nele o botão "Menu" e, só então, o botão da gaveta do `AppShell` sai (sem JavaScript a gaveta de sempre fica).
+      lugarDoMenu(section)),
     // AS ÁREAS são a segunda linha do `Header` (`topbarTabs`, lote T): elas saíram daqui. O `Header` as põe por último na
     // ordem do Tab, depois das ações — a regra da `ordem-de-foco.spec.ts` (WCAG 2.4.3, 14/10/2026) continua valendo.
   );
@@ -3014,7 +3033,13 @@ for (const f of readdirSync(join(outDir, "embeds")).filter(f => f.endsWith(".htm
 // chave ficava vazia ao clicar no claro ou no sistema (o Victor viu na bancada). Mede-se desenhando a chave nos três
 // estados — e não numa lista à mão, que desatualiza sozinha (ver o `spriteFor`).
 const estadosVivos = ["light", "dark", "system"].map(tema =>
-  renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: "", theme: tema}, h(A.ThemeToggle, {mode: "light-dark-system"}))));
+  renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: "", theme: tema}, h(A.ThemeToggle, {mode: "light-dark-system"}))))
+  // A folha do menu do celular (o item 10) só existe viva: os ícones das áreas e da chave de tema entram no sprite por aqui.
+  .concat(renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""},
+    h(A.NavList, {size: "lg", items: Object.entries(AREA_NO_MENU).map(([id, [icon, tone]]) => ({id, label: id, icon, tone, href: "#"}))}),
+    h(A.SegmentedControl, {label: "Color theme", value: "light", items: [{value: "light", label: "Light", icon: "sun"},
+      {value: "dark", label: "Dark", icon: "moon"}, {value: "system", label: "System", icon: "monitor"}]}),
+    h(A.IconButton, {icon: "list", label: "Menu"}), h(A.Button, {leadingIcon: "magnifying-glass"}, "Search"))));
 const spriteInline = spriteFor([...paginas, ...embeds].map(([, html]) => html).concat(estadosVivos));
 for (const [file, html] of [...paginas, ...embeds]) write(join(outDir, file), html.replace(SPRITE_SLOT, spriteInline));
 // Os arquivos para assistentes de IA (SITE-06), ao lado das páginas.

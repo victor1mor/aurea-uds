@@ -72,12 +72,13 @@ test("768: a marca e as ações numa linha só, dentro da cápsula", async ({pag
   perto(capsula.h, 64, "a cápsula com 64");
 });
 
-test("375: a página não rola de lado, e o botão da gaveta é o último da cápsula", async ({page}) => {
+test("375: a página não rola de lado, e o botão do menu é o último da cápsula", async ({page}) => {
   await abrir(page, 375, 812);
   const pagina = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
   expect(pagina[0], "a página não rola de lado").toBeLessThanOrEqual(pagina[1]);
   const capsula = await caixa(page, ".topbar-inner");
-  const gaveta = await caixa(page, ".nav-toggle");
+  // O botão do menu do site B (o item 10): o "Menu" vivo, no lugar do botão da gaveta do `AppShell`.
+  const gaveta = await caixa(page, ".site-menu-botao");
   perto(capsula.x, 16, "a cápsula a 16 da borda");
   expect(gaveta.direita, "o botão da gaveta dentro da cápsula").toBeLessThanOrEqual(capsula.direita);
   expect(capsula.direita - gaveta.direita, "e na ponta dela").toBeLessThanOrEqual(12);

@@ -1,0 +1,59 @@
+/* A PÁGINA "HOOKS" DO SITE B (o desenho "hooks"; o mapa, grupo 2). Toda medida é um token; as peças são as da Aurea. */
+.hk-b { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-4); container-type:inline-size; }
+@media (min-width:1280px) { .site-shell:has(.hk-b) > .content.content { grid-column:3 / 5; } }
+.hk-palco .intro-palco-texto { inline-size:64%; }
+/* Os atalhos: o `Button` secundário xl (50; o desenho tem 52) com a sombra pequena e o número num ladrilho redondo de 36. */
+.hk-atalhos { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-block-start:var(--space-6); }
+.hk-atalho.btn { background:var(--segment); box-shadow:var(--shadow-sm); font-family:var(--font-code); font-weight:var(--weight-semibold);
+  padding-inline-start:calc(var(--space-1) + var(--space-05)); }
+.hk-atalho-n { inline-size:var(--control-h-md); block-size:var(--control-h-md); font-family:var(--font-code); font-weight:var(--weight-semibold); }
+.hk-aviso { align-items:center; }
+.hk-apagado { color:var(--muted-foreground); }
+.hk-aviso .hk-apagado { color:var(--foreground); }
+
+/* Cada hook: o número, o nome em código (30 = --text-3xl; o desenho tem 34), o arquivo e o link para a página dele. */
+.hk-sec { padding-block-start:var(--space-12); scroll-margin-block-start:calc(var(--topbar-height) + var(--space-8)); display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-3); }
+.hk-cabeca { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2) var(--space-3); }
+.hk-nome, .hk-titulo { margin:0; font-size:var(--text-3xl); font-weight:var(--weight-bold); line-height:var(--leading-tight); letter-spacing:-.02em; overflow-wrap:anywhere; }
+.hk-nome { font-family:var(--font-code); }
+.hk-titulo { font-family:var(--font-heading); }
+.hk-fonte.badge { font-family:var(--font-code); max-inline-size:100%; overflow-wrap:anywhere; white-space:normal; block-size:auto; min-block-size:var(--space-7); }
+.hk-pagina { margin-inline-start:auto; }
+.hk-texto { margin:0; max-inline-size:70ch; color:var(--muted-foreground); font-size:var(--text-lg); line-height:var(--leading-relaxed); }
+.hk-grade { display:grid; grid-template-columns:minmax(0,6fr) minmax(0,5fr); gap:var(--space-3); align-items:start; }
+.hk-codigo.card { display:grid; gap:var(--space-3); min-inline-size:0; }
+.hk-teste.card { display:grid; gap:var(--space-4); align-content:start; padding:var(--space-5); min-inline-size:0; }
+.hk-teste-topo { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-2); }
+.hk-teste-nome { display:inline-flex; align-items:center; gap:var(--space-2); font-family:var(--font-code); font-size:var(--text-xs); letter-spacing:.06em;
+  text-transform:uppercase; color:var(--muted-foreground); }
+.hk-ponto { inline-size:var(--space-2); block-size:var(--space-2); border-radius:var(--radius-full); background:var(--success-400); }
+.hk-teste-dica { font-family:var(--font-code); font-size:var(--text-xs); color:var(--muted-foreground); }
+.hk-botoes { display:flex; flex-wrap:wrap; gap:var(--space-2); }
+.hk-vazio { margin:0; padding-block:var(--space-10); text-align:center; color:var(--muted-foreground); font-size:var(--text-sm); }
+.hk-leitura { margin:0; padding:var(--space-3) var(--space-4); border-radius:var(--radius-lg); background:var(--card); font-family:var(--font-code);
+  font-size:var(--text-xs); line-height:var(--leading-relaxed); white-space:pre-wrap; overflow-wrap:anywhere; }
+.hk-lateral-demo { display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--space-4); align-items:start; }
+.hk-lateral[hidden] { display:none; }
+.hk-lateral .sidebar { position:static; block-size:auto; max-block-size:none; margin:0; }
+.hk-lateral-lado { display:grid; gap:var(--space-3); min-inline-size:0; }
+.hk-lista-vazia { display:grid; gap:var(--space-2); }
+.hk-menu.menu { max-inline-size:none; }
+.hk-sprite { display:flex; align-items:center; gap:var(--space-4); }
+.hk-sprite code { white-space:pre-wrap; font-size:var(--text-xs); }
+.hk-sprite-tile { inline-size:var(--space-16); block-size:var(--space-16); background:var(--primary); color:var(--primary-foreground); }
+.hk-sprite-tile .icon { inline-size:var(--icon-xl); block-size:var(--icon-xl); }
+.hk-notas { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:var(--space-3); }
+.hk-nota.card { display:flex; flex-direction:column; gap:var(--space-2); }
+.hk-nota h3 { margin:0; font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); }
+.hk-nota p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--leading-normal); }
+.hk-mais .hk-nome-pequeno { font-family:var(--font-code); }
+.hk-abrir { display:inline-flex; align-items:center; gap:var(--space-1); margin-block-start:auto; color:var(--foreground); font-weight:var(--weight-semibold);
+  font-size:var(--text-sm); }
+
+@container (max-width:820px) { .hk-grade { grid-template-columns:minmax(0,1fr); } .hk-notas { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+@container (max-width:640px) { .hk-notas { grid-template-columns:minmax(0,1fr); } .hk-lateral-demo { grid-template-columns:minmax(0,1fr); } }
+@media (max-width:900px) {
+  .hk-palco .cat-pecas { display:none; }
+  .hk-palco .intro-palco-texto { inline-size:auto; }
+  .hk-pagina { margin-inline-start:0; }
+}
