@@ -1,0 +1,48 @@
+/* "BLOCKS" NO SITE B (o desenho `blocks-*`, 02/11/2026). */
+/* O mini bloco que flutua no palco: o próprio bloco, reduzido, num cartão. */
+.blk-mini { inline-size:calc(var(--space-16) * 3); block-size:calc(var(--space-16) + var(--space-12) + var(--space-2)); padding:var(--space-2);
+  overflow:hidden; background:var(--segment); box-shadow:var(--shadow-md); }
+.blk-mini-peca { display:block; zoom:.38; pointer-events:none; }
+
+.blk-frase { margin:var(--space-2) 0 0; font-size:var(--text-sm); color:var(--muted-foreground); }
+/* Os cartões: quatro por linha (dois, um). O aberto ocupa a linha inteira, logo abaixo da linha do cartão (`dense`). */
+.blk-cartoes { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); grid-auto-flow:row dense; gap:var(--space-3); margin-block-start:var(--space-4); }
+@container g1 (max-width:51.99rem) { .blk-cartoes { grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+@container g1 (max-width:29.99rem) { .blk-cartoes { grid-template-columns:minmax(0, 1fr); } }
+.blk-cartao { display:flex; flex-direction:column; gap:var(--space-2); min-inline-size:0; padding:var(--space-2) var(--space-2) var(--space-3); }
+.blk-cartao[hidden] { display:none; }
+.blk-cartao[data-aberto] { background:var(--segment); box-shadow:var(--shadow-md); }
+/* A miniatura: o bloco de verdade, parado e reduzido, numa caixa da cor da página (176 de altura, canto 16). */
+.blk-miniatura { display:block; block-size:calc(var(--space-24) + var(--space-20)); overflow:hidden; border-radius:var(--radius-lg); background:var(--background); }
+.blk-miniatura-peca { display:block; inline-size:250%; zoom:.4; padding:var(--space-4); pointer-events:none; }
+.blk-olho { margin:var(--space-2) 0 0; padding-inline:var(--space-2); font-family:var(--font-code); font-size:var(--text-xs); letter-spacing:var(--tracking-wider);
+  text-transform:uppercase; color:var(--muted-foreground); }
+.blk-cartao h3 { margin:0; padding-inline:var(--space-2); font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); line-height:var(--leading-tight); }
+.blk-texto { margin:0; padding-inline:var(--space-2); font-size:var(--text-sm); line-height:var(--leading-relaxed); color:var(--muted-foreground); }
+.blk-cartao .blk-texto { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden; }
+.blk-botoes { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-block-start:auto; padding:var(--space-2) var(--space-2) 0; }
+.blk-cartao [data-blk-abrir][aria-expanded="true"] { background:var(--primary); color:var(--primary-foreground); }
+
+/* O ATALHO "Need something smaller?": a caixa do palco, com os dois caminhos. */
+.blk-atalho { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-3); padding:var(--space-5); background:var(--site-palco); }
+.blk-atalho h3 { margin:0; font-family:var(--font-heading); font-size:var(--text-xl); font-weight:var(--weight-bold); line-height:var(--leading-tight); }
+.blk-atalho p { margin:0; font-size:var(--text-sm); line-height:var(--leading-relaxed); color:var(--muted-foreground); }
+
+/* O BLOCO ABERTO NO LUGAR: a linha inteira — o palco à esquerda (7/12), as informações à direita (5/12). */
+.blk-aberto { grid-column:1 / -1; display:grid; grid-template-columns:minmax(0, 7fr) minmax(0, 5fr); gap:var(--space-4); padding:calc(var(--space-3) + var(--space-05));
+  border-radius:var(--radius-card); background:var(--segment); box-shadow:var(--shadow-lg); }
+.blk-aberto[hidden] { display:none; }
+@container g1 (max-width:47.99rem) { .blk-aberto { grid-template-columns:minmax(0, 1fr); } }
+.blk-palco { position:relative; display:grid; place-items:center; min-inline-size:0; min-block-size:calc(var(--space-24) * 4 + var(--space-16));
+  padding:calc(var(--space-12) + var(--space-2)) var(--space-6) var(--space-6); overflow:auto; border-radius:var(--radius-lg); background:var(--background); }
+.blk-ao-vivo { position:absolute; inset-block-start:var(--space-3); inset-inline-start:var(--space-3); }
+.blk-palco-peca { inline-size:100%; min-inline-size:0; }
+.blk-info { display:flex; flex-direction:column; gap:var(--space-4); min-inline-size:0; padding:var(--space-2); }
+.blk-info-topo { display:flex; align-items:flex-start; justify-content:space-between; gap:var(--space-3); }
+.blk-info h3 { margin:var(--space-1) 0 0; padding-inline:var(--space-2); font-family:var(--font-heading); font-size:var(--text-3xl); font-weight:var(--weight-bold);
+  line-height:var(--leading-tight); outline:none; }
+.blk-usa { display:flex; flex-direction:column; gap:var(--space-2); }
+.blk-usa-lista { display:flex; flex-wrap:wrap; gap:calc(var(--space-1) + var(--space-05)); }
+.blk-chip { display:inline-flex; align-items:center; min-block-size:var(--space-8); padding-inline:var(--space-3); border-radius:var(--radius-full); background:var(--fill-2);
+  color:var(--foreground); font-family:var(--font-code); font-size:var(--text-sm); text-decoration:none; }
+a.blk-chip:hover { background:var(--primary); color:var(--primary-foreground); }

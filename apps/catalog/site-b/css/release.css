@@ -1,0 +1,7 @@
+/* A NOTA DE UMA VERSÃO NO SITE B (02/11/2026): o palco com a caixa de atualizar ao lado e o texto num cartão. */
+.page-head.rel-palco-nota { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-7); align-items:center; }
+@container g1 (min-width:48rem) { .page-head.rel-palco-nota { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); } }
+.rel-palco-nota .rel-selos { margin-block-start:var(--space-3); }
+.rel-palco-nota .rel-atualizar { background:var(--segment); box-shadow:var(--shadow-md); }
+.rel-nota { margin-block-start:var(--space-8); padding:var(--space-8); }
+@container g1 (max-width:39.99rem) { .rel-nota { padding:var(--space-5); } }

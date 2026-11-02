@@ -1,0 +1,45 @@
+/* "ALL RELEASES" NO SITE B (o desenho `releases-*`, 02/11/2026). */
+.rel-numerao b { font-family:var(--font-code); font-size:var(--text-4xl); letter-spacing:calc(var(--tracking-tight) * 2); }
+
+/* A última versão: o cartão grande, o texto à esquerda e a caixa de atualizar à direita (uma coluna se não cabe). */
+.rel-ultima-sec { padding-block-start:var(--space-12); }
+.rel-ultima { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-6); margin-block-start:var(--space-4); padding:var(--space-7);
+  box-shadow:var(--shadow-md); }
+@container g1 (min-width:48rem) { .rel-ultima { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); align-items:start; } }
+.rel-ultima-texto { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-4); min-inline-size:0; }
+.rel-ultima-topo { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2) var(--space-3); }
+.rel-versao { margin:0; font-family:var(--font-code); font-size:var(--text-5xl); font-weight:var(--weight-semibold); line-height:var(--leading-none);
+  letter-spacing:calc(var(--tracking-tight) * 2); }
+.rel-data { font-family:var(--font-code); font-size:var(--text-sm); color:var(--muted-foreground); }
+.rel-ultima-resumo { margin:0; font-size:var(--text-lg); line-height:var(--leading-relaxed); }
+.rel-selos { display:flex; flex-wrap:wrap; gap:var(--space-2); }
+.rel-ler { display:inline-flex; align-items:center; gap:var(--space-1); font-weight:var(--weight-semibold); }
+
+/* A caixa de atualizar: o fundo da página, o "Update", a chave Web | Native e o comando nos quatro gerenciadores. */
+.rel-atualizar { display:flex; flex-direction:column; gap:var(--space-3); min-inline-size:0; padding:var(--space-4); border-radius:var(--radius-card);
+  background:var(--background); }
+.rel-atualizar-topo { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-2); }
+.rel-atualizar [data-g1-painel][hidden] { display:none; }
+
+/* Todas as versões: o mês (o número, o nome e a contagem) e as linhas. */
+.rel-todas { padding-block-start:var(--space-12); }
+.rel-mes .g1-grupo-topo h3 { margin:0; font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold); line-height:var(--leading-tight);
+  letter-spacing:var(--tracking-tight); }
+.rel-linhas { display:flex; flex-direction:column; gap:var(--space-2); margin-block-start:var(--space-4); }
+/* A linha: a pílula da versão, a data, o resumo e a seta, em grade (112 · 104 · o resto · 28); no mínimo 64 de altura. */
+.rel-linha { display:grid; grid-template-columns:calc(var(--space-24) + var(--space-4)) calc(var(--space-24) + var(--space-2)) minmax(0, 1fr) var(--space-7);
+  align-items:center; gap:var(--space-3); min-block-size:var(--space-16); padding:var(--space-3) var(--space-4) var(--space-3) var(--space-2); color:inherit;
+  text-decoration:none; }
+.rel-linha[hidden] { display:none; }
+.rel-pilula { display:inline-grid; place-items:center; min-block-size:var(--space-10); padding-inline:var(--space-3); border-radius:var(--radius-full);
+  background:var(--fill-2); font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+.rel-pilula[data-ultima] { background:var(--primary); color:var(--primary-foreground); }
+.rel-curta { font-family:var(--font-code); font-size:var(--text-sm); color:var(--muted-foreground); }
+.rel-resumo { font-size:var(--text-base); line-height:var(--leading-normal); }
+.rel-seta { color:var(--muted-foreground); justify-self:end; }
+
+/* No celular: a linha em duas — a pílula e a data em cima, o resumo embaixo, sem a seta. */
+@container g1 (max-width:39.99rem) {
+  .rel-linha { grid-template-columns:auto minmax(0, 1fr); row-gap:var(--space-2); padding:var(--space-3) var(--space-4); }
+  .rel-resumo { grid-column:1 / -1; }
+  .rel-seta { display:none; } }
