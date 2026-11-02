@@ -1,0 +1,68 @@
+/* A SHOWCASE NO DESENHO B (02/11/2026): o inspetor (a página em miniatura com as ÁREAS de ligar do D-3 e o painel ao lado),
+   as seções prontas e "o seu projeto". Prefixo "sc-". Os desenhos de dentro da miniatura são do site. */
+.sc-mono { padding-inline:var(--space-2); }
+
+/* O INSPETOR: a miniatura e o painel de 300 (--space-24 * 3 + --space-3) ao lado. */
+.sc-inspetor { display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, calc(var(--space-24) * 3 + var(--space-3))); gap:calc(var(--space-3) + var(--space-05));
+  margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.sc-mini { min-inline-size:0; padding:calc(var(--space-3) + var(--space-05)); border-radius:var(--radius-card); background:var(--site-palco); }
+/* A ÁREA abraça a parte inteira (a largura toda; o botão, só o tamanho dele). */
+.sc-area { display:block; inline-size:100%; text-align:start; }
+.sc-area-button { inline-size:auto; align-self:flex-start; }
+.sc-mini-topo { display:flex; align-items:center; gap:calc(var(--space-2) + var(--space-05)); block-size:calc(var(--space-12) - var(--space-05));
+  padding-inline:var(--space-3); border-radius:var(--radius-full); background:var(--card); }
+.sc-mini-topo > i { flex:none; inline-size:calc(var(--space-5) + var(--space-05)); block-size:calc(var(--space-5) + var(--space-05)); border-radius:var(--radius-full); background:var(--primary); }
+.sc-mini-abas { display:flex; gap:var(--space-1); padding:var(--space-1); border-radius:var(--radius-full); background:var(--fill-1); min-inline-size:0; overflow:hidden; }
+.sc-mini-abas span { flex:none; inline-size:calc(var(--space-12) - var(--space-05)); block-size:calc(var(--space-3) + var(--space-05)); border-radius:var(--radius-full); background:var(--fill-2); }
+.sc-mini-abas .sc-on, .sc-mini-lateral .sc-on { background:var(--segment); box-shadow:var(--shadow-sm); }
+.sc-mini-tema { display:flex; gap:var(--space-05); margin-inline-start:auto; padding:var(--space-05); border-radius:var(--radius-full); background:var(--fill-2); }
+.sc-mini-tema span { inline-size:calc(var(--space-4) + var(--space-05)); block-size:calc(var(--space-4) + var(--space-05)); border-radius:var(--radius-full); }
+.sc-mini-tema .sc-on { background:var(--segment); }
+.sc-mini-grade { display:grid; grid-template-columns:calc(var(--space-24) + var(--space-6)) minmax(0, 1fr) calc(var(--space-24) + var(--space-3) + var(--space-05));
+  gap:calc(var(--space-2) + var(--space-05)); margin-block-start:calc(var(--space-2) + var(--space-05)); }
+.sc-mini-lateral, .sc-mini-indice { display:flex; flex-direction:column; gap:calc(var(--space-1) + var(--space-05)); block-size:100%; padding:calc(var(--space-2) + var(--space-05));
+  border-radius:var(--radius-lg); background:var(--card); }
+.sc-mini-lateral { min-block-size:calc(var(--space-24) * 2 + var(--space-10)); }
+.sc-mini-lateral span { block-size:var(--space-3); border-radius:var(--radius-full); background:var(--fill-2); }
+.sc-mini-lateral .sc-on { block-size:calc(var(--space-4) + var(--space-05)); }
+.sc-mini-meio { display:flex; flex-direction:column; gap:calc(var(--space-2) + var(--space-05)); min-inline-size:0; }
+.sc-mini-h1 { block-size:calc(var(--space-5) + var(--space-05)); inline-size:60%; border-radius:var(--radius-full); background:var(--fill-3); }
+.sc-mini-p { block-size:calc(var(--space-2) + var(--space-05)); border-radius:var(--radius-full); background:var(--fill-2); }
+.sc-mini-p-80 { inline-size:80%; }
+.sc-mini-codigo { display:flex; flex-direction:column; gap:calc(var(--space-1) + var(--space-05)); padding:var(--space-3); border-radius:var(--radius-lg); background:var(--card); }
+.sc-mini-codigo span { block-size:var(--space-2); border-radius:var(--radius-full); background:color-mix(in oklab, var(--primary) 40%, var(--fill-2)); }
+.sc-mini-botao { display:inline-flex; align-items:center; justify-content:center; inline-size:var(--space-24); block-size:calc(var(--space-7) + var(--space-05));
+  border-radius:var(--radius-full); background:var(--primary); color:var(--primary-foreground); font-size:var(--text-xs); font-weight:var(--weight-semibold); }
+/* O anel de leitura do índice, desenhado com dois círculos cheios (sem linha nem anel de sombra). */
+.sc-mini-indice > i { display:grid; place-items:center; inline-size:calc(var(--space-6) + var(--space-05)); block-size:calc(var(--space-6) + var(--space-05));
+  border-radius:var(--radius-full); background:var(--primary); }
+.sc-mini-indice > i::after { content:""; inline-size:calc(100% - var(--space-2)); block-size:calc(100% - var(--space-2)); border-radius:var(--radius-full); background:var(--card); }
+.sc-mini-indice span { block-size:calc(var(--space-2) + var(--space-05)); border-radius:var(--radius-full); background:var(--fill-2); }
+
+/* O PAINEL: o nome da parte, a peça em código (26 → o --text-2xl, 24, extranegrito), a frase e o "Open its page". */
+.sc-painel { display:flex; flex-direction:column; gap:calc(var(--space-2) + var(--space-05)); padding:var(--space-5); }
+.sc-painel .gs-k { margin:0; }
+.sc-painel-peca { margin:0; font-family:var(--font-code); font-size:var(--text-2xl); font-weight:var(--weight-extrabold); line-height:var(--leading-tight);
+  letter-spacing:calc(var(--tracking-tight) * 2); color:var(--primary-emphasis); overflow-wrap:anywhere; }
+.sc-painel-frase { margin:0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-normal); }
+.sc-painel-abrir { align-self:flex-start; margin-block-start:auto; }
+
+.sc-tema .btn { margin-inline-start:calc(var(--space-1) + var(--space-05)); vertical-align:middle; }
+
+/* As seções prontas: o grupo de etiquetas na cor do cartão. */
+.sc-prontas { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+
+/* O SEU PROJETO: o quadro no fundo do palco, o texto e o botão. */
+.sc-seu { display:grid; grid-template-columns:minmax(0, 1fr) auto; gap:var(--space-6); align-items:center; margin-block-start:calc(var(--space-4) + var(--space-05));
+  padding:var(--space-7); background:var(--site-palco); }
+.sc-seu-p { margin:0; }
+.sc-seu-nota { margin:calc(var(--space-2) + var(--space-05)) 0 0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-relaxed); }
+
+@media (max-width:899px) {
+  .sc-inspetor, .sc-seu { grid-template-columns:minmax(0, 1fr); }
+  .sc-mini-grade { grid-template-columns:minmax(0, 1fr); }
+  .sc-mini-lateral, .sc-mini-indice { min-block-size:0; }
+}
+
+/* A primeira seção começa colada na abertura, como no desenho (8 do corpo + 8). */
+[data-gs-pagina="showcase"] > .gs-sec:first-child { padding-block-start:var(--space-2); }
