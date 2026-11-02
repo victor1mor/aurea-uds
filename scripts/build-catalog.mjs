@@ -1845,27 +1845,22 @@ function shell(activeHref, inner, section = "components") {
   const {brand, topbar, home} = topoDoSite(section);
   // O sprite é INLINE nesta página (external <use> via file:// esbarra em CORS), então a base é vazia.
   if (section === "home") {
+    const topoB = topoDoSite("inicio");
     // O Início da referência não tem menu: o topo e o conteúdo, sem o AppShell (que sempre desenha a lateral).
     return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, h("div", {className: "site-home"},
       h("a", {className: "skip-link", href: "#main"}, "Skip to content"),
       // `maxWidth="2xl"` (o Victor, 15/10/2026: no monitor de 24" o topo ia para os cantos, e o da referência fica no
       // centro, com 1400 de largura). A escala do `Container` não tem 1400; o `2xl` (1536) fica mais perto nas duas
       // telas medidas: a logo a 32 da borda em 1440 (a dela, 36) e a 215 em 1902 (a dela, 276) — o `xl` daria 104 e 343.
-      h(A.Header, {variant: "flush", brand, className: "site-top", items: home.items, actions: home.actions,
-        itemsJustify: "start", maxWidth: "2xl", navLabel: "Sections",
-        // O topo da página inicial da referência (o Victor, 15/10/2026: "A, B, C, pode"): 56 de altura, 6 entre as
-        // ações, o fundo que embaça, e o GitHub dentro do menu do celular (na barra ele some abaixo de 768).
-        size: "sm", blurred: true, menuActions: h(Fragment, null, chaveDeTema(),
-          h(A.IconButton, {icon: GitHub, label: "GitHub", variant: "tertiary", size: "sm", href: REPO}))}),
+      // O TOPO E O RODAPÉ DO SITE B TAMBÉM NO INÍCIO (02/11/2026, a página inicial no desenho aprovado): a mesma pílula que
+      // flutua das outras páginas (o `Header` `pill`, com as áreas numa cápsula — nenhuma levantada, o Início não é área —
+      // e as mesmas ações, o menu do celular inclusive) e o mesmo rodapé de uma linha.
+      h(A.Header, {variant: "pill", blurred: true, maxWidth: "docs", brand: topoB.brand, className: "site-top site-top-b"},
+        h("div", {className: "site-areas"}, h(A.SegmentedControl, {label: "Sections", size: "xl", value: "", selectedStyle: "neutral",
+          items: AREAS.map(([label, href, id]) => ({value: id, label, href: `./${href}`}))})),
+        topoB.topbar),
       h("main", {id: "main", tabIndex: -1}, node),
-      // O RODAPÉ da página inicial da referência (15/10/2026): uma linha centrada — a `Section variant="footer"` com
-      // `layout="inline"`. O ano é o da última versão publicada (dos dados), para a página não mudar sozinha.
-      h(A.Section, {variant: "footer", layout: "inline", maxWidth: "2xl",
-        legal: `© ${ANO} Aurea UDS. Open source under Apache-2.0.`,
-        links: [{title: "Aurea", items: [{id: "changelog", label: "Changelog", href: `${REPO}/blob/main/CHANGELOG.md`},
-          {id: "license", label: "License", href: `${REPO}/blob/main/LICENSE`}]}]},
-        // O ícone social é um LINK simples, como os da referência (18 de desenho): a pele de link do próprio rodapé.
-        h("a", {className: "section-footer-link", href: REPO, "aria-label": "GitHub"}, h(A.Icon, {name: GitHub}))))));
+      rodapeDoSite())));
   }
   const menu = (MENUS[section] || menuComponentes)();
   // A CHAVE WEB | NATIVE (bloco 1, o 5-A): a "Tabs em pílula" da referência, na ponta da linha das áreas (medida em
@@ -1916,14 +1911,17 @@ function shell(activeHref, inner, section = "components") {
         h("a", {className: "site-toc-topo", href: "#"}, h(A.Icon, {name: "arrow-up"}), "Back to top")),
         asideLabel: "On this page"} : {})},
       node),
-    // O RODAPÉ DO SITE B: uma linha, na largura do bloco — o texto à esquerda, os links à direita.
-    h("footer", {className: "site-rodape"},
-      h("p", null, `© ${ANO} Aurea UDS. Open source under Apache-2.0.`),
-      // "Site footer", e não "Footer" (31/10/2026): a página do rodapé de exemplo tem o próprio menu "Footer", e dois
-      // menus com o mesmo nome confundem o leitor de tela (o axe pegou: `landmark-unique`).
-      h("nav", {className: "site-rodape-links", "aria-label": "Site footer"},
-        h("a", {href: `${REPO}/blob/main/CHANGELOG.md`}, "Changelog"), h("a", {href: `${REPO}/blob/main/LICENSE`}, "License"),
-        h("a", {href: REPO}, "GitHub")))));
+    rodapeDoSite()));
+}
+// O RODAPÉ DO SITE B: uma linha, na largura do bloco — o texto à esquerda, os links à direita.
+function rodapeDoSite() {
+  return h("footer", {className: "site-rodape"},
+    h("p", null, `© ${ANO} Aurea UDS. Open source under Apache-2.0.`),
+    // "Site footer", e não "Footer" (31/10/2026): a página do rodapé de exemplo tem o próprio menu "Footer", e dois
+    // menus com o mesmo nome confundem o leitor de tela (o axe pegou: `landmark-unique`).
+    h("nav", {className: "site-rodape-links", "aria-label": "Site footer"},
+      h("a", {href: `${REPO}/blob/main/CHANGELOG.md`}, "Changelog"), h("a", {href: `${REPO}/blob/main/LICENSE`}, "License"),
+      h("a", {href: REPO}, "GitHub")));
 }
 
 // ── assets: catalog.css (fontes+core+chrome) e catalog.js (abas+tema) ─────────

@@ -39,11 +39,18 @@ for (const c of CASOS) {
   });
 }
 
+// O SITE B (0.54.0): as páginas da Getting Started terminam no cartão "Next", como a Introduction do desenho — o próximo
+// atravessa o grupo, como na referência: depois do último do Overview, o primeiro do Handbook.
+test("na Getting Started do site B, o Next é o vizinho seguinte na lateral", async ({page}) => {
+  for (const [pagina, depois] of [["docs-roadmap.html", "Colors"], ["docs-quick-start.html", "Design Principles"]]) {
+    await page.goto(`${base}/apps/catalog/${pagina}`);
+    await expect(page.locator("a.intro-proxima b"), pagina).toHaveText(depois);
+  }
+});
+
 test("o anterior e o próximo são os vizinhos na lateral da área", async ({page}) => {
   // Em Components, a ordem das famílias (o site B, 01/11/2026): o Carousel é da Media; "All Components" vem antes do Button.
   for (const [pagina, antes, depois] of [["carousel.html", "AvatarGroup", "Gallery"], ["button.html", "All Components", "ButtonGroup"],
-    // Na área Getting Started o vizinho atravessa o grupo, como na referência: depois do último do Overview, o primeiro do Handbook.
-    ["docs-roadmap.html", "Showcase", "Colors"], ["docs-quick-start.html", "Introduction", "Design Principles"],
     // Nas notas, da mais nova para a mais velha, como na lateral.
     ["release-v0-34-0.html", "v0.35.0", "v0.33.0"]]) {
     await page.goto(`${base}/apps/catalog/${pagina}`);
