@@ -17530,7 +17530,7 @@ Two new options and one visible change in the dark theme. This release also ship
 
 ## Changed
 
-- **The small shadow (`--shadow-sm`) now shows in the dark theme.** In dark it is one layer, 1px down, 3px blur, black at 45%; in light it stays the same. Every piece that uses it changes in dark: the selected capsule of tabs and segmented controls, the current sidebar item, fields and the surface accordion. Web and React Native.
+- **The small shadow (`--shadow-sm`) now shows in the dark theme.** In dark it is one layer, 1px down, 3px blur, black at 45%; in light it stays the same. Every piece that uses it changes in dark: the selected capsule of tabs and segmented controls, the current sidebar item, fields and the surface accordion. Web and React Native, in every brand, Aurea Ember included.
 - **React Native reads shadows per theme**: `@aurea-uds/tokens/native` exports `themeShadowLayers`, and the provider applies the theme's layers over the base ones.
 
 ## Breaking changes

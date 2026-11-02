@@ -509,9 +509,11 @@ test.describe("catálogo · contratos do modelo de página", () => {
     const nomes = await lateral.locator('[aria-labelledby] a, .sidebar-group a').allTextContents();
     // Só o MENU (a `nav` "Contents"): no site B a chave Web | Native e as áreas da gaveta moram na mesma lateral, com ícone.
     expect(await lateral.locator('nav[aria-label="Contents"] a svg').count()).toBe(0);
+    // Cada família é o grupo que dobra: o botão do rótulo aponta (`aria-controls`) para a lista dela.
     const familias = await page.evaluate(() =>
-      [...document.querySelectorAll(".app-shell > .sidebar .sidebar-group")].map((g) =>
-        [...g.querySelectorAll("a .sidebar-label")].map((s) => (s.textContent ?? "").trim())));
+      [...document.querySelectorAll(".app-shell > .sidebar .sidebar-group-toggle")].map((b) =>
+        [...(document.getElementById(b.getAttribute("aria-controls") ?? "")?.querySelectorAll("a .sidebar-label") ?? [])]
+          .map((s) => (s.textContent ?? "").trim())));
     expect(familias.length).toBeGreaterThan(10);
     expect(familias.flat().length).toBeGreaterThan(100);
     for (const grupo of familias) expect(grupo).toEqual([...grupo].sort((a, b) => a.localeCompare(b)));
