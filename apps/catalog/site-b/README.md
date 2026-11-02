@@ -5,6 +5,8 @@ sem mexer no mesmo arquivo.
 
 - `paginas/<chave>.mjs` — o desenho da página. Exporta, por padrão, uma função `(site, ...o que a página é) => {node, toc}`.
 - `css/<chave>.css` — o arranjo dela. Entra no fim da folha do site (`assets/catalog.css`), na ordem do nome do arquivo.
+- `js/<chave>.js` — o comportamento dela, quando precisa (script comum, sem `import`). Entra no fim do `assets/catalog.js`,
+  que toda página carrega: o arquivo tem de agir só na página dele (procure o elemento dela antes de fazer qualquer coisa).
 
 Sem o arquivo, a página continua a de antes. Quem chama é o `scripts/build-catalog.mjs` (procure "AS PÁGINAS DO SITE B").
 

@@ -58,6 +58,10 @@ const outDir = join(root, "apps/catalog");
 const siteBDir = join(outDir, "site-b");
 const siteBCss = existsSync(join(siteBDir, "css")) ? readdirSync(join(siteBDir, "css")).filter(f => f.endsWith(".css")).sort()
   .map(f => `/* site-b/css/${f} */\n${readFileSync(join(siteBDir, "css", f), "utf8")}`).join("\n") : "";
+// O comportamento das páginas do site B (o "Mark as done", o caminho que escolhe): `site-b/js/<chave>.js`, script comum,
+// sem módulo, que entra no fim do `catalog.js` (toda página o carrega). Cada arquivo cuida de só agir na página dele.
+const siteBJs = existsSync(join(siteBDir, "js")) ? readdirSync(join(siteBDir, "js")).filter(f => f.endsWith(".js")).sort()
+  .map(f => `\n/* site-b/js/${f} */\n${readFileSync(join(siteBDir, "js", f), "utf8")}`).join("") : "";
 // O sprite é medido depois de todas as páginas existirem, então cada página sai com um lugar
 // reservado para ele e o texto entra no fim.
 const SPRITE_SLOT = "<!--aurea-sprite-->";
@@ -2790,7 +2794,7 @@ ${grafoCss}}
 ${coreCss}@layer aurea{
 ${chrome}${siteBCss}}
 `);
-write(join(outDir, "assets/catalog.js"), catalogJs);
+write(join(outDir, "assets/catalog.js"), catalogJs + siteBJs);
 // O ÍNDICE DA BUSCA (ADR-0067): o que a `CommandPalette` do topo procura, em grupos, saído dos MESMOS dados
 // das páginas — nada escrito à mão. Vai como script clássico (`window.AUREA_SEARCH`), e não como JSON
 // buscado por rede, porque o site abre direto do disco e `file://` bloqueia o `fetch`.
