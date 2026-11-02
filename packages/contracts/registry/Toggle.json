@@ -92,7 +92,7 @@
       "name": "size",
       "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
       "default": "\"md\"",
-      "description": "Matches the button scale, so a toggle sits level with the controls beside it. xl (0.54.0) is the 50 button, the Button's xl."
+      "description": "Matches the button scale, so a toggle sits level with the controls beside it. xl is the 50 button, the Button's xl."
     },
     {
       "name": "disabled",

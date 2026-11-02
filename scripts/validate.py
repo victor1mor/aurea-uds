@@ -2527,6 +2527,10 @@ TRADUZ_ESTADO = {
 # Atributo que não é ESTADO de componente, e por isso não se cobra em `states`:
 NAO_E_ESTADO = {
     "theme": "é o tema do documento, não estado de componente",
+    # O site B (0.54.0): o tom (`tone`) é EIXO da peça ou do item (o "feito" da cápsula, a cor do círculo do ícone), em
+    # `axes`/props; e o `data-contained` é o MODO de um contêiner (as janelas presas), escolhido pelo app.
+    "tone": "é EIXO (`tone` do Checkbox pill, do item da CommandPalette e da NavList), não estado",
+    "contained": "é MODO do contêiner (as janelas presas, `data-contained`), não estado",
     # A marca é o outro eixo do documento, ortogonal ao tema (ADR-0036). O core só a lê para NÃO aplicar uma regra feita
     # para a Aurea padrão (ADR-0073: a letra do selo primário de contorno, que na `ember` do claro cairia a 4,42:1).
     "brand": "é a marca do documento (ADR-0036), eixo como o tema, não estado de componente",
@@ -3482,6 +3486,10 @@ _SEM_LINHA44 = {
     # o anel vai para o corpo do nó (ou a caixa do contêiner), que tem o raio da casa.
     ".dependency-graph:focus-visible:has(>.graph-node)": "o anel é do corpo do nó (`:focus-visible > .graph-node > .graph-node-body`)",
     ".dependency-graph:focus-visible:has(>.graph-group)": "o anel é da caixa do contêiner (`:focus-visible > .graph-group`)",
+    # O site B (0.54.0): no cartão de escolha e na cápsula do "Mark as done" o alvo é o cartão / a cápsula inteira.
+    ".radio-group-cards>.radioinput:focus-visible+.control-mark": "o anel é do cartão (`.radio-group-cards > .radio:has(input:focus-visible)`)",
+    ".checkbox.checkbox-pillinput:focus-visible+.control-mark": "o anel é da cápsula (`.checkbox-pill:has(input:focus-visible)`)",
+    ".checkbox.checkbox-pillinput:focus-visible:checked+.control-mark": "o anel é da cápsula (`.checkbox-pill:has(input:focus-visible)`)",
 }
 _LINHA44 = re.compile(r"^var\(--focus-width\)\s+solid\s+(var\(--focus-strong\)|CanvasText)$")
 _OFFSET44 = {"var(--focus-offset)", "0", "calc(-1 * var(--focus-width))"}

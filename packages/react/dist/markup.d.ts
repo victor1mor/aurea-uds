@@ -196,8 +196,8 @@ export interface KPIProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<
     /** `plain` tira a caixa: o número dentro de um cartão que já existe. `brand` (o site B, 0.54.0) é o cartão AMARELO, com
      *  a tinta e a sombra média. */
     variant?: KPIVariant;
-    /** As barras embaixo do número (o site B, 0.54.0): cada uma é um botão; a escolhida fica branca no `brand` (na cor do
-     *  texto, fora dele) e a leitura diz o nome e o valor dela. */
+    /** As barras embaixo do número (o site B, 0.54.0): cada uma é um botão de opção nativo; a escolhida fica branca no
+     *  `brand` (na cor do texto, fora dele) e a leitura diz o nome e o valor dela. */
     bars?: KPIBar[];
     /** A barra que começa escolhida (o índice). Padrão: a última. */
     defaultBar?: number;

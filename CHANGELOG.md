@@ -274,6 +274,56 @@ como deveria funcionar"*.
 
 ---
 
+## [0.54.0] — em construção
+
+**As peças que as páginas do site B pediram**, cada uma aprovada pelo Victor olhando a imagem (01/11/2026, os itens 1 a 10 e
+os grupos D-1 a D-7.7), construídas em 02/11/2026 (*"pode começar a fazer todas agora"*). Todas são VARIAÇÃO: sem a prop
+nova, a peça sai igual a antes. Valem em todas as marcas, a Aurea Ember inclusive, quando o app as escolhe (*"Sim, como as
+outras"*, 02/11/2026). Só na web.
+
+### ⚠ Pode quebrar a compilação
+
+- **A frase nova `copy` no `AureaStrings`** ("Copy"; em português, "Copiar"): o "Copy" escrito da cabeça do `CodeBlock`.
+  Quem monta a tabela de frases inteira à mão (sem partir do `defaultStrings` ou do `ptBR`) precisa acrescentá-la.
+
+### Acrescentado
+
+- **`RadioGroup variant="card"`** — o cartão de escolha (o mesmo nome do nativo): cada opção é um cartão inteiro; o
+  escolhido SOBE 4 com a `--shadow-lg` e a cor da aba escolhida; o foco é o do cartão. **`indicatorPlacement="none"`** tira
+  a bolinha, só no cartão. (Item 1.)
+- **`Checkbox variant="pill"`** — a cápsula em volta (o alvo inteiro), de 44 ou, com `size` sm/md, de 36; **`tone="success"`**
+  pinta a marcada de "feito" (o verde a 18%, a letra e a caixa no `--success-400`). (Item 4.)
+- **`Stepper variant="path"`** — o caminho que escolhe: bolinhas de 50 num trilho de 8, a escolhida invertida e de 56, as
+  pontas que não clicam (`startContent`, `endContent`); estreito, 4 por linha. **`variant="bar"`** — a barra em partes: cada
+  etapa é uma parte de 12, o link (`items[].href`) ou o botão dela, verde quando feita; `startContent` antes e
+  `endContent` depois (a contagem, anunciada). (Item 5 e D-1.)
+- **`SegmentedControl`**: **`items[].icon`** (o escolhido troca sozinho para a forma cheia), **`size="2xl"`** (segmento de
+  48, ícone 20, letra 16), **`wrap`** (quebra linha, o trilho com canto 22) e **`orientation="vertical"`**. (Itens 3 e 8.)
+- **`CodeBlock filename`** — a cabeça do arquivo, de 52: o nome em mono e, com `copyable`, o "Copy" escrito (o botão
+  secundário, com o ícone antes); o bloco vira o cartão e a linha longa desce. (Item 6.)
+- **`CommandPalette size="lg"`** — a busca grande: a janela de 1024, o campo de 64 com o "Esc" dentro, **`filters`**, o
+  título do grupo com a contagem, o item de 50 com o ícone num círculo tingido (**`items[].tone`**) e a
+  **`items[].description`**, o "↵" na linha ativa, **`preview`** (some abaixo de 1240) e **`footer`**. A busca do site passa
+  a usá-la. (Item 2 e D-2.)
+- **`NavList size="lg"`** — a lista do menu do celular: linha de 56, o ícone num círculo tingido (**`items[].tone`**);
+  **`items[].current`** marca a linha atual e **`currentLabel`** é o selo dela no lugar da seta. (Item 10.)
+- **`Toggle` e `ToggleGroup` `size="xl"`** — o botão de 50. (Item 10.)
+- **`Toggle area`** (`true` ou `"pill"`) — o toggle que é uma ÁREA em volta de um bloco: sem fundo (`variant="ghost"`; o
+  amarelo a 18% com o mouse, 42% ligado) ou com o fundo cinza (o amarelo cheio ligado). (D-3, D-5, D-6.)
+- **O atributo `data-contained`** num contêiner: a janela, a gaveta e o aviso de dentro se prendem a ele, em vez da janela do
+  navegador (no React, com o `portalContainer` do `AureaProvider`). (D-4.)
+- **`Accordion orientation="horizontal"`** — o acordeão de lado: os itens em pé, o aberto toma a linha; um sempre aberto;
+  estreito, vira o de pé. (D-7.1.)
+- **`KPI variant="brand"`** (o cartão amarelo) e **`bars`** / **`defaultBar`** — as barras embaixo do número, cada uma um
+  botão; a escolhida diz o nome e o valor (no amarelo, branca). Na página sem React, o `aurea.js` escolhe. (D-7.3.)
+- **`Table variant="rows"`** — as linhas em cápsula, a marcada (`data-selected`) no amarelo a 14%. (D-7.6.)
+- **`Toolbar tone="brand"`** — a barra amarela da seleção em lote, com os botões brancos. (D-7.7.)
+
+### Site
+
+- As páginas do site B passam a morar em `apps/catalog/site-b/` (o desenho, o arranjo e o comportamento de cada uma), para
+  serem construídas em paralelo; a busca grande, com a descrição e o ícone de cada página no índice.
+
 ## [0.53.0] — 2026-11-01
 
 **O que a página All Components do site B pediu às peças e aos tokens**, cada mudança aprovada pelo Victor olhando a imagem

@@ -97,7 +97,7 @@
       "name": "size",
       "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\"",
       "default": "md",
-      "description": "sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web | Native switch and the area switch of this site. Web only. 2xl (0.54.0): 48 segments (--space-12), 20 icons, 16 letters."
+      "description": "sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web | Native switch and the area switch of this site. Web only. 2xl: 48 segments (--space-12), 20 icons, 16 letters."
     },
     {
       "name": "selectedStyle",

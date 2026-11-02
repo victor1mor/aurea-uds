@@ -84,7 +84,7 @@ area makes the toggle an area around a block — a thumbnail, an icon with its n
 | `onPressedChange` | `(pressed: boolean) => void` | none | Fires with the new state. Pair with `pressed` for the controlled form. |
 | `icon` | `IconName` | none | Glyph shown before the label, or alone when there are no children. |
 | `label` | `string` | none | REQUIRED and non-blank when there is no visible text: an icon-only toggle with no name is unusable by screen reader. Since 2026-08-12 the ToggleProps union rejects omitted, boolean and nullish children unless label is present. Blank labels, empty strings, arrays, Fragments and decorative-only elements need a runtime guard because TypeScript/ReactNode cannot encode whether arbitrary content will render text; they emit console.error too. A custom child that receives apparently visible children but discards them remains the consumer's responsibility (AUD-0003). |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | "md" | Matches the button scale, so a toggle sits level with the controls beside it. xl (0.54.0) is the 50 button, the Button's xl. |
+| `size` | `"sm" \| "md" \| "lg" \| "xl"` | "md" | Matches the button scale, so a toggle sits level with the controls beside it. xl is the 50 button, the Button's xl. |
 | `disabled` | `boolean` | false | Ignores interaction and dims the control. |
 | `children` | `ToggleChildren \| never` | — | What the toggle shows. With children you may omit label; with no children label is REQUIRED, because a bare icon with no accessible name is a control nobody can announce. The type enforces it — the form without a name does not compile. |
 | `id` | `string` | — | Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one. |

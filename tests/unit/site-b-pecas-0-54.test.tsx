@@ -227,17 +227,18 @@ describe("Accordion de lado, KPI amarelo com barras, Table em cápsulas, Toolbar
     expect((aberto.parentElement as HTMLDetailsElement).open).toBe(true);
     expect(regra(".accordion-horizontal > .accordion-item[open]")).toContain("flex:1 1 0");
   });
-  it("o KPI amarelo e as barras: a escolhida é a última, a leitura diz o nome e o valor; trocar pelo clique", () => {
+  it("o KPI amarelo e as barras: rádios nativos, a escolhida é a última; o clique escolhe outra; sem clique no código", () => {
     const {container} = render(<KPI variant="brand" label="Revenue" value="$48k"
       bars={[{label: "May", value: "$44k", amount: 44}, {label: "Jun", value: "$48k", amount: 48}]} />);
     expect(container.querySelector(".kpi.kpi-brand")).not.toBeNull();
-    const barras = [...container.querySelectorAll(".kpi-bar")] as HTMLButtonElement[];
-    expect(barras.map((b) => b.getAttribute("aria-pressed"))).toEqual(["false", "true"]);
-    expect(container.querySelector(".kpi-reading")!.textContent).toBe("Jun · $48k");
-    barras[0].click();
-    expect(barras.map((b) => b.getAttribute("aria-pressed"))).toEqual(["true", "false"]);
-    expect(container.querySelector(".kpi-reading")!.textContent).toBe("May · $44k");
-    expect(regra(".kpi-brand .kpi-bar[aria-pressed=\"true\"] .kpi-bar-fill")).toContain("var(--control-thumb)");
+    const radios = [...container.querySelectorAll(".kpi-bar > input[type=radio]")] as HTMLInputElement[];
+    expect(radios.map((r) => r.checked)).toEqual([false, true]);
+    expect(radios.map((r) => r.getAttribute("aria-label"))).toEqual(["May · $44k", "Jun · $48k"]);
+    expect(container.querySelector("fieldset.kpi-bars-wrap > legend")!.textContent).toBe("Revenue");
+    (container.querySelectorAll(".kpi-bar")[0] as HTMLLabelElement).click();
+    expect(radios.map((r) => r.checked)).toEqual([true, false]);
+    expect(regra(".kpi-brand .kpi-bar:has(> input:checked) .kpi-bar-fill,.kpi-brand .kpi-bar:hover .kpi-bar-fill")).toContain("var(--control-thumb)");
+    expect(readFileSync(join(raiz, "packages/react/src/markup.tsx"), "utf8")).not.toMatch(/onClick=\{/);
   });
   it("a tabela em cápsulas e a barra amarela; sem as variações, as de sempre", () => {
     const {container} = render(<><Table variant="rows"><tbody><tr><td>a</td></tr></tbody></Table><Table><tbody><tr><td>b</td></tr></tbody></Table>

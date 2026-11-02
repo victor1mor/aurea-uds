@@ -108,20 +108,6 @@
     if (trigger) copy(trigger);
   });
 
-  // O SITE B (0.54.0) · AS BARRAS DO KPI. Na página sem React, o mouse, o foco ou o clique numa barra a escolhem, e a
-  // leitura diz o nome e o valor dela — o mesmo que o `KPI` do React faz no evento dele.
-  function escolherBarra(event) {
-    var botao = event.target.closest && event.target.closest("[data-aurea-kpi-bars] .kpi-bar");
-    if (!botao) return;
-    var caixa = botao.closest("[data-aurea-kpi-bars]");
-    caixa.querySelectorAll(".kpi-bar").forEach(function (b) { b.setAttribute("aria-pressed", String(b === botao)); });
-    var leitura = caixa.querySelector(".kpi-reading");
-    if (leitura) leitura.textContent = botao.getAttribute("data-reading") || "";
-  }
-  document.addEventListener("click", escolherBarra);
-  document.addEventListener("focusin", escolherBarra);
-  document.addEventListener("mouseover", escolherBarra);
-
   // GAR-14 (0.28.0) · COMPARTILHAR. O gatilho marcado com [data-aurea-share] (o `Button share` do
   // React emite isto) pergunta ao navegador se ele sabe compartilhar ESTE link — detectar o recurso,
   // e não adivinhar o aparelho, é o padrão da web. Sabe: abre a janela do aparelho; a pessoa

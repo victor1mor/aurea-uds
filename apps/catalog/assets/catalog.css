@@ -4190,8 +4190,8 @@ img,svg { display:block; }
    (o contêiner até 30rem): 4 por linha, sem trilho. `--stepper-cols` é o número de colunas (as etapas e as pontas). */
 .stepper-path { container-type:inline-size; }
 .stepper-path > .stepper { --dot:var(--control-h-xl); --dot-on:calc(var(--control-h-xl) + var(--space-1) + var(--space-05));
-  position:relative; grid-auto-flow:row; grid-template-columns:repeat(var(--stepper-cols),minmax(0,1fr)); align-items:center; gap:var(--space-2) var(--space-1); }
-.stepper-path > .stepper:before { content:""; position:absolute; inset-inline:calc(100% / (2 * var(--stepper-cols))); inset-block-start:50%;
+  position:relative; grid-auto-flow:row; grid-template-columns:repeat(var(--stepper-cols,4),minmax(0,1fr)); align-items:center; gap:var(--space-2) var(--space-1); }
+.stepper-path > .stepper:before { content:""; position:absolute; inset-inline:calc(100% / (2 * var(--stepper-cols,4))); inset-block-start:50%;
   block-size:var(--space-2); translate:0 -50%; border-radius:var(--radius-full); background:var(--fill-2); }
 .stepper-path > .stepper > .step { z-index:1; display:grid; place-items:center; block-size:var(--dot-on); }
 .stepper-path > .stepper > .step:before { content:none; }
@@ -4505,23 +4505,29 @@ button.tag-main { cursor:pointer; }
 /* O CARTÃO AMARELO E AS BARRAS (o site B — a página inicial, aprovado pela bancada em 01/11/2026, o D-7.3, a forma B "sem
    marrom"). `variant="brand"`: o cartão no amarelo da marca, com a tinta e a `--shadow-md`; o rótulo na tinta, 600; a
    tendência na tinta. `bars`: as barras embaixo, 128 de altura (2 × `--space-16`), 8 entre elas, cada uma até 32 de
-   largura, a cápsula em cima — cada barra é um botão, e a escolhida diz o nome e o valor na leitura. No amarelo, as barras
-   na tinta cheia e a escolhida BRANCA (as marcas dos controles); fora dele, as barras no `--fill-3` e a escolhida na cor
-   do texto. Sem `brand` nem `bars`, o KPI de sempre. */
+   largura, a cápsula em cima. Cada barra é um BOTÃO DE OPÇÃO nativo (o KPI é marcação pura, roda no servidor): o clique e as
+   setas escolhem; a leitura acima diz o nome e o valor da escolhida — e, com o mouse, da que está sob ele. No amarelo, as
+   barras na tinta cheia e a escolhida BRANCA (as marcas dos controles); fora dele, o `--fill-3` e a cor do texto. */
 .kpi.kpi-brand { background:var(--primary); color:var(--primary-foreground); box-shadow:var(--shadow-md); padding:var(--space-5) var(--space-5) var(--space-4); }
 .kpi-brand > .muted { color:inherit; font-weight:var(--weight-semibold); font-size:var(--text-sm); }
 .kpi-brand :is(.kpi-tone-success,.kpi-tone-danger,.kpi-tone-neutral) { color:inherit; }
-.kpi-bars-wrap { display:grid; gap:var(--space-1); margin-block-start:var(--space-3); }
-.kpi-reading { font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
-.kpi-bars { display:grid; grid-template-columns:repeat(var(--kpi-bars),minmax(0,1fr)); gap:var(--space-2); align-items:end; block-size:calc(2 * var(--space-16)); }
-.kpi-bar { display:flex; flex-direction:column; justify-content:flex-end; align-items:center; block-size:100%; padding:0; border:0; background:transparent; color:inherit; cursor:pointer; border-radius:var(--radius-xs); }
-.kpi-bar-fill { inline-size:100%; max-inline-size:var(--space-8); block-size:var(--h); border-radius:var(--radius-full) var(--radius-full) var(--radius-xs) var(--radius-xs);
+.kpi-bars-wrap { position:relative; display:grid; gap:var(--space-1); margin:var(--space-3) 0 0; padding:var(--space-6) 0 0; border:0; min-inline-size:0; }
+.kpi-bars { display:grid; grid-template-columns:repeat(var(--kpi-bars,6),minmax(0,1fr)); gap:var(--space-2); align-items:end; block-size:calc(2 * var(--space-16)); }
+.kpi-bar { display:flex; flex-direction:column; justify-content:flex-end; align-items:center; block-size:100%; color:inherit; cursor:pointer; border-radius:var(--radius-xs); }
+.kpi-bar > input { position:absolute; opacity:0; pointer-events:none; }
+.kpi-bar:has(> input:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
+.kpi-bar-fill { inline-size:100%; max-inline-size:var(--space-8); block-size:var(--kpi-bar-h,0%); border-radius:var(--radius-full) var(--radius-full) var(--radius-xs) var(--radius-xs);
   background:var(--fill-3); transition:background-color var(--duration-base); }
-.kpi-bar[aria-pressed="true"] .kpi-bar-fill { background:var(--foreground); }
-.kpi-brand .kpi-bar-fill { background:var(--primary-foreground); }
-.kpi-brand .kpi-bar[aria-pressed="true"] .kpi-bar-fill { background:var(--control-thumb); }
-.kpi-brand .kpi-bar:focus-visible { outline-color:var(--primary-foreground); }
-.kpi-bars-x { display:grid; grid-template-columns:repeat(var(--kpi-bars),minmax(0,1fr)); gap:var(--space-2); text-align:center; font-family:var(--font-code); font-size:var(--text-xs); }
+.kpi-bar-reading { position:absolute; inset-block-start:0; inset-inline-start:0; visibility:hidden; white-space:nowrap;
+  font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+.kpi-bar:has(> input:checked) .kpi-bar-fill,.kpi-bar:hover .kpi-bar-fill { background:var(--foreground); }
+.kpi-bar:has(> input:checked) .kpi-bar-reading,.kpi-bar:hover .kpi-bar-reading { visibility:visible; }
+.kpi-bars:has(.kpi-bar:hover) .kpi-bar:has(> input:checked):not(:hover) .kpi-bar-reading { visibility:hidden; }
+.kpi-bars:has(.kpi-bar:hover) .kpi-bar:has(> input:checked):not(:hover) .kpi-bar-fill { background:var(--fill-3); }
+.kpi-brand .kpi-bar-fill,.kpi-brand .kpi-bars:has(.kpi-bar:hover) .kpi-bar:has(> input:checked):not(:hover) .kpi-bar-fill { background:var(--primary-foreground); }
+.kpi-brand .kpi-bar:has(> input:checked) .kpi-bar-fill,.kpi-brand .kpi-bar:hover .kpi-bar-fill { background:var(--control-thumb); }
+.kpi-brand { --focus-strong:var(--primary-foreground); }
+.kpi-bars-x { display:grid; grid-template-columns:repeat(var(--kpi-bars,6),minmax(0,1fr)); gap:var(--space-2); text-align:center; font-family:var(--font-code); font-size:var(--text-xs); }
 /* DataList: chave/valor em duas colunas. O termo é secundário — mesmo idioma do cabeçalho de
    tabela. Sem a regra (achado A13) o <dl> saía cru: dt e dd empilhados, com o recuo de 40px
    que o navegador dá ao <dd>. */
@@ -5428,7 +5434,8 @@ button.tag-main { cursor:pointer; }
    foco é o do campo inteiro, como o `InputGroup`; os filtros do app vêm embaixo; a lista e a prévia lado a lado (a prévia
    no `--fill-1`, canto 22, presa ao alto); o título do grupo em mono maiúsculo, com a contagem na ponta; o item de 50
    (`--control-h-xl`) com o ícone num círculo de 40 tingido pela cor de categoria, o título 16/600 e a descrição cortada;
-   o "↵" amarelo só na linha ativa; o pé com as teclas e o encaixe do app. Abaixo de 1240, a prévia some. */
+   o "↵" amarelo só na linha ativa; o pé com as teclas e o encaixe do app. Até 1280 (o `--breakpoint-xl`; o desenho
+   tem 1240, fora da escala), a prévia some. */
 .command-body-plain,.command-foot-plain { display:contents; }
 .command-palette-lg { width:min(var(--breakpoint-lg),100%); gap:var(--space-3); }
 .command-field { display:flex; align-items:center; gap:var(--space-3); block-size:var(--space-16); padding-inline:var(--space-5) var(--space-3);
@@ -5437,6 +5444,8 @@ button.tag-main { cursor:pointer; }
 .command-field > .icon { inline-size:var(--icon-md); block-size:var(--icon-md); color:var(--muted-foreground); flex:none; }
 .command-input { flex:1; min-inline-size:0; border:0; padding:0; background:none; color:inherit; font:inherit; font-size:var(--text-lg); outline:none; }
 .command-input::placeholder { color:var(--muted-foreground); }
+.command-filters { display:flex; flex-wrap:wrap; gap:var(--space-2); }
+.command-group-count { flex:none; font-variant-numeric:tabular-nums; }
 .command-body { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,25rem); gap:var(--space-4); align-items:start; }
 .command-palette-lg .command-list { max-height:none; }
 .command-palette-lg .command-group-label { display:flex; justify-content:space-between; gap:var(--space-2); font-family:var(--font-code); text-transform:uppercase; letter-spacing:.06em; }
@@ -5461,7 +5470,7 @@ button.tag-main { cursor:pointer; }
   border-radius:var(--radius-card); background:var(--fill-1); }
 .command-foot { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-4); }
 .command-foot > .command-shortcuts { padding:0; }
-@media (max-width:1240px) { .command-body { grid-template-columns:minmax(0,1fr); } .command-preview { display:none; } }
+@media (max-width:1280px) { .command-body { grid-template-columns:minmax(0,1fr); } .command-preview { display:none; } }
 
 .menu-sep { height:1px; margin:6px 4px; background:var(--border); border:0; }
 /* G-API-02 — a anatomia que o menu ganhou quando o dado deixou de ter uma forma só.

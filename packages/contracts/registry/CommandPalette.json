@@ -49,7 +49,9 @@
   },
   "dependencies": {
     "engine": "@base-ui/react",
-    "icons": []
+    "icons": [
+      "magnifying-glass"
+    ]
   },
   "related": {
     "components": [
