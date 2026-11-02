@@ -80,9 +80,25 @@ No href means the row is a <button> — and it carries NO chevron, because the a
 </Card>
 ```
 
+### Large, with the current row
+
+size="lg" is the phone menu: 56 capsule rows, the icon in a 40 circle tinted by tone, 18 letters. current marks the row of the page you are on — the fill, aria-current="page" — and currentLabel puts a badge where the arrow was.
+
+```tsx
+<NavList size="lg" currentLabel="You are here" items={[
+  {id: "start", label: "Getting Started", icon: "book-open", tone: "green", href: "/getting-started"},
+  {id: "components", label: "Components", icon: "squares-four", tone: "blue", href: "/components"},
+  {id: "patterns", label: "Patterns", icon: "puzzle-piece", tone: "orange", href: "/patterns", current: true},
+]} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `items` | `NavListItem[]` | — | The rows, as data — the house idiom, the same one Sidebar, BottomNav, Timeline and Breadcrumb use. Each item is {id, label, description?, value?, icon?, avatar?, indicators?, href?, onClick?, disabled?}. `description` is the second line and it is optional on purpose: a settings row often needs it ("Notifications" / "Push, email") and a plain destination row does not. `value` is the trailing accessory and takes any node, so Badge, Status or plain text compose in without this component knowing about them. `href` decides the element AND the chevron: with it the row is a link and gets the arrow, without it the row is a button and carries none — an arrow promises the row opens something. `disabled` forces the button form and marks it aria-disabled. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. `avatar` ({src?, fallback?}, the same shape as ChatMessage.avatar) puts a photo at the start of the row, in place of the icon. `indicators` ([{icon, label}]) are small muted signs before the value — pinned, muted — and each label is read by the screen reader, not drawn. |
+| `size` | `"md" \| "lg"` | "md" | lg is the large list (the phone menu): a 56 capsule row (a 40 circle and 8 above and below), 16 between the circle and the name, 18 semibold letters; the 20 icon sits in a 40 circle tinted by the item's tone. |
+| `items[].tone` | `BadgeCategory` | — | With lg: the category color of the icon circle (the Badge colors); without it, the neutral circle. |
+| `items[].current` | `boolean` | false | The row of the page you are on: aria-current="page" and the --fill-2 fill; with currentLabel, its badge replaces the arrow. |
+| `currentLabel` | `ReactNode` | — | The text of the badge on the current row ("You are here"), the solid primary Badge. |
 | `className` | `string` | — | Merged onto the <ul>. The list paints no surface of its own — wrap it in Card when the design calls for a grouped panel. |

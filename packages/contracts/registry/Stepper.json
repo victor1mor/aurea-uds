@@ -9,7 +9,11 @@
     "web": "stable",
     "native": "stable"
   },
-  "variants": [],
+  "variants": [
+    "default",
+    "path",
+    "bar"
+  ],
   "sizes": [],
   "states": [
     "default",
@@ -26,7 +30,18 @@
     "--subtle-foreground",
     "--muted-foreground",
     "--surface-1",
-    "--text-xs"
+    "--text-xs",
+    "--control-h-xl",
+    "--shadow-sm",
+    "--shadow-md",
+    "--fill-2",
+    "--fill-3",
+    "--fill-3-solid",
+    "--font-code",
+    "--success-400",
+    "--space-2",
+    "--space-3",
+    "--card"
   ],
   "a11y": {
     "role": "list",
@@ -82,10 +97,28 @@
       "description": "Makes the step a real button, for a flow the user may enter at any point. Without it the step is not interactive."
     },
     {
+      "name": "items[].href",
+      "type": "string",
+      "default": "—",
+      "description": "Makes the step a link (in the bar, each part leads to its step)."
+    },
+    {
       "name": "label",
       "type": "string",
       "default": "the provider's \"Steps\"",
       "description": "Accessible name of the whole list."
+    },
+    {
+      "name": "variant",
+      "type": "\"default\" | \"path\" | \"bar\"",
+      "default": "\"default\"",
+      "description": "path: a path you choose on — 50 dots (--control-h-xl) on the card with the small shadow, numbers in the code font, one 8 rail (--fill-2) end to end, the chosen step inverted and 56; the labels stay for screen readers; under a 30rem container, four per row and no rail. bar: progress in parts — each step is a 12 part of the bar, 6 apart, the link or button of its step, green when done; the label stays for screen readers."
+    },
+    {
+      "name": "startContent / endContent",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "path: the two ends that do not click (the start one in the brand yellow). bar: the name before the bar (600) and the count after it (code font, role=status, announced when it changes)."
     },
     {
       "name": "className",

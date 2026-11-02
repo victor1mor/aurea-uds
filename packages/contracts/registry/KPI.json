@@ -11,7 +11,8 @@
   },
   "variants": [
     "card",
-    "plain"
+    "plain",
+    "brand"
   ],
   "sizes": [],
   "states": [],
@@ -23,7 +24,14 @@
     "--space-1",
     "--success-400",
     "--text-3xl",
-    "--text-sm"
+    "--text-sm",
+    "--primary",
+    "--primary-foreground",
+    "--shadow-md",
+    "--space-16",
+    "--space-8",
+    "--fill-3",
+    "--control-thumb"
   ],
   "a11y": {
     "role": "group",
@@ -82,9 +90,21 @@
     },
     {
       "name": "variant",
-      "type": "card | plain",
+      "type": "\"card\" | \"plain\" | \"brand\"",
       "default": "card",
-      "description": "`plain` drops the card: the number sits inside a card that already exists, instead of a box inside a box."
+      "description": "`plain` drops the card: the number sits inside a card that already exists, instead of a box inside a box. brand is the yellow card: the brand yellow with the ink and the medium shadow."
+    },
+    {
+      "name": "bars",
+      "type": "Array<{label, value, amount}>",
+      "default": "—",
+      "description": "Bars under the number, 128 tall, 8 apart, up to 32 wide. Each bar is a button; hovering, focusing or clicking one chooses it, and the reading above says its label and value. On brand, the bars are ink and the chosen one is white; elsewhere, --fill-3 and the text color."
+    },
+    {
+      "name": "defaultBar",
+      "type": "number",
+      "default": "the last",
+      "description": "The bar chosen at the start (its index)."
     }
   ],
   "axes": {

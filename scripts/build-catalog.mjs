@@ -54,6 +54,10 @@ function write(file, data) {
 }
 
 const outDir = join(root, "apps/catalog");
+// O arranjo das páginas do site B (ver "AS PÁGINAS DO SITE B", mais abaixo): lido aqui, antes de a folha ser escrita.
+const siteBDir = join(outDir, "site-b");
+const siteBCss = existsSync(join(siteBDir, "css")) ? readdirSync(join(siteBDir, "css")).filter(f => f.endsWith(".css")).sort()
+  .map(f => `/* site-b/css/${f} */\n${readFileSync(join(siteBDir, "css", f), "utf8")}`).join("\n") : "";
 // O sprite é medido depois de todas as páginas existirem, então cada página sai com um lugar
 // reservado para ele e o texto entra no fim.
 const SPRITE_SLOT = "<!--aurea-sprite-->";
@@ -2091,6 +2095,24 @@ a.related-card:hover { border-color:transparent; }
 .cat-familia-topo h2 { margin:0; font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold); letter-spacing:-.02em; }
 .cat-familia-conta { font-family:var(--font-code); font-size:var(--text-xs); color:var(--muted-foreground); }
 .cat-cartoes { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:var(--space-3); }
+/* A BUSCA DO SITE B (0.54.0, aprovada pela bancada em 01/11/2026, o item 2): o arranjo do SITE em volta da
+   CommandPalette grande — os filtros soltos com a contagem, a prévia (o selo com o círculo pequeno, o título Sora 30
+   extranegrito, o texto 18, o endereço em mono e o "Open the page"), as sugestões numa linha própria acima das teclas, e a
+   chave "Components for" na ponta do pé. */
+.site-busca-filtros { flex-wrap:wrap; }
+.site-busca-filtros .badge { margin-inline-start:var(--space-2); }
+.site-busca-previa { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-4); min-inline-size:0; }
+.site-busca-area { gap:var(--space-2); background:var(--card); padding-inline:var(--space-1) var(--space-3); block-size:var(--space-8); }
+.command-item-tile.site-busca-tile { inline-size:var(--space-6); block-size:var(--space-6); }
+.site-busca-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+.site-busca-titulo { margin:0; font-family:var(--font-heading); font-size:var(--text-3xl); font-weight:var(--weight-extrabold); line-height:var(--leading-tight); }
+.site-busca-texto { margin:0; font-size:var(--text-lg); color:var(--muted-foreground); }
+.site-busca-end { font-family:var(--font-code); font-size:var(--text-sm); overflow-wrap:anywhere; }
+.site-busca-abrir { margin-block-start:var(--space-8); }
+.site-busca-pe { display:contents; }
+.site-busca-sugestoes { order:-1; flex-basis:100%; display:flex; flex-wrap:wrap; gap:var(--space-2); }
+.site-busca-sug { font-family:var(--font-code); }
+.site-busca-dir { display:inline-flex; align-items:center; gap:var(--space-3); color:var(--muted-foreground); font-size:var(--text-sm); }
 /* O CARTÃO: o "Card" clicável que sobe ("lift"); o link cobre o cartão inteiro por um pseudo-elemento (a prévia tem botão de
    verdade dentro, e botão dentro de <a> é HTML inválido). */
 .cat-cartao { position:relative; min-inline-size:0; display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center; column-gap:var(--space-2);
@@ -2766,24 +2788,32 @@ write(join(outDir, "assets/catalog.css"),
 ${fontsCss}@layer motor{
 ${grafoCss}}
 ${coreCss}@layer aurea{
-${chrome}}
+${chrome}${siteBCss}}
 `);
 write(join(outDir, "assets/catalog.js"), catalogJs);
 // O ÍNDICE DA BUSCA (ADR-0067): o que a `CommandPalette` do topo procura, em grupos, saído dos MESMOS dados
 // das páginas — nada escrito à mão. Vai como script clássico (`window.AUREA_SEARCH`), e não como JSON
 // buscado por rede, porque o site abre direto do disco e `file://` bloqueia o `fetch`.
+// O SITE B (0.54.0): cada entrada leva também a `description` (a linha de baixo da busca grande e o texto da prévia) e,
+// quando a página tem, o `icon` dela — o da ficha, para os componentes e os hooks.
+const resumo = (texto) => (texto ? String(texto).replace(/\s+/g, " ").trim() : undefined);
 const indiceDaBusca = [
-  ...[["All Components", "components.html"], ["Patterns", "patterns.html"],
-    ["Blocks", "blocks.html"], ["Recipes", "recipes.html"], ["Hooks", "hooks.html"], ["Tokens", "tokens.html"]]
-    .map(([label, href]) => ({label, href, group: "Pages"})),
-  ...docs.map(d => ({label: d.title, href: d.arquivo, group: "Getting Started"})),
-  {label: "All Releases", href: "releases.html", group: "Releases"},
+  ...[["All Components", "components.html", `Explore the full list of ${fichas.length} components, rendered with the Aurea components themselves.`],
+    ["Patterns", "patterns.html", `${patterns.length} compositions. A pattern is a component already assembled.`],
+    ["Blocks", "blocks.html", `${blocks.length} ready sections. A block is bigger than a pattern and smaller than a page.`],
+    ["Recipes", "recipes.html", `${archetypeIds.length} product archetypes: how to assemble a whole kind of application by combining blocks.`],
+    ["Hooks", "hooks.html", "The public hooks. They are API like any component."],
+    ["Tokens", "tokens.html", "The tokens in DTCG format — the single source of the identity."]]
+    .map(([label, href, description]) => ({label, href, group: "Pages", description})),
+  ...docs.map(d => ({label: d.title, href: d.arquivo, group: "Getting Started", description: resumo(d.description)})),
+  {label: "All Releases", href: "releases.html", group: "Releases", description: "Every update to Aurea: what is new, what changed, what was fixed and what broke."},
   {label: "Health", href: "saude.html", group: "Releases"},
-  ...releases.map(r => ({label: r.title, href: r.arquivo, group: "Releases"})),
-  ...alfabetico(fichas.filter(f => f.kind !== "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Components"})),
-  ...alfabetico(fichas.filter(f => f.kind === "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Hooks"})),
-  ...patterns.map(p => ({label: `${p.component} · ${p.name}`, href: `${p.slug}.html`, group: "Patterns"})),
-  ...blocks.map(b => ({label: b.name, href: `${b.slug}.html`, group: "Blocks"})),
+  ...releases.map(r => ({label: r.title, href: r.arquivo, group: "Releases", description: resumo(r.description)})),
+  ...alfabetico(fichas.filter(f => f.kind !== "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Components", description: resumo(f.summary), icon: f.icon,
+    ...(nativos.includes(f.name) ? {native: paginaNativa(f.name)} : null)})),
+  ...alfabetico(fichas.filter(f => f.kind === "hook")).map(f => ({label: f.name, href: `${slug(f.name)}.html`, group: "Hooks", description: resumo(f.summary), icon: f.icon})),
+  ...patterns.map(p => ({label: `${p.component} · ${p.name}`, href: `${p.slug}.html`, group: "Patterns", description: resumo(p.description)})),
+  ...blocks.map(b => ({label: b.name, href: `${b.slug}.html`, group: "Blocks", description: resumo(b.description)})),
   ...archetypeIds.map(id => ({label: recipeTitle(id), href: `recipe-${slug(id)}.html`, group: "Recipes"})),
 ];
 write(join(outDir, "assets/search-index.js"), `window.AUREA_SEARCH = ${JSON.stringify(indiceDaBusca)};\n`);
@@ -2833,28 +2863,47 @@ ${TEMA_SALVO}</head>
 `;
 }
 
+// ── AS PÁGINAS DO SITE B, CADA UMA NO SEU ARQUIVO (02/11/2026) ────────────────────────────────────────────────────────
+// Para várias sessões construírem páginas ao mesmo tempo sem pisar umas nas outras, cada página do desenho B mora em
+// `apps/catalog/site-b/paginas/<chave>.mjs` (o desenho dela) e `apps/catalog/site-b/css/<chave>.css` (o arranjo dela). O
+// módulo exporta, por padrão, uma função que recebe o objeto `site` (as ferramentas do gerador, abaixo) e o que a página
+// é — o `doc` das páginas da Getting Started, a ficha e o índice do componente — e devolve `{node, toc}`, como o
+// `docPage`. Sem o arquivo, a página continua a de hoje. As chaves: o `nome` do `.md` da Getting Started ("quick-start"),
+// e "inicio", "componente", "releases", "release", "patterns", "pattern", "blocks", "block", "recipes", "recipe", "hooks",
+// "tokens". O CSS entra no fim da folha do site, na ordem do nome do arquivo.
+const siteBPaginas = {};
+for (const f of existsSync(join(siteBDir, "paginas")) ? readdirSync(join(siteBDir, "paginas")).filter(f => f.endsWith(".mjs")).sort() : [])
+  siteBPaginas[f.replace(/\.mjs$/, "")] = (await import(pathToFileURL(join(siteBDir, "paginas", f)).href)).default;
+// As ferramentas que uma página do site B usa — as mesmas das páginas de hoje.
+const site = {h, Fragment, A, REPO, SITE, slug, alfabetico, pedacos, lerLinha, linhaMd, paraTexto, paraMarkdown, acoesDaPagina,
+  cabecaDaPagina, anteriorProximo, textoParaCopiar, vizinhos, demoBlock, blocoDeTile, secaoB, identidade, razaoDoTexto,
+  contrasteEntre, hexDoToken, tokensDoc, fichas, docs, DOCS, releases, patterns, blocks, archetypeIds, recipeTitle, contract,
+  nativos, paginaNativa, componentsIndex, homePage, docPage, componentPage, releasesPage, releasePage, patternsIndex,
+  patternPage, blocksIndex, blockPage, recipesIndex, recipePage, hooksPage, tokensPage, introducaoB};
+const pagina = (chave, padrao, ...args) => siteBPaginas[chave] ? siteBPaginas[chave](site, ...args) : padrao(...args);
+
 // As páginas são montadas ANTES de escrever, porque o sprite é medido no HTML de todas elas.
 // ADR-0067: o `index.html` é o Início; o catálogo de componentes mora em `components.html`; a
 // instalação, uma vez, em `getting-started.html`.
 const paginas = [
-  ["index.html", pageHtml("Aurea Universal Design System", null, homePage(), "home")],
-  ...docs.map(d => [d.arquivo, pageHtml(d.title, d.arquivo, d.nome === "introduction" ? introducaoB(d) : docPage(d), "start")]),
-  ["releases.html", pageHtml("All Releases", "releases.html", releasesPage(), "releases")],
+  ["index.html", pageHtml("Aurea Universal Design System", null, pagina("inicio", homePage), "home")],
+  ...docs.map(d => [d.arquivo, pageHtml(d.title, d.arquivo, pagina(d.nome, d.nome === "introduction" ? introducaoB : docPage, d), "start")]),
+  ["releases.html", pageHtml("All Releases", "releases.html", pagina("releases", releasesPage), "releases")],
   ["saude.html", pageHtml("Health", "saude.html", saudePage(), "releases")],
   ["native.html", pageHtml("All Components", "native.html", nativeIndex(), "native")],
   ...nativos.map(n => [paginaNativa(n), pageHtml(`${n} (React Native)`, paginaNativa(n), nativePage(n), "native")]),
-  ...releases.map(r => [r.arquivo, pageHtml(`${r.title} release notes`, r.arquivo, releasePage(r), "releases")]),
+  ...releases.map(r => [r.arquivo, pageHtml(`${r.title} release notes`, r.arquivo, pagina("release", releasePage, r), "releases")]),
   ["components.html", pageHtml("All Components", "components.html", componentsIndex())],
-  ["patterns.html", pageHtml("Patterns", "patterns.html", patternsIndex(), "patterns")],
-  ["blocks.html", pageHtml("Blocks", "blocks.html", blocksIndex(), "blocks")],
-  ["recipes.html", pageHtml("Recipes", "recipes.html", recipesIndex(), "recipes")],
-  ["hooks.html", pageHtml("Hooks", "hooks.html", hooksPage(), "hooks")],
-  ["tokens.html", pageHtml("Tokens", "tokens.html", tokensPage(), "tokens")],
-  ...patterns.map((p, i) => [`${p.slug}.html`, pageHtml(p.name, `${p.slug}.html`, patternPage(p, i), "patterns")]),
-  ...blocks.map((b, i) => [`${b.slug}.html`, pageHtml(b.name, `${b.slug}.html`, blockPage(b, i), "blocks")]),
+  ["patterns.html", pageHtml("Patterns", "patterns.html", pagina("patterns", patternsIndex), "patterns")],
+  ["blocks.html", pageHtml("Blocks", "blocks.html", pagina("blocks", blocksIndex), "blocks")],
+  ["recipes.html", pageHtml("Recipes", "recipes.html", pagina("recipes", recipesIndex), "recipes")],
+  ["hooks.html", pageHtml("Hooks", "hooks.html", pagina("hooks", hooksPage), "hooks")],
+  ["tokens.html", pageHtml("Tokens", "tokens.html", pagina("tokens", tokensPage), "tokens")],
+  ...patterns.map((p, i) => [`${p.slug}.html`, pageHtml(p.name, `${p.slug}.html`, pagina("pattern", patternPage, p, i), "patterns")]),
+  ...blocks.map((b, i) => [`${b.slug}.html`, pageHtml(b.name, `${b.slug}.html`, pagina("block", blockPage, b, i), "blocks")]),
   ...archetypeIds.map((id, i) => [`recipe-${slug(id)}.html`,
-    pageHtml(recipeTitle(id), `recipe-${slug(id)}.html`, recipePage(id, contract.applicationPatterns.archetypes[id], i, archetypeIds), "recipes")]),
-  ...ordered.map((f, i) => [`${slug(f.name)}.html`, pageHtml(f.name, `${slug(f.name)}.html`, componentPage(f, i),
+    pageHtml(recipeTitle(id), `recipe-${slug(id)}.html`, pagina("recipe", recipePage, id, contract.applicationPatterns.archetypes[id], i, archetypeIds), "recipes")]),
+  ...ordered.map((f, i) => [`${slug(f.name)}.html`, pageHtml(f.name, `${slug(f.name)}.html`, pagina("componente", componentPage, f, i),
     f.kind === "hook" ? "hooks" : "components")]),
 ];
 

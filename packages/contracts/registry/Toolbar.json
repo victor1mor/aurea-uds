@@ -23,7 +23,11 @@
     "--border",
     "--radius-control",
     "--radius-lg",
-    "--secondary"
+    "--secondary",
+    "--primary",
+    "--primary-foreground",
+    "--control-h-xl",
+    "--control-thumb"
   ],
   "a11y": {
     "role": "toolbar",
@@ -82,6 +86,12 @@
       "type": "\"brand\" | \"neutral\" | \"contrast\"",
       "default": "\"brand\"",
       "description": "The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's \"increase contrast\", neutral gets a 3:1 outline. For every pressed ToolbarButton inside; each may set its own."
+    },
+    {
+      "name": "tone",
+      "type": "\"default\" | \"brand\"",
+      "default": "\"default\"",
+      "description": "brand is the yellow selection bar (\"3 selected\", Clear, Remove): the brand yellow, 52 tall, the text in the ink at 600, the ends apart, and the buttons inside white with the ink."
     }
   ],
   "axes": {
@@ -89,6 +99,10 @@
       "brand",
       "neutral",
       "contrast"
+    ],
+    "tone": [
+      "default",
+      "brand"
     ]
   }
 }

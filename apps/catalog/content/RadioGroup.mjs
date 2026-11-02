@@ -60,6 +60,29 @@ export default {
         h(Radio, {value: "standard", label: "Standard"}), h(Radio, {value: "express", label: "Express"})),
     },
     {
+      title: "Cards",
+      description: "variant=\"card\" makes each option a whole card; the chosen one rises with a shadow. With " +
+        "indicatorPlacement=\"none\" the dot goes, and the card alone shows the choice.",
+      code: [
+        '<RadioGroup label="Framework" variant="card" orientation="horizontal" defaultValue="vite">',
+        '  <Radio value="vite" label="Vite" description="A single-page app" />',
+        '  <Radio value="next" label="Next.js" description="Server components" />',
+        '  <Radio value="expo" label="Expo" description="iOS and Android" />',
+        '</RadioGroup>',
+        '<RadioGroup label="Theme" variant="card" indicatorPlacement="none" orientation="horizontal" defaultValue="gold">',
+        '  <Radio value="gold" label="Aurea Gold" />',
+        '  <Radio value="ember" label="Aurea Ember" />',
+        '</RadioGroup>',
+      ].join("\n"),
+      render: () => h("div", {style: {display: "grid", gap: "var(--space-8)", inlineSize: "100%"}},
+        h(RadioGroup, {label: "Framework", variant: "card", orientation: "horizontal", defaultValue: "vite"},
+          h(Radio, {value: "vite", label: "Vite", description: "A single-page app"}),
+          h(Radio, {value: "next", label: "Next.js", description: "Server components"}),
+          h(Radio, {value: "expo", label: "Expo", description: "iOS and Android"})),
+        h(RadioGroup, {label: "Theme", variant: "card", indicatorPlacement: "none", orientation: "horizontal", defaultValue: "gold"},
+          h(Radio, {value: "gold", label: "Aurea Gold"}), h(Radio, {value: "ember", label: "Aurea Ember"}))),
+    },
+    {
       title: "With an error",
       description: "The error closes the group, and every option is marked invalid.",
       code: [

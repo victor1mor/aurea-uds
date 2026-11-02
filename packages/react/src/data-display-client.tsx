@@ -30,10 +30,14 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement>, RefAttribu
   stickyFirstColumn?:boolean;
   /** GAR-12: a tabela cabe na largura da caixa, sem o mínimo de 720 — a comparação de dois itens no celular. */
   fit?:boolean;
+  /** `rows` (o site B, 0.54.0 — a lista de membros da página inicial, aprovada pela bancada em 01/11/2026, o D-7.6): sem a
+   *  caixa, cada linha é uma CÁPSULA de 54, 4 entre elas; com o mouse, o `--fill-1`; a linha com `data-selected`, o amarelo
+   *  a 14%. O cabeçalho em mono maiúsculo, apagado. Cabe na largura (sem o mínimo de 720). */
+  variant?:"default"|"rows";
   /** GAR-12: esconde as linhas marcadas como iguais (`<tr data-same>`) — o "Só diferenças". */
   differencesOnly?:boolean;
 }
-export function Table({caption,stickyHeader,stickyFirstColumn,fit,differencesOnly,children,className,...props}:TableProps){const s=useAureaStrings();return <div className={cx("table-region",stickyHeader&&"table-sticky-header",stickyFirstColumn&&"table-sticky-first")} role="region" aria-label={typeof caption==="string"?caption:s.tableLabel} tabIndex={0}><table className={cx("table",fit&&"table-fit",differencesOnly&&"table-differences-only",className)} {...props}>{caption&&<caption>{caption}</caption>}{children}</table></div>}
+export function Table({caption,stickyHeader,stickyFirstColumn,fit,differencesOnly,variant="default",children,className,...props}:TableProps){const s=useAureaStrings();return <div className={cx("table-region",stickyHeader&&"table-sticky-header",stickyFirstColumn&&"table-sticky-first",variant==="rows"&&"table-region-rows")} role="region" aria-label={typeof caption==="string"?caption:s.tableLabel} tabIndex={0}><table className={cx("table",fit&&"table-fit",differencesOnly&&"table-differences-only",variant==="rows"&&"table-rows",className)} {...props}>{caption&&<caption>{caption}</caption>}{children}</table></div>}
 
 // A `Prose` MORAVA AQUI e foi para o `markup.tsx` no item O1. O comentario dela dizia, em
 // 15/08/2026: "e exatamente o caso que o item O1 do plano vai medir: quem e de cliente so por

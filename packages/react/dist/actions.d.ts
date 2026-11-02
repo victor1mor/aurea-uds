@@ -88,7 +88,8 @@ interface ToggleBase {
      *  mudou, e a composição fica bonita e morta. Solto, não faz diferença nenhuma. */
     value?: string;
     icon?: IconName;
-    size?: Responsive<Extract<ComponentSize, "sm" | "md" | "lg">>;
+    /** `xl` (o site B, 0.54.0 — as marcas do menu do celular, aprovado pela bancada em 01/11/2026): o botão de 50, o `xl` do `Button`. */
+    size?: Responsive<Extract<ComponentSize, "sm" | "md" | "lg" | "xl">>;
     disabled?: boolean;
     id?: string;
     className?: string;
@@ -98,6 +99,10 @@ interface ToggleBase {
     /** A cor do LIGADO (ADR-0084, 27/10/2026): `brand` — o amarelo do botão primário, o padrão —, `neutral` (o cinza) ou
      *  `contrast` (o grafite, invertido). Dentro de um `ToggleGroup` ou de um `Toolbar` com `pressedStyle`, o do botão vale. */
     pressedStyle?: TogglePressedStyle;
+    /** A ÁREA (o site B, 0.54.0 — aprovada pela bancada em 01/11/2026): o toggle em volta de um bloco (uma miniatura, um ícone
+     *  com o nome). `true` ocupa a largura; `"pill"` fica do tamanho do conteúdo, em cápsula. Com `variant="ghost"`, sem fundo;
+     *  com o `default`, o fundo cinza e, ligada, o amarelo cheio. */
+    area?: boolean | "pill";
 }
 export type ToggleVariant = "default" | "ghost";
 /** As três cores do ligado aprovadas pelo Victor em 26/10/2026 (A cinza, B grafite, C amarelo — o padrão). */
@@ -110,7 +115,7 @@ export type ToggleProps = ToggleBase & ({
     children?: never;
     label: string;
 });
-export declare function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size: sizePedido, disabled, id, className, children, variant, pressedStyle }: ToggleProps): React.JSX.Element;
+export declare function Toggle({ pressed, defaultPressed, onPressedChange, value, icon, label, size: sizePedido, disabled, id, className, children, variant, pressedStyle, area }: ToggleProps): React.JSX.Element;
 export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     label: string;
     icon: AureaIcon;
@@ -142,10 +147,12 @@ export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement>, RefAtt
     detached?: boolean;
 }
 export declare function ButtonGroup({ label, orientation, variant, size, fullWidth, disabled, detached, className, ...props }: ButtonGroupProps): React.JSX.Element;
-export declare function Toolbar({ orientation, label, className, pressedStyle, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export declare function Toolbar({ orientation, label, className, pressedStyle, tone, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     orientation?: Responsive<Orientation>;
     label?: string;
     pressedStyle?: TogglePressedStyle;
+    /** `brand`: a barra amarela da seleção em lote ("3 selected", "Clear", "Remove"), com os botões brancos. */
+    tone?: "default" | "brand";
 }): React.JSX.Element;
 export declare function ToolbarGroup({ label, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     label?: string;
@@ -167,7 +174,7 @@ export interface ToggleGroupProps {
     className?: string;
     children: React.ReactNode;
     /** O tamanho de todos os botões de dentro; cada um pode trocar o seu (valor simples, como o dela). */
-    size?: Extract<ComponentSize, "sm" | "md" | "lg">;
+    size?: Extract<ComponentSize, "sm" | "md" | "lg" | "xl">;
     /** Ocupa a largura do pai, e os botões repartem em partes iguais. */
     fullWidth?: boolean;
     /** Botões soltos (vão de 4), em vez de colados. */

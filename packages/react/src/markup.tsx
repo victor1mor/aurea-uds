@@ -364,7 +364,19 @@ export function Section({surface="background",spacing="md",theme,variant="base",
 // sprite por hook, e o KPI é marcação pura, sem JavaScript no navegador (ADR-0026).
 export type KPIDirection="up"|"down"|"flat";
 export type KPITone="success"|"danger"|"neutral";
-export type KPIVariant="card"|"plain";
+export type KPIVariant="card"|"plain"|"brand";
+/** Uma barra do `KPI` (o site B): o nome curto ("Jun"), o valor dito na leitura ("$48.2k") e o número que dá a altura. */
+export interface KPIBar{label:string;value:ReactNode;amount:number}
+// A BARRA ESCOLHIDA (o site B, 0.54.0): o mouse, o foco ou o clique numa barra a escolhem, e a leitura diz o nome e o valor
+// dela. Sem estado do React: muda o DOM, do mesmo jeito que o `aurea.js` faz na página sem React — o KPI continua marcação
+// pura.
+function escolherBarra(e:React.SyntheticEvent<HTMLButtonElement>){
+  const botao=e.currentTarget,caixa=botao.closest(".kpi-bars-wrap");
+  if(!caixa)return;
+  for(const b of caixa.querySelectorAll(".kpi-bar"))b.setAttribute("aria-pressed",String(b===botao));
+  const leitura=caixa.querySelector(".kpi-reading");
+  if(leitura)leitura.textContent=botao.dataset.reading??"";
+}
 const TOM_DA_DIRECAO:Record<KPIDirection,KPITone>={up:"success",down:"danger",flat:"neutral"};
 const PALAVRA_DA_DIRECAO:Record<KPIDirection,string>={up:"Up",down:"Down",flat:"No change"};
 export interface KPIProps extends HTMLAttributes<HTMLDivElement>,RefAttributes<HTMLDivElement>{
@@ -378,18 +390,35 @@ export interface KPIProps extends HTMLAttributes<HTMLDivElement>,RefAttributes<H
   tone?:KPITone;
   /** A palavra que o leitor de tela ouve antes da tendência. Padrão em inglês: "Up", "Down", "No change". */
   directionLabel?:string;
-  /** `plain` tira a caixa: o número dentro de um cartão que já existe. */
+  /** `plain` tira a caixa: o número dentro de um cartão que já existe. `brand` (o site B, 0.54.0) é o cartão AMARELO, com
+   *  a tinta e a sombra média. */
   variant?:KPIVariant;
+  /** As barras embaixo do número (o site B, 0.54.0): cada uma é um botão; a escolhida fica branca no `brand` (na cor do
+   *  texto, fora dele) e a leitura diz o nome e o valor dela. */
+  bars?:KPIBar[];
+  /** A barra que começa escolhida (o índice). Padrão: a última. */
+  defaultBar?:number;
 }
-export function KPI({label,value,trend,direction,tone,directionLabel,variant="card",className,...props}:KPIProps){
+export function KPI({label,value,trend,direction,tone,directionLabel,variant="card",bars,defaultBar,className,...props}:KPIProps){
   const tom=direction?(tone??TOM_DA_DIRECAO[direction]):undefined;
   const miolo=<><span className="muted">{label}</span><strong>{value}</strong>
     {(trend||trend===0||direction)&&<small className={direction?cx("kpi-trend",`kpi-trend-${direction}`,`kpi-tone-${tom}`):undefined}>
       {direction&&<span className="kpi-trend-icon" aria-hidden="true"/>}
       {direction&&<span className="sr-only">{directionLabel??PALAVRA_DA_DIRECAO[direction]}</span>}
       {trend}</small>}</>;
-  return variant==="plain"?<div className={cx("kpi",className)} {...props}>{miolo}</div>
-    :<Card className={cx("kpi",className)} {...props}>{miolo}</Card>;
+  const maior=bars&&bars.length>0?Math.max(...bars.map(b=>b.amount),1):1;
+  const escolhida=bars&&bars.length>0?Math.min(Math.max(defaultBar??bars.length-1,0),bars.length-1):-1;
+  const leituraDe=(b:KPIBar)=>`${b.label} · ${typeof b.value==="string"||typeof b.value==="number"?b.value:""}`;
+  const barras=bars&&bars.length>0&&<div className="kpi-bars-wrap" data-aurea-kpi-bars="">
+    <div className="kpi-reading" aria-live="polite">{leituraDe(bars[escolhida]!)}</div>
+    <div className="kpi-bars" style={{"--kpi-bars":bars.length} as React.CSSProperties}>{bars.map((b,i)=>
+      <button key={i} type="button" className="kpi-bar" aria-pressed={i===escolhida} aria-label={leituraDe(b)} data-reading={leituraDe(b)}
+        onClick={escolherBarra} onFocus={escolherBarra} onMouseEnter={escolherBarra}>
+        <span className="kpi-bar-fill" style={{"--h":`${Math.round(b.amount/maior*100)}%`} as React.CSSProperties}/></button>)}</div>
+    <div className="kpi-bars-x" aria-hidden="true" style={{"--kpi-bars":bars.length} as React.CSSProperties}>{bars.map((b,i)=><span key={i}>{b.label}</span>)}</div>
+  </div>;
+  return variant==="plain"?<div className={cx("kpi",className)} {...props}>{miolo}{barras}</div>
+    :<Card className={cx("kpi",variant==="brand"&&"kpi-brand",className)} {...props}>{miolo}{barras}</Card>;
 }
 export function DataList({items}:{items:Array<{term:ReactNode;value:ReactNode}>}){return <dl className="data-list">{items.map((i,n)=><React.Fragment key={n}><dt>{i.term}</dt><dd>{i.value}</dd></React.Fragment>)}</dl>}
 // `variant` (ADR-0084, 27/10/2026): cinco estilos aprovados pelo Victor em 26/10/2026, todos sobre o conserto da ADR-0083 —
@@ -759,7 +788,12 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 export const Textarea=forwardRef<HTMLTextAreaElement,TextareaProps>(function Textarea({className,size,variant,...props},ref){return <textarea ref={ref} className={cx("textarea",peleDoEixo("textarea",size),variant==="secondary"&&"textarea-secondary",className)} {...props}/>});
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.
-export function Checkbox({label,labelHidden,description,size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;size?:Responsive<FieldSize>}){return <label className={cx("checkbox",labelHidden&&"checkbox-bare",className)}><input type="checkbox" {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/><span className={labelHidden?"sr-only":undefined}><strong>{label}</strong>{description&&<><br/><span className="muted">{description}</span></>}</span></label>}
+// `variant="pill"` (o site B, o "Mark as done" — aprovado pela bancada em 01/11/2026, o item 4): a cápsula em volta, o alvo
+// inteiro, de 44 (`--target-min`, a caixa 24) ou, com `size` sm/md, de 36 (`--control-h-md`, a caixa 20). `tone="success"`
+// pinta a marcada de "feito" (a cápsula no verde a 18%, a letra e a caixa no verde). Sem `pill`, a caixa de sempre.
+export function Checkbox({label,labelHidden,description,size,variant="default",tone,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;size?:Responsive<FieldSize>;variant?:"default"|"pill";tone?:"success"}){
+if(variant==="pill")return <label className={cx("checkbox","checkbox-pill",(size==="sm"||size==="md")&&"checkbox-pill-md",className)} data-tone={tone}><input type="checkbox" {...props}/><span className="control-mark"/><span className={labelHidden?"sr-only":undefined}>{label}</span></label>;
+return <label className={cx("checkbox",labelHidden&&"checkbox-bare",className)}><input type="checkbox" {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/><span className={labelHidden?"sr-only":undefined}><strong>{label}</strong>{description&&<><br/><span className="muted">{description}</span></>}</span></label>}
 // `description` no `Radio` e no `Switch` (15/10/2026, a referência tem nos dois): a linha apagada embaixo do nome, do
 // mesmo jeito do `Checkbox`. Sem ela, a marcação é a de sempre.
 const comDescricao=(label:ReactNode,description:ReactNode)=>description?<span><strong>{label}</strong><br/><span className="muted">{description}</span></span>:label;

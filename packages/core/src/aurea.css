@@ -1187,6 +1187,25 @@ img,svg { display:block; }
 /* `aria-disabled` e NÃO `:disabled` — a razão está escrita ao lado de `.btn:disabled`, medida em
    13/08/2026: `:disabled` tira da ordem de foco e quem usa teclado nunca acha a linha. */
 .nav-list-row[aria-disabled="true"] { opacity:.45; cursor:not-allowed; }
+/* A LISTA GRANDE (`NavList size="lg"`, o site B — o menu do celular, aprovado pela bancada em 01/11/2026, o item 10): a linha
+   em cápsula de 56 (o círculo de 40 + 8 em cima e embaixo), 16 entre o círculo e o nome, a letra 18 seminegrito; o ícone de
+   20 num círculo de 40 tingido pela cor de categoria (sem ela, o neutro). A linha ATUAL (`aria-current="page"`, nos dois
+   tamanhos) ganha o fundo `--fill-2`, e o selo dela fica no lugar da seta. Sem `lg`, a lista de sempre. */
+.nav-list-lg { gap:var(--space-1); }
+.nav-list-lg .nav-list-row { min-block-size:calc(var(--space-10) + 2 * var(--space-2)); padding:var(--space-2); gap:var(--space-4); border-radius:var(--radius-control);
+  font-size:var(--text-lg); font-weight:var(--weight-semibold); }
+.nav-list-tile { display:grid; place-items:center; flex:none; inline-size:var(--space-10); block-size:var(--space-10); border-radius:var(--radius-full); background:var(--fill-2); color:var(--foreground); }
+.nav-list-row .nav-list-tile .icon { inline-size:var(--icon-md); block-size:var(--icon-md); opacity:1; }
+.nav-list-tile[data-tone="red"] { background:var(--category-red-bg); color:var(--category-red); }
+.nav-list-tile[data-tone="orange"] { background:var(--category-orange-bg); color:var(--category-orange); }
+.nav-list-tile[data-tone="green"] { background:var(--category-green-bg); color:var(--category-green); }
+.nav-list-tile[data-tone="teal"] { background:var(--category-teal-bg); color:var(--category-teal); }
+.nav-list-tile[data-tone="cyan"] { background:var(--category-cyan-bg); color:var(--category-cyan); }
+.nav-list-tile[data-tone="blue"] { background:var(--category-blue-bg); color:var(--category-blue); }
+.nav-list-tile[data-tone="violet"] { background:var(--category-violet-bg); color:var(--category-violet); }
+.nav-list-tile[data-tone="pink"] { background:var(--category-pink-bg); color:var(--category-pink); }
+.nav-list-row[aria-current="page"] { background:var(--fill-2); }
+.nav-list-here { flex:none; }
 /* O PAINEL DÁ QUASE NADA, A LINHA DÁ O RESTO. Medido em 18/08/2026, depois de o Victor circular a
    folga no print: com o `--card-pad` de 20px o realce da linha começava a 21px da borda e o texto
    a 65px, e a linha ocupava só 88% da largura — realce flutuando no meio de uma caixa grande em
@@ -1526,6 +1545,14 @@ img,svg { display:block; }
 /* Vertical sai da pílula: --radius-control (999px) clampa em 50% da menor
    dimensão e vira um oval num container alto. */
 .toolbar[data-orientation="vertical"] { flex-direction:column; align-items:stretch; border-radius:var(--radius-lg); }
+/* A BARRA AMARELA (`Toolbar tone="brand"`, o site B — a seleção em lote da página inicial, aprovada pela bancada em
+   01/11/2026, o D-7.7, a forma B): o amarelo da marca, 52 de altura (`--control-h-xl` + 2), 16 antes e 4 depois, o texto
+   na tinta, 600, o que vem antes e o que vem depois nas pontas; os botões de dentro BRANCOS (as marcas dos controles) com a
+   tinta. Sem `brand`, a barra de sempre. */
+.toolbar.toolbar-brand { justify-content:space-between; min-block-size:calc(var(--control-h-xl) + var(--space-05)); padding:0 var(--space-1) 0 var(--space-4);
+  background:var(--primary); color:var(--primary-foreground); font-weight:var(--weight-semibold); }
+.toolbar-brand .btn { --btn-bg:var(--control-thumb); --btn-fg:var(--primary-foreground); background:var(--btn-bg); color:var(--btn-fg); }
+.toolbar-brand .btn:hover:not(:disabled) { --btn-bg:color-mix(in oklab,var(--control-thumb) 88%,var(--primary-foreground)); }
 .toolbar-group { display:flex; align-items:center; gap:var(--space-1); }
 .toolbar-sep { flex:none; align-self:stretch; inline-size:1px; min-block-size:20px; margin-inline:4px; margin-block:0; background:var(--border); border:0; }
 /* SEPARADOR — a linha de divisão do sistema, num lugar só.
@@ -1858,6 +1885,21 @@ img,svg { display:block; }
 .radio-group > .field-error { margin-block-start:var(--space-2); }
 /* `labelHidden` (15/10/2026): sem o nome na tela, as opções começam no alto — nada do vão de 16 que o separava delas. */
 .radio-group-bare > .label + :is(.radio,.radio-group-items) { margin-block-start:0; }
+/* O CARTÃO DE ESCOLHA (`variant="card"`, o site B — aprovado pela bancada em 01/11/2026, a opção B): o CHK-01 do nativo
+   levado à web. Cada opção é um cartão inteiro (a pele do `Card`: canto 22, recheio do cartão, a cor do cartão), 12 entre
+   eles; o escolhido SOBE 4 com a `--shadow-lg` e a cor da aba escolhida (`--segment`) — parado para quem pede menos
+   movimento. O foco é o do cartão inteiro, uma linha só (ADR-0059): o da marca sai. `indicatorPlacement="none"` tira a
+   bolinha (o Theming do site); o cartão continua o rádio nativo por dentro. Variação: sem `card`, o grupo é o de sempre. */
+.radio-group-cards { display:grid; gap:var(--space-3); align-self:stretch; margin-block-start:var(--space-4); }
+.radio-group-horizontal > .radio-group-cards { grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); }
+.radio-group-bare > .label + .radio-group-cards { margin-block-start:0; }
+.radio-group-cards > .radio { margin:0; align-items:flex-start; gap:var(--space-3); min-inline-size:0; padding:var(--card-pad); border-radius:var(--radius-card); background:var(--card); cursor:pointer;
+  transition:background-color var(--duration-fast),box-shadow var(--duration-fast),translate var(--duration-fast); }
+.radio-group-cards > .radio:has(input:checked) { background:var(--segment); box-shadow:var(--shadow-lg); translate:0 calc(-1 * var(--space-1)); }
+.radio-group-cards > .radio:has(input:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
+.radio-group-cards > .radio input:focus-visible + .control-mark { outline:none; }
+.radio-group-indicator-none > .radio-group-cards > .radio > .control-mark { display:none; }
+@media (prefers-reduced-motion:reduce) { .radio-group-cards > .radio:has(input:checked) { translate:none; } }
 .checkbox > span > .muted { font-size:var(--text-xs); font-weight:var(--weight-regular); line-height:var(--space-4); }
 .checkbox input,.radio input { position:absolute; opacity:0; pointer-events:none; }
 /* A MARCA DE SELEÇÃO acompanha a densidade, e antes não acompanhava. Era `18px` cru: em
@@ -1890,6 +1932,22 @@ img,svg { display:block; }
    a folga de 3,5 virava 3 de um lado e 4 do outro. A escala gira em torno do centro exato da caixa. */
 .radio input:checked + .control-mark:after { content:""; inline-size:100%; block-size:100%; border-radius:50%;
   background:var(--control-selected-dot); scale:calc(3 / 7); }
+/* A CÁPSULA (`Checkbox variant="pill"`, o site B — o "Mark as done", aprovado pela bancada em 01/11/2026, o item 4): a
+   cápsula em volta é o alvo inteiro — 44 (`--target-min`) com a caixa de 24, ou 36 (`--control-h-md`) com a caixa de 20; o
+   recheio e o vão saem da conta (altura − caixa) / 2. Fundo `--fill-2` (sem linha, ADR-0072), letra 600. O foco é o da
+   cápsula, uma linha só (ADR-0059). `data-tone="success"`: a marcada é "feito" — a cápsula no verde a 18%, a letra e a caixa
+   no `--success-400`. Variação: sem `pill`, a caixa de sempre. */
+.checkbox.checkbox-pill { --pill-h:var(--target-min); --box:var(--space-6); --pill-in:calc((var(--pill-h) - var(--box)) / 2);
+  align-items:center; gap:var(--pill-in); min-block-size:var(--pill-h); padding-inline:var(--pill-in) var(--space-4);
+  border-radius:var(--radius-control); background:var(--fill-2); font-weight:var(--weight-semibold); white-space:nowrap;
+  transition:background-color var(--duration-fast),color var(--duration-fast); }
+.checkbox.checkbox-pill-md { --pill-h:var(--control-h-md); --box:var(--space-5); padding-inline-end:var(--space-3); }
+.checkbox-pill > .control-mark { --mark:var(--box); margin:0; }
+.checkbox-pill > .control-mark:after { inline-size:70%; block-size:70%; }
+.checkbox-pill:has(input:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
+.checkbox.checkbox-pill input:focus-visible + .control-mark,.checkbox.checkbox-pill input:focus-visible:checked + .control-mark { outline:none; }
+.checkbox-pill[data-tone="success"]:has(input:checked) { background:color-mix(in oklab,var(--success-400) 18%,transparent); color:var(--success-400); }
+.checkbox-pill[data-tone="success"] input:checked + .control-mark { background:var(--success-400); color:var(--background); }
 .switch { display:inline-flex; align-items:center; gap:var(--space-3); font-size:var(--text-sm); font-weight:var(--weight-medium); cursor:pointer; } .switch input { position:absolute; opacity:0; }
 /* O TRILHO DO SWITCH (0.32.0): o da referência, 40 × 20 (sm 32 × 16, lg 48 × 24) — a largura é o
    dobro da altura. Era 42 × 24. A altura é a de controle MENOS 16: dá exatamente os três dela
@@ -2045,11 +2103,39 @@ img,svg { display:block; }
    o `md` não mudam. A referência não tem tamanho nessa peça. */
 .segmented-lg :is(button,a) { min-block-size:var(--control-h-md); }
 .segmented-xl :is(button,a) { min-block-size:var(--control-h-lg); }
+/* O SITE B (aprovado pela bancada em 01/11/2026, os itens 3 e 8), quatro variações; sem elas, a chave de sempre.
+   O ÍCONE no item (`items[].icon`): 16 (`--icon-sm`), 8 do nome; o escolhido troca para a forma cheia (o `-fill`, como a
+   lateral e a barra de baixo). `size="2xl"`: um tamanho a mais — segmento de 48 (`--space-12`), ícone 20, letra 16.
+   `wrap`: a chave QUEBRA linha, e o trilho ganha o canto do cartão (22). `orientation="vertical"`: em pé, cada segmento
+   na largura toda, com o mesmo canto. */
+.segmented :is(button,a):has(> .icon) { display:inline-flex; align-items:center; justify-content:center; gap:var(--space-2); }
+.segmented :is(button,a) > .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); flex:none; }
+.segmented-2xl :is(button,a) { min-block-size:var(--space-12); padding-inline:var(--space-4); font-size:var(--text-base); }
+.segmented-2xl :is(button,a) > .icon { inline-size:var(--icon-md); block-size:var(--icon-md); }
+.segmented-wrap { flex-wrap:wrap; border-radius:var(--radius-card); }
+.segmented-vertical { display:flex; flex-direction:column; border-radius:var(--radius-card); }
+.segmented-vertical :is(button,a) { inline-size:100%; padding-block:var(--space-2); text-align:center; }
 /* Toggle (Lote 1): pressionado usa o MESMO par de tokens do segmento aceso, logo acima. Um
    toggle solto e um segmento selecionado dizem a mesma coisa — se parecessem diferentes, o
    sistema teria dois idiomas para "isto está ligado". O estado vem do motor (`data-pressed`),
    não de uma classe que alguém precisa lembrar de pôr. */
 .toggle[data-pressed] { --btn-bg:var(--secondary); --btn-fg:var(--primary); }
+/* A ÁREA (`Toggle area`, o site B — aprovada pela bancada em 01/11/2026, o D-3, o D-5 e o D-6): o toggle que é uma ÁREA
+   clicável em volta de um bloco (a miniatura de uma página, um ícone com o nome). Recheio de 4, o canto concêntrico do
+   cartão (22 − 2), o conteúdo como ele é (alinhado ao início, sem a altura do botão). Com `variant="ghost"`, transparente:
+   com o mouse o amarelo a 18%, ligada a 42% (D-3). Com o fundo (`variant="default"`), o `--fill-2`; com o mouse o
+   `--fill-3`; ligada, o amarelo cheio com a letra do botão primário (D-5, D-6). Sem o fio de baixo do ligado.
+   `area="pill"`: a área do tamanho do conteúdo, em cápsula. Variação: sem `area`, o toggle de sempre. */
+.btn.toggle.toggle-area { --area-bg:transparent; --area-hover:color-mix(in oklab,var(--primary) 18%,transparent);
+  --area-on:color-mix(in oklab,var(--primary) 42%,transparent); --area-on-fg:var(--foreground);
+  display:block; inline-size:100%; min-inline-size:0; block-size:auto; min-block-size:0; padding:var(--space-1);
+  border-radius:calc(var(--radius-card) - var(--space-05)); background:var(--area-bg); color:inherit; text-align:start; font:inherit; white-space:normal;
+  transition:background-color var(--duration-fast); }
+.btn.toggle.toggle-area.btn-tertiary { --area-bg:var(--fill-2); --area-hover:var(--fill-3); --area-on:var(--primary); --area-on-fg:var(--primary-foreground); }
+.btn.toggle.toggle-area:hover:not(:disabled) { background:var(--area-hover); }
+.btn.toggle.toggle-area[aria-pressed="true"],.btn.toggle.toggle-area[aria-pressed="true"]:hover:not(:disabled) { --btn-bg:var(--area-on); background:var(--area-on); color:var(--area-on-fg); }
+.btn.toggle.toggle-area[aria-pressed="true"]::after { content:none; }
+.btn.toggle.toggle-area-pill { inline-size:auto; align-self:flex-start; border-radius:var(--radius-full); }
 /* ── SELECIONADO: uma linguagem só ────────────────────────────────────────────────────
    Item de nav ativo, aba ativa, item de lista lateral e botão alternado ligado mostram o
    MESMO sinal: cápsula elevada + rótulo na cor da marca + fio amarelo encostado na borda de
@@ -2484,6 +2570,45 @@ img,svg { display:block; }
    Cor semântica, não a primária — reprovar não é progredir. */
 .step-error { color:var(--danger-400); } .step-error .step-dot { color:var(--danger-400); border-color:transparent; background:var(--danger-bg); }
 .step-optional { display:block; color:var(--muted-foreground); font-size:var(--text-xs); }
+/* O CAMINHO QUE ESCOLHE (`Stepper variant="path"`, o site B — o Roadmap, aprovado pela bancada em 01/11/2026, o item 5): a
+   mesma lista; a bolinha de 50 (`--control-h-xl`) no cartão, com a `--shadow-sm` e o número na `--font-code`; o rótulo fica
+   para o leitor de tela; UM trilho de 8 (`--space-2`, `--fill-2`) de ponta a ponta; a escolhida invertida (fundo na cor do
+   texto) e maior, 56 (50 + 4 + 2); as pontas (`startContent`, `endContent`) não clicam — a do início no amarelo. Estreito
+   (o contêiner até 30rem): 4 por linha, sem trilho. `--stepper-cols` é o número de colunas (as etapas e as pontas). */
+.stepper-path { container-type:inline-size; }
+.stepper-path > .stepper { --dot:var(--control-h-xl); --dot-on:calc(var(--control-h-xl) + var(--space-1) + var(--space-05));
+  position:relative; grid-auto-flow:row; grid-template-columns:repeat(var(--stepper-cols),minmax(0,1fr)); align-items:center; gap:var(--space-2) var(--space-1); }
+.stepper-path > .stepper:before { content:""; position:absolute; inset-inline:calc(100% / (2 * var(--stepper-cols))); inset-block-start:50%;
+  block-size:var(--space-2); translate:0 -50%; border-radius:var(--radius-full); background:var(--fill-2); }
+.stepper-path > .stepper > .step { z-index:1; display:grid; place-items:center; block-size:var(--dot-on); }
+.stepper-path > .stepper > .step:before { content:none; }
+.stepper-path > .stepper > .step .step-trigger { inline-size:auto; border-radius:var(--radius-full); }
+.stepper-path > .stepper > .step :is(strong,.step-optional) { position:absolute; inline-size:1px; block-size:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.stepper-path > .stepper > .step .step-dot { inline-size:var(--dot); block-size:var(--dot); margin:0; background:var(--card); color:var(--foreground); box-shadow:var(--shadow-sm);
+  font-family:var(--font-code); font-weight:var(--weight-semibold); font-size:var(--text-base);
+  transition:inline-size var(--duration-fast),block-size var(--duration-fast),background-color var(--duration-fast),color var(--duration-fast),box-shadow var(--duration-fast); }
+.stepper-path > .stepper > .step .step-trigger:hover .step-dot { box-shadow:var(--shadow-md); }
+.stepper-path > .stepper > .step-active .step-dot { inline-size:var(--dot-on); block-size:var(--dot-on); background:var(--foreground); color:var(--background); box-shadow:var(--shadow-sm); }
+.stepper-path > .stepper > .step-end { position:relative; z-index:1; justify-self:center; display:grid; place-items:center; block-size:var(--dot); min-inline-size:var(--dot);
+  padding-inline:var(--space-3); border-radius:var(--radius-full); background:var(--fill-3-solid); color:var(--foreground); font-family:var(--font-code); font-size:var(--text-sm); }
+.stepper-path > .stepper > .step-end-start { background:var(--primary); color:var(--primary-foreground); }
+@container (max-width:30rem) {
+  .stepper-path > .stepper { grid-template-columns:repeat(4,minmax(0,1fr)); }
+  .stepper-path > .stepper:before { content:none; }
+}
+/* A BARRA EM PARTES (`Stepper variant="bar"`, o site B — o "Your setup" do Quick Start, aprovado pela bancada em 01/11/2026,
+   o D-1): cada etapa é uma parte da barra, de 12 (`--space-3`), 6 entre elas, e é o LINK (ou o botão) da etapa — o nome
+   fica para o leitor de tela; a feita fica verde (`--success-400`). `startContent` vem antes (o nome, 600) e `endContent`
+   depois (a contagem, mono, anunciada ao mudar). Variação: sem `path` nem `bar`, o `Stepper` de sempre. */
+.stepper-bar { display:flex; align-items:center; gap:var(--space-4); }
+.stepper-bar-label { flex:none; font-weight:var(--weight-semibold); font-size:var(--text-base); white-space:nowrap; }
+.stepper-bar > .stepper { flex:1; display:flex; gap:calc(var(--space-1) + var(--space-05)); }
+.stepper-bar > .stepper > .step { flex:1; display:flex; }
+.stepper-bar > .stepper > .step:before { content:none; }
+.stepper-bar > .stepper > .step > .step-trigger { inline-size:100%; block-size:var(--space-3); border-radius:var(--radius-full); background:var(--fill-2); transition:background-color var(--duration-base); }
+.stepper-bar > .stepper > .step > .step-trigger:hover { background:var(--fill-3); }
+.stepper-bar > .stepper > .step-done > .step-trigger { background:var(--success-400); }
+.stepper-bar-count { flex:none; font-family:var(--font-code); font-weight:var(--weight-semibold); font-size:var(--text-sm); white-space:nowrap; }
 /* Etapa clicável (fluxo não-linear): o alvo é um botão de verdade, com o foco do sistema.
    E ele PRECISA GERAR CAIXA. `display:contents` era o que estava aqui, e um <button> sem caixa
    não recebe foco — o Chromium recusa `.focus()`, e a etapa clicável só funcionava com o mouse.
@@ -2543,6 +2668,24 @@ img,svg { display:block; }
 .table tbody tr:last-child > :last-child,.table-wrap tbody tr:last-child > :last-child { border-end-end-radius:var(--table-cell-r); }
 .table tr:last-child td,.table-wrap tr:last-child td { border-bottom:0; }
 @media (hover:hover) { .table tbody tr:hover > :is(td,th),.table-wrap tbody tr:hover > :is(td,th) { background:color-mix(in oklab,var(--card) 40%,var(--surface-2)); } }
+/* AS LINHAS EM CÁPSULA (`Table variant="rows"`, o site B — a lista de membros da página inicial, aprovada pela bancada em
+   01/11/2026, o D-7.6): sem a caixa em volta; cada linha é uma cápsula de 54 (`--target-min` + 10), 4 entre elas; com o
+   mouse o `--fill-1`; a linha com `data-selected` (a que o app marcou), o amarelo a 14% (18% com o mouse). O cabeçalho em
+   mono maiúsculo, apagado, sem fundo e sem os fios entre as colunas. Cabe na largura. Sem `rows`, a tabela de sempre. */
+.table-region.table-region-rows { padding:0; border-radius:0; background:transparent; }
+.table.table-rows { min-width:0; border-spacing:0 var(--space-1); }
+.table.table-rows thead th { background:transparent; font-family:var(--font-code); letter-spacing:.06em; text-transform:uppercase; }
+.table.table-rows thead th::after { content:none; }
+.table.table-rows tbody :is(td,th) { block-size:calc(var(--target-min) + var(--space-2) + var(--space-05)); padding-block:0; border-bottom:0; background:transparent;
+  transition:background-color var(--duration-fast); }
+.table.table-rows tbody tr > :first-child { border-radius:var(--radius-full) 0 0 var(--radius-full); padding-inline-start:var(--space-1); }
+.table.table-rows tbody tr > :last-child { border-radius:0 var(--radius-full) var(--radius-full) 0; padding-inline-end:var(--space-3); }
+.table.table-rows tbody tr > :only-child { border-radius:var(--radius-full); }
+:dir(rtl) .table.table-rows tbody tr > :first-child,[dir="rtl"] .table.table-rows tbody tr > :first-child { border-radius:0 var(--radius-full) var(--radius-full) 0; }
+:dir(rtl) .table.table-rows tbody tr > :last-child,[dir="rtl"] .table.table-rows tbody tr > :last-child { border-radius:var(--radius-full) 0 0 var(--radius-full); }
+@media (hover:hover) { .table.table-rows tbody tr:hover > :is(td,th) { background:var(--fill-1); } }
+.table.table-rows tbody tr[data-selected] > :is(td,th) { background:color-mix(in oklab,var(--primary) 14%,transparent); }
+@media (hover:hover) { .table.table-rows tbody tr[data-selected]:hover > :is(td,th) { background:color-mix(in oklab,var(--primary) 18%,transparent); } }
 /* GAR-12 e GAR-13 (08/10/2026): a tabela de COMPARAÇÃO — as chaves da `Table` e a pele do HTML de
    comparação. A referência principal só tem o cabeçalho preso, à mão, numa caixa de altura fixa; o
    resto veio do mercado, por escolha do Victor (o detalhe está no comentário da `Table`).
@@ -2746,6 +2889,26 @@ button.tag-main { cursor:pointer; }
 .kpi-tone-success { color:var(--success-400); }
 .kpi-tone-danger { color:var(--danger-400); }
 .kpi-tone-neutral { color:var(--muted-foreground); }
+/* O CARTÃO AMARELO E AS BARRAS (o site B — a página inicial, aprovado pela bancada em 01/11/2026, o D-7.3, a forma B "sem
+   marrom"). `variant="brand"`: o cartão no amarelo da marca, com a tinta e a `--shadow-md`; o rótulo na tinta, 600; a
+   tendência na tinta. `bars`: as barras embaixo, 128 de altura (2 × `--space-16`), 8 entre elas, cada uma até 32 de
+   largura, a cápsula em cima — cada barra é um botão, e a escolhida diz o nome e o valor na leitura. No amarelo, as barras
+   na tinta cheia e a escolhida BRANCA (as marcas dos controles); fora dele, as barras no `--fill-3` e a escolhida na cor
+   do texto. Sem `brand` nem `bars`, o KPI de sempre. */
+.kpi.kpi-brand { background:var(--primary); color:var(--primary-foreground); box-shadow:var(--shadow-md); padding:var(--space-5) var(--space-5) var(--space-4); }
+.kpi-brand > .muted { color:inherit; font-weight:var(--weight-semibold); font-size:var(--text-sm); }
+.kpi-brand :is(.kpi-tone-success,.kpi-tone-danger,.kpi-tone-neutral) { color:inherit; }
+.kpi-bars-wrap { display:grid; gap:var(--space-1); margin-block-start:var(--space-3); }
+.kpi-reading { font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+.kpi-bars { display:grid; grid-template-columns:repeat(var(--kpi-bars),minmax(0,1fr)); gap:var(--space-2); align-items:end; block-size:calc(2 * var(--space-16)); }
+.kpi-bar { display:flex; flex-direction:column; justify-content:flex-end; align-items:center; block-size:100%; padding:0; border:0; background:transparent; color:inherit; cursor:pointer; border-radius:var(--radius-xs); }
+.kpi-bar-fill { inline-size:100%; max-inline-size:var(--space-8); block-size:var(--h); border-radius:var(--radius-full) var(--radius-full) var(--radius-xs) var(--radius-xs);
+  background:var(--fill-3); transition:background-color var(--duration-base); }
+.kpi-bar[aria-pressed="true"] .kpi-bar-fill { background:var(--foreground); }
+.kpi-brand .kpi-bar-fill { background:var(--primary-foreground); }
+.kpi-brand .kpi-bar[aria-pressed="true"] .kpi-bar-fill { background:var(--control-thumb); }
+.kpi-brand .kpi-bar:focus-visible { outline-color:var(--primary-foreground); }
+.kpi-bars-x { display:grid; grid-template-columns:repeat(var(--kpi-bars),minmax(0,1fr)); gap:var(--space-2); text-align:center; font-family:var(--font-code); font-size:var(--text-xs); }
 /* DataList: chave/valor em duas colunas. O termo é secundário — mesmo idioma do cabeçalho de
    tabela. Sem a regra (achado A13) o <dl> saía cru: dt e dd empilhados, com o recuo de 40px
    que o navegador dá ao <dd>. */
@@ -2830,6 +2993,32 @@ button.tag-main { cursor:pointer; }
 .accordion-lg .accordion-content { padding-inline:calc(var(--space-5) + var(--space-05)); padding-block-end:var(--space-5); font-size:var(--text-base); line-height:var(--leading-relaxed); }
 .accordion-lg .accordion-content > p { margin:0; }
 .accordion-surface > .accordion-item::after { inset-inline-start:3%; inline-size:94%; }
+/* O ACORDEÃO DE LADO (`orientation="horizontal"`, o site B — a página inicial, aprovado pela bancada em 01/11/2026, o
+   D-7.1): os itens em pé, lado a lado, 12 entre eles; cada um é um cartão (canto 22, a cor do cartão, sem o fio de baixo),
+   fechado com 104 (`--space-24` + `--space-2`) e o aberto toma o resto, numa curva de duas vezes o tempo lento. A pergunta
+   fechada é uma coluna (o que vem antes em cima, o resto embaixo); aberta, uma linha. O fechado sobe a sombra média com o
+   mouse. A seta sai. A altura é a do pai. Num contêiner estreito (até 47.5rem), vira o acordeão de pé. */
+.accordion-horizontal-frame { container-type:inline-size; block-size:100%; }
+.accordion.accordion-horizontal { flex-direction:row; gap:var(--space-3); block-size:100%; }
+.accordion-horizontal > .accordion-item { display:flex; flex-direction:column; flex:0 0 calc(var(--space-24) + var(--space-2)); min-inline-size:0; overflow:hidden;
+  border-radius:var(--radius-card); background:var(--card);
+  transition:flex-grow calc(2 * var(--duration-slow)) var(--ease-emphasized),flex-basis calc(2 * var(--duration-slow)) var(--ease-emphasized),box-shadow var(--duration-base); }
+.accordion-horizontal > .accordion-item::after { content:none; }
+.accordion-horizontal > .accordion-item[open] { flex:1 1 0; }
+.accordion-horizontal > .accordion-item:not([open]):hover { box-shadow:var(--shadow-md); }
+.accordion-horizontal > .accordion-item > summary { flex:1; flex-direction:column; align-items:flex-start; justify-content:space-between; gap:var(--space-3);
+  padding:var(--space-5); border-radius:var(--radius-card); font-size:var(--text-base); }
+.accordion-horizontal > .accordion-item:not([open]) > summary:hover:not([aria-disabled="true"]) { background:transparent; }
+.accordion-horizontal > .accordion-item[open] > summary { flex:none; flex-direction:row; align-items:center; gap:var(--space-4); padding-block-end:var(--space-2); cursor:default; }
+.accordion-horizontal .accordion-chevron { display:none; }
+.accordion-horizontal > .accordion-item > .accordion-content { flex:1; min-block-size:0; overflow:auto; padding:var(--space-3) var(--space-6) var(--space-6); color:var(--foreground); font-size:var(--text-base); }
+@container (max-width:47.5rem) {
+  .accordion.accordion-horizontal { flex-direction:column; block-size:auto; }
+  .accordion-horizontal > .accordion-item,.accordion-horizontal > .accordion-item[open] { flex:none; }
+  .accordion-horizontal > .accordion-item > summary { flex-direction:row; align-items:center; justify-content:flex-start; }
+  .accordion-horizontal > .accordion-item > .accordion-content { padding:var(--space-3); }
+}
+@media (prefers-reduced-motion:reduce) { .accordion-horizontal > .accordion-item { transition:none; } }
 .accordion-surface > .accordion-item:not([open]) > summary:hover:not([aria-disabled="true"]) { background:var(--secondary); }
 @media (prefers-reduced-motion:reduce) { .accordion-chevron { transition:none; } }
 /* Mockup do kit de origem (apps/docs) — não é o Accordion do sistema, que é <details> nativo. */
@@ -2920,6 +3109,20 @@ button.tag-main { cursor:pointer; }
 .code-block-wrap > .code-block { padding-inline-end:calc(var(--space-3) + var(--control-h-md) + var(--space-2)); }
 .copy-code .c-done { display:none; }
 .copy-code.is-done .c-copy { display:none; } .copy-code.is-done .c-done { display:block; color:var(--primary); }
+/* A CABEÇA DO ARQUIVO (`CodeBlock filename`, o site B — aprovada pela bancada em 01/11/2026, o item 6, "Ícone + nome"): o
+   bloco é o cartão (canto 22, a cor do cartão); a cabeça tem 52 (`--control-h-md` + `--space-4`), o nome do arquivo em mono
+   12, apagado, e o "Copy" escrito — o botão secundário de 36, o ícone antes do nome; copiado, os dois viram o visto e
+   "Copied". O código a 14, na cor do texto, com 6 em cima e 20 dos lados e embaixo, e a linha longa DESCE (sem rolar). */
+.code-block-wrap.code-block-file { flex-direction:column; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
+.code-block-head { display:flex; align-items:center; gap:var(--space-3); min-block-size:calc(var(--control-h-md) + var(--space-4));
+  padding:calc(var(--space-1) + var(--space-05)) var(--space-2) 0 var(--space-5); }
+.code-block-title { min-inline-size:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  font-family:var(--font-code); font-weight:var(--weight-medium); font-size:var(--text-xs); color:var(--muted-foreground); }
+.code-block-head > .copy-code-text { margin-inline-start:auto; flex:none; }
+.copy-code-text .c-done { display:none; }
+.copy-code-text.is-done .c-copy { display:none; } .copy-code-text.is-done .c-done { display:inline-block; }
+.code-block-wrap.code-block-file > .code-block { padding:calc(var(--space-1) + var(--space-05)) var(--space-5) var(--space-5); border-radius:0; background:transparent;
+  color:var(--foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); overflow:visible; white-space:pre-wrap; overflow-wrap:anywhere; }
 /* "On this page": índice da própria página, fixo na lateral. Navegação, não decoração —
    por isso é <nav> com rótulo, e o item atual se marca com aria-current. */
 .toc { position:sticky; top:var(--space-4); align-self:start; display:grid; gap:var(--space-1); max-height:calc(100vh - var(--space-8)); overflow:auto; padding:var(--space-2) 0; }
@@ -3388,6 +3591,15 @@ button.tag-main { cursor:pointer; }
 .dialog-backdrop { position:fixed; inset:0; z-index:var(--z-modal); background:var(--overlay); backdrop-filter:blur(5px); transition:opacity var(--duration-slow) var(--ease-standard); }
 .dialog-backdrop[data-starting-style],.dialog-backdrop[data-ending-style] { opacity:0; }
 .dialog-backdrop[data-ending-style] { transition-duration:var(--duration-fast); }
+/* AS JANELAS PRESAS (`data-contained` num contêiner, o site B — aprovado pela bancada em 01/11/2026, o D-4): a janela, a
+   gaveta, o balão e o aviso continuam os de sempre (a pele, as medidas, a entrada e a saída); só a posição muda — em vez da
+   janela inteira do navegador, eles se prendem ao contêiner que os recebe (no React, o `portalContainer` do
+   `AureaProvider` apontando para ele). Para demonstração e para um painel dentro da página. Sem o atributo, nada muda. */
+[data-contained] { position:relative; overflow:hidden; isolation:isolate; }
+[data-contained] :is(.dialog-backdrop,.dialog,.drawer,.toast-stack) { position:absolute; z-index:1; }
+[data-contained] .dialog { inline-size:min(var(--dialog-w),calc(100% - 2 * var(--dialog-margin))); max-block-size:calc(100% - 2 * var(--dialog-margin)); }
+[data-contained] .drawer-right,[data-contained] .drawer-left { inline-size:min(20rem,85%); }
+[data-contained] .toast-stack { inline-size:calc(100% - 2 * var(--space-3)); inset-block-end:var(--space-3); }
 .dialog { --dialog-margin:var(--space-4); --dialog-w:28rem; position:fixed; inset-inline:0; top:50%; translate:0 -50%; z-index:var(--z-modal); display:flex; flex-direction:column; inline-size:min(var(--dialog-w),calc(100vw - 2 * var(--dialog-margin))); max-block-size:calc(100dvh - 2 * var(--dialog-margin)); margin-inline:auto; padding:var(--space-6); border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); outline:none; transition:opacity var(--duration-slow) var(--ease-standard),scale var(--duration-slow) var(--ease-standard); }
 .dialog[data-starting-style] { opacity:0; scale:1.05; }
 .dialog[data-ending-style] { opacity:0; scale:.95; transition-duration:var(--duration-fast); }
@@ -3597,6 +3809,46 @@ button.tag-main { cursor:pointer; }
 .command-shortcuts > span { display:inline-flex; align-items:center; gap:var(--space-1); }
 .command-item { display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:var(--space-3); align-items:center; }
 .command-item-label { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* A BUSCA GRANDE (`CommandPalette size="lg"`, o site B — aprovada pela bancada em 01/11/2026, o item 2 e o D-2). Sem o
+   `lg`, os invólucros novos não geram caixa (`display:contents`) e a paleta é a de sempre. A janela tem a largura `lg`
+   (1024); o campo é uma cápsula de 64 (`--space-16`) no `--fill-2`, com a lupa de 20, a letra 18 e o "Esc" dentro — o
+   foco é o do campo inteiro, como o `InputGroup`; os filtros do app vêm embaixo; a lista e a prévia lado a lado (a prévia
+   no `--fill-1`, canto 22, presa ao alto); o título do grupo em mono maiúsculo, com a contagem na ponta; o item de 50
+   (`--control-h-xl`) com o ícone num círculo de 40 tingido pela cor de categoria, o título 16/600 e a descrição cortada;
+   o "↵" amarelo só na linha ativa; o pé com as teclas e o encaixe do app. Abaixo de 1240, a prévia some. */
+.command-body-plain,.command-foot-plain { display:contents; }
+.command-palette-lg { width:min(var(--breakpoint-lg),100%); gap:var(--space-3); }
+.command-field { display:flex; align-items:center; gap:var(--space-3); block-size:var(--space-16); padding-inline:var(--space-5) var(--space-3);
+  border-radius:var(--radius-control); background:var(--fill-2); }
+.command-field:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:0; }
+.command-field > .icon { inline-size:var(--icon-md); block-size:var(--icon-md); color:var(--muted-foreground); flex:none; }
+.command-input { flex:1; min-inline-size:0; border:0; padding:0; background:none; color:inherit; font:inherit; font-size:var(--text-lg); outline:none; }
+.command-input::placeholder { color:var(--muted-foreground); }
+.command-body { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,25rem); gap:var(--space-4); align-items:start; }
+.command-palette-lg .command-list { max-height:none; }
+.command-palette-lg .command-group-label { display:flex; justify-content:space-between; gap:var(--space-2); font-family:var(--font-code); text-transform:uppercase; letter-spacing:.06em; }
+.command-palette-lg .command-item { grid-template-columns:auto minmax(0,1fr) auto; min-block-size:var(--control-h-xl); padding-block:var(--space-1); border-radius:var(--radius-control); }
+.command-item-tile { display:inline-grid; place-items:center; inline-size:var(--space-10); block-size:var(--space-10); border-radius:var(--radius-full); flex:none;
+  background:var(--fill-2); color:var(--foreground); }
+.command-item-tile:empty { visibility:hidden; }
+.command-item-tile[data-tone="red"] { background:var(--category-red-bg); color:var(--category-red); }
+.command-item-tile[data-tone="orange"] { background:var(--category-orange-bg); color:var(--category-orange); }
+.command-item-tile[data-tone="green"] { background:var(--category-green-bg); color:var(--category-green); }
+.command-item-tile[data-tone="teal"] { background:var(--category-teal-bg); color:var(--category-teal); }
+.command-item-tile[data-tone="cyan"] { background:var(--category-cyan-bg); color:var(--category-cyan); }
+.command-item-tile[data-tone="blue"] { background:var(--category-blue-bg); color:var(--category-blue); }
+.command-item-tile[data-tone="violet"] { background:var(--category-violet-bg); color:var(--category-violet); }
+.command-item-tile[data-tone="pink"] { background:var(--category-pink-bg); color:var(--category-pink); }
+.command-item-text { display:grid; min-inline-size:0; }
+.command-palette-lg .command-item-label { font-size:var(--text-base); font-weight:var(--weight-semibold); }
+.command-item-description { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted-foreground); font-size:var(--text-sm); }
+.command-item-enter { visibility:hidden; background:var(--primary); color:var(--primary-foreground); }
+.command-item[data-highlighted] .command-item-enter { visibility:visible; }
+.command-preview { position:sticky; inset-block-start:0; display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-4); padding:var(--space-5);
+  border-radius:var(--radius-card); background:var(--fill-1); }
+.command-foot { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-4); }
+.command-foot > .command-shortcuts { padding:0; }
+@media (max-width:1240px) { .command-body { grid-template-columns:minmax(0,1fr); } .command-preview { display:none; } }
 
 .menu-sep { height:1px; margin:6px 4px; background:var(--border); border:0; }
 /* G-API-02 — a anatomia que o menu ganhou quando o dado deixou de ter uma forma só.
@@ -4619,7 +4871,7 @@ button.graph-node-body { cursor:pointer; }
 /* O FOCO DOS CAMPOS no claro é o amarelo, uma linha só, como no escuro (decisão do Victor, 26/10/2026; a medida — 1,75:1
    na página, 1,91:1 no cartão, abaixo dos 3:1 — vai à bancada do passo A). Os botões e o resto continuam com o grafite. */
 [data-theme="light"] :is(.input,.textarea,.select):focus-visible:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
-[data-theme="light"] :is(.input-group,.combobox-multi):focus-within:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+[data-theme="light"] :is(.input-group,.combobox-multi,.command-field):focus-within:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   outline-color:var(--primary); }
 
 /* "AUMENTAR CONTRASTE" do sistema (`prefers-contrast: more`: o "Aumentar contraste" do macOS, do iOS e do Android, o
@@ -4633,7 +4885,7 @@ button.graph-node-body { cursor:pointer; }
   :root:where(:not([data-brand="ember"])),[data-theme]:where(:not([data-brand="ember"],[data-brand="ember"] *)) {
     --control-thumb:var(--brand-yellow-ink); --control-selected-foreground:var(--brand-yellow-ink); --control-selected-dot:var(--brand-yellow-ink); }
   [data-theme="light"] :is(.input,.textarea,.select):focus-visible:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
-  [data-theme="light"] :is(.input-group,.combobox-multi):focus-within:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
+  [data-theme="light"] :is(.input-group,.combobox-multi,.command-field):focus-within:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
     outline-color:var(--focus-strong); }
 }
 

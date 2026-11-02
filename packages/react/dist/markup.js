@@ -117,13 +117,30 @@ export function Section({ surface = "background", spacing = "md", theme, variant
                                                 ? fundirRender(it.render, { className: "section-footer-link", children: it.label }, "a")
                                                 : _jsx("a", { className: "section-footer-link", href: it.href, children: it.label }) }, it.id)) })] }, n)) }), children] }), legal != null && _jsx("div", { className: "section-footer-legal", children: legal })] }) });
 }
+// A BARRA ESCOLHIDA (o site B, 0.54.0): o mouse, o foco ou o clique numa barra a escolhem, e a leitura diz o nome e o valor
+// dela. Sem estado do React: muda o DOM, do mesmo jeito que o `aurea.js` faz na página sem React — o KPI continua marcação
+// pura.
+function escolherBarra(e) {
+    const botao = e.currentTarget, caixa = botao.closest(".kpi-bars-wrap");
+    if (!caixa)
+        return;
+    for (const b of caixa.querySelectorAll(".kpi-bar"))
+        b.setAttribute("aria-pressed", String(b === botao));
+    const leitura = caixa.querySelector(".kpi-reading");
+    if (leitura)
+        leitura.textContent = botao.dataset.reading ?? "";
+}
 const TOM_DA_DIRECAO = { up: "success", down: "danger", flat: "neutral" };
 const PALAVRA_DA_DIRECAO = { up: "Up", down: "Down", flat: "No change" };
-export function KPI({ label, value, trend, direction, tone, directionLabel, variant = "card", className, ...props }) {
+export function KPI({ label, value, trend, direction, tone, directionLabel, variant = "card", bars, defaultBar, className, ...props }) {
     const tom = direction ? (tone ?? TOM_DA_DIRECAO[direction]) : undefined;
     const miolo = _jsxs(_Fragment, { children: [_jsx("span", { className: "muted", children: label }), _jsx("strong", { children: value }), (trend || trend === 0 || direction) && _jsxs("small", { className: direction ? cx("kpi-trend", `kpi-trend-${direction}`, `kpi-tone-${tom}`) : undefined, children: [direction && _jsx("span", { className: "kpi-trend-icon", "aria-hidden": "true" }), direction && _jsx("span", { className: "sr-only", children: directionLabel ?? PALAVRA_DA_DIRECAO[direction] }), trend] })] });
-    return variant === "plain" ? _jsx("div", { className: cx("kpi", className), ...props, children: miolo })
-        : _jsx(Card, { className: cx("kpi", className), ...props, children: miolo });
+    const maior = bars && bars.length > 0 ? Math.max(...bars.map(b => b.amount), 1) : 1;
+    const escolhida = bars && bars.length > 0 ? Math.min(Math.max(defaultBar ?? bars.length - 1, 0), bars.length - 1) : -1;
+    const leituraDe = (b) => `${b.label} · ${typeof b.value === "string" || typeof b.value === "number" ? b.value : ""}`;
+    const barras = bars && bars.length > 0 && _jsxs("div", { className: "kpi-bars-wrap", "data-aurea-kpi-bars": "", children: [_jsx("div", { className: "kpi-reading", "aria-live": "polite", children: leituraDe(bars[escolhida]) }), _jsx("div", { className: "kpi-bars", style: { "--kpi-bars": bars.length }, children: bars.map((b, i) => _jsx("button", { type: "button", className: "kpi-bar", "aria-pressed": i === escolhida, "aria-label": leituraDe(b), "data-reading": leituraDe(b), onClick: escolherBarra, onFocus: escolherBarra, onMouseEnter: escolherBarra, children: _jsx("span", { className: "kpi-bar-fill", style: { "--h": `${Math.round(b.amount / maior * 100)}%` } }) }, i)) }), _jsx("div", { className: "kpi-bars-x", "aria-hidden": "true", style: { "--kpi-bars": bars.length }, children: bars.map((b, i) => _jsx("span", { children: b.label }, i)) })] });
+    return variant === "plain" ? _jsxs("div", { className: cx("kpi", className), ...props, children: [miolo, barras] })
+        : _jsxs(Card, { className: cx("kpi", variant === "brand" && "kpi-brand", className), ...props, children: [miolo, barras] });
 }
 export function DataList({ items }) { return _jsx("dl", { className: "data-list", children: items.map((i, n) => _jsxs(React.Fragment, { children: [_jsx("dt", { children: i.term }), _jsx("dd", { children: i.value })] }, n)) }); }
 export function Timeline({ items, variant }) { return _jsx("ol", { className: "timeline", "data-timeline-style": variant, children: items.map((i, n) => _jsxs("li", { children: [_jsx("span", { className: "timeline-dot" }), _jsxs("div", { children: [_jsx("strong", { children: i.title }), i.description && _jsx("p", { children: i.description }), i.time && _jsx("small", { className: "muted", children: i.time })] })] }, n)) }); }
@@ -233,7 +250,14 @@ export function Kbd({ children, className, ...props }) { return _jsx("kbd", { cl
 export const Textarea = forwardRef(function Textarea({ className, size, variant, ...props }, ref) { return _jsx("textarea", { ref: ref, className: cx("textarea", peleDoEixo("textarea", size), variant === "secondary" && "textarea-secondary", className), ...props }); });
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.
-export function Checkbox({ label, labelHidden, description, size, className, ...props }) { return _jsxs("label", { className: cx("checkbox", labelHidden && "checkbox-bare", className), children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), _jsxs("span", { className: labelHidden ? "sr-only" : undefined, children: [_jsx("strong", { children: label }), description && _jsxs(_Fragment, { children: [_jsx("br", {}), _jsx("span", { className: "muted", children: description })] })] })] }); }
+// `variant="pill"` (o site B, o "Mark as done" — aprovado pela bancada em 01/11/2026, o item 4): a cápsula em volta, o alvo
+// inteiro, de 44 (`--target-min`, a caixa 24) ou, com `size` sm/md, de 36 (`--control-h-md`, a caixa 20). `tone="success"`
+// pinta a marcada de "feito" (a cápsula no verde a 18%, a letra e a caixa no verde). Sem `pill`, a caixa de sempre.
+export function Checkbox({ label, labelHidden, description, size, variant = "default", tone, className, ...props }) {
+    if (variant === "pill")
+        return _jsxs("label", { className: cx("checkbox", "checkbox-pill", (size === "sm" || size === "md") && "checkbox-pill-md", className), "data-tone": tone, children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: "control-mark" }), _jsx("span", { className: labelHidden ? "sr-only" : undefined, children: label })] });
+    return _jsxs("label", { className: cx("checkbox", labelHidden && "checkbox-bare", className), children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), _jsxs("span", { className: labelHidden ? "sr-only" : undefined, children: [_jsx("strong", { children: label }), description && _jsxs(_Fragment, { children: [_jsx("br", {}), _jsx("span", { className: "muted", children: description })] })] })] });
+}
 // `description` no `Radio` e no `Switch` (15/10/2026, a referência tem nos dois): a linha apagada embaixo do nome, do
 // mesmo jeito do `Checkbox`. Sem ela, a marcação é a de sempre.
 const comDescricao = (label, description) => description ? _jsxs("span", { children: [_jsx("strong", { children: label }), _jsx("br", {}), _jsx("span", { className: "muted", children: description })] }) : label;

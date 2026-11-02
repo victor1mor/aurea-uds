@@ -10,7 +10,10 @@
     "native": "planned"
   },
   "variants": [],
-  "sizes": [],
+  "sizes": [
+    "md",
+    "lg"
+  ],
   "states": [
     "closed",
     "open",
@@ -24,7 +27,15 @@
     "--radius-card",
     "--shadow-lg",
     "--space-3",
-    "--z-modal"
+    "--z-modal",
+    "--breakpoint-lg",
+    "--space-16",
+    "--fill-1",
+    "--fill-2",
+    "--control-h-xl",
+    "--space-10",
+    "--font-code",
+    "--primary"
   ],
   "a11y": {
     "role": "dialog",
@@ -87,6 +98,36 @@
       "type": "boolean",
       "default": "true",
       "description": "The line under the list that teaches the keys: ↑ ↓ move, Enter open, Esc close. Each item may also say its group (item.group): items of the same group come together under its title."
+    },
+    {
+      "name": "size",
+      "type": "\"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "lg is the large search: a window as wide as --breakpoint-lg (1024), a 64 field (the magnifier, 18 letters and Esc inside), group titles in uppercase code font with their count, 50 items with the icon in a 40 circle, the title and a cut description, and ↵ on the active row."
+    },
+    {
+      "name": "items[].description / items[].tone",
+      "type": "string / BadgeCategory",
+      "default": "—",
+      "description": "With lg: the second line of the item (muted, cut), and the category color of its icon circle (the Badge colors); without tone, the circle is neutral."
+    },
+    {
+      "name": "filters",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "With lg: what goes under the field — the filters the app draws (a ToggleGroup, for example)."
+    },
+    {
+      "name": "preview",
+      "type": "(item: CommandItem) => ReactNode",
+      "default": "—",
+      "description": "With lg: the preview of the active item, beside the list, on --fill-1 with radius 22. It goes when the window is under 1240 wide."
+    },
+    {
+      "name": "footer",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "With lg: what goes in the foot, next to the key hints."
     }
   ]
 }

@@ -94,8 +94,13 @@ export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "d
     orientation?: "vertical" | "horizontal";
     /** O asterisco no rótulo, como o `Field`. */
     required?: boolean;
+    /** `card` faz de cada opção um cartão inteiro — o cartão de escolha, o mesmo nome do nativo (CHK-01). O escolhido sobe com
+     *  sombra. O site B (aprovado pela bancada em 01/11/2026). */
+    variant?: "list" | "card";
+    /** Na web a marca fica no início. `none` tira a bolinha — só no `card`, em que o cartão inteiro já mostra a escolha. */
+    indicatorPlacement?: "start" | "none";
 }
-export declare function RadioGroup({ label, labelHidden, description, error, value, defaultValue, onValueChange, name, disabled, invalid, orientation, required, children, className, ...props }: RadioGroupProps): React.JSX.Element;
+export declare function RadioGroup({ label, labelHidden, description, error, value, defaultValue, onValueChange, name, disabled, invalid, orientation, required, variant, indicatorPlacement, children, className, ...props }: RadioGroupProps): React.JSX.Element;
 export declare namespace RadioGroup {
     export { Radio as Item };
 }
@@ -311,18 +316,21 @@ export declare function OTPField({ length, value, defaultValue, onValueChange, m
     variant?: "primary" | "secondary";
 }): React.JSX.Element;
 export type SegmentedControlSelectedStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "dot";
-export declare function SegmentedControl({ items, value, onChange, label, fullWidth, size, selectedStyle }: {
+export declare function SegmentedControl({ items, value, onChange, label, fullWidth, size, selectedStyle, wrap, orientation }: {
     items: Array<{
         value: string;
         label: ReactNode;
         href?: string;
+        icon?: IconName;
     }>;
     value: string;
     onChange?: (v: string) => void;
     label?: string;
     fullWidth?: boolean;
-    size?: "sm" | "md" | "lg" | "xl";
+    size?: "sm" | "md" | "lg" | "xl" | "2xl";
     selectedStyle?: SegmentedControlSelectedStyle;
+    wrap?: boolean;
+    orientation?: "horizontal" | "vertical";
 }): React.JSX.Element;
 export interface ComboboxOption {
     value: string;

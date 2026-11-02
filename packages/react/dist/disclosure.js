@@ -10,9 +10,17 @@ import { soOValor } from "./pure.js";
 import { Icon } from "./system.js";
 // O SITE B (30/10/2026, protótipo): `indicator="plus"` troca a setinha pelo "+" numa bolinha, que gira e vira o "×"
 // amarelo quando abre; `size="lg"` é a linha de 60 com a letra do texto (16), a das perguntas do desenho aprovado.
-export function Accordion({ items, variant = "default", multiple = false, defaultValue, indicator = "chevron", size = "md", className }) {
+// `orientation="horizontal"` (o site B — a página inicial, aprovada pela bancada em 01/11/2026, o D-7.1): o acordeão DE LADO.
+// Cada item é um cartão (canto 22) em pé, fechado com 104 de largura; o aberto toma o resto da linha. Um aberto de cada vez,
+// e o aberto não fecha pelo clique (sempre há um à vista). Num contêiner estreito (até 47.5rem) vira o de pé. A altura é
+// a do pai. Sem `horizontal`, o acordeão de sempre.
+export function Accordion({ items, variant = "default", multiple = false, defaultValue, indicator = "chevron", size = "md", orientation = "vertical", className }) {
     const grupo = React.useId();
-    return _jsx("div", { className: cx("accordion", variant === "surface" && "accordion-surface", indicator === "plus" && "accordion-plus", size === "lg" && "accordion-lg", className), children: items.map(i => _jsxs("details", { className: "accordion-item", name: multiple ? undefined : grupo, open: defaultValue?.includes(i.id) || undefined, children: [_jsxs("summary", { "aria-disabled": i.disabled || undefined, tabIndex: i.disabled ? -1 : undefined, onClick: i.disabled ? (e) => e.preventDefault() : undefined, children: [_jsx("span", { className: "accordion-title", children: i.title }), _jsx("span", { className: "accordion-chevron", "aria-hidden": "true" })] }), _jsx("div", { className: "accordion-content", children: i.content })] }, i.id)) });
+    const deLado = orientation === "horizontal";
+    const lista = _jsx("div", { className: cx("accordion", variant === "surface" && "accordion-surface", indicator === "plus" && "accordion-plus", size === "lg" && "accordion-lg", deLado && "accordion-horizontal", !deLado && className), children: items.map(i => _jsxs("details", { className: "accordion-item", name: multiple && !deLado ? undefined : grupo, open: defaultValue?.includes(i.id) || undefined, children: [_jsxs("summary", { "aria-disabled": i.disabled || undefined, tabIndex: i.disabled ? -1 : undefined, onClick: i.disabled ? (e) => e.preventDefault()
+                        : deLado ? (e) => { if (e.currentTarget.parentElement.open)
+                            e.preventDefault(); } : undefined, children: [_jsx("span", { className: "accordion-title", children: i.title }), _jsx("span", { className: "accordion-chevron", "aria-hidden": "true" })] }), _jsx("div", { className: "accordion-content", children: i.content })] }, i.id)) });
+    return deLado ? _jsx("div", { className: cx("accordion-horizontal-frame", className), children: lista }) : lista;
 }
 // COLLAPSIBLE — uma seção que abre e fecha, com o estado do lado de quem usa.
 //

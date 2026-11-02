@@ -16,14 +16,14 @@
 import {flushSync} from "react-dom";
 import {createRoot} from "react-dom/client";
 import {createElement as h, type ReactNode, useEffect, useMemo, useState} from "react";
-import {CommandPalette} from "../../../packages/react/dist/index.js";
+import {Badge, Button, CommandPalette, Icon, SegmentedControl, Toggle, ToggleGroup} from "../../../packages/react/dist/index.js";
 // O botão "Theme" (14/10/2026) é a outra peça viva do topo: vai no mesmo pacote, que toda página já carrega, e
 // sob o MESMO provedor (ver `tema.tsx`).
 import {ChavesDeTema, ProvedorDoSite, SetinhaDoTopo, TemaDoTopo} from "./tema";
 // A setinha do "Copy Markdown" (SITE-06, 18/10/2026), sob o mesmo provedor.
 import {AcoesDaPagina} from "./acoes";
 
-type Entrada = {label: string; href: string; group: string};
+type Entrada = {label: string; href: string; group: string; description?: string; icon?: string; native?: string};
 declare global {interface Window {AUREA_SEARCH?: Entrada[]}}
 
 function Busca() {
@@ -52,13 +52,56 @@ function Busca() {
       document.removeEventListener("keydown", tecla);
     };
   }, []);
-  const itens = useMemo(() => (window.AUREA_SEARCH ?? []).map((e, i) => ({
-    id: `${e.group}-${i}`, label: e.label, group: e.group,
-    run: () => { location.href = `./${e.href}`; },
-  })), []);
-  return h(CommandPalette, {open: aberta, onClose: () => setAberta(false), items: itens,
-    placeholder: "Search components, patterns and pages", label: "Search the site"});
+  // O SITE B (0.54.0, a busca aprovada pela bancada em 01/11/2026, o item 2): a `CommandPalette` grande — os filtros por
+  // grupo com a contagem, o círculo do ícone na cor do grupo, a descrição, a prévia do item ativo, as sugestões e, no pé, a
+  // chave "Components for" Web | Native (no Native, o componente leva à página do nativo, quando ela existe).
+  const [filtro, setFiltro] = useState("all");
+  const [plataforma, setPlataforma] = useState("web");
+  const todas = window.AUREA_SEARCH ?? [];
+  const grupos = useMemo(() => [...new Set(todas.map((e) => e.group))], [todas]);
+  const itens = useMemo(() => todas.filter((e) => filtro === "all" || e.group === filtro).map((e, i) => {
+    const destino = plataforma === "native" && e.native ? e.native : e.href;
+    return {id: `${e.group}-${i}`, label: e.label, group: e.group, description: e.description,
+      icon: (e.icon ?? ICONE_DO_GRUPO[e.group] ?? "file") as never, tone: COR_DO_GRUPO[e.group] as never, href: destino,
+      run: () => { location.href = `./${destino}`; }};
+  }), [todas, filtro, plataforma]);
+  const sugerir = (texto: string) => {
+    const campo = document.querySelector<HTMLInputElement>(".command-palette-lg .command-input");
+    if (!campo) return;
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!.call(campo, texto);
+    campo.dispatchEvent(new Event("input", {bubbles: true}));
+    campo.focus();
+  };
+  return h(CommandPalette, {open: aberta, onClose: () => setAberta(false), items: itens, size: "lg",
+    placeholder: `Search ${todas.length} pages — components, patterns, blocks, recipes…`, label: "Search the site",
+    filters: h(ToggleGroup, {label: "Filter", detached: true, pressedStyle: "contrast", className: "site-busca-filtros",
+      value: [filtro], onValueChange: (v: string[]) => setFiltro(v[0] ?? "all")},
+      h(Toggle, {value: "all", size: "lg"}, "All", h(Badge, {size: "sm"}, String(todas.length))),
+      ...grupos.map((g) => h(Toggle, {key: g, value: g, size: "lg"}, g, h(Badge, {size: "sm"}, String(todas.filter((e) => e.group === g).length))))),
+    preview: (item: {label: string; group?: string; description?: string; icon?: string; tone?: string; href?: string}) =>
+      h("div", {className: "site-busca-previa"},
+        h(Badge, {className: "site-busca-area"}, h("span", {className: "command-item-tile site-busca-tile", "data-tone": item.tone},
+          h(Icon, {name: (item.icon ?? "file") as never})), item.group),
+        h("h2", {className: "site-busca-titulo"}, item.label),
+        item.description ? h("p", {className: "site-busca-texto"}, item.description) : null,
+        h("code", {className: "site-busca-end"}, `aureauds.dev/${item.href ?? ""}`),
+        h(Button, {variant: "primary", size: "lg", className: "site-busca-abrir", trailingIcon: "arrow-right",
+          href: `./${item.href ?? ""}`}, "Open the page")),
+    footer: h("div", {className: "site-busca-pe"},
+      h("div", {className: "site-busca-sugestoes", role: "group", "aria-label": "Suggestions"},
+        ...SUGESTOES.map((s) => h(Button, {key: s, variant: "secondary", className: "site-busca-sug", onClick: () => sugerir(s)}, s))),
+      h("span", {className: "site-busca-dir"}, h("span", {id: "site-busca-plataforma"}, "Components for"),
+        h(SegmentedControl, {label: "Components for", value: plataforma, onChange: setPlataforma, selectedStyle: "neutral",
+          items: [{value: "web", label: "Web"}, {value: "native", label: "Native"}]}))),
+  });
 }
+// A cor e o ícone de cada grupo na busca: os do desenho aprovado (Getting Started verde, Components azul, Releases rosa,
+// Patterns laranja…), das oito cores de categoria da Aurea.
+const COR_DO_GRUPO: Record<string, string> = {"Pages": "blue", "Getting Started": "green", "Components": "blue", "Hooks": "green",
+  "Patterns": "orange", "Blocks": "green", "Recipes": "pink", "Releases": "pink"};
+const ICONE_DO_GRUPO: Record<string, string> = {"Pages": "compass", "Getting Started": "book-open", "Hooks": "function",
+  "Patterns": "puzzle-piece", "Blocks": "stack", "Recipes": "cooking-pot", "Releases": "rocket-launch"};
+const SUGESTOES = ["Button", "sidebar", "empty", "useToast", "receipt"];
 
 // O sprite está DENTRO da página (inline), então a base dos ícones é vazia — como no gerador.
 // O provedor do site guarda o tema escolhido (15/10/2026); as peças vivas moram todas sob ele.

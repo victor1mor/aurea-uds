@@ -136,6 +136,19 @@ function AbrePaleta() {
       {id: "close", label: "CloseButton", icon: "squares-four", group: "Components", run: fecha},
       {id: "theme", label: "Toggle theme", icon: "moon", kbd: "⌘T", group: "Actions", run: fecha}]}));
 }
+// A busca grande (o site B, 0.54.0): os mesmos itens com descrição e a cor do círculo, a prévia do ativo e o pé.
+function AbrePaletaGrande() {
+  const [open, setOpen] = useState(false);
+  const fecha = () => setOpen(false);
+  return h(Fragment, null,
+    h(A.Button, {leadingIcon: "magnifying-glass", onClick: () => setOpen(true)}, "Search, large"),
+    h(A.CommandPalette, {open, onClose: fecha, size: "lg", items: [
+      {id: "button", label: "Button", description: "The action a person takes.", icon: "cursor-click", tone: "blue", group: "Components", run: fecha},
+      {id: "card", label: "Card", description: "A floating surface for related content.", icon: "cards", tone: "blue", group: "Components", run: fecha},
+      {id: "theme", label: "Theming", description: "Brands, themes and densities.", icon: "palette", tone: "green", group: "Getting Started", run: fecha}],
+      preview: (item) => h("div", {style: {display: "grid", gap: "var(--space-2)"}}, h("strong", null, item.label), h("span", null, item.description)),
+      footer: h("span", {className: "muted"}, "Footer content from the app")}));
+}
 function AbreCasca() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -716,6 +729,18 @@ import {highlightCode} from "@aurea-uds/react/code-highlight";
 export function Actions() {
   return <Button variant="primary" size="sm">Save</Button>;
 }`)),
+    examples: [
+      {
+        title: "With a file name",
+        description: "filename puts a head on the block: the file name on the left and, with copyable, Copy written out " +
+          "(it turns to Copied). The block becomes a card, and a long line wraps instead of scrolling.",
+        code: `<CodeBlock filename="terminal" language="bash" copyable>
+  pnpm add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
+</CodeBlock>`,
+        render: () => h("div", {style: wide}, h(A.CodeBlock, {filename: "terminal", language: "bash", copyable: true},
+          "pnpm add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons")),
+      },
+    ],
   },
   Chip: {
     description: "Another name for Badge: the same component, the same props, the same look. "
@@ -765,6 +790,19 @@ export function Actions() {
 ]} />
 // Items with a group come together under its title; the line under the list teaches the keys.`,
     render: () => h(AbrePaleta),
+    examples: [
+      {
+        title: "Large",
+        description: "size=\"lg\" is the site search: a 1024 window, a 64 field with Esc inside, the filters you pass, "
+          + "group titles with their count, items with a tinted icon circle and a description, the preview of the active "
+          + "item beside the list (it goes below 1240), and your footer next to the keys.",
+        code: `<CommandPalette size="lg" open={open} onClose={close} items={[
+  {id: "button", label: "Button", description: "The action a person takes.", icon: "cursor-click", tone: "blue", group: "Components", run},
+  {id: "theme", label: "Theming", description: "Brands, themes and densities.", icon: "palette", tone: "green", group: "Getting Started", run},
+]} preview={(item) => <Preview item={item} />} footer={<PlatformSwitch />} />`,
+        render: () => h(AbrePaletaGrande),
+      },
+    ],
   },
   CommandPaletteShell: {
     // O texto e o exemplo ficaram para trás quando a casca virou janela do motor, com `onClose` (lote R, 16/10/2026):
@@ -1084,6 +1122,21 @@ export function Actions() {
         Comp: A.KPI, nome: "KPI", prop: "tone", valores: ["neutral", "success", "danger"],
         base: {label: "Revenue", value: "$48.2k", trend: "+12% vs last month", direction: "up"},
         estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
+      {
+        title: "Brand, with bars",
+        description: "variant=\"brand\" is the yellow card; bars puts a bar per period under the number. Each bar is a " +
+          "button: hover, focus or click chooses it, and the reading above says its label and value.",
+        code: `<KPI variant="brand" label="Revenue" value="$48.2k" trend="+12%" direction="up" bars={[
+  {label: "Jan", value: "$31k", amount: 31}, {label: "Feb", value: "$35k", amount: 35},
+  {label: "Mar", value: "$33k", amount: 33}, {label: "Apr", value: "$40k", amount: 40},
+  {label: "May", value: "$44k", amount: 44}, {label: "Jun", value: "$48.2k", amount: 48.2},
+]} />`,
+        render: () => h("div", {style: {inlineSize: "100%", maxInlineSize: "19rem"}}, h(A.KPI, {variant: "brand", label: "Revenue", value: "$48.2k",
+          trend: "+12%", direction: "up", bars: [
+            {label: "Jan", value: "$31k", amount: 31}, {label: "Feb", value: "$35k", amount: 35},
+            {label: "Mar", value: "$33k", amount: 33}, {label: "Apr", value: "$40k", amount: 40},
+            {label: "May", value: "$44k", amount: 44}, {label: "Jun", value: "$48.2k", amount: 48.2}]})),
+      },
     ],
   },
   Kbd: {
@@ -1542,6 +1595,27 @@ export function Actions() {
       h("tbody", null,
         h("tr", null, h("td", null, "Messenger"), h("td", null, "Owner")),
         h("tr", null, h("td", null, "Analyst"), h("td", null, "Editor"))))),
+    examples: [
+      {
+        title: "Rows",
+        description: "variant=\"rows\" drops the frame: each row is a capsule, 4 apart, grey on hover; the row the app " +
+          "marked with data-selected is yellow. It fits the width.",
+        code: `<Table variant="rows" caption="Members">
+  <thead><tr><th>Name</th><th>Role</th></tr></thead>
+  <tbody>
+    <tr><td>Messenger</td><td>Owner</td></tr>
+    <tr data-selected=""><td>Analyst</td><td>Editor</td></tr>
+    <tr><td>Curator</td><td>Viewer</td></tr>
+  </tbody>
+</Table>`,
+        render: () => h("div", {style: {width: "100%"}}, h(A.Table, {variant: "rows", caption: "Members"},
+          h("thead", null, h("tr", null, h("th", null, "Name"), h("th", null, "Role"))),
+          h("tbody", null,
+            h("tr", null, h("td", null, "Messenger"), h("td", null, "Owner")),
+            h("tr", {"data-selected": ""}, h("td", null, "Analyst"), h("td", null, "Editor")),
+            h("tr", null, h("td", null, "Curator"), h("td", null, "Viewer"))))),
+      },
+    ],
   },
   TableOfContents: {
     description: "The “On this page” column of every page in this catalog. Presentational: "
@@ -1602,6 +1676,42 @@ export function Actions() {
       {label: "Validation", state: "error"},
       {label: "Publish", optional: "Optional"},
     ]})),
+    examples: [
+      {
+        title: "Path",
+        description: "variant=\"path\" is a path you choose on: big numbered dots on one thick rail, the chosen one " +
+          "inverted and larger, and two ends that do not click. On a narrow container, four per row and no rail.",
+        code: `<Stepper variant="path" label="Before 1.0" startContent="0.x" endContent="1.0" items={[
+  {label: "Finish the open requests", onClick: () => {}},
+  {label: "Review every component", state: "active", onClick: () => {}},
+  {label: "Run on iOS devices", onClick: () => {}},
+  {label: "An independent audit", onClick: () => {}},
+]} />`,
+        render: () => h("div", {style: wide}, h(A.Stepper, {variant: "path", label: "Before 1.0", startContent: "0.x", endContent: "1.0", items: [
+          {label: "Finish the open requests", onClick: () => {}},
+          {label: "Review every component", state: "active", onClick: () => {}},
+          {label: "Run on iOS devices", onClick: () => {}},
+          {label: "An independent audit", onClick: () => {}},
+        ]})),
+      },
+      {
+        title: "Bar",
+        description: "variant=\"bar\" is progress in parts: each part is the link to its step and turns green when the " +
+          "step is done. startContent names the bar; endContent counts, and is announced when it changes.",
+        code: `<Stepper variant="bar" label="Setup progress" startContent="Your setup" endContent="2 of 4 done" items={[
+  {label: "Install, done", state: "done", href: "#install"},
+  {label: "Import the styles, done", state: "done", href: "#styles"},
+  {label: "Add the provider", href: "#provider"},
+  {label: "Your first component", href: "#first"},
+]} />`,
+        render: () => h("div", {style: wide}, h(A.Stepper, {variant: "bar", label: "Setup progress", startContent: "Your setup", endContent: "2 of 4 done", items: [
+          {label: "Install, done", state: "done", href: "#install"},
+          {label: "Import the styles, done", state: "done", href: "#styles"},
+          {label: "Add the provider", href: "#provider"},
+          {label: "Your first component", href: "#first"},
+        ]})),
+      },
+    ],
   },
   Menubar: {
     code: `<Menubar label="Main" menus={[
@@ -1857,7 +1967,7 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
         Comp: A.ToggleGroup, nome: "ToggleGroup", prop: "orientation", valores: ["horizontal", "vertical"],
         base: {label: "Text style", multiple: true, defaultValue: ["bold"]}, filho: () => TRES_ESTILOS}),
       eixo({titulo: "Sizes", descricao: "The size reaches every toggle in the group.", Comp: A.ToggleGroup, nome: "ToggleGroup",
-        prop: "size", valores: ["sm", "md", "lg"], base: {label: "Text style", multiple: true, defaultValue: ["bold"]}, coluna: true,
+        prop: "size", valores: ["sm", "md", "lg", "xl"], base: {label: "Text style", multiple: true, defaultValue: ["bold"]}, coluna: true,
         filho: () => TRES_ESTILOS}),
     ],
   },

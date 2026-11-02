@@ -9,12 +9,19 @@
     "web": "stable",
     "native": "stable"
   },
-  "variants": [],
+  "variants": [
+    "list",
+    "card"
+  ],
   "sizes": [],
   "axes": {
     "orientation": [
       "horizontal",
       "vertical"
+    ],
+    "indicatorPlacement": [
+      "start",
+      "none"
     ]
   },
   "states": [
@@ -29,7 +36,14 @@
     "--text-xs",
     "--weight-medium",
     "--muted-foreground",
-    "--danger-400"
+    "--danger-400",
+    "--card",
+    "--card-pad",
+    "--radius-card",
+    "--segment",
+    "--shadow-lg",
+    "--space-3",
+    "--space-1"
   ],
   "a11y": {
     "role": "radiogroup",
@@ -126,6 +140,18 @@
       "type": "boolean",
       "default": "false",
       "description": "The asterisk on the label, and required on the options."
+    },
+    {
+      "name": "variant",
+      "type": "\"list\" | \"card\"",
+      "default": "\"list\"",
+      "description": "card makes each option a whole card (the card skin: radius 22, the card padding and fill), 12 apart; the chosen card rises 4 with a large shadow and the selected-tab fill. The same name as the native RadioGroup. Still for people who ask for less motion; the focus ring goes around the whole card."
+    },
+    {
+      "name": "indicatorPlacement",
+      "type": "\"start\" | \"none\"",
+      "default": "\"start\"",
+      "description": "On the web the dot sits at the start. none removes it, only with variant=\"card\", where the card itself shows the choice; the option is still a native radio inside."
     },
     {
       "name": "RadioGroup.Item",

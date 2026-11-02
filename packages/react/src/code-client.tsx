@@ -75,7 +75,12 @@ function linhasDoCodigo(codigo:string,language:string,highlight?:CodeHighlighter
   const linhas=highlight?.(codigo,language)??codigo.split("\n").map(l=>l===""?[]:[{text:l}]);
   return codigo.endsWith("\n")&&linhas.length>1&&linhas[linhas.length-1]!.length===0?linhas.slice(0,-1):linhas;
 }
-export function CodeBlock({children,language="text",copyable,preview,lineNumbers,highlight,tabs,className}:{children?:string;language?:string;copyable?:boolean;
+// `filename` (o site B, aprovado pela bancada em 01/11/2026, o item 6 — "Ícone + nome"): a CABEÇA do arquivo — o nome do
+// arquivo à esquerda e, com `copyable`, o "Copy" ESCRITO (o botão secundário, com o ícone antes do nome; vira "Copied").
+// O bloco vira o cartão (canto 22, a cor do cartão) e a linha longa DESCE em vez de rolar. Sem `filename`, o de sempre.
+export function CodeBlock({children,language="text",copyable,preview,lineNumbers,highlight,tabs,filename,className}:{children?:string;language?:string;copyable?:boolean;
+  /** O nome do arquivo na cabeça do bloco; com ele, o "Copy" é escrito e a linha longa desce. */
+  filename?:React.ReactNode;
   /** A prévia viva do código: com ela, o bloco vira a caixa de exemplo, com as abas Prévia | Código. */
   preview?:React.ReactNode;
   /** Mostra o número de cada linha à esquerda. O número não entra no texto copiado nem é lido pelo leitor de tela. */
@@ -101,10 +106,11 @@ const linhas=lineNumbers||highlight?linhasDoCodigo(children,language,highlight):
 const colorido=linhas!=null&&highlight!=null&&linhas.some(l=>l.some(p=>p.className));
 // Os algarismos da última linha: a coluna do número tem a largura deles (99 → 2, 100 → 3).
 const digitos=lineNumbers&&linhas?{"--code-line-digits":String(linhas.length).length} as React.CSSProperties:undefined;
-const pre=<pre className={cx("code-block",lineNumbers&&"code-block-numbered",colorido&&"code-block-highlighted",!copyable&&className)} style={digitos} data-language={language} tabIndex={0}><code>{linhas
+const pre=<pre className={cx("code-block",lineNumbers&&"code-block-numbered",colorido&&"code-block-highlighted",!copyable&&filename==null&&className)} style={digitos} data-language={language} tabIndex={0}><code>{linhas
   ?<>{linhas.map((l,i)=><React.Fragment key={i}><span className="code-line">{l.map((p,j)=>p.className?<span key={j} className={p.className}>{p.text}</span>:p.text)}</span>{i<linhas.length-1?"\n":null}</React.Fragment>)}{children.endsWith("\n")?"\n":null}</>
   :children}</code></pre>;
-if(!copyable)return pre;
+if(!copyable&&filename==null)return pre;
+if(!copyable)return <div className={cx("code-block-wrap","code-block-file",className)}><div className="code-block-head"><span className="code-block-title">{filename}</span></div>{pre}</div>;
 // 0.28.0: o "copiado" é dito ao leitor de tela. Com o `aurea.js` na página, é ele quem diz (pelo
 // texto do `data-aurea-copy-done`, na língua do app); sem ele, a região de status daqui.
 const [copiado,setCopiado]=React.useState(false);
@@ -113,6 +119,12 @@ const onCopy=(e:React.MouseEvent<HTMLButtonElement>)=>{e.stopPropagation();const
   // Sem área de transferência (ou sem promessa), não há o que avisar — e não pode quebrar o clique.
   const copia=navigator.clipboard?.writeText(children);if(typeof copia?.then!=="function")return;
   void copia.then(()=>{setCopiado(true);setTimeout(()=>setCopiado(false),1500)},()=>{})};
+if(filename!=null)return <div className={cx("code-block-wrap","code-block-file",className)} data-aurea-copy-scope>
+<span className="sr-only" role="status" aria-live="polite">{copiado?s.copied:""}</span>
+<div className="code-block-head"><span className="code-block-title">{filename}</span>
+<button type="button" className={cx("btn btn-secondary copy-code-text",copiado&&"is-done")} data-aurea-copy data-aurea-copy-done={s.copied} onClick={onCopy}>
+<Icon name="copy" size="sm" className="c-copy"/><Icon name="check" size="sm" className="c-done"/><span className="c-copy">{s.copy}</span><span className="c-done">{s.copied}</span></button></div>
+{pre}</div>;
 return <div className={cx("code-block-wrap",className)} data-aurea-copy-scope>
 <span className="sr-only" role="status" aria-live="polite">{copiado?s.copied:""}</span>
 <button type="button" className={cx("btn btn-icon btn-ghost copy-code",copiado&&"is-done")} data-aurea-copy data-aurea-copy-done={s.copied} aria-label={s.copyCode} onClick={onCopy}>

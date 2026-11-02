@@ -8,10 +8,14 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement>, RefAttribu
     stickyFirstColumn?: boolean;
     /** GAR-12: a tabela cabe na largura da caixa, sem o mínimo de 720 — a comparação de dois itens no celular. */
     fit?: boolean;
+    /** `rows` (o site B, 0.54.0 — a lista de membros da página inicial, aprovada pela bancada em 01/11/2026, o D-7.6): sem a
+     *  caixa, cada linha é uma CÁPSULA de 54, 4 entre elas; com o mouse, o `--fill-1`; a linha com `data-selected`, o amarelo
+     *  a 14%. O cabeçalho em mono maiúsculo, apagado. Cabe na largura (sem o mínimo de 720). */
+    variant?: "default" | "rows";
     /** GAR-12: esconde as linhas marcadas como iguais (`<tr data-same>`) — o "Só diferenças". */
     differencesOnly?: boolean;
 }
-export declare function Table({ caption, stickyHeader, stickyFirstColumn, fit, differencesOnly, children, className, ...props }: TableProps): React.JSX.Element;
+export declare function Table({ caption, stickyHeader, stickyFirstColumn, fit, differencesOnly, variant, children, className, ...props }: TableProps): React.JSX.Element;
 export interface SortableItem {
     id: string;
     label: ReactNode;

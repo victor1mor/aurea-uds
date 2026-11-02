@@ -28,7 +28,13 @@
     "--success-400",
     "--surface-inset",
     "--warning-400",
-    "--weight-semibold"
+    "--weight-semibold",
+    "--radius-card",
+    "--card",
+    "--control-h-md",
+    "--space-5",
+    "--text-xs",
+    "--text-sm"
   ],
   "a11y": {
     "role": null,
@@ -87,6 +93,12 @@
       "type": "CodeHighlighter",
       "default": "—",
       "description": "Colors the code. Pass `highlightCode` from `@aurea-uds/react/code-highlight`; its grammars are optional peers (@lezer/javascript, @lezer/css, @lezer/html, @lezer/json, @codemirror/legacy-modes). A language it does not know comes back plain. The colors are the same as the CodeEditor's, mixed 20% with the text so each one reads at 4.5:1 or more on the block."
+    },
+    {
+      "name": "filename",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "A head on the block, 52 tall: the file name (code font, 12, muted) on the left and, with copyable, Copy written out — the secondary button of 36, the icon before the word; once copied, both turn to the check and Copied. The block becomes a card (radius 22, the card fill), the code at 14 in the text color, and a long line wraps instead of scrolling."
     },
     {
       "name": "className",

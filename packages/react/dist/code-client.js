@@ -57,7 +57,10 @@ function linhasDoCodigo(codigo, language, highlight) {
     const linhas = highlight?.(codigo, language) ?? codigo.split("\n").map(l => l === "" ? [] : [{ text: l }]);
     return codigo.endsWith("\n") && linhas.length > 1 && linhas[linhas.length - 1].length === 0 ? linhas.slice(0, -1) : linhas;
 }
-export function CodeBlock({ children, language = "text", copyable, preview, lineNumbers, highlight, tabs, className }) {
+// `filename` (o site B, aprovado pela bancada em 01/11/2026, o item 6 — "Ícone + nome"): a CABEÇA do arquivo — o nome do
+// arquivo à esquerda e, com `copyable`, o "Copy" ESCRITO (o botão secundário, com o ícone antes do nome; vira "Copied").
+// O bloco vira o cartão (canto 22, a cor do cartão) e a linha longa DESCE em vez de rolar. Sem `filename`, o de sempre.
+export function CodeBlock({ children, language = "text", copyable, preview, lineNumbers, highlight, tabs, filename, className }) {
     if (tabs && tabs.length > 0)
         return _jsx(CodigoEmAbas, { tabs: tabs, language: language, copyable: copyable, highlight: highlight, className: className });
     if (preview !== undefined)
@@ -74,11 +77,13 @@ export function CodeBlock({ children, language = "text", copyable, preview, line
     const colorido = linhas != null && highlight != null && linhas.some(l => l.some(p => p.className));
     // Os algarismos da última linha: a coluna do número tem a largura deles (99 → 2, 100 → 3).
     const digitos = lineNumbers && linhas ? { "--code-line-digits": String(linhas.length).length } : undefined;
-    const pre = _jsx("pre", { className: cx("code-block", lineNumbers && "code-block-numbered", colorido && "code-block-highlighted", !copyable && className), style: digitos, "data-language": language, tabIndex: 0, children: _jsx("code", { children: linhas
+    const pre = _jsx("pre", { className: cx("code-block", lineNumbers && "code-block-numbered", colorido && "code-block-highlighted", !copyable && filename == null && className), style: digitos, "data-language": language, tabIndex: 0, children: _jsx("code", { children: linhas
                 ? _jsxs(_Fragment, { children: [linhas.map((l, i) => _jsxs(React.Fragment, { children: [_jsx("span", { className: "code-line", children: l.map((p, j) => p.className ? _jsx("span", { className: p.className, children: p.text }, j) : p.text) }), i < linhas.length - 1 ? "\n" : null] }, i)), children.endsWith("\n") ? "\n" : null] })
                 : children }) });
-    if (!copyable)
+    if (!copyable && filename == null)
         return pre;
+    if (!copyable)
+        return _jsxs("div", { className: cx("code-block-wrap", "code-block-file", className), children: [_jsx("div", { className: "code-block-head", children: _jsx("span", { className: "code-block-title", children: filename }) }), pre] });
     // 0.28.0: o "copiado" é dito ao leitor de tela. Com o `aurea.js` na página, é ele quem diz (pelo
     // texto do `data-aurea-copy-done`, na língua do app); sem ele, a região de status daqui.
     const [copiado, setCopiado] = React.useState(false);
@@ -95,5 +100,7 @@ export function CodeBlock({ children, language = "text", copyable, preview, line
             return;
         void copia.then(() => { setCopiado(true); setTimeout(() => setCopiado(false), 1500); }, () => { });
     };
+    if (filename != null)
+        return _jsxs("div", { className: cx("code-block-wrap", "code-block-file", className), "data-aurea-copy-scope": true, children: [_jsx("span", { className: "sr-only", role: "status", "aria-live": "polite", children: copiado ? s.copied : "" }), _jsxs("div", { className: "code-block-head", children: [_jsx("span", { className: "code-block-title", children: filename }), _jsxs("button", { type: "button", className: cx("btn btn-secondary copy-code-text", copiado && "is-done"), "data-aurea-copy": true, "data-aurea-copy-done": s.copied, onClick: onCopy, children: [_jsx(Icon, { name: "copy", size: "sm", className: "c-copy" }), _jsx(Icon, { name: "check", size: "sm", className: "c-done" }), _jsx("span", { className: "c-copy", children: s.copy }), _jsx("span", { className: "c-done", children: s.copied })] })] }), pre] });
     return _jsxs("div", { className: cx("code-block-wrap", className), "data-aurea-copy-scope": true, children: [_jsx("span", { className: "sr-only", role: "status", "aria-live": "polite", children: copiado ? s.copied : "" }), _jsxs("button", { type: "button", className: cx("btn btn-icon btn-ghost copy-code", copiado && "is-done"), "data-aurea-copy": true, "data-aurea-copy-done": s.copied, "aria-label": s.copyCode, onClick: onCopy, children: [_jsx(Icon, { name: "copy", size: "sm", className: "c-copy" }), _jsx(Icon, { name: "check", size: "sm", className: "c-done" })] }), pre] });
 }

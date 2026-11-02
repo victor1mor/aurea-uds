@@ -7,9 +7,11 @@ export interface AccordionItem {
     /** O item que não abre: anunciado como desligado e fora do Tab. */
     disabled?: boolean;
 }
-export declare function Accordion({ items, variant, multiple, defaultValue, indicator, size, className }: {
+export declare function Accordion({ items, variant, multiple, defaultValue, indicator, size, orientation, className }: {
     items: AccordionItem[];
     variant?: AccordionVariant;
+    /** `horizontal`: o acordeão de lado — os itens em pé, o aberto toma o resto da linha. */
+    orientation?: "vertical" | "horizontal";
     /** O desenho de abrir: `"chevron"` (o padrão, a setinha) ou `"plus"` (o "+" numa bolinha, que vira "×" quando abre). */
     indicator?: "chevron" | "plus";
     /** A altura da linha: `"md"` (o padrão) ou `"lg"` (60, com a letra do texto). */

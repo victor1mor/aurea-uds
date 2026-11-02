@@ -55,6 +55,11 @@ The size reaches every toggle in the group.
   <Toggle value="italic">Italic</Toggle>
   <Toggle value="underline">Underline</Toggle>
 </ToggleGroup>
+<ToggleGroup label="Text style" multiple defaultValue={["bold"]} size="xl">
+  <Toggle value="bold">Bold</Toggle>
+  <Toggle value="italic">Italic</Toggle>
+  <Toggle value="underline">Underline</Toggle>
+</ToggleGroup>
 ```
 
 ## API Reference
