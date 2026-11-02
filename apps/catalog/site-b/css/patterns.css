@@ -1,0 +1,29 @@
+/* "PATTERNS" NO SITE B (o desenho `patterns-*`, 02/11/2026). */
+/* O mini cartão de padrão que flutua no palco. */
+.pat-mini { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-1); max-inline-size:calc(var(--space-16) * 4);
+  padding:var(--space-4); background:var(--segment); box-shadow:var(--shadow-md); }
+.pat-mini b { margin-block-start:var(--space-1); font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); }
+.pat-mini > span:last-child { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; font-size:var(--text-sm); }
+
+/* O cabeçalho do grupo: o link para a página do componente na ponta. */
+.pat-pagina { margin-inline-start:auto; }
+.pat-inicial { display:inline-flex; }
+/* Os cartões de padrão: três por linha (dois, um), o selo, o título, o texto e o "Open pattern", que cobre o cartão. */
+.pat-cartoes { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:var(--space-3); margin-block-start:var(--space-4); }
+@container g1 (max-width:49.99rem) { .pat-cartoes { grid-template-columns:repeat(2, minmax(0, 1fr)); } }
+@container g1 (max-width:29.99rem) { .pat-cartoes { grid-template-columns:minmax(0, 1fr); } }
+@container g1 (max-width:39.99rem) { .pat-pagina { display:none; } }
+.pat-cartao { position:relative; display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-2); padding:var(--space-4) var(--space-4) var(--space-3); }
+.pat-cartao[hidden] { display:none; }
+.pat-cartao h3 { margin:var(--space-1) 0 0; font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); line-height:var(--leading-tight); }
+.pat-cartao p { flex:1; margin:0; font-size:var(--text-sm); line-height:var(--leading-relaxed); color:var(--muted-foreground); }
+.pat-abrir { display:inline-flex; align-items:center; gap:var(--space-1); color:var(--primary-emphasis); font-size:var(--text-sm); font-weight:var(--weight-semibold);
+  text-decoration:none; }
+.pat-abrir::after { content:""; position:absolute; inset:0; border-radius:inherit; }
+.pat-abrir:focus-visible { outline:none; }
+.pat-abrir:focus-visible::after { outline:var(--focus-width) solid var(--focus); outline-offset:var(--focus-offset); }
+/* O "Show more components": a caixa do palco, a nota e o botão. */
+.pat-mais-grupos { display:flex; flex-direction:column; align-items:center; gap:var(--space-3); margin-block-start:var(--space-10); padding:var(--space-6);
+  border-radius:var(--radius-card); background:var(--site-palco); }
+.pat-mais-grupos[hidden] { display:none; }
+.pat-mais-grupos p { margin:0; font-size:var(--text-sm); color:var(--muted-foreground); }
