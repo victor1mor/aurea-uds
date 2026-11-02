@@ -25,8 +25,10 @@ test("375: o topo numa linha só, a lupa no lugar da busca larga e o botão da g
   await expect(page.locator(".site-search")).toBeHidden();
   await expect(page.getByRole("link", {name: "Search"})).toBeVisible();
   await expect(page.locator(".topbar .site-theme-switch")).toBeHidden();
-  const gaveta = await caixa(page, ".topbar .nav-toggle");
-  perto(gaveta.direita, 375 - 16 - 10, "o botão da gaveta na ponta da cápsula");
+  // O botão do menu (o item 10 do site B): o "Menu" vivo, no lugar do botão da gaveta do `AppShell`, que sai.
+  await expect(page.locator(".topbar .nav-toggle")).toBeHidden();
+  const gaveta = await caixa(page, ".topbar .site-menu-botao");
+  perto(gaveta.direita, 375 - 16 - 10, "o botão do menu na ponta da cápsula");
   // Os botões numa linha só, da mesma altura.
   const linha = await page.locator(".topbar-inner > :not(.site-areas) :is(a.btn, button.btn), .topbar-inner > :is(a.btn, button.btn)").evaluateAll((l) =>
     l.filter((e) => e.getClientRects().length).map((e) => [Math.round(e.getBoundingClientRect().top), Math.round(e.getBoundingClientRect().height)]));
@@ -52,16 +54,25 @@ test("375 com toque: os botões com 44, numa linha, e a página não rola de lad
   await ctx.close();
 });
 
-test("375: a gaveta abre pela direita, com fundo, e a chave claro/escuro no alto dela", async ({page}) => {
+// ~~A gaveta abria pela direita, com a chave claro/escuro no alto.~~ O SITE B (o item 10, aprovado pela bancada em 01/11/2026):
+// a folha que sobe de baixo (`Drawer side="bottom"`), encostada embaixo e de ponta a ponta, com o canto 32 em cima; a chave de
+// tema com ícone, as áreas, e no fim a lista da área (trazida da lateral, que volta para ela ao fechar).
+test("375: a folha do menu sobe de baixo, com a chave de tema e a lista da área", async ({page}) => {
   await abrir(page, 375);
-  await page.getByRole("button", {name: "Navigation"}).click();
-  const gaveta = page.locator(".app-shell > .sidebar:not(.app-shell-aside)");
-  await expect(gaveta).toBeVisible();
-  perto((await caixa(page, ".app-shell > .sidebar:not(.app-shell-aside)")).direita, 375 - 16, "encostada à direita");
-  expect(await gaveta.evaluate((e) => getComputedStyle(e).backgroundColor), "a gaveta tem fundo").not.toBe("rgba(0, 0, 0, 0)");
-  const chave = await caixa(page, ".app-shell > .sidebar .site-gaveta-topo");
-  const primeiro = await caixa(page, ".app-shell > .sidebar .sidebar-nav");
-  expect(chave.baixo, "a chave fica acima da lista").toBeLessThanOrEqual(primeiro.y);
+  await page.getByRole("button", {name: "Menu", exact: true}).click();
+  const folha = page.getByRole("dialog", {name: "Menu"});
+  await expect(folha).toBeVisible();
+  await expect.poll(async () => (await caixa(page, ".drawer-bottom")).baixo, {message: "encostada embaixo"}).toBeCloseTo(760, 0);
+  const f = await caixa(page, ".drawer-bottom");
+  perto(f.x, 0, "de ponta a ponta");
+  perto(f.w, 375, "de ponta a ponta");
+  expect(await folha.evaluate((e) => getComputedStyle(e).borderTopLeftRadius), "o canto da folha").toBe("32px");
+  await expect(folha.locator(".segmented-2xl"), "a chave de tema com ícone").toBeVisible();
+  await expect(folha.locator('.nav-list-lg a[aria-current="page"]')).toContainText("Components");
+  await expect(folha.locator(".site-menu-area .sidebar-nav")).toHaveCount(1);
+  await page.keyboard.press("Escape");
+  await expect(folha).toBeHidden();
+  await expect(page.locator("#aurea-shell-nav .sidebar-nav"), "a lista volta para a lateral").toHaveCount(1);
 });
 
 // ~~Abaixo de 1280, a barra do índice mostrava a seção em vista e descia a lista (lote U).~~ No site B o índice sai abaixo de
@@ -83,6 +94,7 @@ test("de 768 a 1279 a lateral é coluna, sem o botão da gaveta; de 1280 para ci
     const lateral = await caixa(page, ".app-shell > .sidebar:not(.app-shell-aside)");
     perto(lateral.w, largura, `${w}: a lateral com ${largura}`);
     await expect(page.locator(".topbar .nav-toggle")).toBeHidden();
+    await expect(page.locator(".topbar .site-menu-botao")).toBeHidden();
   }
   await abrir(page, 1280);
   await expect(page.locator(".docs-toc-bar")).toBeHidden();
