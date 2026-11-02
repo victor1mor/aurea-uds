@@ -1,0 +1,28 @@
+/* DARK MODE no desenho B (site-b/paginas/dark-mode.mjs). */
+
+/* A abertura: a lua escura no círculo claro e o sol amarelo no círculo escuro (cada um com o tema dele). */
+.dark-mode-ladrilho { display:grid; place-items:center; inline-size:var(--space-10); block-size:var(--space-10); border-radius:var(--radius-full);
+  background:var(--card); color:var(--foreground); }
+.dark-mode-ladrilho[data-theme="dark"] { color:var(--primary); }
+
+/* Os dois modos: o rótulo, o nome do modo, o palco com a peça viva e a frase. */
+.dark-mode-nome { font-family:var(--font-code); font-size:var(--text-base); font-weight:var(--weight-semibold); color:var(--primary-emphasis); }
+.dark-mode-palco { display:flex; align-items:center; justify-content:center; min-block-size:calc(var(--space-24) + var(--space-6));
+  border-radius:var(--radius-lg); background:var(--background); }
+.dark-mode-texto { margin:0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-normal); }
+
+/* Os quatro passos de "Saving the choice". */
+.dark-mode-passos { margin-inline:0; padding:0; list-style:none; }
+.dark-mode-passo { gap:var(--space-2); padding:var(--space-4); }
+.dark-mode-passo > b { font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); }
+.dark-mode-passo > code { color:var(--muted-foreground); font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); overflow-wrap:anywhere; }
+
+/* A parte escura numa página clara: a caixa clara (o tema claro por atributo), com a faixa e o cartão de verdade dentro. */
+.dark-mode-parte { display:flex; flex-direction:column; gap:calc(var(--space-2) + var(--space-05)); padding:calc(var(--space-4) + var(--space-05));
+  border-radius:var(--radius-card); background:var(--background); color:var(--foreground); }
+.dark-mode-parte > b { font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); }
+/* A faixa é de ponta a ponta por natureza; aqui ela aparece recortada, como no desenho (o recorte é do site). */
+.dark-mode-recorte { overflow:hidden; border-radius:var(--radius-lg); }
+.dark-mode-faixa { font-size:var(--text-sm); }
+.dark-mode-faixa > p { margin:0; padding-inline:var(--space-4); }
+.dark-mode-contraste { font-size:var(--text-sm); }
