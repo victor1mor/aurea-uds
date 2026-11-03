@@ -11,6 +11,10 @@ import {DropdownMenu, IconButton} from "../../../packages/react/dist/index.js";
 
 const parada = document.querySelector<HTMLElement>("[data-page-menu]");
 const grupo = parada?.parentElement ?? null;
+// O TAMANHO do botão ao lado (o Victor, 03/11/2026: a setinha saía com 32 ao lado do "Copy Markdown" de 36). O gerador
+// escreve os dois no mesmo tamanho; a parte viva lê o do "Copy Markdown" pela classe, e sem classe de tamanho é o `md`.
+const tamanho = (grupo?.querySelector("[data-copy-page]")?.className.match(/\bbtn-(xs|sm|lg|xl)\b/)?.[1] ?? "md") as
+  "xs" | "sm" | "md" | "lg" | "xl";
 parada?.remove();
 
 function Menu() {
@@ -19,7 +23,7 @@ function Menu() {
   const pergunta = `Read ${md}, I want to ask questions about it.`;
   return h(DropdownMenu, {
     label: "Page actions",
-    trigger: h(IconButton, {variant: "tertiary", size: "sm", icon: "caret-down", label: "More page actions"}),
+    trigger: h(IconButton, {variant: "tertiary", size: tamanho, icon: "caret-down", label: "More page actions"}),
     items: [
       {kind: "link", label: "View as Markdown", leadingIcon: "file-text", href: md, target: "_blank", rel: "noreferrer"},
       {kind: "link", label: "Open in ChatGPT", leadingIcon: "chat-circle", target: "_blank", rel: "noreferrer",

@@ -3879,7 +3879,7 @@ button.tag-main { cursor:pointer; }
    tem 1240, fora da escala), a prévia some. */
 .command-body-plain,.command-foot-plain { display:contents; }
 .command-palette-lg { width:min(var(--breakpoint-lg),100%); gap:var(--space-3); }
-.command-field { display:flex; align-items:center; gap:var(--space-3); block-size:var(--space-16); padding-inline:var(--space-5) var(--space-3);
+.command-field { display:flex; align-items:center; gap:var(--space-3); block-size:calc(var(--space-12) + var(--space-1)); padding-inline:var(--space-5) var(--space-3);
   border-radius:var(--radius-control); background:var(--fill-2); }
 .command-field:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:0; }
 .command-field > .icon { inline-size:var(--icon-md); block-size:var(--icon-md); color:var(--muted-foreground); flex:none; }

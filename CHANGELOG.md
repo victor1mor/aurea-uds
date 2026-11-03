@@ -274,6 +274,33 @@ como deveria funcionar"*.
 
 ---
 
+## [0.54.1] — 2026-11-03
+
+**Os consertos do site B que o Victor achou no ar** (03/11/2026), cada um aprovado olhando a imagem — o de hoje e a proposta,
+na página de verdade. Só a busca grande muda numa peça; o resto é do site.
+
+### Mudado
+
+- **`CommandPalette size="lg"`** — o campo da busca grande passa de 64 para **52** de altura, como o da referência (o Victor:
+  *"o campo do buscar está muito alto"*). A janela, os filtros, os itens e a prévia não mudam.
+
+### Site
+
+- **A setinha do "Copy Markdown"** sai do mesmo tamanho do botão ao lado: a parte viva punha o tamanho pequeno fixo (32 ao
+  lado de 36).
+- **A lateral não sobe no fim da página**: ela gruda no topo, mas o `AppShell` acaba antes do rodapé, e no fim ela era
+  empurrada para trás da barra de cima. Agora o topo fica parado e ela encolhe por baixo até a linha do conteúdo, com a
+  lista rolando por dentro (`site-b/js/_lateral.js`; a peça não muda).
+- **A busca do site**: no "All", sem nada escrito, saem só as sugestões — as 6 páginas das áreas e as 5 primeiras de
+  Getting Started (eram as 520); o resto aparece ao digitar ou ao escolher a aba.
+- **As laterais de Recipes e Hooks** no padrão de Components: "All Recipes" e "All Hooks" sozinhos no alto, e um grupo
+  numerado com o ícone, que abre e fecha; sai o "On this page" repetido; os nomes do Hooks na letra do texto.
+
+---
+
+✅ **Publicada em 03/11/2026, por volta das 12:35 (Brasília), pelo terminal do Victor, da junção do pedido #112** (*"publicar:
+os 7 em 0.54.0"*). Leva a 0.53.0 e a 0.52.1, que não saíram sozinhas.
+
 ## [0.54.0] — 2026-11-02
 
 **As peças que as páginas do site B pediram**, cada uma aprovada pelo Victor olhando a imagem (01/11/2026, os itens 1 a 10 e
@@ -352,6 +379,8 @@ outras"*, 02/11/2026). Só na web.
   serem construídas em paralelo; a busca grande, com a descrição e o ícone de cada página no índice.
 
 ## [0.53.0] — 2026-11-01
+
+**Não saiu sozinha**: foi publicada dentro da 0.54.0, em 03/11/2026.
 
 **O que a página All Components do site B pediu às peças e aos tokens**, cada mudança aprovada pelo Victor olhando a imagem
 (01/11/2026). Tudo só acrescenta, menos a sombra pequena no escuro, que muda a aparência de quem a usa. Leva junto a 0.52.1,

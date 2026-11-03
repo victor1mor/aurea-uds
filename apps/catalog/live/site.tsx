@@ -60,12 +60,45 @@ function Busca() {
   const [plataforma, setPlataforma] = useState("web");
   const todas = window.AUREA_SEARCH ?? [];
   const grupos = useMemo(() => [...new Set(todas.map((e) => e.group))], [todas]);
-  const itens = useMemo(() => todas.filter((e) => filtro === "all" || e.group === filtro).map((e, i) => {
+  // O "All" VAZIO (o Victor, 03/11/2026: "buscar virou uma lista imensa pra rolar na aba All"): sem nada escrito, o "All"
+  // mostra só as sugestões — as páginas das áreas e as 5 primeiras de Getting Started, como a referência (5 sugestões) —;
+  // o resto aparece ao digitar ou ao escolher a aba. A peça não diz o que se digitou, então o site escuta o campo dela.
+  const [vazio, setVazio] = useState(true);
+  // A escuta mora no DOCUMENTO, e não no campo: quando a lista troca, a peça pode montar o campo de novo, e a escuta presa
+  // no campo velho se perdia (medido: apagar o texto não trazia as sugestões de volta).
+  // E a lista troca ANTES de a primeira letra entrar (`beforeinput`, com `flushSync`): trocada depois, no `input`, o motor
+  // da busca apagava a letra que acabara de entrar (medido: "time" virava "ime"). Na volta ao vazio, o `input` basta.
+  useEffect(() => {
+    if (!aberta) { setVazio(true); return; }
+    const campoDaBusca = (e: Event) => {
+      const alvo = e.target as HTMLElement | null;
+      return alvo instanceof HTMLInputElement && alvo.matches(".command-palette-lg .command-input") ? alvo : null;
+    };
+    const antes = (e: Event) => {
+      const campo = campoDaBusca(e);
+      const tipo = (e as InputEvent).inputType ?? "";
+      if (!campo) return;
+      if (!campo.value.trim() && tipo.startsWith("insert")) flushSync(() => setVazio(false));
+      // Apagar o que sobrou (a última letra, ou tudo selecionado) também troca antes: depois, o motor trazia a letra de volta.
+      const tudo = campo.value.length <= 1 || (campo.selectionStart === 0 && campo.selectionEnd === campo.value.length);
+      if (campo.value && tipo.startsWith("delete") && tudo) flushSync(() => setVazio(true));
+    };
+    const depois = (e: Event) => { const campo = campoDaBusca(e); if (campo) setVazio(!campo.value.trim()); };
+    document.addEventListener("beforeinput", antes, true);
+    document.addEventListener("input", depois, true);
+    return () => { document.removeEventListener("beforeinput", antes, true); document.removeEventListener("input", depois, true); };
+  }, [aberta]);
+  const sugestoes = useMemo(() => [...todas.filter((e) => e.group === "Pages"),
+    ...todas.filter((e) => e.group === "Getting Started").slice(0, 5)], [todas]);
+  const visiveis = useMemo(() => filtro === "all" && vazio ? sugestoes : todas.filter((e) => filtro === "all" || e.group === filtro),
+    [todas, filtro, vazio, sugestoes]);
+  // O `id` vem da posição na lista INTEIRA, para o mesmo item ter o mesmo `id` nas sugestões e nos resultados.
+  const itens = useMemo(() => visiveis.map((e) => { const i = todas.indexOf(e);
     const destino = plataforma === "native" && e.native ? e.native : e.href;
     return {id: `${e.group}-${i}`, label: e.label, group: e.group, description: e.description,
       icon: (e.icon ?? ICONE_DO_GRUPO[e.group] ?? "file") as never, tone: COR_DO_GRUPO[e.group] as never, href: destino,
       run: () => { location.href = `./${destino}`; }};
-  }), [todas, filtro, plataforma]);
+  }), [todas, visiveis, plataforma]);
   const sugerir = (texto: string) => {
     const campo = document.querySelector<HTMLInputElement>(".command-palette-lg .command-input");
     if (!campo) return;

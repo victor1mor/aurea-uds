@@ -22,5 +22,3 @@
   border-radius:var(--radius-full); background:var(--fill-2); font-family:var(--font-code);
   font-size:var(--text-xs); font-weight:var(--weight-semibold); color:var(--foreground); }
 .site-area-mono .sidebar-item[aria-current="true"] .site-conta { background:var(--primary); color:var(--primary-foreground); }
-/* Na área Hooks os nomes da lateral são código, em mono, como no desenho. */
-.site-area-hooks .sidebar .sidebar-label { font-family:var(--font-code); }
