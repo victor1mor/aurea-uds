@@ -814,7 +814,7 @@ export function Actions() {
     examples: [
       {
         title: "Large",
-        description: "size=\"lg\" is the site search: a 1024 window, a 64 field with Esc inside, the filters you pass, "
+        description: "size=\"lg\" is the site search: a 1024 window, a 52 field with Esc inside, the filters you pass, "
           + "group titles with their count, items with a tinted icon circle and a description, the preview of the active "
           + "item beside the list (it goes below 1240), and your footer next to the keys.",
         code: `<CommandPalette size="lg" open={open} onClose={close} items={[

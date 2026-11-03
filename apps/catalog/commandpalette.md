@@ -23,7 +23,7 @@ import {CommandPalette} from "@aurea-uds/react";
 
 ### Large
 
-size="lg" is the site search: a 1024 window, a 64 field with Esc inside, the filters you pass, group titles with their count, items with a tinted icon circle and a description, the preview of the active item beside the list (it goes below 1240), and your footer next to the keys.
+size="lg" is the site search: a 1024 window, a 52 field with Esc inside, the filters you pass, group titles with their count, items with a tinted icon circle and a description, the preview of the active item beside the list (it goes below 1240), and your footer next to the keys.
 
 ```tsx
 <CommandPalette size="lg" open={open} onClose={close} items={[
@@ -42,7 +42,7 @@ size="lg" is the site search: a 1024 window, a 64 field with Esc inside, the fil
 | `placeholder` | `string` | "Type a command…" | Also the accessible name of the input. |
 | `label` | `string` | "Command palette" | Accessible name of the dialog. |
 | `shortcuts` | `boolean` | true | The line under the list that teaches the keys: ↑ ↓ move, Enter open, Esc close. Each item may also say its group (item.group): items of the same group come together under its title. |
-| `size` | `"md" \| "lg"` | "md" | lg is the large search: a window as wide as --breakpoint-lg (1024), a 64 field (the magnifier, 18 letters and Esc inside), group titles in uppercase code font with their count, 50 items with the icon in a 40 circle, the title and a cut description, and ↵ on the active row. |
+| `size` | `"md" \| "lg"` | "md" | lg is the large search: a window as wide as --breakpoint-lg (1024), a 52 field (the magnifier, 18 letters and Esc inside), group titles in uppercase code font with their count, 50 items with the icon in a 40 circle, the title and a cut description, and ↵ on the active row. |
 | `items[].description / items[].tone` | `string / BadgeCategory` | — | With lg: the second line of the item (muted, cut), and the category color of its icon circle (the Badge colors); without tone, the circle is neutral. |
 | `filters` | `ReactNode` | — | With lg: what goes under the field — the filters the app draws (a ToggleGroup, for example). |
 | `preview` | `(item: CommandItem) => ReactNode` | — | With lg: the preview of the active item, beside the list, on --fill-1 with radius 22. It goes when the window is under 1240 wide. |

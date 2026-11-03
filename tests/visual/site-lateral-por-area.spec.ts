@@ -19,8 +19,11 @@ const CASOS = [
   {pagina: "tokens.html", area: "Tokens", grupos: ["Overview", "By $type", "On this page"], itens: ["All Tokens", "color", "Color roles"]},
   // As notas de versão (lote U, 19/10/2026): a área própria, como a da referência.
   {pagina: "release-v0-35-0.html", area: "Releases", grupos: ["Overview", "By month"], itens: ["All Releases", "Health", "10October 2026"]},
-  {pagina: "hooks.html", area: "Hooks", grupos: ["Overview", "On this page", expect.stringMatching(/^Hook pages · \d+$/)], itens: ["All Hooks", "useToast"]},
-  {pagina: "usetoast.html", area: "Hooks", grupos: ["Overview", "On this page", expect.stringMatching(/^Hook pages · \d+$/)], itens: ["All Hooks", "useToast"]},
+  // Hooks e Recipes no padrão de Components (o Victor, 03/11/2026: "quero mesmo sidebar dos outros, como dos componentes"):
+  // "All …" sozinho no alto e um grupo numerado, com o ícone — sem o "On this page" repetido.
+  {pagina: "hooks.html", area: "Hooks", grupos: ["Hooks"], itens: ["All Hooks", "useToast"]},
+  {pagina: "usetoast.html", area: "Hooks", grupos: ["Hooks"], itens: ["All Hooks", "useToast"]},
+  {pagina: "recipes.html", area: "Recipes", grupos: ["Recipes"], itens: ["All Recipes", "Developer tools"]},
   // O site B (01/11/2026): a lateral de Components no padrão da Getting Started — as famílias, numeradas.
   {pagina: "button.html", area: "Components", grupos: ["Buttons", "Collections", "Colors", "Controls", "Data Display", "Date and Time",
     "Feedback", "Forms", "Layout", "Media", "Navigation", "Overlays", "Pickers", "Typography", "Utilities", "AI & Agents", "Code",

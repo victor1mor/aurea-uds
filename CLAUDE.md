@@ -205,6 +205,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.50.0` | A lateral de contraste (MNT-36): `Sidebar contrast` e `AppShell sidebarContrast` — escura nas duas telas, na flutuante e na de canto reto, com as cores medidas da Ember em tokens só dela ([ADR-0087](decisions/0087-a-lateral-de-contraste.md)) — pedido #106. **Publicada em 30/10/2026** (entre 10:02 e 10:09, Brasília, medido no npm), pelo terminal do Victor |
 | `0.51.0` | A ponta da barra de cima (MNT-37): `AppShell topbarActions`, o `actions` do `Header` repassado em todo arranjo — no `layout="sidebar"`, a chave de tema vai para o fim da barra do conteúdo ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md), seção do MNT-37) — pedido #108. **Publicada em 30/10/2026** (entre 18:20 e 18:23, Brasília, medido no npm), pelo terminal do Victor |
 | `0.52.0` | As peças do site B: `AppShell topbarVariant="pill"` e `topbarBlurred`, o `blurred` e o `maxWidth` do `Header` `pill`, `TableOfContents progress` e `indicator="segment"`, o grupo que dobra da `Sidebar` com a seta na ponta, `Accordion indicator="plus"` e `size="lg"` ([ADR-0088](decisions/0088-o-site-b.md)) — pedido #109; e os consertos da auditoria de segurança de 31/10/2026 (`CodeBlock`, `ColorSwatch`, `DataGrid`) — pedido #110. **Publicada em 31/10/2026** (por volta das 21:53, Brasília, medido no npm), pelo terminal do Victor |
+| `0.54.0` | O site B inteiro (as seis partes, o Início na pílula) e as peças que ele pediu — `SegmentedControl selectedStyle="emphasis"`, `Alert appearance="soft"`, `Card fill="brand"`, `Table striped`, `CodeBlock previewLayout="stacked"` ([ADR-0089](decisions/0089-a-caixa-de-exemplo-empilhada.md)) e as 14 do desenho — e o `Chart` do nativo que se anuncia como imagem; leva a `0.53.0` e a `0.52.1` — pedido #112. **Publicada em 03/11/2026** (por volta das 12:35, Brasília), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -766,6 +767,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    branch com pedido aberto, conferir que o pedido continua aberto (`gh pr view`). **Publicada em 31/10/2026** (por volta
    das 21:53, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #110 (o #109 foi juntado antes). O
    registro entrou no lote seguinte (o site B, 1b).
+
+52. **`0.54.0`, o site B inteiro, feita de 01 a 03/11/2026** ([ADR-0089](decisions/0089-a-caixa-de-exemplo-empilhada.md)) — as
+   seis partes do site no desenho aprovado, as 14 peças que elas pediram e as cinco perguntas de peça, cada uma respondida
+   olhando a imagem (o segmento `emphasis`, o aviso `soft`, o cartão amarelo, a tabela listrada e a caixa de exemplo
+   empilhada, *"Com degradê"*); e o `Chart` do nativo que se anuncia como imagem (*"Sim, nesta versão"*, depois do desenho
+   do antes e depois). ⚠ **As lições:** (1) a suíte do Chromium no fim achou o que os testes do lote não pegavam (texto a
+   200%, contraste, exemplos fora do centro), e a CI achou mais no Linux, no Firefox e no WebKit — o teste de texto a 200%
+   passou a dizer QUAL peça passou da borda, e foi isso que achou a última; (2) o `\b` escrito por heredoc virou caractere
+   de controle duas vezes — expressão com barra se grava pelo editor; (3) as páginas do nativo leem o pacote MONTADO
+   (`pnpm build:native` antes do `build:catalog` e do `build:live`). **Publicada em 03/11/2026** (por volta das 12:35,
+   Brasília), pelo terminal do Victor, da junção do pedido #112. O registro entrou no lote seguinte (os consertos do site B,
+   0.54.1).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

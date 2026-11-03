@@ -1708,13 +1708,12 @@ const filtro = (label, valor, conta, extra = {}) => ({id: `#filtro/${valor}`, la
   badge: h("span", {className: "site-conta"}, String(conta)), ...extra});
 const ancora = (label, id) => ({id: `#${id}`, label, href: `#${id}`});
 const menuHooks = () => {
-  const comDemo = ["useToast", "useSidebar", "useAureaTheme", "useAureaStrings", "useSpriteUrl"];
   const todos = alfabetico(fichas.filter(f => f.kind === "hook"));
-  return [
-    {id: "overview", label: "Overview", items: [item("All Hooks", "hooks.html")]},
-    {id: "on-this-page", label: "On this page", items: [...comDemo.map(n => ancora(n, n)),
-      ancora(`${["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"][todos.length - comDemo.length] ?? todos.length - comDemo.length} more hooks`, "more")]},
-    {id: "hook-pages", label: `Hook pages · ${todos.length}`, items: todos.map(f => item(f.name, `${slug(f.name)}.html`, seloBadge(f.name)))},
+  // O padrão de Components (o Victor, 03/11/2026: "quero mesmo sidebar dos outros, como dos componentes"): "All Hooks"
+  // sozinho no alto e os hooks num grupo numerado, com o ícone na bolinha, que abre e fecha.
+  return [item("All Hooks", "hooks.html"),
+    {id: "hooks", label: nomeDoGrupoB(1, "Hooks", ["function", "teal"]), collapsible: true,
+      items: todos.map(f => item(f.name, `${slug(f.name)}.html`, seloBadge(f.name)))},
   ];
 };
 // Os tipos de token (`$type`), contados no DTCG: o `$type` de um grupo vale para os de dentro.
@@ -1741,9 +1740,10 @@ const menuBlocks = () => [{id: "overview", label: "Overview", items: [item("All 
   {id: "by-area", label: "By area", items: [filtro("Every area", "all", blocks.length),
     ...Object.entries(blocksByCategory).map(([cat, list]) => filtro(cat, slug(cat), list.length))]}];
 const archetypeIds = Object.keys(contract.applicationPatterns.archetypes);
-const menuRecipes = () => [{id: "overview", label: "Overview", items: [item("All Recipes", "recipes.html")]},
-  {id: "on-this-page", label: "On this page", items: [ancora("Recipe builder", "recipe-builder"), ancora("Every recipe", "every-recipe")]},
-  {id: "archetypes", label: "Recipes", items: archetypeIds.map(id => item(recipeTitle(id), `recipe-${slug(id)}.html`))}];
+// O padrão de Components (o Victor, 03/11/2026): "All Recipes" sozinho no alto e as receitas num grupo numerado.
+const menuRecipes = () => [item("All Recipes", "recipes.html"),
+  {id: "archetypes", label: nomeDoGrupoB(1, "Recipes", ["cooking-pot", "orange"]), collapsible: true,
+    items: archetypeIds.map(id => item(recipeTitle(id), `recipe-${slug(id)}.html`))}];
 // Releases: "All Releases", "Health" e o filtro por mês, da mais nova à mais velha, como no desenho.
 const MESES_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const menuReleases = () => {
@@ -1954,7 +1954,7 @@ function shell(activeHref, inner, section = "components") {
       // A LATERAL DO SITE B: o bloco de canto 22 (a `Sidebar` flutuante, a de sempre da Aurea), com o item atual na
       // cápsula levantada e o ponto amarelo (`segment-dot`, ADR-0082).
       topbarVariant: "pill", topbarBlurred: true, contentVariant: "plain", layout: "docs", sidebarIndicator: "segment-dot",
-      className: `site-shell site-area-${section}${["hooks", "tokens", "patterns", "blocks", "recipes", "releases"].includes(section) ? " site-area-mono" : ""}`,
+      className: `site-shell site-area-${section}${["tokens", "patterns", "blocks", "releases"].includes(section) ? " site-area-mono" : ""}`,
       // A chave claro/escuro no alto da gaveta do celular, como a da referência (lote U, 19/10/2026): no topo ela não cabe.
       // A ORDEM É A DO HTML (31/10/2026): a chave Web | Native e as áreas da gaveta vêm ANTES da lista, e a lista é a
       // `Sidebar.Nav` aqui dentro, e não o `navItems` (que a lateral põe primeiro). Subir a chave com `order:-1` mudava o

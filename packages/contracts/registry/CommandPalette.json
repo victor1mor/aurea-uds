@@ -105,7 +105,7 @@
       "name": "size",
       "type": "\"md\" | \"lg\"",
       "default": "\"md\"",
-      "description": "lg is the large search: a window as wide as --breakpoint-lg (1024), a 64 field (the magnifier, 18 letters and Esc inside), group titles in uppercase code font with their count, 50 items with the icon in a 40 circle, the title and a cut description, and ↵ on the active row."
+      "description": "lg is the large search: a window as wide as --breakpoint-lg (1024), a 52 field (the magnifier, 18 letters and Esc inside), group titles in uppercase code font with their count, 50 items with the icon in a 40 circle, the title and a cut description, and ↵ on the active row."
     },
     {
       "name": "items[].description / items[].tone",

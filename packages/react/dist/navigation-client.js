@@ -508,7 +508,7 @@ export function NavList({ items, size = "md", currentLabel, className, ...props 
         }) });
 }
 // `size="lg"` (o site B — a busca nova, aprovada pela bancada em 01/11/2026, o item 2 e o D-2): a janela da largura `lg`
-// (1024), o campo de 64 com a lupa e o "Esc" dentro, o encaixe `filters` embaixo dele, o título do grupo em mono maiúsculo
+// (1024), o campo de 52 (era 64 na 0.54.0; o Victor, 03/11/2026, como a referência) com a lupa e o "Esc" dentro, o encaixe `filters` embaixo dele, o título do grupo em mono maiúsculo
 // com a contagem, o item de 50 com o ícone num círculo de 40 tingido (`tone`), o título e a descrição cortada, o "↵" na
 // linha ativa, a prévia (`preview`) do item ativo ao lado da lista — some abaixo de 1240 — e o encaixe `footer` no pé,
 // ao lado das teclas. Sem `size="lg"`, a paleta de sempre; os encaixes só valem no `lg`.
