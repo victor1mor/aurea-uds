@@ -1866,14 +1866,15 @@
     },
     "AureaSegmentedControlSelectedStyle": {
       "module": "inputs",
-      "raw": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\"",
+      "raw": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\" | \"emphasis\"",
       "union": [
         "current",
         "neutral",
         "contrast",
         "brand",
         "ring",
-        "dot"
+        "dot",
+        "emphasis"
       ]
     },
     "AureaStackAlign": {
@@ -5266,7 +5267,8 @@
                 "contrast",
                 "brand",
                 "ring",
-                "dot"
+                "dot",
+                "emphasis"
               ]
             }
           ]

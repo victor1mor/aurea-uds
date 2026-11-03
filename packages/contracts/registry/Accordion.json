@@ -29,7 +29,13 @@
     "--foreground",
     "--muted-foreground",
     "--surface-hover",
-    "--weight-medium"
+    "--weight-medium",
+    "--space-24",
+    "--card",
+    "--radius-card",
+    "--shadow-md",
+    "--ease-emphasized",
+    "--duration-slow"
   ],
   "a11y": {
     "role": "button",
@@ -91,6 +97,12 @@
       "description": "lg is the 60-tall row with body-size (16) text, 22 from the edge, for questions that stand alone."
     },
     {
+      "name": "orientation",
+      "type": "\"vertical\" | \"horizontal\"",
+      "default": "\"vertical\"",
+      "description": "horizontal is the accordion on its side: the items stand side by side, 12 apart, each a card (radius 22); a closed one is 104 wide and the open one takes the rest of the row. One open at a time, and the open one does not close on click. The height is the parent's. Under a 47.5rem container it becomes the upright accordion."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",
@@ -101,6 +113,10 @@
     "indicator": [
       "chevron",
       "plus"
+    ],
+    "orientation": [
+      "vertical",
+      "horizontal"
     ]
   }
 }

@@ -68,14 +68,26 @@ export default {
     },
     eixo({
       titulo: "Sizes",
-      descricao: "The button scale — sm, md and lg — so a toggle sits level with the controls beside it. md is the default.",
-      Comp: Toggle, nome: "Toggle", prop: "size", valores: ["sm", "md", "lg"],
-      filho: (v) => ({sm: "Small", md: "Medium", lg: "Large"})[v],
+      descricao: "The button scale — sm, md, lg and xl — so a toggle sits level with the controls beside it. md is the default; xl is the 50 button.",
+      Comp: Toggle, nome: "Toggle", prop: "size", valores: ["sm", "md", "lg", "xl"],
+      filho: (v) => ({sm: "Small", md: "Medium", lg: "Large", xl: "Extra large"})[v],
     }),
     cada({titulo: "The colour of the on state", descricao: "pressedStyle (ADR-0084): brand — the yellow of the primary button, "
       + "the default — neutral (grey) or contrast (graphite, inverted). Each button below is pressed.",
       valores: ["brand", "neutral", "contrast"],
       codigo: v => `<Toggle icon="text-b" label="Bold" defaultPressed pressedStyle="${v}" />`,
       peca: v => h(Toggle, {icon: "text-b", label: `Bold, ${v}`, defaultPressed: true, pressedStyle: v})}),
+    {
+      title: "Area",
+      description: "area makes the toggle an area around a block — a thumbnail, an icon with its name. With variant=\"ghost\" " +
+        "it has no fill (the yellow at 18% on hover, 42% when on); with the default, the grey fill and, when on, the solid " +
+        "yellow. area=\"pill\" keeps it as wide as its content.",
+      code: '<Toggle area variant="ghost" defaultPressed label="Header">\n  <img src="/thumbnails/header.png" alt="" />\n</Toggle>\n<Toggle area label="Light"><Icon name="sun" /> Light</Toggle>\n<Toggle area="pill" variant="ghost">Sidebar</Toggle>',
+      render: () => h("div", {style: {display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: "var(--space-3)"}},
+        h(Toggle, {area: true, variant: "ghost", defaultPressed: true, label: "Header", style: {inlineSize: "8rem"}},
+          h("span", {style: {display: "block", blockSize: "var(--space-16)", borderRadius: "var(--radius-lg)", background: "var(--card)"}})),
+        h(Toggle, {area: true, label: "Light", style: {inlineSize: "8rem"}}, h("span", {style: {display: "grid", justifyItems: "center", gap: "var(--space-2)", padding: "var(--space-3)"}}, "Light")),
+        h(Toggle, {area: "pill", variant: "ghost"}, h("span", {style: {paddingInline: "var(--space-3)"}}, "Sidebar"))),
+    },
   ],
 };

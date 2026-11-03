@@ -245,13 +245,19 @@ return <button ref={ref} type={type} className={cls} disabled={off} aria-disable
 // tela. O tipo passa a cobrar a regra em vez de descrevê-la: ou há `children`, ou há `label`.
 interface ToggleBase{pressed?:boolean;defaultPressed?:boolean;onPressedChange?:(pressed:boolean)=>void;/** O que identifica este toggle DENTRO de um ToggleGroup — sem ele o grupo não sabe qual botão
  *  mudou, e a composição fica bonita e morta. Solto, não faz diferença nenhuma. */
-value?:string;icon?:IconName;size?:Responsive<Extract<ComponentSize,"sm"|"md"|"lg">>;disabled?:boolean;id?:string;className?:string;
+value?:string;icon?:IconName;
+/** `xl` (o site B, 0.54.0 — as marcas do menu do celular, aprovado pela bancada em 01/11/2026): o botão de 50, o `xl` do `Button`. */
+size?:Responsive<Extract<ComponentSize,"sm"|"md"|"lg"|"xl">>;disabled?:boolean;id?:string;className?:string;
 /** 0.32.0, o `ToggleButton` da referência: `default` com o fundo neutro (o padrão), `ghost` sem fundo
  *  (o desenho de até a 0.31.0). O ligado é o idioma "selecionado" da Aurea nos dois. */
 variant?:ToggleVariant;
 /** A cor do LIGADO (ADR-0084, 27/10/2026): `brand` — o amarelo do botão primário, o padrão —, `neutral` (o cinza) ou
  *  `contrast` (o grafite, invertido). Dentro de um `ToggleGroup` ou de um `Toolbar` com `pressedStyle`, o do botão vale. */
-pressedStyle?:TogglePressedStyle}
+pressedStyle?:TogglePressedStyle;
+/** A ÁREA (o site B, 0.54.0 — aprovada pela bancada em 01/11/2026): o toggle em volta de um bloco (uma miniatura, um ícone
+ *  com o nome). `true` ocupa a largura; `"pill"` fica do tamanho do conteúdo, em cápsula. Com `variant="ghost"`, sem fundo;
+ *  com o `default`, o fundo cinza e, ligada, o amarelo cheio. */
+area?:boolean|"pill"}
 export type ToggleVariant="default"|"ghost";
 /** As três cores do ligado aprovadas pelo Victor em 26/10/2026 (A cinza, B grafite, C amarelo — o padrão). */
 export type TogglePressedStyle="neutral"|"contrast"|"brand";
@@ -284,7 +290,7 @@ return itens.some(item=>{
 // entre os estados**. Se o texto vira "Mute"/"Unmute" ou "Play"/"Pause", não é toggle — é
 // botão de ação, porque quem lê tela ouve o rótulo NOVO e o estado ao mesmo tempo e não sabe
 // se o botão descreve o que é ou o que fará.
-export function Toggle({pressed,defaultPressed,onPressedChange,value,icon,label,size:sizePedido,disabled,id,className,children,variant="default",pressedStyle}:ToggleProps){
+export function Toggle({pressed,defaultPressed,onPressedChange,value,icon,label,size:sizePedido,disabled,id,className,children,variant="default",pressedStyle,area}:ToggleProps){
 const grupo=React.useContext(GrupoDeBotoesContext);
 const size=sizePedido??(grupo?.size as ToggleProps["size"]);
 // O tipo barra o consumidor TypeScript; este aviso barra o de JavaScript, que não tem tipo nenhum.
@@ -300,7 +306,7 @@ if(!textoVisivel&&!rotuloVisivel)console.error("Aurea: <Toggle> sem `children` v
 // sem `size` saía a classe `btn-undefined` (medido no catálogo, nos três botões do `ToggleGroup`); com
 // valor responsivo sairia `btn-[object Object]`.
 const tamanho=ehResponsivo(size)?classesResponsivas("size",size):((valorBase(size)??"md")!=="md"&&`btn-${valorBase(size)}`);
-return <BaseToggle id={id} value={value} disabled={disabled} pressed={pressed} defaultPressed={defaultPressed} onPressedChange={soOValor(onPressedChange)} aria-label={textoVisivel?undefined:(rotuloVisivel?label:undefined)} data-pressed-style={pressedStyle} className={cx("btn",variant==="ghost"?"btn-ghost":"btn-tertiary",tamanho,!textoVisivel&&"btn-icon","toggle",className)}>{icon&&<Icon name={icon}/>}{children}</BaseToggle>}
+return <BaseToggle id={id} value={value} disabled={disabled} pressed={pressed} defaultPressed={defaultPressed} onPressedChange={soOValor(onPressedChange)} aria-label={textoVisivel?undefined:(rotuloVisivel?label:undefined)} data-pressed-style={pressedStyle} className={cx("btn",variant==="ghost"?"btn-ghost":"btn-tertiary",!area&&tamanho,!textoVisivel&&!area&&"btn-icon","toggle",area&&"toggle-area",area==="pill"&&"toggle-area-pill",className)}>{icon&&<Icon name={icon}/>}{children}</BaseToggle>}
 
 // O ícone do `IconButton` aceita também o DESENHO do app (15/10/2026), como o `Icon` (MNT-02, 0.30.0) e o
 // `IconButton` do nativo (R-11): a marca de um serviço, um glifo que o Phosphor não tem.
@@ -386,11 +392,15 @@ export function ButtonGroup({label,orientation,variant,size,fullWidth,disabled,d
 // diz outra coisa — seriam duas fontes de verdade e uma janela em que visual e comportamento
 // divergem. Ver `decisions/0047-css-first-para-apresentacao-runtime-para-semantica.md`.
 // `pressedStyle` (ADR-0084): a cor do ligado de todos os botões de dentro; cada um pode trocar a sua.
-export function Toolbar({orientation,label,className,pressedStyle,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{orientation?:Responsive<Orientation>;label?:string;pressedStyle?:TogglePressedStyle}){
+// `tone="brand"` (o site B — a barra de seleção da página inicial, aprovada pela bancada em 01/11/2026, o D-7.7, a forma B):
+// a barra AMARELA, de 52, o texto na tinta, 600, e os botões de dentro BRANCOS com a tinta. Sem `tone`, a barra de sempre.
+export function Toolbar({orientation,label,className,pressedStyle,tone="default",...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{orientation?:Responsive<Orientation>;label?:string;pressedStyle?:TogglePressedStyle;
+  /** `brand`: a barra amarela da seleção em lote ("3 selected", "Clear", "Remove"), com os botões brancos. */
+  tone?:"default"|"brand"}){
 const s=useAureaStrings();
 const ancora=useRef<HTMLDivElement|null>(null);
 const resolvida=useValorResponsivo(orientation,"horizontal",ancora);
-return <BaseToolbar.Root ref={ancora} orientation={resolvida} aria-label={label??s.toolbarLabel} data-pressed-style={pressedStyle} className={cx("toolbar",className)} {...props}/>}
+return <BaseToolbar.Root ref={ancora} orientation={resolvida} aria-label={label??s.toolbarLabel} data-pressed-style={pressedStyle} className={cx("toolbar",tone==="brand"&&"toolbar-brand",className)} {...props}/>}
 export function ToolbarGroup({label,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{label?:string}){return <BaseToolbar.Group aria-label={label} className={cx("toolbar-group",className)} {...props}/>}
 export function ToolbarSeparator({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <BaseToolbar.Separator className={cx("toolbar-sep",className)} {...props}/>}
 // Sem `share` (GAR-14): o caminho pelo motor da barra não foi provado — entra quando for medido.
@@ -414,7 +424,7 @@ export const ToolbarButton=forwardRef<HTMLButtonElement,ToolbarButtonProps>(func
 // `detached` dela (soltos, com vão de 4 — o grupo de até a 0.31.0).
 export interface ToggleGroupProps{value?:string[];defaultValue?:string[];onValueChange?:(value:string[])=>void;multiple?:boolean;orientation?:Responsive<Orientation>;disabled?:boolean;label?:string;className?:string;children:React.ReactNode;
   /** O tamanho de todos os botões de dentro; cada um pode trocar o seu (valor simples, como o dela). */
-  size?:Extract<ComponentSize,"sm"|"md"|"lg">;
+  size?:Extract<ComponentSize,"sm"|"md"|"lg"|"xl">;
   /** Ocupa a largura do pai, e os botões repartem em partes iguais. */
   fullWidth?:boolean;
   /** Botões soltos (vão de 4), em vez de colados. */

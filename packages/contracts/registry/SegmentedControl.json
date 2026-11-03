@@ -14,7 +14,8 @@
     "md",
     "sm",
     "lg",
-    "xl"
+    "xl",
+    "2xl"
   ],
   "states": [
     "default",
@@ -27,7 +28,11 @@
     "--muted-foreground",
     "--radius-control",
     "--segment",
-    "--shadow-sm"
+    "--shadow-sm",
+    "--space-12",
+    "--icon-sm",
+    "--icon-md",
+    "--radius-card"
   ],
   "a11y": {
     "role": "radiogroup",
@@ -60,7 +65,7 @@
   "props": [
     {
       "name": "items",
-      "type": "Array<{value, label, href?}>",
+      "type": "Array<{value, label, href?, icon?}>",
       "default": "—",
       "description": "The options. Two to five: past that it is a Select, not a segmented control. With href on EVERY item, the control is a <nav> of links — the current one gets aria-current=\"page\" — instead of a choice: going to another page is navigation, and a screen reader hears \"link\", not \"option\". It is the Web | Native switch of this site."
     },
@@ -90,15 +95,33 @@
     },
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\"",
       "default": "md",
-      "description": "sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web | Native switch and the area switch of this site. Web only."
+      "description": "sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web | Native switch and the area switch of this site. Web only. 2xl: 48 segments (--space-12), 20 icons, 16 letters."
     },
     {
       "name": "selectedStyle",
-      "type": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\"",
+      "type": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\" | \"emphasis\"",
       "default": "\"current\"",
-      "description": "The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native."
+      "description": "The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump) or emphasis (the raised capsule with the emphasis letter — yellow in the dark theme, the text colour in the light one — and no line). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native."
+    },
+    {
+      "name": "items[].icon",
+      "type": "IconName",
+      "default": "—",
+      "description": "An icon before the label (16, 8 from it); the selected item switches to the filled form by itself."
+    },
+    {
+      "name": "wrap",
+      "type": "boolean",
+      "default": "false",
+      "description": "The track breaks onto more lines when the options do not fit, and takes the card radius (22)."
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "default": "\"horizontal\"",
+      "description": "vertical stands the control up: each segment the full width, the track with the card radius (22)."
     }
   ],
   "axes": {
@@ -108,7 +131,12 @@
       "contrast",
       "brand",
       "ring",
-      "dot"
+      "dot",
+      "emphasis"
+    ],
+    "orientation": [
+      "horizontal",
+      "vertical"
     ]
   }
 }

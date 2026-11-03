@@ -24,6 +24,18 @@ What the change means, apart from its direction: a cost going up is bad news, so
 <KPI label="Revenue" value="$48.2k" trend="+12% vs last month" direction="up" tone="danger" />
 ```
 
+### Brand, with bars
+
+variant="brand" is the yellow card; bars puts a bar per period under the number. Each bar is a button: hover, focus or click chooses it, and the reading above says its label and value.
+
+```tsx
+<KPI variant="brand" label="Revenue" value="$48.2k" trend="+12%" direction="up" bars={[
+  {label: "Jan", value: "$31k", amount: 31}, {label: "Feb", value: "$35k", amount: 35},
+  {label: "Mar", value: "$33k", amount: 33}, {label: "Apr", value: "$40k", amount: 40},
+  {label: "May", value: "$44k", amount: 44}, {label: "Jun", value: "$48.2k", amount: 48.2},
+]} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -34,4 +46,6 @@ What the change means, apart from its direction: a cost going up is bad news, so
 | `direction` | `up \| down \| flat` | — | Where the number went. Draws the arrow (trend-up, trend-down, minus), colours the trend and puts a word in front of it for screen readers — so the direction never depends on colour alone. |
 | `tone` | `success \| danger \| neutral` | from direction | The colour of the trend. By default up is success, down is danger and flat is neutral; set it when going up is bad (cost, errors). Without direction it paints nothing: colour never travels alone. |
 | `directionLabel` | `string` | Up / Down / No change | The word a screen reader hears before the trend. English by default, like every built-in label of the web package; pass it in the language of the page. |
-| `variant` | `card \| plain` | card | `plain` drops the card: the number sits inside a card that already exists, instead of a box inside a box. |
+| `variant` | `"card" \| "plain" \| "brand"` | card | `plain` drops the card: the number sits inside a card that already exists, instead of a box inside a box. brand is the yellow card: the brand yellow with the ink and the medium shadow. |
+| `bars` | `Array<{label, value, amount}>` | — | Bars under the number, 128 tall, 8 apart, up to 32 wide. Each bar is a button; hovering, focusing or clicking one chooses it, and the reading above says its label and value. On brand, the bars are ink and the chosen one is white; elsewhere, --fill-3 and the text color. |
+| `defaultBar` | `number` | the last | The bar chosen at the start (its index). |

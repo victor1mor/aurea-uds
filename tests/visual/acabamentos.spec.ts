@@ -35,6 +35,8 @@ test("o brilho: no principal que pede, no contêiner que pede, e fora quando a p
   // regra do brilho tem mais força). A caixa acende quando chega perto da tela e troca o botão pelo vivo — focar antes
   // perde o foco na troca; então rola, espera ela acender, e só depois foca.
   const pedido = p.locator('.btn-primary[data-glow="true"]').first();
+  // No site B o exemplo mora num item que abre e fecha (fechado, ele não acende): abre-se o item, como a pessoa faria.
+  await p.evaluate(() => { const d = document.querySelector('.btn-primary[data-glow="true"]')?.closest("details"); if (d) d.open = true; });
   await pedido.scrollIntoViewIfNeeded();
   await p.waitForFunction(() => document.querySelector('.btn-primary[data-glow="true"]')?.closest<HTMLElement>("[data-vivo]")
     ?.dataset.ligada === "sim", null, {timeout: 15000});
@@ -95,7 +97,9 @@ for (const tema of ["light", "dark"] as const) {
     await p.goto("/apps/catalog/index.html", {waitUntil: "networkidle"});
     await p.evaluate((t) => document.documentElement.setAttribute("data-theme", t), tema);
     const r = await p.evaluate(() => {
-      const barra = document.querySelector(".topbar-blurred")!;
+      // A pílula do site B (`Header variant="pill"` contido) pinta o fundo translúcido na parte de DENTRO; a barra de ponta a
+      // ponta, nela mesma. Mede-se quem pinta.
+      const barra = document.querySelector(".topbar-pill.topbar-blurred.topbar-contained > .topbar-inner") ?? document.querySelector(".topbar-blurred")!;
       const cv = document.createElement("canvas"); cv.width = cv.height = 1;
       const cx = cv.getContext("2d")!;
       const rgba = (cor: string) => { cx.clearRect(0, 0, 1, 1); cx.fillStyle = cor; cx.fillRect(0, 0, 1, 1); return [...cx.getImageData(0, 0, 1, 1).data]; };

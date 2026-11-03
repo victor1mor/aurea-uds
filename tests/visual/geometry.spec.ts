@@ -153,10 +153,14 @@ const PAGES = readdirSync(DIR).filter(f => f.endsWith(".html")).sort();
 // O `SegmentedControl` tem dois tamanhos desde o bloco 1 (23/10/2026): o `sm` é a chave Web | Native do topo do site, de 34;
 // o de sempre, de 40. Cada tamanho é um grupo — como os do `Badge`. O `lg` (44) e o `xl` (48), da 0.52.1, são as duas chaves
 // do site B: o site as esticava à força, e esta trava pegou (31/10/2026).
-const UNICA = [".badge:not(.badge-xs):not(.badge-sm):not(.badge-lg):not(.badge-overlay)", ".chip", ".tabs:not(.tabs-secondary)",
-               ".segmented:not(.segmented-sm):not(.segmented-lg):not(.segmented-xl)", ".segmented.segmented-sm", ".segmented.segmented-lg",
-               ".segmented.segmented-xl", ".tab", ".segmented:not(.segmented-sm):not(.segmented-lg):not(.segmented-xl) button",
-               ".segmented.segmented-lg :is(button,a)", ".segmented.segmented-xl :is(button,a)",
+// A 0.54.0 (o site B, 02/11/2026): o `2xl` é um tamanho (grupo próprio); `wrap` (quebra em linhas) e `vertical` (em pé) têm a
+// altura pelo conteúdo, por desenho, e ficam fora dos grupos — como as abas verticais.
+const LIVRE = ":not(.segmented-wrap):not(.segmented-vertical)";
+const BASE = `:not(.segmented-sm):not(.segmented-lg):not(.segmented-xl):not(.segmented-2xl)${LIVRE}`;
+const UNICA = [".badge:not(.badge-xs):not(.badge-sm):not(.badge-lg):not(.badge-overlay)", ".chip", '.tabs:not(.tabs-secondary):not([aria-orientation="vertical"])',
+               `.segmented${BASE}`, `.segmented.segmented-sm${LIVRE}`, `.segmented.segmented-lg${LIVRE}`,
+               `.segmented.segmented-xl${LIVRE}`, `.segmented.segmented-2xl${LIVRE}`, ".tab", `.segmented${BASE} button`,
+               `.segmented.segmented-lg${LIVRE} :is(button,a)`, `.segmented.segmented-xl${LIVRE} :is(button,a)`, `.segmented.segmented-2xl${LIVRE} :is(button,a)`,
                ".kbd:not(.btn-kbd)", ".pagination button:not(.btn)"];
 
 test.describe("catálogo · geometria de todas as páginas", () => {

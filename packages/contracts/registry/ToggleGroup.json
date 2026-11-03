@@ -17,7 +17,8 @@
   "sizes": [
     "lg",
     "md",
-    "sm"
+    "sm",
+    "xl"
   ],
   "responsive": {
     "orientation": "behavioral"

@@ -1,0 +1,5 @@
+/* A PÁGINA DE UM PADRÃO E A DE UM BLOCO NO SITE B (02/11/2026): o palco, a caixa e os cartões são os da página de
+   componente (`componente.css`) e os do grupo (`_grupo-1.css`); aqui só a caixa principal, sem a altura de tela quando
+   não é moldura. */
+.item-b .demo:not(:has(.demo-frame), .demo-stacked) { min-block-size:0; }
+.item-b .demo:not(:has(.demo-frame), .demo-stacked) > .demo-panel[data-panel="preview"] { min-block-size:calc(var(--space-24) * 3); }

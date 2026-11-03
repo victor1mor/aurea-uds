@@ -62,6 +62,16 @@ The system's size step — sm, md and lg, the same scale as the fields beside it
 <Checkbox label="Spacious rows" defaultChecked size="lg" />
 ```
 
+### Pill
+
+variant="pill" puts a capsule around the box and the label — the whole capsule is the target, 44 tall (36 with size="md"). tone="success" turns a checked one green: done.
+
+```tsx
+<Checkbox variant="pill" label="Mark as done" />
+<Checkbox variant="pill" tone="success" label="Done" defaultChecked />
+<Checkbox variant="pill" size="md" label="Smaller" />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -71,3 +81,5 @@ The system's size step — sm, md and lg, the same scale as the fields beside it
 | `description` | `ReactNode` | — | Second line under the label, for the consequence of ticking it. |
 | `checked / defaultChecked` | `boolean` | — | Controlled or uncontrolled. For a third state use indeterminate on the input. |
 | `size` | `Responsive<FieldSize>` | md | The system's size step. It is not the HTML size attribute, which does not exist on a checkbox anyway. |
+| `variant` | `"default" \| "pill"` | "default" | pill puts a capsule around the box and the label (the --fill-2 fill, weight 600): the whole capsule is the target, 44 tall (--target-min, box 24), or 36 with size="sm" or "md" (--control-h-md, box 20). The focus ring goes around the capsule. |
+| `tone` | `"success"` | — | With variant="pill", a checked capsule turns to done: the capsule green at 18%, the label and the box in --success-400. |

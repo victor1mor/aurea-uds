@@ -14,6 +14,7 @@ type CardBase = HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> &
     orientation?: "vertical" | "horizontal";
     accent?: CardAccent;
     lift?: boolean;
+    fill?: "brand";
 };
 export type CardProps = CardBase & ({
     variant?: "base" | "raised" | "inset" | "outline" | "selected" | "danger" | "contrast";
@@ -22,7 +23,7 @@ export type CardProps = CardBase & ({
     variant: "interactive";
     render: ReactElement;
 });
-export declare function Card({ variant, padding, orientation, accent, lift, className, render, ...props }: CardProps): ReactElement<unknown, string | React.JSXElementConstructor<any>>;
+export declare function Card({ variant, padding, orientation, accent, lift, fill, className, render, ...props }: CardProps): ReactElement<unknown, string | React.JSXElementConstructor<any>>;
 export declare namespace Card {
     export { CardMedia as Media };
     export { CardHeader as Header };
@@ -175,7 +176,13 @@ export interface SectionProps extends Omit<HTMLAttributes<HTMLElement>, "title">
 export declare function Section({ surface, spacing, theme, variant, brand, links, legal, layout, maxWidth, navLabel, title, titleAs: Titulo, eyebrow, description, actions, media, align, children, className, ...props }: SectionProps): React.JSX.Element;
 export type KPIDirection = "up" | "down" | "flat";
 export type KPITone = "success" | "danger" | "neutral";
-export type KPIVariant = "card" | "plain";
+export type KPIVariant = "card" | "plain" | "brand";
+/** Uma barra do `KPI` (o site B): o nome curto ("Jun"), o valor dito na leitura ("$48.2k") e o número que dá a altura. */
+export interface KPIBar {
+    label: string;
+    value: ReactNode;
+    amount: number;
+}
 export interface KPIProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<HTMLDivElement> {
     label: ReactNode;
     value: ReactNode;
@@ -187,10 +194,16 @@ export interface KPIProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<
     tone?: KPITone;
     /** A palavra que o leitor de tela ouve antes da tendência. Padrão em inglês: "Up", "Down", "No change". */
     directionLabel?: string;
-    /** `plain` tira a caixa: o número dentro de um cartão que já existe. */
+    /** `plain` tira a caixa: o número dentro de um cartão que já existe. `brand` (o site B, 0.54.0) é o cartão AMARELO, com
+     *  a tinta e a sombra média. */
     variant?: KPIVariant;
+    /** As barras embaixo do número (o site B, 0.54.0): cada uma é um botão de opção nativo; a escolhida fica branca no
+     *  `brand` (na cor do texto, fora dele) e a leitura diz o nome e o valor dela. */
+    bars?: KPIBar[];
+    /** A barra que começa escolhida (o índice). Padrão: a última. */
+    defaultBar?: number;
 }
-export declare function KPI({ label, value, trend, direction, tone, directionLabel, variant, className, ...props }: KPIProps): React.JSX.Element;
+export declare function KPI({ label, value, trend, direction, tone, directionLabel, variant, bars, defaultBar, className, ...props }: KPIProps): React.JSX.Element;
 export declare function DataList({ items }: {
     items: Array<{
         term: ReactNode;
@@ -406,11 +419,13 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
     variant?: FieldVariant;
 }
 export declare const Textarea: React.ForwardRefExoticComponent<Omit<TextareaProps, "ref"> & RefAttributes<HTMLTextAreaElement>>;
-export declare function Checkbox({ label, labelHidden, description, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
+export declare function Checkbox({ label, labelHidden, description, size, variant, tone, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
     label: ReactNode;
     labelHidden?: boolean;
     description?: ReactNode;
     size?: Responsive<FieldSize>;
+    variant?: "default" | "pill";
+    tone?: "success";
 }): React.JSX.Element;
 export declare function Radio({ label, labelHidden, description, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
     label: ReactNode;

@@ -39,8 +39,8 @@ import React, { forwardRef } from "react";
 import { cx, fundirRender, peleDoEixo } from "./pure.js";
 // As contas de cor são funções puras, sem estado e sem navegador (ADR-0069): o `ColorSwatch` usa a do contraste.
 import { contrastingInk, hsbToRgb, parseColor } from "./color.js";
-export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, lift, className, render, ...props }) {
-    return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, lift && variant === "interactive" && "card-lift", accent && `card-accent card-accent-${accent}`, padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...(variant === "contrast" ? { "data-theme": "dark" } : null), ...props });
+export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, lift, fill, className, render, ...props }) {
+    return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, lift && variant === "interactive" && "card-lift", accent && `card-accent card-accent-${accent}`, fill === "brand" && "card-fill-brand", padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...(variant === "contrast" ? { "data-theme": "dark" } : null), ...props });
 }
 /** A mídia do cartão — a primeira das partes da especificação do `Card` (A-14). No vertical,
  *  primeira filha, ela SANGRA até a borda de cima e dos lados; no horizontal, fica à esquerda com a
@@ -119,11 +119,19 @@ export function Section({ surface = "background", spacing = "md", theme, variant
 }
 const TOM_DA_DIRECAO = { up: "success", down: "danger", flat: "neutral" };
 const PALAVRA_DA_DIRECAO = { up: "Up", down: "Down", flat: "No change" };
-export function KPI({ label, value, trend, direction, tone, directionLabel, variant = "card", className, ...props }) {
+export function KPI({ label, value, trend, direction, tone, directionLabel, variant = "card", bars, defaultBar, className, ...props }) {
     const tom = direction ? (tone ?? TOM_DA_DIRECAO[direction]) : undefined;
     const miolo = _jsxs(_Fragment, { children: [_jsx("span", { className: "muted", children: label }), _jsx("strong", { children: value }), (trend || trend === 0 || direction) && _jsxs("small", { className: direction ? cx("kpi-trend", `kpi-trend-${direction}`, `kpi-tone-${tom}`) : undefined, children: [direction && _jsx("span", { className: "kpi-trend-icon", "aria-hidden": "true" }), direction && _jsx("span", { className: "sr-only", children: directionLabel ?? PALAVRA_DA_DIRECAO[direction] }), trend] })] });
-    return variant === "plain" ? _jsx("div", { className: cx("kpi", className), ...props, children: miolo })
-        : _jsx(Card, { className: cx("kpi", className), ...props, children: miolo });
+    const maior = bars && bars.length > 0 ? Math.max(...bars.map(b => b.amount), 1) : 1;
+    const escolhida = bars && bars.length > 0 ? Math.min(Math.max(defaultBar ?? bars.length - 1, 0), bars.length - 1) : -1;
+    const leituraDe = (b) => `${b.label} · ${typeof b.value === "string" || typeof b.value === "number" ? b.value : ""}`;
+    // As barras são botões de opção NATIVOS (o KPI é marcação pura, roda no servidor): o grupo é um `fieldset` com o rótulo
+    // do KPI, cada barra o `label` de um rádio com a leitura dela; o CSS mostra a leitura da escolhida e a da que está sob o
+    // mouse. O `name` vem do rótulo quando é texto.
+    const nomeDoGrupo = `kpi-bars-${typeof label === "string" ? label.toLowerCase().replace(/[^a-z0-9]+/g, "-") : "x"}`;
+    const barras = bars && bars.length > 0 && _jsxs("fieldset", { className: "kpi-bars-wrap", children: [typeof label === "string" && _jsx("legend", { className: "sr-only", children: label }), _jsx("div", { className: "kpi-bars", style: { "--kpi-bars": bars.length }, children: bars.map((b, i) => _jsxs("label", { className: "kpi-bar", children: [_jsx("input", { type: "radio", className: "kpi-bar-input", name: nomeDoGrupo, value: String(i), defaultChecked: i === escolhida, "aria-label": leituraDe(b) }), _jsx("span", { className: "kpi-bar-fill", style: { "--kpi-bar-h": `${Math.round(b.amount / maior * 100)}%` } }), _jsx("span", { className: "kpi-bar-reading", "aria-hidden": "true", children: leituraDe(b) })] }, i)) }), _jsx("div", { className: "kpi-bars-x", "aria-hidden": "true", style: { "--kpi-bars": bars.length }, children: bars.map((b, i) => _jsx("span", { children: b.label }, i)) })] });
+    return variant === "plain" ? _jsxs("div", { className: cx("kpi", className), ...props, children: [miolo, barras] })
+        : _jsxs(Card, { className: cx("kpi", variant === "brand" && "kpi-brand", className), ...props, children: [miolo, barras] });
 }
 export function DataList({ items }) { return _jsx("dl", { className: "data-list", children: items.map((i, n) => _jsxs(React.Fragment, { children: [_jsx("dt", { children: i.term }), _jsx("dd", { children: i.value })] }, n)) }); }
 export function Timeline({ items, variant }) { return _jsx("ol", { className: "timeline", "data-timeline-style": variant, children: items.map((i, n) => _jsxs("li", { children: [_jsx("span", { className: "timeline-dot" }), _jsxs("div", { children: [_jsx("strong", { children: i.title }), i.description && _jsx("p", { children: i.description }), i.time && _jsx("small", { className: "muted", children: i.time })] })] }, n)) }); }
@@ -233,7 +241,14 @@ export function Kbd({ children, className, ...props }) { return _jsx("kbd", { cl
 export const Textarea = forwardRef(function Textarea({ className, size, variant, ...props }, ref) { return _jsx("textarea", { ref: ref, className: cx("textarea", peleDoEixo("textarea", size), variant === "secondary" && "textarea-secondary", className), ...props }); });
 // `size` nos três marcáveis pela mesma razão do campo: uma linha de formulário com um campo `sm`
 // e um checkbox de tamanho fixo ao lado desalinha. O degrau vai na MARCA, não no rótulo.
-export function Checkbox({ label, labelHidden, description, size, className, ...props }) { return _jsxs("label", { className: cx("checkbox", labelHidden && "checkbox-bare", className), children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), _jsxs("span", { className: labelHidden ? "sr-only" : undefined, children: [_jsx("strong", { children: label }), description && _jsxs(_Fragment, { children: [_jsx("br", {}), _jsx("span", { className: "muted", children: description })] })] })] }); }
+// `variant="pill"` (o site B, o "Mark as done" — aprovado pela bancada em 01/11/2026, o item 4): a cápsula em volta, o alvo
+// inteiro, de 44 (`--target-min`, a caixa 24) ou, com `size` sm/md, de 36 (`--control-h-md`, a caixa 20). `tone="success"`
+// pinta a marcada de "feito" (a cápsula no verde a 18%, a letra e a caixa no verde). Sem `pill`, a caixa de sempre.
+export function Checkbox({ label, labelHidden, description, size, variant = "default", tone, className, ...props }) {
+    if (variant === "pill")
+        return _jsxs("label", { className: cx("checkbox", "checkbox-pill", (size === "sm" || size === "md") && "checkbox-pill-md", className), "data-tone": tone, children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: "control-mark" }), _jsx("span", { className: labelHidden ? "sr-only" : undefined, children: label })] });
+    return _jsxs("label", { className: cx("checkbox", labelHidden && "checkbox-bare", className), children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), _jsxs("span", { className: labelHidden ? "sr-only" : undefined, children: [_jsx("strong", { children: label }), description && _jsxs(_Fragment, { children: [_jsx("br", {}), _jsx("span", { className: "muted", children: description })] })] })] });
+}
 // `description` no `Radio` e no `Switch` (15/10/2026, a referência tem nos dois): a linha apagada embaixo do nome, do
 // mesmo jeito do `Checkbox`. Sem ela, a marcação é a de sempre.
 const comDescricao = (label, description) => description ? _jsxs("span", { children: [_jsx("strong", { children: label }), _jsx("br", {}), _jsx("span", { className: "muted", children: description })] }) : label;

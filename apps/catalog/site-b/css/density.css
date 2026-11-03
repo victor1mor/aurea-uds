@@ -1,0 +1,43 @@
+/* DENSITY no desenho B (site-b/paginas/density.mjs). */
+
+/* "See the three": a chave, e embaixo o cartão com as peças ao lado das medidas de agora. */
+.density-chave { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.density-lab { display:grid; grid-template-columns:minmax(0, 1fr) calc(var(--space-24) * 2 + var(--space-16)); align-items:start; gap:var(--space-3);
+  margin-block-start:var(--space-3); }
+.density-previa { padding:var(--space-4); border-radius:var(--radius-card); background:var(--site-palco); }
+.density-membros > * + * { margin-block-start:var(--space-3); }
+/* A legenda da tabela dá nome à região; o título do cartão já a diz na tela. */
+.density-membros caption { position:absolute; inline-size:1px; block-size:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.density-linha { display:flex; align-items:center; gap:var(--space-2); }
+.density-linha > :first-child { flex:1; min-inline-size:0; }
+.density-medidas { position:sticky; inset-block-start:calc(var(--topbar-height) + var(--space-8)); gap:var(--space-2); }
+.density-medidas dl { display:flex; flex-direction:column; gap:var(--space-1); margin:0; }
+.density-medidas dl > div { display:flex; justify-content:space-between; gap:var(--space-3); padding:var(--space-2) var(--space-3); border-radius:var(--radius-full);
+  background:var(--fill-1); font-family:var(--font-code); font-size:var(--text-sm); }
+.density-medidas dd { margin:0; font-weight:var(--weight-bold); }
+
+/* A tabela dos tokens: a coluna da densidade escolhida em cápsulas amarelas. */
+.density-tokens[data-coluna="compact"] .density-col-compact code,
+.density-tokens[data-coluna="comfortable"] .density-col-comfortable code,
+.density-tokens[data-coluna="spacious"] .density-col-spacious code { background:var(--primary); color:var(--primary-foreground); }
+.density-tokens[data-coluna="compact"] th.density-col-compact,
+.density-tokens[data-coluna="comfortable"] th.density-col-comfortable,
+.density-tokens[data-coluna="spacious"] th.density-col-spacious { color:var(--foreground); }
+
+/* O botão de cada densidade no toque. */
+.density-toque { align-items:flex-start; gap:var(--space-3); }
+.density-altura { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--leading-normal); }
+.density-altura > span:not(:empty) { display:block; color:var(--foreground); font-family:var(--font-code); font-weight:var(--weight-semibold); }
+
+/* A parte com outra densidade: as barras com a altura do controle médio da densidade de cada coluna. */
+.density-parte { gap:var(--space-2); }
+.density-barra { block-size:var(--control-h-md); border-radius:var(--radius-full); }
+
+@media (max-width:900px) {
+  .density-lab { grid-template-columns:minmax(0, 1fr); }
+  .density-medidas { position:static; }
+}
+
+/* A lista de membros do desenho: o estado na ponta, mono pequeno e apagado; a legenda da tabela fica só para o leitor. */
+.density-tabela caption { position:absolute; inline-size:1px; block-size:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.density-tabela td:last-child { color:var(--muted-foreground); font-family:var(--font-code); font-size:var(--text-xs); text-align:end; }

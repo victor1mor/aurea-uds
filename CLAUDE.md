@@ -937,10 +937,13 @@ no git.
   (`--success`, `--info`, `--warning`, `--destructive`) é a MESMA cor nos dois temas; letra, ícone,
   borda e barra sobre a tela usam o par `-400`. ⚠ Nunca pintar letra com a cor de fundo de estado:
   `paleta-adr0061.test.tsx` reprova.
-- Sem gradientes (nem funcionais) — com DUAS exceções estreitas, cada uma cobrada pelo check 4: pintar as cores que se
+- Sem gradientes (nem funcionais) — com TRÊS exceções estreitas, cada uma cobrada pelo check 4: pintar as cores que se
   escolhem ([ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md), só no `color.ts`) e o item
   atual da barra de baixo no estilo `brand-gradient` (o H — decisão do Victor, 26/10/2026, *"se não não conseguimos virar UDS
   de verdade"*; [ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md), só na regra dele e só quando o app escolhe).
+  E o código recolhido da caixa de exemplo empilhada, que some num degradê (`CodeBlock previewLayout="stacked"` —
+  *"Com degradê"*, 02/11/2026; [ADR-0089](decisions/0089-a-caixa-de-exemplo-empilhada.md), só na regra
+  `.demo.demo-stacked[data-collapsed]`).
 - **Sem linha** (decisão do Victor, 16/10/2026, [ADR-0072](decisions/0072-sem-linha.md)): nenhuma peça desenha
   borda — a cor de toda borda é transparente (a espessura fica, nenhuma medida muda), e o anel fino de `box-shadow`
   não entra. O que só a linha separava do fundo ganha FUNDO translúcido da cor do texto (`--fill-1` 6%, `--fill-2`

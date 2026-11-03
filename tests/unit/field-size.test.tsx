@@ -104,7 +104,8 @@ test("as regras de tamanho de campo existem, e nenhuma tem px cru", () => {
 // 18px de antes em `comfortable`. O que muda é `compact` e `spacious` passarem a estar certos.
 test("a marca de seleção sai do token de altura, e não de um pixel cru", () => {
   const semComentario = css.replace(/\/\*[\s\S]*?\*\//g, "");
-  const corpo = /\.control-mark\s*\{([^}]*)\}/.exec(semComentario)?.[1] ?? "";
+  // A regra BASE, a que começa a linha: as do cartão de escolha (0.54.0) terminam em `.control-mark` e vêm antes dela.
+  const corpo = /(?:^|\})\s*\.control-mark\s*\{([^}]*)\}/m.exec(semComentario)?.[1] ?? "";
   expect(corpo, ".control-mark precisa derivar de --control-h-md").toContain("--control-h-md");
   expect(corpo, "nenhuma medida da marca pode ser px cru").not.toMatch(/(inline|block)-size:\s*\d+px/);
 });

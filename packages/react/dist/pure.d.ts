@@ -222,8 +222,11 @@ export interface AureaStrings {
     qrCode: string;
     chartLabel: string;
     copyCode: string;
+    copy: string;
     codeBlockPreview: string;
     codeBlockCode: string;
+    codeBlockExpand: string;
+    codeBlockCollapse: string;
     copied: string;
     linkCopied: string;
     linkCopyFailed: string;

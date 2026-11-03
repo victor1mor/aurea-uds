@@ -1,0 +1,117 @@
+/* A PÁGINA "RECIPES" DO SITE B (o desenho "recipes"; o mapa, grupo 2). Toda medida é um token: onde o desenho tem um número
+   fora da escala, o token mais perto (anotado). As peças são as da Aurea; aqui fica o arranjo. */
+.rec-b { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-4); container:rec-b / inline-size; }
+/* O fluxo «Archetype → Patterns → Invariants»: o `Badge lg` (28; o desenho tem 34, sem token) com a sombra pequena. */
+.rec-fluxo { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); margin-block-start:var(--space-5); color:var(--muted-foreground); }
+.rec-fluxo-passo.badge { background:var(--segment); color:var(--foreground); box-shadow:var(--shadow-sm); }
+.rec-peca-3 { inset-block-start:44%; }
+.rec-mini { display:grid; justify-items:start; gap:var(--space-2); inline-size:calc(var(--space-12) * 5 - var(--space-2)); }
+.rec-mini b { font-family:var(--font-heading); font-size:var(--text-base); }
+.rec-mini span:last-child { color:var(--foreground); font-size:var(--text-xs); line-height:var(--leading-normal); white-space:normal; }
+
+/* O cabeçalho numerado de cada parte (o mesmo das famílias da All Components) e a frase embaixo. */
+.rec-cabeca { margin:var(--space-8) 0 0; scroll-margin-block-start:calc(var(--topbar-height) + var(--space-8)); }
+.rec-cabeca-texto { flex-basis:100%; margin:0; padding-inline-start:calc(var(--space-12) + var(--space-1)); color:var(--muted-foreground); font-size:var(--text-sm); }
+
+/* A RECEITA ESCOLHIDA: o cartão (recheio 28 = --space-7), em duas colunas 7/5. */
+.rec-escolhida.card { display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:var(--space-7); padding:var(--space-7); }
+.rec-sobre { margin:0; font-family:var(--font-code); font-size:var(--text-xs); letter-spacing:.06em; text-transform:uppercase; color:var(--muted-foreground); }
+/* O nome em Sora 36 extranegrito (--text-4xl; o desenho tem 38). */
+.rec-nome { margin:var(--space-2) 0 0; font-family:var(--font-heading); font-size:var(--text-4xl); font-weight:var(--weight-extrabold);
+  line-height:var(--leading-tight); letter-spacing:-.03em; overflow-wrap:anywhere; }
+.rec-texto { margin:var(--space-3) 0 0; color:var(--muted-foreground); font-size:var(--text-lg); line-height:var(--leading-relaxed); }
+.rec-cobre { display:flex; flex-wrap:wrap; gap:calc(var(--space-1) + var(--space-05)); margin-block-start:var(--space-4); }
+.rec-usa.card { display:flex; flex-direction:column; gap:var(--space-3); padding:var(--space-5); }
+.rec-usa-n { display:flex; align-items:baseline; gap:var(--space-2); font-weight:var(--weight-semibold); }
+.rec-usa-n b { font-family:var(--font-code); font-size:var(--text-5xl); line-height:1; letter-spacing:-.05em; color:var(--primary-emphasis); }
+.rec-usa-lista, .rec-cartao-padroes { display:flex; flex-wrap:wrap; gap:calc(var(--space-1) + var(--space-05)); }
+.rec-codigo.badge { font-family:var(--font-code); }
+.rec-acoes { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-block-start:auto; }
+
+/* AS DUAS COLUNAS: a lista presa à esquerda (288 = --space-12 × 6; o desenho tem 290) e os padrões. */
+.rec-colunas { display:grid; grid-template-columns:minmax(0, calc(var(--space-12) * 6)) minmax(0,1fr); gap:calc(var(--space-3) + var(--space-05)); align-items:start; }
+.rec-lista.card { position:sticky; inset-block-start:calc(var(--topbar-height) + var(--space-8)); display:flex; flex-direction:column; gap:var(--space-05);
+  max-block-size:calc(100vh - var(--topbar-height) - var(--space-12)); overflow:auto; scrollbar-width:none; padding:calc(var(--space-2) + var(--space-05)); }
+.rec-filtro { margin-block-end:var(--space-2); flex:none; }
+/* Um botão por receita (o desenho): 44 (--target-min), cápsula; a escolhida levantada com o ponto amarelo — a mesma pele do item
+   atual da lateral (`segment-dot`). */
+.rec-item { display:flex; flex:none; align-items:center; gap:calc(var(--space-2) + var(--space-05)); inline-size:100%; min-block-size:var(--target-min);
+  padding:0 calc(var(--space-2) + var(--space-05)) 0 calc(var(--space-3) + var(--space-05)); border:0; border-radius:var(--radius-full); background:transparent;
+  color:var(--foreground); font:inherit; font-size:var(--text-sm); text-align:start; cursor:pointer; }
+.rec-item:hover { background:var(--fill-1); }
+.rec-item[aria-pressed="true"] { background:var(--segment); box-shadow:var(--shadow-sm); font-weight:var(--weight-semibold); }
+.rec-item[aria-pressed="true"]::before { content:""; flex:none; inline-size:var(--space-2); block-size:var(--space-2); margin-inline-start:calc(-1 * var(--space-1));
+  border-radius:var(--radius-full); background:var(--primary); }
+.rec-item[data-apagado] { color:var(--muted-foreground); }
+.rec-item[hidden] { display:none; }
+.rec-item-nome { min-inline-size:0; }
+.rec-item .badge { margin-inline-start:auto; flex:none; font-family:var(--font-code); }
+.rec-item .rec-item-usa { font-family:inherit; }
+.rec-item .badge[hidden] { display:none; }
+.rec-nada { margin:0; padding:var(--space-2) var(--space-3); color:var(--muted-foreground); font-size:var(--text-sm); }
+.rec-nada[hidden] { display:none; }
+
+.rec-quadro { display:flex; flex-direction:column; gap:var(--space-3); min-inline-size:0; container-type:inline-size; }
+/* A faixa do filtro: a cápsula na cor do texto (o fundo invertido do desenho), 50 de altura (--control-h-xl; o desenho tem 52). */
+.rec-faixa { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-2) calc(var(--space-2) + var(--space-05));
+  min-block-size:var(--control-h-xl); padding:var(--space-1) calc(var(--space-1) + var(--space-05)) var(--space-1) var(--space-4);
+  border-radius:var(--radius-full); background:var(--foreground); color:var(--background); font-weight:var(--weight-semibold); }
+.rec-faixa[hidden] { display:none; }
+.rec-grade-cabeca { display:flex; align-items:center; justify-content:space-between; gap:var(--space-3); margin:var(--space-2) var(--space-1) 0; }
+.rec-grade-cabeca p { margin:0; font-family:var(--font-code); font-size:var(--text-xs); letter-spacing:.06em; text-transform:uppercase; color:var(--muted-foreground); }
+.rec-padroes { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:calc(var(--space-2) + var(--space-05)); }
+/* O cartão do padrão: o recheio de sempre (16), 150 de alto (--space-12 × 3 + --space-1 + --space-05). */
+.rec-padrao.card { display:flex; flex-direction:column; align-items:stretch; gap:var(--space-2); min-block-size:calc(var(--space-12) * 3 + var(--space-1) + var(--space-05)); }
+.rec-padrao.card-selected:hover { background:color-mix(in oklab,var(--primary) 12%,var(--card)); }
+/* O padrão apertado (o filtro ligado): o cartão do alto, com a sombra grande, levantado — como o desenho. */
+.rec-padrao.card[aria-pressed="true"] { background:var(--popover); box-shadow:var(--shadow-lg); transform:translateY(calc(-1 * var(--space-1))); }
+.rec-padrao-topo { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:calc(var(--space-1) + var(--space-05)) var(--space-2); }
+.rec-padrao-nome { min-inline-size:0; font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); overflow-wrap:anywhere; }
+.rec-padrao .badge[hidden] { display:none; }
+/* O selo "Filter on" invertido (a cor do texto): o `Badge` não tem esse tom — anotado no relatório como peça que falta. */
+.rec-padrao-filtro.badge { background:var(--foreground); color:var(--background); }
+.rec-padrao-regra { flex:1; color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--leading-normal); }
+.rec-padrao.card-selected .rec-padrao-regra { color:var(--foreground); }
+.rec-padrao-tipos { font-family:var(--font-code); font-size:var(--text-xs); line-height:var(--leading-normal); color:var(--muted-foreground); }
+
+/* TODAS AS RECEITAS: os cartões-link que sobem (o item 7), em três colunas. */
+.rec-todas { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:calc(var(--space-3) + var(--space-05)); }
+.rec-cartao.card { display:flex; flex-direction:column; gap:var(--space-2); }
+.rec-cartao h3 { margin:0; font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); line-height:var(--leading-normal); }
+.rec-cartao p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); }
+.rec-cartao-padroes { margin-block-start:auto; padding-block-start:calc(var(--space-1) + var(--space-05)); }
+
+@media (max-width:1240px) {
+  .rec-todas { grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .rec-colunas { grid-template-columns:calc(var(--space-12) * 5) minmax(0,1fr); }
+  .rec-escolhida.card { grid-template-columns:minmax(0,1fr); }
+}
+@media (max-width:900px) {
+  .rec-todas, .rec-colunas { grid-template-columns:minmax(0,1fr); }
+  /* No celular, como o desenho: as peças que flutuam saem. */
+  .rec-palco .cat-pecas { display:none; }
+  .rec-lista.card { position:static; max-block-size:calc(var(--space-12) * 6 + var(--space-3)); }
+  .rec-cabeca-texto { padding-inline-start:0; }
+  .rec-escolhida.card { padding:var(--space-5); }
+  .rec-nome { font-size:var(--text-3xl); }
+}
+/* Sem índice à direita, o conteúdo ocupa também a coluna dele (como a All Components). */
+@media (min-width:1280px) { .site-shell:has(.rec-b) > .content.content { grid-column:3 / 5; } }
+/* Os padrões descem para duas colunas pela largura do QUADRO (o desenho faz isso a 1240 de tela, com o quadro de ~760): com
+   a lateral do site, a tela de 1280 já tem o quadro estreito, e o nome do padrão quebrava no meio. */
+@container (max-width:760px) { .rec-padroes { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+@container (max-width:420px) { .rec-padroes { grid-template-columns:minmax(0,1fr); } }
+
+/* Texto a 200%: o selo de um nome longo quebra a linha (as peças que flutuam somem na regra de 30rem, abaixo). */
+.rec-usa-lista .badge, .rec-cartao-padroes .badge { max-inline-size:100%; block-size:auto; white-space:normal; overflow-wrap:anywhere; }
+/* Com o texto a 200% (o texto fica com ~150): a coluna da lista é "até 288", os botões da receita escolhida quebram a linha
+   e o cabeçalho da grade desce em vez de empurrar a página. */
+.rec-acoes > .btn { min-inline-size:0; max-inline-size:100%; block-size:auto; white-space:normal; }
+.rec-grade-cabeca { flex-wrap:wrap; }
+.rec-grade-cabeca p { min-inline-size:0; overflow-wrap:anywhere; }
+/* Com o texto a 200%, a coluna da lista (em rem) dobra e esmagava a outra (20 de largura, a página rolava 211): quando o
+   bloco não comporta as duas na régua do texto (30rem — 480 com o texto normal, 960 a 200%), elas empilham. */
+@container rec-b (width < 30rem) { .rec-colunas { grid-template-columns:minmax(0,1fr); } .cat-pecas { display:none; } }
+/* Texto a 200%: o título de um cartão da lista com palavra longa quebra dentro do cartão (passava 44 da página). */
+.rec-todas > * { min-inline-size:0; }
+.rec-todas h3 { overflow-wrap:anywhere; }

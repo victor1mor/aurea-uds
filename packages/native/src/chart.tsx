@@ -264,7 +264,10 @@ export function Chart({
         {largura > 0 ? (
           // O desenho é quem carrega o nome: ele não tem NADA tocável dentro, então marcá-lo
           // como elemento de acessibilidade não apaga ninguém. As faixas são IRMÃS dele.
-          <View accessible accessibilityLabel={nome}>
+          // E o papel é o de IMAGEM (0.54.0, aprovado pelo Victor em 02/11/2026): sem papel, no navegador ele vira uma
+          // caixa genérica com nome, que o leitor de tela pode calar (o axe acusa `aria-prohibited-attr`). `image` mapeia
+          // nos dois sistemas e no `react-native-web` (`role="img"`).
+          <View accessible accessibilityRole="image" accessibilityLabel={nome}>
           <Svg width={largura} height={height} testID={testID ? `${testID}-svg` : undefined}>
             {/* A grade e a régua, na cor de borda — recessivas de propósito: elas orientam, não
                 competem com o dado. */}

@@ -22,7 +22,13 @@ export interface AccordionItem{id:string;title:ReactNode;content:ReactNode;
   disabled?:boolean}
 // O SITE B (30/10/2026, protótipo): `indicator="plus"` troca a setinha pelo "+" numa bolinha, que gira e vira o "×"
 // amarelo quando abre; `size="lg"` é a linha de 60 com a letra do texto (16), a das perguntas do desenho aprovado.
-export function Accordion({items,variant="default",multiple=false,defaultValue,indicator="chevron",size="md",className}:{items:AccordionItem[];variant?:AccordionVariant;
+// `orientation="horizontal"` (o site B — a página inicial, aprovada pela bancada em 01/11/2026, o D-7.1): o acordeão DE LADO.
+// Cada item é um cartão (canto 22) em pé, fechado com 104 de largura; o aberto toma o resto da linha. Um aberto de cada vez,
+// e o aberto não fecha pelo clique (sempre há um à vista). Num contêiner estreito (até 47.5rem) vira o de pé. A altura é
+// a do pai. Sem `horizontal`, o acordeão de sempre.
+export function Accordion({items,variant="default",multiple=false,defaultValue,indicator="chevron",size="md",orientation="vertical",className}:{items:AccordionItem[];variant?:AccordionVariant;
+  /** `horizontal`: o acordeão de lado — os itens em pé, o aberto toma o resto da linha. */
+  orientation?:"vertical"|"horizontal";
   /** O desenho de abrir: `"chevron"` (o padrão, a setinha) ou `"plus"` (o "+" numa bolinha, que vira "×" quando abre). */
   indicator?:"chevron"|"plus";
   /** A altura da linha: `"md"` (o padrão) ou `"lg"` (60, com a letra do texto). */
@@ -32,14 +38,17 @@ export function Accordion({items,variant="default",multiple=false,defaultValue,i
   /** Os itens que começam abertos (o `id` de cada um). */
   defaultValue?:string[];className?:string}){
   const grupo=React.useId();
-  return <div className={cx("accordion",variant==="surface"&&"accordion-surface",indicator==="plus"&&"accordion-plus",size==="lg"&&"accordion-lg",className)}>{items.map(i=>
-    <details key={i.id} className="accordion-item" name={multiple?undefined:grupo} open={defaultValue?.includes(i.id)||undefined}>
+  const deLado=orientation==="horizontal";
+  const lista=<div className={cx("accordion",variant==="surface"&&"accordion-surface",indicator==="plus"&&"accordion-plus",size==="lg"&&"accordion-lg",deLado&&"accordion-horizontal",!deLado&&className)}>{items.map(i=>
+    <details key={i.id} className="accordion-item" name={multiple&&!deLado?undefined:grupo} open={defaultValue?.includes(i.id)||undefined}>
       <summary aria-disabled={i.disabled||undefined} tabIndex={i.disabled?-1:undefined}
-        onClick={i.disabled?(e:React.MouseEvent)=>e.preventDefault():undefined}>
+        onClick={i.disabled?(e:React.MouseEvent)=>e.preventDefault()
+          :deLado?(e:React.MouseEvent<HTMLElement>)=>{if((e.currentTarget.parentElement as HTMLDetailsElement).open)e.preventDefault()}:undefined}>
         <span className="accordion-title">{i.title}</span><span className="accordion-chevron" aria-hidden="true"/>
       </summary>
       <div className="accordion-content">{i.content}</div>
     </details>)}</div>;
+  return deLado?<div className={cx("accordion-horizontal-frame",className)}>{lista}</div>:lista;
 }
 
 // COLLAPSIBLE — uma seção que abre e fecha, com o estado do lado de quem usa.

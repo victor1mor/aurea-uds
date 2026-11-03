@@ -91,5 +91,14 @@ export default {
       codigo: v => `<Toolbar label="Format" pressedStyle="${v}">\n  <ToolbarButton pressed>Bold</ToolbarButton>\n  <ToolbarButton>Italic</ToolbarButton>\n</Toolbar>`,
       peca: v => h(Toolbar, {label: `Format, ${v}`, pressedStyle: v},
         h(ToolbarButton, {pressed: true}, "Bold"), h(ToolbarButton, null, "Italic"))}),
+    {
+      title: "Selection bar",
+      description: "tone=\"brand\" is the yellow bar of a bulk selection: the count at one end, the actions at the other, " +
+        "the buttons white with the ink.",
+      code: '<Toolbar tone="brand" label="Selection">\n  <span>3 members selected</span>\n  <ToolbarGroup>\n    <ToolbarButton>Clear</ToolbarButton>\n    <ToolbarButton>Remove</ToolbarButton>\n  </ToolbarGroup>\n</Toolbar>',
+      render: () => h("div", {style: {inlineSize: "100%"}}, h(Toolbar, {tone: "brand", label: "Selection"},
+        h("span", null, "3 members selected"),
+        h(ToolbarGroup, null, h(ToolbarButton, null, "Clear"), h(ToolbarButton, null, "Remove")))),
+    },
   ],
 };

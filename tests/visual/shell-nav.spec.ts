@@ -34,69 +34,46 @@ test.describe("shell · gaveta de navegação", () => {
     expect(caixa!.y, "o h1 tem de caber na primeira tela em 375px").toBeLessThan(MOVEL.height);
   });
 
-  test("o disparador anuncia o estado, e quem preenche isso é o navegador", async ({page, browserName}) => {
-    // CHROMIUM SÓ, e não por preguiça: a única forma de ler o estado IMPLÍCITO é a árvore de
-    // acessibilidade do navegador, e o protocolo que a expõe (CDP) não existe fora do Chromium.
-    // Escopar é declarar onde a medição é possível; fingir que roda nos três seria pior, porque
-    // um `expect` que não pode rodar vira cobertura de mentira. O que o WebKit e o Firefox
-    // cobrem desta gaveta são os quatro testes ao redor, que medem comportamento observável.
-    test.skip(browserName !== "chromium", "a árvore de acessibilidade só se lê por CDP, que é do Chromium");
+  // O SITE B (o item 10, aprovado pela bancada em 01/11/2026): no celular a gaveta do lado deu lugar à FOLHA QUE SOBE DE
+  // BAIXO (`Drawer side="bottom"`), aberta pelo botão "Menu" (vivo, `apps/catalog/live/site.tsx`). O botão "Navigation" da
+  // gaveta do `AppShell` sai quando o botão vivo existe. Os três testes abaixo cobravam a gaveta pelo botão "Navigation"
+  // NESTA página; passaram a cobrar a mesma coisa na folha: o estado anunciado, o Esc que fecha e devolve o foco, e o foco
+  // que entra. A gaveta do `AppShell` como peça continua coberta onde ela é a navegação (o `appshell-an01.spec.ts`).
+  // Agora o estado é um ATRIBUTO (`aria-expanded` no botão, escrito pelo site), e se lê nos três motores.
+  test("o disparador anuncia o estado", async ({page}) => {
     await page.setViewportSize(MOVEL);
     await page.goto(PAGINA);
-    const botao = page.getByRole("button", {name: "Navigation", exact: true});
+    const botao = page.getByRole("button", {name: "Menu", exact: true});
     await expect(botao).toBeVisible();
-    // `aria-expanded` NÃO existe como atributo no DOM — o popover o entrega na ÁRVORE DE
-    // ACESSIBILIDADE, derivado do `popovertarget`. Medido em 30/07/2026, e por isso este teste
-    // lê a árvore por CDP: `getByRole(..., {expanded})` do Playwright consulta o atributo e
-    // não enxerga o estado implícito (tentado primeiro, e falhou — fica registrado para a
-    // próxima pessoa não repetir). Chromium só, que é o único navegador instalado aqui.
-    const cdp = await page.context().newCDPSession(page);
-    await cdp.send("Accessibility.enable");
-    const estado = async () => {
-      const {nodes} = await cdp.send("Accessibility.getFullAXTree") as any;
-      const n = nodes.find((x: any) => x.role?.value === "button" && x.name?.value === "Navigation");
-      return n?.properties?.find((p: any) => p.name === "expanded")?.value?.value;
-    };
-    expect(await estado(), "fechada, o disparador anuncia expanded=false").toBe(false);
+    await expect(page.getByRole("button", {name: "Navigation", exact: true})).toBeHidden();
+    await expect(botao).toHaveAttribute("aria-expanded", "false");
     await botao.click();
-    await expect(page.locator(NAV)).toBeVisible();
-    expect(await estado(), "aberta, o disparador anuncia expanded=true").toBe(true);
+    await expect(page.getByRole("dialog", {name: "Menu"})).toBeVisible();
+    // Com a folha aberta (modal), o resto da página sai da árvore de acessibilidade: o botão se lê pela classe.
+    await expect(page.locator(".site-menu-botao")).toHaveAttribute("aria-expanded", "true");
   });
 
-  test("Escape fecha a gaveta e devolve o foco ao disparador", async ({page}) => {
+  test("Escape fecha a folha e devolve o foco ao disparador", async ({page}) => {
     await page.setViewportSize(MOVEL);
     await page.goto(PAGINA);
-    const botao = page.getByRole("button", {name: "Navigation", exact: true});
+    const botao = page.getByRole("button", {name: "Menu", exact: true});
     await botao.click();
-    await expect(page.locator(NAV)).toBeVisible();
+    await expect(page.getByRole("dialog", {name: "Menu"})).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(page.locator(NAV)).toBeHidden();
+    await expect(page.getByRole("dialog", {name: "Menu"})).toBeHidden();
     await expect(botao).toBeFocused();
   });
 
   test("o teclado alcança a navegação depois de abrir", async ({page}) => {
     await page.setViewportSize(MOVEL);
     await page.goto(PAGINA);
-    await page.getByRole("button", {name: "Navigation", exact: true}).click();
-    const dentro = () => page.evaluate(() =>
-      document.querySelector(".sidebar:not(.app-shell-aside)")!.contains(document.activeElement));
-    // A GARANTIA MUDOU NO K1. Era "o primeiro Tab depois de abrir cai dentro" — o que dependia
-    // de o motor pôr o conteúdo do popover na ordem de tabulação do documento. O Chromium põe;
-    // o WebKit NÃO. Agora quem põe o foco somos nós, e o que se cobra é o fato que vale nos
-    // três motores: abriu, está dentro.
-    // `expect.poll` e não leitura direta: o `toggle` do popover é ASSÍNCRONO, então ler o
-    // activeElement logo depois do clique é corrida — e ela mordeu na primeira execução, com o
-    // Chromium reprovando e o WebKit passando por sorte. Esperar a condição é o que torna este
-    // gate uma afirmação sobre o comportamento e não sobre a velocidade da máquina.
-    await expect.poll(dentro, {message: "abrir a gaveta põe o foco DENTRO dela"}).toBe(true);
-    // NÃO se cobra aqui que o Tab SIGA dentro, e a ausência é deliberada e medida: no WebKit o
-    // Tab escapa do popover a partir de QUALQUER elemento de dentro (rastro de focusin: link[0]
-    // → botão fora). Fechar isso exige prender o foco enquanto aberto, ou seja, tornar a gaveta
-    // MODAL — e este componente declara não-modalidade de propósito, no `layout.tsx`. Era decisão
-    // de desenho, e o Victor DECIDIU em 10/08/2026: continua não-modal, e isto aqui é limite
-    // declarado, não pendência (ADR-0019, Decisão 3).
-    // Escrever a asserção e pular no WebKit seria fingir cobertura; escrevê-la sem cumprir seria
-    // gate vermelho permanente. Fica o que é verdade nos três.
+    await page.getByRole("button", {name: "Menu", exact: true}).click();
+    const folha = page.getByRole("dialog", {name: "Menu"});
+    // `expect.poll`: a janela abre e põe o foco dentro de forma assíncrona.
+    await expect.poll(() => folha.evaluate((el) => el.contains(document.activeElement)),
+      {message: "abrir a folha põe o foco DENTRO dela"}).toBe(true);
+    // E a lista da área (a da lateral) está nela: a página atual, marcada.
+    await expect(folha.locator('.sidebar-item[aria-current="page"]')).toBeVisible();
   });
 
   // O nome EXATO (site B, 01/11/2026): a lateral de Components tem a família "Navigation", com o botão que a abre e fecha

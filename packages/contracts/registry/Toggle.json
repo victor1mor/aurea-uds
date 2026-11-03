@@ -16,7 +16,8 @@
   "sizes": [
     "sm",
     "md",
-    "lg"
+    "lg",
+    "xl"
   ],
   "responsive": {
     "size": "visual"
@@ -33,7 +34,10 @@
     "--primary",
     "--foreground",
     "--radius-control",
-    "--control-h-md"
+    "--control-h-md",
+    "--radius-card",
+    "--fill-2",
+    "--fill-3"
   ],
   "a11y": {
     "role": "button",
@@ -86,9 +90,9 @@
     },
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\"",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
       "default": "\"md\"",
-      "description": "Matches the button scale, so a toggle sits level with the controls beside it."
+      "description": "Matches the button scale, so a toggle sits level with the controls beside it. xl is the 50 button, the Button's xl."
     },
     {
       "name": "disabled",
@@ -131,6 +135,12 @@
       "type": "\"brand\" | \"neutral\" | \"contrast\"",
       "default": "\"brand\"",
       "description": "The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's \"increase contrast\", neutral gets a 3:1 outline."
+    },
+    {
+      "name": "area",
+      "type": "boolean | \"pill\"",
+      "default": "—",
+      "description": "The toggle as an AREA around a block (a page thumbnail, an icon with its name): 4 padding, the card's concentric radius, the content as it is. With variant=\"ghost\", no fill: the yellow at 18% on hover, 42% when on. With the default variant, --fill-2 (--fill-3 on hover) and, when on, the solid yellow with the primary button's letter. pill keeps it as wide as its content, as a capsule."
     }
   ],
   "notes": [

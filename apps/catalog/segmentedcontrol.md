@@ -1,6 +1,6 @@
 # SegmentedControl
 
-SegmentedControl is one-of-many, always visible: two to five options in a track, the chosen one raised. It carries one value and one tab stop. Past five options this becomes a Select — a track that wraps to a second line stops being a segmented control.
+SegmentedControl is one-of-many, always visible: two to five options in a track, the chosen one raised. It carries one value and one tab stop. Past five options it usually becomes a Select; when every option must stay in sight, wrap lets the track break onto more lines.
 
 ## Usage
 
@@ -44,13 +44,14 @@ Five is the limit. At this width it already asks to become a Select — which is
 
 ### Sizes
 
-sm (34) is the low capsule of a documentation switch; md (40), the default, is the control height; lg (44) and xl (48) are the tall capsules — the Web | Native switch and the area switch of this site.
+sm (34) is the low capsule of a documentation switch; md (40), the default, is the control height; lg (44) and xl (48) are the tall capsules — the Web | Native switch and the area switch of this site; 2xl (56) has 48 segments.
 
 ```tsx
 <SegmentedControl size="sm" label="View" value={view} onChange={setView} items={views} />
 <SegmentedControl size="md" label="View" value={view} onChange={setView} items={views} />
 <SegmentedControl size="lg" label="View" value={view} onChange={setView} items={views} />
 <SegmentedControl size="xl" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl size="2xl" label="View" value={view} onChange={setView} items={views} />
 ```
 
 ### As navigation
@@ -64,9 +65,34 @@ With href on every item it is a <nav> of links: going to another page is navigat
 ]} />
 ```
 
+### With icons
+
+An icon on each item, 8 before the label; the selected one switches to the filled form by itself. size="2xl" is one step taller: 48 segments, 20 icons, 16 letters.
+
+```tsx
+<SegmentedControl label="View" value={view} onChange={setView} items={[
+  {value: "grid", label: "Grid", icon: "squares-four"},
+  {value: "list", label: "List", icon: "list"},
+]} />
+<SegmentedControl size="2xl" label="Section" value={section} onChange={setSection} items={[
+  {value: "home", label: "Home", icon: "house"},
+  {value: "alerts", label: "Alerts", icon: "bell"},
+  {value: "settings", label: "Settings", icon: "gear"},
+]} />
+```
+
+### Wrapping and vertical
+
+wrap lets a long set break onto more lines, and the track takes the card radius (22). orientation="vertical" stands it up, each segment the full width.
+
+```tsx
+<SegmentedControl wrap label="Principle" value={p} onChange={setP} items={principles} />
+<SegmentedControl orientation="vertical" label="Reader" value={r} onChange={setR} items={readers} />
+```
+
 ### The colour of the selected segment
 
-selectedStyle (ADR-0084): current — the raised capsule with the yellow line, the default — neutral, contrast (graphite), brand (yellow), ring (a yellow ring) and dot (a yellow dot before the label; its place is kept in every segment, so the width does not jump).
+selectedStyle (ADR-0084): current — the raised capsule with the yellow line, the default — neutral, contrast (graphite), brand (yellow), ring (a yellow ring) and dot (a yellow dot before the label; its place is kept in every segment, so the width does not jump) and emphasis (the raised capsule with the emphasis letter, no line).
 
 ```tsx
 <SegmentedControl selectedStyle="current" label="View" value={view} onChange={setView} items={views} />
@@ -75,16 +101,20 @@ selectedStyle (ADR-0084): current — the raised capsule with the yellow line, t
 <SegmentedControl selectedStyle="brand" label="View" value={view} onChange={setView} items={views} />
 <SegmentedControl selectedStyle="ring" label="View" value={view} onChange={setView} items={views} />
 <SegmentedControl selectedStyle="dot" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl selectedStyle="emphasis" label="View" value={view} onChange={setView} items={views} />
 ```
 
 ## API Reference
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `Array<{value, label, href?}>` | — | The options. Two to five: past that it is a Select, not a segmented control. With href on EVERY item, the control is a <nav> of links — the current one gets aria-current="page" — instead of a choice: going to another page is navigation, and a screen reader hears "link", not "option". It is the Web \| Native switch of this site. |
+| `items` | `Array<{value, label, href?, icon?}>` | — | The options. Two to five: past that it is a Select, not a segmented control. With href on EVERY item, the control is a <nav> of links — the current one gets aria-current="page" — instead of a choice: going to another page is navigation, and a screen reader hears "link", not "option". It is the Web \| Native switch of this site. |
 | `value` | `string` | — | The selected value. Controlled by design — one of many always has an owner. |
 | `onChange` | `(v: string) => void` | — | Fires with the new value. Not needed when the items are links (href). |
 | `label` | `string` | — | Accessible name of the set. |
 | `fullWidth` | `boolean` | false | Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control scrolls, as without the prop. The name the reference library gives this prop on its toggle-button group; the same prop on native. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | md | sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web \| Native switch and the area switch of this site. Web only. |
-| `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot"` | "current" | The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |
+| `size` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl"` | md | sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web \| Native switch and the area switch of this site. Web only. 2xl: 48 segments (--space-12), 20 icons, 16 letters. |
+| `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot" \| "emphasis"` | "current" | The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump) or emphasis (the raised capsule with the emphasis letter — yellow in the dark theme, the text colour in the light one — and no line). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |
+| `items[].icon` | `IconName` | — | An icon before the label (16, 8 from it); the selected item switches to the filled form by itself. |
+| `wrap` | `boolean` | false | The track breaks onto more lines when the options do not fit, and takes the card radius (22). |
+| `orientation` | `"horizontal" \| "vertical"` | "horizontal" | vertical stands the control up: each segment the full width, the track with the card radius (22). |

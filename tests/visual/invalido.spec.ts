@@ -64,6 +64,9 @@ const SEM_INVALIDO: Record<string, string> = {
   // 0.33.0 (15/10/2026): os botões de opção invisíveis da chave de tema de três posições (`ThemeToggle`).
   "theme-switch-input": "é a chave de tema — claro, escuro ou sistema —, que sempre tem uma escolhida, como o " +
     "`SegmentedControl`: não há valor inválido a mostrar",
+  // 0.54.0 (o site B): os botões de opção invisíveis das barras do `KPI` (`bars`).
+  "kpi-bar-input": "escolhe qual barra do gráfico mostra a leitura — sempre há uma escolhida, e não é campo de " +
+    "formulário: não há valor inválido a mostrar",
 };
 
 // ── A MEDIÇÃO, UMA SÓ, EM DOIS MODOS ─────────────────────────────────────────────────────────

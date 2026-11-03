@@ -1,0 +1,47 @@
+/* A FRAMEWORKS NO DESENHO B (02/11/2026). O cartão de escolha é o da Aurea (`RadioGroup variant="card"`); aqui fica o
+   arranjo da página, com o prefixo "fw-". */
+
+/* A peça do "use client": o selo amarelo menor (12 → o --text-xs). */
+.fw-peca-uso { padding-inline:var(--space-4) var(--space-2); }
+.fw-nao { font-size:var(--text-xs); }
+.fw-peca-arquivo { padding-inline:var(--space-4); }
+
+/* As duas provas: o ladrilho, o nome e a frase, e o selo verde na ponta. */
+.fw-prova { display:flex; align-items:center; gap:calc(var(--space-3) + var(--space-05)); padding:var(--space-4) calc(var(--space-4) + var(--space-05)); }
+.fw-prova-texto { display:flex; flex-direction:column; min-inline-size:0; }
+.fw-prova-texto b { font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); }
+.fw-prova-texto span { color:var(--muted-foreground); font-size:var(--text-sm); }
+.fw-prova-selo { flex:none; margin-inline-start:auto; }
+
+/* «Choose a framework»: os quatro cartões, com 148 de altura mínima (--space-24 + --space-12 + --space-1), o ladrilho em
+   cima, o nome, a frase e o selo "Showing" no pé do escolhido. */
+.fw-escolha { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.fw-escolha > .radio-group-cards { gap:calc(var(--space-2) + var(--space-05)); }
+.fw-escolha .radio { min-block-size:calc(var(--space-24) + var(--space-12) + var(--space-1)); }
+.fw-escolha .radio > span:last-child { display:flex; align-self:stretch; min-inline-size:0; }
+.fw-opcao { display:flex; flex-direction:column; align-items:flex-start; gap:calc(var(--space-2) + var(--space-05)); font-weight:var(--weight-regular); }
+.fw-opcao b { font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); color:var(--foreground); }
+.fw-opcao-frase { color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--leading-normal); }
+.fw-mostrando { display:none; margin-block-start:auto; padding:var(--space-05) calc(var(--space-2) + var(--space-05)); border-radius:var(--radius-full);
+  background:var(--primary); color:var(--primary-foreground); font-size:var(--text-xs); font-weight:var(--weight-semibold); }
+.fw-escolha .radio:has(input:checked) .fw-mostrando { display:inline-flex; }
+
+.fw-gerenciador { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); margin-block-start:calc(var(--space-3) + var(--space-05)); }
+.fw-painel[hidden] { display:none; }
+.fw-paineis > .fw-painel > .gs-p:first-child { margin-block-start:var(--space-6); }
+
+/* "What runs where": os dois lados, cada um com o selo e a lista. */
+.fw-lado { padding:calc(var(--space-4) + var(--space-05)); }
+.fw-lado-topo { display:flex; flex-wrap:wrap; align-items:center; gap:calc(var(--space-2) + var(--space-05)); margin-block-end:var(--space-3); }
+.fw-lado-topo b { font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); }
+.fw-tag { font-family:var(--font-code); }
+.fw-lado .gs-lista { margin:0; }
+.fw-lado .gs-lista > li { font-size:var(--text-base); }
+
+@media (max-width:899px) {
+  .fw-escolha > .radio-group-cards { grid-auto-flow:row; grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .fw-prova { flex-wrap:wrap; }
+}
+
+/* O comando de instalar, quando a escolha do gerenciador desce até ele: abaixo do topo fixo, como as seções. */
+[data-fw-instalar] { scroll-margin-block-start:calc(var(--topbar-height) + var(--space-8)); }

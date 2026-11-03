@@ -1,0 +1,26 @@
+/* A MOLDURA DAS ÁREAS NO DESENHO B (02/11/2026): Hooks, Tokens, Patterns, Blocks, Recipes e Releases. Os rótulos dos grupos
+   da lateral em mono maiúsculo, 12, apagados (o `side-lbl` do desenho); o item de filtro com a contagem numa bolinha na
+   ponta, que fica amarela no filtro escolhido. Toda medida é token. */
+.site-area-mono .sidebar-group-label { font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium);
+  letter-spacing:.06em; text-transform:uppercase; color:var(--muted-foreground); }
+/* Releases: o número do mês (mono, 12, apagado, numa coluna de 22) e o ponto de 10 na cor da categoria. */
+.site-mes-n { display:inline-block; inline-size:calc(var(--space-5) + var(--space-05)); flex:none; color:var(--muted-foreground); font-family:var(--font-code);
+  font-size:var(--text-xs); font-weight:var(--weight-medium); text-align:end; }
+.site-mes-d { display:inline-block; inline-size:calc(var(--space-2) + var(--space-05)); block-size:calc(var(--space-2) + var(--space-05)); flex:none;
+  margin-inline:var(--space-2); border-radius:var(--radius-full); background:var(--category-blue); }
+.site-mes-d[data-cor="primary"] { background:var(--primary); } .site-mes-d[data-cor="orange"] { background:var(--category-orange); }
+.site-mes-d[data-cor="green"] { background:var(--category-green); } .site-mes-d[data-cor="pink"] { background:var(--category-pink); }
+/* O item atual da lateral é o --segment: no escuro, a letra apagada dentro dele (o "··", o número do mês) é o texto a 80%. */
+[data-theme="dark"] .sidebar-item[aria-current]:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { --muted-foreground:color-mix(in oklab, var(--foreground) 80%, var(--segment)); }
+/* Nas linhas de mês, o ponto de cor é a marca da linha (como o desenho): o ponto do item atual da lateral não se repete. */
+.sidebar-indicator-segment-dot .sidebar-item[aria-current] > .sidebar-label:has(.site-mes-n)::before { content:none; }
+/* Patterns: o campo de filtrar, na largura da lateral. */
+.site-filtro-busca { padding:var(--space-1) var(--space-2) var(--space-2); }
+.site-filtro-busca .search-field, .site-filtro-busca .input-group { inline-size:100%; }
+/* O número da lateral na cor do texto: apagado sobre o --fill-2, no claro, lia 4,34:1 (o axe). */
+.site-conta { display:inline-grid; place-items:center; min-inline-size:var(--space-6); block-size:var(--space-6); padding-inline:var(--space-1);
+  border-radius:var(--radius-full); background:var(--fill-2); font-family:var(--font-code);
+  font-size:var(--text-xs); font-weight:var(--weight-semibold); color:var(--foreground); }
+.site-area-mono .sidebar-item[aria-current="true"] .site-conta { background:var(--primary); color:var(--primary-foreground); }
+/* Na área Hooks os nomes da lateral são código, em mono, como no desenho. */
+.site-area-hooks .sidebar .sidebar-label { font-family:var(--font-code); }

@@ -1,0 +1,59 @@
+/* A ROADMAP NO DESENHO B (02/11/2026). O caminho é o `Stepper variant="path"` da Aurea; aqui fica o arranjo da página,
+   com o prefixo "rm-". */
+
+/* As peças que flutuam: o "0.x" maior (letra 16, 36 de alto) e o cartão das datas, mais estreito. */
+.rm-peca-zero .gs-amarela { min-block-size:var(--control-h-md); font-size:var(--text-base); }
+.rm-peca-datas { max-inline-size:calc(var(--space-24) * 2); }
+.rm-peca-semver { padding-inline:var(--space-4); }
+
+/* As duas promessas: o recheio de 22 do desenho é o 20 da Introduction (--space-5). */
+.rm-promessa { display:flex; flex-direction:column; gap:var(--space-3); padding:var(--space-5); scroll-margin-block-start:calc(var(--topbar-height) + var(--space-8)); }
+.rm-versao-topo { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); }
+.rm-versao-topo b { font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); }
+/* A cápsula da versão: 40 de alto (--space-10), código 20 (--text-xl). */
+.rm-versao { display:inline-flex; align-items:center; min-block-size:var(--space-10); padding-inline:var(--space-4); border-radius:var(--radius-full);
+  background:var(--fill-2); font-family:var(--font-code); font-size:var(--text-xl); font-weight:var(--weight-semibold); }
+.rm-versao[data-v="0.x"] { background:var(--primary); color:var(--primary-foreground); }
+.rm-promessa .gs-lista, .rm-promessa .gs-p { margin:0; }
+.rm-promessa .gs-lista > li, .rm-promessa .gs-p { font-size:var(--text-base); }
+
+/* O que já está feito: o visto num círculo verde de 30 (--space-7 + --space-05). O texto dos cartões é o 15 do desenho:
+   o 14 da escala (--text-sm), com a linha de 1,7 (23,8 contra 23,25). */
+.rm-feitos { gap:calc(var(--space-2) + var(--space-05)); }
+.rm-feito { display:flex; align-items:flex-start; gap:var(--space-3); padding:var(--space-4) calc(var(--space-4) + var(--space-05)); font-size:var(--text-sm);
+  line-height:var(--leading-relaxed); }
+.rm-feito-tile { inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
+.rm-feito-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+
+/* O caminho, na faixa cinza (o fundo é do site, o ITEM 5). No escuro o palco é a cor do cartão, e as bolinhas (o cartão)
+   sumiam nele: a faixa é o cinza (--secondary), como o do desenho — no --fill-3 o "1.0" do fim (o --fill-3-solid) sumia. No claro, o palco. */
+.rm-caminho { margin-block-start:calc(var(--space-5) + var(--space-05)); padding:calc(var(--space-4) + var(--space-05)) calc(var(--space-3) + var(--space-05));
+  border-radius:var(--radius-card); background:var(--secondary); }
+[data-theme="light"] .rm-caminho { background:var(--site-palco); }
+/* O quadro da etapa: o número grande (48, código), o título, o texto e Previous | Next. */
+.rm-etapa { display:grid; grid-template-columns:auto minmax(0, 1fr); align-items:start; gap:calc(var(--space-4) + var(--space-05));
+  margin-block-start:var(--space-3); padding:var(--space-5); }
+.rm-etapa-n { font-family:var(--font-code); font-size:var(--text-5xl); font-weight:var(--weight-semibold); line-height:var(--leading-none);
+  letter-spacing:calc(var(--tracking-tight) * 2); }
+.rm-etapa-texto b { display:block; font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold); line-height:var(--leading-tight); }
+.rm-etapa-texto p { margin:var(--space-2) 0 0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-relaxed); }
+.rm-etapa-texto [hidden] { display:none; }
+.rm-etapa-nav { display:flex; gap:var(--space-2); margin-block-start:calc(var(--space-3) + var(--space-05)); }
+
+/* O que não se vai construir: o X num círculo vermelho de 36 (--control-h-md). */
+.rm-naos { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.rm-nao { display:flex; flex-direction:column; gap:calc(var(--space-2) + var(--space-05)); padding:var(--space-5); }
+.rm-nao-tile { inline-size:var(--control-h-md); block-size:var(--control-h-md); }
+.rm-nao-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+.rm-nao b { font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); }
+.rm-nao p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--leading-relaxed); }
+
+/* O pedido: o texto e o botão lado a lado, no fundo do palco (recheio 28 = --space-7). */
+.rm-pedido { display:grid; grid-template-columns:minmax(0, 1fr) auto; align-items:center; gap:var(--space-6); margin-block-start:calc(var(--space-4) + var(--space-05));
+  padding:var(--space-7); }
+.rm-pedido .gs-p { margin:0; }
+
+@media (max-width:899px) {
+  .rm-naos, .rm-pedido { grid-template-columns:minmax(0, 1fr); }
+  .rm-pedido { justify-items:start; }
+}

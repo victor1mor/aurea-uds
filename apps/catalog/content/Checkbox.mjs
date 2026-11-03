@@ -75,5 +75,19 @@ export default {
       render: () => h("div", {style: stack}, ...TAMANHOS.map(([size, label]) =>
         h(Checkbox, {key: size, label, defaultChecked: true, ...(size === "md" ? {} : {size})}))),
     },
+    {
+      title: "Pill",
+      description: "variant=\"pill\" puts a capsule around the box and the label — the whole capsule is the target, 44 " +
+        "tall (36 with size=\"md\"). tone=\"success\" turns a checked one green: done.",
+      code: [
+        '<Checkbox variant="pill" label="Mark as done" />',
+        '<Checkbox variant="pill" tone="success" label="Done" defaultChecked />',
+        '<Checkbox variant="pill" size="md" label="Smaller" />',
+      ].join("\n"),
+      render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-3)", alignItems: "center"}},
+        h(Checkbox, {variant: "pill", label: "Mark as done"}),
+        h(Checkbox, {variant: "pill", tone: "success", label: "Done", defaultChecked: true}),
+        h(Checkbox, {variant: "pill", size: "md", label: "Smaller"})),
+    },
   ],
 };

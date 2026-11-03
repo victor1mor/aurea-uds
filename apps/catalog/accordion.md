@@ -53,6 +53,16 @@ indicator="plus" swaps the arrow for a plus in a circle, which turns into a yell
 <Accordion variant="surface" indicator="plus" size="lg" defaultValue={["ship"]} items={[item]} />
 ```
 
+### On its side
+
+orientation="horizontal" stands the items side by side, each a card; a closed one is 104 wide and the open one takes the rest. One is always open. The height is the parent's; under a 47.5rem container it becomes the upright accordion.
+
+```tsx
+<div style={{blockSize: "20rem"}}>
+  <Accordion orientation="horizontal" defaultValue={["ship"]} items={items} />
+</div>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -63,4 +73,5 @@ indicator="plus" swaps the arrow for a plus in a circle, which turns into a yell
 | `defaultValue` | `string[]` | — | The ids of the items that start open. |
 | `indicator` | `chevron \| plus` | chevron | How opening is drawn: the arrow at the end, or a plus in a circle that turns 45° into a yellow × when the item opens (the FAQ of this site). |
 | `size` | `md \| lg` | md | lg is the 60-tall row with body-size (16) text, 22 from the edge, for questions that stand alone. |
+| `orientation` | `"vertical" \| "horizontal"` | "vertical" | horizontal is the accordion on its side: the items stand side by side, 12 apart, each a card (radius 22); a closed one is 104 wide and the open one takes the rest of the row. One open at a time, and the open one does not close on click. The height is the parent's. Under a 47.5rem container it becomes the upright accordion. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin. |

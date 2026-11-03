@@ -241,6 +241,14 @@ describe("O papel que o RN aceita e não mapeia — terceira vez", () => {
     expect(grupo?.accessible).toBe(true);
   });
 
+  // 0.54.0: o desenho se anuncia como IMAGEM. Sem papel, no navegador a caixa com nome é genérica, e o leitor de tela
+  // pode calar o nome (a varredura do site acusou `aria-prohibited-attr` nas caixas do gráfico do nativo).
+  it("o desenho com nome tem o papel de imagem", () => {
+    desenhar(<Chart labels={LABELS} series={UMA} label="Custo por mês" />);
+    const grupo = todos("View").find((p) => p.accessibilityLabel === "Custo por mês");
+    expect(grupo?.accessibilityRole).toBe("image");
+  });
+
   it("sem `label`, cai na frase da tabela de frases — e ela traduz", () => {
     desenhar(<Chart labels={LABELS} series={UMA} />);
     const grupo = todos("View").find((p) => p.accessible && p.accessibilityLabel);

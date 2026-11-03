@@ -1,0 +1,37 @@
+/* A PÁGINA "RTL" NO DESENHO B (02/11/2026, o grupo 5). A caixa que espelha: o palco do site com a chave em cima e, dentro
+   de um `dir`, a lista ao lado do miolo — as peças da Aurea como são; aqui só o arranjo. A lateral de 180 do desenho é
+   --space-12 * 4 - --space-3 (180). */
+.rtl-espelho { margin-block-start:calc(var(--space-4) + var(--space-05)); padding:var(--space-4); border-radius:var(--radius-card); background:var(--site-palco); }
+.rtl-espelho-topo { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-3); margin-block-end:calc(var(--space-3) + var(--space-05)); }
+.rtl-espelho-topo > code { font-family:var(--font-code); font-size:var(--text-sm); color:var(--muted-foreground); }
+.rtl-espelho-ui { display:grid; grid-template-columns:calc(var(--space-12) * 4 - var(--space-3)) minmax(0, 1fr); gap:var(--space-3); }
+.rtl-espelho-lado, .rtl-espelho-miolo { border-radius:var(--radius-lg); background:var(--card); }
+.rtl-espelho-lado { padding:calc(var(--space-2) + var(--space-05)); }
+.rtl-espelho-miolo { display:flex; flex-direction:column; gap:var(--space-3); padding:var(--space-4); text-align:start; }
+.rtl-espelho-titulo { margin:0; font-family:var(--font-heading); font-size:var(--text-xl); font-weight:var(--weight-bold); }
+.rtl-espelho-texto { margin:0; font-size:var(--text-sm); line-height:var(--leading-normal); color:var(--muted-foreground); }
+.rtl-espelho-botoes { display:flex; flex-wrap:wrap; gap:calc(var(--space-2) + var(--space-05)); }
+/* A seta do "Next" trocada à mão: as duas estão na página, e a do outro sentido fica escondida. */
+.rtl-espelho-ui[dir="ltr"] .rtl-so-rtl, .rtl-espelho-ui[dir="rtl"] .rtl-so-ltr { display:none; }
+
+/* "dir" e "direction": a etiqueta amarela em mono (o recheio 4/12 do desenho). */
+.rtl-ajuste { align-self:flex-start; padding:var(--space-1) var(--space-3); border-radius:var(--radius-full); background:var(--primary);
+  color:var(--primary-foreground); font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+
+/* O que fica no lugar: o cartão com o desenho em cima (90 de alto = --space-20 + --space-2 + --space-05; canto 16). */
+.rtl-fica { display:flex; flex-direction:column; gap:calc(var(--space-2) + var(--space-05)); padding:var(--space-4); }
+.rtl-fica-desenho { display:flex; align-items:center; justify-content:center; gap:calc(var(--space-3) + var(--space-05));
+  block-size:calc(var(--space-20) + var(--space-2) + var(--space-05)); border-radius:var(--radius-lg); background:var(--background); }
+.rtl-fica > b { font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); }
+.rtl-fica > p { margin:0; font-size:var(--text-sm); line-height:var(--leading-normal); color:var(--muted-foreground); }
+.rtl-gaveta { display:flex; flex-direction:column; align-items:center; gap:var(--space-1); }
+.rtl-gaveta code, .rtl-icones code { white-space:nowrap; }
+.rtl-gaveta-folha { inline-size:calc(var(--space-12) - var(--space-05)); block-size:var(--space-12); border-radius:var(--radius-lg); background:var(--segment); box-shadow:var(--shadow-sm); }
+.rtl-gaveta code, .rtl-icones code { font-family:var(--font-code); font-size:var(--text-xs); color:var(--muted-foreground); }
+.rtl-icones { display:flex; align-items:center; gap:var(--space-2); }
+
+.rtl-tabela { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+
+@media (max-width:900px) {
+  .rtl-espelho-ui { grid-template-columns:minmax(0, 1fr); }
+}

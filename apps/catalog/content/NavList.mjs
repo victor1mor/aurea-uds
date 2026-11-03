@@ -111,5 +111,21 @@ export default {
         {id: "out", label: "Sign out", icon: "sign-out"},
       ]}),
     },
+    {
+      title: "Large, with the current row",
+      description: "size=\"lg\" is the phone menu: 56 capsule rows, the icon in a 40 circle tinted by tone, 18 letters. "
+        + "current marks the row of the page you are on — the fill, aria-current=\"page\" — and currentLabel puts a badge "
+        + "where the arrow was.",
+      code: `<NavList size="lg" currentLabel="You are here" items={[
+  {id: "start", label: "Getting Started", icon: "book-open", tone: "green", href: "/getting-started"},
+  {id: "components", label: "Components", icon: "squares-four", tone: "blue", href: "/components"},
+  {id: "patterns", label: "Patterns", icon: "puzzle-piece", tone: "orange", href: "/patterns", current: true},
+]} />`,
+      render: () => h("div", {style: box}, h(NavList, {size: "lg", currentLabel: "You are here", items: [
+        {id: "start", label: "Getting Started", icon: "book-open", tone: "green", href: "#"},
+        {id: "components", label: "Components", icon: "squares-four", tone: "blue", href: "#"},
+        {id: "patterns", label: "Patterns", icon: "puzzle-piece", tone: "orange", href: "#", current: true},
+      ]})),
+    },
   ],
 };

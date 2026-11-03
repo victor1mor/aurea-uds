@@ -28,7 +28,13 @@
     "--success-400",
     "--surface-inset",
     "--warning-400",
-    "--weight-semibold"
+    "--weight-semibold",
+    "--radius-card",
+    "--card",
+    "--control-h-md",
+    "--space-5",
+    "--text-xs",
+    "--text-sm"
   ],
   "a11y": {
     "role": null,
@@ -77,6 +83,12 @@
       "description": "The live example of the code. With it, the block becomes the example box of Aurea's site: the Preview | Code tabs (a segmented control across the width; arrows, Home and End move between them), the preview on the recessed surface and the code without a frame."
     },
     {
+      "name": "previewLayout",
+      "type": "\"tabs\" | \"stacked\"",
+      "default": "\"tabs\"",
+      "description": "With preview: tabs is the Preview | Code tabs. stacked puts the example on top (350 tall, on the page background) and the code under it; past five lines the code starts collapsed at 150, fading out, with Expand code (Collapse code once open) at the bottom."
+    },
+    {
       "name": "lineNumbers",
       "type": "boolean",
       "default": "false",
@@ -87,6 +99,12 @@
       "type": "CodeHighlighter",
       "default": "—",
       "description": "Colors the code. Pass `highlightCode` from `@aurea-uds/react/code-highlight`; its grammars are optional peers (@lezer/javascript, @lezer/css, @lezer/html, @lezer/json, @codemirror/legacy-modes). A language it does not know comes back plain. The colors are the same as the CodeEditor's, mixed 20% with the text so each one reads at 4.5:1 or more on the block."
+    },
+    {
+      "name": "filename",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "A head on the block, 52 tall: the file name (code font, 12, muted) on the left and, with copyable, Copy written out — the secondary button of 36, the icon before the word; once copied, both turn to the check and Copied. The block becomes a card (radius 22, the card fill), the code at 14 in the text color, and a long line wraps instead of scrolling."
     },
     {
       "name": "className",
@@ -100,5 +118,11 @@
       "default": "—",
       "description": "The alternatives of the same step, in tabs — the install command in npm, pnpm, yarn and bun: the row on top, inside the box, and one code per tab. With tabs, children is not read."
     }
-  ]
+  ],
+  "axes": {
+    "previewLayout": [
+      "tabs",
+      "stacked"
+    ]
+  }
 }

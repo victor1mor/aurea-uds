@@ -8,10 +8,15 @@ export interface StepItem {
     state?: StepState;
     optional?: ReactNode;
     onClick?: () => void;
+    href?: string;
 }
-export declare function Stepper({ items, label, className }: {
+export type StepperVariant = "default" | "path" | "bar";
+export declare function Stepper({ items, label, variant, startContent, endContent, className }: {
     items: StepItem[];
     label?: string;
+    variant?: StepperVariant;
+    startContent?: ReactNode;
+    endContent?: ReactNode;
     className?: string;
 }): React.JSX.Element;
 export interface BreadcrumbItem {
@@ -249,10 +254,18 @@ export interface NavListItem {
     };
     /** Os sinais ao lado do `value` (AN-04): fixada, silenciada. Pequenos e apagados, cada um com nome. */
     indicators?: NavListIndicator[];
+    /** A cor de categoria do círculo do ícone, no `size="lg"` (as cores do `Badge`). */
+    tone?: BadgeCategory;
+    /** A linha da página em que se está: `aria-current="page"`, o fundo, e o selo `currentLabel` no lugar da seta. */
+    current?: boolean;
 }
-export declare function NavList({ items, className, ...props }: HTMLAttributes<HTMLUListElement> & RefAttributes<HTMLUListElement> & {
+export declare function NavList({ items, size, currentLabel, className, ...props }: HTMLAttributes<HTMLUListElement> & RefAttributes<HTMLUListElement> & {
     items: NavListItem[];
+    size?: "md" | "lg";
+    /** O texto do selo da linha atual (só aparece com `current` num item). */
+    currentLabel?: ReactNode;
 }): React.JSX.Element;
+import type { BadgeCategory } from "./markup.js";
 export interface CommandItem {
     id: string;
     label: string;
@@ -262,8 +275,12 @@ export interface CommandItem {
     /** 0.32.0 (DOC-06): o grupo do item ("Componentes", "Páginas"). Itens com o mesmo grupo saem juntos,
      *  sob o título dele, na ordem em que o grupo aparece primeiro. */
     group?: string;
+    /** A linha de baixo do item, apagada e cortada (no `size="lg"`). */
+    description?: string;
+    /** A cor de categoria do círculo do ícone (no `size="lg"`), como as do `Badge`. Sem ela, o círculo neutro. */
+    tone?: BadgeCategory;
 }
-export declare function CommandPalette({ open, onClose, items, placeholder, label, shortcuts }: {
+export declare function CommandPalette({ open, onClose, items, placeholder, label, shortcuts, size, filters, preview, footer }: {
     open: boolean;
     onClose: () => void;
     items: CommandItem[];
@@ -271,6 +288,13 @@ export declare function CommandPalette({ open, onClose, items, placeholder, labe
     label?: string;
     /** 0.32.0 (DOC-07): a linha que ensina as teclas, embaixo — ↑ ↓ mover, Enter abrir, Esc fechar. */
     shortcuts?: boolean;
+    size?: "md" | "lg";
+    /** No `lg`: o que vai embaixo do campo — os filtros que o app desenha (um `ToggleGroup`, por exemplo). */
+    filters?: ReactNode;
+    /** No `lg`: a prévia do item ativo, ao lado da lista. Some quando a janela é estreita. */
+    preview?: (item: CommandItem) => ReactNode;
+    /** No `lg`: o que vai no pé, ao lado da linha das teclas. */
+    footer?: ReactNode;
 }): React.JSX.Element;
 export declare function CommandPaletteShell({ open, query, onQueryChange, onClose, label, children }: {
     open: boolean;

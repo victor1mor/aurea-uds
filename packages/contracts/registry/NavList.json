@@ -10,7 +10,10 @@
     "native": "stable"
   },
   "variants": [],
-  "sizes": [],
+  "sizes": [
+    "md",
+    "lg"
+  ],
   "states": [
     "default",
     "row-hover",
@@ -30,7 +33,12 @@
     "--space-3",
     "--target-min",
     "--text-sm",
-    "--text-xs"
+    "--text-xs",
+    "--space-10",
+    "--text-lg",
+    "--weight-semibold",
+    "--fill-2",
+    "--icon-md"
   ],
   "a11y": {
     "role": "list",
@@ -70,6 +78,30 @@
       "type": "NavListItem[]",
       "default": "—",
       "description": "The rows, as data — the house idiom, the same one Sidebar, BottomNav, Timeline and Breadcrumb use. Each item is {id, label, description?, value?, icon?, avatar?, indicators?, href?, onClick?, disabled?}. `description` is the second line and it is optional on purpose: a settings row often needs it (\"Notifications\" / \"Push, email\") and a plain destination row does not. `value` is the trailing accessory and takes any node, so Badge, Status or plain text compose in without this component knowing about them. `href` decides the element AND the chevron: with it the row is a link and gets the arrow, without it the row is a button and carries none — an arrow promises the row opens something. `disabled` forces the button form and marks it aria-disabled. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. `avatar` ({src?, fallback?}, the same shape as ChatMessage.avatar) puts a photo at the start of the row, in place of the icon. `indicators` ([{icon, label}]) are small muted signs before the value — pinned, muted — and each label is read by the screen reader, not drawn."
+    },
+    {
+      "name": "size",
+      "type": "\"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "lg is the large list (the phone menu): a 56 capsule row (a 40 circle and 8 above and below), 16 between the circle and the name, 18 semibold letters; the 20 icon sits in a 40 circle tinted by the item's tone."
+    },
+    {
+      "name": "items[].tone",
+      "type": "BadgeCategory",
+      "default": "—",
+      "description": "With lg: the category color of the icon circle (the Badge colors); without it, the neutral circle."
+    },
+    {
+      "name": "items[].current",
+      "type": "boolean",
+      "default": "false",
+      "description": "The row of the page you are on: aria-current=\"page\" and the --fill-2 fill; with currentLabel, its badge replaces the arrow."
+    },
+    {
+      "name": "currentLabel",
+      "type": "ReactNode",
+      "default": "—",
+      "description": "The text of the badge on the current row (\"You are here\"), the solid primary Badge."
     },
     {
       "name": "className",

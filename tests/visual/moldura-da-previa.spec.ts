@@ -1,6 +1,7 @@
 import {expect, test} from "@playwright/test";
 import {readdirSync, readFileSync} from "node:fs";
 import {join} from "node:path";
+import {esperarTransicoes} from "./esperar-transicoes";
 
 // AS MOLDURAS DO SITE (21/10/2026) — o Victor achou três defeitos nas prévias que moram em documento próprio
 // (`apps/catalog/embeds/`): o fundo cinza da PÁGINA em vez do preto da caixa, a peça no canto de cima à esquerda (o
@@ -83,11 +84,15 @@ const TINTA = `window.tintaDe = (raiz) => {
     }
     return {left: a, top: b, right: c, bottom: d, width: c - a, height: d - b};
   };
+  // O conteúdo de um <details> FECHADO não se desenha, mas o Range ainda devolve a posição dele (o Accordion de um
+  // tamanho maior, 0.54.0: a resposta fechada da última pergunta passava 25 abaixo da caixa). O resumo dele se vê.
+  const fechado = (e) => { const d = e.closest("details:not([open])"); if (!d) return false;
+    const s = e.closest("summary"); return !(s && s.parentElement === d); };
   const soma = (r) => { if (r.width < 2 || r.height < 2) return;
     x0 = Math.min(x0, r.left); y0 = Math.min(y0, r.top); x1 = Math.max(x1, r.right); y1 = Math.max(y1, r.bottom); };
   const tw = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT);
   for (let t = tw.nextNode(); t; t = tw.nextNode()) {
-    if (!t.textContent.trim() || t.parentElement.closest(".sr-only")) continue;
+    if (!t.textContent.trim() || t.parentElement.closest(".sr-only") || fechado(t.parentElement)) continue;
     const cs = getComputedStyle(t.parentElement);
     if (cs.visibility === "hidden") continue;
     const r = document.createRange(); r.selectNodeContents(t);
@@ -95,7 +100,7 @@ const TINTA = `window.tintaDe = (raiz) => {
   }
   for (const el of raiz.querySelectorAll("*")) {
     const cs = getComputedStyle(el);
-    if (cs.visibility === "hidden" || cs.display === "none" || el.closest(".sr-only")) continue;
+    if (cs.visibility === "hidden" || cs.display === "none" || el.closest(".sr-only") || fechado(el)) continue;
     if (el instanceof SVGSVGElement || /^(INPUT|IMG|CANVAS|VIDEO)$/.test(el.tagName)
       || !/rgba\\(.*,\\s*0\\)$|transparent/.test(cs.backgroundColor) || cs.backgroundImage !== "none") soma(corte(el, el.getBoundingClientRect()));
   }
@@ -149,8 +154,6 @@ test("toda moldura tem o fundo da caixa de prévia, e a peça no centro, com fol
 // (o Checkbox, o Radio, o Switch…) — consertados com `maxWidth`, como a referência mostra: a peça no centro, na largura
 // dela. As que ficam, cada uma com o motivo medido:
 const FORA_DO_CENTRO: Record<string, string> = {
-  "Accordion:0": "o bloco está no centro; a medida conta o espaço que o item fechado reserva embaixo",
-  "Accordion:1": "o bloco está no centro; a medida conta o espaço que o item fechado reserva embaixo",
   "Skeleton:0": "linhas de larguras diferentes, de propósito (70% e 90%)",
   "Skeleton:1": "as linhas de 70% do texto que carrega, alinhadas como texto — o mesmo motivo da de cima",
   "Tabs:1": "na referência as abas esticam até encher a fila; as nossas (secondary) não — é da peça, lote 2",
@@ -172,22 +175,35 @@ test("toda caixa do meio da página de componente tem a peça no centro, já viv
   const usadas = new Set<string>();
   for (const arquivo of PAGINAS) {
     await page.goto(`/apps/catalog/${arquivo}`);
+    // No site B os exemplos moram em itens que abrem e fecham, um aberto por vez: cada caixa é medida com o item dela
+    // aberto, na tela e acesa — como a pessoa a vê.
     const caixas = page.locator("[data-vivo]");
     const n = await caixas.count();
-    for (let i = 0; i < n; i++) await caixas.nth(i).scrollIntoViewIfNeeded();
-    await page.waitForFunction(() => [...document.querySelectorAll<HTMLElement>("[data-vivo]")].every((c) => c.dataset.ligada),
-      null, {timeout: 15000}).catch(() => {});
-    const medidas = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>("[data-vivo]")].map((c) => {
-      const t = (window as unknown as {tintaDe: (r: Element) => Record<string, number>}).tintaDe(c);
-      const p = c.getBoundingClientRect();
-      return {nome: c.dataset.vivo!, vazia: t.x0 === Infinity, cabe: t.y1 - t.y0 <= p.height - 2 * 16,
-        dx: Math.round((t.x0 + t.x1) / 2 - (p.left + p.width / 2)), dy: Math.round((t.y0 + t.y1) / 2 - (p.top + p.height / 2))};
-    }));
+    const medidas: {nome: string; vazia: boolean; cabe: boolean; cresceu: boolean; dx: number; dy: number}[] = [];
+    for (let i = 0; i < n; i++) {
+      const caixa = caixas.nth(i);
+      await caixa.evaluate((c) => { const d = c.closest("details"); if (d) d.open = true; });
+      await caixa.scrollIntoViewIfNeeded();
+      await page.waitForFunction((el) => !!(el as HTMLElement).dataset.ligada, await caixa.elementHandle(), {timeout: 4000}).catch(() => {});
+      await page.waitForTimeout(150);
+      // A peça que abre ao montar (o Accordion com um item aberto) cresce numa animação: medir no meio dela tira o centro.
+      await esperarTransicoes(page);
+      medidas.push(await caixa.evaluate((c) => {
+        const t = (window as unknown as {tintaDe: (r: Element) => Record<string, number>}).tintaDe(c);
+        const p = c.getBoundingClientRect();
+        // A caixa empilhada do site B (0.54.0, ADR-0089) cresce até o conteúdo: passando da altura mínima, o que sobra em
+        // cima e embaixo é o recheio, e o centro de altura já não é medida da caixa (o DataState de todos os estados, o
+        // Accordion de lado dentro dos 20rem dele).
+        const cresceu = p.height > parseFloat(getComputedStyle(c).minHeight) + 1;
+        return {nome: (c as HTMLElement).dataset.vivo!, vazia: t.x0 === Infinity, cabe: t.y1 - t.y0 <= p.height - 2 * 16, cresceu,
+          dx: Math.round((t.x0 + t.x1) / 2 - (p.left + p.width / 2)), dy: Math.round((t.y0 + t.y1) / 2 - (p.top + p.height / 2))};
+      }));
+    }
     for (const m of medidas) {
       if (m.vazia) { erros.push(`${arquivo} ${m.nome}: a caixa está vazia`); continue; }
       // A altura só conta quando a peça CABE na caixa: a mais alta começa no topo e rola, e isso é outro defeito (na tela
       // do Victor, onze rolam — levado a ele em 21/10/2026), não o centro.
-      if (Math.abs(m.dx) <= 8 && (!m.cabe || Math.abs(m.dy) <= 8)) continue;
+      if (Math.abs(m.dx) <= 8 && (!m.cabe || m.cresceu || Math.abs(m.dy) <= 8)) continue;
       if (FORA_DO_CENTRO[m.nome]) { usadas.add(m.nome); continue; }
       erros.push(`${arquivo} ${m.nome}: fora do centro (${m.dx}, ${m.dy})`);
     }

@@ -12,7 +12,7 @@
 // duas raízes, cada `AureaProvider` punha a sua região de avisos, com o mesmo nome — e o axe reprovou as 410
 // páginas (`landmark-unique`, 14/10/2026).
 import {createPortal} from "react-dom";
-import {createElement as h, Fragment, type ReactElement, type ReactNode, type SVGProps, useState, useSyncExternalStore} from "react";
+import {createElement as h, Fragment, type ReactElement, type ReactNode, type SVGProps, useEffect, useState, useSyncExternalStore} from "react";
 import {AureaProvider, Button, ColorSwatch, IconButton, Popover, ThemeToggle, type AureaThemePreference} from "../../../packages/react/dist/index.js";
 
 type Marca = {id: string; label: string; color: string};
@@ -38,6 +38,12 @@ function amostra(cor: string) {
 
 function Tema({marcas}: {marcas: Marca[]}) {
   const [marca, setMarca] = useState(() => document.documentElement.dataset.brand || "");
+  // A marca também se escolhe na folha do menu do celular (o item 10): o botão acompanha quem avisar pelo 'aurea-brand'.
+  useEffect(() => {
+    const ouve = (e: Event) => setMarca((e as CustomEvent).detail?.brand || "");
+    document.addEventListener("aurea-brand", ouve);
+    return () => document.removeEventListener("aurea-brand", ouve);
+  }, []);
   const estreito = useSyncExternalStore(assina, () => matchMedia(ESTREITO).matches);
   const atual = marcas.find((m) => m.id === marca) ?? marcas[0];
   const padrao = atual.id === "";

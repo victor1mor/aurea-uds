@@ -27,23 +27,25 @@ test("cada grupo da lateral da área tem o número e o ícone, e os itens ficam 
   for (const g of await grupos.all()) await expect(g.locator(".site-grupo-tile svg")).toHaveCount(1);
 });
 
-test("no Início a área se chama Docs, como no Início da referência, e o topo fica numa linha de 768 a 1023", async ({page}) => {
-  for (const w of [776, 800, 1023]) {
-    await page.setViewportSize({width: w, height: 663});
-    await page.goto(`${base}/apps/catalog/index.html`);
-    await expect(page.locator("header nav a", {hasText: "Docs"}).first()).toBeVisible();
-    const h = await page.locator("header").first().evaluate((e) => e.getBoundingClientRect().height);
-    expect(h, `${w}: a barra de cima`).toBe(56);
-  }
+// O SITE B (0.54.0): o topo do Início é a pílula do desenho `inicio-B` — os links do Início ("Docs", sem "Releases") e a busca
+// só na lupa —, e o rodapé é o das outras páginas.
+test("no Início o topo é a pílula do desenho B — Docs e as áreas, sem Releases, a busca só na lupa — e o rodapé é o das outras páginas", async ({page}) => {
+  await page.setViewportSize({width: 1280, height: 663});
+  await page.goto(`${base}/apps/catalog/index.html`);
+  const links = page.locator("header.topbar-pill nav a");
+  await expect(links.first()).toHaveText("Docs");
+  await expect(links.filter({hasText: "Releases"})).toHaveCount(0);
+  await expect(page.locator("header.topbar-pill [data-site-search]").first()).toHaveClass(/\bbtn-icon\b/);
+  await expect(page.locator("footer.site-rodape")).toBeVisible();
 });
 
 test("nenhuma caixa de exemplo das páginas rola por dentro (ADR-0002)", async ({page}) => {
   await page.setViewportSize({width: 1280, height: 663});
-  // A Introduction do site B (31/10/2026) não tem texto corrido nem caixa de exemplo: o palco, os cartões e as perguntas.
-  for (const p of PAGINAS.filter((x) => x !== "getting-started")) {
+  // As páginas do site B (a Introduction em 31/10/2026, as outras na 0.54.0) não têm o texto corrido (`.prose`): o palco e
+  // as seções. A caixa de exemplo se procura na página toda.
+  for (const p of PAGINAS) {
     await page.goto(`${base}/apps/catalog/${p}.html`);
-    await expect(page.locator(".prose").first(), p).toBeVisible();
-    const caixas = await page.locator('.prose .demo-panel[data-panel="preview"]').evaluateAll((ps) =>
+    const caixas = await page.locator('main .demo-panel[data-panel="preview"]').evaluateAll((ps) =>
       ps.map((e) => [e.clientHeight, e.scrollHeight, e.clientWidth, e.scrollWidth]));
     for (const [ch, sh, cw, sw] of caixas) {
       expect(sh, `${p}: altura`).toBeLessThanOrEqual(ch);

@@ -49,6 +49,22 @@ No option can be chosen.
 </RadioGroup>
 ```
 
+### Cards
+
+variant="card" makes each option a whole card; the chosen one rises with a shadow. With indicatorPlacement="none" the dot goes, and the card alone shows the choice.
+
+```tsx
+<RadioGroup label="Framework" variant="card" orientation="horizontal" defaultValue="vite">
+  <Radio value="vite" label="Vite" description="A single-page app" />
+  <Radio value="next" label="Next.js" description="Server components" />
+  <Radio value="expo" label="Expo" description="iOS and Android" />
+</RadioGroup>
+<RadioGroup label="Theme" variant="card" indicatorPlacement="none" orientation="horizontal" defaultValue="gold">
+  <Radio value="gold" label="Aurea Gold" />
+  <Radio value="ember" label="Aurea Ember" />
+</RadioGroup>
+```
+
 ### With an error
 
 The error closes the group, and every option is marked invalid.
@@ -75,4 +91,6 @@ The error closes the group, and every option is marked invalid.
 | `disabled` | `boolean` | false | No option can be chosen. |
 | `invalid` | `boolean` | false | Paints every option invalid, as the native invalid; error already does it. |
 | `required` | `boolean` | false | The asterisk on the label, and required on the options. |
+| `variant` | `"list" \| "card"` | "list" | card makes each option a whole card (the card skin: radius 22, the card padding and fill), 12 apart; the chosen card rises 4 with a large shadow and the selected-tab fill. The same name as the native RadioGroup. Still for people who ask for less motion; the focus ring goes around the whole card. |
+| `indicatorPlacement` | `"start" \| "none"` | "start" | On the web the dot sits at the start. none removes it, only with variant="card", where the card itself shows the choice; the option is still a native radio inside. |
 | `RadioGroup.Item` | `component` | — | The option: the Radio (value, label, description, disabled). |

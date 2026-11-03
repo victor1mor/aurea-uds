@@ -433,7 +433,7 @@ export function CheckboxGroup({ label, description, error, value, defaultValue, 
     });
     return _jsxs("div", { role: "group", "aria-labelledby": idRotulo, "aria-describedby": [idDescricao, idErro].filter(Boolean).join(" ") || undefined, className: cx("checkbox-group", className), ...props, children: [_jsx("span", { className: "label", id: idRotulo, children: _jsxs("span", { children: [label, required ? _jsx("span", { className: "label-required", "aria-hidden": "true", children: "*" }) : null] }) }), description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), caixas, error && _jsx("span", { className: "field-error", id: idErro, children: error })] });
 }
-export function RadioGroup({ label, labelHidden, description, error, value, defaultValue, onValueChange, name, disabled, invalid, orientation = "vertical", required, children, className, ...props }) {
+export function RadioGroup({ label, labelHidden, description, error, value, defaultValue, onValueChange, name, disabled, invalid, orientation = "vertical", required, variant = "list", indicatorPlacement = "start", children, className, ...props }) {
     const auto = React.useId();
     const [proprio, setProprio] = React.useState(defaultValue);
     const escolhido = value ?? proprio;
@@ -456,7 +456,7 @@ export function RadioGroup({ label, labelHidden, description, error, value, defa
                 onValueChange?.(v);
             } });
     });
-    return _jsxs("div", { role: "radiogroup", "aria-labelledby": idRotulo, "aria-describedby": [idDescricao, idErro].filter(Boolean).join(" ") || undefined, "aria-orientation": orientation, "aria-required": required || undefined, "aria-invalid": error || invalid ? true : undefined, className: cx("radio-group", orientation === "horizontal" && "radio-group-horizontal", labelHidden && "radio-group-bare", className), ...props, children: [_jsx("span", { className: cx("label", labelHidden && "sr-only"), id: idRotulo, children: _jsxs("span", { children: [label, required ? _jsx("span", { className: "label-required", "aria-hidden": "true", children: "*" }) : null] }) }), description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), orientation === "horizontal" ? _jsx("div", { className: "radio-group-items", children: opcoes }) : opcoes, error && _jsx("span", { className: "field-error", id: idErro, children: error })] });
+    return _jsxs("div", { role: "radiogroup", "aria-labelledby": idRotulo, "aria-describedby": [idDescricao, idErro].filter(Boolean).join(" ") || undefined, "aria-orientation": orientation, "aria-required": required || undefined, "aria-invalid": error || invalid ? true : undefined, className: cx("radio-group", orientation === "horizontal" && "radio-group-horizontal", labelHidden && "radio-group-bare", variant === "card" && indicatorPlacement === "none" && "radio-group-indicator-none", className), ...props, children: [_jsx("span", { className: cx("label", labelHidden && "sr-only"), id: idRotulo, children: _jsxs("span", { children: [label, required ? _jsx("span", { className: "label-required", "aria-hidden": "true", children: "*" }) : null] }) }), description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), variant === "card" ? _jsx("div", { className: "radio-group-cards", children: opcoes }) : orientation === "horizontal" ? _jsx("div", { className: "radio-group-items", children: opcoes }) : opcoes, error && _jsx("span", { className: "field-error", id: idErro, children: error })] });
 }
 /** A opção do grupo: o `Radio`, como o `RadioGroup.Item` do nativo. */
 RadioGroup.Item = Radio;
@@ -730,12 +730,15 @@ export function OTPField({ length, value, defaultValue, onValueChange, mask, dis
     const s = useAureaStrings();
     return _jsx(BaseOTPField.Root, { id: id, length: length, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), mask: mask, disabled: disabled, required: required, role: "group", "aria-label": label, className: cx("otp-field", className), children: Array.from({ length }, (_, i) => _jsxs(React.Fragment, { children: [_jsx(BaseOTPField.Input, { render: _jsx("input", { "aria-label": `${s.otpDigit} ${i + 1}` }), className: cx("input otp-slot", variant === "secondary" && "input-secondary") }), groupSize && groupSize > 0 && (i + 1) % groupSize === 0 && i < length - 1 ? _jsx(BaseOTPField.Separator, { className: "otp-separator" }) : null] }, i)) });
 }
-export function SegmentedControl({ items, value, onChange, label, fullWidth, size = "md", selectedStyle }) {
+// O SITE B (aprovado pela bancada em 01/11/2026, os itens 3 e 8): `items[].icon` (o escolhido troca sozinho para a forma
+// cheia), `size="2xl"` (segmento de 48), `wrap` (quebra linha, o trilho com canto 22) e `orientation="vertical"` (em pé).
+export function SegmentedControl({ items, value, onChange, label, fullWidth, size = "md", selectedStyle, wrap, orientation = "horizontal" }) {
     const s = useAureaStrings();
-    const classe = cx("segmented", fullWidth && "segmented-full", size === "sm" && "segmented-sm", size === "lg" && "segmented-lg", size === "xl" && "segmented-xl");
+    const classe = cx("segmented", fullWidth && "segmented-full", size === "sm" && "segmented-sm", size === "lg" && "segmented-lg", size === "xl" && "segmented-xl", size === "2xl" && "segmented-2xl", wrap && orientation !== "vertical" && "segmented-wrap", orientation === "vertical" && "segmented-vertical");
+    const miolo = (i) => i.icon ? _jsxs(_Fragment, { children: [_jsx(Icon, { name: i.icon, weight: i.value === value ? "fill" : "regular" }), i.label] }) : i.label;
     if (items.length > 0 && items.every(i => i.href != null))
-        return _jsx("nav", { className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, children: items.map(i => _jsx("a", { href: i.href, className: i.value === value ? "active" : undefined, "aria-current": i.value === value ? "page" : undefined, children: i.label }, i.value)) });
-    return _jsx(BaseRadioGroup, { className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, value: value, onValueChange: v => onChange?.(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: i.label }, i.value)) });
+        return _jsx("nav", { className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, children: items.map(i => _jsx("a", { href: i.href, className: i.value === value ? "active" : undefined, "aria-current": i.value === value ? "page" : undefined, children: miolo(i) }, i.value)) });
+    return _jsx(BaseRadioGroup, { className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, "aria-orientation": orientation === "vertical" ? "vertical" : undefined, value: value, onValueChange: v => onChange?.(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: miolo(i) }, i.value)) });
 }
 const ehAgrupado = (items) => items != null && items.length > 0 && typeof items[0] === "object" && items[0] != null && "items" in items[0];
 // UM renderizador e UMA lista para os dois combobox: duas cópias da mesma árvore é como a

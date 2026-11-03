@@ -6,8 +6,8 @@
     "modulos": 40,
     "componentes": 145,
     "hooks": 10,
-    "aliasesLiterais": 118,
-    "propsDistintas": 398
+    "aliasesLiterais": 119,
+    "propsDistintas": 407
   },
   "aliases": {
     "ButtonVariant": {
@@ -2030,14 +2030,15 @@
     },
     "SegmentedControlSelectedStyle": {
       "module": "inputs-client",
-      "raw": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\"",
+      "raw": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\" | \"emphasis\"",
       "union": [
         "current",
         "neutral",
         "contrast",
         "brand",
         "ring",
-        "dot"
+        "dot",
+        "emphasis"
       ]
     },
     "SeparatorSpacing": {
@@ -2234,10 +2235,11 @@
     },
     "KPIVariant": {
       "module": "markup",
-      "raw": "\"card\" | \"plain\"",
+      "raw": "\"card\" | \"plain\" | \"brand\"",
       "union": [
         "card",
-        "plain"
+        "plain",
+        "brand"
       ]
     },
     "TimelineVariant": {
@@ -2470,6 +2472,15 @@
         "active",
         "done",
         "error"
+      ]
+    },
+    "StepperVariant": {
+      "module": "navigation-client",
+      "raw": "\"default\" | \"path\" | \"bar\"",
+      "union": [
+        "default",
+        "path",
+        "bar"
       ]
     },
     "TabsOrientation": {
@@ -3306,11 +3317,12 @@
             {
               "name": "size",
               "optional": true,
-              "type": "Responsive<Extract<ComponentSize, \"sm\" | \"md\" | \"lg\">>",
+              "type": "Responsive<Extract<ComponentSize, \"sm\" | \"md\" | \"lg\" | \"xl\">>",
               "values": [
                 "sm",
                 "md",
-                "lg"
+                "lg",
+                "xl"
               ]
             },
             {
@@ -3349,6 +3361,12 @@
                 "contrast",
                 "brand"
               ]
+            },
+            {
+              "name": "area",
+              "optional": true,
+              "type": "boolean | \"pill\"",
+              "values": null
             },
             {
               "name": "children",
@@ -3429,11 +3447,12 @@
             {
               "name": "size",
               "optional": true,
-              "type": "Extract<ComponentSize, \"sm\" | \"md\" | \"lg\">",
+              "type": "Extract<ComponentSize, \"sm\" | \"md\" | \"lg\" | \"xl\">",
               "values": [
                 "sm",
                 "md",
-                "lg"
+                "lg",
+                "xl"
               ]
             },
             {
@@ -3487,6 +3506,15 @@
               "values": [
                 "neutral",
                 "contrast",
+                "brand"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "\"default\" | \"brand\"",
+              "values": [
+                "default",
                 "brand"
               ]
             }
@@ -4418,10 +4446,25 @@
               "values": null
             },
             {
+              "name": "filename",
+              "optional": true,
+              "type": "React.ReactNode",
+              "values": null
+            },
+            {
               "name": "preview",
               "optional": true,
               "type": "React.ReactNode",
               "values": null
+            },
+            {
+              "name": "previewLayout",
+              "optional": true,
+              "type": "\"tabs\" | \"stacked\"",
+              "values": [
+                "tabs",
+                "stacked"
+              ]
             },
             {
               "name": "lineNumbers",
@@ -4733,7 +4776,22 @@
               "values": null
             },
             {
+              "name": "variant",
+              "optional": true,
+              "type": "\"default\" | \"rows\"",
+              "values": [
+                "default",
+                "rows"
+              ]
+            },
+            {
               "name": "differencesOnly",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "striped",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -5023,6 +5081,15 @@
               ]
             },
             {
+              "name": "orientation",
+              "optional": true,
+              "type": "\"vertical\" | \"horizontal\"",
+              "values": [
+                "vertical",
+                "horizontal"
+              ]
+            },
+            {
               "name": "indicator",
               "optional": true,
               "type": "\"chevron\" | \"plus\"",
@@ -5193,6 +5260,15 @@
               "optional": true,
               "type": "() => void",
               "values": null
+            },
+            {
+              "name": "appearance",
+              "optional": true,
+              "type": "\"card\" | \"soft\"",
+              "values": [
+                "card",
+                "soft"
+              ]
             },
             {
               "name": "action",
@@ -7079,6 +7155,24 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "\"list\" | \"card\"",
+              "values": [
+                "list",
+                "card"
+              ]
+            },
+            {
+              "name": "indicatorPlacement",
+              "optional": true,
+              "type": "\"start\" | \"none\"",
+              "values": [
+                "start",
+                "none"
+              ]
             }
           ]
         },
@@ -7119,7 +7213,7 @@
             {
               "name": "items",
               "optional": false,
-              "type": "Array<{ value: string; label: ReactNode; href?: string; }>",
+              "type": "Array<{ value: string; label: ReactNode; href?: string; icon?: IconName; }>",
               "values": null
             },
             {
@@ -7149,12 +7243,13 @@
             {
               "name": "size",
               "optional": true,
-              "type": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
+              "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\"",
               "values": [
                 "sm",
                 "md",
                 "lg",
-                "xl"
+                "xl",
+                "2xl"
               ]
             },
             {
@@ -7167,7 +7262,23 @@
                 "contrast",
                 "brand",
                 "ring",
-                "dot"
+                "dot",
+                "emphasis"
+              ]
+            },
+            {
+              "name": "wrap",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "\"horizontal\" | \"vertical\"",
+              "values": [
+                "horizontal",
+                "vertical"
               ]
             }
           ]
@@ -8070,6 +8181,23 @@
                 "md",
                 "lg"
               ]
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "\"default\" | \"pill\"",
+              "values": [
+                "default",
+                "pill"
+              ]
+            },
+            {
+              "name": "tone",
+              "optional": true,
+              "type": "\"success\"",
+              "values": [
+                "success"
+              ]
             }
           ]
         },
@@ -8827,8 +8955,21 @@
               "type": "KPIVariant",
               "values": [
                 "card",
-                "plain"
+                "plain",
+                "brand"
               ]
+            },
+            {
+              "name": "bars",
+              "optional": true,
+              "type": "KPIBar[]",
+              "values": null
+            },
+            {
+              "name": "defaultBar",
+              "optional": true,
+              "type": "number",
+              "values": null
             }
           ]
         },
@@ -10018,6 +10159,33 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "\"md\" | \"lg\"",
+              "values": [
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "filters",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "preview",
+              "optional": true,
+              "type": "(item: CommandItem) => ReactNode",
+              "values": null
+            },
+            {
+              "name": "footer",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
             }
           ]
         },
@@ -10073,6 +10241,21 @@
               "name": "items",
               "optional": false,
               "type": "NavListItem[]",
+              "values": null
+            },
+            {
+              "name": "size",
+              "optional": true,
+              "type": "\"md\" | \"lg\"",
+              "values": [
+                "md",
+                "lg"
+              ]
+            },
+            {
+              "name": "currentLabel",
+              "optional": true,
+              "type": "ReactNode",
               "values": null
             }
           ]
@@ -10265,6 +10448,28 @@
               "name": "label",
               "optional": true,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "StepperVariant",
+              "values": [
+                "default",
+                "path",
+                "bar"
+              ]
+            },
+            {
+              "name": "startContent",
+              "optional": true,
+              "type": "ReactNode",
+              "values": null
+            },
+            {
+              "name": "endContent",
+              "optional": true,
+              "type": "ReactNode",
               "values": null
             },
             {

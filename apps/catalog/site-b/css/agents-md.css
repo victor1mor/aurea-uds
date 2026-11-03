@@ -1,0 +1,32 @@
+/* A PÁGINA "AGENTS.md" NO DESENHO B (02/11/2026, o grupo 5). */
+
+/* As duas perguntas: o rótulo em mono e a chave de segmentos. */
+.agents-pergunta { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-3); padding:calc(var(--space-4) + var(--space-05)); }
+.agents-pergunta .g5-segmentos { flex-wrap:wrap; }
+[data-agents-comando] > .g5-codigo { margin-block-start:var(--space-3); }
+
+/* A pasta antes e depois: o palco, as linhas de canto 16 (--radius-lg) em mono; a nova no amarelo misturado. */
+.agents-pasta { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:calc(var(--space-3) + var(--space-05)); margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.agents-pasta > div { display:flex; flex-direction:column; gap:var(--space-2); padding:calc(var(--space-4) + var(--space-05)); border-radius:var(--radius-card); background:var(--site-palco); }
+.agents-pasta ul { display:flex; flex-direction:column; gap:var(--space-2); margin:0; padding:0; list-style:none; }
+.agents-pasta li { display:flex; flex-wrap:wrap; align-items:center; gap:calc(var(--space-2) + var(--space-05)); padding:calc(var(--space-2) + var(--space-05)) calc(var(--space-3) + var(--space-05));
+  border-radius:var(--radius-lg); background:var(--card); }
+.agents-pasta li code { font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-medium); }
+.agents-pasta li small { margin-inline-start:auto; font-size:var(--text-xs); font-weight:var(--weight-semibold); color:var(--muted-foreground); }
+.agents-pasta li.agents-pasta-nova { background:color-mix(in oklab, var(--primary) 24%, var(--card)); }
+.agents-pasta li.agents-pasta-nova small { color:var(--foreground); font-weight:var(--weight-semibold); }
+
+/* O que o arquivo traz: as quatro linhas numeradas em cartões, o número num círculo de 32. */
+.agents-contem { counter-reset:agents; display:flex; flex-direction:column; gap:var(--space-2); margin:calc(var(--space-4) + var(--space-05)) 0 0; padding:0; list-style:none; }
+.agents-contem > li { counter-increment:agents; display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) var(--space-4); border-radius:var(--radius-card);
+  background:var(--card); font-size:var(--text-base); line-height:var(--leading-normal); }
+.agents-contem > li::before { content:counter(agents); flex:none; display:grid; place-items:center; inline-size:var(--space-8); block-size:var(--space-8);
+  border-radius:var(--radius-full); background:var(--fill-2); font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+.agents-contem a { font-weight:var(--weight-semibold); }
+.g5 .agents-comeco.g5-codigo { margin-block-start:var(--space-3); }
+.agents-comeco pre { max-block-size:calc(var(--space-12) * 5 + var(--space-5)); overflow:auto; color:var(--muted-foreground); }
+.agents-quando { align-self:flex-start; }
+
+@media (max-width:900px) {
+  .agents-pasta { grid-template-columns:minmax(0, 1fr); }
+}

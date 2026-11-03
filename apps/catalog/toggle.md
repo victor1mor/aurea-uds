@@ -45,12 +45,13 @@ The default has the neutral fill; ghost has none, for a quiet row. Pressed looks
 
 ### Sizes
 
-The button scale — sm, md and lg — so a toggle sits level with the controls beside it. md is the default.
+The button scale — sm, md, lg and xl — so a toggle sits level with the controls beside it. md is the default; xl is the 50 button.
 
 ```tsx
 <Toggle size="sm">Small</Toggle>
 <Toggle size="md">Medium</Toggle>
 <Toggle size="lg">Large</Toggle>
+<Toggle size="xl">Extra large</Toggle>
 ```
 
 ### The colour of the on state
@@ -63,6 +64,18 @@ pressedStyle (ADR-0084): brand — the yellow of the primary button, the default
 <Toggle icon="text-b" label="Bold" defaultPressed pressedStyle="contrast" />
 ```
 
+### Area
+
+area makes the toggle an area around a block — a thumbnail, an icon with its name. With variant="ghost" it has no fill (the yellow at 18% on hover, 42% when on); with the default, the grey fill and, when on, the solid yellow. area="pill" keeps it as wide as its content.
+
+```tsx
+<Toggle area variant="ghost" defaultPressed label="Header">
+  <img src="/thumbnails/header.png" alt="" />
+</Toggle>
+<Toggle area label="Light"><Icon name="sun" /> Light</Toggle>
+<Toggle area="pill" variant="ghost">Sidebar</Toggle>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -71,7 +84,7 @@ pressedStyle (ADR-0084): brand — the yellow of the primary button, the default
 | `onPressedChange` | `(pressed: boolean) => void` | none | Fires with the new state. Pair with `pressed` for the controlled form. |
 | `icon` | `IconName` | none | Glyph shown before the label, or alone when there are no children. |
 | `label` | `string` | none | REQUIRED and non-blank when there is no visible text: an icon-only toggle with no name is unusable by screen reader. Since 2026-08-12 the ToggleProps union rejects omitted, boolean and nullish children unless label is present. Blank labels, empty strings, arrays, Fragments and decorative-only elements need a runtime guard because TypeScript/ReactNode cannot encode whether arbitrary content will render text; they emit console.error too. A custom child that receives apparently visible children but discards them remains the consumer's responsibility (AUD-0003). |
-| `size` | `"sm" \| "md" \| "lg"` | "md" | Matches the button scale, so a toggle sits level with the controls beside it. |
+| `size` | `"sm" \| "md" \| "lg" \| "xl"` | "md" | Matches the button scale, so a toggle sits level with the controls beside it. xl is the 50 button, the Button's xl. |
 | `disabled` | `boolean` | false | Ignores interaction and dims the control. |
 | `children` | `ToggleChildren \| never` | — | What the toggle shows. With children you may omit label; with no children label is REQUIRED, because a bare icon with no accessible name is a control nobody can announce. The type enforces it — the form without a name does not compile. |
 | `id` | `string` | — | Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one. |
@@ -79,3 +92,4 @@ pressedStyle (ADR-0084): brand — the yellow of the primary button, the default
 | `value` | `string` | — | What identifies this toggle inside a ToggleGroup — without it the group cannot tell which button changed. Standalone, it makes no difference. |
 | `variant` | `default \| ghost` | default | default has the neutral fill; ghost has none. Pressed uses Aurea's selected language on both. |
 | `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. |
+| `area` | `boolean \| "pill"` | — | The toggle as an AREA around a block (a page thumbnail, an icon with its name): 4 padding, the card's concentric radius, the content as it is. With variant="ghost", no fill: the yellow at 18% on hover, 42% when on. With the default variant, --fill-2 (--fill-3 on hover) and, when on, the solid yellow with the primary button's letter. pill keeps it as wide as its content, as a capsule. |

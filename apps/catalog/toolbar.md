@@ -87,6 +87,20 @@ pressedStyle on the toolbar colours every pressed button inside (ADR-0084): bran
 </Toolbar>
 ```
 
+### Selection bar
+
+tone="brand" is the yellow bar of a bulk selection: the count at one end, the actions at the other, the buttons white with the ink.
+
+```tsx
+<Toolbar tone="brand" label="Selection">
+  <span>3 members selected</span>
+  <ToolbarGroup>
+    <ToolbarButton>Clear</ToolbarButton>
+    <ToolbarButton>Remove</ToolbarButton>
+  </ToolbarGroup>
+</Toolbar>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -96,3 +110,4 @@ pressedStyle on the toolbar colours every pressed button inside (ADR-0084): bran
 | `children` | `ReactNode` | — | ToolbarButton, ToolbarGroup and ToolbarSeparator. |
 | `className` | `string` | — | Extra classes on the surface. |
 | `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. For every pressed ToolbarButton inside; each may set its own. |
+| `tone` | `"default" \| "brand"` | "default" | brand is the yellow selection bar ("3 selected", Clear, Remove): the brand yellow, 52 tall, the text in the ink at 600, the ends apart, and the buttons inside white with the ink. |

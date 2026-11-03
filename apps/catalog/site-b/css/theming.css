@@ -1,0 +1,76 @@
+/* A THEMING NO DESENHO B (02/11/2026): o arranjo da página, com o prefixo "th-". A cor de cada marca vem do arquivo de
+   tokens nas variáveis --th-claro/--th-escuro (o primário) e --th-tinta-claro/--th-tinta-escuro (a letra sobre ele); o tema
+   da página escolhe qual vale. */
+.th-cor { --th-cor:var(--th-escuro); --th-tinta:var(--th-tinta-escuro); }
+[data-theme="light"] .th-cor { --th-cor:var(--th-claro); --th-tinta:var(--th-tinta-claro); }
+.th-so-claro { display:none; }
+[data-theme="light"] .th-so-claro { display:inline; }
+[data-theme="light"] .th-so-escuro { display:none; }
+.th-ponto { flex:none; inline-size:calc(var(--space-4) + var(--space-05)); block-size:calc(var(--space-4) + var(--space-05)); border-radius:var(--radius-full); background:var(--th-cor); }
+.th-capsula-texto { padding-inline:var(--space-2); }
+
+/* O LABORATÓRIO: os controles num cartão e a prévia ao lado, fixa ao rolar. */
+.th-lab { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:calc(var(--space-3) + var(--space-05)); align-items:start;
+  margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.th-controles { display:flex; flex-direction:column; gap:var(--space-4); padding:var(--space-5); }
+.th-k { margin:0 0 var(--space-2); font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); letter-spacing:var(--tracking-wide);
+  color:var(--muted-foreground); }
+.th-k b { color:var(--foreground); }
+.th-marcas-botoes { display:flex; flex-wrap:wrap; gap:calc(var(--space-1) + var(--space-05)); }
+.th-marcas-botoes > .toggle { gap:var(--space-2); padding-inline:calc(var(--space-1) + var(--space-05)) var(--space-3); }
+.th-linha { padding-inline-start:var(--space-4); }
+.th-linha code { white-space:normal; overflow-wrap:anywhere; }
+.th-previa { position:sticky; inset-block-start:calc(var(--topbar-height) + var(--space-8)); padding:calc(var(--space-4) + var(--space-05)); border-radius:var(--radius-card);
+  background:var(--background); color:var(--foreground); transition:background-color var(--duration-slow); }
+.th-previa-barra { display:flex; align-items:center; justify-content:space-between; gap:var(--space-2); margin-block-end:var(--space-3);
+  font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); }
+.th-previa-cartao { display:flex; flex-direction:column; gap:var(--space-3); }
+.th-previa-cartao h4 { margin:0; font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); }
+.th-previa-cartao p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--leading-normal); }
+.th-previa-cartao .switch { justify-content:space-between; }
+.th-previa-botoes { display:flex; flex-wrap:wrap; gap:var(--space-2); }
+.th-nota { margin:calc(var(--space-2) + var(--space-05)) var(--space-05) 0; font-size:var(--text-xs); line-height:var(--leading-normal); }
+.th-nota[hidden] { display:none; }
+@media (prefers-reduced-motion:reduce) { .th-previa { transition:none; } }
+
+/* OS SUFIXOS em três colunas. */
+.th-sufixos { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:calc(var(--space-2) + var(--space-05)); margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.th-sufixo { display:flex; flex-direction:column; gap:calc(var(--space-1) + var(--space-05)); padding:var(--space-4); }
+.th-sufixo code { font-family:var(--font-code); font-size:var(--text-base); font-weight:var(--weight-semibold); color:var(--primary-emphasis); }
+.th-sufixo b { font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); }
+.th-sufixo span { color:var(--muted-foreground); font-family:var(--font-code); font-size:var(--text-sm); overflow-wrap:anywhere; }
+
+/* AS MARCAS: o cartão de escolha em quatro colunas; a amostra de 64 (--space-16), canto 16 (--radius-lg). */
+.th-marcas { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.th-marcas > .radio-group-cards { grid-template-columns:repeat(4, minmax(0, 1fr)); gap:calc(var(--space-2) + var(--space-05)); }
+.th-marcas > .radio-group-cards > .radio { padding:var(--space-3); }
+.th-marca { display:flex; flex-direction:column; gap:calc(var(--space-2) + var(--space-05)); min-inline-size:0; inline-size:100%; }
+.th-amostra { display:flex; align-items:flex-end; justify-content:space-between; gap:var(--space-2); block-size:var(--space-16); padding:var(--space-2) var(--space-3);
+  border-radius:var(--radius-lg); background:var(--th-cor); color:var(--th-tinta); font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); }
+.th-hexa { font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); }
+.th-amostra::before { content:"Aa"; }
+.th-hexa::before { content:attr(data-escuro); }
+[data-theme="light"] .th-amostra:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) .th-hexa::before { content:attr(data-claro); }
+.th-marca b { padding-inline:var(--space-1); font-family:var(--font-heading); font-size:var(--text-sm); font-weight:var(--weight-bold); }
+.th-marca code { padding:0 var(--space-1) var(--space-1); color:var(--muted-foreground); font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); overflow-wrap:anywhere; }
+
+/* O TEMA NUM PEDAÇO: o claro com o escuro dentro, os dois de verdade. */
+.th-faixa { margin-block-start:calc(var(--space-4) + var(--space-05)); padding:calc(var(--space-4) + var(--space-05)); border-radius:var(--radius-card);
+  background:var(--background); color:var(--foreground); }
+.th-faixa-k { font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); color:var(--muted-foreground); }
+.th-faixa-dentro { margin-block-start:calc(var(--space-2) + var(--space-05)); padding:var(--space-5); border-radius:var(--radius-lg); background:var(--background); color:var(--foreground); }
+.th-faixa-linha { display:flex; gap:calc(var(--space-2) + var(--space-05)); margin-block-start:var(--space-3); }
+.th-faixa-linha span { flex:1; block-size:var(--target-min); border-radius:calc(var(--radius-lg) - var(--space-05)); box-shadow:var(--shadow-sm); }
+
+@media (max-width:1240px) {
+  .th-marcas > .radio-group-cards { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width:899px) {
+  .th-lab, .th-sufixos { grid-template-columns:minmax(0, 1fr); }
+  .th-previa { position:static; }
+  .th-marcas > .radio-group-cards { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+}
+
+/* Texto a 200% (a CI, 03/11/2026: WebKit +7): a coluna do meio fica com uns 150, e a chave de densidade quebra em duas linhas
+   em vez de empurrar a página. No tamanho normal ela cabe numa linha, e nada muda. */
+.th-controles .segmented { flex-wrap:wrap; max-inline-size:100%; }

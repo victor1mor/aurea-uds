@@ -1,0 +1,47 @@
+/* A QUICK START NO DESENHO B (02/11/2026). As peças aprovadas (o cartão de escolha, a barra em partes, o "Mark as done", o
+   código com o nome do arquivo) são as da Aurea; aqui fica só o arranjo da página, com o prefixo "qs-". */
+
+/* A peça do comando quebra a linha, como no desenho (cápsula de até 232: --space-24 * 2 + --space-10). */
+.qs-peca-comando { max-inline-size:calc(var(--space-24) * 2 + var(--space-10)); padding-inline-end:var(--space-4); }
+.qs-peca-comando .gs-mono { white-space:normal; overflow-wrap:anywhere; }
+
+/* A faixa do alvo e do gerenciador, no fundo do palco (canto 22, recheio 12). */
+.qs-trilho { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); margin-block-start:var(--space-2); padding:var(--space-3);
+  border-radius:var(--radius-card); background:var(--site-palco); }
+/* Os alvos e o gerenciador na MESMA linha, como o desenho a 1280 (o texto dos cartões desce a linha). */
+.qs-alvos { flex:1 1 0; min-inline-size:0; }
+.qs-trilho { flex-wrap:nowrap; }
+.qs-gerenciador { flex:none; }
+.qs-alvos .radio { align-items:center; }
+.qs-alvo { display:flex; align-items:center; gap:calc(var(--space-3) + var(--space-05)); font-weight:var(--weight-regular); }
+.qs-alvo-tile { inline-size:var(--space-12); block-size:var(--space-12); }
+.qs-alvo-texto { display:flex; flex-direction:column; min-inline-size:0; }
+.qs-alvo-texto b { font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); color:var(--foreground); }
+.qs-alvo-texto span { color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--leading-normal); }
+.qs-gerenciador { display:flex; flex-direction:column; gap:calc(var(--space-1) + var(--space-05)); padding-inline:calc(var(--space-1) + var(--space-05)); }
+
+/* "Your setup": a barra em partes (D-1) numa faixa em cápsula, na cor do cartão. */
+.qs-setup { margin-block-start:calc(var(--space-3) + var(--space-05)); padding:var(--space-3) var(--space-4); border-radius:var(--radius-full); background:var(--card); }
+.qs-setup[hidden], .qs-so[hidden], [data-qs-plataforma][hidden] { display:none; }
+
+/* O "Mark as done" vai na ponta da linha do título. */
+.qs-feito { flex:none; }
+
+/* A ordem dos estilos: o número num círculo de 40 (--space-10), o caminho em código e a frase. */
+.qs-ordem-item { display:flex; align-items:center; gap:calc(var(--space-3) + var(--space-05)); padding:var(--space-4) calc(var(--space-4) + var(--space-05)); }
+.qs-ordem-n { flex:none; display:grid; place-items:center; inline-size:var(--space-10); block-size:var(--space-10); border-radius:var(--radius-full);
+  background:var(--fill-2); font-family:var(--font-code); font-size:var(--text-base); font-weight:var(--weight-semibold); }
+.qs-ordem-item code { font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-medium); overflow-wrap:anywhere; }
+.qs-ordem-item p { margin:var(--space-05) 0 0; color:var(--muted-foreground); font-size:var(--text-sm); }
+
+/* Os dois atributos do html, com os valores em selo. */
+.qs-atributo { padding:calc(var(--space-4) + var(--space-05)); }
+.qs-atributo > code { font-family:var(--font-code); font-size:var(--text-base); font-weight:var(--weight-semibold); }
+.qs-valores { display:flex; flex-wrap:wrap; gap:calc(var(--space-1) + var(--space-05)); margin-block-start:var(--space-3); }
+.qs-valor { font-family:var(--font-code); }
+
+@media (max-width:899px) {
+  .qs-trilho { flex-direction:column; align-items:stretch; }
+  .qs-alvos { flex-basis:auto; }
+  .qs-alvos > .radio-group-cards { grid-auto-flow:row; }
+}

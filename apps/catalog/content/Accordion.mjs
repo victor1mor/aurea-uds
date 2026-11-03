@@ -57,5 +57,14 @@ export default {
       render: () => h("div", {style: {...wide, display: "grid", gap: "var(--space-2)"}}, ...ITENS.map((i) =>
         h(Accordion, {key: i.id, variant: "surface", indicator: "plus", size: "lg", defaultValue: i.id === "ship" ? ["ship"] : undefined, items: [i]}))),
     },
+    {
+      title: "On its side",
+      description: "orientation=\"horizontal\" stands the items side by side, each a card; a closed one is 104 wide and the " +
+        "open one takes the rest. One is always open. The height is the parent's; under a 47.5rem container it becomes " +
+        "the upright accordion.",
+      code: '<div style={{blockSize: "20rem"}}>\n  <Accordion orientation="horizontal" defaultValue={["ship"]} items={items} />\n</div>',
+      render: () => h("div", {style: {inlineSize: "100%", blockSize: "20rem"}},
+        h(Accordion, {orientation: "horizontal", defaultValue: ["ship"], items: ITENS})),
+    },
   ],
 };

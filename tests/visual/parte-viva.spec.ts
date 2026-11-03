@@ -16,10 +16,17 @@ const PAGINAS = [...FICHAS.filter((d) => d.platforms?.web !== "n-a").map((d) => 
 const PAGINAS_DO_NATIVO = readdirSync(join(process.cwd(), "apps/catalog")).filter((f) => /^native-.+\.html$/.test(f)).sort();
 
 // Rola por cada caixa (ela acende quando chega perto da tela) e espera todas terem resposta.
+// No site B os exemplos moram em itens que abrem e fecham, um aberto por vez: cada caixa tem o item dela aberto, é levada
+// à tela e acende — e continua acesa quando o próximo item abre e fecha este.
 async function acenderTudo(page: Page) {
   const caixas = page.locator("[data-vivo]");
   const n = await caixas.count();
-  for (let i = 0; i < n; i++) await caixas.nth(i).scrollIntoViewIfNeeded();
+  for (let i = 0; i < n; i++) {
+    const caixa = caixas.nth(i);
+    await caixa.evaluate((c) => { const d = c.closest("details"); if (d) d.open = true; });
+    await caixa.scrollIntoViewIfNeeded();
+    await page.waitForFunction((el) => !!(el as HTMLElement).dataset.ligada, await caixa.elementHandle(), {timeout: 4000}).catch(() => {});
+  }
   await page.waitForFunction(() => [...document.querySelectorAll<HTMLElement>("[data-vivo]")].every((c) => c.dataset.ligada),
     null, {timeout: 15000}).catch(() => {});
 }
@@ -38,7 +45,10 @@ test("toda caixa de prévia de toda página de componente, de padrão, de bloco 
     await acenderTudo(page);
     const r = await page.evaluate(() => {
       const caixas = [...document.querySelectorAll<HTMLElement>(".demo-panel[data-panel='preview']")]
-        .filter((c) => !c.querySelector("iframe.demo-frame"));
+        .filter((c) => !c.querySelector("iframe.demo-frame"))
+        // A caixa que mora DENTRO de outra é o exemplo dela, não do site: a página do CodeBlock mostra o `CodeBlock` com
+        // prévia (as abas e a caixa empilhada da 0.54.0), e quem acende é a caixa de fora.
+        .filter((c) => !c.parentElement?.closest("[data-vivo]"));
       return {
         semMarca: caixas.filter((c) => !c.dataset.vivo).length,
         apagadas: caixas.filter((c) => c.dataset.vivo && c.dataset.ligada !== "sim").map((c) => `${c.dataset.vivo}=${c.dataset.ligada ?? "nada"}`),

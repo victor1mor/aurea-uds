@@ -21,14 +21,20 @@ import { SearchField } from "./inputs.js";
 // mudou foi a ORDEM documentada, que colocava overlays no "resto" sem motivo medido.
 import { Tooltip } from "./overlays.js";
 import { Avatar } from "./identity-client.js";
-export function Stepper({ items, label, className }) {
+export function Stepper({ items, label, variant = "default", startContent, endContent, className }) {
     const s = useAureaStrings();
-    return _jsx("div", { role: "list", "aria-label": label ?? s.stepperLabel, className: cx("stepper", className), children: items.map((it, n) => {
-            const st = it.state ?? "default";
-            const marca = st === "done" ? _jsx(Icon, { name: "check" }) : st === "error" ? _jsx(Icon, { name: "x-circle" }) : n + 1;
-            const miolo = _jsxs(_Fragment, { children: [_jsx("span", { className: "step-dot", children: marca }), _jsx("strong", { children: it.label }), it.optional && _jsx("small", { className: "step-optional", children: it.optional })] });
-            return _jsx("div", { role: "listitem", className: cx("step", st !== "default" && `step-${st}`), "aria-current": st === "active" ? "step" : undefined, children: it.onClick ? _jsx("button", { type: "button", className: "step-trigger", onClick: it.onClick, children: miolo }) : miolo }, n);
-        }) });
+    const comPontas = variant === "path";
+    const lista = _jsxs("div", { role: "list", "aria-label": label ?? s.stepperLabel, className: cx("stepper", variant === "default" && className), style: comPontas ? { "--stepper-cols": items.length + (startContent != null ? 1 : 0) + (endContent != null ? 1 : 0) } : undefined, children: [comPontas && startContent != null && _jsx("div", { role: "listitem", className: "step-end step-end-start", children: startContent }), items.map((it, n) => {
+                const st = it.state ?? "default";
+                const marca = st === "done" && variant !== "path" ? _jsx(Icon, { name: "check" }) : st === "error" ? _jsx(Icon, { name: "x-circle" }) : n + 1;
+                const miolo = variant === "bar" ? _jsx("span", { className: "sr-only", children: it.label }) : _jsxs(_Fragment, { children: [_jsx("span", { className: "step-dot", children: marca }), _jsx("strong", { children: it.label }), it.optional && _jsx("small", { className: "step-optional", children: it.optional })] });
+                return _jsx("div", { role: "listitem", className: cx("step", st !== "default" && `step-${st}`), "aria-current": st === "active" ? "step" : undefined, children: it.href ? _jsx("a", { className: "step-trigger", href: it.href, onClick: it.onClick, children: miolo }) : it.onClick || variant === "bar" ? _jsx("button", { type: "button", className: "step-trigger", onClick: it.onClick, children: miolo }) : miolo }, n);
+            }), comPontas && endContent != null && _jsx("div", { role: "listitem", className: "step-end", children: endContent })] });
+    if (variant === "path")
+        return _jsx("div", { className: cx("stepper-path", className), children: lista });
+    if (variant === "bar")
+        return _jsxs("div", { className: cx("stepper-bar", className), children: [startContent != null && _jsx("span", { className: "stepper-bar-label", children: startContent }), lista, endContent != null && _jsx("span", { className: "stepper-bar-count", role: "status", children: endContent })] });
+    return lista;
 }
 export function Breadcrumb({ items, label }) { const s = useAureaStrings(); return _jsx("nav", { className: "breadcrumb", "aria-label": label ?? s.breadcrumbLabel, children: items.map((i, n) => _jsxs(React.Fragment, { children: [n > 0 && _jsx(Icon, { name: "caret-right", size: "sm" }), " ", i.render ? fundirRender(i.render, { children: i.label }, "a") : i.href ? _jsx("a", { href: i.href, children: i.label }) : _jsx("strong", { "aria-current": "page", children: i.label })] }, n)) }); }
 export function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus = true, loopFocus, panel = "card", variant = "primary" }) { const s = useAureaStrings(); const ancora = useRef(null); const resolvida = useValorResponsivo(orientation, "horizontal", ancora); return _jsxs(BaseTabs.Root, { ref: ancora, value: value, onValueChange: v => onChange(String(v)), orientation: resolvida, className: "tabs-root", children: [_jsx(BaseTabs.List, { className: cx("tabs", variant === "secondary" && "tabs-secondary"), "aria-label": label ?? s.tabsLabel, activateOnFocus: activateOnFocus, loopFocus: loopFocus, children: tabs.map(t => _jsx(BaseTabs.Tab, { value: t.id, className: "tab", children: t.label }, t.id)) }), tabs.map(t => _jsx(BaseTabs.Panel, { value: t.id, className: panel === "plain" ? "tabs-panel" : "card card-inset", tabIndex: 0, children: t.content }, t.id))] }); }
@@ -483,17 +489,32 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
                     : _jsx("button", { type: "button", className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, it.id);
         }) });
 }
-export function NavList({ items, className, ...props }) {
-    return _jsx("ul", { className: cx("nav-list", className), ...props, children: items.map(it => {
-            const miolo = _jsxs(_Fragment, { children: [it.avatar ? _jsx(Avatar, { src: it.avatar.src, fallback: it.avatar.fallback }) : it.icon && _jsx(Icon, { name: it.icon }), _jsxs("span", { className: "nav-list-text", children: [_jsx("span", { className: "nav-list-label", children: it.label }), it.description != null && _jsx("span", { className: "nav-list-description", children: it.description })] }), it.indicators && it.indicators.length > 0 && _jsx("span", { className: "nav-list-indicators", children: it.indicators.map(x => _jsxs("span", { children: [_jsx(Icon, { name: x.icon, size: "sm" }), _jsx("span", { className: "sr-only", children: x.label })] }, x.label)) }), it.value != null && _jsx("span", { className: "nav-list-value", children: it.value }), (it.href || it.render) && _jsx(Icon, { name: "caret-right", size: "sm", className: "nav-list-chevron" })] });
+// `size="lg"` (o site B — o menu do celular, aprovado pela bancada em 01/11/2026, o item 10): a linha de 56 em cápsula (o
+// ícone de 40 + 8 em cima e embaixo), o ícone num círculo de 40 tingido (`tone`), a letra 18 seminegrito. `current` marca a
+// linha atual (o fundo `--fill-2`), e `currentLabel` é o selo que ela leva no lugar da seta ("You are here"). Sem `lg`, a
+// lista de sempre; `current` vale nos dois tamanhos.
+export function NavList({ items, size = "md", currentLabel, className, ...props }) {
+    const grande = size === "lg";
+    return _jsx("ul", { className: cx("nav-list", grande && "nav-list-lg", className), ...props, children: items.map(it => {
+            const icone = it.icon && (grande ? _jsx("span", { className: "nav-list-tile", "data-tone": it.tone, children: _jsx(Icon, { name: it.icon }) }) : _jsx(Icon, { name: it.icon }));
+            const miolo = _jsxs(_Fragment, { children: [it.avatar ? _jsx(Avatar, { src: it.avatar.src, fallback: it.avatar.fallback }) : icone, _jsxs("span", { className: "nav-list-text", children: [_jsx("span", { className: "nav-list-label", children: it.label }), it.description != null && _jsx("span", { className: "nav-list-description", children: it.description })] }), it.indicators && it.indicators.length > 0 && _jsx("span", { className: "nav-list-indicators", children: it.indicators.map(x => _jsxs("span", { children: [_jsx(Icon, { name: x.icon, size: "sm" }), _jsx("span", { className: "sr-only", children: x.label })] }, x.label)) }), it.value != null && _jsx("span", { className: "nav-list-value", children: it.value }), it.current && currentLabel != null ? _jsx(Badge, { variant: "primary", emphasis: "solid", className: "nav-list-here", children: currentLabel })
+                        : (it.href || it.render) && _jsx(Icon, { name: "caret-right", size: "sm", className: "nav-list-chevron" })] });
+            const atual = it.current ? "page" : undefined;
             return _jsx("li", { children: it.render && !it.disabled
-                    ? fundirRender(it.render, { className: "nav-list-row", onClick: it.onClick, children: miolo }, "a")
+                    ? fundirRender(it.render, { className: "nav-list-row", onClick: it.onClick, "aria-current": atual, children: miolo }, "a")
                     : it.href && !it.disabled
-                        ? _jsx("a", { href: it.href, className: "nav-list-row", onClick: it.onClick, children: miolo })
-                        : _jsx("button", { type: "button", className: "nav-list-row", "aria-disabled": it.disabled || undefined, onClick: it.disabled ? undefined : it.onClick, children: miolo }) }, it.id);
+                        ? _jsx("a", { href: it.href, className: "nav-list-row", "aria-current": atual, onClick: it.onClick, children: miolo })
+                        : _jsx("button", { type: "button", className: "nav-list-row", "aria-current": atual, "aria-disabled": it.disabled || undefined, onClick: it.disabled ? undefined : it.onClick, children: miolo }) }, it.id);
         }) });
 }
-export function CommandPalette({ open, onClose, items, placeholder, label, shortcuts = true }) {
+// `size="lg"` (o site B — a busca nova, aprovada pela bancada em 01/11/2026, o item 2 e o D-2): a janela da largura `lg`
+// (1024), o campo de 64 com a lupa e o "Esc" dentro, o encaixe `filters` embaixo dele, o título do grupo em mono maiúsculo
+// com a contagem, o item de 50 com o ícone num círculo de 40 tingido (`tone`), o título e a descrição cortada, o "↵" na
+// linha ativa, a prévia (`preview`) do item ativo ao lado da lista — some abaixo de 1240 — e o encaixe `footer` no pé,
+// ao lado das teclas. Sem `size="lg"`, a paleta de sempre; os encaixes só valem no `lg`.
+export function CommandPalette({ open, onClose, items, placeholder, label, shortcuts = true, size = "md", filters, preview, footer }) {
+    const grande = size === "lg";
+    const [ativo, setAtivo] = React.useState(undefined);
     const s = useAureaStrings();
     const idAtalhos = React.useId();
     // GRUPOS (0.32.0, DOC-06). Em 13/08/2026 a Aurea ficou SEM grupo, e a medição decidiu: dar a cada
@@ -516,7 +537,9 @@ export function CommandPalette({ open, onClose, items, placeholder, label, short
     const portal = usePortalContainer();
     const campo = useRef(null);
     const executa = (item) => { onClose(); item.run(); };
-    const linha = (item) => _jsxs(BaseAutocomplete.Item, { value: item, className: "menu-item command-item", onClick: () => executa(item), children: [item.icon && _jsx(Icon, { name: item.icon }), _jsx("span", { className: "command-item-label", children: item.label }), item.kbd && _jsx(Kbd, { children: item.kbd })] }, item.id);
+    const linha = (item) => grande
+        ? _jsxs(BaseAutocomplete.Item, { value: item, className: "menu-item command-item", onClick: () => executa(item), children: [_jsx("span", { className: "command-item-tile", "data-tone": item.tone, children: item.icon && _jsx(Icon, { name: item.icon }) }), _jsxs("span", { className: "command-item-text", children: [_jsx("span", { className: "command-item-label", children: item.label }), item.description && _jsx("span", { className: "command-item-description", children: item.description })] }), item.kbd ? _jsx(Kbd, { children: item.kbd }) : _jsx(Kbd, { className: "command-item-enter", "aria-hidden": "true", children: "\u21B5" })] }, item.id)
+        : _jsxs(BaseAutocomplete.Item, { value: item, className: "menu-item command-item", onClick: () => executa(item), children: [item.icon && _jsx(Icon, { name: item.icon }), _jsx("span", { className: "command-item-label", children: item.label }), item.kbd && _jsx(Kbd, { children: item.kbd })] }, item.id);
     // A JANELA É A DO MOTOR (14/10/2026), como na paleta de exemplo dele (1.6.0): `Dialog` por fora,
     // `Autocomplete` `inline` por dentro. Até aqui a moldura era uma `div` feita à mão, e o Victor achou no site
     // publicado: o clique no fundo não fechava, e depois dele o foco ia para a página — o Esc, que era escutado
@@ -525,9 +548,12 @@ export function CommandPalette({ open, onClose, items, placeholder, label, short
     // (`onOpenChange`), e quem fecha é o `onClose` — mesma regra do Dialog e do Drawer daqui. Os nomes de classe
     // ficaram: a moldura (`Viewport`) é a `.command-overlay`, a caixa (`Popup`) é a `.command-palette`.
     return _jsx(BaseDialog.Root, { open: open, onOpenChange: o => { if (!o)
-            onClose(); }, children: _jsx(BaseDialog.Portal, { container: portal, children: _jsx(BaseDialog.Viewport, { className: "command-overlay", children: _jsxs(BaseDialog.Popup, { className: "command-palette", "aria-label": label ?? s.commandLabel, initialFocus: campo, children: [_jsxs(BaseAutocomplete.Root, { items: (grupos ?? items), itemToStringValue: (i) => i.label, mode: "list", open: true, inline: true, autoHighlight: "always", keepHighlight: true, children: [_jsx(BaseAutocomplete.Input, { ref: campo, className: "input", "aria-label": placeholder ?? s.commandPlaceholder, placeholder: placeholder ?? s.commandPlaceholder, "aria-expanded": true, "aria-describedby": shortcuts ? idAtalhos : undefined }), _jsxs("div", { className: "menu command-list", children: [_jsx(BaseAutocomplete.Empty, { className: "combobox-empty", children: s.comboboxEmpty }), _jsx(BaseAutocomplete.List, { children: grupos
-                                                ? (g) => _jsxs(BaseAutocomplete.Group, { items: g.items, className: "command-group", children: [g.value && _jsx(BaseAutocomplete.GroupLabel, { className: "command-group-label", children: g.value }), _jsx(BaseAutocomplete.Collection, { children: linha })] }, g.value)
-                                                : _jsx(BaseAutocomplete.Collection, { children: linha }) })] })] }), shortcuts && _jsxs("p", { className: "command-shortcuts", id: idAtalhos, children: [_jsxs("span", { children: [_jsx(Kbd, { children: "\u2191" }), _jsx(Kbd, { children: "\u2193" }), " ", s.commandHintMove] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Enter" }), " ", s.commandHintSelect] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Esc" }), " ", s.commandHintClose] })] })] }) }) }) });
+            onClose(); }, children: _jsx(BaseDialog.Portal, { container: portal, children: _jsx(BaseDialog.Viewport, { className: "command-overlay", children: _jsxs(BaseDialog.Popup, { className: cx("command-palette", grande && "command-palette-lg"), "aria-label": label ?? s.commandLabel, initialFocus: campo, children: [_jsxs(BaseAutocomplete.Root, { items: (grupos ?? items), itemToStringValue: (i) => i.label, mode: "list", open: true, inline: true, autoHighlight: "always", keepHighlight: true, onItemHighlighted: grande && preview ? (v) => { if (v)
+                                setAtivo(v); } : undefined, children: [grande
+                                    ? _jsxs("div", { className: "command-field", children: [_jsx(Icon, { name: "magnifying-glass" }), _jsx(BaseAutocomplete.Input, { ref: campo, className: "command-input", "aria-label": placeholder ?? s.commandPlaceholder, placeholder: placeholder ?? s.commandPlaceholder, "aria-expanded": true, "aria-describedby": shortcuts ? idAtalhos : undefined }), _jsx(Kbd, { children: "Esc" })] })
+                                    : _jsx(BaseAutocomplete.Input, { ref: campo, className: "input", "aria-label": placeholder ?? s.commandPlaceholder, placeholder: placeholder ?? s.commandPlaceholder, "aria-expanded": true, "aria-describedby": shortcuts ? idAtalhos : undefined }), grande && filters != null && _jsx("div", { className: "command-filters", children: filters }), _jsxs("div", { className: grande && preview ? "command-body" : "command-body-plain", children: [_jsxs("div", { className: "menu command-list", children: [_jsx(BaseAutocomplete.Empty, { className: "combobox-empty", children: s.comboboxEmpty }), _jsx(BaseAutocomplete.List, { children: grupos
+                                                        ? (g) => _jsxs(BaseAutocomplete.Group, { items: g.items, className: "command-group", children: [g.value && _jsxs(BaseAutocomplete.GroupLabel, { className: "command-group-label", children: [g.value, grande && _jsx("span", { className: "command-group-count", children: g.items.length })] }), _jsx(BaseAutocomplete.Collection, { children: linha })] }, g.value)
+                                                        : _jsx(BaseAutocomplete.Collection, { children: linha }) })] }), grande && preview && ativo && _jsx("div", { className: "command-preview", children: preview(ativo) })] })] }), (shortcuts || (grande && footer != null)) && _jsxs("div", { className: grande ? "command-foot" : "command-foot-plain", children: [shortcuts && _jsxs("p", { className: "command-shortcuts", id: idAtalhos, children: [_jsxs("span", { children: [_jsx(Kbd, { children: "\u2191" }), _jsx(Kbd, { children: "\u2193" }), " ", s.commandHintMove] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Enter" }), " ", s.commandHintSelect] }), _jsxs("span", { children: [_jsx(Kbd, { children: "Esc" }), " ", s.commandHintClose] })] }), grande && footer] })] }) }) }) });
 }
 // A CASCA (15/10/2026, o Victor: "C sim"): a mesma janela do motor da `CommandPalette` acima. Até aqui era uma `div`
 // feita à mão — o mesmo defeito que a busca do site teve: o clique fora e o Esc não fechavam, e o Tab saía da caixa.

@@ -124,7 +124,7 @@ See [Animation](./docs-animation.html).
 
 When the system forces its own colours (`forced-colors: active`), the focus ring uses the system text colour. Icons drawn as masks would vanish, so they repaint in the system colour of the text next to them. Colour swatches keep their colour, because the colour is their content. A dedicated test checks each of these.
 
-Aurea does not change its design under `prefers-contrast: more`.
+When the system asks for more contrast (`prefers-contrast: more`), fields get an outline that measures at least 3:1, the marks inside a chosen control (the switch thumb, the checkbox mark, the radio dot) turn to the ink, the focus of a field turns graphite in the light theme, and a pressed button in the neutral style gets an outline. Outside that preference, none of this is drawn. The Aurea Ember brand keeps its fields and marks as they are.
 
 ## Text size and reflow
 

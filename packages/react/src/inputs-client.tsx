@@ -566,8 +566,13 @@ export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>,"de
   /** `vertical` (o padrão) ou `horizontal`, como a referência e o nativo. */
   orientation?:"vertical"|"horizontal";
   /** O asterisco no rótulo, como o `Field`. */
-  required?:boolean}
-export function RadioGroup({label,labelHidden,description,error,value,defaultValue,onValueChange,name,disabled,invalid,orientation="vertical",required,children,className,...props}:RadioGroupProps){
+  required?:boolean;
+  /** `card` faz de cada opção um cartão inteiro — o cartão de escolha, o mesmo nome do nativo (CHK-01). O escolhido sobe com
+   *  sombra. O site B (aprovado pela bancada em 01/11/2026). */
+  variant?:"list"|"card";
+  /** Na web a marca fica no início. `none` tira a bolinha — só no `card`, em que o cartão inteiro já mostra a escolha. */
+  indicatorPlacement?:"start"|"none"}
+export function RadioGroup({label,labelHidden,description,error,value,defaultValue,onValueChange,name,disabled,invalid,orientation="vertical",required,variant="list",indicatorPlacement="start",children,className,...props}:RadioGroupProps){
   const auto=React.useId();
   const [proprio,setProprio]=React.useState<string|undefined>(defaultValue);
   const escolhido=value??proprio;
@@ -584,10 +589,11 @@ export function RadioGroup({label,labelHidden,description,error,value,defaultVal
   });
   return <div role="radiogroup" aria-labelledby={idRotulo} aria-describedby={[idDescricao,idErro].filter(Boolean).join(" ")||undefined}
     aria-orientation={orientation} aria-required={required||undefined} aria-invalid={error||invalid?true:undefined}
-    className={cx("radio-group",orientation==="horizontal"&&"radio-group-horizontal",labelHidden&&"radio-group-bare",className)} {...props}>
+    className={cx("radio-group",orientation==="horizontal"&&"radio-group-horizontal",labelHidden&&"radio-group-bare",
+      variant==="card"&&indicatorPlacement==="none"&&"radio-group-indicator-none",className)} {...props}>
     <span className={cx("label",labelHidden&&"sr-only")} id={idRotulo}><span>{label}{required?<span className="label-required" aria-hidden="true">*</span>:null}</span></span>
     {description&&<span className="field-description" id={idDescricao}>{description}</span>}
-    {orientation==="horizontal"?<div className="radio-group-items">{opcoes}</div>:opcoes}
+    {variant==="card"?<div className="radio-group-cards">{opcoes}</div>:orientation==="horizontal"?<div className="radio-group-items">{opcoes}</div>:opcoes}
     {error&&<span className="field-error" id={idErro}>{error}</span>}
   </div>;
 }
@@ -1117,14 +1123,19 @@ return <BaseOTPField.Root id={id} length={length} value={value} defaultValue={de
 // `size="lg"` (44) e `size="xl"` (48) (0.52.1, variação nova aprovada pela imagem em 01/11/2026): as duas chaves do site B.
 // `selectedStyle` (ADR-0084, 27/10/2026): a cor do segmento aceso, em seis estilos aprovados pelo Victor em 26/10/2026 —
 // `current` (o de sempre, o padrão), `neutral`, `contrast`, `brand`, `ring` e `dot`. Vai como `data-segment-style` na
-// cápsula; o mesmo atributo num contêiner (ou no `<html>`) vale para todos os de dentro.
-export type SegmentedControlSelectedStyle="current"|"neutral"|"contrast"|"brand"|"ring"|"dot";
-export function SegmentedControl({items,value,onChange,label,fullWidth,size="md",selectedStyle}:{items:Array<{value:string;label:ReactNode;href?:string}>;value:string;onChange?:(v:string)=>void;label?:string;fullWidth?:boolean;size?:"sm"|"md"|"lg"|"xl";selectedStyle?:SegmentedControlSelectedStyle}){
+// cápsula; o mesmo atributo num contêiner (ou no `<html>`) vale para todos os de dentro. O sétimo, `emphasis` (o site B,
+// 02/11/2026, a "C" na imagem): a cápsula erguida com a letra do destaque e sem o fio.
+export type SegmentedControlSelectedStyle="current"|"neutral"|"contrast"|"brand"|"ring"|"dot"|"emphasis";
+// O SITE B (aprovado pela bancada em 01/11/2026, os itens 3 e 8): `items[].icon` (o escolhido troca sozinho para a forma
+// cheia), `size="2xl"` (segmento de 48), `wrap` (quebra linha, o trilho com canto 22) e `orientation="vertical"` (em pé).
+export function SegmentedControl({items,value,onChange,label,fullWidth,size="md",selectedStyle,wrap,orientation="horizontal"}:{items:Array<{value:string;label:ReactNode;href?:string;icon?:IconName}>;value:string;onChange?:(v:string)=>void;label?:string;fullWidth?:boolean;size?:"sm"|"md"|"lg"|"xl"|"2xl";selectedStyle?:SegmentedControlSelectedStyle;wrap?:boolean;orientation?:"horizontal"|"vertical"}){
 const s=useAureaStrings();
-const classe=cx("segmented",fullWidth&&"segmented-full",size==="sm"&&"segmented-sm",size==="lg"&&"segmented-lg",size==="xl"&&"segmented-xl");
-if(items.length>0&&items.every(i=>i.href!=null))return <nav className={classe} data-segment-style={selectedStyle} aria-label={label??s.optionsLabel}>{items.map(i=><a key={i.value} href={i.href} className={i.value===value?"active":undefined} aria-current={i.value===value?"page":undefined}>{i.label}</a>)}</nav>;
-return <BaseRadioGroup className={classe} data-segment-style={selectedStyle} aria-label={label??s.optionsLabel} value={value} onValueChange={v=>onChange?.(String(v))}>
-{items.map(i=><BaseRadio.Root key={i.value} value={i.value} className={i.value===value?"active":undefined} nativeButton render={<button type="button"/>}>{i.label}</BaseRadio.Root>)}
+const classe=cx("segmented",fullWidth&&"segmented-full",size==="sm"&&"segmented-sm",size==="lg"&&"segmented-lg",size==="xl"&&"segmented-xl",size==="2xl"&&"segmented-2xl",
+  wrap&&orientation!=="vertical"&&"segmented-wrap",orientation==="vertical"&&"segmented-vertical");
+const miolo=(i:{value:string;label:ReactNode;icon?:IconName})=>i.icon?<><Icon name={i.icon} weight={i.value===value?"fill":"regular"}/>{i.label}</>:i.label;
+if(items.length>0&&items.every(i=>i.href!=null))return <nav className={classe} data-segment-style={selectedStyle} aria-label={label??s.optionsLabel}>{items.map(i=><a key={i.value} href={i.href} className={i.value===value?"active":undefined} aria-current={i.value===value?"page":undefined}>{miolo(i)}</a>)}</nav>;
+return <BaseRadioGroup className={classe} data-segment-style={selectedStyle} aria-label={label??s.optionsLabel} aria-orientation={orientation==="vertical"?"vertical":undefined} value={value} onValueChange={v=>onChange?.(String(v))}>
+{items.map(i=><BaseRadio.Root key={i.value} value={i.value} className={i.value===value?"active":undefined} nativeButton render={<button type="button"/>}>{miolo(i)}</BaseRadio.Root>)}
 </BaseRadioGroup>}
 
 

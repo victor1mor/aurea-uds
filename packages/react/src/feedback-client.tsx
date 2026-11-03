@@ -60,9 +60,13 @@ success:"check-circle",warning:"warning",danger:"x-circle",accent:"info"};
 // "esperando" dele é grave.
 // `action` (15/10/2026, o "Upgrade" da referência): o botão do aviso, depois do texto e antes do X; no celular ele desce
 // para baixo do texto, na mesma coluna (a referência repete o botão; aqui ele só muda de lugar).
-export function Alert({variant,state,title,icon,onDismiss,action,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:AlertVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void;
+// `appearance="soft"` (o site B, 02/11/2026, a "B" na imagem): o fundo da cor do estado a 14%, sem sombra, e o texto a 16
+// na cor do texto. Sem ele (`"card"`), o cartão de sempre.
+export function Alert({variant,state,title,icon,onDismiss,action,appearance,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{variant?:AlertVariant;state?:UniversalState;title?:ReactNode;icon?:IconName;onDismiss?:()=>void;
+  /** A pele: `card` (o cartão, o padrão) ou `soft` (o fundo da cor do estado, sem sombra, o texto maior). */
+  appearance?:"card"|"soft";
   /** O botão do aviso ("Atualizar", "Desfazer"): depois do texto, antes do X. No celular, embaixo do texto. */
-  action?:ReactNode}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("alert",`alert-${v}`,action!=null&&"alert-has-action",className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??proprio(ICONE_DA_VARIANTE,v)??"info"} weight={icon?undefined:"fill"}/><div>{title&&<strong>{title}</strong>}{children??(state?proprio(s.universalState,state):null)}</div>{action!=null&&<div className="alert-action">{action}</div>}{onDismiss?<CloseButton onClick={onDismiss}/>:<span/>}</div>}
+  action?:ReactNode}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("alert",`alert-${v}`,appearance==="soft"&&"alert-soft",action!=null&&"alert-has-action",className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??proprio(ICONE_DA_VARIANTE,v)??"info"} weight={icon?undefined:"fill"}/><div>{title&&<strong>{title}</strong>}{children??(state?proprio(s.universalState,state):null)}</div>{action!=null&&<div className="alert-action">{action}</div>}{onDismiss?<CloseButton onClick={onDismiss}/>:<span/>}</div>}
 // 0.32.0 (o Alert da referência): o X de dispensar é o `CloseButton` (HER-12), e a pele mudou no core —
 // fundo de cartão, sem borda, sombra, 12/16, o ícone de 16 numa caixa de 24 e o título na cor do estado.
 // Banner: aviso de largura de página, opcionalmente dispensável. Os <span/> vazios

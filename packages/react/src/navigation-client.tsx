@@ -38,17 +38,29 @@ import {Avatar} from "./identity-client.js";
 // Não existe padrão APG para stepper. A prática adotada é `role="list"` com `aria-current="step"`
 // na etapa atual, que é o que aquela quinta referência também faz.
 export type StepState="default"|"active"|"done"|"error";
-export interface StepItem{label:ReactNode;state?:StepState;optional?:ReactNode;onClick?:()=>void}
-export function Stepper({items,label,className}:{items:StepItem[];label?:string;className?:string}){
+// `href` (o site B, 02/11/2026): a etapa é um LINK — na barra em partes, cada parte leva à seção do passo.
+export interface StepItem{label:ReactNode;state?:StepState;optional?:ReactNode;onClick?:()=>void;href?:string}
+// `variant` (o site B, aprovado pela bancada em 01/11/2026): `path` é o caminho que escolhe (o Roadmap, o item 5) e `bar` a
+// barra em partes (o "Your setup" do Quick Start, o D-1). `startContent` e `endContent`: no `path`, as pontas que não
+// clicam ("0.x", "1.0"); no `bar`, o nome antes da barra e a contagem depois. Sem `variant`, o `Stepper` de sempre.
+export type StepperVariant="default"|"path"|"bar";
+export function Stepper({items,label,variant="default",startContent,endContent,className}:{items:StepItem[];label?:string;variant?:StepperVariant;startContent?:ReactNode;endContent?:ReactNode;className?:string}){
 const s=useAureaStrings();
-return <div role="list" aria-label={label??s.stepperLabel} className={cx("stepper",className)}>
+const comPontas=variant==="path";
+const lista=<div role="list" aria-label={label??s.stepperLabel} className={cx("stepper",variant==="default"&&className)}
+  style={comPontas?{"--stepper-cols":items.length+(startContent!=null?1:0)+(endContent!=null?1:0)} as React.CSSProperties:undefined}>
+{comPontas&&startContent!=null&&<div role="listitem" className="step-end step-end-start">{startContent}</div>}
 {items.map((it,n)=>{const st=it.state??"default";
-const marca=st==="done"?<Icon name="check"/>:st==="error"?<Icon name="x-circle"/>:n+1;
-const miolo=<><span className="step-dot">{marca}</span><strong>{it.label}</strong>{it.optional&&<small className="step-optional">{it.optional}</small>}</>;
+const marca=st==="done"&&variant!=="path"?<Icon name="check"/>:st==="error"?<Icon name="x-circle"/>:n+1;
+const miolo=variant==="bar"?<span className="sr-only">{it.label}</span>:<><span className="step-dot">{marca}</span><strong>{it.label}</strong>{it.optional&&<small className="step-optional">{it.optional}</small>}</>;
 return <div key={n} role="listitem" className={cx("step",st!=="default"&&`step-${st}`)} aria-current={st==="active"?"step":undefined}>
-{it.onClick?<button type="button" className="step-trigger" onClick={it.onClick}>{miolo}</button>:miolo}
+{it.href?<a className="step-trigger" href={it.href} onClick={it.onClick}>{miolo}</a>:it.onClick||variant==="bar"?<button type="button" className="step-trigger" onClick={it.onClick}>{miolo}</button>:miolo}
 </div>})}
-</div>}
+{comPontas&&endContent!=null&&<div role="listitem" className="step-end">{endContent}</div>}
+</div>;
+if(variant==="path")return <div className={cx("stepper-path",className)}>{lista}</div>;
+if(variant==="bar")return <div className={cx("stepper-bar",className)}>{startContent!=null&&<span className="stepper-bar-label">{startContent}</span>}{lista}{endContent!=null&&<span className="stepper-bar-count" role="status">{endContent}</span>}</div>;
+return lista}
 
 // M-01 (25/09/2026): `render` no item de navegação — o link do roteador do app (`<Link href/>`)
 // recebe a pele e o conteúdo do item, pelo `fundirRender` que o `Card` já usa. Com `render`, quem
@@ -794,12 +806,25 @@ export interface NavListItem{id:string;label:ReactNode;description?:ReactNode;va
   /** A foto da linha (AN-04) — o mesmo formato do `ChatMessage.avatar`. Toma o lugar do `icon`. */
   avatar?:{src?:string;fallback?:ReactNode};
   /** Os sinais ao lado do `value` (AN-04): fixada, silenciada. Pequenos e apagados, cada um com nome. */
-  indicators?:NavListIndicator[]}
-export function NavList({items,className,...props}:HTMLAttributes<HTMLUListElement>&RefAttributes<HTMLUListElement>&{items:NavListItem[]}){
-return <ul className={cx("nav-list",className)} {...props}>
+  indicators?:NavListIndicator[];
+  /** A cor de categoria do círculo do ícone, no `size="lg"` (as cores do `Badge`). */
+  tone?:BadgeCategory;
+  /** A linha da página em que se está: `aria-current="page"`, o fundo, e o selo `currentLabel` no lugar da seta. */
+  current?:boolean}
+// `size="lg"` (o site B — o menu do celular, aprovado pela bancada em 01/11/2026, o item 10): a linha de 56 em cápsula (o
+// ícone de 40 + 8 em cima e embaixo), o ícone num círculo de 40 tingido (`tone`), a letra 18 seminegrito. `current` marca a
+// linha atual (o fundo `--fill-2`), e `currentLabel` é o selo que ela leva no lugar da seta ("You are here"). Sem `lg`, a
+// lista de sempre; `current` vale nos dois tamanhos.
+export function NavList({items,size="md",currentLabel,className,...props}:HTMLAttributes<HTMLUListElement>&RefAttributes<HTMLUListElement>&{items:NavListItem[];
+  size?:"md"|"lg";
+  /** O texto do selo da linha atual (só aparece com `current` num item). */
+  currentLabel?:ReactNode}){
+const grande=size==="lg";
+return <ul className={cx("nav-list",grande&&"nav-list-lg",className)} {...props}>
 {items.map(it=>{
+const icone=it.icon&&(grande?<span className="nav-list-tile" data-tone={it.tone}><Icon name={it.icon}/></span>:<Icon name={it.icon}/>);
 const miolo=<>
-{it.avatar?<Avatar src={it.avatar.src} fallback={it.avatar.fallback}/>:it.icon&&<Icon name={it.icon}/>}
+{it.avatar?<Avatar src={it.avatar.src} fallback={it.avatar.fallback}/>:icone}
 <span className="nav-list-text">
 <span className="nav-list-label">{it.label}</span>
 {it.description!=null&&<span className="nav-list-description">{it.description}</span>}
@@ -807,28 +832,48 @@ const miolo=<>
 {it.indicators&&it.indicators.length>0&&<span className="nav-list-indicators">{it.indicators.map(x=>
   <span key={x.label}><Icon name={x.icon} size="sm"/><span className="sr-only">{x.label}</span></span>)}</span>}
 {it.value!=null&&<span className="nav-list-value">{it.value}</span>}
-{(it.href||it.render)&&<Icon name="caret-right" size="sm" className="nav-list-chevron"/>}
+{it.current&&currentLabel!=null?<Badge variant="primary" emphasis="solid" className="nav-list-here">{currentLabel}</Badge>
+  :(it.href||it.render)&&<Icon name="caret-right" size="sm" className="nav-list-chevron"/>}
 </>;
+const atual=it.current?"page" as const:undefined;
 return <li key={it.id}>{it.render&&!it.disabled
-?fundirRender(it.render,{className:"nav-list-row",onClick:it.onClick,children:miolo},"a")
+?fundirRender(it.render,{className:"nav-list-row",onClick:it.onClick,"aria-current":atual,children:miolo},"a")
 :it.href&&!it.disabled
-?<a href={it.href} className="nav-list-row" onClick={it.onClick}>{miolo}</a>
-:<button type="button" className="nav-list-row" aria-disabled={it.disabled||undefined} onClick={it.disabled?undefined:it.onClick}>{miolo}</button>}</li>;
+?<a href={it.href} className="nav-list-row" aria-current={atual} onClick={it.onClick}>{miolo}</a>
+:<button type="button" className="nav-list-row" aria-current={atual} aria-disabled={it.disabled||undefined} onClick={it.disabled?undefined:it.onClick}>{miolo}</button>}</li>;
 })}
 </ul>}
 
 // A MARCA mora no topo (decisão do Victor, 23/07/2026): o topo atravessa toda a largura
 // e a lateral começa abaixo dele. Por isso o Topbar é sempre renderizado pelo AppShell —
 // ele carrega a marca, então não é mais opcional; opcional é o CONTEÚDO dele.
-import type {TopbarVariant} from "./markup.js";
+import type {TopbarVariant, BadgeCategory} from "./markup.js";
 export interface CommandItem{id:string;label:string;icon?:IconName;kbd?:string;run:()=>void;
   /** 0.32.0 (DOC-06): o grupo do item ("Componentes", "Páginas"). Itens com o mesmo grupo saem juntos,
    *  sob o título dele, na ordem em que o grupo aparece primeiro. */
-  group?:string}
+  group?:string;
+  /** A linha de baixo do item, apagada e cortada (no `size="lg"`). */
+  description?:string;
+  /** A cor de categoria do círculo do ícone (no `size="lg"`), como as do `Badge`. Sem ela, o círculo neutro. */
+  tone?:BadgeCategory}
 interface GrupoDeComandos{value:string;items:CommandItem[]}
-export function CommandPalette({open,onClose,items,placeholder,label,shortcuts=true}:{open:boolean;onClose:()=>void;items:CommandItem[];placeholder?:string;label?:string;
+// `size="lg"` (o site B — a busca nova, aprovada pela bancada em 01/11/2026, o item 2 e o D-2): a janela da largura `lg`
+// (1024), o campo de 64 com a lupa e o "Esc" dentro, o encaixe `filters` embaixo dele, o título do grupo em mono maiúsculo
+// com a contagem, o item de 50 com o ícone num círculo de 40 tingido (`tone`), o título e a descrição cortada, o "↵" na
+// linha ativa, a prévia (`preview`) do item ativo ao lado da lista — some abaixo de 1240 — e o encaixe `footer` no pé,
+// ao lado das teclas. Sem `size="lg"`, a paleta de sempre; os encaixes só valem no `lg`.
+export function CommandPalette({open,onClose,items,placeholder,label,shortcuts=true,size="md",filters,preview,footer}:{open:boolean;onClose:()=>void;items:CommandItem[];placeholder?:string;label?:string;
   /** 0.32.0 (DOC-07): a linha que ensina as teclas, embaixo — ↑ ↓ mover, Enter abrir, Esc fechar. */
-  shortcuts?:boolean}){
+  shortcuts?:boolean;
+  size?:"md"|"lg";
+  /** No `lg`: o que vai embaixo do campo — os filtros que o app desenha (um `ToggleGroup`, por exemplo). */
+  filters?:ReactNode;
+  /** No `lg`: a prévia do item ativo, ao lado da lista. Some quando a janela é estreita. */
+  preview?:(item:CommandItem)=>ReactNode;
+  /** No `lg`: o que vai no pé, ao lado da linha das teclas. */
+  footer?:ReactNode}){
+  const grande=size==="lg";
+  const [ativo,setAtivo]=React.useState<CommandItem|undefined>(undefined);
   const s=useAureaStrings();
   const idAtalhos=React.useId();
   // GRUPOS (0.32.0, DOC-06). Em 13/08/2026 a Aurea ficou SEM grupo, e a medição decidiu: dar a cada
@@ -845,7 +890,14 @@ export function CommandPalette({open,onClose,items,placeholder,label,shortcuts=t
   const portal=usePortalContainer();
   const campo=useRef<HTMLInputElement>(null);
   const executa=(item:CommandItem)=>{onClose();item.run()};
-  const linha=(item:CommandItem)=><BaseAutocomplete.Item key={item.id} value={item} className="menu-item command-item" onClick={()=>executa(item)}>
+  const linha=(item:CommandItem)=>grande
+  ?<BaseAutocomplete.Item key={item.id} value={item} className="menu-item command-item" onClick={()=>executa(item)}>
+    <span className="command-item-tile" data-tone={item.tone}>{item.icon&&<Icon name={item.icon}/>}</span>
+    <span className="command-item-text"><span className="command-item-label">{item.label}</span>
+      {item.description&&<span className="command-item-description">{item.description}</span>}</span>
+    {item.kbd?<Kbd>{item.kbd}</Kbd>:<Kbd className="command-item-enter" aria-hidden="true">↵</Kbd>}
+  </BaseAutocomplete.Item>
+  :<BaseAutocomplete.Item key={item.id} value={item} className="menu-item command-item" onClick={()=>executa(item)}>
     {item.icon&&<Icon name={item.icon}/>}
     <span className="command-item-label">{item.label}</span>
     {item.kbd&&<Kbd>{item.kbd}</Kbd>}
@@ -862,7 +914,7 @@ export function CommandPalette({open,onClose,items,placeholder,label,shortcuts=t
     <BaseDialog.Viewport className="command-overlay">
     {/* O campo recebe o foco pelo `initialFocus` da janela, e não por `autoFocus`: o `autoFocus` focava o campo
         ANTES de o motor anotar quem tinha o foco, e ao fechar o foco não voltava ao botão que abriu (medido). */}
-    <BaseDialog.Popup className="command-palette" aria-label={label??s.commandLabel} initialFocus={campo}>
+    <BaseDialog.Popup className={cx("command-palette",grande&&"command-palette-lg")} aria-label={label??s.commandLabel} initialFocus={campo}>
       {/* O `as` é sobre TIPO, não sobre comportamento: o motor aceita a estrutura agrupada em
           tempo de execução — é o mesmo caminho que o `MultiCombobox` daqui já usa, e o teste de
           grupo prova —, mas o genérico do `Root` fica preso em `CommandItem` por causa do
@@ -875,29 +927,40 @@ export function CommandPalette({open,onClose,items,placeholder,label,shortcuts=t
       {/* O `as` é sobre TIPO: o motor aceita os grupos em execução (é o exemplo de paleta dele), mas o
           genérico do `Root` fica preso em `CommandItem` pelo `itemToStringValue`. O teste de grupo
           (`lote-q-navegacao.test.tsx`) prova que filtra DENTRO dos grupos. */}
-      <BaseAutocomplete.Root items={(grupos??items) as unknown as CommandItem[]} itemToStringValue={(i:CommandItem)=>i.label} mode="list" open inline autoHighlight="always" keepHighlight>
+      <BaseAutocomplete.Root items={(grupos??items) as unknown as CommandItem[]} itemToStringValue={(i:CommandItem)=>i.label} mode="list" open inline autoHighlight="always" keepHighlight
+        onItemHighlighted={grande&&preview?(v:CommandItem|undefined)=>{if(v)setAtivo(v)}:undefined}>
         {/* `aria-expanded` à mão (0.32.0): no `inline` o motor 1.6.0 publica o papel `combobox` SEM ele, e o
             atributo é obrigatório (o axe acusou `aria-required-attr`). A lista está sempre à vista. O Esc não
             se trata mais aqui: é a janela que fecha, de onde quer que o foco esteja dentro dela. */}
-        <BaseAutocomplete.Input ref={campo} className="input" aria-label={placeholder??s.commandPlaceholder} placeholder={placeholder??s.commandPlaceholder}
-          aria-expanded={true} aria-describedby={shortcuts?idAtalhos:undefined}/>
+        {grande
+          ?<div className="command-field"><Icon name="magnifying-glass"/>
+            <BaseAutocomplete.Input ref={campo} className="command-input" aria-label={placeholder??s.commandPlaceholder} placeholder={placeholder??s.commandPlaceholder}
+              aria-expanded={true} aria-describedby={shortcuts?idAtalhos:undefined}/><Kbd>Esc</Kbd></div>
+          :<BaseAutocomplete.Input ref={campo} className="input" aria-label={placeholder??s.commandPlaceholder} placeholder={placeholder??s.commandPlaceholder}
+            aria-expanded={true} aria-describedby={shortcuts?idAtalhos:undefined}/>}
+        {grande&&filters!=null&&<div className="command-filters">{filters}</div>}
+        <div className={grande&&preview?"command-body":"command-body-plain"}>
         <div className="menu command-list">
           <BaseAutocomplete.Empty className="combobox-empty">{s.comboboxEmpty}</BaseAutocomplete.Empty>
           <BaseAutocomplete.List>
             {grupos
               ?(g:GrupoDeComandos)=><BaseAutocomplete.Group key={g.value} items={g.items} className="command-group">
-                  {g.value&&<BaseAutocomplete.GroupLabel className="command-group-label">{g.value}</BaseAutocomplete.GroupLabel>}
+                  {g.value&&<BaseAutocomplete.GroupLabel className="command-group-label">{g.value}{grande&&<span className="command-group-count">{g.items.length}</span>}</BaseAutocomplete.GroupLabel>}
                   <BaseAutocomplete.Collection>{linha}</BaseAutocomplete.Collection>
                 </BaseAutocomplete.Group>
               :<BaseAutocomplete.Collection>{linha}</BaseAutocomplete.Collection>}
           </BaseAutocomplete.List>
         </div>
+        {grande&&preview&&ativo&&<div className="command-preview">{preview(ativo)}</div>}
+        </div>
       </BaseAutocomplete.Root>
+      {(shortcuts||(grande&&footer!=null))&&<div className={grande?"command-foot":"command-foot-plain"}>
       {shortcuts&&<p className="command-shortcuts" id={idAtalhos}>
         <span><Kbd>↑</Kbd><Kbd>↓</Kbd> {s.commandHintMove}</span>
         <span><Kbd>Enter</Kbd> {s.commandHintSelect}</span>
         <span><Kbd>Esc</Kbd> {s.commandHintClose}</span>
       </p>}
+      {grande&&footer}</div>}
     </BaseDialog.Popup>
     </BaseDialog.Viewport>
     </BaseDialog.Portal>

@@ -14,6 +14,20 @@ import {Icon} from "./system.js";
 // moldura. É a caixa do site de hoje (decisão do Victor, 06/10/2026: a da Aurea, não a da referência),
 // agora no pacote, para o site usar só peças da Aurea. O teclado é o das abas do APG: setas, Home e End.
 // Sem o `aurea.js` na página — quem troca a aba é o React.
+// A CAIXA EMPILHADA (`previewLayout="stacked"`, ADR-0089): a peça em cima e o código embaixo, sem as abas; mais de 5
+// linhas, o código vem recolhido com o "Expand code".
+function CaixaEmpilhada({preview,codigo,linhas,className}:{preview:React.ReactNode;codigo:React.ReactNode;linhas:number;className?:string}){
+  const s=useAureaStrings();
+  const id=React.useId();
+  const [aberto,setAberto]=React.useState(false);
+  const dobra=linhas>5;
+  return <div className={cx("demo code-preview demo-stacked",className)} data-collapsed={dobra&&!aberto?"":undefined} data-expanded={dobra&&aberto?"":undefined}>
+    <div className="demo-panel" data-panel="preview">{preview}</div>
+    <div className="demo-panel demo-code" data-panel="code" id={`${id}-code`}>{codigo}
+      {dobra&&<button type="button" className="btn btn-tertiary btn-sm demo-stacked-toggle" aria-expanded={aberto} aria-controls={`${id}-code`}
+        onClick={()=>setAberto(!aberto)}>{aberto?s.codeBlockCollapse:s.codeBlockExpand}</button>}</div>
+  </div>;
+}
 function CaixaDeExemplo({preview,codigo,className}:{preview:React.ReactNode;codigo:React.ReactNode;className?:string}){
   const s=useAureaStrings();
   const id=React.useId();
@@ -75,9 +89,17 @@ function linhasDoCodigo(codigo:string,language:string,highlight?:CodeHighlighter
   const linhas=highlight?.(codigo,language)??codigo.split("\n").map(l=>l===""?[]:[{text:l}]);
   return codigo.endsWith("\n")&&linhas.length>1&&linhas[linhas.length-1]!.length===0?linhas.slice(0,-1):linhas;
 }
-export function CodeBlock({children,language="text",copyable,preview,lineNumbers,highlight,tabs,className}:{children?:string;language?:string;copyable?:boolean;
+// `filename` (o site B, aprovado pela bancada em 01/11/2026, o item 6 — "Ícone + nome"): a CABEÇA do arquivo — o nome do
+// arquivo à esquerda e, com `copyable`, o "Copy" ESCRITO (o botão secundário, com o ícone antes do nome; vira "Copied").
+// O bloco vira o cartão (canto 22, a cor do cartão) e a linha longa DESCE em vez de rolar. Sem `filename`, o de sempre.
+export function CodeBlock({children,language="text",copyable,preview,previewLayout="tabs",lineNumbers,highlight,tabs,filename,className}:{children?:string;language?:string;copyable?:boolean;
+  /** O nome do arquivo na cabeça do bloco; com ele, o "Copy" é escrito e a linha longa desce. */
+  filename?:React.ReactNode;
   /** A prévia viva do código: com ela, o bloco vira a caixa de exemplo, com as abas Prévia | Código. */
   preview?:React.ReactNode;
+  /** Com `preview`: `tabs` (as abas Prévia | Código, o padrão) ou `stacked` (a peça em cima e o código embaixo; mais de 5
+   *  linhas, recolhido com o "Expand code" — ADR-0089). */
+  previewLayout?:"tabs"|"stacked";
   /** Mostra o número de cada linha à esquerda. O número não entra no texto copiado nem é lido pelo leitor de tela. */
   lineNumbers?:boolean;
   /** Colore o código. Passe o `highlightCode` de `@aurea-uds/react/code-highlight` (os analisadores são peer opcional). */
@@ -87,6 +109,8 @@ export function CodeBlock({children,language="text",copyable,preview,lineNumbers
   tabs?:CodeBlockTab[];
   className?:string}){
 if(tabs&&tabs.length>0)return <CodigoEmAbas tabs={tabs} language={language} copyable={copyable} highlight={highlight} className={className}/>;
+if(preview!==undefined&&previewLayout==="stacked")return <CaixaEmpilhada preview={preview} className={className} linhas={(children??"").split("\n").length}
+  codigo={<CodeBlock language={language} copyable={copyable} lineNumbers={lineNumbers} highlight={highlight}>{children}</CodeBlock>}/>;
 if(preview!==undefined)return <CaixaDeExemplo preview={preview} className={className}
   codigo={<CodeBlock language={language} copyable={copyable} lineNumbers={lineNumbers} highlight={highlight}>{children}</CodeBlock>}/>;
 const s=useAureaStrings();
@@ -101,10 +125,11 @@ const linhas=lineNumbers||highlight?linhasDoCodigo(children,language,highlight):
 const colorido=linhas!=null&&highlight!=null&&linhas.some(l=>l.some(p=>p.className));
 // Os algarismos da última linha: a coluna do número tem a largura deles (99 → 2, 100 → 3).
 const digitos=lineNumbers&&linhas?{"--code-line-digits":String(linhas.length).length} as React.CSSProperties:undefined;
-const pre=<pre className={cx("code-block",lineNumbers&&"code-block-numbered",colorido&&"code-block-highlighted",!copyable&&className)} style={digitos} data-language={language} tabIndex={0}><code>{linhas
+const pre=<pre className={cx("code-block",lineNumbers&&"code-block-numbered",colorido&&"code-block-highlighted",!copyable&&filename==null&&className)} style={digitos} data-language={language} tabIndex={0}><code>{linhas
   ?<>{linhas.map((l,i)=><React.Fragment key={i}><span className="code-line">{l.map((p,j)=>p.className?<span key={j} className={p.className}>{p.text}</span>:p.text)}</span>{i<linhas.length-1?"\n":null}</React.Fragment>)}{children.endsWith("\n")?"\n":null}</>
   :children}</code></pre>;
-if(!copyable)return pre;
+if(!copyable&&filename==null)return pre;
+if(!copyable)return <div className={cx("code-block-wrap","code-block-file",className)}><div className="code-block-head"><span className="code-block-title">{filename}</span></div>{pre}</div>;
 // 0.28.0: o "copiado" é dito ao leitor de tela. Com o `aurea.js` na página, é ele quem diz (pelo
 // texto do `data-aurea-copy-done`, na língua do app); sem ele, a região de status daqui.
 const [copiado,setCopiado]=React.useState(false);
@@ -113,6 +138,12 @@ const onCopy=(e:React.MouseEvent<HTMLButtonElement>)=>{e.stopPropagation();const
   // Sem área de transferência (ou sem promessa), não há o que avisar — e não pode quebrar o clique.
   const copia=navigator.clipboard?.writeText(children);if(typeof copia?.then!=="function")return;
   void copia.then(()=>{setCopiado(true);setTimeout(()=>setCopiado(false),1500)},()=>{})};
+if(filename!=null)return <div className={cx("code-block-wrap","code-block-file",className)} data-aurea-copy-scope>
+<span className="sr-only" role="status" aria-live="polite">{copiado?s.copied:""}</span>
+<div className="code-block-head"><span className="code-block-title">{filename}</span>
+<button type="button" className={cx("btn btn-secondary copy-code-text",copiado&&"is-done")} data-aurea-copy data-aurea-copy-done={s.copied} onClick={onCopy}>
+<Icon name="copy" size="sm" className="c-copy"/><Icon name="check" size="sm" className="c-done"/><span className="c-copy">{s.copy}</span><span className="c-done">{s.copied}</span></button></div>
+{pre}</div>;
 return <div className={cx("code-block-wrap",className)} data-aurea-copy-scope>
 <span className="sr-only" role="status" aria-live="polite">{copiado?s.copied:""}</span>
 <button type="button" className={cx("btn btn-icon btn-ghost copy-code",copiado&&"is-done")} data-aurea-copy data-aurea-copy-done={s.copied} aria-label={s.copyCode} onClick={onCopy}>

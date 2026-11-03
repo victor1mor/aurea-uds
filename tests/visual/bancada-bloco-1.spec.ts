@@ -10,6 +10,9 @@ const AA = 4.5;
 async function contrastes(page: Page, pagina: string, seletor: string) {
   await page.setViewportSize({width: 1280, height: 900});
   await page.goto(`${base}/apps/catalog/${pagina}`);
+  // No site B os exemplos moram em itens que abrem e fecham: fechado, o navegador não termina a troca de cor do tema, e a
+  // medida leria a cor velha. Abrem-se todos, como a pessoa faria para ver.
+  await page.evaluate(() => document.querySelectorAll("details").forEach((d) => { d.open = true; }));
   const out: Record<string, {texto: string; razao: number}[]> = {};
   for (const tema of ["dark", "light"] as const) {
     await page.evaluate((t) => { document.documentElement.dataset.theme = t; }, tema);

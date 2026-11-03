@@ -1,0 +1,39 @@
+/* ICONS no desenho B (site-b/paginas/icons.mjs). */
+
+/* Os dois passos de servir o desenho: o número na bolinha e o parágrafo ao lado. */
+.icons-passo { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-3); padding:var(--space-4); }
+.icons-passo > b { font-size:var(--text-base); font-weight:var(--weight-bold); line-height:var(--leading-tight); }
+
+/* A mesa de experimentar: os controles à esquerda, o palco à direita. */
+.icons-mesa { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-3); margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.docb-corpo:has(.icons-mesa) { container:docb / inline-size; }
+/* Lado a lado como no desenho, já na coluna de 1280 (a mesa à esquerda, a prévia à direita). */
+@container docb (min-width:520px) { .icons-mesa { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); align-items:start; } }
+.icons-controles { min-inline-size:0; }
+/* A grade dos dez nomes (o D-6): cinco por linha, três no estreito; o ladrilho de 72 (`--space-16` + `--space-2`). */
+.icons-grade { display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:var(--space-2); }
+.icons-ladrilho { min-inline-size:0; min-block-size:calc(var(--space-16) + var(--space-2)); }
+.icons-ladrilho-dentro { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--space-1); inline-size:100%; block-size:100%; }
+.icons-ladrilho-dentro > span { max-inline-size:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:var(--font-code); font-size:var(--text-xs); }
+.icons-escolhas { display:flex; flex-direction:column; gap:var(--space-3); }
+.icons-escolhas .docb-rotulo { margin-block-end:var(--space-2); }
+.docb-corpo .icons-linha { margin:0; }
+.icons-palco { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--space-6); min-block-size:calc(var(--space-24) * 3);
+  padding:var(--space-6); border-radius:var(--radius-card); background:var(--site-palco); }
+/* O desenho grande do sprite (128 = duas vezes o `--space-16`, ilustração do site; não é o `Icon`). */
+.icons-grande { inline-size:calc(var(--space-16) * 2); block-size:calc(var(--space-16) * 2); fill:currentColor; }
+.icons-real { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-2) var(--space-4); border-radius:var(--radius-full); background:var(--card);
+  font-size:var(--text-sm); }
+.icons-px { color:var(--muted-foreground); font-family:var(--font-code); }
+
+/* "The filled form", o `x` e os vereditos. */
+.icons-abas { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.icons-xis, .icons-veredito { flex-direction:row; align-items:center; gap:var(--space-3); }
+.icons-xis code, .icons-veredito code { font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+.icons-veredito > .badge { margin-inline-start:auto; }
+.icons-roteador { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+
+@media (max-width:767px) { .icons-grade { grid-template-columns:repeat(3, minmax(0, 1fr)); } }
+
+/* Texto a 200%: a chave das abas rola dentro dela, em vez de empurrar a página. */
+.icons-abas { max-inline-size:100%; overflow-x:auto; }
