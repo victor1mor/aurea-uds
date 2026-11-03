@@ -8746,6 +8746,10 @@ a.blk-chip:hover { background:var(--primary); color:var(--primary-foreground); }
   .g5-grade-4 { grid-template-columns:repeat(2, minmax(0, 1fr)); }
 }
 
+/* Texto a 200% (a CI do pedido #112, 03/11/2026: Accessibility +2 no Chromium do Linux): o código do texto quebra quando
+   não cabe na linha, como o `.docb-corpo` — o `prefers-reduced-motion: reduce` inteiro passava da borda. */
+.g5 :is(.g5-p, .g5-ul, .g5-ol, .g5-h3, .g5-cartao p, .alert) code { white-space:normal; overflow-wrap:break-word; }
+
 /* site-b/css/hooks.css */
 /* A PÁGINA "HOOKS" DO SITE B (o desenho "hooks"; o mapa, grupo 2). Toda medida é um token; as peças são as da Aurea. */
 .hk-b { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-4); container-type:inline-size; }
