@@ -70,7 +70,7 @@ area makes the toggle an area around a block — a thumbnail, an icon with its n
 
 ```tsx
 <Toggle area variant="ghost" defaultPressed label="Header">
-  <Thumbnail part="header" />
+  <img src="/thumbnails/header.png" alt="" />
 </Toggle>
 <Toggle area label="Light"><Icon name="sun" /> Light</Toggle>
 <Toggle area="pill" variant="ghost">Sidebar</Toggle>

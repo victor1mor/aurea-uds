@@ -9683,6 +9683,10 @@ a.blk-chip:hover { background:var(--primary); color:var(--primary-foreground); }
   .th-marcas > .radio-group-cards { grid-template-columns:repeat(2, minmax(0, 1fr)); }
 }
 
+/* Texto a 200% (a CI, 03/11/2026: WebKit +7): a coluna do meio fica com uns 150, e a chave de densidade quebra em duas linhas
+   em vez de empurrar a página. No tamanho normal ela cabe numa linha, e nada muda. */
+.th-controles .segmented { flex-wrap:wrap; max-inline-size:100%; }
+
 /* site-b/css/tokens.css */
 /* A PÁGINA "TOKENS" DO SITE B (o desenho "tokens"; o mapa, grupo 2). Toda medida é um token; as peças são as da Aurea. */
 .tk-b { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-4); container-type:inline-size; }
@@ -9790,4 +9794,10 @@ a.blk-chip:hover { background:var(--primary); color:var(--primary-foreground); }
   .tk-ferramentas { position:static; border-radius:var(--radius-card); }
   .tk-amostras { padding:var(--space-2); }
 }
+
+/* Texto a 200% (a CI, 03/11/2026: Firefox +38 e WebKit +11; e a 320 no Firefox, +15): a coluna das amostras encolhe com a
+   página, e o nome do tom ("warning-800") quebra em vez de alargar o botão. No tamanho normal, nada muda. */
+.tk-amostras { grid-template-columns:minmax(0, 1fr); }
+.tk-sec, .tk-grade-4 > *, .tk-passo { min-inline-size:0; }
+.tk-passo code { overflow-wrap:anywhere; }
 }

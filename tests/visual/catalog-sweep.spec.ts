@@ -121,13 +121,25 @@ test.describe("catálogo · varredura de todas as páginas", () => {
     await page.setViewportSize({width: 1280, height: 900});
     for (const f of PAGES) {
       await abrir(page, url(f), avisar);
-      const over = await page.evaluate(() => {
+      const {over, quem} = await page.evaluate(() => {
         document.documentElement.style.fontSize = "32px"; // 200% de 16px
-        const x = document.documentElement.scrollWidth - document.documentElement.clientWidth;
+        const cw = document.documentElement.clientWidth;
+        const x = document.documentElement.scrollWidth - cw;
+        // QUEM passou da borda (03/11/2026): a CI do Linux acusou +2 numa página que o Windows não reproduz, e o número
+        // sozinho não diz onde olhar. A primeira peça que passa da borda sem um pai que corte nem que passe também.
+        const quem: string[] = [];
+        if (x > 0) for (const el of document.querySelectorAll("body *")) {
+          const r = el.getBoundingClientRect();
+          if (!r.width || r.right <= cw + 0.5 || el.parentElement!.getBoundingClientRect().right > cw + 0.5) continue;
+          let cortado = false;
+          for (let a = el.parentElement; a && !cortado; a = a.parentElement) cortado = getComputedStyle(a).overflowX !== "visible";
+          if (!cortado) quem.push(`${el.tagName.toLowerCase()}.${String(el.className).split(" ").slice(0, 3).join(".")}`);
+          if (quem.length >= 3) break;
+        }
         document.documentElement.style.fontSize = "";
-        return x;
+        return {over: x, quem};
       });
-      if (over > 0) falhas.push(`${f}: +${over}px com texto a 200%`);
+      if (over > 0) falhas.push(`${f}: +${over}px com texto a 200% (${quem.join(", ") || "?"})`);
     }
     expect(falhas, "páginas que rolam de lado com texto a 200%:\n" + falhas.join("\n")).toEqual([]);
   });
@@ -555,6 +567,11 @@ test.describe("catálogo · contratos do modelo de página", () => {
   // A prévia é VIVA (`embed`): o componente mora na moldura, então tudo se procura dentro dela.
   test("o DatePicker: o gatilho sem a seta, o calendário abre com foco e o Esc devolve o foco", async ({page}) => {
     await page.goto("/apps/catalog/datepicker.html");
+    // No site B (0.54.0) o exemplo mora num item que abre e fecha; no WebKit a moldura do item fechado não carrega, e o
+    // teste esperava para sempre (a CI do pedido #112). Abre-se o item, como a pessoa faz.
+    await page.locator(".demo-panel > iframe.demo-frame").first().evaluate((e) => {
+      const d = e.closest("details"); if (d) d.open = true; e.scrollIntoView();
+    });
     const moldura = page.frameLocator(".demo-panel > iframe.demo-frame").first();
     const gatilho = moldura.locator(".date-picker-trigger").first();
     await expect(gatilho).toHaveAccessibleName("Check-in");

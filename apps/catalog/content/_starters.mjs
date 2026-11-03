@@ -820,7 +820,7 @@ export function Actions() {
         code: `<CommandPalette size="lg" open={open} onClose={close} items={[
   {id: "button", label: "Button", description: "The action a person takes.", icon: "cursor-click", tone: "blue", group: "Components", run},
   {id: "theme", label: "Theming", description: "Brands, themes and densities.", icon: "palette", tone: "green", group: "Getting Started", run},
-]} preview={(item) => <Preview item={item} />} footer={<PlatformSwitch />} />`,
+]} preview={(item) => <p>{item.description}</p>} footer={<Badge>Web</Badge>} />`,
         render: () => h(AbrePaletaGrande),
       },
     ],

@@ -104,3 +104,9 @@
   .tk-ferramentas { position:static; border-radius:var(--radius-card); }
   .tk-amostras { padding:var(--space-2); }
 }
+
+/* Texto a 200% (a CI, 03/11/2026: Firefox +38 e WebKit +11; e a 320 no Firefox, +15): a coluna das amostras encolhe com a
+   página, e o nome do tom ("warning-800") quebra em vez de alargar o botão. No tamanho normal, nada muda. */
+.tk-amostras { grid-template-columns:minmax(0, 1fr); }
+.tk-sec, .tk-grade-4 > *, .tk-passo { min-inline-size:0; }
+.tk-passo code { overflow-wrap:anywhere; }

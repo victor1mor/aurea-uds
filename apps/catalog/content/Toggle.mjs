@@ -82,7 +82,7 @@ export default {
       description: "area makes the toggle an area around a block — a thumbnail, an icon with its name. With variant=\"ghost\" " +
         "it has no fill (the yellow at 18% on hover, 42% when on); with the default, the grey fill and, when on, the solid " +
         "yellow. area=\"pill\" keeps it as wide as its content.",
-      code: '<Toggle area variant="ghost" defaultPressed label="Header">\n  <Thumbnail part="header" />\n</Toggle>\n<Toggle area label="Light"><Icon name="sun" /> Light</Toggle>\n<Toggle area="pill" variant="ghost">Sidebar</Toggle>',
+      code: '<Toggle area variant="ghost" defaultPressed label="Header">\n  <img src="/thumbnails/header.png" alt="" />\n</Toggle>\n<Toggle area label="Light"><Icon name="sun" /> Light</Toggle>\n<Toggle area="pill" variant="ghost">Sidebar</Toggle>',
       render: () => h("div", {style: {display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: "var(--space-3)"}},
         h(Toggle, {area: true, variant: "ghost", defaultPressed: true, label: "Header", style: {inlineSize: "8rem"}},
           h("span", {style: {display: "block", blockSize: "var(--space-16)", borderRadius: "var(--radius-lg)", background: "var(--card)"}})),
