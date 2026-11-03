@@ -770,8 +770,8 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await page.evaluate(() => localStorage.removeItem("aurea-theme"));
     await page.reload();
     await page.waitForLoadState("load");
-    // No site B a chave mora nas ações da pílula (`.site-actions`).
-    const chave = page.locator("header .site-actions").getByRole("radiogroup", {name: "Theme", exact: true});
+    // No site B a chave mora nas ações da pílula: `.site-actions` nas áreas, o encaixe de ações do `Header` na página inicial.
+    const chave = page.locator("header :is(.site-actions, .topbar-actions)").getByRole("radiogroup", {name: "Theme", exact: true});
     await expect(chave.getByRole("radio")).toHaveCount(3);
     const caixa = await chave.boundingBox();
     expect(Math.round(caixa!.height), "a cápsula de 34 da referência").toBe(34);
@@ -783,23 +783,23 @@ test.describe("catálogo · contratos do modelo de página", () => {
     await page.reload();
     await page.waitForLoadState("load");
     await expect(page.locator("html"), "a escolha volta ao abrir de novo").toHaveAttribute("data-theme", "dark");
-    await expect(page.locator("header .site-actions").getByRole("radio", {name: "System"})).toBeChecked();
-    await page.locator("header .site-actions").getByRole("radio", {name: "Light"}).check();
+    await expect(page.locator("header :is(.site-actions, .topbar-actions)").getByRole("radio", {name: "System"})).toBeChecked();
+    await page.locator("header :is(.site-actions, .topbar-actions)").getByRole("radio", {name: "Light"}).check();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
     await page.emulateMedia({colorScheme: "dark"});
     await expect(page.locator("html"), "escolhido Claro, o computador não manda mais").toHaveAttribute("data-theme", "light");
     // 15/10/2026 (o Victor: "some o ícone quando clica"): a escolhida desenha a forma CHEIA, e o sprite da página só
     // tinha a da lua — a página sai pronta com o escuro. Em cada uma das três, todo desenho da chave existe na página.
     for (const nome of ["Light", "Dark", "System"]) {
-      await page.locator("header .site-actions").getByRole("radio", {name: nome}).check();
-      const faltando = await page.evaluate(() => [...document.querySelectorAll("header .site-actions .theme-switch-option use")]
+      await page.locator("header :is(.site-actions, .topbar-actions)").getByRole("radio", {name: nome}).check();
+      const faltando = await page.evaluate(() => [...document.querySelectorAll("header :is(.site-actions, .topbar-actions) .theme-switch-option use")]
         .map((u) => u.getAttribute("href")!).filter((h) => !document.getElementById(h.slice(1))));
       expect(faltando, `o desenho da escolhida (${nome})`).toEqual([]);
       // PINTADA (o Victor, 15/10/2026: "o sol deve ficar amarelo… a lua quero um preto absoluto"): a escolhida é branca nos
       // dois temas, o sol no amarelo da marca, puro (a "B" dele; o de ícone do claro saiu marrom), a lua e o monitor no
       // preto absoluto.
       const pintura = await page.evaluate(() => {
-        const op = [...document.querySelectorAll("header .site-actions .theme-switch-option")].find((o) => o.querySelector(":checked"))!;
+        const op = [...document.querySelectorAll("header :is(.site-actions, .topbar-actions) .theme-switch-option")].find((o) => o.querySelector(":checked"))!;
         const raiz = getComputedStyle(document.documentElement);
         const cor = (v: string) => { const t = document.createElement("i"); t.style.color = raiz.getPropertyValue(v); document.body.append(t);
           const c = getComputedStyle(t).color; t.remove(); return c; };
@@ -922,15 +922,26 @@ test.describe("catálogo · contratos do modelo de página", () => {
     expect(m.sobra, "a última tecla encosta no recuo da borda direita").toBeCloseTo(m.recuo, 0);
   });
 
-  test("as abas do demo alternam pelo comportamento do CORE, sem JS do app", async ({page}) => {
+  // A CAIXA EMPILHADA (ADR-0089, 02/11/2026): a peça e o código à vista juntos, sem abas; o código longo vem recolhido, e
+  // quem abre e recolhe é o `aurea.js` do CORE (`data-aurea-code-expand`), sem JS do app.
+  test("a caixa de exemplo empilhada abre e recolhe o código pelo comportamento do CORE, sem JS do app", async ({page}) => {
     await page.goto("/apps/catalog/button.html");
-    // .demo-panel no seletor: aba e painel compartilham data-panel, e sem isso o locator
-    // pega os dois.
-    const preview = page.locator(".demo").first().locator('.demo-panel[data-panel="preview"]');
-    const code = page.locator(".demo").first().locator('.demo-panel[data-panel="code"]');
-    await expect(preview).toBeVisible();
-    await page.locator('.demo').first().locator('[role="tab"][data-panel="code"]').click();
-    await expect(preview).toBeHidden();
-    await expect(code).toBeVisible();
+    const caixa = page.locator("#preview");
+    await expect(caixa.locator('[role="tab"]')).toHaveCount(0);
+    await expect(caixa.locator('.demo-panel[data-panel="preview"]')).toBeVisible();
+    await expect(caixa.locator('.demo-panel[data-panel="code"]')).toBeVisible();
+    await expect(caixa).toHaveAttribute("data-collapsed", "");
+    const alturaFechada = await caixa.locator(".code-block-wrap").evaluate((e) => e.getBoundingClientRect().height);
+    const botao = caixa.locator("[data-aurea-code-expand]");
+    await expect(botao).toHaveText("Expand code");
+    await botao.click();
+    await expect(caixa).toHaveAttribute("data-expanded", "");
+    await expect(botao).toHaveAttribute("aria-expanded", "true");
+    await expect(botao).toHaveText("Collapse code");
+    const alturaAberta = await caixa.locator(".code-block-wrap").evaluate((e) => e.getBoundingClientRect().height);
+    expect(alturaAberta).toBeGreaterThan(alturaFechada);
+    await botao.click();
+    await expect(caixa).toHaveAttribute("data-collapsed", "");
+    await expect(botao).toHaveText("Expand code");
   });
 });

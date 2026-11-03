@@ -24,7 +24,7 @@ export default function hooks(site) {
       h("p", {className: "intro-lede"}, `${HOOKS.length} public hooks. They are API like any component — they just have no registry card, because a card describes a component. Everything below was read from the source file named on each one.`),
       // Os atalhos (o desenho): o `Button` secundário xl com o número num ladrilho redondo da cor do hook.
       h("nav", {className: "hk-atalhos", "aria-label": "Jump to a hook"}, ...HOOKS.map((g, n) =>
-        h(A.Button, {key: g.name, variant: "secondary", size: "xl", href: `#${g.name}`, className: "hk-atalho"},
+        h(A.Button, {key: g.name, variant: "tertiary", size: "xl", href: `#${g.name}`, className: "hk-atalho"},
           h("span", {className: "intro-tile hk-atalho-n", "data-cor": COR[n % COR.length], "aria-hidden": "true"}, n + 1), g.name)))),
     h("div", {className: "intro-pecas cat-pecas", "aria-hidden": "true"},
       h("div", {className: "intro-peca cat-peca-1", "data-fundo": "1"}, h("div", {className: "intro-boia"},
@@ -36,7 +36,7 @@ export default function hooks(site) {
           h("span", null, h("b", null, "Saved"), h("br"), h("span", {className: "hk-apagado"}, "Two files uploaded.")))))));
 
   // O "Try it" de cada hook: o que a demonstração mostra (o `hooks.js` dá vida).
-  const caixaDeTeste = (titulo, dica, ...filhos) => h(A.Card, {variant: "inset", className: "hk-teste"},
+  const caixaDeTeste = (titulo, dica, ...filhos) => h(A.Card, {className: "hk-teste"},
     h("div", {className: "hk-teste-topo"}, h("span", {className: "hk-teste-nome"}, h("span", {className: "hk-ponto", "aria-hidden": "true"}), titulo),
       h("span", {className: "hk-teste-dica"}, dica)),
     ...filhos);
@@ -52,27 +52,27 @@ export default function hooks(site) {
   const DEMOS = {
     useToast: () => caixaDeTeste("Try it", "toast.add · toast.promise",
       h("div", {className: "hk-botoes"},
-        h(A.Button, {variant: "primary", size: "sm", type: "button", "data-hk-aviso": "success"}, "Save"),
-        ...["info", "warning", "danger"].map(t => h(A.Button, {key: t, variant: "secondary", size: "sm", type: "button", "data-hk-aviso": t}, t)),
-        h(A.Button, {variant: "secondary", size: "sm", type: "button", "data-hk-aviso": "promise"}, "promise")),
+        h(A.Button, {variant: "primary", size: "md", type: "button", "data-hk-aviso": "success"}, "Save"),
+        ...["info", "warning", "danger"].map(t => h(A.Button, {key: t, variant: "tertiary", size: "md", type: "button", "data-hk-aviso": t}, t)),
+        h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-hk-aviso": "promise"}, "promise")),
       h("p", {className: "hk-vazio"}, "Press a button. Each toast leaves by itself after 4 seconds.")),
     useSidebar: () => caixaDeTeste("Try it", "setCollapsed · toggle",
       h("div", {className: "hk-lateral-demo", id: "useSidebar-demo"},
         lateral(false), lateral(true),
         h("div", {className: "hk-lateral-lado"},
           h("div", {className: "hk-botoes"},
-            h(A.Button, {variant: "primary", size: "sm", type: "button", "data-hk-lateral-foco": ""}, "Focus mode"),
-            h(A.Button, {variant: "secondary", size: "sm", type: "button", "data-hk-lateral-alterna": ""}, h("code", null, "sidebar.toggle()"))),
+            h(A.Button, {variant: "primary", size: "md", type: "button", "data-hk-lateral-foco": ""}, "Focus mode"),
+            h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-hk-lateral-alterna": ""}, h("code", null, "sidebar.toggle()"))),
           h("pre", {className: "hk-leitura", "aria-live": "polite"}, h("code", {"data-hk-lateral-estado": ""},
             "sidebar.collapsed   // false\nsidebar.collapsible // \"icon\""))))),
     useAureaTheme: () => caixaDeTeste("Try it — this changes the whole page", "",
-      h("div", {className: "hk-botoes"}, h(A.Button, {variant: "primary", size: "sm", type: "button", "data-hk-tema": ""}, h("code", null, "toggleTheme()"))),
-      h("span", {className: "segmented segmented-full", "data-segment-style": "neutral", role: "group", "aria-label": "Density"},
+      h("div", {className: "hk-botoes"}, h(A.Button, {variant: "primary", size: "md", type: "button", "data-hk-tema": ""}, h("code", null, "toggleTheme()"))),
+      h("span", {className: "segmented segmented-lg segmented-full", "data-segment-style": "emphasis", role: "group", "aria-label": "Density"},
         ...["compact", "comfortable", "spacious"].map(d => h("button", {key: d, type: "button", "data-hk-densidade": d,
           className: d === "comfortable" ? "active" : undefined, "aria-pressed": d === "comfortable" ? "true" : "false"}, d))),
       h("pre", {className: "hk-leitura", "aria-live": "polite"}, h("code", {"data-hk-tema-estado": ""}, "theme   // \"dark\"\ndensity // \"comfortable\"")),
       h(A.Input, {"aria-label": "A field at this density", placeholder: "A field at this density"}),
-      h("div", null, h(A.Button, {variant: "primary", size: "sm", type: "button"}, "Save"))),
+      h("div", null, h(A.Button, {variant: "primary", size: "md", type: "button"}, "Save"))),
     useAureaStrings: () => caixaDeTeste("Try an override", "one line of the dictionary",
       h(A.Field, {label: h("code", null, "strings.comboboxEmpty")},
         h(A.Input, {defaultValue: "No results", "data-hk-frase": "", autoComplete: "off"})),
@@ -81,7 +81,7 @@ export default function hooks(site) {
         h(A.Input, {"aria-label": "A combobox that finds nothing", defaultValue: "zzz", readOnly: true}),
         h("div", {className: "menu hk-menu", role: "status"}, h("div", {className: "combobox-empty", "data-hk-frase-mostra": ""}, "No results")))),
     useSpriteUrl: () => caixaDeTeste("Try it", "what Icon reads",
-      h("span", {className: "segmented", "data-segment-style": "neutral", role: "group", "aria-label": "Sprite"},
+      h("span", {className: "segmented segmented-lg", "data-segment-style": "emphasis", role: "group", "aria-label": "Sprite"},
         ...["/aurea-icons.svg", "/other-sprite.svg"].map((u, n) => h("button", {key: u, type: "button", "data-hk-sprite": u,
           className: n === 0 ? "active" : undefined, "aria-pressed": n === 0 ? "true" : "false"}, h("code", null, u)))),
       h("div", {className: "hk-sprite"}, h("span", {className: "intro-tile hk-sprite-tile", "aria-hidden": "true"}, h(A.Icon, {name: "plus"})),
@@ -89,17 +89,21 @@ export default function hooks(site) {
       h("code", {className: "hk-apagado", "data-hk-sprite-valor": ""}, "useSpriteUrl()  // \"/aurea-icons.svg\"")),
   };
 
+  // O código do desenho: o rótulo em mono maiúsculo e o "Copy" (o botão neutro) numa linha, e o código numa caixa mais escura
+  // que o cartão, canto 16. O copiar é o do core (`data-aurea-copy`, o mesmo do `CodeBlock`).
+  const blocoDeCodigo = (rotulo, nome, codigo) => h("div", {className: "hk-bloco", "data-aurea-copy-scope": ""},
+    h("div", {className: "hk-bloco-cabeca"}, h("p", {className: "hk-cap"}, rotulo),
+      h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-aurea-copy": "", "aria-label": `Copy the ${nome} ${rotulo.toLowerCase()}`}, "Copy")),
+    h("pre", {className: "hk-caixa", tabIndex: 0}, h("code", null, codigo)));
   const secao = (g, n) => h("section", {key: g.name, className: "hk-sec", id: g.name, "aria-labelledby": `${g.name}-h`},
     h("div", {className: "hk-cabeca"},
       h("span", {className: "cat-familia-num"}, num(n)),
       h("h2", {id: `${g.name}-h`, className: "hk-nome"}, g.name),
       h(A.Badge, {size: "lg", className: "hk-fonte"}, g.source),
-      h(A.Button, {variant: "tertiary", size: "sm", href: `./${slug(g.name)}.html`, trailingIcon: "arrow-up-right", className: "hk-pagina"}, "Hook page")),
+      h(A.Button, {variant: "tertiary", size: "md", href: `./${slug(g.name)}.html`, trailingIcon: "arrow-up-right", className: "hk-pagina"}, "Hook page")),
     h("p", {className: "hk-texto"}, g.lede),
     h("div", {className: "hk-grade"},
-      h(A.Card, {className: "hk-codigo"},
-        h(A.CodeBlock, {language: "tsx", copyable: true, filename: "Signature"}, g.signature),
-        h(A.CodeBlock, {language: "tsx", copyable: true, filename: "Example"}, g.example)),
+      h(A.Card, {className: "hk-codigo"}, blocoDeCodigo("Signature", g.name, g.signature), blocoDeCodigo("Example", g.name, g.example)),
       DEMOS[g.name] ? DEMOS[g.name]() : null),
     h("div", {className: "hk-notas"}, ...g.notes.map(([t, v]) => h(A.Card, {key: t, className: "hk-nota"}, h("h3", null, t), h("p", null, v)))));
 

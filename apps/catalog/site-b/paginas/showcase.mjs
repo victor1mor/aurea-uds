@@ -49,20 +49,26 @@ export default function showcase(site, doc) {
     h("p", {className: "gs-k", "data-sc-campo": "nome"}, nome0),
     h("h3", {className: "sc-painel-peca", "data-sc-campo": "peca"}, peca0),
     h("p", {className: "sc-painel-frase", "data-sc-campo": "frase"}, frase0),
-    h(A.Button, {size: "sm", variant: "secondary", href: href0, trailingIcon: "arrow-right", className: "sc-painel-abrir", "data-sc-campo": "href"}, "Open its page"));
+    h(A.Button, {size: "md", variant: "tertiary", href: href0, trailingIcon: "arrow-up-right", className: "sc-painel-abrir", "data-sc-campo": "href"}, "Open its page"));
   // O dado de cada parte, para o script.
   const dados = h("script", {type: "application/json", id: "sc-partes", dangerouslySetInnerHTML: {__html: JSON.stringify(PARTES).replace(/</g, "\\u003c")}});
 
   const [p1, p2, p3] = este.blocos.filter(b => b.tipo === "p");
   const [pSeu1, pSeu2] = seu.blocos.filter(b => b.tipo === "p");
   const link = pSeu1.texto.find(x => x.link !== undefined);
+  // Como o desenho (02/11/2026): o aviso tem o título em cima ("Enforced, not just intended.") e o corpo embaixo; o texto
+  // do documento (que também sai em Markdown) fica como está, e a página só o reparte.
+  const PREFIXO = "This is enforced, not just intended: ";
+  const [aviso0, ...avisoResto] = p2.texto;
+  const comTitulo = typeof aviso0?.t === "string" && aviso0.t.startsWith(PREFIXO);
+  const corpoDoAviso = comTitulo ? [{t: aviso0.t.slice(PREFIXO.length).replace(/^./, c => c.toUpperCase())}, ...avisoResto] : p2.texto;
   const node = g.pagina(doc, abertura,
     g.secao(este.id, "01 · This site", "Built only with Aurea.",
       g.p(p1.texto, "e1"),
       h("div", {className: "sc-inspetor"}, miniatura, inspetor),
-      h(A.Alert, {variant: "success", className: "gs-aviso"}, ...site.pedacos(p2.texto, "e2")),
+      h(A.Alert, {appearance: "soft", variant: "success", className: "gs-aviso", title: comTitulo ? "Enforced, not just intended." : undefined}, ...site.pedacos(corpoDoAviso, "e2")),
       h("p", {className: "intro-p gs-p sc-tema"}, ...site.pedacos(p3.texto, "e3"), " ",
-        h(A.Button, {size: "sm", variant: "secondary", type: "button", "data-sc-tema": ""}, "See it in light")),
+        h(A.Button, {size: "md", variant: "tertiary", type: "button", "data-sc-tema": ""}, "See it in light")),
       dados),
     g.secao(blocos.id, "02 · Blocks", "Ready sections.",
       ...g.corpo(blocos.blocos, {chave: "b"}),
@@ -72,8 +78,12 @@ export default function showcase(site, doc) {
       g.linksDaLista(padroes.blocos.find(b => b.tipo === "ul"), [["puzzle-piece", "orange"], ["book-open", "pink"]])),
     g.secao(seu.id, "04 · Your project here", "Built something with Aurea?",
       h(A.Card, {variant: "inset", className: "sc-seu"},
-        h("div", null, g.p(pSeu1.texto, "s1", {className: "intro-p gs-p sc-seu-p"}), g.p(pSeu2.texto, "s2", {className: "sc-seu-nota"})),
-        h(A.Button, {variant: "primary", href: link.href, trailingIcon: "arrow-up-right"}, "Open an issue"))));
+        // Como o desenho: o pedido em lista (o nome, o link, uma frase), e não numa frase só.
+        h("div", null,
+          h("p", {className: "intro-p gs-p sc-seu-p"}, "Open an issue on GitHub with:"),
+          h("ul", {className: "gs-lista gs-ul sc-seu-lista"}, ...["the name,", "a link,", "one sentence about it."].map(x => h("li", {key: x}, x))),
+          g.p(pSeu2.texto, "s2", {className: "sc-seu-nota"})),
+        h(A.Button, {size: "lg", variant: "primary", href: link.href, trailingIcon: "arrow-up-right"}, "Open an issue"))));
   const toc = [[este, "This site"], [blocos, "Blocks"], [padroes, "Patterns and recipes"], [seu, "Your project here"]].map(([s, label]) => ({id: s.id, label}));
   return {node, toc};
 }

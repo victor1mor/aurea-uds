@@ -51,3 +51,19 @@
     });
   }
 }
+
+// O FILTRO DA LATERAL (o desenho B, 02/11/2026): "By area" mostra só os blocos da área escolhida; "Every area" mostra todos.
+// A contagem de cada grupo diz quantos aparecem ("1 of 7"); o grupo que fica vazio some.
+document.addEventListener("site-filtro", (e) => {
+  const pagina = document.querySelector(".blk-b");
+  if (!pagina) return;
+  const valor = e.detail;
+  pagina.querySelectorAll("[data-blk]").forEach((c) => { c.hidden = valor !== "all" && c.dataset.area !== valor; });
+  pagina.querySelectorAll(".blk-grupo").forEach((g) => {
+    const cartoes = g.querySelectorAll("[data-blk]");
+    const vistos = [...cartoes].filter((c) => !c.hidden).length;
+    const conta = g.querySelector("[data-blk-conta]");
+    if (conta) conta.textContent = vistos + " of " + cartoes.length;
+    g.hidden = vistos === 0;
+  });
+});

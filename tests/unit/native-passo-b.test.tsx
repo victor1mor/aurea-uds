@@ -103,3 +103,13 @@ describe("as peças pintam o lugar certo", () => {
     expect(claro.color.input).not.toBe(claro.color.border);
   });
 });
+
+// O sétimo estilo (o site B, 02/11/2026): `emphasis` é a cápsula do `neutral` com a letra do escolhido de sempre — o
+// destaque no escuro, o texto no claro.
+describe("o segmento emphasis", () => {
+  it("é o neutral com a letra do destaque", () => {
+    expect(peleDoSegmento(escuro, "emphasis")).toMatchObject({fundo: "#3f3f46", letra: escuro.color.primaryEmphasis, sombra: true, aro: null, ponto: false});
+    expect(peleDoSegmento(claro, "emphasis")).toMatchObject({fundo: "#ffffff", letra: "#09090b", sombra: true});
+    expect(peleDoSegmento(escuro, "emphasis")?.letra).not.toBe(peleDoSegmento(escuro, "neutral")?.letra);
+  });
+});

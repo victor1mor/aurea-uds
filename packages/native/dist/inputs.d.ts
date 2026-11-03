@@ -378,12 +378,13 @@ export interface SegmentedControlProps extends ViewProps {
      * A cor do segmento aceso (ADR-0084, 27/10/2026), em seis estilos aprovados pelo Victor em 26/10/2026, os mesmos da web:
      * `current` (a cápsula amarela de sempre — o padrão), `neutral` (a cápsula branca com sombra), `contrast` (o grafite),
      * `brand` (o amarelo), `ring` (a cápsula neutra com o aro amarelo) e `dot` (a cápsula neutra com o ponto amarelo antes
-     * do nome — o lugar do ponto fica reservado em todos, para a largura não pular quando a escolha muda).
+     * do nome — o lugar do ponto fica reservado em todos, para a largura não pular quando a escolha muda). E `emphasis` (o
+     * site B, 02/11/2026): a cápsula branca com sombra e a letra do destaque — o amarelo no escuro, o texto no claro.
      */
     selectedStyle?: AureaSegmentedControlSelectedStyle;
 }
 /** Os seis estilos do segmento aceso (ADR-0084). */
-export type AureaSegmentedControlSelectedStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "dot";
+export type AureaSegmentedControlSelectedStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "dot" | "emphasis";
 /**
  * Um de poucos, lado a lado.
  *

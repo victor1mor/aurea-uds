@@ -11,7 +11,8 @@ import {esperarTransicoes} from "./esperar-transicoes";
 // conteúdo novo e ninguém olha o diff depois da terceira vez.
 const PAGES = [
   // ADR-0067 (13/10/2026): o `index.html` é o Início, e o catálogo de componentes mora em `components.html`.
-  {name: "index", url: "/apps/catalog/index.html", clip: ".home-hero"},
+  // O site B (0.54.0): a abertura do Início é o palco (`.inicio-palco`), não mais a `.home-hero`.
+  {name: "index", url: "/apps/catalog/index.html", clip: ".inicio-palco"},
   // O site B (01/11/2026): a All Components é o palco e as famílias; a foto é a PRIMEIRA família (o cabeçalho e os cartões).
   {name: "componentes", url: "/apps/catalog/components.html", clip: ".cat-familia"},
   {name: "componente", url: "/apps/catalog/button.html", clip: "#usage"},

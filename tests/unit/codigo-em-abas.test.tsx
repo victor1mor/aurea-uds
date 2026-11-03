@@ -36,13 +36,17 @@ describe("CodeBlock tabs", () => {
   });
 });
 
-describe("as quatro abas de instalar nas páginas de texto do site (o `build-catalog` montado)", () => {
+// O SITE B (02/11/2026): nas páginas de texto, a escolha do gerenciador é a CHAVE do desenho aprovado (pnpm, npm, yarn e
+// bun, nessa ordem), na Quick Start e na Frameworks; a caixa de quatro abas de antes saiu delas com o desenho. A Dark Mode,
+// como o desenho, mostra só o `pnpm add`.
+describe("a chave do gerenciador nas páginas de texto do site (o `build-catalog` montado)", () => {
   const pagina = (f: string) => readFileSync(join(__dirname, "../../apps/catalog", f), "utf8");
-  test.each(["docs-quick-start.html", "docs-frameworks.html", "docs-dark-mode.html"])("%s: o `pnpm add` virou npm, pnpm, yarn e bun, nessa ordem", (f) => {
+  test.each([["docs-quick-start.html", "qs-pm"], ["docs-frameworks.html", "fw-pm"]])("%s: a chave %s com pnpm, npm, yarn e bun, nessa ordem", (f, chave) => {
     const html = pagina(f);
-    expect(html).toContain('class="code-tabs"');
-    const ordem = ["npm i ", "pnpm add ", "yarn add ", "bun add "].map((c) => html.indexOf(c, html.indexOf('class="code-tabs"')));
-    expect(ordem.every((i) => i > 0)).toBe(true);
-    expect([...ordem].sort((a, b) => a - b)).toEqual(ordem);
+    const i = html.indexOf(`data-gs-chave="${chave}"`);
+    expect(i).toBeGreaterThan(0);
+    const valores = [...html.slice(i, i + 3000).matchAll(/data-valor="(pnpm|npm|yarn|bun)"/g)].map((m) => m[1]).slice(0, 4);
+    expect(valores).toEqual(["pnpm", "npm", "yarn", "bun"]);
+    expect(html).toContain("pnpm add ");
   });
 });

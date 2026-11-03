@@ -1,7 +1,7 @@
 // A PÁGINA "LLMs.txt" NO DESENHO B (02/11/2026, o grupo 5). O texto é o do `content/docs/llms-txt.md`; a página o arruma
 // como o desenho aprovado: os três arquivos em cartões de escolha (`RadioGroup variant="card"`, o item 1), o começo do
 // escolhido num bloco de arquivo (`CodeBlock filename`, o item 6), a troca de `.html` por `.md`, e a pergunta "How does
-// your tool read?" com a chave em pé (`orientation="vertical"`, o item 3, `selectedStyle="neutral"`). Os TAMANHOS dos
+// your tool read?" com a chave em pé (`orientation="vertical"`, o item 3, `selectedStyle="emphasis"`). Os TAMANHOS dos
 // arquivos são contados na montagem (o `llms.txt` pela receita do gerador; o `aurea-agents.md` pela skill); o do
 // `llms-full.txt` só existe depois de todas as páginas, então quem o conta é o `site-b/js/llms-txt.js`, lendo o arquivo.
 import {ferramentas, indiceLlms, notasDosAgentes, tamanho, comeco} from "../comum/grupo-5.mjs";
@@ -52,7 +52,7 @@ export default function llmsTxt(site, doc) {
     filename: h("span", {className: "llms-espiada-cabeca"},
       h("code", null, `${SITE}/`, h("wbr"), a.nome), h("span", {className: "llms-espiada-meta", "data-llms-tamanho": a.valor}, a.selo),
       h("span", {className: "llms-espiada-acoes"},
-        h(A.Button, {variant: "secondary", size: "md", type: "button", "data-copiar": a.url, "aria-label": `Copy the address of ${a.nome}`}, "Copy address"),
+        h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-copiar": a.url, "aria-label": `Copy the address of ${a.nome}`}, "Copy address"),
         h(A.Button, {variant: "ghost", size: "md", href: a.url, trailingIcon: "arrow-up-right"}, "Open")))},
   comeco(a.texto ?? a.comeco, a.linhas)));
   // O `CodeBlock` não repassa o `hidden`: a caixa de cada arquivo vai num invólucro que esconde.
@@ -93,12 +93,12 @@ export default function llmsTxt(site, doc) {
         h("div", {className: "llms-qual-resposta", "aria-live": "polite"},
           ...USOS.map(([v, , arquivo, porque], n) => h("div", {key: v, hidden: n !== 0 ? true : undefined, "data-llms-uso": v},
             h("div", {className: "llms-endereco"}, h("code", null, `${SITE}/`, h("wbr"), arquivo),
-              h(A.Button, {variant: "secondary", size: "md", type: "button", "data-copiar": `${SITE}/${arquivo}`, "aria-label": `Copy the address of ${arquivo}`}, "Copy")),
+              h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-copiar": `${SITE}/${arquivo}`, "aria-label": `Copy the address of ${arquivo}`}, "Copy")),
             h("p", null, porque))))),
       aviso("info", "sparkle", "Copy Prompt", ...site.pedacos(prompt.texto, "cp"))),
     secao("contributing", "Wrong answer?", "Contributing",
       h("p", {className: "intro-p g5-p"}, ...site.pedacos(contribuir.texto.map(p => p.link !== undefined ? {t: p.link} : p), "c")),
-      h("div", {className: "llms-issue"}, h(A.Button, {variant: "primary", href: `${site.REPO}/issues`, trailingIcon: "arrow-up-right"}, "Open an issue"))),
+      h("div", {className: "llms-issue"}, h(A.Button, {size: "lg", variant: "primary", href: `${site.REPO}/issues`, trailingIcon: "arrow-up-right"}, "Open an issue"))),
     proxima());
   const toc = [["available-files", "Available files"], ["every-page-as-markdown", "Every page as Markdown"], ["integration", "Integration"],
     ["contributing", "Contributing"]].map(([id, label]) => ({id, label}));

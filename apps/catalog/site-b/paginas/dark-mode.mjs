@@ -33,6 +33,16 @@ export default function darkMode(site, doc) {
       h("div", {className: "dark-mode-palco"}, pecaDoModo(modo)),
       h("p", {className: "dark-mode-texto"}, ...g.pedacos(texto, `m-${modo}`)));
   }));
+  // A FAIXA "SIMULATE THE COMPUTER" do desenho: Light | Dark finge a escolha do computador. Com a preferência "system", a
+  // página segue o que se finge; com "light" ou "dark", nada muda na tela — e a linha ao lado diz as duas coisas. O
+  // comportamento está em `site-b/js/dark-mode.js`; sem ele, a faixa mostra o estado de quando a página saiu.
+  const simulador = h("div", {key: "simula", className: "dark-mode-simula", role: "group", "aria-label": "Simulate the computer setting"},
+    h("span", {className: "dark-mode-simula-k"}, "Simulate the computer"),
+    h("span", {className: "segmented segmented-lg", "data-segment-style": "emphasis"},
+      ...[["light", "Light"], ["dark", "Dark"]].map(([v, rotulo]) => h("button", {key: v, type: "button", "data-dm-simula": v,
+        className: v === "dark" ? "active" : undefined, "aria-pressed": v === "dark" ? "true" : "false"}, rotulo))),
+    h("span", {className: "dark-mode-simula-res", "aria-live": "polite"},
+      "preference ", h("b", {"data-dm-pref": ""}, '"system"'), " → on screen ", h("b", {"data-dm-tela": ""}, '"dark"')));
   const naoGrava = g.achar(sw, "p", "ThemeToggle changes the theme");
 
   // SAVING THE CHOICE: os quatro passos do desenho, entre o primeiro parágrafo e o resto.
@@ -59,7 +69,7 @@ export default function darkMode(site, doc) {
   const evite = g.achar(st, "p", "Avoid fixed colors.");
   const [primeiro, ...resto] = evite.texto;
   const corte = primeiro.t.indexOf(". ") + 1;
-  const avisoEvite = h(A.Alert, {key: "evite", variant: "warning", className: "intro-nota docb-aviso", title: primeiro.t.slice(0, corte)},
+  const avisoEvite = h(A.Alert, {appearance: "soft", key: "evite", variant: "warning", className: "intro-nota docb-aviso", title: primeiro.t.slice(0, corte)},
     ...g.pedacos([{t: primeiro.t.slice(corte + 1)}, ...resto], "evite"));
 
   // READING THE THEME: os três parágrafos depois da tabela são a lista do desenho.
@@ -68,7 +78,7 @@ export default function darkMode(site, doc) {
   const depoisRd = rd.blocos.slice(tabelaRd + 1);
 
   const partes = [
-    g.doMd("the-theme-switch", "ThemeToggle", g.blocos(sw.blocos, {troca: b => b === modos ? cartoesDosModos
+    g.doMd("the-theme-switch", "ThemeToggle", g.blocos(sw.blocos, {troca: b => b === modos ? [cartoesDosModos, simulador]
       : b === naoGrava ? g.aviso(b, "info") : undefined})),
     g.doMd("with-aureaprovider", "Own the theme"),
     g.doMd("reading-the-theme", "useAureaTheme()", [...g.blocos(rd.blocos.slice(0, tabelaRd + 1), {legenda: rd.rotulo}),

@@ -1,11 +1,12 @@
 /* A PÁGINA "HOOKS" DO SITE B (o desenho "hooks"; o mapa, grupo 2). Toda medida é um token; as peças são as da Aurea. */
 .hk-b { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-4); container-type:inline-size; }
 @media (min-width:1280px) { .site-shell:has(.hk-b) > .content.content { grid-column:3 / 5; } }
-.hk-palco .intro-palco-texto { inline-size:64%; }
+.hk-palco .intro-palco-texto { inline-size:72%; }
 /* Os atalhos: o `Button` secundário xl (50; o desenho tem 52) com a sombra pequena e o número num ladrilho redondo de 36. */
 .hk-atalhos { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-block-start:var(--space-6); }
-.hk-atalho.btn { background:var(--segment); box-shadow:var(--shadow-sm); font-family:var(--font-code); font-weight:var(--weight-semibold);
-  padding-inline-start:calc(var(--space-1) + var(--space-05)); }
+/* Como o desenho: a cápsula na cor do cartão, com a sombra pequena, e a letra na cor do TEXTO (não a amarela do botão secundário). */
+.hk-atalho.btn { --btn-fg:var(--foreground); background:var(--segment); color:var(--foreground); box-shadow:var(--shadow-sm); font-family:var(--font-code);
+  font-size:var(--text-sm); font-weight:var(--weight-semibold); padding-inline:calc(var(--space-1) + var(--space-05)) var(--space-4); }
 .hk-atalho-n { inline-size:var(--control-h-md); block-size:var(--control-h-md); font-family:var(--font-code); font-weight:var(--weight-semibold); }
 .hk-aviso { align-items:center; }
 .hk-apagado { color:var(--muted-foreground); }
@@ -20,8 +21,13 @@
 .hk-fonte.badge { font-family:var(--font-code); max-inline-size:100%; overflow-wrap:anywhere; white-space:normal; block-size:auto; min-block-size:var(--space-7); }
 .hk-pagina { margin-inline-start:auto; }
 .hk-texto { margin:0; max-inline-size:70ch; color:var(--muted-foreground); font-size:var(--text-lg); line-height:var(--leading-relaxed); }
-.hk-grade { display:grid; grid-template-columns:minmax(0,6fr) minmax(0,5fr); gap:var(--space-3); align-items:start; }
-.hk-codigo.card { display:grid; gap:var(--space-3); min-inline-size:0; }
+.hk-grade { display:grid; grid-template-columns:minmax(0,6fr) minmax(0,5fr); gap:var(--space-3); align-items:stretch; }
+.hk-codigo.card { display:grid; gap:var(--space-3); align-content:start; min-inline-size:0; padding:var(--space-4); }
+.hk-bloco { display:grid; gap:var(--space-2); min-inline-size:0; }
+.hk-bloco-cabeca { display:flex; align-items:center; justify-content:space-between; gap:var(--space-2); }
+.hk-cap { margin:0; font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); letter-spacing:.06em; text-transform:uppercase; color:var(--muted-foreground); }
+.hk-caixa { margin:0; padding:var(--space-3) var(--space-2) var(--space-3) var(--space-4); border-radius:var(--radius-lg); background:var(--background);
+  font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-medium); line-height:var(--leading-relaxed); white-space:pre-wrap; overflow-wrap:anywhere; }
 .hk-teste.card { display:grid; gap:var(--space-4); align-content:start; padding:var(--space-5); min-inline-size:0; }
 .hk-teste-topo { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-2); }
 .hk-teste-nome { display:inline-flex; align-items:center; gap:var(--space-2); font-family:var(--font-code); font-size:var(--text-xs); letter-spacing:.06em;

@@ -108,6 +108,19 @@
     if (trigger) copy(trigger);
   });
 
+  // A CAIXA EMPILHADA (ADR-0089): o [data-aurea-code-expand] abre e recolhe o código da caixa — troca `data-collapsed` por
+  // `data-expanded`, o `aria-expanded` e o texto ("Expand code" / "Collapse code", lidos do próprio botão).
+  document.addEventListener("click", function (event) {
+    var botao = event.target.closest && event.target.closest("[data-aurea-code-expand]");
+    var caixa = botao && botao.closest(".demo-stacked");
+    if (!caixa) return;
+    var abre = caixa.hasAttribute("data-collapsed");
+    caixa.toggleAttribute("data-collapsed", !abre);
+    caixa.toggleAttribute("data-expanded", abre);
+    botao.setAttribute("aria-expanded", abre ? "true" : "false");
+    botao.textContent = botao.getAttribute(abre ? "data-label-collapse" : "data-label-expand") || botao.textContent;
+  });
+
   // GAR-14 (0.28.0) · COMPARTILHAR. O gatilho marcado com [data-aurea-share] (o `Button share` do
   // React emite isto) pergunta ao navegador se ele sabe compartilhar ESTE link — detectar o recurso,
   // e não adivinhar o aparelho, é o padrão da web. Sabe: abre a janela do aparelho; a pessoa

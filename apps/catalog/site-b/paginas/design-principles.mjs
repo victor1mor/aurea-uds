@@ -1,7 +1,7 @@
 // A DESIGN PRINCIPLES NO DESENHO B (aprovado em 26/10/2026): a abertura no palco; o mapa das dez regras (cartões que levam
 // à regra, o selo "Checked" nas que um teste cobra); cada regra com o número grande, o texto do `.md` e o painel ao lado,
 // que fica parado ao rolar ("Try it", "Compare", "Build the line"…). O "Build the line" é a chave de segmentos que QUEBRA
-// a linha (`SegmentedControl wrap`, o ITEM 3, com a escolhida neutra). O comportamento dos painéis está em
+// a linha (`SegmentedControl wrap`, o ITEM 3, com a escolhida no `emphasis`, a "C" de 02/11/2026). O comportamento dos painéis está em
 // `site-b/js/design-principles.js`.
 import {ferramentas} from "./_getting-started/comum.mjs";
 
@@ -39,9 +39,9 @@ export default function designPrinciples(site, doc) {
 
   const paineis = [
     // 01: o anel de foco pintado no botão, a régua dos 44 e o botão que liga o anel.
-    painel("Try it", quadro([h(A.Button, {key: "b", variant: "primary", className: "dp-salvar", "data-dp-salvar": ""}, "Save"),
+    painel("Try it", quadro([h(A.Button, {size: "lg", key: "b", variant: "primary", className: "dp-salvar", "data-dp-salvar": ""}, "Save"),
       h("span", {key: "r", className: "dp-regua", "aria-hidden": "true"}, h("i"), "44 px")]),
-      h(A.Toggle, {size: "sm", className: "dp-ligar"}, "Show the focus ring")),
+      h(A.Toggle, {className: "dp-ligar"}, "Show the focus ring")),
     // 02: três tokens.
     painel("Three tokens", quadro([["--radius-card", "22px"], ["--space-4", "space"], ["--card", "colour"]].map(([n, v]) =>
       h("span", {key: n, className: "dp-token"}, n, h("b", null, v))), "dp-coluna")),
@@ -125,7 +125,7 @@ export default function designPrinciples(site, doc) {
     g.secao(mantidos.id, "Enforced", "How the principles are kept",
       ...g.corpo([pMantidos], {chave: "m"}),
       ...restoMantidos.filter(b => b.tipo === "tabela").map((b, k) => g.tabelaB(b, `mt${k}`, "How the principles are kept")),
-      ...restoMantidos.filter(b => b.tipo === "p").map((b, k) => h(A.Alert, {key: `ma${k}`, variant: "success", className: "gs-aviso"}, ...site.pedacos(b.texto, `ma${k}`)))));
+      ...restoMantidos.filter(b => b.tipo === "p").map((b, k) => h(A.Alert, {appearance: "soft", key: `ma${k}`, variant: "success", className: "gs-aviso"}, ...site.pedacos(b.texto, `ma${k}`)))));
   const toc = [{id: nucleo.id, label: "The ten rules"}, ...regras.map((s, n) => ({id: s.id, label: NO_INDICE[n]})), {id: mantidos.id, label: "How they are kept"}];
   return {node, toc};
 }

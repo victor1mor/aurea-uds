@@ -68,8 +68,8 @@ export default function recipes(site) {
       h("div", {className: "rec-usa-lista", role: "list", "aria-label": "Patterns it composes", "data-rec-usa": ""},
         ...atual.padroes.map(p => h(A.Badge, {key: p, size: "lg", tone: "primary", emphasis: "solid", role: "listitem", className: "rec-codigo"}, p))),
       h("div", {className: "rec-acoes"},
-        h(A.Button, {variant: "primary", trailingIcon: "arrow-right", href: atual.href, "data-rec-abrir": ""}, "Open the recipe"),
-        h(A.Button, {variant: "secondary", type: "button", "data-rec-copiar": ""}, "Copy the list"))));
+        h(A.Button, {size: "lg", variant: "primary", trailingIcon: "arrow-right", href: atual.href, "data-rec-abrir": ""}, "Open the recipe"),
+        h(A.Button, {size: "lg", variant: "tertiary", type: "button", "data-rec-copiar": ""}, "Copy the list"))));
 
   // A LISTA DAS RECEITAS (coluna presa): o filtro e um botão por receita, a escolhida com o ponto amarelo.
   const lista = h(A.Card, {variant: "inset", className: "rec-lista", role: "group", "aria-label": "Recipes"},
@@ -107,7 +107,7 @@ export default function recipes(site) {
     h("div", {className: "rec-quadro"},
       h("div", {className: "rec-faixa", role: "status", "data-rec-faixa": "", hidden: true},
         h("span", {"data-rec-faixa-texto": ""}),
-        h(A.Button, {variant: "secondary", size: "sm", type: "button", "data-rec-limpar": ""}, "Show all recipes")),
+        h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-rec-limpar": ""}, "Show all recipes")),
       grade("Application patterns", nApp, "app"),
       grade("Operational patterns", nOp, "op")));
 

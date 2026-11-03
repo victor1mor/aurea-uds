@@ -101,8 +101,10 @@ test("de 768 a 1279 a lateral é coluna, sem o botão da gaveta; de 1280 para ci
   perto((await caixa(page, ".app-shell-aside")).w, 236, "o índice com 236");
 });
 
-test("o Copy Prompt só nas páginas de começar, como na referência", async ({page}) => {
-  for (const [pagina, tem] of [["getting-started.html", 1], ["docs-quick-start.html", 1], ["docs-theming.html", 0], ["button.html", 0], ["releases.html", 0]] as const) {
+// O SITE B (o desenho aprovado em 26/10/2026): toda página da área Getting Started tem o Copy Prompt na abertura (a Theming
+// inclusive); as outras áreas, não.
+test("o Copy Prompt só nas páginas da área Getting Started, como no desenho B", async ({page}) => {
+  for (const [pagina, tem] of [["getting-started.html", 1], ["docs-quick-start.html", 1], ["docs-theming.html", 1], ["button.html", 0], ["releases.html", 0]] as const) {
     await abrir(page, 1280, pagina);
     await expect(page.getByRole("button", {name: "Copy Prompt"}), pagina).toHaveCount(tem);
     await expect(page.getByRole("button", {name: "Copy Markdown"}), pagina).toHaveCount(1);

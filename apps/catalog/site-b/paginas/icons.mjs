@@ -24,7 +24,11 @@ export default function icons(site, doc) {
   const sp = g.secao("serve-the-sprite");
   const paragrafos = sp.blocos.filter(b => b.tipo === "p");
   const [copiar, dizer, raiz] = paragrafos;
-  const passo = (b, n) => h("div", {key: `passo${n}`, className: "icons-passo"}, h("span", {className: "docb-bolinha"}, n), g.p(b));
+  // Como o desenho (02/11/2026): os dois passos são dois cartões lado a lado (a bolinha e o passo em uma linha), e os dois
+  // blocos de código vêm embaixo, na ordem.
+  const passos = h("div", {key: "passos", className: "docb-grade-2 icons-passos"},
+    ...[["1", "Copy it to the folder your app serves as static files"], ["2", "Tell the provider where it is, once"]].map(([n, texto]) =>
+      h("div", {key: n, className: "docb-caixa icons-passo"}, h("span", {className: "docb-bolinha"}, n), h("b", null, texto))));
 
   // THE ICON COMPONENT: a mesa de experimentar, no lugar do exemplo do `.md`.
   const ic = g.secao("the-icon-component");
@@ -38,11 +42,11 @@ export default function icons(site, doc) {
           h("span", {className: "icons-ladrilho-dentro"}, h(A.Icon, {name: nome, size: "lg"}), h("span", null, nome))))),
       h("div", {className: "icons-escolhas"},
         h("div", null, h("p", {className: "docb-rotulo"}, "weight"),
-          h(A.SegmentedControl, {label: "weight", size: "lg", selectedStyle: "neutral", value: "regular", onChange: () => {},
+          h(A.SegmentedControl, {label: "weight", size: "lg", selectedStyle: "emphasis", value: "regular", onChange: () => {},
             items: [{value: "regular", label: "regular"}, {value: "fill", label: "fill"}]})),
         h("div", {className: "icons-tamanho"}, h("p", {className: "docb-rotulo"}, "size"),
-          h(A.SegmentedControl, {label: "size", size: "lg", selectedStyle: "neutral", value: "md", onChange: () => {},
-            items: ["sm", "md", "lg", "xl"].map(v => ({value: v, label: v}))}))),
+          h(A.SegmentedControl, {label: "size", size: "lg", selectedStyle: "emphasis", value: "md", onChange: () => {},
+            items: [["sm", 16], ["md", 20], ["lg", 24], ["xl", 32]].map(([v, px]) => ({value: v, label: `${v} ${px}`}))}))),
       h(A.CodeBlock, {filename: "Icon.tsx", copyable: true, language: "tsx", className: "icons-linha"}, linha)),
     h("div", {className: "icons-palco", "aria-live": "polite"},
       // O desenho grande é o símbolo do sprite numa ilustração do site (o `Icon` vai até 32); o de verdade fica embaixo.
@@ -54,7 +58,7 @@ export default function icons(site, doc) {
   const ff = g.secao("the-filled-form");
   const primeiroFf = ff.blocos[0];
   const abas = h("div", {key: "abas", className: "icons-abas"},
-    h(A.SegmentedControl, {label: "Tabs", size: "2xl", selectedStyle: "neutral", value: "home", onChange: () => {},
+    h(A.SegmentedControl, {label: "Tabs", size: "2xl", selectedStyle: "emphasis", value: "home", onChange: () => {},
       items: [{value: "home", label: "Home", icon: "house"}, {value: "alerts", label: "Alerts", icon: "bell"}, {value: "settings", label: "Settings", icon: "gear"}]}));
   const xis = h("div", {key: "xis", className: "docb-grade-2"},
     h("div", {className: "docb-caixa icons-xis"}, h(A.Icon, {name: "x", size: "xl"}), h("code", null, "x")),
@@ -80,8 +84,8 @@ export default function icons(site, doc) {
   const lo = g.secao("what-is-left-out");
 
   const partes = [
-    g.doMd("serve-the-sprite", "A static file", g.blocos(sp.blocos, {troca: b => b === copiar ? passo(b, 1) : b === dizer ? passo(b, 2)
-      : b === raiz ? g.aviso(b, "warning") : undefined})),
+    g.doMd("serve-the-sprite", "A static file", g.blocos(sp.blocos, {troca: b => b === copiar ? passos : b === dizer ? []
+      : b === raiz ? g.aviso(b, "warning", "The default only works at the root of the domain.") : undefined})),
     g.doMd("the-icon-component", "One glyph", g.blocos(ic.blocos, {troca: b => b === exemplo ? mesa : undefined})),
     g.doMd("the-filled-form", "weight=\"fill\"", g.blocos(ff.blocos, {troca: b => b === primeiroFf ? [g.p(b), abas] : undefined}).concat([xis])),
     g.doMd("names-are-checked", "TypeScript", g.blocos(nc.blocos, {troca: b => b === primeiroNc ? [g.p(b), veredito] : undefined})),

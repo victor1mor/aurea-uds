@@ -56,7 +56,7 @@ export default function accessibility(site, doc) {
   // O cartão de reflow: o que a janela própria mostra (e o que aparece sem o script).
   const cartaoReflow = h(A.Card, {className: "acc-reflow-cartao"},
     h("h4", null, "Weekly report"), h("p", null, "Sent every Monday at 9:00 to the twelve people in the team."),
-    h("div", {className: "acc-reflow-botoes"}, h(A.Button, {variant: "primary", type: "button"}, "Edit"), h(A.Button, {variant: "secondary", type: "button"}, "Pause")));
+    h("div", {className: "acc-reflow-botoes"}, h(A.Button, {variant: "primary", type: "button"}, "Edit"), h(A.Button, {variant: "tertiary", type: "button"}, "Pause")));
 
   const node = pagina("acc-b",
     palco("Handbook", [
@@ -70,7 +70,7 @@ export default function accessibility(site, doc) {
       h("div", {className: "acc-relance"}, ...relance.linhas.map((l, n) => h(A.Card, {key: n, variant: "interactive", lift: true, className: "acc-area",
         render: h("a", {href: `#${IDS[n]}`})},
         h("b", null, ...site.pedacos(l[0], `a${n}`)), h("span", {className: "acc-area-faz"}, ...site.pedacos(l[1], `w${n}`)),
-        h("span", {className: "acc-area-quem"}, h(A.Icon, {name: "check-circle", size: "sm"}), h("span", null, ...site.pedacos(l[2], `c${n}`))))))),
+        h(A.Badge, {tone: "success", dot: true, size: "sm", className: "acc-area-quem"}, ...site.pedacos(l[2], `c${n}`)))))),
     secao("readable-type", "Inter · Sora · IBM Plex Mono", "Readable type",
       h("div", {className: "acc-fontes"}, ...[
         ["Text", "Inter", "inter", "A typeface drawn for screens. Its optical size covers 14 to 32 pixels: more open in small text, a little tighter in large text."],
@@ -90,10 +90,10 @@ export default function accessibility(site, doc) {
         h(A.Card, {className: "acc-razao"}, h("span", {className: "acc-amostra acc-amostra-amarela"}, "Save"), h("b", null, razao(TINTA, AMARELO)),
           h("p", null, "Text on the brand yellow is the ink, ", h("code", null, TINTA.toUpperCase()), ", in both themes.")),
         h(A.Card, {className: "acc-razao"}, h("span", {className: "acc-amostra", "data-theme": "light"},
-          h(A.Button, {variant: "secondary", type: "button", tabIndex: -1, className: "acc-anel"}, "Focus")), h("b", null, razao(TEXTO, PAGINA)),
+          h(A.Button, {variant: "tertiary", type: "button", tabIndex: -1, className: "acc-anel"}, "Focus")), h("b", null, razao(TEXTO, PAGINA)),
           h("p", null, "The light theme's focus ring on the page.")),
         h(A.Card, {className: "acc-razao"}, h("span", {className: "acc-amostra", "data-theme": "light"},
-          h(A.Button, {variant: "primary", type: "button", tabIndex: -1, className: "acc-anel"}, "Save")), h("b", null, razao(TEXTO, AMARELO)),
+          h(A.Button, {size: "lg", variant: "primary", type: "button", tabIndex: -1, className: "acc-anel"}, "Save")), h("b", null, razao(TEXTO, AMARELO)),
           h("p", null, "The same ring around the yellow button.")))),
     secao("known-trade-offs", "Written down, with the numbers", "Known trade-offs",
       bloco(abreConcessoes, "k"),
@@ -117,17 +117,17 @@ export default function accessibility(site, doc) {
       bloco(foco[0], "f0"),
       caixa("Press Tab to move through these", {role: "group", "aria-label": "Try the focus with Tab", "data-acc-foco": ""},
         h("div", {className: "acc-foco-pecas"},
-          h(A.Button, {variant: "primary", type: "button"}, "Save"),
+          h(A.Button, {size: "lg", variant: "primary", type: "button"}, "Save"),
           h(A.Input, {"aria-label": "Email", defaultValue: "you@company.com", readOnly: true, "data-acc-campo": "", className: "acc-foco-campo"}),
           h(A.Link, {href: "#focus"}, "A link"),
-          h(A.Button, {variant: "secondary", size: "md", type: "button", "aria-pressed": "false", "data-acc-invalido": ""}, "Make the field invalid"))),
+          h(A.Button, {variant: "tertiary", size: "md", type: "button", "aria-pressed": "false", "data-acc-invalido": ""}, "Make the field invalid"))),
       ...foco.slice(1).map((b, n) => bloco(b, `f${n + 1}`))),
     secao("touch-targets", "--target-min · 2.75rem", "Touch targets",
       bloco(toque[0], "t0"),
       caixa("A small remove button keeps its drawing", {"data-acc-toque": "", "data-mostrar": "true"},
         h("div", {className: "acc-toque-pecas"},
           h(A.TagGroup, {label: "Tags", labelHidden: true, size: "lg", variant: "surface", items: [{id: "design", label: "Design"}], onRemove: () => {}}),
-          h(A.Button, {variant: "secondary", size: "md", type: "button", "aria-pressed": "true", "data-acc-area": ""}, "Hide the 44px hit area"))),
+          h(A.Button, {variant: "tertiary", size: "md", type: "button", "aria-pressed": "true", "data-acc-area": ""}, "Hide the 44px hit area"))),
       ...toque.slice(1).map((b, n) => bloco(b, `t${n + 1}`))),
     secao("keyboard", "Base UI", "Keyboard", ...teclado.map((b, n) => bloco(b, `k${n}`))),
     secao("screen-readers", "Names, states, descriptions", "Screen readers",

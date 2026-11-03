@@ -1,6 +1,6 @@
 /* A PÁGINA "RECIPES" DO SITE B (o desenho "recipes"; o mapa, grupo 2). Toda medida é um token: onde o desenho tem um número
    fora da escala, o token mais perto (anotado). As peças são as da Aurea; aqui fica o arranjo. */
-.rec-b { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-4); }
+.rec-b { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-4); container:rec-b / inline-size; }
 /* O fluxo «Archetype → Patterns → Invariants»: o `Badge lg` (28; o desenho tem 34, sem token) com a sombra pequena. */
 .rec-fluxo { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); margin-block-start:var(--space-5); color:var(--muted-foreground); }
 .rec-fluxo-passo.badge { background:var(--segment); color:var(--foreground); box-shadow:var(--shadow-sm); }
@@ -29,7 +29,7 @@
 .rec-acoes { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-block-start:auto; }
 
 /* AS DUAS COLUNAS: a lista presa à esquerda (288 = --space-12 × 6; o desenho tem 290) e os padrões. */
-.rec-colunas { display:grid; grid-template-columns:calc(var(--space-12) * 6) minmax(0,1fr); gap:calc(var(--space-3) + var(--space-05)); align-items:start; }
+.rec-colunas { display:grid; grid-template-columns:minmax(0, calc(var(--space-12) * 6)) minmax(0,1fr); gap:calc(var(--space-3) + var(--space-05)); align-items:start; }
 .rec-lista.card { position:sticky; inset-block-start:calc(var(--topbar-height) + var(--space-8)); display:flex; flex-direction:column; gap:var(--space-05);
   max-block-size:calc(100vh - var(--topbar-height) - var(--space-12)); overflow:auto; scrollbar-width:none; padding:calc(var(--space-2) + var(--space-05)); }
 .rec-filtro { margin-block-end:var(--space-2); flex:none; }
@@ -101,3 +101,17 @@
    a lateral do site, a tela de 1280 já tem o quadro estreito, e o nome do padrão quebrava no meio. */
 @container (max-width:760px) { .rec-padroes { grid-template-columns:repeat(2, minmax(0,1fr)); } }
 @container (max-width:420px) { .rec-padroes { grid-template-columns:minmax(0,1fr); } }
+
+/* Texto a 200%: o selo de um nome longo quebra a linha (as peças que flutuam somem na regra de 30rem, abaixo). */
+.rec-usa-lista .badge, .rec-cartao-padroes .badge { max-inline-size:100%; block-size:auto; white-space:normal; overflow-wrap:anywhere; }
+/* Com o texto a 200% (o texto fica com ~150): a coluna da lista é "até 288", os botões da receita escolhida quebram a linha
+   e o cabeçalho da grade desce em vez de empurrar a página. */
+.rec-acoes > .btn { min-inline-size:0; max-inline-size:100%; block-size:auto; white-space:normal; }
+.rec-grade-cabeca { flex-wrap:wrap; }
+.rec-grade-cabeca p { min-inline-size:0; overflow-wrap:anywhere; }
+/* Com o texto a 200%, a coluna da lista (em rem) dobra e esmagava a outra (20 de largura, a página rolava 211): quando o
+   bloco não comporta as duas na régua do texto (30rem — 480 com o texto normal, 960 a 200%), elas empilham. */
+@container rec-b (width < 30rem) { .rec-colunas { grid-template-columns:minmax(0,1fr); } .cat-pecas { display:none; } }
+/* Texto a 200%: o título de um cartão da lista com palavra longa quebra dentro do cartão (passava 44 da página). */
+.rec-todas > * { min-inline-size:0; }
+.rec-todas h3 { overflow-wrap:anywhere; }

@@ -8,7 +8,10 @@
 /* A faixa do alvo e do gerenciador, no fundo do palco (canto 22, recheio 12). */
 .qs-trilho { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); margin-block-start:var(--space-2); padding:var(--space-3);
   border-radius:var(--radius-card); background:var(--site-palco); }
-.qs-alvos { flex:1 1 calc(var(--space-24) * 5); min-inline-size:0; }
+/* Os alvos e o gerenciador na MESMA linha, como o desenho a 1280 (o texto dos cartões desce a linha). */
+.qs-alvos { flex:1 1 0; min-inline-size:0; }
+.qs-trilho { flex-wrap:nowrap; }
+.qs-gerenciador { flex:none; }
 .qs-alvos .radio { align-items:center; }
 .qs-alvo { display:flex; align-items:center; gap:calc(var(--space-3) + var(--space-05)); font-weight:var(--weight-regular); }
 .qs-alvo-tile { inline-size:var(--space-12); block-size:var(--space-12); }

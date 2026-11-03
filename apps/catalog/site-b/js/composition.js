@@ -7,11 +7,13 @@
   // As partes: cada `Toggle` liga ou desliga uma parte do cartão de verdade, e o código ao lado acompanha.
   var cartao = montador.querySelector(".composition-cartao");
   var codigo = montador.querySelector(".composition-codigo code");
-  var grupo = montador.querySelector(".toggle-group");
-  var ORDEM = ["media", "header", "title", "desc", "content", "footer"];
+  // As partes são caixas de marcar (o `Checkbox variant="pill"`): cada uma liga ou desliga a parte dela.
   function partes() {
     var on = {};
-    grupo.querySelectorAll("button").forEach(function (b, i) { on[ORDEM[i]] = b.getAttribute("aria-pressed") === "true"; });
+    // O atributo vai na própria caixa (o `input` do `Checkbox`).
+    montador.querySelectorAll("input[data-composition-parte]").forEach(function (caixa) {
+      on[caixa.getAttribute("data-composition-parte")] = caixa.checked;
+    });
     return on;
   }
   function montar() {
@@ -38,7 +40,7 @@
     l.push("</Card>");
     if (codigo) codigo.textContent = l.join("\n");
   }
-  D.grupoDeBotoes(grupo, montar, false);
+  montador.addEventListener("change", function (e) { if (e.target.closest("[data-composition-parte]")) montar(); });
   montar();
 
   // As áreas do `AppShell`: uma escolhida por vez; o painel diz o nome e para que serve.

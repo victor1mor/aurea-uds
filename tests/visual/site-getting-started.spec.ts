@@ -27,15 +27,15 @@ test("cada grupo da lateral da área tem o número e o ícone, e os itens ficam 
   for (const g of await grupos.all()) await expect(g.locator(".site-grupo-tile svg")).toHaveCount(1);
 });
 
-// ~~No Início a área se chamava "Docs", no topo de 56 da referência.~~ O SITE B (0.54.0): o Início tem a MESMA pílula das
-// outras páginas — as oito áreas numa cápsula, nenhuma levantada (o Início não é área) — e o mesmo rodapé.
-test("no Início o topo é a pílula do site B, com as oito áreas e nenhuma atual, e o rodapé é o das outras páginas", async ({page}) => {
+// O SITE B (0.54.0): o topo do Início é a pílula do desenho `inicio-B` — os links do Início ("Docs", sem "Releases") e a busca
+// só na lupa —, e o rodapé é o das outras páginas.
+test("no Início o topo é a pílula do desenho B — Docs e as áreas, sem Releases, a busca só na lupa — e o rodapé é o das outras páginas", async ({page}) => {
   await page.setViewportSize({width: 1280, height: 663});
   await page.goto(`${base}/apps/catalog/index.html`);
-  const areas = page.locator("header.topbar-pill .site-areas a");
-  await expect(areas).toHaveCount(8);
-  await expect(areas.first()).toHaveText("Getting Started");
-  await expect(page.locator('header.topbar-pill .site-areas a[aria-current="page"]')).toHaveCount(0);
+  const links = page.locator("header.topbar-pill nav a");
+  await expect(links.first()).toHaveText("Docs");
+  await expect(links.filter({hasText: "Releases"})).toHaveCount(0);
+  await expect(page.locator("header.topbar-pill [data-site-search]").first()).toHaveClass(/\bbtn-icon\b/);
   await expect(page.locator("footer.site-rodape")).toBeVisible();
 });
 

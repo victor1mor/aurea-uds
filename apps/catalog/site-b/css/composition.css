@@ -9,13 +9,18 @@
 
 /* O montador do cartão: as partes e o código à esquerda, o palco com o cartão à direita. */
 /* Lado a lado só quando a coluna do texto passa de 900; abaixo disso o código quebrava a cada palavra (medido a 1280). */
-.composition-montador { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-3); margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.composition-montador { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-3); margin-block-start:calc(var(--space-4) + var(--space-05)); align-items:start; }
 .docb-corpo:has(.composition-montador) { container:docb / inline-size; }
-@container docb (min-width:900px) { .composition-montador { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); } }
-.composition-controles { display:flex; flex-direction:column; gap:var(--space-3); min-inline-size:0; padding:var(--space-4); border-radius:var(--radius-card); background:var(--card); }
+/* Lado a lado como no desenho, já na coluna de 1280 (o código desce a linha, como no desenho). */
+@container docb (min-width:520px) { .composition-montador { grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); } }
+.composition-controles { display:flex; flex-direction:column; gap:var(--space-3); min-inline-size:0; }
+.composition-partes-caixa { display:flex; flex-direction:column; gap:var(--space-3); padding:var(--space-4); border-radius:var(--radius-card); background:var(--card); }
+.composition-partes { display:flex; flex-wrap:wrap; gap:var(--space-2); }
+.composition-controles .composition-codigo { border-radius:var(--radius-card); background:var(--card); }
+.composition-codigo pre, .composition-codigo .code-block { white-space:pre-wrap; overflow-wrap:anywhere; }
 .composition-controles .toggle-group { flex-wrap:wrap; }
 .docb-corpo .composition-codigo { margin:0; }
-.composition-palco { display:flex; align-items:center; justify-content:center; padding:var(--space-6); border-radius:var(--radius-card); background:var(--site-palco); }
+.composition-palco { display:flex; align-items:flex-start; justify-content:center; padding:var(--space-4); border-radius:var(--radius-card); background:var(--card); }
 .composition-cartao { inline-size:100%; max-inline-size:calc(var(--space-24) * 3); }
 .composition-midia { display:grid; place-items:center; block-size:var(--space-24); background:var(--fill-2); color:var(--muted-foreground);
   font-family:var(--font-code); font-size:var(--text-xs); }

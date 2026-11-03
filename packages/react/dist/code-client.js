@@ -14,6 +14,15 @@ import { Icon } from "./system.js";
 // moldura. É a caixa do site de hoje (decisão do Victor, 06/10/2026: a da Aurea, não a da referência),
 // agora no pacote, para o site usar só peças da Aurea. O teclado é o das abas do APG: setas, Home e End.
 // Sem o `aurea.js` na página — quem troca a aba é o React.
+// A CAIXA EMPILHADA (`previewLayout="stacked"`, ADR-0089): a peça em cima e o código embaixo, sem as abas; mais de 5
+// linhas, o código vem recolhido com o "Expand code".
+function CaixaEmpilhada({ preview, codigo, linhas, className }) {
+    const s = useAureaStrings();
+    const id = React.useId();
+    const [aberto, setAberto] = React.useState(false);
+    const dobra = linhas > 5;
+    return _jsxs("div", { className: cx("demo code-preview demo-stacked", className), "data-collapsed": dobra && !aberto ? "" : undefined, "data-expanded": dobra && aberto ? "" : undefined, children: [_jsx("div", { className: "demo-panel", "data-panel": "preview", children: preview }), _jsxs("div", { className: "demo-panel demo-code", "data-panel": "code", id: `${id}-code`, children: [codigo, dobra && _jsx("button", { type: "button", className: "btn btn-tertiary btn-sm demo-stacked-toggle", "aria-expanded": aberto, "aria-controls": `${id}-code`, onClick: () => setAberto(!aberto), children: aberto ? s.codeBlockCollapse : s.codeBlockExpand })] })] });
+}
 function CaixaDeExemplo({ preview, codigo, className }) {
     const s = useAureaStrings();
     const id = React.useId();
@@ -60,9 +69,11 @@ function linhasDoCodigo(codigo, language, highlight) {
 // `filename` (o site B, aprovado pela bancada em 01/11/2026, o item 6 — "Ícone + nome"): a CABEÇA do arquivo — o nome do
 // arquivo à esquerda e, com `copyable`, o "Copy" ESCRITO (o botão secundário, com o ícone antes do nome; vira "Copied").
 // O bloco vira o cartão (canto 22, a cor do cartão) e a linha longa DESCE em vez de rolar. Sem `filename`, o de sempre.
-export function CodeBlock({ children, language = "text", copyable, preview, lineNumbers, highlight, tabs, filename, className }) {
+export function CodeBlock({ children, language = "text", copyable, preview, previewLayout = "tabs", lineNumbers, highlight, tabs, filename, className }) {
     if (tabs && tabs.length > 0)
         return _jsx(CodigoEmAbas, { tabs: tabs, language: language, copyable: copyable, highlight: highlight, className: className });
+    if (preview !== undefined && previewLayout === "stacked")
+        return _jsx(CaixaEmpilhada, { preview: preview, className: className, linhas: (children ?? "").split("\n").length, codigo: _jsx(CodeBlock, { language: language, copyable: copyable, lineNumbers: lineNumbers, highlight: highlight, children: children }) });
     if (preview !== undefined)
         return _jsx(CaixaDeExemplo, { preview: preview, className: className, codigo: _jsx(CodeBlock, { language: language, copyable: copyable, lineNumbers: lineNumbers, highlight: highlight, children: children }) });
     const s = useAureaStrings();

@@ -78,3 +78,7 @@
   .docb-palco .intro-peca { max-inline-size:100%; }
   .docb-palco .docb-amarela { white-space:normal; overflow-wrap:anywhere; }
 }
+
+/* Texto a 200% (a varredura, 02/11/2026): o código no meio do texto quebra quando não cabe na linha — antes ele empurrava a
+   página de lado (Density +27, Styling +83). Só quebra se não houver outro lugar. */
+.docb-corpo :is(.docb-p, .docb-lista, .docb-aviso, .docb-h3) code { white-space:normal; overflow-wrap:break-word; }

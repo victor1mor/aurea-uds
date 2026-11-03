@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 10,
     "aliasesLiterais": 119,
-    "propsDistintas": 405
+    "propsDistintas": 407
   },
   "aliases": {
     "ButtonVariant": {
@@ -2030,14 +2030,15 @@
     },
     "SegmentedControlSelectedStyle": {
       "module": "inputs-client",
-      "raw": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\"",
+      "raw": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\" | \"emphasis\"",
       "union": [
         "current",
         "neutral",
         "contrast",
         "brand",
         "ring",
-        "dot"
+        "dot",
+        "emphasis"
       ]
     },
     "SeparatorSpacing": {
@@ -4457,6 +4458,15 @@
               "values": null
             },
             {
+              "name": "previewLayout",
+              "optional": true,
+              "type": "\"tabs\" | \"stacked\"",
+              "values": [
+                "tabs",
+                "stacked"
+              ]
+            },
+            {
               "name": "lineNumbers",
               "optional": true,
               "type": "boolean",
@@ -4776,6 +4786,12 @@
             },
             {
               "name": "differencesOnly",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "striped",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -5244,6 +5260,15 @@
               "optional": true,
               "type": "() => void",
               "values": null
+            },
+            {
+              "name": "appearance",
+              "optional": true,
+              "type": "\"card\" | \"soft\"",
+              "values": [
+                "card",
+                "soft"
+              ]
             },
             {
               "name": "action",
@@ -7237,7 +7262,8 @@
                 "contrast",
                 "brand",
                 "ring",
-                "dot"
+                "dot",
+                "emphasis"
               ]
             },
             {

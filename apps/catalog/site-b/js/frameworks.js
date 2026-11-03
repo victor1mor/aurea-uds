@@ -22,10 +22,17 @@
     aplicar();
   };
   pagina.addEventListener("change", e => { if (e.target.name === "fw-qual") escolher(e.target.value); });
+
+  // O Victor, 02/11/2026: escolher o gerenciador lá em cima não dizia nada — o comando que muda fica embaixo. Agora a página
+  // desce até ele (suave, menos com o "reduzir movimento" do sistema). Só no clique: o evento "gs-chave" sai da pessoa.
+  const descerAte = el => { if (el) el.scrollIntoView({block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); };
   pagina.addEventListener("gs-chave", e => {
     if (e.detail.nome !== "fw-pm") return;
     estado.pm = e.detail.valor;
     aplicar();
+    // o primeiro comando de instalar do framework escolhido (a caixa inteira, com o "Terminal")
+    const cmd = pagina.querySelector("[data-fw-painel]:not([hidden]) [data-fw-instalar]");
+    descerAte(cmd);
   });
   // Quem chega pelo endereço de um passo (#vite-2, #plain-html…) vê o framework dele.
   const doEndereco = () => {

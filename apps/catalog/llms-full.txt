@@ -885,7 +885,8 @@ import "@aurea-uds/core/css";
 <html data-theme="light" data-density="comfortable">
 ```
 
-`data-theme` is required: without it the color roles are not defined. `data-density` is optional: without it you get the comfortable sizes.
+- `data-theme` is required: without it the color roles are not defined.
+- `data-density` is optional: without it you get the comfortable sizes.
 
 To switch the theme at run time, see [Dark Mode](./docs-dark-mode.html). For the density, see [Density](./docs-density.html).
 
@@ -2559,6 +2560,15 @@ How serious it is. danger interrupts the screen reader (role=alert); the others 
 <Alert variant="accent">A accent alert.</Alert>
 ```
 
+### Appearance
+
+card is the card surface, the default. soft fills the alert with the state colour at 14%, with no shadow and the body at 16 in the text colour.
+
+```tsx
+<Alert appearance="card">A card alert.</Alert>
+<Alert appearance="soft">A soft alert.</Alert>
+```
+
 ### Every state
 
 What is happening, apart from how serious it is. Without children, the alert says the state in words of its own.
@@ -2583,6 +2593,7 @@ What is happening, apart from how serious it is. Without children, the alert say
 | `state` | `waiting_user \| waiting_approval \| waiting_dependency \| offline \| stale \| partial \| degraded` | — | Universal state (Part J) — an axis of its own alongside `variant`, because the two answer different questions: `variant` is how serious this is, `state` is what is happening. Merging them would put “out of date” next to “danger” and force the caller to pick one. It sets `data-state`, derives the severity when no `variant` is given — waiting states inform, the rest warn, and none of the seven is `danger`, because in all seven the screen still works — and supplies the message when there are no children. |
 | `icon` | `IconName` | — | Overrides the glyph. The icon is a FUNCTION of the variant by default, because a system that makes you remember which glyph means "danger" ends up with four answers to the same question. |
 | `action` | `ReactNode` | — | The alert's button (Upgrade, Undo), as the reference: after the text and before the X, in the middle; on a phone (below 640) it goes under the text, in the same column. |
+| `appearance` | `card \| soft` | card | The skin. card is the card surface with its shadow, the state colour on the icon and the title. soft is the state colour at 14% behind the whole alert, no shadow, with the body in the text colour at 16 and the title in bold. Under the Aurea Ember brand, soft keeps the card skin. |
 | `onDismiss` | `() => void` | — | Shows the X (the CloseButton) and is called when it is pressed. |
 </page>
 
@@ -3959,6 +3970,17 @@ base is the floating surface; raised lifts it with a shadow; interactive answers
 <Card variant="contrast">variant contrast</Card>
 ```
 
+### Brand fill
+
+fill="brand" paints the whole card in the brand colour, with the ink on top — for the one card that leads a row.
+
+```tsx
+<Card fill="brand">
+  <Card.Title>Props</Card.Title>
+  <Card.Description>appearance, tone, variant, size</Card.Description>
+</Card>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -3967,6 +3989,7 @@ base is the floating surface; raised lifts it with a shadow; interactive answers
 | `children` | `ReactNode` | — | The content. Padding comes from --card-pad and the 22px radius from --radius-card; neither is a prop, because the floating surface is the identity of the system. |
 | `render` | `ReactElement` | — | The ELEMENT the card renders as, with the Aurea surface merged into it. Required when variant is "interactive": a card that is a target has to be a real target — <button> for an action, <a href> for navigation — and only you know which. tabIndex on a <div> would give focus with no role, no key and no accessible name. |
 | `accent` | `brand \| success \| info \| warning \| danger` | — | A colour stroke on the top edge, --accent-width (4) tall, in the tone's FILL colour, the same in both themes. It is decoration: the card's own title says the subject, so the stroke carries no information of its own. The other sides keep the regular 1px border, and the stroke wins over `selected`, `danger` and the `contrast` outline. |
+| `fill` | `"brand"` | — | Paints the whole card in the brand colour, with the ink on top (--primary-foreground): the title, the supporting text and anything that reads the card colour follow. The accent stroke is hidden (brand on brand); an interactive card keeps the colour under the pointer. Under the Aurea Ember brand, the card stays a regular card. |
 | `padding` | `"normal" \| "none"` | "normal" | none removes the inner padding so media bleeds to the edge; the 22 radius stays and clips the media. |
 | `orientation` | `"vertical" \| "horizontal"` | "vertical" | `horizontal` is the list mode: Card.Media on the left at thumbnail width (96, --space-24) and the content beside it. |
 | `lift` | `boolean` | false | With `variant="interactive"`, the card RISES on hover: it lifts 4px and takes a medium shadow, instead of changing its fill. Still for people who ask for less motion. Web only; on the other variants it does nothing. |
@@ -4547,6 +4570,16 @@ filename puts a head on the block: the file name on the left and, with copyable,
 </CodeBlock>
 ```
 
+### Example box
+
+preview turns the block into an example box. previewLayout="tabs" (the default) switches between Preview and Code; previewLayout="stacked" puts the example on top and the code under it, collapsed past five lines with Expand code.
+
+```tsx
+<CodeBlock language="tsx" copyable lineNumbers preview={<Button variant="primary">Save</Button>} previewLayout="stacked">
+  {code}
+</CodeBlock>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -4555,6 +4588,7 @@ filename puts a head on the block: the file name on the left and, with copyable,
 | `language` | `string` | text | Written to data-language, which labels the block, and handed to `highlight`, which picks the grammar by it: tsx, ts, jsx, js, css, html, json and bash. |
 | `copyable` | `boolean` | false | Draws the copy button. The copying itself lives in the core's aurea.js, so React and plain HTML share one implementation instead of two that drift. |
 | `preview` | `ReactNode` | — | The live example of the code. With it, the block becomes the example box of Aurea's site: the Preview \| Code tabs (a segmented control across the width; arrows, Home and End move between them), the preview on the recessed surface and the code without a frame. |
+| `previewLayout` | `"tabs" \| "stacked"` | "tabs" | With preview: tabs is the Preview \| Code tabs. stacked puts the example on top (350 tall, on the page background) and the code under it; past five lines the code starts collapsed at 150, fading out, with Expand code (Collapse code once open) at the bottom. |
 | `lineNumbers` | `boolean` | false | Shows the number of each line on the left, in a 16px column 24px from the code. The column grows with the digits of the last line, so it does not jump at line 100. The number is drawing: it is not in the copied text and not read by screen readers. |
 | `highlight` | `CodeHighlighter` | — | Colors the code. Pass `highlightCode` from `@aurea-uds/react/code-highlight`; its grammars are optional peers (@lezer/javascript, @lezer/css, @lezer/html, @lezer/json, @codemirror/legacy-modes). A language it does not know comes back plain. The colors are the same as the CodeEditor's, mixed 20% with the text so each one reads at 4.5:1 or more on the block. |
 | `filename` | `ReactNode` | — | A head on the block, 52 tall: the file name (code font, 12, muted) on the left and, with copyable, Copy written out — the secondary button of 36, the icon before the word; once copied, both turn to the check and Copied. The block becomes a card (radius 22, the card fill), the code at 14 in the text color, and a long line wraps instead of scrolling. |
@@ -9098,7 +9132,7 @@ wrap lets a long set break onto more lines, and the track takes the card radius 
 
 ### The colour of the selected segment
 
-selectedStyle (ADR-0084): current — the raised capsule with the yellow line, the default — neutral, contrast (graphite), brand (yellow), ring (a yellow ring) and dot (a yellow dot before the label; its place is kept in every segment, so the width does not jump).
+selectedStyle (ADR-0084): current — the raised capsule with the yellow line, the default — neutral, contrast (graphite), brand (yellow), ring (a yellow ring) and dot (a yellow dot before the label; its place is kept in every segment, so the width does not jump) and emphasis (the raised capsule with the emphasis letter, no line).
 
 ```tsx
 <SegmentedControl selectedStyle="current" label="View" value={view} onChange={setView} items={views} />
@@ -9107,6 +9141,7 @@ selectedStyle (ADR-0084): current — the raised capsule with the yellow line, t
 <SegmentedControl selectedStyle="brand" label="View" value={view} onChange={setView} items={views} />
 <SegmentedControl selectedStyle="ring" label="View" value={view} onChange={setView} items={views} />
 <SegmentedControl selectedStyle="dot" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl selectedStyle="emphasis" label="View" value={view} onChange={setView} items={views} />
 ```
 
 ## API Reference
@@ -9119,7 +9154,7 @@ selectedStyle (ADR-0084): current — the raised capsule with the yellow line, t
 | `label` | `string` | — | Accessible name of the set. |
 | `fullWidth` | `boolean` | false | Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control scrolls, as without the prop. The name the reference library gives this prop on its toggle-button group; the same prop on native. |
 | `size` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl"` | md | sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web \| Native switch and the area switch of this site. Web only. 2xl: 48 segments (--space-12), 20 icons, 16 letters. |
-| `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot"` | "current" | The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |
+| `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot" \| "emphasis"` | "current" | The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump) or emphasis (the raised capsule with the emphasis letter — yellow in the dark theme, the text colour in the light one — and no line). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |
 | `items[].icon` | `IconName` | — | An icon before the label (16, 8 from it); the selected item switches to the filled form by itself. |
 | `wrap` | `boolean` | false | The track breaks onto more lines when the options do not fit, and takes the card radius (22). |
 | `orientation` | `"horizontal" \| "vertical"` | "horizontal" | vertical stands the control up: each segment the full width, the track with the card radius (22). |
@@ -10212,6 +10247,21 @@ variant="rows" drops the frame: each row is a capsule, 4 apart, grey on hover; t
 </Table>
 ```
 
+### Striped
+
+striped gives every other body row a fill — the 1st, the 3rd — so the eye can follow a row across a wide table. It works with both variants; in rows, the striped row takes the 16 corner.
+
+```tsx
+<Table variant="rows" striped caption="The three attributes">
+  <thead><tr><th>Attribute</th><th>Values</th></tr></thead>
+  <tbody>
+    <tr><td>data-theme</td><td>light, dark</td></tr>
+    <tr><td>data-density</td><td>compact, comfortable, spacious</td></tr>
+    <tr><td>data-brand</td><td>ember, sun, honey…</td></tr>
+  </tbody>
+</Table>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -10222,6 +10272,7 @@ variant="rows" drops the frame: each row is a capsule, 4 apart, grey on hover; t
 | `fit` | `boolean` | false | The table fits its box, without the 720px minimum that makes a wide table scroll sideways. This is what lets a comparison of TWO items fit a 360px phone with no sideways scroll; which two is the page's choice (a Select above the table). |
 | `differencesOnly` | `boolean` | false | The 'differences only' view — hides the rows the page marked as identical with <tr data-same>. The table does not compare cells itself; the page knows which rows are equal and owns the switch. |
 | `variant` | `"default" \| "rows"` | "default" | rows drops the frame: each row is a 54 capsule, 4 apart; --fill-1 on hover; a row with data-selected (the one the app marked) the yellow at 14%. The head in uppercase code font, muted, without fill or column dividers. It fits the width. |
+| `striped` | `boolean` | false | Gives every other body row a fill — the 1st, the 3rd and so on — so the eye can follow a row across a wide table. Works with both variants; in rows, the striped rows take the 16 corner. It is a fill, not a line. |
 | `children` | `ReactNode` | — | The <thead> and <tbody>, written by you. This is the presentational table; the one that sorts, filters and pages is DataGrid. |
 | `className` | `string` | — | On the <table>. The wrapper around it is focusable (tabIndex 0) so a table wider than the screen can be scrolled with the keyboard, not only by dragging. |
 </page>
@@ -17727,6 +17778,56 @@ import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
   <LogStream lines={tail} />
   <Button variant="outline">Pause live tail</Button>
 </Card>
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-54-0.html">
+# v0.54.0
+
+An example box with the code under the preview, a path and a bar for Stepper, a large CommandPalette, and new options on fourteen web components.
+
+New options on web components — nothing changes unless you use them. One addition reaches React Native too: `SegmentedControl selectedStyle="emphasis"`.
+
+## Breaking
+
+- **New strings in `AureaStrings`:** `copy` ("Copy"), `codeBlockExpand` ("Expand code") and `codeBlockCollapse` ("Collapse code"). If you build the whole strings table by hand instead of starting from `defaultStrings` or `ptBR`, add them.
+
+## New
+
+- **`CodeBlock previewLayout="stacked"`** — the example box with the preview on top (350 tall) and the code under it. Past five lines the code starts collapsed at 150, fading out, with **Expand code** at the bottom (it becomes **Collapse code** once open). On plain HTML pages, `aurea.js` opens and closes it through `data-aurea-code-expand`. The default, `"tabs"`, is unchanged.
+- **`CodeBlock filename`** — a 52-tall head with the file name and, with `copyable`, a written **Copy** button; a long line wraps instead of scrolling.
+- **`Stepper variant="path"`** — 50 dots on an 8 track, the chosen one inverted and 56, with `startContent` and `endContent` at the ends. **`variant="bar"`** — one 12-tall segment per step, a link (`items[].href`) or a button, green when done.
+- **`CommandPalette size="lg"`** — the large search: a 1024 window, a 64 field with Esc inside, **`filters`**, group titles with counts, 50-tall items with a tinted icon (**`items[].tone`**) and **`items[].description`**, **`preview`** (hidden below 1240) and **`footer`**.
+- **`SegmentedControl`** — **`items[].icon`** (the selected one switches to the filled glyph), **`size="2xl"`**, **`wrap`**, **`orientation="vertical"`**, and a seventh **`selectedStyle`**, **`"emphasis"`**: the raised capsule with the emphasis letter and no line (web and React Native).
+- **`RadioGroup variant="card"`** — each option is a whole card; the chosen one rises with a large shadow. **`indicatorPlacement="none"`** drops the dot.
+- **`Checkbox variant="pill"`** — a capsule around the whole target; **`tone="success"`** paints the checked one as done.
+- **`Alert appearance="soft"`** — the state colour at 14% behind the alert, no shadow, the body at 16 in the text colour. Under Aurea Ember it keeps the card skin.
+- **`Card fill="brand"`** — the whole card in the brand colour with the ink on top. Under Aurea Ember it stays a regular card.
+- **`Table striped`** — every other body row gets a fill, in both variants. **`Table variant="rows"`** — rows as capsules; a row with `data-selected` is highlighted.
+- **`NavList size="lg"`** — 56-tall rows with a tinted icon (**`items[].tone`**); **`items[].current`** and **`currentLabel`** mark the current row.
+- **`Toggle` and `ToggleGroup` `size="xl"`** (50), and **`Toggle area`** (`true` or `"pill"`) — a toggle that wraps a whole block.
+- **`data-contained`** on a container keeps the dialogs, drawers and toasts inside it pinned to it instead of the window (in React, through `portalContainer` on `AureaProvider`).
+- **`Accordion orientation="horizontal"`** — items stand side by side; the open one takes the row.
+- **`KPI variant="brand"`** and **`bars`** / **`defaultBar`** — bars under the number, each one a button that shows its name and value.
+- **`Toolbar tone="brand"`** — the yellow bar for bulk selection.
+
+## Fixed
+
+- **`Chart` on React Native** — the drawing with a name now announces itself as an image, so a screen reader reads the
+  chart's name in the browser too. Nothing changes on screen.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.54.0 @aurea-uds/core@0.54.0 @aurea-uds/fonts@0.54.0 @aurea-uds/icons@0.54.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.54.0
 ```
 </page>
 

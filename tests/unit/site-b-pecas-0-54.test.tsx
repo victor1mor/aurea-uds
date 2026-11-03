@@ -1,7 +1,7 @@
 // O SITE B, AS PEÇAS DA 0.54.0 (02/11/2026). Cada uma aprovada pela imagem em 01/11/2026, uma por vez, e construída depois
 // do "pode começar a fazer todas agora". Todas são VARIAÇÃO: sem a prop nova, a peça sai igual a antes — e cada bloco cobra
 // as duas coisas, a variação e o de sempre.
-import {render} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import {readFileSync} from "node:fs";
 import {join} from "node:path";
 import {describe, expect, it} from "vitest";
@@ -13,6 +13,8 @@ import {Accordion} from "../../packages/react/src/disclosure.js";
 import {Table} from "../../packages/react/src/data-display-client.js";
 import {SegmentedControl} from "../../packages/react/src/inputs-client.js";
 import {CodeBlock} from "../../packages/react/src/code-client.js";
+import {Alert} from "../../packages/react/src/feedback-client.js";
+import {Card} from "../../packages/react/src/markup.js";
 
 const raiz = join(__dirname, "..", "..");
 const core = readFileSync(join(raiz, "packages/core/src/aurea.css"), "utf8");
@@ -231,7 +233,7 @@ describe("Accordion de lado, KPI amarelo com barras, Table em cápsulas, Toolbar
     const {container} = render(<KPI variant="brand" label="Revenue" value="$48k"
       bars={[{label: "May", value: "$44k", amount: 44}, {label: "Jun", value: "$48k", amount: 48}]} />);
     expect(container.querySelector(".kpi.kpi-brand")).not.toBeNull();
-    const radios = [...container.querySelectorAll(".kpi-bar > input[type=radio]")] as HTMLInputElement[];
+    const radios = [...container.querySelectorAll(".kpi-bar > .kpi-bar-input[type=radio]")] as HTMLInputElement[];
     expect(radios.map((r) => r.checked)).toEqual([false, true]);
     expect(radios.map((r) => r.getAttribute("aria-label"))).toEqual(["May · $44k", "Jun · $48k"]);
     expect(container.querySelector("fieldset.kpi-bars-wrap > legend")!.textContent).toBe("Revenue");
@@ -250,5 +252,110 @@ describe("Accordion de lado, KPI amarelo com barras, Table em cápsulas, Toolbar
     expect(brand.className).toContain("toolbar-brand");
     expect(comum.className).not.toContain("toolbar-brand");
     expect(regra(".toolbar-brand .btn")).toContain("--btn-bg:var(--control-thumb)");
+  });
+});
+
+// `selectedStyle="emphasis"` (o site B, 02/11/2026, a "C" na imagem): a cápsula erguida, a letra do destaque e sem fio.
+// Provado contra o defeito: sem a regra, o `emphasis` caía no geral dos estilos (sem fio) com a letra do `--seg-fg`
+// indefinido — e o teste da regra reprova.
+describe("SegmentedControl selectedStyle=\"emphasis\"", () => {
+  it("escreve o estilo na cápsula, e a folha pinta a letra do destaque sem o fio", () => {
+    const {container} = render(<SegmentedControl selectedStyle="emphasis" label="View" value="a" items={[{value: "a", label: "A"}, {value: "b", label: "B"}]}/>);
+    expect(container.querySelector("[data-segment-style]")?.getAttribute("data-segment-style")).toBe("emphasis");
+    const linha = core.split("\n").find(l => l.includes('.segmented[data-segment-style="emphasis"]) :is(button,a).active'));
+    expect(linha).toBeDefined();
+    expect(linha).toContain("--seg-fg:var(--primary-emphasis)");
+    expect(linha).toContain("--seg-shadow:var(--shadow-sm)");
+  });
+});
+
+// `Alert appearance="soft"` (o site B, 02/11/2026, a "B" na imagem). Provado contra o defeito: sem a classe, o alerta sai
+// com o fundo do cartão — o teste da classe reprova; sem a regra, o da folha.
+describe("Alert appearance=\"soft\"", () => {
+  it("põe a classe só com soft, e a folha pinta o fundo do tom a 14% sem sombra", () => {
+    const {container} = render(<><Alert appearance="soft" variant="success" title="T">Corpo</Alert><Alert variant="success">Corpo</Alert></>);
+    const [suave, cartao] = Array.from(container.querySelectorAll(".alert"));
+    expect(suave.className).toContain("alert-soft");
+    expect(cartao.className).not.toContain("alert-soft");
+    const linha = core.split("\n").find(l => l.startsWith(".alert.alert-soft"));
+    expect(linha).toContain("background:color-mix(in oklab, var(--alert-tone) 14%, transparent)");
+    expect(linha).toContain("box-shadow:none");
+    // Na Ember, o cartão de sempre (o Victor, 02/11/2026: "Ember no cartão"): TODA regra do soft leva a guarda dela.
+    const regras = core.split("\n").filter(l => l.startsWith(".alert.alert-soft"));
+    expect(regras.length).toBe(3);
+    for (const r of regras) expect(r).toContain(':where(:not([data-brand="ember"],[data-brand="ember"] *))');
+  });
+});
+
+// `Card fill="brand"` (o site B, 02/11/2026, a "B" na imagem). Provado contra o defeito: sem a classe, o cartão sai na cor
+// de cartão — o teste da classe reprova; sem a regra, o da folha.
+describe("Card fill=\"brand\"", () => {
+  it("põe a classe só com fill, e a folha pinta o amarelo com a tinta, também no texto de apoio", () => {
+    const {container} = render(<><Card fill="brand">A</Card><Card>B</Card></>);
+    const [cheio, comum] = Array.from(container.querySelectorAll(".card"));
+    expect(cheio.className).toContain("card-fill-brand");
+    expect(comum.className).not.toContain("card-fill-brand");
+    const regra = core.split("\n").findIndex(l => l.startsWith(".card.card-fill-brand:where"));
+    const corpo = core.split("\n").slice(regra, regra + 2).join(" ");
+    expect(corpo).toContain("background:var(--primary)");
+    expect(corpo).toContain("--muted-foreground:var(--primary-foreground)");
+    // Na Ember, o cartão comum (o Victor, 02/11/2026: "Ember no cartão comum"): TODA regra do fill leva a guarda dela.
+    const regras = core.split("\n").filter(l => l.startsWith(".card.card-fill-brand"));
+    expect(regras.length).toBe(2);
+    for (const r of regras) expect(r).toContain(':where(:not([data-brand="ember"],[data-brand="ember"] *))');
+  });
+});
+
+// `Table striped` (o site B, 02/11/2026, a "B" na imagem). Provado contra o defeito: sem a classe, a tabela sai sem faixas
+// — o teste da classe reprova; sem as regras, o da folha.
+describe("Table striped", () => {
+  it("põe a classe só com striped, e a folha pinta as linhas ímpares nos dois arranjos", () => {
+    const corpo = <tbody><tr><td>a</td></tr><tr><td>b</td></tr></tbody>;
+    const {container} = render(<><Table striped caption="A">{corpo}</Table><Table caption="B">{corpo}</Table></>);
+    const [com, sem] = Array.from(container.querySelectorAll("table"));
+    expect(com.className).toContain("table-striped");
+    expect(sem.className).not.toContain("table-striped");
+    expect(core).toContain(".table.table-striped:not(.table-rows) tbody tr:nth-child(odd) > :is(td,th) { background:color-mix(in oklab, var(--foreground) 6%, var(--card)); }");
+    expect(core).toContain(".table.table-striped.table-rows tbody tr:nth-child(odd) > :is(td,th) { background:var(--fill-1); }");
+  });
+});
+
+// `CodeBlock previewLayout="stacked"` (ADR-0089, 02/11/2026: "preciso que seja fiel a referencia", "Com degradê").
+// Provado contra o defeito: sem a variação, a caixa sai com as abas (o tablist) — o primeiro teste reprova; sem a
+// troca de estado, o botão não abre — o segundo; o degradê fora da regra recolhida — o terceiro.
+describe("CodeBlock previewLayout=\"stacked\"", () => {
+  const longo = "import {Button} from \"@aurea-uds/react\";\n\nexport function Example() {\n  return (\n    <Button>Save</Button>\n  );\n}";
+  it("empilha a peça e o código, sem abas, e recolhe o código com mais de 5 linhas", () => {
+    const {container} = render(<CodeBlock preview={<span>peça</span>} previewLayout="stacked" copyable>{longo}</CodeBlock>);
+    const caixa = container.querySelector(".demo")!;
+    expect(caixa.className).toContain("demo-stacked");
+    expect(container.querySelector("[role=tablist]")).toBeNull();
+    expect(caixa.hasAttribute("data-collapsed")).toBe(true);
+    expect(container.querySelector(".demo-stacked-toggle")?.textContent).toBe("Expand code");
+  });
+  it("o botão abre e recolhe, e o código curto não tem botão", () => {
+    const {container} = render(<><CodeBlock preview={<span>a</span>} previewLayout="stacked">{longo}</CodeBlock>
+      <CodeBlock preview={<span>b</span>} previewLayout="stacked">{"<Button>Save</Button>"}</CodeBlock></>);
+    const [caixa, curta] = Array.from(container.querySelectorAll(".demo"));
+    const botao = caixa.querySelector<HTMLButtonElement>(".demo-stacked-toggle")!;
+    fireEvent.click(botao);
+    expect(caixa.hasAttribute("data-expanded")).toBe(true);
+    expect(caixa.hasAttribute("data-collapsed")).toBe(false);
+    expect(botao.getAttribute("aria-expanded")).toBe("true");
+    expect(botao.textContent).toBe("Collapse code");
+    expect(curta.querySelector(".demo-stacked-toggle")).toBeNull();
+    expect(curta.hasAttribute("data-collapsed")).toBe(false);
+  });
+  it("sem a prop, a caixa de sempre (as abas); o degradê mora só na regra recolhida", () => {
+    const {container} = render(<CodeBlock preview={<span>c</span>}>{longo}</CodeBlock>);
+    expect(container.querySelector("[role=tablist]")).not.toBeNull();
+    // O seletor de cada degradê do core: só o brand-gradient (ADR-0084) e a caixa recolhida (ADR-0089).
+    const semComentario = core.replace(/\/\*[\s\S]*?\*\//g, "");
+    const seletores = [...semComentario.matchAll(/gradient\(/g)].map(m => {
+      const abre = semComentario.lastIndexOf("{", m.index!);
+      return semComentario.slice(Math.max(semComentario.lastIndexOf("}", abre), semComentario.lastIndexOf("{", abre - 1)) + 1, abre).trim();
+    });
+    expect(seletores.some(s => s.startsWith(".demo.demo-stacked[data-collapsed] > .demo-code .code-block-wrap"))).toBe(true);
+    for (const s of seletores) expect(s.includes('data-current-style="brand-gradient"') || s.startsWith(".demo.demo-stacked[data-collapsed]")).toBe(true);
   });
 });

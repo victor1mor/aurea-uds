@@ -240,6 +240,9 @@ export default {
       eixo({titulo: "Variants", descricao: "How serious it is. danger interrupts the screen reader (role=alert); the others wait for a pause (role=status).",
         Comp: A.Alert, nome: "Alert", prop: "variant", valores: ["info", "success", "warning", "danger", "accent"],
         estilo: {display: "grid", gap: "var(--space-3)", ...wide}, filho: (v) => `A ${v} alert.`}),
+      eixo({titulo: "Appearance", descricao: "card is the card surface, the default. soft fills the alert with the state colour at 14%, with no shadow and the body at 16 in the text colour.",
+        Comp: A.Alert, nome: "Alert", prop: "appearance", valores: ["card", "soft"],
+        estilo: {display: "grid", gap: "var(--space-3)", ...wide}, filho: (v) => `A ${v} alert.`}),
       eixo({titulo: "Every state", descricao: "What is happening, apart from how serious it is. Without children, the alert says the state in words of its own.",
         Comp: A.Alert, nome: "Alert", prop: "state", valores: ["stale", "partial", "degraded", "offline", "waiting_user", "waiting_approval", "waiting_dependency"], estilo: {display: "grid", gap: "var(--space-3)", ...wide}}),
     ],
@@ -416,6 +419,11 @@ export default {
         codigo: (v) => v === "interactive" ? `<Card variant="interactive" render={<a href="#" />}>variant interactive</Card>`
           : `<Card variant="${v}">variant ${v}</Card>`,
         peca: (v) => h(A.Card, v === "interactive" ? {variant: v, render: h("a", {href: "#"})} : {variant: v}, `variant ${v}`)}),
+      cada({titulo: "Brand fill", descricao: "fill=\"brand\" paints the whole card in the brand colour, with the ink on top — for the one card that leads a row.",
+        valores: ["brand"],
+        estilo: {display: "grid", inlineSize: "min(100%, 16rem)"},
+        codigo: (v) => `<Card fill="${v}">\n  <Card.Title>Props</Card.Title>\n  <Card.Description>appearance, tone, variant, size</Card.Description>\n</Card>`,
+        peca: (v) => h(A.Card, {fill: v}, h(A.Card.Title, null, "Props"), h(A.Card.Description, null, "appearance, tone, variant, size"))}),
     ],
   },
   // Image (L4). A foto é um SVG em data URI porque o catálogo é HTML gerado e COMMITADO: preview
@@ -739,6 +747,19 @@ export function Actions() {
 </CodeBlock>`,
         render: () => h("div", {style: wide}, h(A.CodeBlock, {filename: "terminal", language: "bash", copyable: true},
           "pnpm add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons")),
+      },
+      {
+        title: "Example box",
+        description: "preview turns the block into an example box. previewLayout=\"tabs\" (the default) switches between Preview " +
+          "and Code; previewLayout=\"stacked\" puts the example on top and the code under it, collapsed past five lines with " +
+          "Expand code.",
+        code: `<CodeBlock language="tsx" copyable lineNumbers preview={<Button variant="primary">Save</Button>} previewLayout="stacked">
+  {code}
+</CodeBlock>`,
+        render: () => h("div", {style: {...wide, display: "grid", gap: "var(--space-4)"}},
+          ...["tabs", "stacked"].map(v => h(A.CodeBlock, {key: v, language: "tsx", copyable: true, lineNumbers: true, highlight: highlightCode, previewLayout: v,
+            preview: h(A.Button, {variant: "primary"}, "Save")},
+            `import {Button} from "@aurea-uds/react";\n\nexport function Example() {\n  return (\n    <Button variant="primary">Save</Button>\n  );\n}`))),
       },
     ],
   },
@@ -1614,6 +1635,25 @@ export function Actions() {
             h("tr", null, h("td", null, "Messenger"), h("td", null, "Owner")),
             h("tr", {"data-selected": ""}, h("td", null, "Analyst"), h("td", null, "Editor")),
             h("tr", null, h("td", null, "Curator"), h("td", null, "Viewer"))))),
+      },
+      {
+        title: "Striped",
+        description: "striped gives every other body row a fill — the 1st, the 3rd — so the eye can follow a row across " +
+          "a wide table. It works with both variants; in rows, the striped row takes the 16 corner.",
+        code: `<Table variant="rows" striped caption="The three attributes">
+  <thead><tr><th>Attribute</th><th>Values</th></tr></thead>
+  <tbody>
+    <tr><td>data-theme</td><td>light, dark</td></tr>
+    <tr><td>data-density</td><td>compact, comfortable, spacious</td></tr>
+    <tr><td>data-brand</td><td>ember, sun, honey…</td></tr>
+  </tbody>
+</Table>`,
+        render: () => h("div", {style: {width: "100%"}}, h(A.Table, {variant: "rows", striped: true, caption: "The three attributes"},
+          h("thead", null, h("tr", null, h("th", null, "Attribute"), h("th", null, "Values"))),
+          h("tbody", null,
+            h("tr", null, h("td", null, "data-theme"), h("td", null, "light, dark")),
+            h("tr", null, h("td", null, "data-density"), h("td", null, "compact, comfortable, spacious")),
+            h("tr", null, h("td", null, "data-brand"), h("td", null, "ember, sun, honey…"))))),
       },
     ],
   },

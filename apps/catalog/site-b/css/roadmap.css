@@ -17,17 +17,18 @@
 .rm-promessa .gs-lista, .rm-promessa .gs-p { margin:0; }
 .rm-promessa .gs-lista > li, .rm-promessa .gs-p { font-size:var(--text-base); }
 
-/* O que já está feito: o visto num círculo verde de 30 (--space-7 + --space-05). */
+/* O que já está feito: o visto num círculo verde de 30 (--space-7 + --space-05). O texto dos cartões é o 15 do desenho:
+   o 14 da escala (--text-sm), com a linha de 1,7 (23,8 contra 23,25). */
 .rm-feitos { gap:calc(var(--space-2) + var(--space-05)); }
-.rm-feito { display:flex; align-items:flex-start; gap:var(--space-3); padding:var(--space-4) calc(var(--space-4) + var(--space-05)); font-size:var(--text-base);
+.rm-feito { display:flex; align-items:flex-start; gap:var(--space-3); padding:var(--space-4) calc(var(--space-4) + var(--space-05)); font-size:var(--text-sm);
   line-height:var(--leading-relaxed); }
 .rm-feito-tile { inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
 .rm-feito-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
 
 /* O caminho, na faixa cinza (o fundo é do site, o ITEM 5). No escuro o palco é a cor do cartão, e as bolinhas (o cartão)
-   sumiam nele: a faixa é o texto a 20% (--fill-3), mais clara que elas, como o cinza do desenho. No claro, o palco. */
+   sumiam nele: a faixa é o cinza (--secondary), como o do desenho — no --fill-3 o "1.0" do fim (o --fill-3-solid) sumia. No claro, o palco. */
 .rm-caminho { margin-block-start:calc(var(--space-5) + var(--space-05)); padding:calc(var(--space-4) + var(--space-05)) calc(var(--space-3) + var(--space-05));
-  border-radius:var(--radius-card); background:var(--fill-3); }
+  border-radius:var(--radius-card); background:var(--secondary); }
 [data-theme="light"] .rm-caminho { background:var(--site-palco); }
 /* O quadro da etapa: o número grande (48, código), o título, o texto e Previous | Next. */
 .rm-etapa { display:grid; grid-template-columns:auto minmax(0, 1fr); align-items:start; gap:calc(var(--space-4) + var(--space-05));
@@ -45,7 +46,7 @@
 .rm-nao-tile { inline-size:var(--control-h-md); block-size:var(--control-h-md); }
 .rm-nao-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
 .rm-nao b { font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); }
-.rm-nao p { margin:0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-relaxed); }
+.rm-nao p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--leading-relaxed); }
 
 /* O pedido: o texto e o botão lado a lado, no fundo do palco (recheio 28 = --space-7). */
 .rm-pedido { display:grid; grid-template-columns:minmax(0, 1fr) auto; align-items:center; gap:var(--space-6); margin-block-start:calc(var(--space-4) + var(--space-05));

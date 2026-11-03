@@ -26,7 +26,7 @@ export default function releases(site) {
     trilha: ["Releases", "Overview"], titulo: "All Releases", ponteiro: true, classe: "rel-palco",
     lede: "Every update to Aurea: what is new, what changed, what was fixed and what may break. All seven packages are released together, with the same version number.",
     acoes: h(Fragment, null, site.acoesDaPagina(false, "md"),
-      h(A.Button, {variant: "tertiary", leadingIcon: "arrow-up-right", href: `${REPO}/blob/main/CHANGELOG.md`, target: "_blank", rel: "noreferrer"}, "Changelog on GitHub")),
+      h(A.Button, {size: "lg", variant: "tertiary", leadingIcon: "arrow-up-right", href: `${REPO}/blob/main/CHANGELOG.md`, target: "_blank", rel: "noreferrer"}, "Changelog on GitHub")),
     lado: pecasQueFlutuam(site, [
       h("span", {className: "g1-numerao rel-numerao"}, h("b", null, ultima ? `v${ultima.versao}` : "—"), "latest"),
       h("span", {className: "g1-capsula"}, h("span", {className: "g1-capsula-num"}, todas.length),
@@ -64,7 +64,7 @@ export default function releases(site) {
           h("span", {className: "rel-resumo"}, l.resumo),
           h(A.Icon, {name: "arrow-right", size: "sm", className: "rel-seta"})))),
         m.linhas.length > PRIMEIRAS ? h("div", {className: "g1-mais"},
-          h(A.Button, {variant: "secondary", type: "button", trailingIcon: "caret-down", "data-g1-mais": "", "aria-expanded": "false"},
+          h(A.Button, {variant: "tertiary", size: "lg", type: "button", trailingIcon: "caret-down", "data-g1-mais": "", "aria-expanded": "false"},
             `Show all ${m.linhas.length}`)) : null)),
       vazioDaBusca(site, {chave: "g1", titulo: "No release found", texto: "Try a component name, a version number or a shorter word."})),
     markdown);

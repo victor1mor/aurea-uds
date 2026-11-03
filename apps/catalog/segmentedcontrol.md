@@ -92,7 +92,7 @@ wrap lets a long set break onto more lines, and the track takes the card radius 
 
 ### The colour of the selected segment
 
-selectedStyle (ADR-0084): current — the raised capsule with the yellow line, the default — neutral, contrast (graphite), brand (yellow), ring (a yellow ring) and dot (a yellow dot before the label; its place is kept in every segment, so the width does not jump).
+selectedStyle (ADR-0084): current — the raised capsule with the yellow line, the default — neutral, contrast (graphite), brand (yellow), ring (a yellow ring) and dot (a yellow dot before the label; its place is kept in every segment, so the width does not jump) and emphasis (the raised capsule with the emphasis letter, no line).
 
 ```tsx
 <SegmentedControl selectedStyle="current" label="View" value={view} onChange={setView} items={views} />
@@ -101,6 +101,7 @@ selectedStyle (ADR-0084): current — the raised capsule with the yellow line, t
 <SegmentedControl selectedStyle="brand" label="View" value={view} onChange={setView} items={views} />
 <SegmentedControl selectedStyle="ring" label="View" value={view} onChange={setView} items={views} />
 <SegmentedControl selectedStyle="dot" label="View" value={view} onChange={setView} items={views} />
+<SegmentedControl selectedStyle="emphasis" label="View" value={view} onChange={setView} items={views} />
 ```
 
 ## API Reference
@@ -113,7 +114,7 @@ selectedStyle (ADR-0084): current — the raised capsule with the yellow line, t
 | `label` | `string` | — | Accessible name of the set. |
 | `fullWidth` | `boolean` | false | Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control scrolls, as without the prop. The name the reference library gives this prop on its toggle-button group; the same prop on native. |
 | `size` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl"` | md | sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web \| Native switch and the area switch of this site. Web only. 2xl: 48 segments (--space-12), 20 icons, 16 letters. |
-| `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot"` | "current" | The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |
+| `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot" \| "emphasis"` | "current" | The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump) or emphasis (the raised capsule with the emphasis letter — yellow in the dark theme, the text colour in the light one — and no line). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |
 | `items[].icon` | `IconName` | — | An icon before the label (16, 8 from it); the selected item switches to the filled form by itself. |
 | `wrap` | `boolean` | false | The track breaks onto more lines when the options do not fit, and takes the card radius (22). |
 | `orientation` | `"horizontal" \| "vertical"` | "horizontal" | vertical stands the control up: each segment the full width, the track with the card radius (22). |

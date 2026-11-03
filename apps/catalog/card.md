@@ -41,6 +41,17 @@ base is the floating surface; raised lifts it with a shadow; interactive answers
 <Card variant="contrast">variant contrast</Card>
 ```
 
+### Brand fill
+
+fill="brand" paints the whole card in the brand colour, with the ink on top — for the one card that leads a row.
+
+```tsx
+<Card fill="brand">
+  <Card.Title>Props</Card.Title>
+  <Card.Description>appearance, tone, variant, size</Card.Description>
+</Card>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -49,6 +60,7 @@ base is the floating surface; raised lifts it with a shadow; interactive answers
 | `children` | `ReactNode` | — | The content. Padding comes from --card-pad and the 22px radius from --radius-card; neither is a prop, because the floating surface is the identity of the system. |
 | `render` | `ReactElement` | — | The ELEMENT the card renders as, with the Aurea surface merged into it. Required when variant is "interactive": a card that is a target has to be a real target — <button> for an action, <a href> for navigation — and only you know which. tabIndex on a <div> would give focus with no role, no key and no accessible name. |
 | `accent` | `brand \| success \| info \| warning \| danger` | — | A colour stroke on the top edge, --accent-width (4) tall, in the tone's FILL colour, the same in both themes. It is decoration: the card's own title says the subject, so the stroke carries no information of its own. The other sides keep the regular 1px border, and the stroke wins over `selected`, `danger` and the `contrast` outline. |
+| `fill` | `"brand"` | — | Paints the whole card in the brand colour, with the ink on top (--primary-foreground): the title, the supporting text and anything that reads the card colour follow. The accent stroke is hidden (brand on brand); an interactive card keeps the colour under the pointer. Under the Aurea Ember brand, the card stays a regular card. |
 | `padding` | `"normal" \| "none"` | "normal" | none removes the inner padding so media bleeds to the edge; the 22 radius stays and clips the media. |
 | `orientation` | `"vertical" \| "horizontal"` | "vertical" | `horizontal` is the list mode: Card.Media on the left at thumbnail width (96, --space-24) and the content beside it. |
 | `lift` | `boolean` | false | With `variant="interactive"`, the card RISES on hover: it lifts 4px and takes a medium shadow, instead of changing its fill. Still for people who ask for less motion. Web only; on the other variants it does nothing. |

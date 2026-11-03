@@ -1,11 +1,13 @@
 // A THEMING DO SITE B (02/11/2026): o laboratório põe os três atributos na prévia (tema, densidade e marca) e escreve a
 // linha do html; os botões de marca do laboratório e os cartões das marcas são a mesma escolha. Sem este script, a prévia
-// fica no escuro, confortável, na Aurea Gold.
+// fica no claro, confortável, na Aurea Gold (como o desenho).
 (() => {
   const pagina = document.querySelector('[data-gs-pagina="theming"]');
   if (!pagina) return;
   const previa = pagina.querySelector("[data-th-previa]");
-  const estado = {tema: "dark", densidade: "comfortable", marca: "gold"};
+  const estado = {tema: "light", densidade: "comfortable", marca: "gold"};
+  // A altura do controle em cada densidade (o --control-h-md de cada uma), como a barra da prévia do desenho.
+  const ALTURA = {compact: 32, comfortable: 36, spacious: 40};
   const nomeDa = id => "Aurea " + id.charAt(0).toUpperCase() + id.slice(1);
   const aplicar = () => {
     if (!previa) return;
@@ -13,7 +15,7 @@
     previa.dataset.density = estado.densidade;
     if (estado.marca === "gold") delete previa.dataset.brand; else previa.dataset.brand = estado.marca;
     previa.querySelector("[data-th-rotulo]").textContent = nomeDa(estado.marca) + " · " + estado.tema;
-    previa.querySelector("[data-th-dens]").textContent = estado.densidade;
+    previa.querySelector("[data-th-dens]").textContent = estado.densidade + " · control " + ALTURA[estado.densidade] + "px";
     const nota = previa.querySelector("[data-th-ember]");
     if (nota) nota.hidden = estado.marca !== "ember";
     const marca = estado.marca === "gold" ? "" : ' data-brand="' + estado.marca + '"';

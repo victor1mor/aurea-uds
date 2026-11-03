@@ -28,3 +28,38 @@
   new MutationObserver(desenhar).observe(raiz, {attributes: true, attributeFilter: ["data-theme"]});
   desenhar();
 })();
+
+// "SIMULATE THE COMPUTER": finge a escolha clara ou escura do computador. A preferência é a guardada pelo site ("light",
+// "dark" ou "system"; sem nada guardado, "system"). Só com "system" a tela segue o que se finge; a linha ao lado diz a
+// preferência e o tema que está na tela.
+(function () {
+  var faixa = document.querySelector(".dark-mode-simula");
+  if (!faixa) return;
+  var raiz = document.documentElement;
+  var pref = faixa.querySelector("[data-dm-pref]"), tela = faixa.querySelector("[data-dm-tela]");
+  var computador = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  function preferencia() {
+    var t = null;
+    try { t = localStorage.getItem("aurea-theme"); } catch (e) { /* sem armazenamento */ }
+    return t === "light" || t === "dark" ? t : "system";
+  }
+  function desenhar() {
+    faixa.querySelectorAll("[data-dm-simula]").forEach(function (b) {
+      var sim = b.getAttribute("data-dm-simula") === computador;
+      b.classList.toggle("active", sim);
+      b.setAttribute("aria-pressed", sim ? "true" : "false");
+    });
+    pref.textContent = '"' + preferencia() + '"';
+    tela.textContent = '"' + (raiz.getAttribute("data-theme") || computador) + '"';
+  }
+  faixa.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-dm-simula]");
+    if (!b) return;
+    computador = b.getAttribute("data-dm-simula");
+    if (preferencia() === "system") raiz.setAttribute("data-theme", computador);
+    desenhar();
+  });
+  new MutationObserver(desenhar).observe(raiz, {attributes: true, attributeFilter: ["data-theme"]});
+  window.addEventListener("storage", desenhar);
+  desenhar();
+})();

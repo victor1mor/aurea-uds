@@ -26,7 +26,7 @@ export default function density(site, doc) {
   const medidas = ["--control-h-md", "--control-h-sm", "--row-h", "--card-pad", "--section-gap"];
   const tres = [
     h("div", {key: "chave", className: "density-chave"},
-      h(A.SegmentedControl, {label: "Density", size: "lg", selectedStyle: "neutral", wrap: true, value: "comfortable", onChange: () => {},
+      h(A.SegmentedControl, {label: "Density", size: "lg", selectedStyle: "emphasis", wrap: true, value: "comfortable", onChange: () => {},
         items: DENSIDADES.map(d => ({value: d, label: d}))})),
     h("div", {key: "lab", className: "density-lab"},
       h("div", {className: "density-previa", "data-density": "comfortable"},
@@ -34,9 +34,9 @@ export default function density(site, doc) {
           h(A.Card.Header, null, h(A.Card.Title, null, "Members")),
           h("div", {className: "density-linha"},
             h(A.SearchField, {placeholder: "Filter members…", "aria-label": "Filter members"}),
-            h(A.IconButton, {icon: "sliders-horizontal", label: "Filter options", variant: "tertiary"})),
-          h(A.Table, {fit: true, caption: "Members"},
-            h("thead", null, h("tr", null, h("th", {scope: "col"}, "Name"), h("th", {scope: "col"}, "Status"))),
+            h(A.IconButton, {icon: "plus", label: "Add member", variant: "tertiary"})),
+          // Como o desenho: a lista em linhas (`Table variant="rows"`), sem cabeçalho, com o estado na ponta.
+          h(A.Table, {variant: "rows", striped: true, caption: "Members", className: "density-tabela"},
             h("tbody", null, ...membros.map(([n, s]) => h("tr", {key: n}, h("td", null, n), h("td", null, s))))),
           h(A.Card.Footer, null, h(A.Button, {variant: "primary"}, "Invite"), h(A.Button, null, "Cancel"), h(A.Button, {size: "sm"}, "Small")))),
       h("div", {className: "docb-caixa density-medidas", "aria-live": "polite"},
@@ -54,7 +54,7 @@ export default function density(site, doc) {
   const tokens = g.achar(tk, "tabela");
   const coluna = j => j === 0 ? "" : `density-col-${DENSIDADES[j - 1]}`;
   const tabelaTokens = h("div", {key: "tokens", className: "docb-tabela density-tokens", "data-coluna": "comfortable"},
-    h(A.Table, {variant: "rows", caption: tk.rotulo},
+    h(A.Table, {variant: "rows", striped: true, caption: `${tk.rotulo} table`},
       h("thead", null, h("tr", null, ...tokens.cabecalho.map((c, j) => h("th", {key: j, scope: "col", className: coluna(j)}, ...g.pedacos(c, g.k()))))),
       h("tbody", null, ...tokens.linhas.map((l, n) => h("tr", {key: n}, ...l.map((c, j) => h("td", {key: j, className: coluna(j)}, ...g.pedacos(c, g.k()))))))));
 

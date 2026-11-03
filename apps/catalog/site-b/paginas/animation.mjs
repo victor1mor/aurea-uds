@@ -26,7 +26,7 @@ export default function animation(site, doc) {
   const movimentos = g.achar(bi, "tabela");
   // A miniatura presa: o contêiner `data-contained` a 70% (o número é do site). `abrir` diz qual peça o botão abre.
   const mini = (abrir, ...filhos) => h("div", {className: "animation-mini", "data-contained": "", "data-janela": abrir, "aria-hidden": "true"}, ...filhos);
-  const botaoFalso = texto => h("span", {className: "btn btn-secondary btn-sm animation-ancora"}, texto);
+  const botaoFalso = texto => h("span", {className: "btn btn-tertiary btn-sm animation-ancora"}, texto);
   const janela = mini("dialog",
     h("div", {className: "dialog-backdrop", "data-fechada": ""}),
     h("div", {className: "dialog", "data-fechada": ""},
@@ -57,24 +57,44 @@ export default function animation(site, doc) {
     Accordion: () => [h("div", {key: "p", className: "animation-palco animation-palco-centro"},
       h(A.Accordion, {variant: "surface", className: "animation-acordeao", items: [{id: "ship", title: "Shipping", content: "Two to four working days."}]}))],
     Spinner: () => [h("div", {key: "p", className: "animation-palco animation-palco-centro animation-palco-baixo"},
-      h(A.Spinner, {label: "Loading", size: "lg"}), h("div", {className: "animation-progresso"}, h(A.Progress, {label: "Loading the report"})),
+      h(A.Spinner, {label: "Loading", size: "lg"}), h("div", {className: "animation-progresso"}, h(A.Progress, {label: "Loading the report"})))],
+    Skeleton: () => [h("div", {key: "p", className: "animation-palco animation-palco-centro animation-palco-baixo"},
       h("div", {className: "animation-esqueleto", "aria-hidden": "true"}, h(A.Skeleton, {style: {inlineSize: "100%", blockSize: "var(--space-3)"}}),
         h(A.Skeleton, {style: {inlineSize: "70%", blockSize: "var(--space-3)"}}), h(A.Skeleton, {style: {inlineSize: "85%", blockSize: "var(--space-3)"}})))],
   };
+  // Como o desenho (02/11/2026): o nome do cartão junta as peças com "·" ("Button · IconButton"); a linha das esperas vira
+  // dois cartões, "Spinner · Progress" e "Skeleton" (com a frase do desenho); e o aviso se mostra com "Show".
+  const nomeDoCartao = cel => g.textoDe(cel).replace(/ and /g, " · ").replace(/, /g, " · ");
+  const ROTULO = {toast: "Show"};
   const frase = cel => {
     const t = g.pedacos(cel, g.k());
     if (typeof t[0] === "string") t[0] = t[0][0].toUpperCase() + t[0].slice(1);
     return [...t, "."];
   };
-  const galeria = h("div", {key: "galeria", className: "animation-galeria"}, ...movimentos.linhas.map((linha, n) => {
-    const chave = g.textoDe(linha[0]).match(/^[A-Z][A-Za-z]*/)[0];
+  const cartao = (n, chave, nome, texto) => {
     const [palco, abre] = palcos[chave]();
-    return h("div", {key: n, className: `docb-caixa animation-movimento${chave === "Spinner" ? " animation-movimento-largo" : ""}`},
+    const meio = chave === "Spinner" || chave === "Skeleton";
+    return h("div", {key: n, className: `docb-caixa animation-movimento${meio ? " animation-movimento-meio" : ""}`},
       palco,
-      h("div", {className: "animation-cabeca"}, h("b", null, ...g.pedacos(linha[0], g.k())),
-        abre ? h(A.Button, {size: "sm", variant: "secondary", "data-abre": abre}, "Open") : null),
-      h("p", null, ...frase(linha[1])));
+      h("div", {className: "animation-cabeca"}, h("b", null, nome),
+        abre ? h(A.Button, {size: "md", variant: "tertiary", "data-abre": abre}, ROTULO[abre] ?? "Open") : null),
+      h("p", null, ...texto));
+  };
+  const galeria = h("div", {key: "galeria", className: "animation-galeria"}, ...movimentos.linhas.flatMap((linha, n) => {
+    const chave = g.textoDe(linha[0]).match(/^[A-Z][A-Za-z]*/)[0];
+    if (chave === "Spinner") return [cartao(n, "Spinner", "Spinner · Progress", frase(linha[1])),
+      cartao(`${n}s`, "Skeleton", "Skeleton", ["Pulses while the content loads."])];
+    return [cartao(n, chave, nomeDoCartao(linha[0]), frase(linha[1]))];
   }));
+
+  // A FAIXA "SIMULATE REDUCE MOTION" do desenho: On corta o movimento da página, como o sistema faria (a regra é do site,
+  // `site-b/css/animation.css`); a frase da ponta diz o que acontece. Quem liga é o `site-b/js/animation.js`.
+  const simulador = h("div", {key: "simula", className: "animation-simula", role: "group", "aria-label": "Simulate the system setting"},
+    h("span", {className: "animation-simula-k"}, 'Simulate "reduce motion"'),
+    h("span", {className: "segmented segmented-lg", "data-segment-style": "emphasis"},
+      ...[["off", "Off"], ["on", "On"]].map(([v, rotulo]) => h("button", {key: v, type: "button", "data-an-reduz": v,
+        className: v === "off" ? "active" : undefined, "aria-pressed": v === "off" ? "true" : "false"}, rotulo))),
+    h("span", {className: "animation-simula-res", "aria-live": "polite", "data-an-reduz-frase": ""}, "the motion below plays"));
 
   // ── MOTION TOKENS: a tabela do `.md` com a bolinha que corre e o "Play" de cada linha ───────────────────────────────
   const mt = g.secao("motion-tokens");
@@ -82,7 +102,7 @@ export default function animation(site, doc) {
   const pista = (tempo, curva) => h("span", {className: "animation-pista", "aria-hidden": "true"},
     h("span", {className: "animation-bola", style: {transitionDuration: tempo, transitionTimingFunction: curva}}));
   const tabelaTokens = h("div", {key: "tokens", className: "docb-tabela animation-tokens"},
-    h(A.Table, {variant: "rows", caption: "Motion tokens"},
+    h(A.Table, {variant: "rows", striped: true, caption: "Motion tokens table"},
       h("thead", null, h("tr", null, ...tokens.cabecalho.map((c, j) => h("th", {key: j, scope: "col"}, ...g.pedacos(c, g.k()))),
         h("th", {key: "play", scope: "col"}, h("span", {className: "animation-escondido"}, "Try it")))),
       h("tbody", null, ...tokens.linhas.map((l, n) => {
@@ -95,11 +115,11 @@ export default function animation(site, doc) {
           h("td", null, ...g.pedacos(l[0], g.k())),
           h("td", null, h("span", {className: "animation-valor"}, ...g.pedacos(l[1], g.k()), pista(tempo, curva))),
           h("td", null, ...g.pedacos(l[2], g.k())),
-          h("td", null, h(A.Button, {size: "sm", variant: "secondary", className: "animation-play", "aria-label": `Play ${nome}`}, "Play")));
+          h("td", null, h(A.Button, {size: "md", variant: "tertiary", className: "animation-play", "aria-label": `Play ${nome}`}, "Play")));
       }))));
   const corrida = h("div", {key: "corrida", className: "docb-caixa animation-corrida"},
     h("div", {className: "animation-corrida-topo"}, h("b", null, "The two curves, side by side, at twice --duration-slow"),
-      h(A.Button, {size: "sm", variant: "primary", className: "animation-correr"}, "Race")),
+      h(A.Button, {size: "md", variant: "primary", className: "animation-correr"}, "Race")),
     ...["--ease-standard", "--ease-emphasized"].map(c => h("div", {key: c, className: "animation-raia"}, h("code", null, c),
       pista("calc(var(--duration-slow) * 2)", `var(${c})`))));
 
@@ -110,7 +130,7 @@ export default function animation(site, doc) {
     ...[["As shipped", "Grows in and shrinks out.", ""], ["With your rule", "Only fades.", "animation-so-esmaece"]].map(([titulo, texto, extra]) =>
       h("div", {key: titulo, className: "docb-caixa animation-movimento"},
         h("div", {className: "animation-palco"}, balao(extra)),
-        h("div", {className: "animation-cabeca"}, h("b", null, titulo), h(A.Button, {size: "sm", variant: "secondary", "data-abre": "popover"}, "Open")),
+        h("div", {className: "animation-cabeca"}, h("b", null, titulo), h(A.Button, {size: "md", variant: "tertiary", "data-abre": "popover"}, "Open")),
         h("p", null, texto))));
 
   // ── REDUCED MOTION: os três grupos de regras em cartões ─────────────────────────────────────────────────────────────
@@ -132,5 +152,5 @@ export default function animation(site, doc) {
     g.doMd("next-steps", "Keep going", [g.proximos(g.secao("next-steps"), [["paint-brush", "teal", "Target state attributes."],
       ["hexagon", "orange", "See every token."], ["eye", "blue", "How Aurea serves low vision."]])]),
   ];
-  return g.pagina({pecas, partes});
+  return g.pagina({pecas, antes: [...g.blocos(g.intro), simulador], partes});
 }

@@ -524,7 +524,9 @@ def _gradiente_fora_da_excecao(texto):
         abre = limpo.rfind("{", 0, m.start())
         antes = max(limpo.rfind("}", 0, abre), limpo.rfind("{", 0, abre - 1))
         seletor = limpo[antes + 1:abre]
-        if 'data-current-style="brand-gradient"' not in seletor:
+        # A TERCEIRA (ADR-0089, 02/11/2026, o Victor: "Com degradê"): o código recolhido da caixa empilhada some num degradê,
+        # como na referência — só na regra `.demo.demo-stacked[data-collapsed]`.
+        if 'data-current-style="brand-gradient"' not in seletor and ".demo.demo-stacked[data-collapsed]" not in seletor:
             return True
     return False
 for rel in _sem_gradiente:
@@ -532,7 +534,7 @@ for rel in _sem_gradiente:
     # O `catalog.css` é a CÓPIA do CSS do core que o site carrega (CLAUDE.md, a regra da 0.32.0): a mesma exceção vale nele.
     if rel in ("packages/core/dist/aurea.css", "packages/core/src/aurea.css", "apps/catalog/assets/catalog.css"):
         if _gradiente_fora_da_excecao(_txt4):
-            errors.append(f"{rel}: contém gradient() fora da regra do brand-gradient (a exceção da ADR-0084)")
+            errors.append(f"{rel}: contém gradient() fora das regras do brand-gradient (ADR-0084) e da caixa empilhada (ADR-0089)")
     elif "gradient(" in _txt4:
         errors.append(f"{rel}: contém gradient()")
 # A QUARTA porta, fechada em 13/10/2026 (ADR-0069): o código dos componentes. Até ali o check olhava só o CSS e

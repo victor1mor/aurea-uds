@@ -14,6 +14,20 @@ import {Icon} from "./system.js";
 // moldura. É a caixa do site de hoje (decisão do Victor, 06/10/2026: a da Aurea, não a da referência),
 // agora no pacote, para o site usar só peças da Aurea. O teclado é o das abas do APG: setas, Home e End.
 // Sem o `aurea.js` na página — quem troca a aba é o React.
+// A CAIXA EMPILHADA (`previewLayout="stacked"`, ADR-0089): a peça em cima e o código embaixo, sem as abas; mais de 5
+// linhas, o código vem recolhido com o "Expand code".
+function CaixaEmpilhada({preview,codigo,linhas,className}:{preview:React.ReactNode;codigo:React.ReactNode;linhas:number;className?:string}){
+  const s=useAureaStrings();
+  const id=React.useId();
+  const [aberto,setAberto]=React.useState(false);
+  const dobra=linhas>5;
+  return <div className={cx("demo code-preview demo-stacked",className)} data-collapsed={dobra&&!aberto?"":undefined} data-expanded={dobra&&aberto?"":undefined}>
+    <div className="demo-panel" data-panel="preview">{preview}</div>
+    <div className="demo-panel demo-code" data-panel="code" id={`${id}-code`}>{codigo}
+      {dobra&&<button type="button" className="btn btn-tertiary btn-sm demo-stacked-toggle" aria-expanded={aberto} aria-controls={`${id}-code`}
+        onClick={()=>setAberto(!aberto)}>{aberto?s.codeBlockCollapse:s.codeBlockExpand}</button>}</div>
+  </div>;
+}
 function CaixaDeExemplo({preview,codigo,className}:{preview:React.ReactNode;codigo:React.ReactNode;className?:string}){
   const s=useAureaStrings();
   const id=React.useId();
@@ -78,11 +92,14 @@ function linhasDoCodigo(codigo:string,language:string,highlight?:CodeHighlighter
 // `filename` (o site B, aprovado pela bancada em 01/11/2026, o item 6 — "Ícone + nome"): a CABEÇA do arquivo — o nome do
 // arquivo à esquerda e, com `copyable`, o "Copy" ESCRITO (o botão secundário, com o ícone antes do nome; vira "Copied").
 // O bloco vira o cartão (canto 22, a cor do cartão) e a linha longa DESCE em vez de rolar. Sem `filename`, o de sempre.
-export function CodeBlock({children,language="text",copyable,preview,lineNumbers,highlight,tabs,filename,className}:{children?:string;language?:string;copyable?:boolean;
+export function CodeBlock({children,language="text",copyable,preview,previewLayout="tabs",lineNumbers,highlight,tabs,filename,className}:{children?:string;language?:string;copyable?:boolean;
   /** O nome do arquivo na cabeça do bloco; com ele, o "Copy" é escrito e a linha longa desce. */
   filename?:React.ReactNode;
   /** A prévia viva do código: com ela, o bloco vira a caixa de exemplo, com as abas Prévia | Código. */
   preview?:React.ReactNode;
+  /** Com `preview`: `tabs` (as abas Prévia | Código, o padrão) ou `stacked` (a peça em cima e o código embaixo; mais de 5
+   *  linhas, recolhido com o "Expand code" — ADR-0089). */
+  previewLayout?:"tabs"|"stacked";
   /** Mostra o número de cada linha à esquerda. O número não entra no texto copiado nem é lido pelo leitor de tela. */
   lineNumbers?:boolean;
   /** Colore o código. Passe o `highlightCode` de `@aurea-uds/react/code-highlight` (os analisadores são peer opcional). */
@@ -92,6 +109,8 @@ export function CodeBlock({children,language="text",copyable,preview,lineNumbers
   tabs?:CodeBlockTab[];
   className?:string}){
 if(tabs&&tabs.length>0)return <CodigoEmAbas tabs={tabs} language={language} copyable={copyable} highlight={highlight} className={className}/>;
+if(preview!==undefined&&previewLayout==="stacked")return <CaixaEmpilhada preview={preview} className={className} linhas={(children??"").split("\n").length}
+  codigo={<CodeBlock language={language} copyable={copyable} lineNumbers={lineNumbers} highlight={highlight}>{children}</CodeBlock>}/>;
 if(preview!==undefined)return <CaixaDeExemplo preview={preview} className={className}
   codigo={<CodeBlock language={language} copyable={copyable} lineNumbers={lineNumbers} highlight={highlight}>{children}</CodeBlock>}/>;
 const s=useAureaStrings();

@@ -14,8 +14,11 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement>, RefAttribu
     variant?: "default" | "rows";
     /** GAR-12: esconde as linhas marcadas como iguais (`<tr data-same>`) — o "Só diferenças". */
     differencesOnly?: boolean;
+    /** As linhas ímpares do corpo com fundo (o site B, 02/11/2026, a "B" na imagem): a 1ª, a 3ª… — o olho segue a linha
+     *  numa tabela larga. Nos dois arranjos (`default` e `rows`). */
+    striped?: boolean;
 }
-export declare function Table({ caption, stickyHeader, stickyFirstColumn, fit, differencesOnly, variant, children, className, ...props }: TableProps): React.JSX.Element;
+export declare function Table({ caption, stickyHeader, stickyFirstColumn, fit, differencesOnly, striped, variant, children, className, ...props }: TableProps): React.JSX.Element;
 export interface SortableItem {
     id: string;
     label: ReactNode;

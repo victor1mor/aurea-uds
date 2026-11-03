@@ -99,6 +99,12 @@
       "description": "rows drops the frame: each row is a 54 capsule, 4 apart; --fill-1 on hover; a row with data-selected (the one the app marked) the yellow at 14%. The head in uppercase code font, muted, without fill or column dividers. It fits the width."
     },
     {
+      "name": "striped",
+      "type": "boolean",
+      "default": "false",
+      "description": "Gives every other body row a fill — the 1st, the 3rd and so on — so the eye can follow a row across a wide table. Works with both variants; in rows, the striped rows take the 16 corner. It is a fill, not a line."
+    },
+    {
       "name": "children",
       "type": "ReactNode",
       "default": "—",

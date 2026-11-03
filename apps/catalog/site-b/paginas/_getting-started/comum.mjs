@@ -51,7 +51,7 @@ export function ferramentas(site) {
   // A tabela do desenho: a `Table` da Aurea em linhas (`variant="rows"`), na caixa do cartão. A legenda é o nome da região
   // que rola (o mesmo cuidado do `docPage`).
   const tabelaB = (b, chave, legenda = "Table") => h("div", {key: chave, className: "gs-tabela"},
-    h(A.Table, {variant: "rows", caption: legenda},
+    h(A.Table, {variant: "rows", striped: true, caption: `${legenda} table`},
       h("thead", null, h("tr", null, ...b.cabecalho.map((c, j) => h("th", {key: j, scope: "col"}, ...site.pedacos(c, `${chave}h${j}`))))),
       h("tbody", null, ...b.linhas.map((l, j) => h("tr", {key: j}, ...l.map((c, i) => h("td", {key: i}, ...site.pedacos(c, `${chave}r${j}c${i}`))))))));
 
@@ -80,12 +80,12 @@ export function ferramentas(site) {
     olho ? h("p", {className: "intro-olho"}, olho) : null,
     titulo != null ? h("h2", {className: "intro-h2"}, titulo) : null, ...filhos);
 
-  // A CHAVE DE SEGMENTOS: a pele da `SegmentedControl` (o escolhido erguido, sem o fio — `selectedStyle="neutral"`, ITEM 3),
+  // A CHAVE DE SEGMENTOS: a pele da `SegmentedControl` (o escolhido erguido, sem o fio — `selectedStyle="emphasis"`: a letra do destaque, a "C" de 02/11/2026),
   // com botões de ligar: a página não hidrata a peça, e o `getting-started.js` move o escolhido. `data-gs-chave`: o nome da
   // escolha; cada botão leva `data-valor`.
   const chave = (nome, rotulo, opcoes, ativo, {tamanho = "lg", cheia = false, quebra = false, classe = ""} = {}) =>
     h("span", {className: ["segmented", tamanho && `segmented-${tamanho}`, cheia && "segmented-full", quebra && "segmented-wrap", "gs-chave", classe].filter(Boolean).join(" "),
-      "data-segment-style": "neutral", role: "group", "aria-label": rotulo, "data-gs-chave": nome},
+      "data-segment-style": "emphasis", role: "group", "aria-label": rotulo, "data-gs-chave": nome},
       ...opcoes.map(o => { const [valor, texto] = Array.isArray(o) ? o : [o, o];
         return h("button", {key: valor, type: "button", "data-valor": valor, className: valor === ativo ? "active" : undefined,
           "aria-pressed": valor === ativo ? "true" : "false"}, texto); }));
@@ -113,9 +113,18 @@ export function ferramentas(site) {
       h("span", {className: "intro-proxima-seta"}, h(A.Icon, {name: "arrow-right"}))) : null;
   };
 
+  // O AVISO COM TÍTULO, como o do desenho (02/11/2026): a primeira frase do texto vira o título (na cor do estado) e o resto,
+  // o corpo. O texto do documento não muda; sem uma primeira frase solta no começo, sai o aviso de sempre, sem título.
+  const avisoComTitulo = (variante, texto, chave, extra = {}) => {
+    const [p0, ...resto] = texto;
+    const m = typeof p0?.t === "string" ? /^(.+?\.)\s+(\S[\s\S]*)$/.exec(p0.t) : null;
+    return h(A.Alert, {appearance: "soft", key: chave, variant: variante, className: "gs-aviso", title: m ? m[1] : undefined, ...extra},
+      ...site.pedacos(m ? [{t: m[2]}, ...resto] : texto, chave));
+  };
+
   // A página inteira: a abertura, o corpo e o texto do "Copy Markdown".
   const pagina = (doc, abertura_, ...corpo_) => h(Fragment, null, abertura_, h("div", {className: "intro-corpo gs-corpo", "data-gs-pagina": doc.nome}, ...corpo_, proxima(doc)),
     site.textoParaCopiar(site.paraTexto(doc.texto)));
 
-  return {secoes, codigo, p, corpo, tabelaB, abertura, cartao, capsula, numerao, amarela, secao, chave, rotuloK, links, linksDaLista, proxima, pagina};
+  return {secoes, codigo, p, corpo, tabelaB, avisoComTitulo, abertura, cartao, capsula, numerao, amarela, secao, chave, rotuloK, links, linksDaLista, proxima, pagina};
 }

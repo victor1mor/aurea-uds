@@ -108,6 +108,19 @@
     if (trigger) copy(trigger);
   });
 
+  // A CAIXA EMPILHADA (ADR-0089): o [data-aurea-code-expand] abre e recolhe o código da caixa — troca `data-collapsed` por
+  // `data-expanded`, o `aria-expanded` e o texto ("Expand code" / "Collapse code", lidos do próprio botão).
+  document.addEventListener("click", function (event) {
+    var botao = event.target.closest && event.target.closest("[data-aurea-code-expand]");
+    var caixa = botao && botao.closest(".demo-stacked");
+    if (!caixa) return;
+    var abre = caixa.hasAttribute("data-collapsed");
+    caixa.toggleAttribute("data-collapsed", !abre);
+    caixa.toggleAttribute("data-expanded", abre);
+    botao.setAttribute("aria-expanded", abre ? "true" : "false");
+    botao.textContent = botao.getAttribute(abre ? "data-label-collapse" : "data-label-expand") || botao.textContent;
+  });
+
   // GAR-14 (0.28.0) · COMPARTILHAR. O gatilho marcado com [data-aurea-share] (o `Button share` do
   // React emite isto) pergunta ao navegador se ele sabe compartilhar ESTE link — detectar o recurso,
   // e não adivinhar o aparelho, é o padrão da web. Sabe: abre a janela do aparelho; a pessoa
@@ -784,6 +797,64 @@ if (catalogo) {
   window.AureaDocsB = {escolha: escolha, aperta: aperta, grupoDeBotoes: grupoDeBotoes, deslizante: deslizante};
 })();
 
+/* site-b/js/_filtro.js */
+/* O FILTRO DA LATERAL (o desenho B, 02/11/2026): nas áreas Blocks, Patterns, Releases e Tokens, os itens da lateral levam a
+   `#filtro/<valor>`. Este script marca o escolhido (`aria-current="true"`) e avisa a página com o evento `site-filtro`
+   (`detail` = o valor; "all" sem filtro). Quem mostra e esconde é o script de cada página. Sem script, a página mostra tudo. */
+(function () {
+  var links = function () { return document.querySelectorAll('.sidebar a[href^="#filtro/"]'); };
+  if (!links().length) return;
+  function aplicar() {
+    var m = /^#filtro\/(.+)$/.exec(location.hash);
+    var valor = m ? decodeURIComponent(m[1]) : "all";
+    links().forEach(function (a) {
+      var sim = a.getAttribute("href") === "#filtro/" + valor;
+      if (sim) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+      a.classList.toggle("is-selected", sim);
+    });
+    document.dispatchEvent(new CustomEvent("site-filtro", {detail: valor}));
+  }
+  window.addEventListener("hashchange", aplicar);
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", aplicar); else aplicar();
+})();
+
+/* O CAMPO DE FILTRAR DA LATERAL (Patterns): vai para baixo de "By component", como o desenho, e esconde os componentes
+   cujo nome não tem o que se digitou ("All components" fica sempre). */
+(function () {
+  var campo = document.querySelector("[data-site-filtro-busca]");
+  if (!campo) return;
+  var caixa = campo.closest(".site-filtro-busca");
+  var primeiro = document.querySelector('.sidebar a[href="#filtro/all"]');
+  var grupo = primeiro && primeiro.closest("li");
+  var lista = grupo && grupo.parentElement;
+  if (caixa && lista && lista.parentElement) lista.parentElement.insertBefore(caixa, lista);
+  campo.addEventListener("input", function () {
+    var q = campo.value.trim().toLowerCase();
+    document.querySelectorAll('.sidebar a[href^="#filtro/"]').forEach(function (a) {
+      if (a.getAttribute("href") === "#filtro/all") return;
+      var li = a.closest("li") || a;
+      li.hidden = !!q && a.textContent.toLowerCase().indexOf(q) < 0;
+    });
+  });
+})();
+
+/* O "ON THIS PAGE" DA LATERAL (o desenho B): a âncora da seção que está na tela fica marcada enquanto a página rola. */
+(function () {
+  var links = [].slice.call(document.querySelectorAll('.sidebar a[href^="#"]:not([href^="#filtro/"])'));
+  var alvos = links.map(function (a) { return document.getElementById(decodeURIComponent(a.getAttribute("href").slice(1))); });
+  if (!links.length || !alvos.some(Boolean) || !("IntersectionObserver" in window)) return;
+  var visiveis = new Set();
+  function marcar() {
+    var k = alvos.findIndex(function (el) { return el && visiveis.has(el); });
+    links.forEach(function (a, i) { if (i === k) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current"); });
+  }
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) visiveis.add(e.target); else visiveis.delete(e.target); });
+    marcar();
+  }, {rootMargin: "-20% 0px -60% 0px"});
+  alvos.forEach(function (el) { if (el) io.observe(el); });
+})();
+
 /* site-b/js/_getting-started.js */
 // AS PÁGINAS DA GETTING STARTED NO DESENHO B (02/11/2026): o que as sete repetem. Só age numa página que tem o
 // `[data-gs-pagina]` (o corpo delas, em `site-b/paginas/_getting-started/comum.mjs`).
@@ -1142,6 +1213,26 @@ if (catalogo) {
   if (correrBotao) correrBotao.addEventListener("click", function () { correr(corrida.querySelectorAll(".animation-bola")); });
 })();
 
+// "SIMULATE REDUCE MOTION": o On para o movimento da página (a regra `.animation-parado`, em `site-b/css/animation.css`),
+// como o "reduzir movimento" do sistema; o Off devolve. A frase da ponta diz o que acontece.
+(function () {
+  var faixa = document.querySelector(".animation-simula");
+  if (!faixa) return;
+  var corpo = faixa.parentElement, frase = faixa.querySelector("[data-an-reduz-frase]");
+  faixa.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-an-reduz]");
+    if (!b) return;
+    var parado = b.getAttribute("data-an-reduz") === "on";
+    corpo.classList.toggle("animation-parado", parado);
+    faixa.querySelectorAll("[data-an-reduz]").forEach(function (x) {
+      var sim = x === b;
+      x.classList.toggle("active", sim);
+      x.setAttribute("aria-pressed", sim ? "true" : "false");
+    });
+    frase.textContent = parado ? "the motion below stops" : "the motion below plays";
+  });
+})();
+
 /* site-b/js/blocks.js */
 // "BLOCKS" NO SITE B (02/11/2026): o "Preview" abre o bloco no lugar, numa linha inteira (um de cada vez); o "×" fecha e
 // devolve o foco ao "Preview"; o "Next block" abre o próximo. A busca e os grupos são do `_grupo-1.js`. Só age na página
@@ -1196,6 +1287,22 @@ if (catalogo) {
     });
   }
 }
+
+// O FILTRO DA LATERAL (o desenho B, 02/11/2026): "By area" mostra só os blocos da área escolhida; "Every area" mostra todos.
+// A contagem de cada grupo diz quantos aparecem ("1 of 7"); o grupo que fica vazio some.
+document.addEventListener("site-filtro", (e) => {
+  const pagina = document.querySelector(".blk-b");
+  if (!pagina) return;
+  const valor = e.detail;
+  pagina.querySelectorAll("[data-blk]").forEach((c) => { c.hidden = valor !== "all" && c.dataset.area !== valor; });
+  pagina.querySelectorAll(".blk-grupo").forEach((g) => {
+    const cartoes = g.querySelectorAll("[data-blk]");
+    const vistos = [...cartoes].filter((c) => !c.hidden).length;
+    const conta = g.querySelector("[data-blk-conta]");
+    if (conta) conta.textContent = vistos + " of " + cartoes.length;
+    g.hidden = vistos === 0;
+  });
+});
 
 /* site-b/js/colors.js */
 // A COLORS DO SITE B (02/11/2026): escolher um papel do tema padrão mostra-o grande nos dois temas; a chave do link troca
@@ -1310,11 +1417,13 @@ if (catalogo) {
   // As partes: cada `Toggle` liga ou desliga uma parte do cartão de verdade, e o código ao lado acompanha.
   var cartao = montador.querySelector(".composition-cartao");
   var codigo = montador.querySelector(".composition-codigo code");
-  var grupo = montador.querySelector(".toggle-group");
-  var ORDEM = ["media", "header", "title", "desc", "content", "footer"];
+  // As partes são caixas de marcar (o `Checkbox variant="pill"`): cada uma liga ou desliga a parte dela.
   function partes() {
     var on = {};
-    grupo.querySelectorAll("button").forEach(function (b, i) { on[ORDEM[i]] = b.getAttribute("aria-pressed") === "true"; });
+    // O atributo vai na própria caixa (o `input` do `Checkbox`).
+    montador.querySelectorAll("input[data-composition-parte]").forEach(function (caixa) {
+      on[caixa.getAttribute("data-composition-parte")] = caixa.checked;
+    });
     return on;
   }
   function montar() {
@@ -1341,7 +1450,7 @@ if (catalogo) {
     l.push("</Card>");
     if (codigo) codigo.textContent = l.join("\n");
   }
-  D.grupoDeBotoes(grupo, montar, false);
+  montador.addEventListener("change", function (e) { if (e.target.closest("[data-composition-parte]")) montar(); });
   montar();
 
   // As áreas do `AppShell`: uma escolhida por vez; o painel diz o nome e para que serve.
@@ -1394,6 +1503,41 @@ if (catalogo) {
     try { localStorage.setItem("aurea-theme", vai); } catch (e) { /* sem armazenamento: vale até recarregar */ }
   });
   new MutationObserver(desenhar).observe(raiz, {attributes: true, attributeFilter: ["data-theme"]});
+  desenhar();
+})();
+
+// "SIMULATE THE COMPUTER": finge a escolha clara ou escura do computador. A preferência é a guardada pelo site ("light",
+// "dark" ou "system"; sem nada guardado, "system"). Só com "system" a tela segue o que se finge; a linha ao lado diz a
+// preferência e o tema que está na tela.
+(function () {
+  var faixa = document.querySelector(".dark-mode-simula");
+  if (!faixa) return;
+  var raiz = document.documentElement;
+  var pref = faixa.querySelector("[data-dm-pref]"), tela = faixa.querySelector("[data-dm-tela]");
+  var computador = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  function preferencia() {
+    var t = null;
+    try { t = localStorage.getItem("aurea-theme"); } catch (e) { /* sem armazenamento */ }
+    return t === "light" || t === "dark" ? t : "system";
+  }
+  function desenhar() {
+    faixa.querySelectorAll("[data-dm-simula]").forEach(function (b) {
+      var sim = b.getAttribute("data-dm-simula") === computador;
+      b.classList.toggle("active", sim);
+      b.setAttribute("aria-pressed", sim ? "true" : "false");
+    });
+    pref.textContent = '"' + preferencia() + '"';
+    tela.textContent = '"' + (raiz.getAttribute("data-theme") || computador) + '"';
+  }
+  faixa.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-dm-simula]");
+    if (!b) return;
+    computador = b.getAttribute("data-dm-simula");
+    if (preferencia() === "system") raiz.setAttribute("data-theme", computador);
+    desenhar();
+  });
+  new MutationObserver(desenhar).observe(raiz, {attributes: true, attributeFilter: ["data-theme"]});
+  window.addEventListener("storage", desenhar);
   desenhar();
 })();
 
@@ -1499,10 +1643,17 @@ if (catalogo) {
     aplicar();
   };
   pagina.addEventListener("change", e => { if (e.target.name === "fw-qual") escolher(e.target.value); });
+
+  // O Victor, 02/11/2026: escolher o gerenciador lá em cima não dizia nada — o comando que muda fica embaixo. Agora a página
+  // desce até ele (suave, menos com o "reduzir movimento" do sistema). Só no clique: o evento "gs-chave" sai da pessoa.
+  const descerAte = el => { if (el) el.scrollIntoView({block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); };
   pagina.addEventListener("gs-chave", e => {
     if (e.detail.nome !== "fw-pm") return;
     estado.pm = e.detail.valor;
     aplicar();
+    // o primeiro comando de instalar do framework escolhido (a caixa inteira, com o "Terminal")
+    const cmd = pagina.querySelector("[data-fw-painel]:not([hidden]) [data-fw-instalar]");
+    descerAte(cmd);
   });
   // Quem chega pelo endereço de um passo (#vite-2, #plain-html…) vê o framework dele.
   const doEndereco = () => {
@@ -1739,10 +1890,15 @@ if (catalogo) {
       aplicar();
     }
   });
+
+  // O Victor, 02/11/2026: escolher o gerenciador lá em cima não dizia nada — o comando que muda fica embaixo. Agora a página
+  // desce até ele (suave, menos com o "reduzir movimento" do sistema). Só no clique: o evento "gs-chave" sai da pessoa.
+  const descerAte = el => { if (el) el.scrollIntoView({block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); };
   pagina.addEventListener("gs-chave", e => {
     if (e.detail.nome !== "qs-pm") return;
     estado.pm = e.detail.valor;
     aplicar();
+    descerAte(pagina.querySelector('[data-gs-sec="install"]'));
   });
   // Quem chega por um endereço de uma seção do React Native (o "#react-native" da Frameworks) vê o alvo dele.
   const alvoDoEndereco = () => {
@@ -1998,12 +2154,14 @@ if (catalogo) {
 /* site-b/js/theming.js */
 // A THEMING DO SITE B (02/11/2026): o laboratório põe os três atributos na prévia (tema, densidade e marca) e escreve a
 // linha do html; os botões de marca do laboratório e os cartões das marcas são a mesma escolha. Sem este script, a prévia
-// fica no escuro, confortável, na Aurea Gold.
+// fica no claro, confortável, na Aurea Gold (como o desenho).
 (() => {
   const pagina = document.querySelector('[data-gs-pagina="theming"]');
   if (!pagina) return;
   const previa = pagina.querySelector("[data-th-previa]");
-  const estado = {tema: "dark", densidade: "comfortable", marca: "gold"};
+  const estado = {tema: "light", densidade: "comfortable", marca: "gold"};
+  // A altura do controle em cada densidade (o --control-h-md de cada uma), como a barra da prévia do desenho.
+  const ALTURA = {compact: 32, comfortable: 36, spacious: 40};
   const nomeDa = id => "Aurea " + id.charAt(0).toUpperCase() + id.slice(1);
   const aplicar = () => {
     if (!previa) return;
@@ -2011,7 +2169,7 @@ if (catalogo) {
     previa.dataset.density = estado.densidade;
     if (estado.marca === "gold") delete previa.dataset.brand; else previa.dataset.brand = estado.marca;
     previa.querySelector("[data-th-rotulo]").textContent = nomeDa(estado.marca) + " · " + estado.tema;
-    previa.querySelector("[data-th-dens]").textContent = estado.densidade;
+    previa.querySelector("[data-th-dens]").textContent = estado.densidade + " · control " + ALTURA[estado.densidade] + "px";
     const nota = previa.querySelector("[data-th-ember]");
     if (nota) nota.hidden = estado.marca !== "ember";
     const marca = estado.marca === "gold" ? "" : ' data-brand="' + estado.marca + '"';

@@ -81,7 +81,10 @@ test("os glifos por máscara são todos conhecidos: máscara nova entra nesta li
     return [...achados];
   });
   // Cada seletor com máscara termina num dos glifos conhecidos (o do menu tem uma segunda regra, a do X).
-  const desconhecidos = comMascara.filter((s) => !Object.keys(GLIFOS).some((g) => s.endsWith(g)));
+  // A máscara que NÃO é ícone: o degradê do código recolhido da caixa empilhada (ADR-0089) só esmaece o fim do código, e
+  // no alto contraste ele sai (`@media (forced-colors:active)` logo abaixo da regra, no `aurea.css`).
+  const NAO_GLIFO = [".demo.demo-stacked[data-collapsed] > .demo-code .code-block-wrap"];
+  const desconhecidos = comMascara.filter((s) => !NAO_GLIFO.includes(s) && !Object.keys(GLIFOS).some((g) => s.endsWith(g)));
   expect(desconhecidos).toEqual([]);
   for (const g of Object.keys(GLIFOS)) expect(comMascara.some((s) => s.endsWith(g)), g).toBe(true);
 });

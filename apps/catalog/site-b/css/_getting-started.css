@@ -14,7 +14,7 @@
 
 /* O texto do .md: o parágrafo de 17 do desenho é o de 18 da Introduction ("intro-p"); o código no meio da linha é a
    cápsula no --fill-2. */
-.gs-corpo :is(.gs-p, .gs-lista, .gs-aviso) code { padding:var(--space-05) var(--space-2); border-radius:var(--radius-full); background:var(--fill-2);
+.gs-corpo :is(.gs-p, .gs-lista, .gs-aviso) code, .gs-tabela tbody td:first-child code { padding:var(--space-05) var(--space-2); border-radius:var(--radius-full); background:var(--fill-2);
   font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-medium); overflow-wrap:anywhere; }
 .gs-lista { display:flex; flex-direction:column; gap:calc(var(--space-2) + var(--space-05)); margin:var(--space-4) 0 0; padding:0; list-style:none; }
 .gs-lista > li { display:flex; gap:var(--space-3); font-size:var(--text-lg); line-height:var(--leading-relaxed); }
@@ -30,6 +30,11 @@
 .gs-corpo .gs-codigo, .gs-aviso, .gs-tabela { margin-block-start:calc(var(--space-4) + var(--space-05)); }
 .gs-tabela { padding:var(--space-2); border-radius:var(--radius-card); background:var(--card); }
 .gs-tabela .table-wrap, .gs-tabela table { margin:0; }
+/* Como o desenho: na tabela, só a primeira coluna é a cápsula de código (o nome); nas outras o valor fica no texto da
+   linha, sem mudar de fonte. */
+.gs-tabela tbody td:not(:first-child) code { font:inherit; }
+/* O nome na cápsula não quebra no meio ("data-" numa linha e "theme" na outra): a coluna cresce para ele. */
+.gs-tabela tbody td:first-child code { white-space:nowrap; overflow-wrap:normal; }
 
 /* O rótulo pequeno em código ("Package manager", "Try it"). */
 .gs-k { font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); letter-spacing:var(--tracking-wider); text-transform:uppercase;

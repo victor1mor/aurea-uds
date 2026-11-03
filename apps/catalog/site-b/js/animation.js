@@ -48,3 +48,23 @@
   var correrBotao = corrida && corrida.querySelector(".animation-correr");
   if (correrBotao) correrBotao.addEventListener("click", function () { correr(corrida.querySelectorAll(".animation-bola")); });
 })();
+
+// "SIMULATE REDUCE MOTION": o On para o movimento da página (a regra `.animation-parado`, em `site-b/css/animation.css`),
+// como o "reduzir movimento" do sistema; o Off devolve. A frase da ponta diz o que acontece.
+(function () {
+  var faixa = document.querySelector(".animation-simula");
+  if (!faixa) return;
+  var corpo = faixa.parentElement, frase = faixa.querySelector("[data-an-reduz-frase]");
+  faixa.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-an-reduz]");
+    if (!b) return;
+    var parado = b.getAttribute("data-an-reduz") === "on";
+    corpo.classList.toggle("animation-parado", parado);
+    faixa.querySelectorAll("[data-an-reduz]").forEach(function (x) {
+      var sim = x === b;
+      x.classList.toggle("active", sim);
+      x.setAttribute("aria-pressed", sim ? "true" : "false");
+    });
+    frase.textContent = parado ? "the motion below stops" : "the motion below plays";
+  });
+})();

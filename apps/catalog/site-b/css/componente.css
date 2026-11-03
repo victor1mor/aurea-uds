@@ -32,8 +32,8 @@
 .comp-pontos { margin:0; padding-inline-start:var(--space-6); display:grid; gap:var(--space-2); color:var(--muted-foreground); line-height:var(--leading-relaxed); }
 /* A caixa de exemplo do site, sem a altura de tela: a caixa tem o tamanho do exemplo, com o mínimo do desenho (180). A
    prévia em documento próprio (a moldura) continua com a altura dela. */
-.comp-b .demo:not(:has(.demo-frame)) { min-block-size:0; }
-.comp-b .demo:not(:has(.demo-frame)) > .demo-panel[data-panel="preview"] { min-block-size:calc(var(--space-12) * 4 - var(--space-3)); }
+.comp-b .demo:not(:has(.demo-frame), .demo-stacked) { min-block-size:0; }
+.comp-b .demo:not(:has(.demo-frame), .demo-stacked) > .demo-panel[data-panel="preview"] { min-block-size:calc(var(--space-12) * 4 - var(--space-3)); }
 
 /* 02 · Examples: um acordeão por exemplo — o número, o título e a frase que corta fechada e abre inteira (o B16). */
 .comp-exemplos { display:flex; flex-direction:column; gap:var(--space-2); margin-block-start:var(--space-5); }

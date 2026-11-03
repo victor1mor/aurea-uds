@@ -53,8 +53,8 @@ export default function rtl(site, doc) {
           h(A.Button, {variant: "primary", size: "lg", leadingIcon: "plus", type: "button"}, "Add"),
           // Os dois "Next", um por sentido: a seta é escolhida pelo app (`arrow-right` ou `arrow-left`), e o do outro sentido
           // fica escondido.
-          h(A.Button, {variant: "secondary", size: "lg", trailingIcon: "arrow-right", type: "button", className: "rtl-so-ltr"}, "Next"),
-          h(A.Button, {variant: "secondary", size: "lg", trailingIcon: "arrow-left", type: "button", className: "rtl-so-rtl"}, "Next")))));
+          h(A.Button, {variant: "tertiary", size: "lg", trailingIcon: "arrow-right", type: "button", className: "rtl-so-ltr"}, "Next"),
+          h(A.Button, {variant: "tertiary", size: "lg", trailingIcon: "arrow-left", type: "button", className: "rtl-so-rtl"}, "Next")))));
 
   const node = pagina("rtl-b",
     palco("Handbook", [peca.amarela('dir="rtl"'), peca.mono('direction="rtl"'), peca.numero("2", "settings", "and that is all"), peca.mono("margin-inline-start")]),
@@ -86,7 +86,7 @@ export default function rtl(site, doc) {
         h("p", null, ...site.pedacos(aparar(ficam.itens[n].filter(p => p.strong === undefined)), `f${n}`)))))),
     secao("your-own-css", "Start and end", "Your own CSS",
       bloco(css[0], "c"),
-      h(A.Table, {variant: "rows", caption: "Your own CSS", className: "rtl-tabela"},
+      h(A.Table, {variant: "rows", striped: true, caption: "Your own CSS table", className: "rtl-tabela"},
         h("thead", null, h("tr", null, ...tabela.cabecalho.map((c, k) => h("th", {key: k, scope: "col"}, ...site.pedacos(c, `th${k}`))))),
         h("tbody", null, ...tabela.linhas.map((l, k) => h("tr", {key: k}, ...l.map((c, j) => h("td", {key: j}, ...site.pedacos(c, `td${k}${j}`))))))),
       codigo(css.find(b => b.tipo === "codigo").codigo, {arquivo: "order.css", lingua: "css"})),

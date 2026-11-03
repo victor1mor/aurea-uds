@@ -223,6 +223,7 @@ export const peleDoSegmento = (t: AureaTokens, estilo: string | undefined): Pele
     case "brand": return {fundo: t.color.primary, letra: t.color.primaryForeground, sombra: false, aro: null, ponto: false};
     case "ring": return {...neutra, aro: t.color.primary};
     case "dot": return {...neutra, ponto: true};
+    case "emphasis": return {...neutra, letra: corDoEscolhido(t)};
     default: return null;
   }
 };

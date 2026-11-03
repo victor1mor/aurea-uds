@@ -111,8 +111,9 @@ export default {
     },
     cada({titulo: "The colour of the selected segment", descricao: "selectedStyle (ADR-0084): current — the raised capsule with "
       + "the yellow line, the default — neutral, contrast (graphite), brand (yellow), ring (a yellow ring) and dot (a yellow dot "
-      + "before the label; its place is kept in every segment, so the width does not jump).",
-      valores: ["current", "neutral", "contrast", "brand", "ring", "dot"], coluna: true,
+      + "before the label; its place is kept in every segment, so the width does not jump) and emphasis (the raised capsule with "
+      + "the emphasis letter, no line).",
+      valores: ["current", "neutral", "contrast", "brand", "ring", "dot", "emphasis"], coluna: true,
       codigo: v => `<SegmentedControl selectedStyle="${v}" label="View" value={view} onChange={setView} items={views} />`,
       peca: v => h(ComValor, {componente: SegmentedControl, valor: "value", aviso: "onChange", selectedStyle: v,
         label: `View, ${v}`, value: "list", items: [{value: "list", label: "List"}, {value: "grid", label: "Grid"}, {value: "map", label: "Map"}]})}),

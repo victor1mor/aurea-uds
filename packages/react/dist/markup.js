@@ -39,8 +39,8 @@ import React, { forwardRef } from "react";
 import { cx, fundirRender, peleDoEixo } from "./pure.js";
 // As contas de cor são funções puras, sem estado e sem navegador (ADR-0069): o `ColorSwatch` usa a do contraste.
 import { contrastingInk, hsbToRgb, parseColor } from "./color.js";
-export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, lift, className, render, ...props }) {
-    return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, lift && variant === "interactive" && "card-lift", accent && `card-accent card-accent-${accent}`, padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...(variant === "contrast" ? { "data-theme": "dark" } : null), ...props });
+export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, lift, fill, className, render, ...props }) {
+    return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, lift && variant === "interactive" && "card-lift", accent && `card-accent card-accent-${accent}`, fill === "brand" && "card-fill-brand", padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...(variant === "contrast" ? { "data-theme": "dark" } : null), ...props });
 }
 /** A mídia do cartão — a primeira das partes da especificação do `Card` (A-14). No vertical,
  *  primeira filha, ela SANGRA até a borda de cima e dos lados; no horizontal, fica à esquerda com a
@@ -129,7 +129,7 @@ export function KPI({ label, value, trend, direction, tone, directionLabel, vari
     // do KPI, cada barra o `label` de um rádio com a leitura dela; o CSS mostra a leitura da escolhida e a da que está sob o
     // mouse. O `name` vem do rótulo quando é texto.
     const nomeDoGrupo = `kpi-bars-${typeof label === "string" ? label.toLowerCase().replace(/[^a-z0-9]+/g, "-") : "x"}`;
-    const barras = bars && bars.length > 0 && _jsxs("fieldset", { className: "kpi-bars-wrap", children: [typeof label === "string" && _jsx("legend", { className: "sr-only", children: label }), _jsx("div", { className: "kpi-bars", style: { "--kpi-bars": bars.length }, children: bars.map((b, i) => _jsxs("label", { className: "kpi-bar", children: [_jsx("input", { type: "radio", name: nomeDoGrupo, value: String(i), defaultChecked: i === escolhida, "aria-label": leituraDe(b) }), _jsx("span", { className: "kpi-bar-fill", style: { "--kpi-bar-h": `${Math.round(b.amount / maior * 100)}%` } }), _jsx("span", { className: "kpi-bar-reading", "aria-hidden": "true", children: leituraDe(b) })] }, i)) }), _jsx("div", { className: "kpi-bars-x", "aria-hidden": "true", style: { "--kpi-bars": bars.length }, children: bars.map((b, i) => _jsx("span", { children: b.label }, i)) })] });
+    const barras = bars && bars.length > 0 && _jsxs("fieldset", { className: "kpi-bars-wrap", children: [typeof label === "string" && _jsx("legend", { className: "sr-only", children: label }), _jsx("div", { className: "kpi-bars", style: { "--kpi-bars": bars.length }, children: bars.map((b, i) => _jsxs("label", { className: "kpi-bar", children: [_jsx("input", { type: "radio", className: "kpi-bar-input", name: nomeDoGrupo, value: String(i), defaultChecked: i === escolhida, "aria-label": leituraDe(b) }), _jsx("span", { className: "kpi-bar-fill", style: { "--kpi-bar-h": `${Math.round(b.amount / maior * 100)}%` } }), _jsx("span", { className: "kpi-bar-reading", "aria-hidden": "true", children: leituraDe(b) })] }, i)) }), _jsx("div", { className: "kpi-bars-x", "aria-hidden": "true", style: { "--kpi-bars": bars.length }, children: bars.map((b, i) => _jsx("span", { children: b.label }, i)) })] });
     return variant === "plain" ? _jsxs("div", { className: cx("kpi", className), ...props, children: [miolo, barras] })
         : _jsxs(Card, { className: cx("kpi", variant === "brand" && "kpi-brand", className), ...props, children: [miolo, barras] });
 }

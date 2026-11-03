@@ -13,28 +13,20 @@ const abrir = async (page: Page, pagina: string) => {
 };
 const perto = (a: number, b: number, nome: string) => expect(Math.abs(a - b), `${nome}: ${a} (esperado ${b})`).toBeLessThanOrEqual(1);
 
-test("o Quick Start instala em quatro abas, npm primeiro, nas medidas da referência", async ({page}) => {
+// O SITE B (02/11/2026): no Quick Start a escolha do gerenciador é a CHAVE do desenho aprovado (pnpm, npm, yarn, bun), e não
+// mais as quatro abas; escolher troca o comando do passo 1 e a página desce até ele (o Victor: "quando clicar em uma
+// dessas opções … ja descer"). As quatro abas continuam valendo no `CodeBlock tabs` (o teste de unidade `codigo-em-abas`).
+test("o Quick Start troca o comando pela chave do gerenciador e desce até o passo 1", async ({page}) => {
   await abrir(page, "docs-quick-start.html");
-  const caixa = page.locator(".code-tabs").first();
-  await expect(caixa.getByRole("tab")).toHaveText(["npm", "pnpm", "yarn", "bun"]);
-  await expect(caixa.getByRole("tab", {name: "npm", exact: true})).toHaveAttribute("aria-selected", "true");
-  const m = await caixa.evaluate((c) => {
-    const r = (e: Element) => e.getBoundingClientRect();
-    const abas = [...c.querySelectorAll("[role=tab]")].map(r);
-    const s = getComputedStyle(c.querySelector("[role=tab]")!);
-    return {fileira: r(c.querySelector(".code-tabs-list")!).height, vao: abas[1].left - abas[0].right,
-      borda: abas[0].left - r(c).left, fs: s.fontSize, fw: s.fontWeight};
-  });
-  perto(m.fileira, 37, "a fileira de abas tem 37");
-  perto(m.vao, 14, "as abas ficam a 14 uma da outra");
-  perto(m.borda, 16, "a primeira fica a 16 da borda");
-  expect([m.fs, m.fw]).toEqual(["14px", "500"]);
-  // A troca: o clique mostra o código do pnpm, e a seta leva ao yarn.
-  await caixa.getByRole("tab", {name: "pnpm", exact: true}).click();
-  await expect(caixa.locator("[role=tabpanel]:not([hidden])")).toContainText("pnpm add @aurea-uds/react");
-  await page.keyboard.press("ArrowRight");
-  await expect(caixa.getByRole("tab", {name: "yarn", exact: true})).toBeFocused();
-  await expect(caixa.locator("[role=tabpanel]:not([hidden])")).toContainText("yarn add @aurea-uds/react");
+  const chave = page.locator('[data-gs-chave="qs-pm"]');
+  await expect(chave.locator("[data-valor]")).toHaveText(["pnpm", "npm", "yarn", "bun"]);
+  const passo = page.locator('[data-gs-sec="install"]');
+  await expect(passo.locator("code").first()).toContainText("pnpm add @aurea-uds/react");
+  const antes = await page.evaluate(() => scrollY);
+  await chave.locator('[data-valor="yarn"]').click();
+  await expect(passo.locator("code").first()).toContainText("yarn add @aurea-uds/react");
+  await expect.poll(() => page.evaluate(() => scrollY), {message: "a página desce até o passo 1"}).toBeGreaterThan(antes);
+  await expect.poll(() => passo.evaluate((s) => Math.round(s.getBoundingClientRect().top))).toBeLessThan(200);
 });
 
 test("o fim de toda linha aparece fora do botão de copiar, em todo bloco do Quick Start e em toda aba", async ({page}) => {
@@ -48,7 +40,10 @@ test("o fim de toda linha aparece fora do botão de copiar, em todo bloco do Qui
       .flatMap((w) => {
         const pre = w.querySelector("pre")!;
         pre.scrollLeft = pre.scrollWidth;
-        const botao = w.querySelector(".copy-code")!.getBoundingClientRect();
+        // O "Copy" escrito na cabeça do bloco (`CodeBlock filename`) fica acima do código e não cobre linha nenhuma.
+        const flutuante = w.querySelector(".copy-code");
+        if (!flutuante) { pre.scrollLeft = 0; return []; }
+        const botao = flutuante.getBoundingClientRect();
         const achados = [...pre.querySelectorAll(".code-line")].flatMap((linha) => {
           const faixa = document.createRange();
           faixa.selectNodeContents(linha);

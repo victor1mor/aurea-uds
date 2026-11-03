@@ -96,7 +96,7 @@ export function ferramentas(site, doc) {
       h("span", {className: "intro-mini"}, fraco)),
   };
   // O aviso: o `Alert` com o ícone e, quando há, o título.
-  const aviso = (variant, icon, titulo, ...filhos) => h(A.Alert, {variant, icon, title: titulo || undefined, className: "intro-nota g5-aviso"}, ...filhos);
+  const aviso = (variant, icon, titulo, ...filhos) => h(A.Alert, {appearance: "soft", variant, icon, title: titulo || undefined, className: "intro-nota g5-aviso"}, ...filhos);
   // Os cartões-link (o "Next steps"): o `Card` clicável que sobe (`lift`, o item 7), com o ladrilho de cor.
   const links = itens => h("div", {className: "g5-links"}, ...itens.map(([titulo, texto, icone, cor, href]) =>
     h(A.Card, {key: titulo, variant: "interactive", lift: true, className: "g5-link", render: h("a", {href})},
@@ -114,7 +114,7 @@ export function ferramentas(site, doc) {
   // `site-b/js/<página>.js`, pelo `data-g5-chave`.
   const segmentos = ({rotulo, itens, ativo, chave, vertical = false, tamanho = "lg"}) => h("div", {
     className: ["segmented", `segmented-${tamanho}`, vertical ? "segmented-vertical" : null, "g5-segmentos"].filter(Boolean).join(" "),
-    "data-segment-style": "neutral", role: "group", "aria-label": rotulo, "data-g5-chave": chave},
+    "data-segment-style": "emphasis", role: "group", "aria-label": rotulo, "data-g5-chave": chave},
     ...itens.map(([valor, texto]) => h("button", {key: valor, type: "button", "data-valor": valor, className: valor === ativo ? "active" : undefined,
       "aria-pressed": valor === ativo ? "true" : "false"}, texto)));
   // O corpo: o texto de abertura do `.md`, as seções, o "Next" e o texto do "Copy Markdown" (o `.md` puro).

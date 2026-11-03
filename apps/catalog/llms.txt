@@ -456,6 +456,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.54.0](https://aureauds.dev/release-v0-54-0.md): An example box with the code under the preview, a path and a bar for Stepper, a large CommandPalette, and new options on fourteen web components.
 - [v0.53.0](https://aureauds.dev/release-v0-53-0.md): Clickable cards that lift on hover, a framed icon for EmptyState on the web, and the small shadow now shows in the dark theme. Also ships v0.52.1.
 - [v0.52.0](https://aureauds.dev/release-v0-52-0.md): The pill on AppShell, a reading ring on TableOfContents and a plus on Accordion — the pieces of the new site.
 - [v0.51.0](https://aureauds.dev/release-v0-51-0.md): The far end of the top bar of AppShell — where the theme switch, notifications and the account go.

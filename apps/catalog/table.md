@@ -35,6 +35,21 @@ variant="rows" drops the frame: each row is a capsule, 4 apart, grey on hover; t
 </Table>
 ```
 
+### Striped
+
+striped gives every other body row a fill — the 1st, the 3rd — so the eye can follow a row across a wide table. It works with both variants; in rows, the striped row takes the 16 corner.
+
+```tsx
+<Table variant="rows" striped caption="The three attributes">
+  <thead><tr><th>Attribute</th><th>Values</th></tr></thead>
+  <tbody>
+    <tr><td>data-theme</td><td>light, dark</td></tr>
+    <tr><td>data-density</td><td>compact, comfortable, spacious</td></tr>
+    <tr><td>data-brand</td><td>ember, sun, honey…</td></tr>
+  </tbody>
+</Table>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -45,5 +60,6 @@ variant="rows" drops the frame: each row is a capsule, 4 apart, grey on hover; t
 | `fit` | `boolean` | false | The table fits its box, without the 720px minimum that makes a wide table scroll sideways. This is what lets a comparison of TWO items fit a 360px phone with no sideways scroll; which two is the page's choice (a Select above the table). |
 | `differencesOnly` | `boolean` | false | The 'differences only' view — hides the rows the page marked as identical with <tr data-same>. The table does not compare cells itself; the page knows which rows are equal and owns the switch. |
 | `variant` | `"default" \| "rows"` | "default" | rows drops the frame: each row is a 54 capsule, 4 apart; --fill-1 on hover; a row with data-selected (the one the app marked) the yellow at 14%. The head in uppercase code font, muted, without fill or column dividers. It fits the width. |
+| `striped` | `boolean` | false | Gives every other body row a fill — the 1st, the 3rd and so on — so the eye can follow a row across a wide table. Works with both variants; in rows, the striped rows take the 16 corner. It is a fill, not a line. |
 | `children` | `ReactNode` | — | The <thead> and <tbody>, written by you. This is the presentational table; the one that sorts, filters and pages is DataGrid. |
 | `className` | `string` | — | On the <table>. The wrapper around it is focusable (tabIndex 0) so a table wider than the screen can be scrolled with the keyboard, not only by dragging. |

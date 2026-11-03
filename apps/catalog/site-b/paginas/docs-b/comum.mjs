@@ -52,9 +52,9 @@ export function docsB(site, doc, {arquivos = [], grupo = "Handbook"} = {}) {
   const cabeca = b => h("thead", null, h("tr", null, ...b.cabecalho.map((c, j) => celula("th", c, j))));
   const corpo = b => h("tbody", null, ...b.linhas.map((l, j) => h("tr", {key: j}, ...l.map((c, i) => celula("td", c, i)))));
   const tabela = (b, legenda) => h("div", {key: k(), className: "docb-tabela"},
-    h(A.Table, {variant: "rows", caption: legenda}, cabeca(b), corpo(b)));
+    h(A.Table, {variant: "rows", striped: true, caption: `${legenda} table`}, cabeca(b), corpo(b)));
   // O aviso: o `Alert` da Aurea, com o arranjo da Introduction (`intro-nota`).
-  const aviso = (b, variant = "info", title) => h(A.Alert, {key: k(), variant, className: "intro-nota docb-aviso", ...(title ? {title} : {})},
+  const aviso = (b, variant = "info", title) => h(A.Alert, {appearance: "soft", key: k(), variant, className: "intro-nota docb-aviso", ...(title ? {title} : {})},
     ...pedacos(b.texto, k()));
   // Um bloco qualquer, do jeito de sempre. A caixa de exemplo (`::: demo`) sai: o desenho mostra o código dela, e a seção
   // mostra as peças vivas no lugar.

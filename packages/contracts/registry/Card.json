@@ -92,6 +92,12 @@
       "description": "A colour stroke on the top edge, --accent-width (4) tall, in the tone's FILL colour, the same in both themes. It is decoration: the card's own title says the subject, so the stroke carries no information of its own. The other sides keep the regular 1px border, and the stroke wins over `selected`, `danger` and the `contrast` outline."
     },
     {
+      "name": "fill",
+      "type": "\"brand\"",
+      "default": "—",
+      "description": "Paints the whole card in the brand colour, with the ink on top (--primary-foreground): the title, the supporting text and anything that reads the card colour follow. The accent stroke is hidden (brand on brand); an interactive card keeps the colour under the pointer. Under the Aurea Ember brand, the card stays a regular card."
+    },
+    {
       "name": "padding",
       "type": "\"normal\" | \"none\"",
       "default": "\"normal\"",

@@ -54,7 +54,8 @@ import "@aurea-uds/core/css";
 <html data-theme="light" data-density="comfortable">
 ```
 
-`data-theme` is required: without it the color roles are not defined. `data-density` is optional: without it you get the comfortable sizes.
+- `data-theme` is required: without it the color roles are not defined.
+- `data-density` is optional: without it you get the comfortable sizes.
 
 To switch the theme at run time, see [Dark Mode](./docs-dark-mode.html). For the density, see [Density](./docs-density.html).
 

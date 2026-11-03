@@ -37,13 +37,13 @@ export default function theming(site, doc) {
     g.numerao("3", "attributes", "theme · density · brand"),
     g.cartao([...quatro.map(m => h("span", {key: m.id, className: "th-ponto th-cor", style: cores(m)})), h("span", {key: "t", className: "intro-mini intro-forte"}, "13 palettes")]),
     g.capsula(h("span", {className: "gs-mono th-capsula-texto"}, "@layer aurea")),
-    g.capsula(h("span", {className: "gs-amarela", "data-th-curto": ""}, 'data-theme="dark"'))]);
+    g.capsula(h("span", {className: "gs-amarela", "data-th-curto": ""}, 'data-theme="light"'))]);
 
   // O LABORATÓRIO: as três chaves e a linha do html à esquerda; a prévia (peças de verdade) à direita.
-  const linhaHtml = '<html data-theme="dark" data-density="comfortable">';
+  const linhaHtml = '<html data-theme="light" data-density="comfortable">';
   const controles = h(A.Card, {className: "th-controles"},
     h("div", null, h("p", {className: "th-k"}, h("b", null, "data-theme"), " · every color role"),
-      g.chave("th-tema", "data-theme", ["light", "dark"], "dark")),
+      g.chave("th-tema", "data-theme", ["light", "dark"], "light")),
     h("div", null, h("p", {className: "th-k"}, h("b", null, "data-density"), " · control heights, table rows, card padding"),
       g.chave("th-densidade", "data-density", ["compact", "comfortable", "spacious"], "comfortable")),
     h("div", null, h("p", {className: "th-k"}, h("b", null, "data-brand"), " · the color palette, in both themes"),
@@ -53,15 +53,15 @@ export default function theming(site, doc) {
           "data-th-marca": m.id, "aria-pressed": m.id === "gold" ? "true" : "false", "data-pressed": m.id === "gold" ? "" : undefined, style: cores(m)},
           h(A.ColorSwatch, {color: "var(--th-cor)", size: "sm", "aria-hidden": "true"}), m.curto)))),
     h("div", {className: "intro-instalar th-linha"}, h("code", {"data-th-linha": ""}, linhaHtml),
-      h(A.Button, {variant: "tertiary", size: "sm", type: "button", "data-copiar": linhaHtml, "data-th-copiar": "", "aria-label": "Copy the html line"}, "Copy")));
-  const previa = h("div", {className: "th-previa", "data-theme": "dark", "data-density": "comfortable", "data-th-previa": "", role: "region", "aria-label": "Preview"},
-    h("div", {className: "th-previa-barra"}, h("span", {"data-th-rotulo": ""}, "Aurea Gold · dark"), h("span", {"data-th-dens": ""}, "comfortable")),
+      h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-copiar": linhaHtml, "data-th-copiar": "", "aria-label": "Copy the html line"}, "Copy")));
+  const previa = h("div", {className: "th-previa", "data-theme": "light", "data-density": "comfortable", "data-th-previa": "", role: "region", "aria-label": "Preview"},
+    h("div", {className: "th-previa-barra"}, h("span", {"data-th-rotulo": ""}, "Aurea Gold · light"), h("span", {"data-th-dens": ""}, "comfortable · control 36px")),
     h(A.Card, {className: "th-previa-cartao"},
-      h(A.Heading, {level: 4}, "Workspace"),
+      h("p", {className: "typography typography-h4 th-previa-titulo"}, "Workspace"),
       h("p", null, "Changes are saved for everyone in the team."),
       h(A.Input, {"aria-label": "Team name", defaultValue: "Internal tooling"}),
       h(A.Switch, {label: "Weekly digest", defaultChecked: true}),
-      h("div", {className: "th-previa-botoes"}, h(A.Button, {variant: "primary", type: "button"}, "Save"), h(A.Button, {variant: "secondary", type: "button"}, "Cancel"))),
+      h("div", {className: "th-previa-botoes"}, h(A.Button, {variant: "primary", type: "button"}, "Save"), h(A.Button, {variant: "tertiary", type: "button"}, "Cancel"))),
     h("p", {className: "th-nota", "data-th-ember": "", hidden: true}, "Aurea Ember keeps its own neutrals: the page and the card change too."));
 
   // OS SUFIXOS, em cartões (o desenho; a lista do .md diz o mesmo).
@@ -71,8 +71,10 @@ export default function theming(site, doc) {
 
   // AS MARCAS no cartão de escolha, sem a bolinha: a amostra com "Aa" e o hexa (o do tema da página), o nome e o atributo.
   const cartaoDaMarca = m => h("span", {className: "th-marca"},
-    h("span", {className: "th-amostra th-cor", style: cores(m), "aria-hidden": "true"}, "Aa",
-      h("span", {className: "th-hexa"}, h("span", {className: "th-so-claro"}, m.claro), h("span", {className: "th-so-escuro"}, m.escuro))),
+    // A amostra é DESENHO (escondida do leitor de tela): o "Aa" e o hexa saem do CSS, com as cores da marca como são — a
+    // Ember no claro é o branco no laranja dela (3,08:1), que não se muda.
+    h("span", {className: "th-amostra th-cor", style: cores(m), "aria-hidden": "true"},
+      h("span", {className: "th-hexa", "data-claro": m.claro, "data-escuro": m.escuro})),
     h("b", null, m.nome), h("code", null, m.attr));
   const brandsP = bl("Brands", "p"), brandsUl = bl("Brands", "ul");
 
@@ -91,7 +93,8 @@ export default function theming(site, doc) {
       g.p([...how1.texto, {t: " Try them:"}], "h1"),
       h("div", {className: "th-lab"}, controles, previa),
       tabela("How it works", "The three attributes"),
-      g.p(how2.texto, "h2"), g.p(how3.texto, "h3"),
+      // Como o desenho: as duas frases num parágrafo só, que termina nos dois blocos de código.
+      g.p([...how2.texto, {t: " "}, ...how3.texto], "h2"),
       g.codigo(howCod[0].codigo, "aurea.css", "css"), g.codigo(howCod[1].codigo, "index.html", "html")),
     g.secao(s("Quick start").id, "Start", "Quick start",
       ...g.corpo(quick, {chave: "q", arquivos: ["main.tsx", "index.html"]})),
@@ -118,7 +121,7 @@ export default function theming(site, doc) {
     g.secao(s("Overriding a token").id, "Your values", "Overriding a token",
       g.p(sobreP[0].texto, "o0"), g.p(sobreP[1].texto, "o1"), g.codigo(sobreC[0].codigo, "app.css", "css"),
       g.p(sobreP[2].texto, "o2"), g.codigo(sobreC[1].codigo, "app.css", "css"),
-      h(A.Alert, {variant: "warning", className: "gs-aviso"}, ...site.pedacos(sobreP[3].texto, "oa"))),
+      g.avisoComTitulo("warning", sobreP[3].texto, "oa")),
     g.secao(s("Token formats").id, "One source, three forms", "Token formats",
       g.p(bl("Token formats", "p")[0].texto, "f0"), tabela("Token formats"), g.p(bl("Token formats", "p")[1].texto, "f1")),
     g.secao(s("In React Native").id, "No cascade", "In React Native",

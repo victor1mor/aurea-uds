@@ -16,6 +16,8 @@ const ESTADOS = [["loading", "boolean"], ["disabled", "boolean"], ["invalid", "b
 // Quantas formas o palco desenha, no máximo: cada uma é um `<template>` pronto na página.
 const MAX_FORMAS = 256;
 const MAX_VARIACOES = 8;
+// A caixa de exemplo: a classe `demo` (com ou sem o `demo-stacked` da ADR-0089).
+const ehCaixa = e => String(e?.props?.className ?? "").split(" ").includes("demo");
 
 export default function componente(site, f, i) {
   const base = site.componentPage(f, i);
@@ -28,14 +30,14 @@ export default function componente(site, f, i) {
   // Do Usage de hoje: o bloco do import, a frase do exemplo principal, a caixa principal (`#preview`, viva) e os pontos.
   const [codigoDoImport, ...resto] = filhos(uso).slice(1);
   const frase = resto.find(e => e.type === "p");
-  const caixa = resto.find(e => e.props?.className === "demo");
+  const caixa = resto.find(e => ehCaixa(e));
   const pontos = resto.find(e => e.type === "ul");
   const linhaDoImport = texto(codigoDoImport) || `import {${f.name}} from "@aurea-uds/react";`;
   const pacote = (linhaDoImport.match(/from\s+"([^"]+)"/) || [])[1] || "@aurea-uds/react";
   const lede = texto(achar(raiz, e => e.props?.className === "page-lede")) || f.summary;
   const exemplos = filhos(exemplosSec).filter(e => e.props?.className === "example").map(e => {
     const [titulo, ...dentro] = filhos(e);
-    return {titulo: texto(titulo), descricao: texto(dentro.find(x => x.type === "p")), caixa: dentro.find(x => x.props?.className === "demo"), id: e.props.id};
+    return {titulo: texto(titulo), descricao: texto(dentro.find(x => x.type === "p")), caixa: dentro.find(x => ehCaixa(x)), id: e.props.id};
   });
 
   // ── O PALCO DE TESTES ──
@@ -169,7 +171,7 @@ function palcoDeTestes(site, f, linhaDoImport) {
   // código é só o import (um gatilho de janela parado aqui, com o código da janela, pareceria quebrado).
   const codigoInicial = formas[0]?.codigo ?? linhaDoImport;
   const temNativo = nativos.includes(f.name);
-  const chave = h(A.SegmentedControl, {label: "Playground platform", selectedStyle: "neutral", value: "web",
+  const chave = h(A.SegmentedControl, {label: "Playground platform", size: "lg", selectedStyle: "emphasis", value: "web",
     items: [{value: "web", label: "Web", href: `./${slug(f.name)}.html`},
       ...(temNativo ? [{value: "native", label: "Native", href: `./${paginaNativa(f.name)}`}] : [])]});
   const estados = escolhas.filter(e => e.estado);
@@ -182,7 +184,7 @@ function palcoDeTestes(site, f, linhaDoImport) {
     formas.length ? null : h(A.Link, {href: "#usage", className: "comp-teste-ir"}, "Try it live in Usage", h(A.Icon, {name: "arrow-down", size: "sm"})),
     ...escolhas.filter(e => !e.estado).map(e => h("div", {key: e.id, className: "comp-escolha", "data-comp-escolha": e.id, "data-g1-escolha": ""},
       h("span", {className: "comp-rotulo", "aria-hidden": "true"}, e.rotulo),
-      h(A.SegmentedControl, {label: e.rotulo, wrap: true, selectedStyle: "neutral", value: e.inicial ?? e.valores[0],
+      h(A.SegmentedControl, {label: e.rotulo, size: "lg", wrap: true, selectedStyle: "emphasis", value: e.inicial ?? e.valores[0],
         items: e.valores.map(v => ({value: v, label: v}))}))),
     estados.length ? h("div", {className: "comp-escolha"},
       h("span", {className: "comp-rotulo", "aria-hidden": "true"}, "State"),
@@ -225,7 +227,7 @@ function referencia(site, f) {
   return h("dl", {className: "comp-chips"}, ...grupos.map(([rotulo, valores]) => h(Fragment, {key: rotulo},
     h("dt", null, rotulo),
     h("dd", null, ...valores.map((v, n) => chip(v, rotulo === "Tokens" && n >= MAX_TOKENS)),
-      rotulo === "Tokens" && valores.length > MAX_TOKENS ? h(A.Button, {variant: "ghost", size: "sm", type: "button", className: "comp-chips-mais",
+      rotulo === "Tokens" && valores.length > MAX_TOKENS ? h(A.Button, {variant: "ghost", size: "md", type: "button", className: "comp-chips-mais",
         "data-comp-tokens": "", "aria-expanded": "false", "data-rotulo": `Show all ${valores.length}`}, `Show all ${valores.length}`) : null))));
 }
 
@@ -249,7 +251,7 @@ function api(site, f) {
           h("p", {className: "comp-prop-texto"},
             ...frase(primeira, `p${n}a`),
             longa ? h("span", {className: "comp-prop-resto", id: `prop-${p.name.replace(/[^a-z0-9]+/gi, "-")}-mais`}, " ", ...frase(demais.join(" "), `p${n}b`)) : null,
-            longa ? h(A.Button, {variant: "link-primary", size: "sm", type: "button", className: "comp-prop-mais", "aria-expanded": "false",
+            longa ? h(A.Button, {variant: "link-primary", size: "md", type: "button", className: "comp-prop-mais", "aria-expanded": "false",
               "aria-controls": `prop-${p.name.replace(/[^a-z0-9]+/gi, "-")}-mais`, "data-comp-mais": ""}, "More") : null)));
     })),
     h("p", {className: "comp-nota", "data-comp-api-vazio": "", hidden: true}, "No prop with that name."));

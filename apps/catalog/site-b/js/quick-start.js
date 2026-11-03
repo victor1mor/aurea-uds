@@ -62,10 +62,15 @@
       aplicar();
     }
   });
+
+  // O Victor, 02/11/2026: escolher o gerenciador lá em cima não dizia nada — o comando que muda fica embaixo. Agora a página
+  // desce até ele (suave, menos com o "reduzir movimento" do sistema). Só no clique: o evento "gs-chave" sai da pessoa.
+  const descerAte = el => { if (el) el.scrollIntoView({block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); };
   pagina.addEventListener("gs-chave", e => {
     if (e.detail.nome !== "qs-pm") return;
     estado.pm = e.detail.valor;
     aplicar();
+    descerAte(pagina.querySelector('[data-gs-sec="install"]'));
   });
   // Quem chega por um endereço de uma seção do React Native (o "#react-native" da Frameworks) vê o alvo dele.
   const alvoDoEndereco = () => {

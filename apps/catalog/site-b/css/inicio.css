@@ -57,6 +57,8 @@
 .inicio-peca-clube > .intro-boia { rotate:-3deg; animation-delay:-6s; }
 /* O cartão que flutua: a cor da peça levantada e a sombra média (o mesmo da Introduction). */
 .inicio-flutua { background:var(--segment); box-shadow:var(--shadow-md); }
+/* No escuro, a letra apagada sobre o --segment lia 4,07:1 (o axe): nas peças erguidas, o texto a 80% sobre ele. */
+[data-theme="dark"] :is(.inicio-flutua, .inicio-teste, .inicio-baralho-lista :is(.active, [data-checked])):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { --muted-foreground:color-mix(in oklab, var(--foreground) 80%, var(--segment)); }
 .inicio-capsula { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-2) var(--space-3) var(--space-2) var(--space-4); border-radius:var(--radius-full); }
 .inicio-aviso { padding-inline:var(--space-2) var(--space-4); font-size:var(--text-sm); font-weight:var(--weight-semibold); white-space:nowrap; }
 .inicio-chave { flex:1; font-size:var(--text-sm); font-weight:var(--weight-semibold); }

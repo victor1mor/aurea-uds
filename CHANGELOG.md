@@ -274,7 +274,7 @@ como deveria funcionar"*.
 
 ---
 
-## [0.54.0] — em construção
+## [0.54.0] — 2026-11-02
 
 **As peças que as páginas do site B pediram**, cada uma aprovada pelo Victor olhando a imagem (01/11/2026, os itens 1 a 10 e
 os grupos D-1 a D-7.7), construídas em 02/11/2026 (*"pode começar a fazer todas agora"*). Todas são VARIAÇÃO: sem a prop
@@ -285,6 +285,8 @@ outras"*, 02/11/2026). Só na web.
 
 - **A frase nova `copy` no `AureaStrings`** ("Copy"; em português, "Copiar"): o "Copy" escrito da cabeça do `CodeBlock`.
   Quem monta a tabela de frases inteira à mão (sem partir do `defaultStrings` ou do `ptBR`) precisa acrescentá-la.
+- **As frases novas `codeBlockExpand` e `codeBlockCollapse` no `AureaStrings`** ("Expand code" e "Collapse code"; em
+  português, "Expandir código" e "Recolher código"): o botão da caixa empilhada do `CodeBlock`. Mesma observação.
 
 ### Acrescentado
 
@@ -299,6 +301,26 @@ outras"*, 02/11/2026). Só na web.
   `endContent` depois (a contagem, anunciada). (Item 5 e D-1.)
 - **`SegmentedControl`**: **`items[].icon`** (o escolhido troca sozinho para a forma cheia), **`size="2xl"`** (segmento de
   48, ícone 20, letra 16), **`wrap`** (quebra linha, o trilho com canto 22) e **`orientation="vertical"`**. (Itens 3 e 8.)
+- **`CodeBlock previewLayout="stacked"`**, web — a caixa de exemplo com a peça em cima e o código embaixo, sem as abas,
+  nas medidas da referência (a peça em 350, recolhido em 150); mais de 5 linhas, o código vem recolhido num degradê com o
+  "Expand code" (o `aurea.js` abre no HTML puro, por `data-aurea-code-expand`). O degradê é a 3ª exceção à regra sem
+  gradiente, só nessa regra ([ADR-0089](decisions/0089-a-caixa-de-exemplo-empilhada.md)). O padrão (`"tabs"`) não muda.
+  Aprovado na bancada funcional (*"preciso que seja fiel a referencia"*, *"Com degradê"*, 02/11/2026). Todos os exemplos
+  do site passam a usá-la, com o código como arquivo inteiro (o `import` e a função).
+- **`Table striped`**, web — as linhas ímpares do corpo com fundo (o texto a 6%), nos dois arranjos; no `rows`, a linha
+  com fundo leva o canto de 16. É fundo, não linha. Aprovado pela imagem (*"B, como o desenho"*, 02/11/2026). As tabelas
+  do site passam a usá-lo.
+- **`Card fill="brand"`**, web — o cartão pintado no amarelo da marca, com a tinta por cima (o título, o texto de apoio e o
+  que lê a cor do cartão passam a ser a tinta); o traço do `accent` some e, no clicável, o amarelo fica ao passar o mouse.
+  Na Aurea Ember, o cartão fica comum (*"Ember no cartão comum"*: no claro, o branco no laranja media 3,08:1).
+  Aprovado pela imagem (*"B, como o desenho"*, 02/11/2026). A Styling do site usa no "1 Props" e no "your CSS… wins".
+- **`Alert appearance="soft"`**, web — o fundo da cor do estado a 14%, sem a sombra do cartão, o corpo a 16 na cor do
+  texto e o título em negrito na cor do estado. O padrão (`"card"`) não muda. Na Aurea Ember, o `soft` continua o cartão (*"Ember no
+  cartão"*: no claro, o título de atenção dela no fundo do tom media 4,23:1). Aprovado pela imagem (*"B, como o
+  desenho"*, 02/11/2026). Os avisos do site passam a usá-lo.
+- **`SegmentedControl selectedStyle="emphasis"`**, web e nativo — o sétimo estilo do segmento aceso: a cápsula erguida
+  com a letra do destaque (o amarelo no escuro, a cor do texto no claro) e sem o fio de baixo. Aprovado pela imagem
+  (*"C"*, 02/11/2026). As chaves do site passam a usá-lo.
 - **`CodeBlock filename`** — a cabeça do arquivo, de 52: o nome em mono e, com `copyable`, o "Copy" escrito (o botão
   secundário, com o ícone antes); o bloco vira o cartão e a linha longa desce. (Item 6.)
 - **`CommandPalette size="lg"`** — a busca grande: a janela de 1024, o campo de 64 com o "Esc" dentro, **`filters`**, o
@@ -318,6 +340,11 @@ outras"*, 02/11/2026). Só na web.
   botão; a escolhida diz o nome e o valor (no amarelo, branca). Na página sem React, o `aurea.js` escolhe. (D-7.3.)
 - **`Table variant="rows"`** — as linhas em cápsula, a marcada (`data-selected`) no amarelo a 14%. (D-7.6.)
 - **`Toolbar tone="brand"`** — a barra amarela da seleção em lote, com os botões brancos. (D-7.7.)
+
+### Corrigido
+
+- **`Chart` do nativo** — o desenho com nome se anuncia como imagem (`accessibilityRole="image"`): no navegador ele era
+  uma caixa genérica com nome, que o leitor de tela podia calar. Na tela, nada muda.
 
 ### Site
 

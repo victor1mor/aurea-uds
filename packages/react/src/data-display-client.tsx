@@ -36,8 +36,11 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement>, RefAttribu
   variant?:"default"|"rows";
   /** GAR-12: esconde as linhas marcadas como iguais (`<tr data-same>`) — o "Só diferenças". */
   differencesOnly?:boolean;
+  /** As linhas ímpares do corpo com fundo (o site B, 02/11/2026, a "B" na imagem): a 1ª, a 3ª… — o olho segue a linha
+   *  numa tabela larga. Nos dois arranjos (`default` e `rows`). */
+  striped?:boolean;
 }
-export function Table({caption,stickyHeader,stickyFirstColumn,fit,differencesOnly,variant="default",children,className,...props}:TableProps){const s=useAureaStrings();return <div className={cx("table-region",stickyHeader&&"table-sticky-header",stickyFirstColumn&&"table-sticky-first",variant==="rows"&&"table-region-rows")} role="region" aria-label={typeof caption==="string"?caption:s.tableLabel} tabIndex={0}><table className={cx("table",fit&&"table-fit",differencesOnly&&"table-differences-only",variant==="rows"&&"table-rows",className)} {...props}>{caption&&<caption>{caption}</caption>}{children}</table></div>}
+export function Table({caption,stickyHeader,stickyFirstColumn,fit,differencesOnly,striped,variant="default",children,className,...props}:TableProps){const s=useAureaStrings();return <div className={cx("table-region",stickyHeader&&"table-sticky-header",stickyFirstColumn&&"table-sticky-first",variant==="rows"&&"table-region-rows")} role="region" aria-label={typeof caption==="string"?caption:s.tableLabel} tabIndex={0}><table className={cx("table",fit&&"table-fit",differencesOnly&&"table-differences-only",variant==="rows"&&"table-rows",striped&&"table-striped",className)} {...props}>{caption&&<caption>{caption}</caption>}{children}</table></div>}
 
 // A `Prose` MORAVA AQUI e foi para o `markup.tsx` no item O1. O comentario dela dizia, em
 // 15/08/2026: "e exatamente o caso que o item O1 do plano vai medir: quem e de cliente so por

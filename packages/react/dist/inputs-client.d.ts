@@ -315,7 +315,7 @@ export declare function OTPField({ length, value, defaultValue, onValueChange, m
     /** `secondary`: o fundo neutro do `Input` secundário, para o campo dentro de um cartão. */
     variant?: "primary" | "secondary";
 }): React.JSX.Element;
-export type SegmentedControlSelectedStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "dot";
+export type SegmentedControlSelectedStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "dot" | "emphasis";
 export declare function SegmentedControl({ items, value, onChange, label, fullWidth, size, selectedStyle, wrap, orientation }: {
     items: Array<{
         value: string;

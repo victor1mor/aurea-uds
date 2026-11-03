@@ -30,6 +30,15 @@ How serious it is. danger interrupts the screen reader (role=alert); the others 
 <Alert variant="accent">A accent alert.</Alert>
 ```
 
+### Appearance
+
+card is the card surface, the default. soft fills the alert with the state colour at 14%, with no shadow and the body at 16 in the text colour.
+
+```tsx
+<Alert appearance="card">A card alert.</Alert>
+<Alert appearance="soft">A soft alert.</Alert>
+```
+
 ### Every state
 
 What is happening, apart from how serious it is. Without children, the alert says the state in words of its own.
@@ -54,4 +63,5 @@ What is happening, apart from how serious it is. Without children, the alert say
 | `state` | `waiting_user \| waiting_approval \| waiting_dependency \| offline \| stale \| partial \| degraded` | — | Universal state (Part J) — an axis of its own alongside `variant`, because the two answer different questions: `variant` is how serious this is, `state` is what is happening. Merging them would put “out of date” next to “danger” and force the caller to pick one. It sets `data-state`, derives the severity when no `variant` is given — waiting states inform, the rest warn, and none of the seven is `danger`, because in all seven the screen still works — and supplies the message when there are no children. |
 | `icon` | `IconName` | — | Overrides the glyph. The icon is a FUNCTION of the variant by default, because a system that makes you remember which glyph means "danger" ends up with four answers to the same question. |
 | `action` | `ReactNode` | — | The alert's button (Upgrade, Undo), as the reference: after the text and before the X, in the middle; on a phone (below 640) it goes under the text, in the same column. |
+| `appearance` | `card \| soft` | card | The skin. card is the card surface with its shadow, the state colour on the icon and the title. soft is the state colour at 14% behind the whole alert, no shadow, with the body in the text colour at 16 and the title in bold. Under the Aurea Ember brand, soft keeps the card skin. |
 | `onDismiss` | `() => void` | — | Shows the X (the CloseButton) and is called when it is pressed. |

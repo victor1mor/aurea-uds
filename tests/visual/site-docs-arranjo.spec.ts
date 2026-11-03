@@ -37,8 +37,10 @@ test("1440 × 900: a cápsula de 1400 no centro, e a lateral, o texto e o índic
   perto(indice.y, 96, "o índice também a 96");
   perto(indice.w, 236, "o índice tem 236");
   perto(indice.direita, capsula.direita, "e termina na ponta da cápsula");
-  perto((await caixa(page, ".content h1")).y, 96, "o título da página a 96");
-  perto((await caixa(page, ".content h1")).x, lateral.direita + 28, "o texto a 28 da lateral");
+  // A página de componente do site B tem o título DENTRO do palco, com a trilha em cima (o desenho aprovado do Button, medido
+  // na mesma tela em 02/11/2026: o título a 178 do alto e a 60 da lateral).
+  perto((await caixa(page, ".content h1")).y, 178, "o título da página a 178, dentro do palco");
+  perto((await caixa(page, ".content h1")).x, lateral.direita + 60, "o título a 60 da lateral");
 });
 
 test("1280 × 663: a cápsula a 16 das bordas, e a lateral e o índice nas pontas dela", async ({page}) => {
@@ -84,13 +86,15 @@ test("375: a página não rola de lado, e o botão do menu é o último da cáps
   expect(capsula.direita - gaveta.direita, "e na ponta dela").toBeLessThanOrEqual(12);
 });
 
-test("o anterior e o próximo ficam lado a lado, e o texto longo termina em reticências", async ({page}) => {
+// O SITE B: os dois cartões do anterior e do próximo (`g1-pn`) lado a lado; o nome comprido quebra a linha DENTRO do cartão,
+// como no desenho B (antes, a reticência do lote T).
+test("o anterior e o próximo ficam lado a lado, e o nome comprido fica dentro do cartão", async ({page}) => {
   await abrir(page, 1440, 900, "carousel.html");
-  const [ant, prox] = await page.locator(".pn").evaluateAll((l) => l.map((e) => e.getBoundingClientRect().top));
+  const [ant, prox] = await page.locator(".g1-pn").evaluateAll((l) => l.map((e) => e.getBoundingClientRect().top));
   perto(ant, prox, "os dois na mesma linha");
-  const corte = await page.locator(".pn-next > :last-child").evaluate((e) => {
-    const c = getComputedStyle(e);
-    return [c.whiteSpace, c.textOverflow, c.overflow];
-  });
-  expect(corte).toEqual(["nowrap", "ellipsis", "hidden"]);
+  const dentro = await page.locator(".g1-pn").evaluateAll((l) => l.every((c) => {
+    const n = c.querySelector("strong")!.getBoundingClientRect(), r = c.getBoundingClientRect();
+    return n.left >= r.left && n.right <= r.right;
+  }));
+  expect(dentro, "o nome dentro do cartão").toBe(true);
 });

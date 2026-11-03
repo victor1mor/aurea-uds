@@ -143,7 +143,8 @@ export function itemDoGrupo(site, {base, area, arquivo, trilha, titulo, lede, se
   const uso = achar(raiz, e => e.type === "section" && e.props?.id === "usage");
   const [codigoDoImport, ...resto] = filhos(uso).slice(1);
   const frase = resto.find(e => e.type === "p");
-  const caixa = resto.find(e => e.props?.className === "demo");
+  // A caixa de exemplo: a classe `demo` (com ou sem o `demo-stacked` da ADR-0089).
+  const caixa = resto.find(e => String(e.props?.className ?? "").split(" ").includes("demo"));
   const markdown = achar(raiz, e => e.props?.id === "page-markdown");
   const rel = [...new Set(usa)].map(nome => site.fichas.find(f => f.name === nome)).filter(Boolean);
   const secoes = [{id: "usage", label: "Usage", node: secao(site, "usage", "01", "Usage", tituloDoUso,

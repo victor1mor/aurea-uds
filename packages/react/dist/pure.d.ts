@@ -225,6 +225,8 @@ export interface AureaStrings {
     copy: string;
     codeBlockPreview: string;
     codeBlockCode: string;
+    codeBlockExpand: string;
+    codeBlockCollapse: string;
     copied: string;
     linkCopied: string;
     linkCopyFailed: string;

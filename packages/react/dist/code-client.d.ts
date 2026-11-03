@@ -15,7 +15,7 @@ export type CodeLine = CodeToken[];
 /** Quem colore: recebe o código e a língua e devolve as linhas, ou `null` quando não conhece a língua. O da Aurea é o
  *  `highlightCode` de `@aurea-uds/react/code-highlight`. */
 export type CodeHighlighter = (code: string, language: string) => CodeLine[] | null;
-export declare function CodeBlock({ children, language, copyable, preview, lineNumbers, highlight, tabs, filename, className }: {
+export declare function CodeBlock({ children, language, copyable, preview, previewLayout, lineNumbers, highlight, tabs, filename, className }: {
     children?: string;
     language?: string;
     copyable?: boolean;
@@ -23,6 +23,9 @@ export declare function CodeBlock({ children, language, copyable, preview, lineN
     filename?: React.ReactNode;
     /** A prévia viva do código: com ela, o bloco vira a caixa de exemplo, com as abas Prévia | Código. */
     preview?: React.ReactNode;
+    /** Com `preview`: `tabs` (as abas Prévia | Código, o padrão) ou `stacked` (a peça em cima e o código embaixo; mais de 5
+     *  linhas, recolhido com o "Expand code" — ADR-0089). */
+    previewLayout?: "tabs" | "stacked";
     /** Mostra o número de cada linha à esquerda. O número não entra no texto copiado nem é lido pelo leitor de tela. */
     lineNumbers?: boolean;
     /** Colore o código. Passe o `highlightCode` de `@aurea-uds/react/code-highlight` (os analisadores são peer opcional). */

@@ -17,13 +17,13 @@ export default function styling(site, doc) {
     g.mono("[data-pressed]"),
   ];
 
-  // A ESCADA: os quatro jeitos, do mais ao menos preferido; cada degrau leva à seção dele. O primeiro leva o traço da marca
-  // (o `accent` do `Card`): o desenho o pinta de amarelo cheio, e o `Card` não tem fundo amarelo (ver o relatório, B-3).
+  // A ESCADA: os quatro jeitos, do mais ao menos preferido; cada degrau leva à seção dele. O primeiro é o amarelo cheio do
+  // desenho (`Card fill="brand"`, a "B" de 02/11/2026).
   const degraus = [["start-with-props", "Props", "appearance, tone, variant, size"], ["basic-styling", "A class name", "className, added after Aurea's"],
     ["how-your-css-wins", "Your own CSS", "outside the aurea layer"], ["use-the-tokens", "The tokens", "var(--space-4) and friends"]];
   const escada = [h("ol", {key: "escada", className: "styling-escada"}, ...degraus.map(([id, nome, frase], n) =>
     h("li", {key: id, className: `styling-degrau styling-degrau-${n + 1}`},
-      h(A.Card, {variant: "interactive", lift: true, ...(n === 0 ? {accent: "brand"} : {}), className: "styling-degrau-cartao", render: h("a", {href: `#${id}`})},
+      h(A.Card, {variant: "interactive", lift: true, ...(n === 0 ? {fill: "brand"} : {}), className: "styling-degrau-cartao", render: h("a", {href: `#${id}`})},
         h("span", {className: "styling-degrau-n"}, n + 1), h("b", null, nome), h("span", null, frase))))),
     h("div", {key: "legenda", className: "styling-escada-legenda", "aria-hidden": "true"}, h("span", null, "most preferred"), h("span", null, "least preferred"))];
 
@@ -49,11 +49,12 @@ export default function styling(site, doc) {
   const [primeiroCw, codigoSolto, ordemP, codigoOrdem] = cw.blocos;
   const camadas = h("div", {key: "camadas", className: "styling-camadas"},
     h("div", {className: "styling-pilha", "aria-live": "polite"},
-      h(A.Card, {variant: "selected", className: "styling-camada"}, h("span", {className: "styling-voce"}, "your CSS, outside any layer"),
-        h(A.Badge, {variant: "primary", size: "sm"}, "wins")),
+      // A camada que ganha é o amarelo cheio do desenho (`Card fill="brand"`); o "wins" vai no selo neutro, que se lê no amarelo.
+      h(A.Card, {fill: "brand", className: "styling-camada"}, h("span", {className: "styling-voce"}, "your CSS, outside any layer"),
+        h(A.Badge, {variant: "neutral", size: "sm"}, "wins")),
       h(A.Card, {className: "styling-camada"}, h("span", null, "@layer aurea"), h(A.Badge, {variant: "neutral", size: "sm"}, "loses"))),
     h("div", {className: "styling-pergunta"}, h("span", {id: "styling-pergunta"}, "Does your app use layers too?"),
-      h(A.SegmentedControl, {label: "Does your app use layers too?", size: "lg", selectedStyle: "neutral", value: "no", onChange: () => {},
+      h(A.SegmentedControl, {label: "Does your app use layers too?", size: "lg", selectedStyle: "emphasis", value: "no", onChange: () => {},
         items: [{value: "no", label: "No"}, {value: "yes", label: "Yes"}]})));
 
   // USE THE TOKENS: as duas regras em cartões, com o X no ladrilho vermelho.

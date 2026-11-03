@@ -377,7 +377,20 @@ let uid = 0;
 // parte viva da página (`assets/live.js`, `live/vivo.tsx`) acende a caixa com o MESMO exemplo — o Victor: "adicione o
 // javascript ao site da aurea assim todos os componente funciona como deveria funcionar". Sem `vivo`, a caixa continua
 // só desenho (os padrões, os blocos e as receitas, por enquanto).
-function demoBlock(render, code, anchor, vivo = null) {
+// O ARQUIVO INTEIRO (ADR-0089, como na referência): o código de um exemplo que é só JSX ganha o `import` das peças que ele
+// usa e a função que o devolve. Código que já traz `import`, ou que não começa por uma tag, sai como está.
+function arquivoInteiro(code, pacote) {
+  if (!code || /^\s*import\s/m.test(code) || !/^\s*</.test(code)) return code;
+  const pecas = [...new Set([...code.matchAll(/<([A-Z][A-Za-z0-9]*)/g)].map(m => m[1]))].sort();
+  let corpo = code.trim().split("\n");
+  // Mais de uma peça solta (cada uma começando na margem, ou uma expressão `{…}` ao lado) não é um `return` válido: o arquivo as embrulha num fragmento,
+  // como se escreve em React — sem isso, quem copiasse levaria código que não compila (e as cores se perdiam).
+  if (corpo.filter(l => /^(<(?!\/)|\{)/.test(l)).length > 1) corpo = ["<>", ...corpo.map(l => `  ${l}`), "</>"];
+  const volta = corpo.length === 1 ? [`  return ${corpo[0]};`] : ["  return (", ...corpo.map(l => `    ${l}`), "  );"];
+  return [`import {${pecas.join(", ")}} from "${pacote}";`, "", "export function Example() {", ...volta, "}"].join("\n");
+}
+function demoBlock(render, code, anchor, vivo = null, pacote = "@aurea-uds/react") {
+  code = arquivoInteiro(code, pacote);
   const id = `d${uid++}`;
   let previewHtml = null;
   // Demo que estoura DERRUBA o build. Antes era console.warn: a página saía com "Preview
@@ -395,30 +408,29 @@ function demoBlock(render, code, anchor, vivo = null) {
     try { previewHtml = renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, render()), {identifierPrefix: `${id}-`}); }
     catch (e) { e.message = `demo que estourou:\n${code || "(sem código)"}\n\n${e.message}`; throw e; }
   }
-  // Uma aba só não é escolha nenhuma: sem código, o bloco é o painel puro (modelo da referência).
-  const tab = (panel, label, on) => h("button", {key: panel, className: on ? "active" : undefined,
-    type: "button", role: "tab", id: `${id}-${panel}`, "data-panel": panel,
-    "aria-selected": on ? "true" : "false", "aria-controls": `${id}-${panel}-panel`, tabIndex: on ? 0 : -1}, label);
-  // data-aurea-tabpanel: é assim que o aurea.js do CORE sabe quem esconder. As abas do
-  // catálogo não têm JS próprio — usam o mesmo comportamento (setas, Home/End) de todo mundo.
-  // tabIndex no painel: ele é `overflow:auto` por construção, e um preview mais alto que a caixa
+  // Sem código, o bloco é o painel puro (modelo da referência). As abas Preview | Code saíram com a caixa empilhada
+  // (ADR-0089, 02/11/2026). tabIndex no painel: ele é `overflow:auto` por construção, e um preview mais alto que a caixa
   // rolava só com o mouse — axe `scrollable-region-focusable`, medido em 30/07/2026 em duas
   // páginas. A regra é do PAINEL, não daquelas duas: qualquer conteúdo alto cai nela. É também o
   // que o APG pede para um tabpanel sem elemento focável dentro.
-  const panelAttrs = panel => ({role: "tabpanel", id: `${id}-${panel}-panel`, "data-aurea-tabpanel": "",
-    tabIndex: 0, ...(code ? {"aria-labelledby": `${id}-${panel}`} : {})});
-  return h("div", {className: "demo", id: anchor, "data-demo": id},
-    code ? h("div", {className: "demo-tabs"},
-      h("div", {className: "segmented", role: "tablist"}, tab("preview", "Preview", true), tab("code", "Code", false))) : null,
-    h("div", {className: "demo-panel", "data-panel": "preview", ...panelAttrs("preview"),
+  const panelAttrs = panel => ({role: "tabpanel", id: `${id}-${panel}-panel`, "data-aurea-tabpanel": "", tabIndex: 0});
+  // A CAIXA EMPILHADA (ADR-0089, a "C" do site B, 02/11/2026): a peça em cima e o código embaixo, sem as abas — a mesma
+  // pele do `CodeBlock previewLayout="stacked"`; mais de 5 linhas, o código recolhido, e quem abre é o `aurea.js`
+  // (`data-aurea-code-expand`).
+  const dobra = code ? code.split("\n").length > 5 : false;
+  return h("div", {className: code ? "demo demo-stacked" : "demo", id: anchor, "data-demo": id, ...(dobra ? {"data-collapsed": ""} : {})},
+    h("div", {className: "demo-panel", "data-panel": "preview", ...(code ? {tabIndex: 0} : panelAttrs("preview")),
       ...(vivo ? {"data-vivo": `${vivo.componente}:${vivo.indice}`, ...(vivo.motor ? {"data-vivo-motor": ""} : {})} : {}),
       ...(previewHtml ? {dangerouslySetInnerHTML: {__html: previewHtml}} : {})},
       // Componente cujo conteúdo vive num portal renderiza só o disparador; quem não renderiza
       // nada (Dialog, Drawer) mostra o disparador do próprio starter. O `note` do conteúdo
       // explica na lede da demo — nunca uma caixa vazia sem explicação.
       previewHtml ? null : h("span", {style: muted}, "Interactive — see the code.")),
-    code ? h("div", {className: "demo-panel demo-code", "data-panel": "code", ...panelAttrs("code"), hidden: true},
-      h(A.CodeBlock, {language: "tsx", copyable: true, lineNumbers: true, highlight: highlightCode}, code)) : null);
+    code ? h("div", {className: "demo-panel demo-code", "data-panel": "code", id: `${id}-code-panel`},
+      h(A.CodeBlock, {language: "tsx", copyable: true, lineNumbers: true, highlight: highlightCode}, code),
+      dobra ? h("button", {type: "button", className: "btn btn-tertiary btn-sm demo-stacked-toggle", "data-aurea-code-expand": "",
+        "aria-expanded": "false", "aria-controls": `${id}-code-panel`, "data-label-expand": "Expand code", "data-label-collapse": "Collapse code"},
+        "Expand code") : null) : null);
 }
 // O número de linha como na documentação da referência (medido na página dela, 20/10/2026): no código dos EXEMPLOS,
 // sempre; no código do meio do texto, só nos longos (os de 22 e 24 linhas tinham, o de 19 não); na linha de `import` e
@@ -502,7 +514,7 @@ function itemPage({title, lede, pills = [], demo, imports, points = [], related 
     h("section", {className: "block", id: "usage"}, h("h2", null, "Usage"),
       h(A.CodeBlock, {language: "tsx", copyable: true, highlight: highlightCode, className: "usage-import"}, imports),
       demo.description ? h("p", {className: "demo-lede"}, demo.description) : null,
-      demoBlock(demo.render, demo.code, "preview", demo.vivo),
+      demoBlock(demo.render, demo.code, "preview", demo.vivo, (String(imports).match(/from "([^"]+)"/) || [])[1]),
       points.length ? h("ul", {className: "usage-points"}, ...points.map((t, n) => h("li", {key: n}, t))) : null),
     ...secoes.map(s => s.node),
     // A proveniência ("Uses" da ADR-0001) vira os cartões de "Related Components", como na referência.
@@ -537,9 +549,16 @@ const resumoDaPagina = arquivo => fichas.find(f => `${slug(f.name)}.html` === ar
   ?? blocks.find(x => `${x.slug}.html` === arquivo)?.description
   ?? docs.find(d => d.arquivo === arquivo)?.description
   ?? releases.find(r => r.arquivo === arquivo)?.description ?? null;
+// A ORDEM DE LEITURA das áreas cuja lateral virou filtro no desenho B (02/11/2026): o anterior e o próximo seguem as páginas
+// da área, na ordem da lista dela, e não os itens da lateral (que agora são filtros e âncoras).
+const ORDEM_DE_LEITURA = {
+  patterns: () => [item("All Patterns", "patterns.html"), ...Object.values(patternsByComponent).flat().map(p => item(p.name, `${p.slug}.html`))],
+  blocks: () => [item("All Blocks", "blocks.html"), ...Object.values(blocksByCategory).flat().map(b => item(b.name, `${b.slug}.html`))],
+  releases: () => [item("All Releases", "releases.html"), item("Health", "saude.html"), ...releases.map(r => item(r.title, r.arquivo))],
+};
 const vizinhos = (area, arquivo) => {
-  // Um item solto no alto da lateral (o "All Components") entra como ele mesmo.
-  const linha = MENUS[area]().flatMap(g => g.items ?? [g]);
+  // Um item solto no alto da lateral (o "All Components") entra como ele mesmo. Âncora e filtro (`#…`) não são página.
+  const linha = (ORDEM_DE_LEITURA[area] ? ORDEM_DE_LEITURA[area]() : MENUS[area]().flatMap(g => g.items ?? [g])).filter(x => !String(x.id).startsWith("#"));
   const k = linha.findIndex(x => x.id === arquivo);
   const um = x => x ? {name: x.label, href: x.href, summary: resumoDaPagina(x.id)} : null;
   return k < 0 ? {prev: null, next: null} : {prev: um(linha[k - 1]), next: um(linha[k + 1])};
@@ -755,7 +774,7 @@ function componentsIndex(lado = "web") {
           "data-cat-busca": "", autoComplete: "off"}),
         // A chave Grade | Lista: a pele da "SegmentedControl" (lg, sem o fio) com botões de ligar — a página não hidrata a
         // peça (ela carrega só o "search.js"), e o grupo de dois botões com "aria-pressed" funciona sem React.
-        h("div", {className: "cat-vista", "data-cat-vista": ""}, h("span", {className: "segmented segmented-lg", "data-segment-style": "neutral",
+        h("div", {className: "cat-vista", "data-cat-vista": ""}, h("span", {className: "segmented segmented-lg", "data-segment-style": "emphasis",
           role: "group", "aria-label": "View"},
           h("button", {type: "button", className: "active", "aria-pressed": "true"}, h(A.Icon, {name: "squares-four"}), "Grid"),
           h("button", {type: "button", "aria-pressed": "false"}, h(A.Icon, {name: "list-bullets"}), "List"))))),
@@ -792,7 +811,7 @@ function componentsIndex(lado = "web") {
         h("span", {className: "cat-familia-conta"}, `${fam.itens.length} component${fam.itens.length > 1 ? "s" : ""}`)),
       h("div", {className: "cat-cartoes"}, ...fam.itens.map((f, k) => cartao(f, fam, k))),
       fam.itens.length > PRIMEIROS ? h("div", {className: "cat-mais"},
-        h(A.Button, {variant: "secondary", type: "button", trailingIcon: "caret-down", "data-cat-mais": "", "aria-expanded": "false"},
+        h(A.Button, {variant: "tertiary", size: "lg", type: "button", trailingIcon: "caret-down", "data-cat-mais": "", "aria-expanded": "false"},
           `Show all ${fam.itens.length}`)) : null)),
     // O VAZIO da busca: a moldura do nativo (`framed`, o item 9) e o título maior do site (o B do item 9).
     h("div", {className: "card cat-vazio", "data-cat-vazio": "", hidden: true},
@@ -1171,7 +1190,7 @@ function nativePage(nome) {
     node: h("section", {className: "block", id: "examples"}, h("h2", null, "Examples"),
       ...resto.map((ex, n) => h("div", {className: "example", key: n, id: slug(ex.title)},
         h("h3", null, ex.title), ex.description ? h("p", {className: "demo-lede"}, ex.description) : null,
-        demoBlock(previaNativa(nome, n + 1), ex.code))))} : null;
+        demoBlock(previaNativa(nome, n + 1), ex.code, undefined, null, "@aurea-uds/native"))))} : null;
   return itemPage({
     title: nome, lede: c.description || ficha?.summary || "",
     pills: [["Source", "code", `${REPO}/blob/main/packages/native/src/${peca.module}.tsx`]],
@@ -1679,25 +1698,67 @@ const menuComponentes = () => [item("All Components", "components.html"),
   ...familiasB().map(f => ({id: `fam-${f.slug}`, label: nomeDoGrupoB(f.n + 1, f.cat, [f.icone, f.cor]), collapsible: true,
     items: f.itens.filter(x => x.kind !== "hook").map(x => item(x.name, `${slug(x.name)}.html`, seloBadge(x.name)))}))
     .filter(g => g.items.length)];
-// Os hooks moram na área Hooks: a página de cada um marca "Hooks" no topo, e não "Components".
-const menuHooks = () => [
-  {id: "overview", label: "Overview", items: [item("All Hooks", "hooks.html")]},
-  {id: "hooks", label: "Hooks", items: alfabetico(fichas.filter(f => f.kind === "hook"))
-    .map(f => item(f.name, `${slug(f.name)}.html`, seloBadge(f.name)))},
-].filter(g => g.items.length);
-const menuTokens = () => [{id: "overview", label: "Overview", items: [item("All Tokens", "tokens.html")]}];
+// AS LATERAIS DAS ÁREAS NO DESENHO B (02/11/2026 — o Victor, olhando a bancada: "esse itens não esta como referencia"):
+// cada área tem a árvore do desenho aprovado — "Overview", o "On this page" (os links para as seções da página) e, onde o
+// desenho tem, o FILTRO (Blocks por área, Patterns por componente, Releases por mês, Tokens por `$type`), cada item com a
+// contagem. O filtro é um link com o endereço `#filtro/<valor>`: o script da página (`site-b/js/`) mostra só o grupo
+// escolhido, e sem ele o link não faz nada e a página mostra tudo. Os rótulos dos grupos são os do desenho, que o CSS do
+// site põe em mono maiúsculo nessas áreas (`.site-area-mono`).
+const filtro = (label, valor, conta, extra = {}) => ({id: `#filtro/${valor}`, label, href: `#filtro/${valor}`,
+  badge: h("span", {className: "site-conta"}, String(conta)), ...extra});
+const ancora = (label, id) => ({id: `#${id}`, label, href: `#${id}`});
+const menuHooks = () => {
+  const comDemo = ["useToast", "useSidebar", "useAureaTheme", "useAureaStrings", "useSpriteUrl"];
+  const todos = alfabetico(fichas.filter(f => f.kind === "hook"));
+  return [
+    {id: "overview", label: "Overview", items: [item("All Hooks", "hooks.html")]},
+    {id: "on-this-page", label: "On this page", items: [...comDemo.map(n => ancora(n, n)),
+      ancora(`${["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"][todos.length - comDemo.length] ?? todos.length - comDemo.length} more hooks`, "more")]},
+    {id: "hook-pages", label: `Hook pages · ${todos.length}`, items: todos.map(f => item(f.name, `${slug(f.name)}.html`, seloBadge(f.name)))},
+  ];
+};
+// Os tipos de token (`$type`), contados no DTCG: o `$type` de um grupo vale para os de dentro.
+const TIPOS_DE_TOKEN = (() => {
+  const conta = {};
+  const anda = (no, herdado) => {
+    if (!no || typeof no !== "object") return;
+    const tipo = no.$type ?? herdado;
+    if ("$value" in no) { if (tipo) conta[tipo] = (conta[tipo] ?? 0) + 1; return; }
+    for (const [k, v] of Object.entries(no)) if (!k.startsWith("$")) anda(v, tipo);
+  };
+  anda(tokensDoc, undefined);
+  return Object.entries(conta).sort((a, b) => b[1] - a[1]);
+})();
+const menuTokens = () => [{id: "overview", label: "Overview", items: [item("All Tokens", "tokens.html")]},
+  {id: "by-type", label: "By $type", items: TIPOS_DE_TOKEN.map(([tipo, n]) => filtro(tipo, tipo, n))},
+  {id: "on-this-page", label: "On this page", items: [["Color roles", "color-roles"], ["Status scales", "status-scales"], ["Brands", "brands"],
+    ["Radius", "radius"], ["Space", "space"], ["Type", "type"], ["Controls and density", "controls"], ["Motion", "motion"], ["Shadow", "shadow"],
+    ["Numbers", "numbers"]].map(([l, id]) => ancora(l, id))}];
 const menuPatterns = () => [{id: "overview", label: "Overview", items: [item("All Patterns", "patterns.html")]},
-  ...Object.entries(patternsByComponent).map(([cmp, list]) => ({id: `p-${slug(cmp)}`, label: cmp,
-    items: list.map(p => item(p.name, `${p.slug}.html`))}))];
+  {id: "by-component", label: "By component", items: [filtro("All components", "all", patterns.length),
+    ...Object.entries(patternsByComponent).sort((a, b) => a[0].localeCompare(b[0])).map(([cmp, list]) => filtro(cmp, slug(cmp), list.length))]}];
 const menuBlocks = () => [{id: "overview", label: "Overview", items: [item("All Blocks", "blocks.html")]},
-  ...Object.entries(blocksByCategory).map(([cat, list]) => ({id: `b-${slug(cat)}`, label: cat,
-    items: list.map(b => item(b.name, `${b.slug}.html`))}))];
+  {id: "by-area", label: "By area", items: [filtro("Every area", "all", blocks.length),
+    ...Object.entries(blocksByCategory).map(([cat, list]) => filtro(cat, slug(cat), list.length))]}];
 const archetypeIds = Object.keys(contract.applicationPatterns.archetypes);
 const menuRecipes = () => [{id: "overview", label: "Overview", items: [item("All Recipes", "recipes.html")]},
-  {id: "archetypes", label: "Archetypes", items: archetypeIds.map(id => item(recipeTitle(id), `recipe-${slug(id)}.html`))}];
-// Releases: "All Releases" e as versões, da mais nova à mais velha, como a da referência.
-const menuReleases = () => [{id: "overview", label: "Overview", items: [item("All Releases", "releases.html"), item("Health", "saude.html")]},
-  {id: "releases", label: "Releases", items: releases.map(r => item(r.title, r.arquivo))}];
+  {id: "on-this-page", label: "On this page", items: [ancora("Recipe builder", "recipe-builder"), ancora("Every recipe", "every-recipe")]},
+  {id: "archetypes", label: "Recipes", items: archetypeIds.map(id => item(recipeTitle(id), `recipe-${slug(id)}.html`))}];
+// Releases: "All Releases", "Health" e o filtro por mês, da mais nova à mais velha, como no desenho.
+const MESES_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const menuReleases = () => {
+  const porMes = new Map();
+  for (const r of releases) { const k = String(r.date).slice(0, 7); porMes.set(k, (porMes.get(k) ?? 0) + 1); }
+  // Como o desenho: o número do mês em mono e um ponto de cor antes do nome (as cores de categoria, em ciclo); "··" e o
+  // amarelo no "Every release".
+  const PONTOS = ["blue", "orange", "green", "pink"];
+  const mes = (num, cor, nome) => h(Fragment, null, h("span", {className: "site-mes-n", "aria-hidden": "true"}, num),
+    h("span", {className: "site-mes-d", "data-cor": cor, "aria-hidden": "true"}), nome);
+  return [{id: "overview", label: "Overview", items: [item("All Releases", "releases.html"), item("Health", "saude.html")]},
+    {id: "by-month", label: "By month", items: [filtro(mes("··", "primary", "Every release"), "all", releases.length),
+      ...[...porMes].sort((a, b) => b[0].localeCompare(a[0])).map(([k, n], i) =>
+        filtro(mes(k.slice(5, 7), PONTOS[i % PONTOS.length], `${MESES_EN[Number(k.slice(5, 7)) - 1]} ${k.slice(0, 4)}`), k, n))]}];
+};
 // O menu do nativo: as peças do `@aurea-uds/native` que o site mostra, em ordem alfabética, como o dos componentes.
 // No padrão da Docs, como a de Components (o Victor, 01/11/2026: "e o nativo?"): as famílias numeradas, que abrem e fecham.
 const menuNativo = () => [item("All Components", "native.html"),
@@ -1845,7 +1906,6 @@ function shell(activeHref, inner, section = "components") {
   const {brand, topbar, home} = topoDoSite(section);
   // O sprite é INLINE nesta página (external <use> via file:// esbarra em CORS), então a base é vazia.
   if (section === "home") {
-    const topoB = topoDoSite("inicio");
     // O Início da referência não tem menu: o topo e o conteúdo, sem o AppShell (que sempre desenha a lateral).
     return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, h("div", {className: "site-home"},
       h("a", {className: "skip-link", href: "#main"}, "Skip to content"),
@@ -1855,10 +1915,10 @@ function shell(activeHref, inner, section = "components") {
       // O TOPO E O RODAPÉ DO SITE B TAMBÉM NO INÍCIO (02/11/2026, a página inicial no desenho aprovado): a mesma pílula que
       // flutua das outras páginas (o `Header` `pill`, com as áreas numa cápsula — nenhuma levantada, o Início não é área —
       // e as mesmas ações, o menu do celular inclusive) e o mesmo rodapé de uma linha.
-      h(A.Header, {variant: "pill", blurred: true, maxWidth: "docs", brand: topoB.brand, className: "site-top site-top-b"},
-        h("div", {className: "site-areas"}, h(A.SegmentedControl, {label: "Sections", size: "xl", value: "", selectedStyle: "neutral",
-          items: AREAS.map(([label, href, id]) => ({value: id, label, href: `./${href}`}))})),
-        topoB.topbar),
+      // Como o desenho do Início (`inicio-B`, 02/11/2026): a pílula com os links do Início — "Docs" no lugar de "Getting
+      // Started", sem "Releases" — e a busca só na lupa, como as ações do Início de antes.
+      h(A.Header, {variant: "pill", blurred: true, maxWidth: "docs", brand, className: "site-top site-top-b", items: home.items,
+        actions: home.actions, itemsJustify: "start", navLabel: "Sections"}),
       h("main", {id: "main", tabIndex: -1}, node),
       rodapeDoSite())));
   }
@@ -1872,7 +1932,7 @@ function shell(activeHref, inner, section = "components") {
   const areaAtual = section === "native" ? "components" : section;
   const areasDoSite = AREAS.map(([label, href, id]) => ({value: id, label, href: `./${section === "native" && id === "components" ? "native.html" : href}`}));
   // No site B (31/10/2026), a chave do desenho: o escolhido levantado, sem o fio, e a janela do navegador no "Web".
-  const chavePlataforma = h(A.SegmentedControl, {label: "Platform", size: "lg", fullWidth: true, selectedStyle: "neutral", value: section === "native" ? "native" : "web",
+  const chavePlataforma = h(A.SegmentedControl, {label: "Platform", size: "lg", fullWidth: true, selectedStyle: "emphasis", value: section === "native" ? "native" : "web",
     items: [
       {value: "web", label: h(Fragment, null, h(A.Icon, {name: "browser"}), "Web"),
         href: section === "native" ? (daWeb ? `./${slug(daWeb.name)}.html` : "./components.html") : `./${activeHref || "components.html"}`},
@@ -1894,15 +1954,19 @@ function shell(activeHref, inner, section = "components") {
       // A LATERAL DO SITE B: o bloco de canto 22 (a `Sidebar` flutuante, a de sempre da Aurea), com o item atual na
       // cápsula levantada e o ponto amarelo (`segment-dot`, ADR-0082).
       topbarVariant: "pill", topbarBlurred: true, contentVariant: "plain", layout: "docs", sidebarIndicator: "segment-dot",
-      className: "site-shell",
+      className: `site-shell site-area-${section}${["hooks", "tokens", "patterns", "blocks", "recipes", "releases"].includes(section) ? " site-area-mono" : ""}`,
       // A chave claro/escuro no alto da gaveta do celular, como a da referência (lote U, 19/10/2026): no topo ela não cabe.
       // A ORDEM É A DO HTML (31/10/2026): a chave Web | Native e as áreas da gaveta vêm ANTES da lista, e a lista é a
       // `Sidebar.Nav` aqui dentro, e não o `navItems` (que a lateral põe primeiro). Subir a chave com `order:-1` mudava o
       // que se vê e não o que se tabula — a `ordem-de-foco.spec.ts` (WCAG 2.4.3) reprovou em toda página.
       navigation: h(Fragment, null, h("div", {className: "site-gaveta-topo"}, chaveDeTema()),
-        h("div", {className: "site-plataforma"}, chavePlataforma),
+        // A chave Web | Native só onde o desenho a tem: a Getting Started e Components (o nativo inclusive).
+        ["start", "components", "native"].includes(section) ? h("div", {className: "site-plataforma"}, chavePlataforma) : null,
         h("div", {className: "site-gaveta-areas"}, h(A.NavList, {"aria-label": "Sections",
           items: areasDoSite.map(a => ({id: a.value, label: a.label, href: a.href, icon: ICONE_DA_AREA[a.value]}))})),
+        section === "patterns" ? h("div", {className: "site-filtro-busca"}, h(A.SearchField, {size: "sm",
+          placeholder: `Filter ${Object.keys(patternsByComponent).length} components`, "aria-label": "Filter components",
+          autoComplete: "off", "data-site-filtro-busca": ""})) : null,
         h(A.Sidebar.Nav, {items: menu, current: activeHref || undefined, label: "Contents"})),
       // O ÍNDICE DO SITE B: o mesmo bloco, com o anel de leitura e o item atual na cápsula levantada (as duas variações do
       // `TableOfContents`, protótipo) e o "Back to top" no pé.

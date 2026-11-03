@@ -97,7 +97,8 @@
 .dp-camada span { font-size:var(--text-sm); line-height:var(--leading-normal); }
 .dp-camada-pele { background:var(--primary); color:var(--primary-foreground); }
 .dp-camada-motor { background:var(--fill-2); }
-.dp-camada-motor span { color:var(--muted-foreground); }
+/* A letra apagada sobre o fundo da camada, no claro, media 4,34:1 (o axe, 02/11/2026): ali ela é um passo mais perto do texto. */
+.dp-camada-motor span { color:color-mix(in oklab, var(--muted-foreground) 70%, var(--foreground)); }
 .dp-painel [hidden] { display:none; }
 
 /* 09: as barras das alturas. */

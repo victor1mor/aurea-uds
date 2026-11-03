@@ -37,3 +37,7 @@
   .density-lab { grid-template-columns:minmax(0, 1fr); }
   .density-medidas { position:static; }
 }
+
+/* A lista de membros do desenho: o estado na ponta, mono pequeno e apagado; a legenda da tabela fica só para o leitor. */
+.density-tabela caption { position:absolute; inline-size:1px; block-size:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.density-tabela td:last-child { color:var(--muted-foreground); font-family:var(--font-code); font-size:var(--text-xs); text-align:end; }

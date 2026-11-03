@@ -10,6 +10,8 @@ const MINIMO_DO_GRUPO = 3;
 // e escondida do leitor de tela, e o mesmo id duas vezes na página quebraria o bloco aberto.
 const semIds = html => html.replace(/\s(id|for|aria-labelledby|aria-describedby|aria-controls|aria-activedescendant|name|list|form)="[^"]*"/g, "");
 
+import {ESBOCOS} from "./_esbocos-blocks.mjs";
+const POR_EXTENSO = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
 export default function blocks(site) {
   const {h, A, slug, fichas, blocks: todos} = site;
   const porArea = [];
@@ -20,7 +22,7 @@ export default function blocks(site) {
   }
   const soltos = porArea.filter(g => g.itens.length < MINIMO_DO_GRUPO);
   const grupos = [
-    ...(soltos.length ? [{titulo: "Everyday sections", frase: `One block for each of ${soltos.length} areas — the sections almost every product has.`,
+    ...(soltos.length ? [{titulo: "Everyday sections", frase: `One block for each of ${POR_EXTENSO[soltos.length] ?? soltos.length} areas — the sections almost every product has.`,
       itens: soltos.flatMap(g => g.itens), atalho: true}] : []),
     ...porArea.filter(g => g.itens.length >= MINIMO_DO_GRUPO).map(g => ({titulo: g.area, frase: null, itens: g.itens}))];
   // O desenho de cada bloco, lido da página de hoje (o mesmo HTML da caixa dela, pré-desenhado quando é o caso), e a chave
@@ -38,8 +40,8 @@ export default function blocks(site) {
     lado: pecasQueFlutuam(site, [
       h("span", {className: "g1-numerao"}, h("b", null, todos.length), "blocks"),
       h("span", {className: "g1-capsula"}, `${porArea.length} areas`),
-      amostra ? h(A.Card, {className: "blk-mini"}, h("span", {className: "blk-mini-peca", inert: true,
-        dangerouslySetInnerHTML: {__html: semIds(desenhos.get(amostra.slug).html)}})) : null].filter(Boolean)),
+      amostra ? h(A.Card, {className: "blk-mini blk-mini-esboco"}, h("span", {className: "blk-esboco", "aria-hidden": "true",
+        dangerouslySetInnerHTML: {__html: ESBOCOS[amostra.slug] ?? ""}})) : null].filter(Boolean)),
   });
   const cartao = (b, idx) => {
     const n = dois(++numero);
@@ -49,15 +51,19 @@ export default function blocks(site) {
     const proximo = todos[(idx + 1) % todos.length];
     return [
       h(A.Card, {key: b.slug, variant: "interactive", lift: true, render: h("div"), className: "blk-cartao", "data-g1-item": "", "data-blk": b.slug,
+        "data-area": slug(b.category),
         "data-busca": `${b.category} ${b.name} ${b.description} ${usa.join(" ")}`.toLowerCase()},
-        h("span", {className: "blk-miniatura", "aria-hidden": "true"},
-          h("span", {className: "blk-miniatura-peca", inert: true, dangerouslySetInnerHTML: {__html: semIds(d.html)}})),
+        // O esboço do desenho (o bloco encolhido saía com letra de 4); sem esboço, o bloco parado de antes.
+        ESBOCOS[b.slug]
+          ? h("span", {className: "blk-miniatura blk-esboco", "aria-hidden": "true", dangerouslySetInnerHTML: {__html: ESBOCOS[b.slug]}})
+          : h("span", {className: "blk-miniatura", "aria-hidden": "true"},
+            h("span", {className: "blk-miniatura-peca", inert: true, dangerouslySetInnerHTML: {__html: semIds(d.html)}})),
         h("p", {className: "blk-olho"}, `${b.category} · ${n}`),
         h("h3", null, b.name),
         h("p", {className: "blk-texto"}, b.description),
         h("div", {className: "blk-botoes"},
-          h(A.Button, {variant: "secondary", size: "sm", type: "button", "aria-expanded": "false", "aria-controls": painelId, "data-blk-abrir": ""}, "Preview"),
-          h(A.Button, {variant: "ghost", size: "sm", href: `./${b.slug}.html`, trailingIcon: "arrow-up-right", "aria-label": `${b.name} — block page`}, "Block page"))),
+          h(A.Button, {variant: "tertiary", size: "md", type: "button", "aria-expanded": "false", "aria-controls": painelId, "data-blk-abrir": ""}, "Preview"),
+          h(A.Button, {variant: "ghost", size: "md", href: `./${b.slug}.html`, trailingIcon: "arrow-up-right", "aria-label": `${b.name} — block page`}, "Block page"))),
       // O BLOCO ABERTO NO LUGAR: a linha inteira, o palco à esquerda (7/12) e as informações à direita (5/12).
       h("section", {key: `${b.slug}-aberto`, className: "blk-aberto", id: painelId, hidden: true, "data-blk-painel": b.slug, "aria-label": `${b.name} preview`},
         h("div", {className: "blk-palco"},
@@ -75,7 +81,7 @@ export default function blocks(site) {
             h(A.CodeBlock, {language: "tsx", copyable: true}, `import {${usa.filter(u => fichas.some(f => f.name === u)).join(", ")}} from "@aurea-uds/react";`)),
           h("div", {className: "blk-botoes"},
             h(A.Button, {variant: "primary", href: `./${b.slug}.html`, trailingIcon: "arrow-right"}, "Open the block page"),
-            h(A.Button, {variant: "secondary", type: "button", "data-blk-proximo": proximo.slug}, "Next block"))))];
+            h(A.Button, {variant: "tertiary", type: "button", "data-blk-proximo": proximo.slug}, "Next block"))))];
   };
   const node = h("div", {className: "g1-b g1-largo blk-b", "data-g1-lista": "", "data-g1-frase": "No block mentions"},
     cabeca,
@@ -85,15 +91,15 @@ export default function blocks(site) {
       h("div", {className: "g1-grupo-topo"},
         h("span", {className: "g1-grupo-num", "aria-hidden": "true"}, dois(n + 1)),
         h("h2", {id: `blk-${slug(g.titulo)}-h`}, g.titulo),
-        h("span", {className: "g1-grupo-conta"}, `${g.itens.length} block${g.itens.length > 1 ? "s" : ""}`)),
+        h("span", {className: "g1-grupo-conta", "data-blk-conta": g.itens.length}, `${g.itens.length} of ${g.itens.length}`)),
       g.frase ? h("p", {className: "blk-frase"}, g.frase) : null,
       h("div", {className: "blk-cartoes"}, ...g.itens.flatMap(b => cartao(b, todos.indexOf(b))),
         g.atalho ? h(A.Card, {key: "atalho", className: "blk-atalho"},
           h("h3", null, "Need something smaller?"),
           h("p", null, `A pattern is one component assembled one way. ${site.patterns.length} of them, one click from here.`),
-          h(A.Button, {variant: "secondary", size: "sm", href: "./patterns.html", trailingIcon: "arrow-right"}, "Browse patterns"),
+          h(A.Button, {variant: "tertiary", size: "md", href: "./patterns.html", trailingIcon: "arrow-right"}, "Browse patterns"),
           h("p", null, "Need a whole screen? Recipes put blocks together."),
-          h(A.Button, {variant: "ghost", size: "sm", href: "./recipes.html", trailingIcon: "arrow-right"}, "Browse recipes")) : null))),
+          h(A.Button, {variant: "ghost", size: "md", href: "./recipes.html", trailingIcon: "arrow-right"}, "Browse recipes")) : null))),
     vazioDaBusca(site, {chave: "g1", titulo: "No block found", texto: "Try an area, a component name or a shorter word."}));
   return {node, toc: []};
 }

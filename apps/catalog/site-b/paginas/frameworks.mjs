@@ -96,7 +96,7 @@ export default function frameworks(site, doc) {
     passo("vite-1", "1", sem(v1.rotulo), ...blocos(v1.blocos, [], "v1")),
     passo("vite-2", "2", sem(v2.rotulo), ...blocos(v2.blocos.filter(b => !notas.includes(b)), ["src/main.tsx", "index.html"], "v2")),
     g.secao("vite-notes", "Good to know", "Two notes",
-      ...notas.map((b, n) => h(A.Alert, {key: n, variant: "info", className: "gs-aviso"}, ...site.pedacos(b.texto, `vn${n}`)))));
+      ...notas.map((b, n) => h(A.Alert, {appearance: "soft", key: n, variant: "info", className: "gs-aviso"}, ...site.pedacos(b.texto, `vn${n}`)))));
 
   // PLAIN HTML: p, código · p, código, p · p, código.
   const hb = html.blocos;

@@ -35,7 +35,7 @@
 .llms-conversao-seta { color:var(--muted-foreground); }
 
 /* "How does your tool read?": a pergunta num cartão de 280 (--space-12 * 6 - --space-2) e a resposta no palco. */
-.llms-qual { display:grid; grid-template-columns:calc(var(--space-12) * 6 - var(--space-2)) minmax(0, 1fr); gap:calc(var(--space-3) + var(--space-05));
+.llms-qual { display:grid; grid-template-columns:minmax(0, calc(var(--space-12) * 6 - var(--space-2))) minmax(0, 1fr); gap:calc(var(--space-3) + var(--space-05));
   align-items:stretch; margin-block-start:calc(var(--space-4) + var(--space-05)); }
 .llms-qual-pergunta { display:flex; flex-direction:column; gap:calc(var(--space-2) + var(--space-05)); padding:calc(var(--space-4) + var(--space-05)); }
 .llms-qual-pergunta > b { font-family:var(--font-heading); font-size:var(--text-base); font-weight:var(--weight-bold); }
@@ -51,3 +51,9 @@
   .llms-qual, .llms-conversao { grid-template-columns:minmax(0, 1fr); }
   .llms-conversao-seta { rotate:90deg; justify-self:center; }
 }
+
+/* Texto a 200%: o endereço e o "Copy" vão para linhas separadas quando não cabem (passavam 161 da página). */
+.llms-qual-resposta { min-inline-size:0; }
+.llms-endereco { flex-wrap:wrap; }
+/* Com o texto a 200% (o texto fica com ~150): a coluna das escolhas é "até 280", e o botão do endereço quebra a linha. */
+.llms-endereco > .btn { min-inline-size:0; max-inline-size:100%; block-size:auto; white-space:normal; }

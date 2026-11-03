@@ -2994,6 +2994,9 @@ img,svg { display:block; }
 .radio-group-cards > .radio { margin:0; align-items:flex-start; gap:var(--space-3); min-inline-size:0; padding:var(--card-pad); border-radius:var(--radius-card); background:var(--card); cursor:pointer;
   transition:background-color var(--duration-fast),box-shadow var(--duration-fast),translate var(--duration-fast); }
 .radio-group-cards > .radio:has(input:checked) { background:var(--segment); box-shadow:var(--shadow-lg); translate:0 calc(-1 * var(--space-1)); }
+/* No escuro, o texto de apoio do cartão marcado lia 4,07:1 no --segment (o axe da varredura, 02/11/2026): ali dentro ele é o
+   texto a 80% sobre o --segment, como a letra apagada de uma peça erguida. */
+[data-theme="dark"] .radio-group-cards > .radio:has(input:checked):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { --muted-foreground:color-mix(in oklab, var(--foreground) 80%, var(--segment)); }
 .radio-group-cards > .radio:has(input:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 .radio-group-cards > .radio input:focus-visible + .control-mark { outline:none; }
 .radio-group-indicator-none > .radio-group-cards > .radio > .control-mark { display:none; }
@@ -3511,6 +3514,14 @@ img,svg { display:block; }
 .card-accent-brand { --card-accent:var(--primary); } .card-accent-success { --card-accent:var(--success); }
 .card-accent-info { --card-accent:var(--info); } .card-accent-warning { --card-accent:var(--warning); }
 .card-accent-danger { --card-accent:var(--destructive); }
+/* `fill="brand"` (o site B, 02/11/2026 — o Victor escolheu a "B" na imagem): o cartão pintado no amarelo da marca, com a
+   tinta por cima (`--primary-foreground`, 9,28:1 na Aurea Gold) — o título, o texto de apoio e o que lê a cor do cartão
+   passam a ser a tinta e o amarelo. O traço do `accent` some (amarelo sobre amarelo); no clicável, o amarelo fica ao
+   passar o mouse. NA EMBER, o cartão comum (o Victor, 02/11/2026: "Ember no cartão comum" — no claro, o branco no laranja
+   media 3,08:1). Quem cobra: `tests/unit/site-b-pecas-0-54.test.tsx`. */
+.card.card-fill-brand:where(:not([data-brand="ember"],[data-brand="ember"] *)) { --card:var(--primary); --surface-2:var(--primary-hover); --card-foreground:var(--primary-foreground);
+  --foreground:var(--primary-foreground); --muted-foreground:var(--primary-foreground); background:var(--primary); color:var(--primary-foreground); }
+.card.card-fill-brand.card-accent:where(:not([data-brand="ember"],[data-brand="ember"] *)) { box-shadow:none; }
 /* 0.32.0: a descrição 14/20 colada no título. O `.card-header` e o `.card-title` desta linha (o cabeçalho em LINHA, com
    16 de vão e 16 embaixo, da primeira versão pública) saíram em 15/10/2026: nenhuma peça os usava, e vindo DEPOIS das
    partes do cartão eles separavam o título da descrição do `Card.Header` em 16 — na referência, colados. */
@@ -3544,6 +3555,16 @@ img,svg { display:block; }
 /* A cor do glifo é a da variante, senão o ícone vira enfeite cinza e não repete o sinal.
    Só o ícone DIRETO do alerta: um ícone dentro do corpo (num botão, num link) é do corpo. */
 .alert>.icon { --step-icon:var(--icon-sm); margin:var(--space-1); color:var(--alert-tone); }
+/* `appearance="soft"` (o site B, 02/11/2026 — o Victor escolheu a "B" na imagem): o fundo é a cor do estado a 14%, sem a
+   sombra do cartão; o corpo vai na cor do texto, a 16 com a linha de 1,5 (a do desenho, 1,6, no degrau mais perto — ADR-0088), e o título em negrito na cor do estado. O
+   padrão continua o de cartão. O título é o tom com 25% da cor do texto: puro, o azul (info) no claro media 4,07:1 no
+   fundo do tom (o axe, 02/11/2026). NA EMBER, o cartão de sempre (o Victor, 02/11/2026: "Ember no cartão" — no claro, o título
+   de atenção dela no fundo do tom media 4,23:1).
+   Quem cobra: `tests/unit/site-b-pecas-0-54.test.tsx`. */
+.alert.alert-soft:where(:not([data-brand="ember"],[data-brand="ember"] *)) { background:color-mix(in oklab, var(--alert-tone) 14%, transparent); box-shadow:none; color:var(--foreground);
+  font-size:var(--text-base); line-height:var(--leading-normal); }
+.alert.alert-soft:where(:not([data-brand="ember"],[data-brand="ember"] *)) strong { color:color-mix(in oklab, var(--alert-tone) 75%, var(--foreground)); font-size:var(--text-base); font-weight:var(--weight-bold); line-height:var(--leading-normal); }
+.alert.alert-soft:where(:not([data-brand="ember"],[data-brand="ember"] *)) p { color:var(--foreground); font-size:var(--text-base); }
 .banner strong { font-size:var(--text-sm); } .banner p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); }
 /* GAR-19 (lote U, 19/10/2026): o aviso de cookies, Banner variant="consent". Uma coluna: o título (h2), o texto e os
    três botões de MESMO peso numa linha que quebra — rejeitar tão fácil de ver quanto aceitar (o guia da ANPD) —; depois
@@ -3784,6 +3805,18 @@ img,svg { display:block; }
 @media (hover:hover) { .table.table-rows tbody tr:hover > :is(td,th) { background:var(--fill-1); } }
 .table.table-rows tbody tr[data-selected] > :is(td,th) { background:color-mix(in oklab,var(--primary) 14%,transparent); }
 @media (hover:hover) { .table.table-rows tbody tr[data-selected]:hover > :is(td,th) { background:color-mix(in oklab,var(--primary) 18%,transparent); } }
+/* `striped` (o site B, 02/11/2026 — o Victor escolheu a "B" na imagem): as linhas ímpares do corpo com um fundo, a 1ª, a 3ª,
+   a 5ª…, como o desenho. Na tabela de sempre, o cartão com o texto a 6% (opaco: a célula pinta a cor do cartão); nas
+   linhas em cápsula (`rows`), o `--fill-1` e o canto de 16 (`--radius-lg`), e o mouse escurece para o `--fill-2`. É fundo,
+   não linha (ADR-0072). Quem cobra: `tests/unit/site-b-pecas-0-54.test.tsx`. */
+.table.table-striped:not(.table-rows) tbody tr:nth-child(odd) > :is(td,th) { background:color-mix(in oklab, var(--foreground) 6%, var(--card)); }
+.table.table-striped.table-rows tbody tr:nth-child(odd) > :is(td,th) { background:var(--fill-1); }
+.table.table-striped.table-rows tbody tr > :first-child { border-start-start-radius:var(--radius-lg); border-end-start-radius:var(--radius-lg); }
+.table.table-striped.table-rows tbody tr > :last-child { border-start-end-radius:var(--radius-lg); border-end-end-radius:var(--radius-lg); }
+@media (hover:hover) {
+  .table.table-striped:not(.table-rows) tbody tr:hover > :is(td,th) { background:color-mix(in oklab,var(--card) 40%,var(--surface-2)); }
+  .table.table-striped.table-rows tbody tr:hover > :is(td,th) { background:var(--fill-2); }
+}
 /* GAR-12 e GAR-13 (08/10/2026): a tabela de COMPARAÇÃO — as chaves da `Table` e a pele do HTML de
    comparação. A referência principal só tem o cabeçalho preso, à mão, numa caixa de altura fixa; o
    resto veio do mercado, por escolha do Victor (o detalhe está no comentário da `Table`).
@@ -3999,7 +4032,7 @@ button.tag-main { cursor:pointer; }
 .kpi-bars-wrap { position:relative; display:grid; gap:var(--space-1); margin:var(--space-3) 0 0; padding:var(--space-6) 0 0; border:0; min-inline-size:0; }
 .kpi-bars { display:grid; grid-template-columns:repeat(var(--kpi-bars,6),minmax(0,1fr)); gap:var(--space-2); align-items:end; block-size:calc(2 * var(--space-16)); }
 .kpi-bar { display:flex; flex-direction:column; justify-content:flex-end; align-items:center; block-size:100%; color:inherit; cursor:pointer; border-radius:var(--radius-xs); }
-.kpi-bar > input { position:absolute; opacity:0; pointer-events:none; }
+.kpi-bar > .kpi-bar-input { position:absolute; opacity:0; pointer-events:none; }
 .kpi-bar:has(> input:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 .kpi-bar-fill { inline-size:100%; max-inline-size:var(--space-8); block-size:var(--kpi-bar-h,0%); border-radius:var(--radius-full) var(--radius-full) var(--radius-xs) var(--radius-xs);
   background:var(--fill-3); transition:background-color var(--duration-base); }
@@ -4205,6 +4238,27 @@ button.tag-main { cursor:pointer; }
 .demo-code { display:flex; padding:0; overflow:hidden; }
 .demo-code .code-block-wrap { flex:1; }
 .demo-code .code-block { padding:var(--space-6); border:0; border-radius:0; }
+/* A CAIXA EMPILHADA (`CodeBlock previewLayout="stacked"`, o site B, 02/11/2026 — o Victor: "preciso que seja fiel a
+   referencia", e "Com degradê"; ADR-0089): a peça em cima e o código embaixo, sem a chave Prévia | Código, nas medidas da
+   referência — a peça em 350 (3 x 96 + 48 + 12 + 2) com recheio de 40, no fundo da página; o código no cartão, 16 em cima,
+   12 dos lados e 14 embaixo. Mais de 5 linhas: recolhido em 150 (96 + 48 + 4 + 2), sumindo num DEGRADÊ (a 3ª exceção à
+   regra sem gradiente, só nesta regra — o check 4 cobra), com o "Expand code" (32, letra 12) a 8 do fundo; aberto, o código
+   inteiro e o "Collapse code" embaixo dele. Sem linha: a peça e o código se separam pelo fundo. */
+.demo.demo-stacked { display:flex; flex-direction:column; min-block-size:0; padding:0; overflow:hidden; }
+.demo.demo-stacked > .demo-panel { flex:none; }
+.demo.demo-stacked > .demo-panel[data-panel="preview"] { min-block-size:calc(3 * var(--space-24) + var(--space-12) + var(--space-3) + var(--space-05));
+  padding:var(--space-10); border-radius:var(--radius-card) var(--radius-card) 0 0; background:var(--background); }
+.demo.demo-stacked > .demo-code { position:relative; display:block; overflow:visible; background:var(--card); }
+.demo.demo-stacked > .demo-code .code-block-wrap { position:relative; }
+.demo.demo-stacked > .demo-code .code-block { padding:var(--space-4) var(--space-3) calc(var(--space-3) + var(--space-05)); background:transparent; }
+.demo.demo-stacked > .demo-code .copy-code { top:var(--space-3); inset-inline-end:var(--space-2); z-index:2; }
+.demo.demo-stacked[data-collapsed] > .demo-code .code-block-wrap { max-block-size:calc(var(--space-24) + var(--space-12) + var(--space-1) + var(--space-05)); overflow:hidden;
+  -webkit-mask-image:linear-gradient(to bottom, var(--foreground) 40%, transparent); mask-image:linear-gradient(to bottom, var(--foreground) 40%, transparent); }
+.demo.demo-stacked[data-expanded] > .demo-code .code-block { padding-block-end:calc(var(--space-12) + var(--space-1)); }
+/* No alto contraste do sistema o degradê sai: o código recolhido aparece inteiro até o corte, sem esmaecer. */
+@media (forced-colors:active) { .demo.demo-stacked[data-collapsed] > .demo-code .code-block-wrap { -webkit-mask-image:none; mask-image:none; } }
+.demo-stacked-toggle { --step-fs:var(--text-xs); position:absolute; inset-block-end:var(--space-2); inset-inline-start:50%; translate:-50% 0; z-index:3;
+  font-weight:var(--weight-medium); box-shadow:var(--shadow-sm); }
 .copy-code { position:absolute; top:var(--space-3); inset-inline-end:var(--space-3); z-index:1; }
 /* O fim da linha fica fora do botão de copiar (achado no 3-A, 23/10/2026): no Quick Start, o `pnpm add` de uma linha
    terminava a 915 e o botão começava a 901 — o fim do comando ficava embaixo dele. O código reserva no fim o lugar do
@@ -5129,7 +5183,14 @@ button.tag-main { cursor:pointer; }
 .combobox-multi:has([aria-invalid="true"]),
 .combobox-multi:has(:user-invalid),
 .dropzone:has([aria-invalid="true"]),
-.dropzone:has(:user-invalid) { border-color:transparent; background-color:var(--danger-bg); --focus-strong:var(--danger-400); }
+.dropzone:has(:user-invalid),
+.checkbox-pill[data-tone] input[aria-invalid="true"] + .control-mark,
+.checkbox-pill[data-tone] input:user-invalid + .control-mark,
+.radio-group-cards > .radio:has(input[aria-invalid="true"]),
+.radio-group-cards > .radio:has(input:user-invalid) { border-color:transparent; background-color:var(--danger-bg); --focus-strong:var(--danger-400); }
+/* ↑ A 0.54.0 (02/11/2026, a trava `invalido.spec.ts`): a cápsula com tom (`Checkbox variant="pill" tone`) tem a regra da
+   marcada com a mesma força desta — aqui, depois, o inválido vence; e o cartão de escolha (`RadioGroup variant="card"`)
+   pinta o CARTÃO inteiro, porque com `indicatorPlacement="none"` a marca que pintava está escondida. */
 /* ↑ Sem linha (16/10/2026, o Victor: "quero tudo sem borda sem exceções"): o inválido era a borda vermelha; sem
    borda, ele é o FUNDO de perigo (`--danger-bg`), o mesmo dos avisos. A frase de erro do `Field` continua embaixo.
    `--focus-strong` (ADR-0059, 08/10/2026): o anel de foco agora COLA na borda e a pinta — com o
@@ -6047,6 +6108,10 @@ button.graph-node-body { cursor:pointer; }
 :is([data-segment-style="brand"] .segmented:not([data-segment-style]),.segmented[data-segment-style="brand"]) :is(button,a).active { --seg-bg:var(--primary); --seg-fg:var(--primary-foreground); --seg-shadow:none; }
 :is([data-segment-style="ring"] .segmented:not([data-segment-style]),.segmented[data-segment-style="ring"]) :is(button,a).active { --seg-bg:var(--segment); --seg-fg:var(--foreground); --seg-shadow:inset 0 0 0 calc(1.5 * var(--border-width)) var(--primary), var(--shadow-sm); }
 :is([data-segment-style="dot"] .segmented:not([data-segment-style]),.segmented[data-segment-style="dot"]) :is(button,a).active { --seg-bg:var(--segment); --seg-fg:var(--foreground); --seg-shadow:var(--shadow-sm); }
+/* `emphasis` (o site B, 02/11/2026 — o Victor escolheu a "C" na imagem): a cápsula erguida do `neutral` com a letra do
+   DESTAQUE, a mesma do escolhido de sempre (`--primary-emphasis`: o amarelo no escuro, a cor do texto no claro), e sem o
+   fio de baixo. */
+:is([data-segment-style="emphasis"] .segmented:not([data-segment-style]),.segmented[data-segment-style="emphasis"]) :is(button,a).active { --seg-bg:var(--segment); --seg-fg:var(--primary-emphasis); --seg-shadow:var(--shadow-sm); }
 :is([data-segment-style]:not([data-segment-style="current"]) .segmented:not([data-segment-style]),.segmented[data-segment-style]:not([data-segment-style="current"])) :is(button,a).active {
   --btn-bg:var(--seg-bg); --btn-fg:var(--seg-fg); background:var(--seg-bg); color:var(--seg-fg); box-shadow:var(--seg-shadow); }
 :is([data-segment-style]:not([data-segment-style="current"]) .segmented:not([data-segment-style]),.segmented[data-segment-style]:not([data-segment-style="current"])) :is(button,a).active::after { content:none; }

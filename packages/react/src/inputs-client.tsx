@@ -1123,8 +1123,9 @@ return <BaseOTPField.Root id={id} length={length} value={value} defaultValue={de
 // `size="lg"` (44) e `size="xl"` (48) (0.52.1, variação nova aprovada pela imagem em 01/11/2026): as duas chaves do site B.
 // `selectedStyle` (ADR-0084, 27/10/2026): a cor do segmento aceso, em seis estilos aprovados pelo Victor em 26/10/2026 —
 // `current` (o de sempre, o padrão), `neutral`, `contrast`, `brand`, `ring` e `dot`. Vai como `data-segment-style` na
-// cápsula; o mesmo atributo num contêiner (ou no `<html>`) vale para todos os de dentro.
-export type SegmentedControlSelectedStyle="current"|"neutral"|"contrast"|"brand"|"ring"|"dot";
+// cápsula; o mesmo atributo num contêiner (ou no `<html>`) vale para todos os de dentro. O sétimo, `emphasis` (o site B,
+// 02/11/2026, a "C" na imagem): a cápsula erguida com a letra do destaque e sem o fio.
+export type SegmentedControlSelectedStyle="current"|"neutral"|"contrast"|"brand"|"ring"|"dot"|"emphasis";
 // O SITE B (aprovado pela bancada em 01/11/2026, os itens 3 e 8): `items[].icon` (o escolhido troca sozinho para a forma
 // cheia), `size="2xl"` (segmento de 48), `wrap` (quebra linha, o trilho com canto 22) e `orientation="vertical"` (em pé).
 export function SegmentedControl({items,value,onChange,label,fullWidth,size="md",selectedStyle,wrap,orientation="horizontal"}:{items:Array<{value:string;label:ReactNode;href?:string;icon?:IconName}>;value:string;onChange?:(v:string)=>void;label?:string;fullWidth?:boolean;size?:"sm"|"md"|"lg"|"xl"|"2xl";selectedStyle?:SegmentedControlSelectedStyle;wrap?:boolean;orientation?:"horizontal"|"vertical"}){

@@ -54,7 +54,7 @@ export default function agentSkills(site, doc) {
         return h("div", {key: n, className: "skills-pedido"},
           h("span", {className: "skills-pedido-icone"}, h(A.Icon, {name: "chat-circle"})),
           h("span", {className: "skills-pedido-texto"}, texto),
-          h(A.Button, {variant: "secondary", size: "md", type: "button", "data-copiar": texto, "aria-label": `Copy the request: ${texto}`}, "Copy"));
+          h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-copiar": texto, "aria-label": `Copy the request: ${texto}`}, "Copy"));
       }))),
     secao("what-s-included", "Inside the file", "What's included",
       h("div", {className: "g5-grade-2"}, ...dentro.itens.map((it, n) => {

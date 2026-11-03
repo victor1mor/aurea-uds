@@ -43,9 +43,13 @@ export default function composition(site, doc) {
   const codigoDoCartao = pt.blocos.find(b => b.tipo === "codigo");
   const montador = h("div", {key: "montador", className: "composition-montador"},
     h("div", {className: "composition-controles"},
-      h("p", {className: "docb-rotulo", id: "composition-partes"}, "Card parts"),
-      h(A.ToggleGroup, {multiple: true, detached: true, size: "lg", label: "Card parts", defaultValue: PARTES.slice(1).map(([v]) => v)},
-        ...PARTES.map(([v, nome]) => h(A.Toggle, {key: v, value: v}, nome))),
+      // Como o desenho (02/11/2026): cada parte é uma caixa de marcar em cápsula (o `Checkbox variant="pill"`, o item 4),
+      // num cartão; o código vem num cartão próprio, embaixo, e o cartão de verdade fica ao lado dos dois.
+      h("div", {className: "composition-partes-caixa"},
+        h("p", {className: "docb-rotulo", id: "composition-partes"}, "Card parts"),
+        h("div", {className: "composition-partes", role: "group", "aria-labelledby": "composition-partes"},
+          ...PARTES.map(([v, nome], i) => h(A.Checkbox, {key: v, variant: "pill", size: "md", label: nome, value: v, defaultChecked: i > 0,
+            "data-composition-parte": v})))),
       g.codigo(codigoDoCartao, "composition-codigo")),
     h("div", {className: "composition-palco", "aria-label": "Preview of the card", role: "group"},
       h(A.Card, {className: "composition-cartao"},
@@ -53,7 +57,7 @@ export default function composition(site, doc) {
         h(A.Card.Media, {hidden: true}, h("div", {className: "composition-midia"}, "Card.Media")),
         h(A.Card.Header, null, h(A.Card.Title, null, "Weekly report"), h(A.Card.Description, null, "Sent every Monday at 9:00.")),
         h(A.Card.Content, null, "12 people receive it."),
-        h(A.Card.Footer, null, h(A.Button, {variant: "primary", size: "sm"}, "Edit"), h(A.Button, {size: "sm"}, "Pause")),
+        h(A.Card.Footer, null, h(A.Button, {variant: "primary", size: "md"}, "Edit"), h(A.Button, {size: "md"}, "Pause")),
         h("p", {className: "composition-vazio", hidden: true}, "An empty card. Turn a part on."))));
 
   // SLOTS: o desenho do `AppShell`, cada área um `Toggle area` com fundo (o D-5); a escolhida explica-se no painel ao lado.

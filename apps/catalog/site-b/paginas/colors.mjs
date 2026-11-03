@@ -36,7 +36,7 @@ export default function colors(site, doc) {
   // grande ao lado. A amostra é o token de hoje; o valor escrito é o do .md.
   const padrao = s("Default theme").blocos.find(b => b.tipo === "tabela");
   const papeis = padrao.linhas.map(l => ({nome: texto(l[0]), claro: texto(l[1]), escuro: texto(l[2])}));
-  const escolhido = papeis.find(p => p.nome === "--primary") || papeis[0];
+  const escolhido = papeis[0]; // o primeiro papel da lista, como no desenho (o `--background`)
   const amostra = (tema, nome, valor) => h("span", {className: "co-amostra"},
     h("i", {"data-theme": tema, style: {background: `var(${nome})`}}), valor);
   const explorador = h("div", {className: "co-explorar"},
@@ -93,7 +93,7 @@ export default function colors(site, doc) {
 
   const node = g.pagina(doc, abertura,
     ...g.corpo(sec.antes.slice(0, 2), {chave: "a"}),
-    h(A.Alert, {variant: "info", className: "gs-aviso"}, ...site.pedacos(sec.antes[2].texto, "av")),
+    h(A.Alert, {appearance: "soft", variant: "info", className: "gs-aviso"}, ...site.pedacos(sec.antes[2].texto, "av")),
     ...g.corpo(sec.antes.slice(3), {chave: "a2", arquivos: ["styles.css"]}),
     g.secao(s("Default theme").id, "Side by side", "Default theme",
       g.p([{t: "The main roles, side by side. Choose a role to see it large in both themes."}], "d0"),
@@ -111,7 +111,7 @@ export default function colors(site, doc) {
     g.secao(s("Status colors").id, "Never swapped", "Status colors",
       g.p(ps("Status colors")[0].texto, "s0"), estados,
       h("ul", {className: "gs-lista gs-ul"}, ...listaEstados.itens.slice(0, -1).map((it, n) => h("li", {key: n}, h("span", null, ...site.pedacos(it, `se${n}`))))),
-      h(A.Alert, {variant: "warning", className: "gs-aviso"}, ...site.pedacos(ultimoEstado, "sea")),
+      h(A.Alert, {appearance: "soft", variant: "warning", className: "gs-aviso"}, ...site.pedacos(ultimoEstado, "sea")),
       tabela("Status colors")),
     g.secao("text-and-surfaces", "Text, page and surfaces", "Text and surfaces",
       h3("Foreground"), tabela("Foreground"),

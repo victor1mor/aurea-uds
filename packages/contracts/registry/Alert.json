@@ -103,6 +103,12 @@
       "description": "The alert's button (Upgrade, Undo), as the reference: after the text and before the X, in the middle; on a phone (below 640) it goes under the text, in the same column."
     },
     {
+      "name": "appearance",
+      "type": "card | soft",
+      "default": "card",
+      "description": "The skin. card is the card surface with its shadow, the state colour on the icon and the title. soft is the state colour at 14% behind the whole alert, no shadow, with the body in the text colour at 16 and the title in bold. Under the Aurea Ember brand, soft keeps the card skin."
+    },
+    {
       "name": "onDismiss",
       "type": "() => void",
       "default": "—",
@@ -110,6 +116,10 @@
     }
   ],
   "axes": {
+    "appearance": [
+      "card",
+      "soft"
+    ],
     "state": [
       "degraded",
       "offline",

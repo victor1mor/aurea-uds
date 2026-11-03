@@ -48,10 +48,10 @@ export default function roadmap(site, doc) {
       h("span", {className: "rm-etapa-n", "aria-hidden": "true", "data-rm-numero": ""}, "01"),
       h("div", {className: "rm-etapa-texto", "aria-live": "polite"},
         ...etapas.map((e, n) => h("div", {key: n, "data-rm-texto": n, hidden: n !== 0 ? true : undefined},
-          h("b", null, e.titulo), h("p", null, ...site.pedacos(e.resto, `e${n}`)))),
+          h("b", null, `${e.titulo}.`), h("p", null, ...site.pedacos(e.resto, `e${n}`)))),
         h("div", {className: "rm-etapa-nav"},
-          h(A.Button, {variant: "secondary", size: "sm", type: "button", "data-rm-ir": "-1"}, "Previous"),
-          h(A.Button, {variant: "secondary", size: "sm", type: "button", "data-rm-ir": "1"}, "Next")))));
+          h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-rm-ir": "-1"}, "Previous"),
+          h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-rm-ir": "1"}, "Next")))));
 
   const nao = g.secao(s("Decided not to build").id, "On purpose", "Decided not to build",
     h("div", {className: "intro-grade-3 rm-naos"}, ...primeiro("Decided not to build", "ul").itens.map(partes).map((e, n) => h(A.Card, {key: n, className: "rm-nao"},
@@ -64,7 +64,7 @@ export default function roadmap(site, doc) {
   const semLink = pedido.filter(x => x !== link).map((x, n) => n === k && x.t ? {t: x.t.replace(/^\.\s*/, "")} : x);
   const pedir = g.secao(s("Ask for something").id, "Your turn", "Ask for something",
     h(A.Card, {variant: "inset", className: "rm-pedido"}, h("p", {className: "intro-p gs-p"}, ...site.pedacos(semLink, "ped")),
-      h(A.Button, {variant: "primary", href: link.href, trailingIcon: "arrow-up-right"}, link.link)));
+      h(A.Button, {size: "lg", variant: "primary", href: link.href, trailingIcon: "arrow-up-right"}, link.link)));
 
   const node = g.pagina(doc, abertura,
     ...g.corpo(sec.antes, {chave: "a"}),

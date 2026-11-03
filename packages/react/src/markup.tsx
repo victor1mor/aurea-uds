@@ -90,14 +90,15 @@ export type TopbarVariant=HeaderVariant;
 export type CardAccent="brand"|"success"|"info"|"warning"|"danger";
 // `lift` (o site B, aprovado pela bancada em 01/11/2026): no cartão clicável, ao passar o mouse ele SOBE com sombra em vez de
 // trocar o fundo. Só vale com `variant="interactive"`; nos outros, não faz nada.
-type CardBase=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{padding?:"normal"|"none";orientation?:"vertical"|"horizontal";accent?:CardAccent;lift?:boolean};
+// `fill="brand"` (o site B, 02/11/2026, a "B" na imagem): o cartão pintado no amarelo da marca, com a tinta por cima.
+type CardBase=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{padding?:"normal"|"none";orientation?:"vertical"|"horizontal";accent?:CardAccent;lift?:boolean;fill?:"brand"};
 // Os literais são escritos NOS DOIS RAMOS, sem `Exclude<Alias,…>`: quem lê a assinatura pública
 // vê os valores em vez de seguir dois aliases, e o `api-surface` os enxerga sem ginástica.
 export type CardProps=CardBase&(
   {variant?:"base"|"raised"|"inset"|"outline"|"selected"|"danger"|"contrast";render?:ReactElement}|
   {variant:"interactive";render:ReactElement});
-export function Card({variant="base",padding="normal",orientation="vertical",accent,lift,className,render,...props}:CardProps){
-return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${variant}`,lift&&variant==="interactive"&&"card-lift",accent&&`card-accent card-accent-${accent}`,padding==="none"&&"card-flush",orientation==="horizontal"&&"card-horizontal",className),...(variant==="contrast"?{"data-theme":"dark"}:null),...props})}
+export function Card({variant="base",padding="normal",orientation="vertical",accent,lift,fill,className,render,...props}:CardProps){
+return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${variant}`,lift&&variant==="interactive"&&"card-lift",accent&&`card-accent card-accent-${accent}`,fill==="brand"&&"card-fill-brand",padding==="none"&&"card-flush",orientation==="horizontal"&&"card-horizontal",className),...(variant==="contrast"?{"data-theme":"dark"}:null),...props})}
 /** A mídia do cartão — a primeira das partes da especificação do `Card` (A-14). No vertical,
  *  primeira filha, ela SANGRA até a borda de cima e dos lados; no horizontal, fica à esquerda com a
  *  largura de miniatura, dentro do respiro, com o raio que sai da conta da casa (ADR-0033: raio do
@@ -406,7 +407,7 @@ export function KPI({label,value,trend,direction,tone,directionLabel,variant="ca
   const barras=bars&&bars.length>0&&<fieldset className="kpi-bars-wrap">
     {typeof label==="string"&&<legend className="sr-only">{label}</legend>}
     <div className="kpi-bars" style={{"--kpi-bars":bars.length} as React.CSSProperties}>{bars.map((b,i)=>
-      <label key={i} className="kpi-bar"><input type="radio" name={nomeDoGrupo} value={String(i)} defaultChecked={i===escolhida} aria-label={leituraDe(b)}/>
+      <label key={i} className="kpi-bar"><input type="radio" className="kpi-bar-input" name={nomeDoGrupo} value={String(i)} defaultChecked={i===escolhida} aria-label={leituraDe(b)}/>
         <span className="kpi-bar-fill" style={{"--kpi-bar-h":`${Math.round(b.amount/maior*100)}%`} as React.CSSProperties}/>
         <span className="kpi-bar-reading" aria-hidden="true">{leituraDe(b)}</span></label>)}</div>
     <div className="kpi-bars-x" aria-hidden="true" style={{"--kpi-bars":bars.length} as React.CSSProperties}>{bars.map((b,i)=><span key={i}>{b.label}</span>)}</div>

@@ -15,11 +15,12 @@ const CASOS = [
   // A área Getting Started com a árvore da referência (lote U, SITE-03 e SITE-06, 18/10/2026): Overview, Handbook e UI for Agents.
   {pagina: "getting-started.html", area: "Getting Started", grupos: ["Overview", "Handbook", "UI for Agents"], itens: ["Introduction", "Quick Start", "Colors", "Accessibility"]},
   {pagina: "docs-theming.html", area: "Getting Started", grupos: ["Overview", "Handbook", "UI for Agents"], itens: ["Introduction", "Theming"]},
-  {pagina: "tokens.html", area: "Tokens", grupos: ["Overview"], itens: ["All Tokens"]},
+  // O SITE B (02/11/2026): Tokens, Releases e Hooks com a lateral do desenho — o filtro e o "On this page" de cada área.
+  {pagina: "tokens.html", area: "Tokens", grupos: ["Overview", "By $type", "On this page"], itens: ["All Tokens", "color", "Color roles"]},
   // As notas de versão (lote U, 19/10/2026): a área própria, como a da referência.
-  {pagina: "release-v0-35-0.html", area: "Releases", grupos: ["Overview", "Releases"], itens: ["All Releases", "v0.35.0", "v0.1.0"]},
-  {pagina: "hooks.html", area: "Hooks", grupos: ["Overview", "Hooks"], itens: ["All Hooks"]},
-  {pagina: "usetoast.html", area: "Hooks", grupos: ["Overview", "Hooks"], itens: ["All Hooks", "useToast"]},
+  {pagina: "release-v0-35-0.html", area: "Releases", grupos: ["Overview", "By month"], itens: ["All Releases", "Health", "10October 2026"]},
+  {pagina: "hooks.html", area: "Hooks", grupos: ["Overview", "On this page", expect.stringMatching(/^Hook pages · \d+$/)], itens: ["All Hooks", "useToast"]},
+  {pagina: "usetoast.html", area: "Hooks", grupos: ["Overview", "On this page", expect.stringMatching(/^Hook pages · \d+$/)], itens: ["All Hooks", "useToast"]},
   // O site B (01/11/2026): a lateral de Components no padrão da Getting Started — as famílias, numeradas.
   {pagina: "button.html", area: "Components", grupos: ["Buttons", "Collections", "Colors", "Controls", "Data Display", "Date and Time",
     "Feedback", "Forms", "Layout", "Media", "Navigation", "Overlays", "Pickers", "Typography", "Utilities", "AI & Agents", "Code",
