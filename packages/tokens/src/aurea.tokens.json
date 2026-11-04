@@ -4689,13 +4689,15 @@
         "focus-strong": {
           "$type": "color",
           "$value": {
-            "colorSpace": "oklch",
+            "colorSpace": "srgb",
             "components": [
-              0.52,
-              0.17,
-              45
-            ]
-          }
+              1.0,
+              0.4,
+              0.0
+            ],
+            "hex": "#ff6600"
+          },
+          "$description": "O anel de foco da Ember no claro é o laranja do anel da origem, #ff6600 — como no sistema de origem da Ember (o Victor, 04/11/2026, olhando a imagem: \"Como na origem\"). Mede 2,94:1 no cartão branco: a exceção consciente do Victor."
         },
         "selection": {
           "$type": "color",
@@ -5050,24 +5052,24 @@
         },
         "link": {
           "$type": "color",
-          "$description": "O link da Ember no claro é o laranja escuro, a letra de destaque dela (o --primary-emphasis) — decisão do Victor, 04/11/2026, olhando a bancada: o link herdava o amarelo da Gold escurecido (oklch 0.52 0.106 86, mantido de antes de 18/10/2026).",
+          "$description": "O link da Ember no claro é o laranja do botão, o --primary dela (#f76500) — como no sistema de origem da Ember (o Victor, 04/11/2026, olhando a imagem: \"Como na origem\"). Mede 3,08:1 no cartão branco, abaixo dos 4,5:1 de texto: a exceção consciente do Victor, como o foco amarelo dos campos da Gold.",
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.52,
-              0.17,
-              45
+              0.682,
+              0.197,
+              44.5
             ]
           }
         },
         "link-hover": {
           "$type": "color",
-          "$description": "O link sob o ponteiro: o laranja do botão pressionado (o --primary-active da Ember).",
+          "$description": "O link sob o ponteiro: o laranja do botão sob o ponteiro (o --primary-hover da Ember).",
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.58,
-              0.19,
+              0.63,
+              0.197,
               44.5
             ]
           }

@@ -290,9 +290,12 @@ Markdown", a ponta da setinha ficava reta (*"quando clico botão fica quadrado"*
   marcas, em toda peça com foco, na web e no nativo. O Victor achou no campo do Início e aprovou na bancada (*"Pode"*). No
   claro, nada muda.
 - **O link da Aurea Ember** — a varredura das 13 marcas achou que ele herdava o amarelo da Gold: no escuro, o próprio
-  amarelo; no claro, um amarelo escurecido de antes de 18/10/2026. Agora é o laranja dela: no escuro, o do botão
-  (`oklch(0.72 0.19 48)`, 6,67:1 no cartão); no claro, o laranja escuro da letra de destaque (`oklch(0.52 0.17 45)`, 5,89:1).
-  Escolhido pelo Victor na bancada (a "A" no escuro, *"Pode"* no claro). Web e nativo.
+  amarelo; no claro, um amarelo escurecido de antes de 18/10/2026. Agora é o laranja do botão nos dois temas
+  (`oklch(0.72 0.19 48)` no escuro; `#f76500` no claro), como no sistema de origem da Ember — conferido na base dele, sem a
+  preferência de aparência por cima. E o anel de foco da Ember CLARA passa a ser o `#ff6600` da origem (era o laranja escuro
+  `oklch(0.52 0.17 45)`). No claro, o link mede 3,08:1 e o anel 2,94:1 no cartão branco: a exceção consciente do Victor,
+  como o foco amarelo dos campos da Gold. Escolhido olhando a imagem (a "A" no escuro, *"Como na origem"* no claro). Web e
+  nativo.
 - **O foco dos campos do nativo** (`Input`, `InputGroup`, `SearchField`, `NumberField`) — a borda de foco tinha 1, e no
   navegador (`react-native-web`, o site inclusive) o anel da web saía por fora dela: duas linhas. Agora a borda tem a
   largura do anel da web (`focusWidth`, 2), o recheio desconta o que ela engrossou (o texto não anda), e no navegador o anel
