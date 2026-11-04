@@ -17,6 +17,30 @@ test("a setinha do Copy Markdown tem a altura do botão ao lado", async ({page})
   expect(alturas[1]).toBe(alturas[0]);
 });
 
+// O botão dividido com o menu ABERTO (04/11/2026, o Victor: "quando clico botão fica quadrado"). O motor do menu põe marcadores
+// de foco de 1 pixel ao lado da setinha, dentro do grupo; o `ButtonGroup` arredondava o último FILHO, e a setinha perdia a
+// ponta e a linha do meio. E o menu da referência: alinhado à ponta do botão, com a explicação em cada item.
+// Provado contra o defeito: contra o site publicado (0.54.1), o raio da ponta é 0 e a ponta do menu não bate.
+test("com o menu aberto, a setinha do Copy Markdown continua redonda e o menu encosta na ponta", async ({page}) => {
+  await page.goto(`${SITE}/button.html`);
+  const grupo = page.locator('[aria-label="Page as Markdown"]').first();
+  await grupo.getByRole("button", {name: "More page actions"}).click();
+  const menu = page.getByRole("menu", {name: "Page actions"});
+  await expect(menu).toBeVisible();
+  const m = await page.evaluate(() => {
+    const g = document.querySelector('[aria-label="Page as Markdown"]')!;
+    const botoes = [...g.children].filter((c) => c.tagName === "BUTTON") as HTMLElement[];
+    const ultimo = getComputedStyle(botoes[botoes.length - 1]);
+    const menu = document.querySelector('[role="menu"]')!.getBoundingClientRect();
+    return {ponta: parseFloat(ultimo.borderEndEndRadius), linha: getComputedStyle(botoes[botoes.length - 1], "::before").content,
+      grupo: Math.round(g.getBoundingClientRect().right), menu: Math.round(menu.right)};
+  });
+  expect(m.ponta).toBeGreaterThan(0);
+  expect(m.linha).not.toBe("none");
+  expect(Math.abs(m.menu - m.grupo)).toBeLessThanOrEqual(1);
+  await expect(menu.locator(".menu-item-description").first()).toHaveText("View page as Markdown format");
+});
+
 test("no fim da página a lateral não sobe: o topo fica parado", async ({page}) => {
   // A janela alta do Victor: a lateral é mais alta que o que sobra no fim da página.
   await page.setViewportSize({width: 1303, height: 960});

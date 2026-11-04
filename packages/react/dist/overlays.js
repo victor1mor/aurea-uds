@@ -150,26 +150,31 @@ const marca = (children) => _jsx("span", { className: "menu-mark", "aria-hidden"
 // container configurado pelo provider e o submenu escaparia para o `document.body`. Duas
 // camadas do mesmo menu em containers diferentes é o tipo de divergência que só aparece quando
 // alguém monta a Aurea dentro de um shadow root ou de um diálogo nativo.
-function renderMenuItems(items, portal) {
+// O item com `description` (0.55.0) se anuncia como o da referência: o NOME é só o rótulo e a explicação é a DESCRIÇÃO
+// (`aria-labelledby` + `aria-describedby`). Sem isso o leitor de tela lia os dois colados ("View as MarkdownView page as…").
+// `ids` é o `useId` de quem monta o menu, mais a posição do item: estável no servidor e no navegador.
+const nomeDoItem = (x, id) => x.description != null ? { "aria-labelledby": `${id}-l`, "aria-describedby": `${id}-d` } : {};
+function renderMenuItems(items, portal, ids = "") {
     return items.map((it, i) => {
         if (it === "separator")
             return _jsx(BaseMenu.Separator, { className: "menu-sep" }, i);
         const kind = it.kind ?? "item";
-        const dentro = (x) => _jsxs(_Fragment, { children: [x.leadingIcon && _jsx(Icon, { name: x.leadingIcon }), x.label] });
+        const id = `${ids}-${i}`;
+        const dentro = (x, xid = id) => _jsxs(_Fragment, { children: [x.leadingIcon && _jsx(Icon, { name: x.leadingIcon }), x.description != null ? _jsxs("span", { className: "menu-item-text", children: [_jsx("span", { id: `${xid}-l`, children: x.label }), _jsx("span", { id: `${xid}-d`, className: "menu-item-description", children: x.description })] }) : x.label, x.trailingIcon && _jsx(Icon, { name: x.trailingIcon, className: "menu-item-trailing" })] });
         switch (kind) {
             case "group": {
                 const g = it;
-                return _jsxs(BaseMenu.Group, { children: [g.label && _jsx(BaseMenu.GroupLabel, { className: "menu-label", children: g.label }), renderMenuItems(g.items, portal)] }, i);
+                return _jsxs(BaseMenu.Group, { children: [g.label && _jsx(BaseMenu.GroupLabel, { className: "menu-label", children: g.label }), renderMenuItems(g.items, portal, id)] }, i);
             }
             case "radiogroup": {
                 const g = it;
-                return _jsxs(BaseMenu.RadioGroup, { value: g.value, defaultValue: g.defaultValue, onValueChange: v => g.onValueChange?.(String(v)), children: [g.label && _jsx(BaseMenu.GroupLabel, { className: "menu-label", children: g.label }), g.items.map((r, j) => _jsxs(BaseMenu.RadioItem, { className: "menu-item", value: r.value, disabled: r.disabled, children: [marca(_jsx(BaseMenu.RadioItemIndicator, { className: "menu-ponto" })), dentro(r)] }, j))] }, i);
+                return _jsxs(BaseMenu.RadioGroup, { value: g.value, defaultValue: g.defaultValue, onValueChange: v => g.onValueChange?.(String(v)), children: [g.label && _jsx(BaseMenu.GroupLabel, { className: "menu-label", children: g.label }), g.items.map((r, j) => _jsxs(BaseMenu.RadioItem, { className: "menu-item", value: r.value, disabled: r.disabled, ...nomeDoItem(r, `${id}-${j}`), children: [marca(_jsx(BaseMenu.RadioItemIndicator, { className: "menu-ponto" })), dentro(r, `${id}-${j}`)] }, j))] }, i);
             }
             case "submenu": {
                 const sm = it;
                 // O submenu é uma RAIZ própria com gatilho próprio — não é um item que "abre outro menu".
                 // É o que dá `aria-haspopup`, a seta para a direita e o fechamento em cascata de graça.
-                return _jsxs(BaseMenu.SubmenuRoot, { children: [_jsxs(BaseMenu.SubmenuTrigger, { className: "menu-item", disabled: sm.disabled, children: [dentro(sm), _jsx(Icon, { name: "caret-right", size: "sm", className: "menu-seta" })] }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { className: "positioner", side: "inline-end", sideOffset: 4, children: _jsx(BaseMenu.Popup, { className: "menu", children: renderMenuItems(sm.items, portal) }) }) })] }, i);
+                return _jsxs(BaseMenu.SubmenuRoot, { children: [_jsxs(BaseMenu.SubmenuTrigger, { className: "menu-item", disabled: sm.disabled, ...nomeDoItem(sm, id), children: [dentro(sm), _jsx(Icon, { name: "caret-right", size: "sm", className: "menu-seta" })] }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { className: "positioner", side: "inline-end", sideOffset: 4, children: _jsx(BaseMenu.Popup, { className: "menu", children: renderMenuItems(sm.items, portal, id) }) }) })] }, i);
             }
             case "checkbox": {
                 const c = it;
@@ -178,26 +183,26 @@ function renderMenuItems(items, portal) {
                 // assinatura pública da Aurea mudar junto com uma versão do motor. Mesma decisão do
                 // `onValueChange` do grupo de rádio. O teste pegou: sem o embrulho, o `vi.fn()` recebia um
                 // `PointerEvent` de brinde.
-                return _jsxs(BaseMenu.CheckboxItem, { className: "menu-item", disabled: c.disabled, checked: c.checked, defaultChecked: c.defaultChecked, onCheckedChange: v => c.onCheckedChange?.(v), children: [marca(_jsx(BaseMenu.CheckboxItemIndicator, { children: _jsx(Icon, { name: "check", size: "sm" }) })), dentro(c)] }, i);
+                return _jsxs(BaseMenu.CheckboxItem, { className: "menu-item", disabled: c.disabled, checked: c.checked, defaultChecked: c.defaultChecked, onCheckedChange: v => c.onCheckedChange?.(v), ...nomeDoItem(c, id), children: [marca(_jsx(BaseMenu.CheckboxItemIndicator, { children: _jsx(Icon, { name: "check", size: "sm" }) })), dentro(c)] }, i);
             }
             case "link": {
                 const l = it;
-                return _jsx(BaseMenu.LinkItem, { className: "menu-item", href: l.href, target: l.target, rel: l.rel, closeOnClick: l.closeOnClick ?? true, children: dentro(l) }, i);
+                return _jsx(BaseMenu.LinkItem, { className: "menu-item", href: l.href, target: l.target, rel: l.rel, closeOnClick: l.closeOnClick ?? true, ...nomeDoItem(l, id), children: dentro(l) }, i);
             }
             default: {
                 const a = it;
-                return _jsx(BaseMenu.Item, { className: "menu-item", disabled: a.disabled, onClick: a.onClick, render: a.render, children: dentro(a) }, i);
+                return _jsx(BaseMenu.Item, { className: "menu-item", disabled: a.disabled, onClick: a.onClick, render: a.render, ...nomeDoItem(a, id), children: dentro(a) }, i);
             }
         }
     });
 }
-export function DropdownMenu({ trigger, items, side = "bottom", label }) { const portal = usePortalContainer(); return _jsxs(BaseMenu.Root, { children: [_jsx(BaseMenu.Trigger, { render: trigger }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { className: "positioner", side: side, sideOffset: 6, children: _jsx(BaseMenu.Popup, { className: "menu", "aria-label": label, children: renderMenuItems(items, portal) }) }) })] }); }
+export function DropdownMenu({ trigger, items, side = "bottom", align = "center", label }) { const portal = usePortalContainer(); const ids = React.useId(); return _jsxs(BaseMenu.Root, { children: [_jsx(BaseMenu.Trigger, { render: trigger }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { className: "positioner", side: side, align: align, sideOffset: 6, children: _jsx(BaseMenu.Popup, { className: "menu", "aria-label": label, children: renderMenuItems(items, portal, ids) }) }) })] }); }
 // ContextMenu: abre no botão direito e — por teclado — em Shift+F10 / tecla Menu,
 // que o browser só dispara (como evento contextmenu) sobre um elemento FOCADO. Por
 // isso o gatilho é focável (tabIndex 0) e tem nome acessível (auditoria 18/07/2026,
 // MÉDIO 3); sem isso o teclado não alcança o menu. Consumidor pode sobrescrever
 // tabIndex via children se o próprio já for focável.
-export function ContextMenu({ children, items, label, className }) { const portal = usePortalContainer(); return _jsxs(BaseContextMenu.Root, { children: [_jsx(BaseContextMenu.Trigger, { className: className, tabIndex: 0, "aria-label": label, "aria-haspopup": "menu", children: children }), _jsx(BaseContextMenu.Portal, { container: portal, children: _jsx(BaseContextMenu.Positioner, { className: "positioner", children: _jsx(BaseContextMenu.Popup, { className: "menu", "aria-label": label, children: renderMenuItems(items, portal) }) }) })] }); }
+export function ContextMenu({ children, items, label, className }) { const portal = usePortalContainer(); const ids = React.useId(); return _jsxs(BaseContextMenu.Root, { children: [_jsx(BaseContextMenu.Trigger, { className: className, tabIndex: 0, "aria-label": label, "aria-haspopup": "menu", children: children }), _jsx(BaseContextMenu.Portal, { container: portal, children: _jsx(BaseContextMenu.Positioner, { className: "positioner", children: _jsx(BaseContextMenu.Popup, { className: "menu", "aria-label": label, children: renderMenuItems(items, portal, ids) }) }) })] }); }
 // G-AXIS-06 — o valor responsivo RESOLVIDO é a única fonte de verdade: ele vai para o motor, o
 // motor publica `data-orientation`/`aria-orientation` e ajusta o teclado, e a pele reage ao
 // atributo publicado. Ver `decisions/0047-css-first-para-apresentacao-runtime-para-semantica.md`.
@@ -206,5 +211,6 @@ export function Menubar({ menus, label, modal, disabled, loopFocus, orientation,
     const ancora = useRef(null);
     const resolvida = useValorResponsivo(orientation, "horizontal", ancora);
     const vertical = resolvida === "vertical";
-    return _jsx(BaseMenubar, { ref: ancora, modal: modal, disabled: disabled, loopFocus: loopFocus, orientation: resolvida, "aria-label": label, className: cx("menubar", className), children: menus.map((m, i) => _jsxs(BaseMenu.Root, { disabled: m.disabled, children: [_jsx(BaseMenu.Trigger, { className: "menubar-trigger", children: m.label }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { className: "positioner", side: vertical ? "inline-end" : "bottom", align: "start", sideOffset: 4, children: _jsx(BaseMenu.Popup, { className: "menu", children: renderMenuItems(m.items) }) }) })] }, i)) });
+    const ids = React.useId();
+    return _jsx(BaseMenubar, { ref: ancora, modal: modal, disabled: disabled, loopFocus: loopFocus, orientation: resolvida, "aria-label": label, className: cx("menubar", className), children: menus.map((m, i) => _jsxs(BaseMenu.Root, { disabled: m.disabled, children: [_jsx(BaseMenu.Trigger, { className: "menubar-trigger", children: m.label }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { className: "positioner", side: vertical ? "inline-end" : "bottom", align: "start", sideOffset: 4, children: _jsx(BaseMenu.Popup, { className: "menu", children: renderMenuItems(m.items, undefined, `${ids}-${i}`) }) }) })] }, i)) });
 }

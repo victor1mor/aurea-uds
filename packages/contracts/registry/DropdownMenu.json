@@ -17,6 +17,11 @@
       "left",
       "right",
       "top"
+    ],
+    "align": [
+      "center",
+      "end",
+      "start"
     ]
   },
   "states": [
@@ -78,13 +83,19 @@
       "name": "items",
       "type": "Array<MenuItemDef | \"separator\">",
       "default": "—",
-      "description": "The menu, as data: {label, onClick?, disabled?, leadingIcon?}. The literal string \"separator\" draws a rule — a separator is not an item, so it never takes focus."
+      "description": "The menu, as data: {label, onClick?, disabled?, leadingIcon?, description?, trailingIcon?}. The literal string \"separator\" draws a rule — a separator is not an item, so it never takes focus. description is a line under the label, in the small muted text; trailingIcon sits at the end of the item (for example, arrow-square-out on a link that opens another site)."
     },
     {
       "name": "side",
       "type": "top | right | bottom | left",
       "default": "bottom",
       "description": "Preferred side; it flips when there is no room."
+    },
+    {
+      "name": "align",
+      "type": "start | center | end",
+      "default": "center",
+      "description": "How the menu lines up with the trigger along that side. end puts the menu's edge on the trigger's edge, as on a split button."
     },
     {
       "name": "label",

@@ -1007,6 +1007,29 @@ export function Actions() {
         codigo: v => `<DropdownMenu label="Side ${v}" side="${v}" trigger={<Button variant="outline">Side ${v}</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />`,
         peca: v => h(A.DropdownMenu, {label: `Side ${v}`, side: v, trigger: h(A.Button, {variant: "outline"}, `Side ${v}`),
           items: [{label: "Duplicate"}, {label: "Rename"}]})}),
+      cada({titulo: "Alignment", descricao: "How the menu lines up with the trigger. end puts the menu's edge on the trigger's edge — the split button of a page's actions opens this way.", valores: ["start", "center", "end"],
+        codigo: v => `<DropdownMenu label="Align ${v}" align="${v}" trigger={<Button variant="outline">Align ${v}</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />`,
+        peca: v => h(A.DropdownMenu, {label: `Align ${v}`, align: v, trigger: h(A.Button, {variant: "outline"}, `Align ${v}`),
+          items: [{label: "Duplicate"}, {label: "Rename"}]})}),
+      {
+        title: "Descriptions and an end icon",
+        description: "description puts a line under the label, in the small muted text; trailingIcon sits at the end — arrow-square-out says a link opens another site.",
+        code: `<DropdownMenu
+  label="Page actions"
+  align="end"
+  trigger={<IconButton icon="caret-down" label="More page actions" />}
+  items={[
+    {kind: "link", label: "View as Markdown", description: "View page as Markdown format", leadingIcon: "file-text", href: "/page.md"},
+    {kind: "link", label: "Open in a chat", description: "Ask questions about this page", leadingIcon: "chat-circle",
+      trailingIcon: "arrow-square-out", href: "https://example.com", target: "_blank", rel: "noreferrer"},
+  ]}
+/>`,
+        render: () => h(A.DropdownMenu, {label: "Page actions", align: "end",
+          trigger: h(A.IconButton, {icon: "caret-down", label: "More page actions"}),
+          items: [{kind: "link", label: "View as Markdown", description: "View page as Markdown format", leadingIcon: "file-text", href: "#"},
+            {kind: "link", label: "Open in a chat", description: "Ask questions about this page", leadingIcon: "chat-circle",
+              trailingIcon: "arrow-square-out", href: "https://example.com", target: "_blank", rel: "noreferrer"}]}),
+      },
     ],
   },
   EmptyState: {

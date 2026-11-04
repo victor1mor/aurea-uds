@@ -274,7 +274,38 @@ como deveria funcionar"*.
 
 ---
 
+## [0.55.0] — 2026-11-04
+
+**O botão dividido com o menu aberto e o menu da referência** (04/11/2026). O Victor achou no site: ao abrir o menu do "Copy
+Markdown", a ponta da setinha ficava reta (*"quando clico botão fica quadrado"*), e mandou pegar o código da referência
+(*"vá até eles e pegue o código"*). Aprovado olhando a peça rodando (*"Pode"*). Na web.
+
+### Corrigido
+
+- **`ButtonGroup`** — arredonda o primeiro e o último BOTÃO, e não o primeiro e o último filho: com um menu aberto, o motor do
+  menu põe marcadores de foco invisíveis ao lado do gatilho, e a setinha de um botão dividido perdia a ponta redonda e a linha
+  do meio. Vale também para o `ToggleGroup`.
+
+### Acrescentado
+
+- **`DropdownMenu align`** (`"start"`, `"center"` — o padrão — ou `"end"`): por onde o menu se alinha ao gatilho; `"end"`
+  encosta a ponta do menu na ponta do botão, como no botão dividido.
+- **`description` e `trailingIcon` no item do menu** (`DropdownMenu`, `ContextMenu` e os itens de link): a explicação numa
+  linha embaixo do nome, na letra pequena e na cor de apoio, e um ícone na ponta (o `arrow-square-out` diz que o link abre
+  outro site) — a anatomia do item da referência. Sem os dois, o item sai igual a antes. O leitor de tela ouve o NOME só com
+  o rótulo e a explicação à parte (`aria-labelledby` e `aria-describedby`), como na referência; a primeira versão lia os dois
+  colados, e a suíte do fim do lote pegou.
+
+### Site
+
+- O menu do "Copy Markdown" no jeito da referência: alinhado à ponta, cada item com a explicação, o "abre fora" na ponta dos
+  que abrem outro site; e a sombra do grupo com o canto da cápsula (ela desenhava um retângulo atrás do botão).
+
+---
+
 ## [0.54.1] — 2026-11-03
+
+✅ **Publicada em 03/11/2026, por volta das 21:13 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #113.**
 
 **Os consertos do site B que o Victor achou no ar** (03/11/2026), cada um aprovado olhando a imagem — o de hoje e a proposta,
 na página de verdade. Só a busca grande muda numa peça; o resto é do site.

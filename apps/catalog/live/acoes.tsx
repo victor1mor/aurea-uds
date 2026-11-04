@@ -24,11 +24,17 @@ function Menu() {
   return h(DropdownMenu, {
     label: "Page actions",
     trigger: h(IconButton, {variant: "tertiary", size: tamanho, icon: "caret-down", label: "More page actions"}),
+    // O menu da referência (04/11/2026, o Victor: "pegue o código"): alinhado à ponta do botão, cada item com a explicação
+    // embaixo, e o "abre fora" na ponta dos que abrem outro site. Sem os dois itens do servidor MCP, que ainda não existe.
+    align: "end",
     items: [
-      {kind: "link", label: "View as Markdown", leadingIcon: "file-text", href: md, target: "_blank", rel: "noreferrer"},
-      {kind: "link", label: "Open in ChatGPT", leadingIcon: "chat-circle", target: "_blank", rel: "noreferrer",
+      {kind: "link", label: "View as Markdown", description: "View page as Markdown format", leadingIcon: "file-text", href: md,
+        target: "_blank", rel: "noreferrer"},
+      {kind: "link", label: "Open in ChatGPT", description: "Ask questions about this page", leadingIcon: "chat-circle",
+        trailingIcon: "arrow-square-out", target: "_blank", rel: "noreferrer",
         href: `https://chatgpt.com/?${new URLSearchParams({hints: "search", q: pergunta})}`},
-      {kind: "link", label: "Open in Claude", leadingIcon: "chat-circle", target: "_blank", rel: "noreferrer",
+      {kind: "link", label: "Open in Claude", description: "Ask questions about this page", leadingIcon: "chat-circle",
+        trailingIcon: "arrow-square-out", target: "_blank", rel: "noreferrer",
         href: `https://claude.ai/new?${new URLSearchParams({q: pergunta})}`},
     ],
   });
