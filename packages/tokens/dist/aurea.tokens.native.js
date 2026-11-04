@@ -1520,6 +1520,16 @@ export const brands = {
         "p3": "color(display-p3 0.0322 0.0538 0.0819)",
         "oklch": "oklch(0.16 0.02 250)"
       },
+      "link": {
+        "hex": "#ff7716",
+        "p3": "color(display-p3 0.9354 0.4975 0.2145)",
+        "oklch": "oklch(0.72 0.19 48)"
+      },
+      "linkHover": {
+        "hex": "#ff9246",
+        "p3": "color(display-p3 0.9855 0.5981 0.3416)",
+        "oklch": "oklch(0.78 0.17 50)"
+      },
       "secondary": {
         "hex": "#19212a",
         "p3": "color(display-p3 0.1052 0.1296 0.1607)",
@@ -1908,14 +1918,14 @@ export const brands = {
         "oklch": "oklch(1 0 0)"
       },
       "link": {
-        "hex": "#846301",
-        "p3": "color(display-p3 0.4976 0.3951 0.1201)",
-        "oklch": "oklch(0.52 0.106 86.047)"
+        "hex": "#b33c00",
+        "p3": "color(display-p3 0.6487 0.2683 0)",
+        "oklch": "oklch(0.52 0.17 45)"
       },
       "linkHover": {
-        "hex": "#6c4d00",
-        "p3": "color(display-p3 0.4058 0.3056 0)",
-        "oklch": "oklch(0.44 0.106 86.047)"
+        "hex": "#cf4600",
+        "p3": "color(display-p3 0.7528 0.3139 0)",
+        "oklch": "oklch(0.58 0.19 44.5)"
       },
       "secondary": {
         "hex": "#f6f3ef",

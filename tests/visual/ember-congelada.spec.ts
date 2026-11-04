@@ -81,7 +81,13 @@ for (const marca of ["ember"]) for (const tema of ["light", "dark"]) {
     const SOMBRA_ANTIGA = "rgba(0, 0, 0, 0.04) 0px 2px 4px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px, rgba(0, 0, 0, 0.06) 0px 0px 1px 0px";
     const sombraDoEscuro = (prop: string, antes: string, depois: string) => tema === "dark" && prop.endsWith("box-shadow")
       && antes === SOMBRA_ANTIGA && depois === "rgba(0, 0, 0, 0.45) 0px 1px 3px 0px";
-    let permitidas = 0, sombras = 0;
+    // A TERCEIRA (0.55.0, 04/11/2026, o Victor na bancada: "A" no escuro, "Pode" no claro): o link herdava o amarelo da
+    // Gold; agora é o laranja dela — o do botão no escuro, o da letra de destaque no claro. Vale para a letra do link e
+    // tudo que a pinta com `currentColor` (a borda transparente não muda: só a cor guardada nela).
+    const linkDaEmber = (antes: string, depois: string) =>
+      (tema === "dark" && antes === "oklch(0.795 0.184 86.047)" && depois === "oklch(0.72 0.19 48)")
+      || (tema === "light" && antes === "oklch(0.52 0.106 86.047)" && depois === "oklch(0.52 0.17 45)");
+    let permitidas = 0, sombras = 0, links = 0;
     for (const [chave, linha] of Object.entries(ref)) {
       const hoje = agora[chave];
       if (!hoje) { diferencas.push(`${chave}: sumiu`); continue; }
@@ -89,12 +95,14 @@ for (const marca of ["ember"]) for (const tema of ["light", "dark"]) {
         if (hoje[prop] === valor) continue;
         if (marcaDoControle(valor, hoje[prop])) { permitidas++; continue; }
         if (sombraDoEscuro(prop, valor, hoje[prop])) { sombras++; continue; }
+        if (linkDaEmber(valor, hoje[prop])) { links++; continue; }
         diferencas.push(`${chave} ${prop}: ${valor} → ${hoje[prop]}`);
       }
     }
     expect(diferencas.slice(0, 40), `${diferencas.length} diferenças`).toEqual([]);
     if (tema === "dark") expect(permitidas, "as marcas brancas do escuro estão lá").toBe(9);
     if (tema === "dark") expect(sombras, "a sombra pequena do escuro está lá").toBe(3);
+    expect(links, "o link no laranja da Ember está lá").toBeGreaterThan(0);
     expect(Object.keys(agora).length, "o banco tem as mesmas peças").toBe(Object.keys(ref).length);
   });
 }

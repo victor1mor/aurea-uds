@@ -382,6 +382,8 @@
   --ring:oklch(0.72 0.19 48);
   --focus:oklch(0.72 0.19 48);
   --focus-strong:oklch(0.72 0.19 48);
+  --link:oklch(0.72 0.19 48);
+  --link-hover:oklch(0.78 0.17 50);
   --selection:oklch(0.32 0.08 50);
   --control-selected:oklch(0.72 0.19 48);
   --control-selected-foreground:oklch(1 0 0);
@@ -484,8 +486,8 @@
   --warning-bg:oklch(0.95 0.06 80);
   --danger-bg:oklch(0.95 0.05 25);
   --info-bg:oklch(0.95 0.04 235);
-  --link:oklch(0.52 0.106 86.047);
-  --link-hover:oklch(0.44 0.106 86.047);
+  --link:oklch(0.52 0.17 45);
+  --link-hover:oklch(0.58 0.19 44.5);
   --brand-yellow-ink:#242424;
   --warning-foreground:#242424;
   --control-thumb:var(--primary-mark);

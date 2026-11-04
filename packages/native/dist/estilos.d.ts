@@ -57,6 +57,20 @@ export declare const fundoDeCampo: (t: AureaTokens, _naSuperficie: boolean, mais
  */
 export declare const focoDoCampo: (t: AureaTokens, maisContraste?: boolean) => string;
 /**
+ * A BORDA DE FOCO do campo (0.55.0 — o Victor, 04/11/2026, olhando o campo do nativo no site com duas linhas: "B, 2
+ * pixels"): a cor do foco na espessura do `focusWidth` — o token do anel de foco da web, o mesmo que a casa ativa do
+ * `OTPField` já usava. Quem tem recheio lateral passa o `respiro` dele, e recebe o recheio descontado do que a borda
+ * engrossou: o texto não anda quando o campo ganha o foco. O texto no centro (o número) não precisa.
+ */
+export declare const bordaDeFoco: (t: AureaTokens, maisContraste?: boolean, respiro?: number) => ViewStyle;
+/**
+ * No navegador (`react-native-web`), o campo de texto ganha também o anel de foco da web, por fora da borda — e o foco
+ * sai com DUAS linhas (o Victor viu no site, 04/11/2026). No nativo o foco É a borda (`bordaDeFoco`): o anel sai. Só
+ * entra no `TextInput` de uma peça que pinta a borda de foco, e SÓ no navegador: no telefone a Nova Arquitetura também
+ * conhece `outlineStyle`, e lá não há anel nenhum para tirar.
+ */
+export declare const semAnelDaWeb: () => TextStyle;
+/**
  * A marca DENTRO de um controle ligado — a bolinha do `Switch`, a alça do `Slider`, o visto do `Checkbox` e o ponto do
  * rádio: branca (ADR-0083, 26/10/2026, o Victor: "como na referência"); com "aumentar contraste" no sistema, a tinta.
  */

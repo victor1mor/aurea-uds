@@ -16,7 +16,7 @@
 // O cache não tem limite de tamanho, e isso é seguro por construção: a chave é
 // `${tema}:${densidade}`, então ele tem **teto de seis entradas por componente**. Não é cache de
 // dados do usuário; é uma tabela de seis linhas.
-import {StyleSheet, type ImageStyle, type TextStyle, type ViewStyle} from "react-native";
+import {Platform, StyleSheet, type ImageStyle, type TextStyle, type ViewStyle} from "react-native";
 import type {AureaTokens} from "./tokens.js";
 
 /**
@@ -109,7 +109,30 @@ export const fundoDeCampo = (t: AureaTokens, _naSuperficie: boolean, maisContras
  * (ADR-0083, 26/10/2026). Com "aumentar contraste" no sistema, volta ao `focusStrong` (o grafite no claro).
  */
 export const focoDoCampo = (t: AureaTokens, maisContraste = false): string =>
-  maisContraste ? t.color.focusStrong : t.color.primary;
+  // A Ember fica fora do amarelo dos campos, como na web (a regra do foco do campo a exclui, e ela usa o `--focus-strong`
+  // dela — o laranja escuro no claro, o laranja do botão no escuro). O nativo usava o primário e, na Ember clara, saía
+  // diferente da web (o Victor, 04/11/2026: "Sim, segue a web").
+  maisContraste || t.brand === "ember" ? t.color.focusStrong : t.color.primary;
+
+/**
+ * A BORDA DE FOCO do campo (0.55.0 — o Victor, 04/11/2026, olhando o campo do nativo no site com duas linhas: "B, 2
+ * pixels"): a cor do foco na espessura do `focusWidth` — o token do anel de foco da web, o mesmo que a casa ativa do
+ * `OTPField` já usava. Quem tem recheio lateral passa o `respiro` dele, e recebe o recheio descontado do que a borda
+ * engrossou: o texto não anda quando o campo ganha o foco. O texto no centro (o número) não precisa.
+ */
+export const bordaDeFoco = (t: AureaTokens, maisContraste = false, respiro?: number): ViewStyle => ({
+  borderColor: focoDoCampo(t, maisContraste),
+  borderWidth: t.size.focusWidth,
+  ...(respiro != null ? {paddingHorizontal: respiro - (t.size.focusWidth - t.size.borderWidth)} : null),
+});
+
+/**
+ * No navegador (`react-native-web`), o campo de texto ganha também o anel de foco da web, por fora da borda — e o foco
+ * sai com DUAS linhas (o Victor viu no site, 04/11/2026). No nativo o foco É a borda (`bordaDeFoco`): o anel sai. Só
+ * entra no `TextInput` de uma peça que pinta a borda de foco, e SÓ no navegador: no telefone a Nova Arquitetura também
+ * conhece `outlineStyle`, e lá não há anel nenhum para tirar.
+ */
+export const semAnelDaWeb = (): TextStyle => (Platform.OS === "web" ? {outlineStyle: "none"} : {}) as unknown as TextStyle;
 
 /**
  * A marca DENTRO de um controle ligado — a bolinha do `Switch`, a alça do `Slider`, o visto do `Checkbox` e o ponto do

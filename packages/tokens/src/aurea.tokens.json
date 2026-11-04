@@ -3895,6 +3895,30 @@
             ]
           }
         },
+        "link": {
+          "$type": "color",
+          "$description": "O link da Ember no escuro é o laranja do botão (o --primary dela) — decisão do Victor, 04/11/2026, olhando a bancada: o link herdava o amarelo da Gold, e saía no amarelo dela.",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.72,
+              0.19,
+              48
+            ]
+          }
+        },
+        "link-hover": {
+          "$type": "color",
+          "$description": "O link sob o ponteiro: o laranja do botão sob o ponteiro (o --primary-hover da Ember).",
+          "$value": {
+            "colorSpace": "oklch",
+            "components": [
+              0.78,
+              0.17,
+              50
+            ]
+          }
+        },
         "selection": {
           "$type": "color",
           "$value": {
@@ -5026,24 +5050,25 @@
         },
         "link": {
           "$type": "color",
-          "$description": "Kept as it was before 18/10/2026 (the Aurea light link at the time), so this brand does not change when the Aurea light link becomes the brand yellow.",
+          "$description": "O link da Ember no claro é o laranja escuro, a letra de destaque dela (o --primary-emphasis) — decisão do Victor, 04/11/2026, olhando a bancada: o link herdava o amarelo da Gold escurecido (oklch 0.52 0.106 86, mantido de antes de 18/10/2026).",
           "$value": {
             "colorSpace": "oklch",
             "components": [
               0.52,
-              0.106,
-              86.047
+              0.17,
+              45
             ]
           }
         },
         "link-hover": {
           "$type": "color",
+          "$description": "O link sob o ponteiro: o laranja do botão pressionado (o --primary-active da Ember).",
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.44,
-              0.106,
-              86.047
+              0.58,
+              0.19,
+              44.5
             ]
           }
         },

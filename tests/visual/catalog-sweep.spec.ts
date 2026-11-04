@@ -570,9 +570,14 @@ test.describe("catálogo · contratos do modelo de página", () => {
     // No site B (0.54.0) o exemplo mora num item que abre e fecha; no WebKit a moldura do item fechado não carrega, e o
     // teste esperava para sempre (a CI do pedido #112). Abre-se o item, como a pessoa faz.
     await page.locator(".demo-panel > iframe.demo-frame").first().evaluate((e) => {
-      const d = e.closest("details"); if (d) d.open = true; e.scrollIntoView();
+      // A rolagem de UMA vez: a do site é suave (~0,5 s), e no Firefox o clique saía no meio do caminho — o botão era
+      // apertado num lugar e solto em outro (medido em 04/11/2026: 5 de 8 rodadas sem o `click`).
+      const d = e.closest("details"); if (d) d.open = true; e.scrollIntoView({behavior: "instant"});
     });
     const moldura = page.frameLocator(".demo-panel > iframe.demo-frame").first();
+    // O clique só depois de a peça ACENDER (`data-ligada="sim"`, posto pela parte viva): antes disso o botão é o desenho
+    // pronto, e o clique se perde. A CI do pedido #114 pegou no Firefox (04/11/2026); aqui reprovava 2 de 3 vezes.
+    await expect(moldura.locator('#root[data-ligada="sim"]')).toBeAttached({timeout: 15000});
     const gatilho = moldura.locator(".date-picker-trigger").first();
     await expect(gatilho).toHaveAccessibleName("Check-in");
     expect(await gatilho.evaluate((e) => getComputedStyle(e).backgroundImage)).toBe("none");

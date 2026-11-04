@@ -44,6 +44,14 @@ describe("a fonte dos tokens", () => {
     const escuro = fonte.brand.ember.dark;
     expect(escuro["focus-strong"].$value).toEqual(escuro.primary.$value);
   });
+  // O link da Ember (0.55.0, 04/11/2026): herdava o amarelo da Gold — no escuro, o próprio amarelo; no claro, um amarelo
+  // escurecido de antes de 18/10/2026. O Victor escolheu na bancada: no escuro, o laranja do botão ("A"); no claro, o
+  // laranja escuro, a letra de destaque dela. Provado contra o defeito: sem as duas cores na fonte, reprova.
+  it("o link da Ember é o laranja dela: o do botão no escuro, o da letra de destaque no claro", () => {
+    const {dark, light} = fonte.brand.ember;
+    expect(dark.link?.$value).toEqual(dark.primary.$value);
+    expect(light.link.$value).toEqual(light["primary-emphasis"].$value);
+  });
 });
 
 describe("o core", () => {

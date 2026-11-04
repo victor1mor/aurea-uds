@@ -289,6 +289,18 @@ Markdown", a ponta da setinha ficava reta (*"quando clico botão fica quadrado"*
   marca no botão, no visto e na alça; agora é o laranja dela (`oklch(0.72 0.19 48)`, o mesmo do `--primary`), como nas outras
   marcas, em toda peça com foco, na web e no nativo. O Victor achou no campo do Início e aprovou na bancada (*"Pode"*). No
   claro, nada muda.
+- **O link da Aurea Ember** — a varredura das 13 marcas achou que ele herdava o amarelo da Gold: no escuro, o próprio
+  amarelo; no claro, um amarelo escurecido de antes de 18/10/2026. Agora é o laranja dela: no escuro, o do botão
+  (`oklch(0.72 0.19 48)`, 6,67:1 no cartão); no claro, o laranja escuro da letra de destaque (`oklch(0.52 0.17 45)`, 5,89:1).
+  Escolhido pelo Victor na bancada (a "A" no escuro, *"Pode"* no claro). Web e nativo.
+- **O foco dos campos do nativo** (`Input`, `InputGroup`, `SearchField`, `NumberField`) — a borda de foco tinha 1, e no
+  navegador (`react-native-web`, o site inclusive) o anel da web saía por fora dela: duas linhas. Agora a borda tem a
+  largura do anel da web (`focusWidth`, 2), o recheio desconta o que ela engrossou (o texto não anda), e no navegador o anel
+  da web sai (`semAnelDaWeb`). Na Ember, a cor é o `focusStrong` dela, como na web (antes, o primário: na Ember clara saía o
+  laranja do botão onde a web tinha o escuro). Medido nas 13 marcas e nos dois temas: o campo com foco sai igual na web e no
+  nativo. Escolhido pelo Victor olhando a imagem (*"B, 2 pixels"*, *"Sim, segue a web"*).
+- **O teste do `DatePicker` no Firefox** (só teste) — rolava até o exemplo com a rolagem suave do site e clicava no meio do
+  caminho; reprovava 2 de 3 vezes aqui, e reprovou na CI do pedido #114. Agora rola de uma vez e espera a peça acender.
 
 ### Acrescentado
 
