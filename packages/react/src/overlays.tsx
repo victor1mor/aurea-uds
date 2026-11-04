@@ -239,7 +239,11 @@ export function HoverCard({trigger,children,side="bottom"}:{trigger:ReactElement
 // E vale para os TRÊS menus porque o renderizador é um só. Corrigir só o `DropdownMenu` seria o
 // patch local que o CLAUDE.md proíbe: a pergunta "quem mais tem esse problema?" tem resposta
 // exata aqui — `ContextMenu` e `Menubar` importam o mesmo `renderMenuItems`.
-interface MenuItemBase{label:ReactNode;disabled?:boolean;leadingIcon?:IconName}
+interface MenuItemBase{label:ReactNode;disabled?:boolean;leadingIcon?:IconName;
+  /** 0.55.0: a explicação embaixo do nome, na letra pequena (a anatomia do item da referência). */
+  description?:ReactNode;
+  /** 0.55.0: o ícone na ponta do item — por exemplo, o "abre fora" de um link que abre outro site. */
+  trailingIcon?:IconName}
 /** Item de ação — a forma de sempre. `kind` é opcional para não quebrar quem já usa. */
 export interface MenuActionDef extends MenuItemBase{kind?:"item";onClick?:()=>void;
   /** O elemento que MATERIALIZA o item, no idioma `render` da casa (o mesmo do `Card`). Para
@@ -249,7 +253,7 @@ export interface MenuActionDef extends MenuItemBase{kind?:"item";onClick?:()=>vo
  *  NÃO estende `MenuItemBase`, e a ausência é a informação: **link não tem `disabled`** — o HTML
  *  não desabilita âncora, e o motor não aceita a prop. Um destino indisponível é um item de ação
  *  desabilitado, não um link apagado. */
-export interface MenuLinkDef{kind:"link";label:ReactNode;leadingIcon?:IconName;href:string;
+export interface MenuLinkDef{kind:"link";label:ReactNode;leadingIcon?:IconName;description?:ReactNode;trailingIcon?:IconName;href:string;
   target?:string;rel?:string;
   /** Fechar o menu ao clicar. O padrão do motor é `false` (a navegação desmonta tudo de qualquer
    *  jeito); aqui o padrão é `true`, porque numa aplicação de página única o clique NÃO desmonta
@@ -284,16 +288,24 @@ const marca=(children:ReactNode)=><span className="menu-mark" aria-hidden="true"
 // container configurado pelo provider e o submenu escaparia para o `document.body`. Duas
 // camadas do mesmo menu em containers diferentes é o tipo de divergência que só aparece quando
 // alguém monta a Aurea dentro de um shadow root ou de um diálogo nativo.
-function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null):ReactNode{return items.map((it,i)=>{
+// O item com `description` (0.55.0) se anuncia como o da referência: o NOME é só o rótulo e a explicação é a DESCRIÇÃO
+// (`aria-labelledby` + `aria-describedby`). Sem isso o leitor de tela lia os dois colados ("View as MarkdownView page as…").
+// `ids` é o `useId` de quem monta o menu, mais a posição do item: estável no servidor e no navegador.
+const nomeDoItem=(x:MenuItemBase,id:string)=>x.description!=null?{"aria-labelledby":`${id}-l`,"aria-describedby":`${id}-d`}:{};
+function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null,ids=""):ReactNode{return items.map((it,i)=>{
   if(it==="separator")return <BaseMenu.Separator key={i} className="menu-sep"/>;
   const kind=it.kind??"item";
-  const dentro=(x:MenuItemBase)=><>{x.leadingIcon&&<Icon name={x.leadingIcon}/>}{x.label}</>;
+  const id=`${ids}-${i}`;
+  const dentro=(x:MenuItemBase,xid=id)=><>{x.leadingIcon&&<Icon name={x.leadingIcon}/>}
+    {x.description!=null?<span className="menu-item-text"><span id={`${xid}-l`}>{x.label}</span>
+      <span id={`${xid}-d`} className="menu-item-description">{x.description}</span></span>:x.label}
+    {x.trailingIcon&&<Icon name={x.trailingIcon} className="menu-item-trailing"/>}</>;
   switch(kind){
     case "group":{
       const g=it as MenuGroupDef;
       return <BaseMenu.Group key={i}>
         {g.label&&<BaseMenu.GroupLabel className="menu-label">{g.label}</BaseMenu.GroupLabel>}
-        {renderMenuItems(g.items,portal)}</BaseMenu.Group>;
+        {renderMenuItems(g.items,portal,id)}</BaseMenu.Group>;
     }
     case "radiogroup":{
       const g=it as MenuRadioGroupDef;
@@ -301,23 +313,23 @@ function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null):ReactNode{r
         defaultValue={g.defaultValue} onValueChange={v=>g.onValueChange?.(String(v))}>
         {g.label&&<BaseMenu.GroupLabel className="menu-label">{g.label}</BaseMenu.GroupLabel>}
         {g.items.map((r,j)=><BaseMenu.RadioItem key={j} className="menu-item" value={r.value}
-          disabled={r.disabled}>
+          disabled={r.disabled} {...nomeDoItem(r,`${id}-${j}`)}>
           {/* O PONTO DO RÁDIO É FORMA, NÃO ÍCONE — desenhado em CSS, como o `.control-mark` do
               `Radio` já faz. Pôr um glifo aqui daria duas linguagens para a mesma marca: o rádio
               do formulário com um círculo desenhado e o do menu com um ícone de outra família. */}
           {marca(<BaseMenu.RadioItemIndicator className="menu-ponto"/>)}
-          {dentro(r)}</BaseMenu.RadioItem>)}</BaseMenu.RadioGroup>;
+          {dentro(r,`${id}-${j}`)}</BaseMenu.RadioItem>)}</BaseMenu.RadioGroup>;
     }
     case "submenu":{
       const sm=it as MenuSubmenuDef;
       // O submenu é uma RAIZ própria com gatilho próprio — não é um item que "abre outro menu".
       // É o que dá `aria-haspopup`, a seta para a direita e o fechamento em cascata de graça.
       return <BaseMenu.SubmenuRoot key={i}>
-        <BaseMenu.SubmenuTrigger className="menu-item" disabled={sm.disabled}>
+        <BaseMenu.SubmenuTrigger className="menu-item" disabled={sm.disabled} {...nomeDoItem(sm,id)}>
           {dentro(sm)}<Icon name="caret-right" size="sm" className="menu-seta"/>
         </BaseMenu.SubmenuTrigger>
         <BaseMenu.Portal container={portal}><BaseMenu.Positioner className="positioner" side="inline-end" sideOffset={4}>
-          <BaseMenu.Popup className="menu">{renderMenuItems(sm.items,portal)}</BaseMenu.Popup>
+          <BaseMenu.Popup className="menu">{renderMenuItems(sm.items,portal,id)}</BaseMenu.Popup>
         </BaseMenu.Positioner></BaseMenu.Portal></BaseMenu.SubmenuRoot>;
     }
     case "checkbox":{
@@ -329,29 +341,31 @@ function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null):ReactNode{r
       // `PointerEvent` de brinde.
       return <BaseMenu.CheckboxItem key={i} className="menu-item" disabled={c.disabled}
         checked={c.checked} defaultChecked={c.defaultChecked}
-        onCheckedChange={v=>c.onCheckedChange?.(v)}>
+        onCheckedChange={v=>c.onCheckedChange?.(v)} {...nomeDoItem(c,id)}>
         {marca(<BaseMenu.CheckboxItemIndicator><Icon name="check" size="sm"/></BaseMenu.CheckboxItemIndicator>)}
         {dentro(c)}</BaseMenu.CheckboxItem>;
     }
     case "link":{
       const l=it as MenuLinkDef;
       return <BaseMenu.LinkItem key={i} className="menu-item" href={l.href} target={l.target}
-        rel={l.rel} closeOnClick={l.closeOnClick??true}>{dentro(l)}</BaseMenu.LinkItem>;
+        rel={l.rel} closeOnClick={l.closeOnClick??true} {...nomeDoItem(l,id)}>{dentro(l)}</BaseMenu.LinkItem>;
     }
     default:{
       const a=it as MenuActionDef;
       return <BaseMenu.Item key={i} className="menu-item" disabled={a.disabled}
-        onClick={a.onClick} render={a.render}>{dentro(a)}</BaseMenu.Item>;
+        onClick={a.onClick} render={a.render} {...nomeDoItem(a,id)}>{dentro(a)}</BaseMenu.Item>;
     }
   }
 })}
-export function DropdownMenu({trigger,items,side="bottom",label}:{trigger:ReactElement;items:MenuEntry[];side?:OverlaySide;label?:string}){const portal=usePortalContainer();return <BaseMenu.Root><BaseMenu.Trigger render={trigger}/><BaseMenu.Portal container={portal}><BaseMenu.Positioner className="positioner" side={side} sideOffset={6}><BaseMenu.Popup className="menu" aria-label={label}>{renderMenuItems(items,portal)}</BaseMenu.Popup></BaseMenu.Positioner></BaseMenu.Portal></BaseMenu.Root>}
+export function DropdownMenu({trigger,items,side="bottom",align="center",label}:{trigger:ReactElement;items:MenuEntry[];side?:OverlaySide;
+  /** 0.55.0: por onde o menu se alinha ao gatilho — `"end"` encosta a ponta dele na ponta do botão (a referência, no botão dividido). */
+  align?:"start"|"center"|"end";label?:string}){const portal=usePortalContainer();const ids=React.useId();return <BaseMenu.Root><BaseMenu.Trigger render={trigger}/><BaseMenu.Portal container={portal}><BaseMenu.Positioner className="positioner" side={side} align={align} sideOffset={6}><BaseMenu.Popup className="menu" aria-label={label}>{renderMenuItems(items,portal,ids)}</BaseMenu.Popup></BaseMenu.Positioner></BaseMenu.Portal></BaseMenu.Root>}
 // ContextMenu: abre no botão direito e — por teclado — em Shift+F10 / tecla Menu,
 // que o browser só dispara (como evento contextmenu) sobre um elemento FOCADO. Por
 // isso o gatilho é focável (tabIndex 0) e tem nome acessível (auditoria 18/07/2026,
 // MÉDIO 3); sem isso o teclado não alcança o menu. Consumidor pode sobrescrever
 // tabIndex via children se o próprio já for focável.
-export function ContextMenu({children,items,label,className}:{children:ReactNode;items:MenuEntry[];label?:string;className?:string}){const portal=usePortalContainer();return <BaseContextMenu.Root><BaseContextMenu.Trigger className={className} tabIndex={0} aria-label={label} aria-haspopup="menu">{children}</BaseContextMenu.Trigger><BaseContextMenu.Portal container={portal}><BaseContextMenu.Positioner className="positioner"><BaseContextMenu.Popup className="menu" aria-label={label}>{renderMenuItems(items,portal)}</BaseContextMenu.Popup></BaseContextMenu.Positioner></BaseContextMenu.Portal></BaseContextMenu.Root>}
+export function ContextMenu({children,items,label,className}:{children:ReactNode;items:MenuEntry[];label?:string;className?:string}){const portal=usePortalContainer();const ids=React.useId();return <BaseContextMenu.Root><BaseContextMenu.Trigger className={className} tabIndex={0} aria-label={label} aria-haspopup="menu">{children}</BaseContextMenu.Trigger><BaseContextMenu.Portal container={portal}><BaseContextMenu.Positioner className="positioner"><BaseContextMenu.Popup className="menu" aria-label={label}>{renderMenuItems(items,portal,ids)}</BaseContextMenu.Popup></BaseContextMenu.Positioner></BaseContextMenu.Portal></BaseContextMenu.Root>}
 
 // MENUBAR — a fila de menus de aplicação: Arquivo, Editar, Ver.
 //
@@ -377,11 +391,12 @@ export function Menubar({menus,label,modal,disabled,loopFocus,orientation,classN
   const ancora=useRef<HTMLDivElement|null>(null);
   const resolvida=useValorResponsivo(orientation,"horizontal",ancora);
   const vertical=resolvida==="vertical";
+  const ids=React.useId();
   return <BaseMenubar ref={ancora} modal={modal} disabled={disabled} loopFocus={loopFocus} orientation={resolvida} aria-label={label} className={cx("menubar",className)}>
     {menus.map((m,i)=><BaseMenu.Root key={i} disabled={m.disabled}>
       <BaseMenu.Trigger className="menubar-trigger">{m.label}</BaseMenu.Trigger>
       <BaseMenu.Portal container={portal}><BaseMenu.Positioner className="positioner" side={vertical?"inline-end":"bottom"} align="start" sideOffset={4}>
-        <BaseMenu.Popup className="menu">{renderMenuItems(m.items)}</BaseMenu.Popup>
+        <BaseMenu.Popup className="menu">{renderMenuItems(m.items,undefined,`${ids}-${i}`)}</BaseMenu.Popup>
       </BaseMenu.Positioner></BaseMenu.Portal>
     </BaseMenu.Root>)}
   </BaseMenubar>;

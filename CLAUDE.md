@@ -103,8 +103,12 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
   a Inter, a Sora e a IBM Plex Mono (ADR-0077) e o Phosphor; as densidades; nenhum degradê; **nenhuma linha** (ADR-0072); e a
   acessibilidade de baixa visão (contraste medido, toque de 44, foco visível). Divergir em qualquer outra coisa é pergunta
   ao Victor, com o motivo.
-  - **O alcance, decidido pelo Victor em 11/10/2026:** vale para as peças E para o site da Aurea (o
-    site segue a documentação da referência, com a cara da Aurea). *"A questão é não colocar nomes
+  - **O alcance, decidido pelo Victor em 11/10/2026:** vale para as peças ~~E para o site da Aurea (o
+    site segue a documentação da referência, com a cara da Aurea)~~ → **o SITE tem identidade própria**
+    (ordem do Victor, 04/11/2026: *"[a referência] parmanece como referencia apenas na construção de componentes,
+    a aurea agora tem identidade propria, essa deve ser a padrão"*). A referência é fonte só para
+    CONSTRUIR peça; o site não copia mais o arranjo dela (o Início com um topo e a documentação com
+    outro, por exemplo, deixa de ser motivo). Mudança no site continua com imagem antes e "pode". *"A questão é não colocar nomes
     dos outros no projeto; aqui do desenvolvimento é livre"*: copiar o desenho é livre, e **copiar o
     nome de COMPONENTE também** (`CloseButton`, `ColorSwatch`… podem ser os dela). O que não entra é
     o nome da BIBLIOTECA dela (nem de nenhuma outra) escrito em qualquer coisa do projeto —
@@ -206,6 +210,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.51.0` | A ponta da barra de cima (MNT-37): `AppShell topbarActions`, o `actions` do `Header` repassado em todo arranjo — no `layout="sidebar"`, a chave de tema vai para o fim da barra do conteúdo ([ADR-0080](decisions/0080-a-lateral-ate-o-topo.md), seção do MNT-37) — pedido #108. **Publicada em 30/10/2026** (entre 18:20 e 18:23, Brasília, medido no npm), pelo terminal do Victor |
 | `0.52.0` | As peças do site B: `AppShell topbarVariant="pill"` e `topbarBlurred`, o `blurred` e o `maxWidth` do `Header` `pill`, `TableOfContents progress` e `indicator="segment"`, o grupo que dobra da `Sidebar` com a seta na ponta, `Accordion indicator="plus"` e `size="lg"` ([ADR-0088](decisions/0088-o-site-b.md)) — pedido #109; e os consertos da auditoria de segurança de 31/10/2026 (`CodeBlock`, `ColorSwatch`, `DataGrid`) — pedido #110. **Publicada em 31/10/2026** (por volta das 21:53, Brasília, medido no npm), pelo terminal do Victor |
 | `0.54.0` | O site B inteiro (as seis partes, o Início na pílula) e as peças que ele pediu — `SegmentedControl selectedStyle="emphasis"`, `Alert appearance="soft"`, `Card fill="brand"`, `Table striped`, `CodeBlock previewLayout="stacked"` ([ADR-0089](decisions/0089-a-caixa-de-exemplo-empilhada.md)) e as 14 do desenho — e o `Chart` do nativo que se anuncia como imagem; leva a `0.53.0` e a `0.52.1` — pedido #112. **Publicada em 03/11/2026** (por volta das 12:35, Brasília), pelo terminal do Victor |
+| `0.54.1` | Os consertos do site B que o Victor achou no ar: o campo da busca grande (`CommandPalette size="lg"`) de 64 para 52, a setinha do "Copy Markdown", a lateral que não sobe no fim da página, a busca com 11 sugestões e as laterais de Recipes e Hooks — pedido #113. **Publicada em 03/11/2026** (por volta das 21:13, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -780,6 +785,15 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    Brasília), pelo terminal do Victor, da junção do pedido #112. O registro entrou no lote seguinte (os consertos do site B,
    0.54.1).
 
+53. **`0.54.1`, os consertos do site B, feita em 03/11/2026** — os cinco defeitos que o Victor achou no `aureauds.dev`, cada
+   conserto aprovado pela imagem (o de hoje e a proposta na página de verdade): a setinha do "Copy Markdown" no tamanho do
+   botão, a lateral que encolhe por baixo em vez de subir (a primeira proposta, o rodapé na coluna do texto, foi recusada), a
+   busca com 11 sugestões e o campo de 52, e as laterais de Recipes e Hooks no padrão de Components (a primeira, no molde de
+   Blocks, recusada). ⚠ **A lição:** a troca da lista da busca no `input` apagava a primeira letra digitada — o motor da busca
+   zera o campo quando a lista muda no meio do evento; a troca vai no `beforeinput`. **Publicada em 03/11/2026** (por volta das
+   21:13, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #113. O registro entrou no lote seguinte (o
+   botão dividido, 0.55.0).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -995,7 +1009,10 @@ no git.
   exceções, cada uma decidida pelo Victor: o conserto da linha do tempo (era defeito em todas as marcas); as marcas dos
   controles brancas no escuro (*"Brancos, como as outras"*, 28/10/2026); e os estilos novos do passo B, que a alcançam quando
   o app os escolhe (*"Sim, como as outras"*, 28/10/2026); e a sombra pequena do escuro (*"adicione sombra na ember também"*,
-  01/11/2026, a `0.53.0`). **Tudo que alcança a Ember — ou que fica fora dela — se pergunta ao Victor ANTES** (a mesma ordem,
+  01/11/2026, a `0.53.0`); e o anel de foco do escuro no laranja dela, `--focus-strong` igual ao `--primary`, como nas outras
+  marcas (o âmbar claro de antes destoava do botão e do visto — achado do Victor no campo, aprovado na bancada com *"Pode"*,
+  04/11/2026, a `0.55.0`); e o link no laranja dela — no escuro o do botão, no claro o da letra de destaque (herdava o
+  amarelo da Gold; a varredura das 13 marcas achou, o Victor escolheu na bancada, 04/11/2026, a `0.55.0`). **Tudo que alcança a Ember — ou que fica fora dela — se pergunta ao Victor ANTES** (a mesma ordem,
   01/11/2026: *"me pergunte antes o que fazer o que não fazer também na ember"*). Quem cobra: `tests/visual/ember-congelada.spec.ts` (contra a
   0.44.0).
   - **E é a ÚNICA marca fechada a mudança de cor** (ordem do Victor, 29/10/2026: *"Ember deve sempre ter a cor original

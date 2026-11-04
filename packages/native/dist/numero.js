@@ -48,7 +48,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import * as React from "react";
 import { Platform, TextInput, View } from "react-native";
 import { IconButton } from "./actions.js";
-import { canto, criarFolha, estadoAcessivel, fundoDeCampo, focoDoCampo } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel, fundoDeCampo, bordaDeFoco, semAnelDaWeb } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
 import { useMaisContraste } from "./contraste.js";
 import { useCampo } from "./inputs.js";
@@ -383,11 +383,13 @@ export function NumberField({ value, defaultValue, onValueChange, min, max, step
                     // A ORDEM IMPORTA e é a mesma do `Input` do Lote 4: o inválido vem antes, o foco
                     // depois. Um campo inválido que está sendo corrigido tem de mostrar que está ativo —
                     // invertendo, a pessoa digita sem pista nenhuma de onde o teclado está batendo.
-                    focado && { borderColor: focoDoCampo(t, maisContraste) },
+                    focado && bordaDeFoco(t, maisContraste),
                     // 🔴 E DENTRO DO CARTÃO DA MARCA A TINTA VENCE OS DOIS — `usePeleSobreAMarca` tem os
                     // números: sobre o amarelo o inválido mede 1,86 e o foco do tema escuro mede 1,00.
                     // O foco continua existindo, por espessura.
                     peleDaMarca,
                     peleDaMarca && focado && { borderWidth: t.size.borderWidth * 2 },
+                    // No navegador o foco é a borda: o anel da web sairia por fora, com duas linhas (0.55.0).
+                    semAnelDaWeb(),
                 ] }), mostrarBotoes && (_jsx(IconButton, { name: icons.increment, label: strings.increment, appearance: "ghost", size: tamDoBotao, disabled: inativo || noLimite(1), onPress: () => empurrar(1), testID: testID ? `${testID}-mais` : undefined }))] }));
 }

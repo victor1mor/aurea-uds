@@ -124,6 +124,43 @@ describe("Input e Textarea", () => {
     act(() => { (props("TextInput").onFocus as () => void)(); });
     expect(estiloDoUltimo("TextInput").borderColor).toBe(tokens.color.focusStrong);
   });
+
+  // A BORDA DE FOCO COM 2 (0.55.0 — o Victor, 04/11/2026, "B, 2 pixels"): no site, o campo do nativo saía com a borda de 1
+  // e o anel da web por fora — duas linhas. Agora a borda tem a largura do anel da web (`focusWidth`), o recheio desconta o
+  // que ela engrossou (o texto não anda), e no navegador o anel da web sai. Provado contra o defeito: com a borda de antes
+  // (só a cor), reprova a largura; sem o `semAnelDaWeb`, reprova o anel.
+  it("o foco tem a largura do anel da web, o texto não anda, e no navegador não há anel por cima", () => {
+    render(<Envolve><Input /></Envolve>);
+    const antes = estilo("TextInput");
+    act(() => { (props("TextInput").onFocus as () => void)(); });
+    const depois = estiloDoUltimo("TextInput");
+    expect(depois.borderWidth).toBe(tokens.size.focusWidth);
+    expect(depois.borderWidth).toBeGreaterThan(antes.borderWidth as number);
+    expect((depois.borderWidth as number) + (depois.paddingHorizontal as number))
+      .toBe((antes.borderWidth as number) + (antes.paddingHorizontal as number));
+  });
+
+  // A Ember segue a web (o Victor, 04/11/2026, "Sim, segue a web"): na web a regra do foco do campo a exclui, e o anel é o
+  // `--focus-strong` dela; o nativo usava o primário, e na Ember clara saía o laranja do botão onde a web tinha o escuro.
+  // Provado contra o defeito: com o primário de antes, reprova no claro.
+  it("na Ember, a borda de foco é o focusStrong dela, como na web, nos dois temas", () => {
+    for (const tema of ["light", "dark"] as const) {
+      const ember = resolverTokens(tema, "comfortable", undefined, "ember");
+      render(<AureaProvider theme={tema} brand="ember" icons={ICONES}><Input /></AureaProvider>);
+      act(() => { (ultimo("TextInput").onFocus as () => void)(); });
+      expect(estiloDoUltimo("TextInput").borderColor).toBe(ember.color.focusStrong);
+    }
+  });
+
+  it("no navegador, o Input não ganha o anel da web por cima da borda", () => {
+    __definirPlataforma("web");
+    try {
+      render(<Envolve><Input /></Envolve>);
+      expect(estilo("TextInput").outlineStyle).toBe("none");
+    } finally { __definirPlataforma("android"); }
+    render(<Envolve><Input /></Envolve>);
+    expect(estiloDoUltimo("TextInput").outlineStyle).toBeUndefined();
+  });
 });
 
 describe("Checkbox e Radio — o mesmo desenho, duas semânticas", () => {

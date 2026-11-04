@@ -274,7 +274,54 @@ como deveria funcionar"*.
 
 ---
 
+## [0.55.0] — 2026-11-04
+
+**O botão dividido com o menu aberto e o menu da referência** (04/11/2026). O Victor achou no site: ao abrir o menu do "Copy
+Markdown", a ponta da setinha ficava reta (*"quando clico botão fica quadrado"*), e mandou pegar o código da referência
+(*"vá até eles e pegue o código"*). Aprovado olhando a peça rodando (*"Pode"*). Na web.
+
+### Corrigido
+
+- **`ButtonGroup`** — arredonda o primeiro e o último BOTÃO, e não o primeiro e o último filho: com um menu aberto, o motor do
+  menu põe marcadores de foco invisíveis ao lado do gatilho, e a setinha de um botão dividido perdia a ponta redonda e a linha
+  do meio. Vale também para o `ToggleGroup`.
+- **O anel de foco da Aurea Ember no escuro** — era um âmbar claro (`oklch(0.85 0.14 60)`), só dela, e destoava do laranja da
+  marca no botão, no visto e na alça; agora é o laranja dela (`oklch(0.72 0.19 48)`, o mesmo do `--primary`), como nas outras
+  marcas, em toda peça com foco, na web e no nativo. O Victor achou no campo do Início e aprovou na bancada (*"Pode"*). No
+  claro, nada muda.
+- **O link da Aurea Ember** — a varredura das 13 marcas achou que ele herdava o amarelo da Gold: no escuro, o próprio
+  amarelo; no claro, um amarelo escurecido de antes de 18/10/2026. Agora é o laranja dela: no escuro, o do botão
+  (`oklch(0.72 0.19 48)`, 6,67:1 no cartão); no claro, o laranja escuro da letra de destaque (`oklch(0.52 0.17 45)`, 5,89:1).
+  Escolhido pelo Victor na bancada (a "A" no escuro, *"Pode"* no claro). Web e nativo.
+- **O foco dos campos do nativo** (`Input`, `InputGroup`, `SearchField`, `NumberField`) — a borda de foco tinha 1, e no
+  navegador (`react-native-web`, o site inclusive) o anel da web saía por fora dela: duas linhas. Agora a borda tem a
+  largura do anel da web (`focusWidth`, 2), o recheio desconta o que ela engrossou (o texto não anda), e no navegador o anel
+  da web sai (`semAnelDaWeb`). Na Ember, a cor é o `focusStrong` dela, como na web (antes, o primário: na Ember clara saía o
+  laranja do botão onde a web tinha o escuro). Medido nas 13 marcas e nos dois temas: o campo com foco sai igual na web e no
+  nativo. Escolhido pelo Victor olhando a imagem (*"B, 2 pixels"*, *"Sim, segue a web"*).
+- **O teste do `DatePicker` no Firefox** (só teste) — rolava até o exemplo com a rolagem suave do site e clicava no meio do
+  caminho; reprovava 2 de 3 vezes aqui, e reprovou na CI do pedido #114. Agora rola de uma vez e espera a peça acender.
+
+### Acrescentado
+
+- **`DropdownMenu align`** (`"start"`, `"center"` — o padrão — ou `"end"`): por onde o menu se alinha ao gatilho; `"end"`
+  encosta a ponta do menu na ponta do botão, como no botão dividido.
+- **`description` e `trailingIcon` no item do menu** (`DropdownMenu`, `ContextMenu` e os itens de link): a explicação numa
+  linha embaixo do nome, na letra pequena e na cor de apoio, e um ícone na ponta (o `arrow-square-out` diz que o link abre
+  outro site) — a anatomia do item da referência. Sem os dois, o item sai igual a antes. O leitor de tela ouve o NOME só com
+  o rótulo e a explicação à parte (`aria-labelledby` e `aria-describedby`), como na referência; a primeira versão lia os dois
+  colados, e a suíte do fim do lote pegou.
+
+### Site
+
+- O menu do "Copy Markdown" no jeito da referência: alinhado à ponta, cada item com a explicação, o "abre fora" na ponta dos
+  que abrem outro site; e a sombra do grupo com o canto da cápsula (ela desenhava um retângulo atrás do botão).
+
+---
+
 ## [0.54.1] — 2026-11-03
+
+✅ **Publicada em 03/11/2026, por volta das 21:13 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #113.**
 
 **Os consertos do site B que o Victor achou no ar** (03/11/2026), cada um aprovado olhando a imagem — o de hoje e a proposta,
 na página de verdade. Só a busca grande muda numa peça; o resto é do site.

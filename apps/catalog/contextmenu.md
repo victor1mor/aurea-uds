@@ -23,6 +23,6 @@ import {ContextMenu} from "@aurea-uds/react";
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `children` | `ReactNode` | — | The region that answers the right button. It is rendered focusable (tabIndex 0) on purpose: the keyboard route into a context menu is Shift+F10 or the Menu key, and the browser only fires those over a FOCUSED element. Without that, the menu is mouse-only. |
-| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onClick?, disabled?, leadingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. |
+| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onClick?, disabled?, leadingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. Each item can carry a description (a line under the label) and a trailingIcon (an icon at the end), as in DropdownMenu. |
 | `label` | `string` | — | Names both the trigger region and the menu. A right-click target with no name is announced as nothing at all. |
 | `className` | `string` | — | Goes on the trigger region, which is the element you can see. |

@@ -76,6 +76,10 @@ interface MenuItemBase {
     label: ReactNode;
     disabled?: boolean;
     leadingIcon?: IconName;
+    /** 0.55.0: a explicação embaixo do nome, na letra pequena (a anatomia do item da referência). */
+    description?: ReactNode;
+    /** 0.55.0: o ícone na ponta do item — por exemplo, o "abre fora" de um link que abre outro site. */
+    trailingIcon?: IconName;
 }
 /** Item de ação — a forma de sempre. `kind` é opcional para não quebrar quem já usa. */
 export interface MenuActionDef extends MenuItemBase {
@@ -93,6 +97,8 @@ export interface MenuLinkDef {
     kind: "link";
     label: ReactNode;
     leadingIcon?: IconName;
+    description?: ReactNode;
+    trailingIcon?: IconName;
     href: string;
     target?: string;
     rel?: string;
@@ -137,10 +143,12 @@ export type MenuEntry = MenuActionDef | MenuLinkDef | MenuCheckboxDef | MenuRadi
 /** @deprecated desde 28/08/2026 — use `MenuEntry`. Mantido porque `MenuActionDef` É a forma
  *  antiga: quem tipava com `MenuItemDef` continua compilando. */
 export type MenuItemDef = MenuActionDef;
-export declare function DropdownMenu({ trigger, items, side, label }: {
+export declare function DropdownMenu({ trigger, items, side, align, label }: {
     trigger: ReactElement;
     items: MenuEntry[];
     side?: OverlaySide;
+    /** 0.55.0: por onde o menu se alinha ao gatilho — `"end"` encosta a ponta dele na ponta do botão (a referência, no botão dividido). */
+    align?: "start" | "center" | "end";
     label?: string;
 }): React.JSX.Element;
 export declare function ContextMenu({ children, items, label, className }: {

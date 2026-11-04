@@ -1,0 +1,31 @@
+# v0.55.0
+
+A split button that keeps its round end with the menu open, and menu items with a description and an end icon.
+
+New options on the web menu, and a fix to `ButtonGroup`. Nothing changes unless you use the new options.
+
+## New
+
+- **`DropdownMenu align`** — `"start"`, `"center"` (the default) or `"end"`: how the menu lines up with its trigger. `"end"` puts the menu's edge on the trigger's edge, as on a split button.
+- **`description` and `trailingIcon` on menu items** — a line under the label in the small muted text, and an icon at the end of the item (`arrow-square-out` says a link opens another site). Screen readers hear the label as the item's name and the description separately.
+
+## Fixed
+
+- **`ButtonGroup`** — the first and last *buttons* get the round ends. With a menu open inside the group, its focus markers no longer flatten the end of a split button or hide the divider. `ToggleGroup` too.
+- **Aurea Ember, dark theme** — the focus ring now uses the brand's own orange, the same as the primary button, instead of a separate light amber. Web and native; the light theme is unchanged.
+- **Aurea Ember links** — links used the Aurea Gold yellow in this brand. They now use the brand's own orange: the primary orange in the dark theme and the darker emphasis orange in the light theme. Web and native.
+- **Native field focus** (`Input`, `InputGroup`, `SearchField`, `NumberField`) — the focus border is now 2px, the width of the web focus ring, and the text does not move when it thickens. In a browser (`react-native-web`), the web focus ring no longer appears outside the border, so focus is one line. In Aurea Ember the border uses the brand's focus colour, as on the web.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.55.0 @aurea-uds/core@0.55.0 @aurea-uds/fonts@0.55.0 @aurea-uds/icons@0.55.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.55.0
+```

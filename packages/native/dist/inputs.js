@@ -45,7 +45,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, focoDoCampo, marcaDoControle, aroDoEstilo, peleDoSegmento, marcaDoEstilo } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, bordaDeFoco, semAnelDaWeb, marcaDoControle, aroDoEstilo, peleDoSegmento, marcaDoEstilo } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
 import { useMaisContraste } from "./contraste.js";
 import { FilaRolante } from "./rolagem.js";
@@ -294,7 +294,8 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
             !grupo && campo?.invalido && s.invalido,
             // O foco é o único estado que sobra do trio da web (hover/focus/active), e ele importa
             // mais aqui: no telefone é a única pista de qual campo o teclado está alimentando.
-            !grupo && focado && { borderColor: focoDoCampo(t, maisContraste) },
+            // Com 2 de espessura, como o anel da web (0.55.0); o recheio desconta o pixel a mais — `bordaDeFoco`.
+            !grupo && focado && bordaDeFoco(t, maisContraste, respiroDoTamanho(t, tam)),
             // 🔴 DENTRO DO CARTÃO DA MARCA A TINTA VENCE TUDO — inclusive inválido e foco, e isso é
             // medição, não preferência (os números estão no `usePeleSobreAMarca`): sobre o amarelo a
             // borda de inválido mede **1,86** e o `focusStrong` do tema ESCURO mede **1,00**, porque
@@ -306,6 +307,8 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
             // quando só há uma tinta. O dobro da borda do token, não número novo.
             !grupo && peleDaMarca && focado && { borderWidth: t.size.borderWidth * 2 },
             !grupo && inativo && s.desabilitado,
+            // No navegador, o foco é a borda (a dele ou a do grupo): o anel da web sairia por fora, com duas linhas.
+            semAnelDaWeb(),
             style,
         ] }));
 }
@@ -356,7 +359,7 @@ export function InputGroup({ size, disabled, children, style, testID, ...rest })
             campo?.invalido && s.invalido,
             // O foco vem do campo lá dentro, por contexto: no React Native não existe `:focus-within`,
             // e sem isto a única pista de qual campo o teclado alimenta sumiria ao entrar num grupo.
-            focado && { borderColor: focoDoCampo(t, maisContraste) },
+            focado && bordaDeFoco(t, maisContraste, respiroDoTamanho(t, tam)),
             // Sobre a marca a tinta vence inválido e foco — ver `usePeleSobreAMarca`.
             peleDaMarca,
             peleDaMarca && focado && { borderWidth: t.size.borderWidth * 2 },

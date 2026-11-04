@@ -69,7 +69,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, Easing, FlatList, Modal, PanResponder, Platform, Pressable, TextInput, View, } from "react-native";
 import { IconButton } from "./actions.js";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo, focoDoCampo } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo, bordaDeFoco, semAnelDaWeb } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
 import { useMaisContraste } from "./contraste.js";
 import { Spinner } from "./feedback.js";
@@ -429,7 +429,7 @@ export function SearchField({ value, onChangeText, onSearchChange, searchDelay =
             campo?.invalido && s.invalido,
             // O foco é a única pista de campo ativo que sobra no telefone — mesma decisão do `Input`
             // do Lote 4, e ela vale igual aqui.
-            focado && { borderColor: focoDoCampo(t, maisContraste) },
+            focado && bordaDeFoco(t, maisContraste, respiroDoTamanho(t, tam)),
             // Sobre a marca a tinta vence inválido e foco; o foco vira ESPESSURA — `usePeleSobreAMarca`.
             peleDaMarca,
             peleDaMarca && focado && { borderWidth: t.size.borderWidth * 2 },
@@ -442,5 +442,7 @@ export function SearchField({ value, onChangeText, onSearchChange, searchDelay =
                     s.campoDeTexto,
                     { fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400],
                         color: t.color.foreground },
+                    // No navegador o foco é a borda da caixa: o anel da web sairia por dentro dela (0.55.0).
+                    semAnelDaWeb(),
                 ] }), clearable && texto.length > 0 && !inativo && (_jsx(IconButton, { name: "x", label: strings.searchClear, appearance: "ghost", size: "sm", onPress: () => digitar(""), testID: testID ? `${testID}-limpar` : undefined }))] }));
 }

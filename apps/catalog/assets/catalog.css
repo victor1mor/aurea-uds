@@ -896,7 +896,9 @@ svg.react-flow__connectionline {
   --field-bg:oklch(0.19 0.02 250);
   --ring:oklch(0.72 0.19 48);
   --focus:oklch(0.72 0.19 48);
-  --focus-strong:oklch(0.85 0.14 60);
+  --focus-strong:oklch(0.72 0.19 48);
+  --link:oklch(0.72 0.19 48);
+  --link-hover:oklch(0.78 0.17 50);
   --selection:oklch(0.32 0.08 50);
   --control-selected:oklch(0.72 0.19 48);
   --control-selected-foreground:oklch(1 0 0);
@@ -999,8 +1001,8 @@ svg.react-flow__connectionline {
   --warning-bg:oklch(0.95 0.06 80);
   --danger-bg:oklch(0.95 0.05 25);
   --info-bg:oklch(0.95 0.04 235);
-  --link:oklch(0.52 0.106 86.047);
-  --link-hover:oklch(0.44 0.106 86.047);
+  --link:oklch(0.52 0.17 45);
+  --link-hover:oklch(0.58 0.19 44.5);
   --brand-yellow-ink:#242424;
   --warning-foreground:#242424;
   --control-thumb:var(--primary-mark);
@@ -3138,13 +3140,16 @@ img,svg { display:block; }
    que um grupo vertical tem de não ter. */
 .btn-group-vertical { flex-direction:column; align-items:stretch; --btn-group-h:0; --btn-group-v:var(--radius-full); --btn-group-sep-i:25%; --btn-group-sep-b:0; --btn-group-sep-w:50%; --btn-group-sep-h:var(--border-width); --btn-group-bi:var(--border-width); --btn-group-bb:0; }
 :is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn { position:relative; border-radius:0; }
-:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn:first-child { border-start-start-radius:var(--radius-full); border-end-start-radius:var(--btn-group-h); border-start-end-radius:var(--btn-group-v); }
-:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn:last-child { border-end-end-radius:var(--radius-full); border-start-end-radius:var(--btn-group-h); border-end-start-radius:var(--btn-group-v); }
-:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn:only-child { border-radius:var(--radius-full); }
-:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn + .btn::before { content:""; position:absolute; inset-inline-start:var(--btn-group-sep-i); inset-block-start:var(--btn-group-sep-b); inline-size:var(--btn-group-sep-w); block-size:var(--btn-group-sep-h); border-radius:var(--radius-full); background:currentColor; opacity:.15; pointer-events:none; }
+/* O PRIMEIRO e o ÚLTIMO BOTÃO, e não o primeiro e o último filho (o Victor, 04/11/2026: "quando clico botão fica quadrado"): com
+   um menu aberto, o motor dele põe marcadores de foco invisíveis ao lado do gatilho, e a setinha de um botão dividido deixava
+   de ser o último filho — perdia a ponta redonda e a linha do meio. `:where()` mantém a força de antes. */
+:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn:where(:not(.btn ~ .btn)) { border-start-start-radius:var(--radius-full); border-end-start-radius:var(--btn-group-h); border-start-end-radius:var(--btn-group-v); }
+:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn:where(:not(:has(~ .btn))) { border-end-end-radius:var(--radius-full); border-start-end-radius:var(--btn-group-h); border-end-start-radius:var(--btn-group-v); }
+:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn:where(:not(.btn ~ .btn):not(:has(~ .btn))) { border-radius:var(--radius-full); }
+:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn ~ .btn::before { content:""; position:absolute; inset-inline-start:var(--btn-group-sep-i); inset-block-start:var(--btn-group-sep-b); inline-size:var(--btn-group-sep-w); block-size:var(--btn-group-sep-h); border-radius:var(--radius-full); background:currentColor; opacity:.15; pointer-events:none; }
 :is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn:active:not(:disabled) { transform:none; }
-:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn-outline:not(:last-child) { border-inline-end-width:var(--btn-group-bi); border-block-end-width:var(--btn-group-bb); }
-:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn-outline:not(:first-child) { border-inline-start-width:var(--btn-group-bi); border-block-start-width:var(--btn-group-bb); }
+:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn-outline:where(:has(~ .btn)) { border-inline-end-width:var(--btn-group-bi); border-block-end-width:var(--btn-group-bb); }
+:is(.btn-group:not(.btn-group-detached),.toggle-group:not(.toggle-group-detached)) > .btn-outline:where(.btn ~ .btn) { border-inline-start-width:var(--btn-group-bi); border-block-start-width:var(--btn-group-bb); }
 /* o anel de foco de um botão do meio fica por cima dos vizinhos, e não por baixo */
 :is(.btn-group,.toggle-group) > .btn:focus-visible { z-index:1; }
 .btn-group-detached,.toggle-group-detached { flex-wrap:wrap; gap:var(--space-1); }
@@ -5451,6 +5456,15 @@ button.tag-main { cursor:pointer; }
    DropdownMenu, ContextMenu, Menubar e a lista da CommandPalette. */
 .menu { --menu-px:10px; z-index:var(--z-modal); min-width:200px; max-width:min(320px,calc(100vw - 32px)); padding:var(--space-1); border:1px solid transparent; border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); }
 .menu-item { display:flex; align-items:center; gap:10px; width:100%; min-height:var(--control-h-md); padding:0 var(--menu-px,10px); border:0; border-radius:calc(var(--radius-card) - var(--space-1)); background:transparent; color:var(--foreground); font:inherit; text-align:start; text-decoration:none; cursor:pointer; }
+/* O ITEM COM EXPLICAÇÃO e o ÍCONE NA PONTA (0.55.0, o Victor, 04/11/2026: "pegue o código" da referência): a anatomia do
+   item dela — o nome e, embaixo, a explicação na letra pequena e na cor de apoio; o recheio de 6 em cima e embaixo; o ícone
+   da ponta (o "abre fora" de um link) empurrado para o fim. Só com `description` ou `trailingIcon`: sem eles, o item é o
+   de sempre. */
+.menu-item:has(> .menu-item-text) { padding-block:calc(var(--space-1) + var(--space-05)); }
+.menu-item-text { display:grid; gap:var(--space-05); min-inline-size:0; }
+.menu-item-description { font-size:var(--text-xs); line-height:var(--leading-normal); font-weight:var(--weight-regular); color:var(--muted-foreground);
+  overflow-wrap:break-word; }
+.menu-item > .menu-item-trailing { margin-inline-start:auto; color:var(--muted-foreground); }
 .menu-item[data-highlighted],.menu-item:hover:not([data-disabled]) { background:var(--surface-3); }
 /* Foco de TECLADO no item: a linha de foco, por dentro, porque a lista recorta o que passa da borda
    (B-09 e a ordem de 25/09/2026, "a referência sempre primeiro": o item de menu dela
@@ -7577,6 +7591,8 @@ a.related-card:hover { border-color:transparent; }
 .g1-palco .intro-lede { margin-block-start:calc(var(--space-3) + var(--space-05)); }
 .g1-acoes { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-block-start:var(--space-6); }
 .g1-acoes > .btn, .g1-acoes .btn-group { box-shadow:var(--shadow-sm); }
+/* A sombra do grupo segue a cápsula dos botões (04/11/2026): o grupo não tinha canto, e a sombra desenhava um retângulo atrás. */
+.g1-acoes .btn-group { border-radius:var(--radius-full); }
 .g1-selos { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-block-start:calc(var(--space-4) + var(--space-05)); }
 .g1-selo-mono { font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); }
 

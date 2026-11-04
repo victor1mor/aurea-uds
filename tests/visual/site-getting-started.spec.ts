@@ -69,7 +69,15 @@ test("a setinha do Copy Markdown abre o menu com o .md da página e os dois assi
   await page.goto(`${base}/apps/catalog/docs-theming.html`);
   await page.getByRole("button", {name: "More page actions"}).click();
   const itens = page.getByRole("menu").getByRole("menuitem");
-  await expect(itens).toHaveText(["View as Markdown", "Open in ChatGPT", "Open in Claude"]);
+  await expect(itens).toHaveCount(3);
+  // 0.55.0: cada item com a explicação da referência embaixo. O leitor de tela ouve o NOME só com o rótulo e a explicação
+  // à parte — sem o `aria-labelledby`, o nome saía colado ("View as MarkdownView page as Markdown format").
+  const nomes = ["View as Markdown", "Open in ChatGPT", "Open in Claude"];
+  const explicacoes = ["View page as Markdown format", "Ask questions about this page", "Ask questions about this page"];
+  for (let n = 0; n < 3; n++) {
+    await expect(itens.nth(n)).toHaveAccessibleName(nomes[n]);
+    await expect(itens.nth(n)).toHaveAccessibleDescription(explicacoes[n]);
+  }
   const md = await itens.nth(0).getAttribute("href");
   expect(md).toMatch(/\/docs-theming\.md$/);
   const pergunta = `Read ${md}, I want to ask questions about it.`;

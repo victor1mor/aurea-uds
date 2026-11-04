@@ -10971,6 +10971,16 @@
               ]
             },
             {
+              "name": "align",
+              "optional": true,
+              "type": "\"start\" | \"center\" | \"end\"",
+              "values": [
+                "start",
+                "center",
+                "end"
+              ]
+            },
+            {
               "name": "label",
               "optional": true,
               "type": "string",

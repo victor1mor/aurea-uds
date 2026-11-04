@@ -58,7 +58,7 @@ Every focusable piece shows one focus line. It is never a border plus a separate
 
 - Width: `--focus-width`, 2px. Gap from the piece: `--focus-offset`, 2px.
 - Inside a clipped container (a table row, a tree item), the ring is drawn inward so it is not cut off.
-- In the light theme, the ring of most pieces is the text colour (`--focus-strong`): 18.25:1 on the page and 10.42:1 around the yellow button. Fields use the yellow (trade-off 3 above). In the dark theme, the ring is the brand yellow.
+- In the light theme, the ring of most pieces is the text colour (`--focus-strong`): 18.25:1 on the page and 10.42:1 around the yellow button. Fields use the yellow (trade-off 3 above). In the dark theme, the ring is the brand colour: the yellow in Aurea Gold, and the primary colour of each of the other brands.
 - On an invalid field, the ring takes the danger colour, so the error stays visible while it is being fixed.
 - React Native has no outline. There, focus is shown as a border in the focus colour.
 
