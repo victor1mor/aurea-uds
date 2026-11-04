@@ -1716,9 +1716,9 @@ export const brands = {
         "oklch": "oklch(0.72 0.19 48)"
       },
       "focusStrong": {
-        "hex": "#ffb769",
-        "p3": "color(display-p3 1 0.7314 0.4648)",
-        "oklch": "oklch(0.85 0.14 60)"
+        "hex": "#ff7716",
+        "p3": "color(display-p3 0.9354 0.4975 0.2145)",
+        "oklch": "oklch(0.72 0.19 48)"
       },
       "primaryEmphasis": {
         "hex": "#ffb769",

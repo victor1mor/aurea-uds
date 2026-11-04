@@ -3885,12 +3885,13 @@
         },
         "focus-strong": {
           "$type": "color",
+          "$description": "O anel de foco da Ember no escuro é o laranja da própria marca, como nas outras marcas (decisão do Victor, 04/11/2026, olhando a bancada: o âmbar claro de antes destoava do botão e do visto).",
           "$value": {
             "colorSpace": "oklch",
             "components": [
-              0.85,
-              0.14,
-              60
+              0.72,
+              0.19,
+              48
             ]
           }
         },

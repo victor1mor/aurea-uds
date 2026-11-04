@@ -380,7 +380,7 @@
   --field-bg:oklch(0.19 0.02 250);
   --ring:oklch(0.72 0.19 48);
   --focus:oklch(0.72 0.19 48);
-  --focus-strong:oklch(0.85 0.14 60);
+  --focus-strong:oklch(0.72 0.19 48);
   --selection:oklch(0.32 0.08 50);
   --control-selected:oklch(0.72 0.19 48);
   --control-selected-foreground:oklch(1 0 0);

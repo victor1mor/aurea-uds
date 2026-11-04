@@ -285,6 +285,10 @@ Markdown", a ponta da setinha ficava reta (*"quando clico botão fica quadrado"*
 - **`ButtonGroup`** — arredonda o primeiro e o último BOTÃO, e não o primeiro e o último filho: com um menu aberto, o motor do
   menu põe marcadores de foco invisíveis ao lado do gatilho, e a setinha de um botão dividido perdia a ponta redonda e a linha
   do meio. Vale também para o `ToggleGroup`.
+- **O anel de foco da Aurea Ember no escuro** — era um âmbar claro (`oklch(0.85 0.14 60)`), só dela, e destoava do laranja da
+  marca no botão, no visto e na alça; agora é o laranja dela (`oklch(0.72 0.19 48)`, o mesmo do `--primary`), como nas outras
+  marcas, em toda peça com foco, na web e no nativo. O Victor achou no campo do Início e aprovou na bancada (*"Pode"*). No
+  claro, nada muda.
 
 ### Acrescentado
 

@@ -1009,7 +1009,9 @@ no git.
   exceções, cada uma decidida pelo Victor: o conserto da linha do tempo (era defeito em todas as marcas); as marcas dos
   controles brancas no escuro (*"Brancos, como as outras"*, 28/10/2026); e os estilos novos do passo B, que a alcançam quando
   o app os escolhe (*"Sim, como as outras"*, 28/10/2026); e a sombra pequena do escuro (*"adicione sombra na ember também"*,
-  01/11/2026, a `0.53.0`). **Tudo que alcança a Ember — ou que fica fora dela — se pergunta ao Victor ANTES** (a mesma ordem,
+  01/11/2026, a `0.53.0`); e o anel de foco do escuro no laranja dela, `--focus-strong` igual ao `--primary`, como nas outras
+  marcas (o âmbar claro de antes destoava do botão e do visto — achado do Victor no campo, aprovado na bancada com *"Pode"*,
+  04/11/2026, a `0.55.0`). **Tudo que alcança a Ember — ou que fica fora dela — se pergunta ao Victor ANTES** (a mesma ordem,
   01/11/2026: *"me pergunte antes o que fazer o que não fazer também na ember"*). Quem cobra: `tests/visual/ember-congelada.spec.ts` (contra a
   0.44.0).
   - **E é a ÚNICA marca fechada a mudança de cor** (ordem do Victor, 29/10/2026: *"Ember deve sempre ter a cor original

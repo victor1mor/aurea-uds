@@ -37,6 +37,13 @@ describe("a fonte dos tokens", () => {
   it("a Orange troca o aviso pelo mel (o laranja do aviso seria a cor da marca)", () => {
     for (const tema of ["light", "dark"]) expect(fonte.brand.orange[tema].warning.$value.hex).toBe("#f5a524");
   });
+  // O anel de foco da Ember escura (0.55.0, 04/11/2026): era um âmbar claro só dela, que destoava do laranja do botão e do
+  // visto; o Victor achou no campo e aprovou na bancada a cor da marca, como nas outras. Provado contra o defeito: com o
+  // `[0.85, 0.14, 60]` de antes, reprova.
+  it("o anel de foco da Ember escura é o laranja dela, o mesmo do primário", () => {
+    const escuro = fonte.brand.ember.dark;
+    expect(escuro["focus-strong"].$value).toEqual(escuro.primary.$value);
+  });
 });
 
 describe("o core", () => {

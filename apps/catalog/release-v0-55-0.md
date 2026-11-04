@@ -12,6 +12,7 @@ New options on the web menu, and a fix to `ButtonGroup`. Nothing changes unless 
 ## Fixed
 
 - **`ButtonGroup`** — the first and last *buttons* get the round ends. With a menu open inside the group, its focus markers no longer flatten the end of a split button or hide the divider. `ToggleGroup` too.
+- **Aurea Ember, dark theme** — the focus ring now uses the brand's own orange, the same as the primary button, instead of a separate light amber. Web and native; the light theme is unchanged.
 
 ## Update
 
