@@ -53,6 +53,10 @@ for (const banco of BANCOS) {
           // (28/10/2026, "Sim, como as outras"), os estilos que pintam o laranja cheio (o `brand` do botão ligado e do
           // segmento, a barra inteira da marca) herdam o mesmo par. Só esse par, só nela, só no claro.
           if (marca === "ember" && tema === "light" && a.razao === 3.08) continue;
+          // E O LINK DA EMBER NO CLARO (0.55.0, 04/11/2026): é o laranja do botão, `#f76500`, como no sistema de origem dela —
+          // o Victor, olhando a imagem ao lado da cor escura que passava: "Como na origem". Mede 3,08:1 no cartão e 2,93:1 na
+          // página. A exceção consciente, como o foco amarelo dos campos da Gold. Só o link, só nela, só no claro.
+          if (marca === "ember" && tema === "light" && /^(link-|texto-link)/.test(a.prova)) continue;
           falhas.push(`${marca || "gold"} · ${a.prova || "(sem prova)"} · ${a.razao}:1 · ${a.html}`);
         }
       }

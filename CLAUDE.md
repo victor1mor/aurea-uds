@@ -1011,8 +1011,10 @@ no git.
   o app os escolhe (*"Sim, como as outras"*, 28/10/2026); e a sombra pequena do escuro (*"adicione sombra na ember também"*,
   01/11/2026, a `0.53.0`); e o anel de foco do escuro no laranja dela, `--focus-strong` igual ao `--primary`, como nas outras
   marcas (o âmbar claro de antes destoava do botão e do visto — achado do Victor no campo, aprovado na bancada com *"Pode"*,
-  04/11/2026, a `0.55.0`); e o link no laranja dela — no escuro o do botão, no claro o da letra de destaque (herdava o
-  amarelo da Gold; a varredura das 13 marcas achou, o Victor escolheu na bancada, 04/11/2026, a `0.55.0`). **Tudo que alcança a Ember — ou que fica fora dela — se pergunta ao Victor ANTES** (a mesma ordem,
+  04/11/2026, a `0.55.0`); e o link no laranja do botão, e o anel do claro no `#ff6600` (herdava o amarelo da Gold; a
+  varredura das 13 marcas achou; conferido contra a base do sistema de origem, o Victor: *"Como na origem"*, 04/11/2026,
+  a `0.55.0`). ⚠ **O sistema de origem da Ember valida as cores dela** — a base dele (`:root` e `.dark`), não a preferência
+  de aparência da conta, que ele escreve por cima da página. **Tudo que alcança a Ember — ou que fica fora dela — se pergunta ao Victor ANTES** (a mesma ordem,
   01/11/2026: *"me pergunte antes o que fazer o que não fazer também na ember"*). Quem cobra: `tests/visual/ember-congelada.spec.ts` (contra a
   0.44.0).
   - **E é a ÚNICA marca fechada a mudança de cor** (ordem do Victor, 29/10/2026: *"Ember deve sempre ter a cor original
@@ -1109,6 +1111,16 @@ hoje `Header`).
 ---
 
 ## 8. O alvo nativo, o que não é óbvio
+
+- **PEÇA EDITADA: CONFERIR O OUTRO ALVO, EM TODAS AS MARCAS E TEMAS** (ordem do Victor, 04/11/2026: *"adicione uma regra
+  não apenas na [Ember] mas para todos os temas sempre verificar quando um item for editado se ele existe no nativo, para
+  padrão sempre ser seguido"*). Quando uma peça muda na web — ou no nativo —, antes de dar por pronta:
+  1. procurar se ela existe no outro alvo (`packages/native/src` ↔ `packages/react/src`; a ficha diz as plataformas);
+  2. levar a mesma mudança para lá, ou dizer ao Victor por que não;
+  3. medir as duas lado a lado nas 13 marcas e nos dois temas, no site (as páginas `native-*.html` rodam o nativo de
+     verdade) — como a comparação do campo com foco de 04/11/2026, que achou a borda de 1 com o anel da web por fora e a
+     Ember clara com outra cor.
+  Diferença que sobrar é pergunta ao Victor, com imagem. Vale também para token: cor nova de marca chega aos dois alvos.
 
 - **Quantos componentes existem se mede:** os valores com inicial maiúscula exportados por
   `packages/native/src/index.ts`, `sistema.tsx` e `arquivo.tsx` (desde a `0.15.0`), menos os dois

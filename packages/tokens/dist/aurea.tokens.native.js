@@ -1918,14 +1918,14 @@ export const brands = {
         "oklch": "oklch(1 0 0)"
       },
       "link": {
-        "hex": "#b33c00",
-        "p3": "color(display-p3 0.6487 0.2683 0)",
-        "oklch": "oklch(0.52 0.17 45)"
+        "hex": "#f76500",
+        "p3": "color(display-p3 0.8989 0.4331 0.1717)",
+        "oklch": "oklch(0.682 0.197 44.5)"
       },
       "linkHover": {
-        "hex": "#cf4600",
-        "p3": "color(display-p3 0.7528 0.3139 0)",
-        "oklch": "oklch(0.58 0.19 44.5)"
+        "hex": "#e45400",
+        "p3": "color(display-p3 0.8286 0.3673 0.0792)",
+        "oklch": "oklch(0.63 0.197 44.5)"
       },
       "secondary": {
         "hex": "#f6f3ef",
@@ -2118,9 +2118,9 @@ export const brands = {
         "oklch": "oklch(0.682 0.197 44.5)"
       },
       "focusStrong": {
-        "hex": "#b33c00",
-        "p3": "color(display-p3 0.6487 0.2683 0)",
-        "oklch": "oklch(0.52 0.17 45)"
+        "hex": "#ff6600",
+        "p3": "color(display-p3 1 0.4 0)",
+        "oklch": null
       },
       "primaryEmphasis": {
         "hex": "#b33c00",

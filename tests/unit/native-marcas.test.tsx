@@ -57,6 +57,9 @@ describe("os tokens das marcas no nativo", () => {
         const r = razao(opaco(a), opaco(b));
         // A Ember já reprovava assim, congelada (ADR-0083): a letra branca no laranja dela, no claro, 3,08:1.
         if (marca === "ember" && tema === "light" && nome === "letra no primário") continue;
+        // E o link dela no claro (0.55.0, 04/11/2026): o laranja do botão, como no sistema de origem — "Como na origem", a
+        // exceção consciente do Victor (2,93:1 na página).
+        if (marca === "ember" && tema === "light" && nome === "link na página") continue;
         if (r < minimo) falhas.push(`${marca} ${tema} · ${nome}: ${r.toFixed(2)}:1`);
       }
     }
