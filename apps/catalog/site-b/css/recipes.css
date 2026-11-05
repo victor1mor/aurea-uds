@@ -9,7 +9,7 @@
 
 /* A miniatura: a tela inteira desenhada parada, reduzida, mostrando o alto dela. */
 .rcs-miniatura { display:block; block-size:calc(var(--space-24) * 2 + var(--space-12)); overflow:hidden; border-radius:var(--radius-lg); background:var(--background); }
-.rcs-miniatura-peca { display:block; inline-size:calc(100% / 0.55); zoom:.55; padding:var(--space-4); pointer-events:none; }
+.rcs-miniatura-peca { display:block; box-sizing:border-box; inline-size:100%; zoom:.55; padding:var(--space-4); pointer-events:none; }
 
 .rcs-texto { display:flex; flex-direction:column; gap:var(--space-2); padding-inline:calc(var(--space-2) + var(--space-05)); }
 .rcs-olho { margin:0; font-family:var(--font-code); font-size:var(--text-xs); color:var(--muted-foreground); text-transform:uppercase; letter-spacing:var(--tracking-wider); }
