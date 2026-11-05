@@ -118,6 +118,11 @@ export interface TableProps<T> extends Virtualizavel {
     onRowPress?: (linha: T) => void;
     /** O que mostrar sem linhas. Sem isto, a frase de vazio da tabela de frases. */
     empty?: React.ReactNode;
+    /**
+     * MNT-38: as fileiras juntas num cartão só, com uma linha clara entre elas (menos depois da última) — o `dividers` da web,
+     * no arranjo do aparelho, onde cada fileira já é um cartão. Sem efeito na marca Ember, como na web.
+     */
+    dividers?: boolean;
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }
@@ -141,5 +146,5 @@ export interface TableProps<T> extends Virtualizavel {
  * cartão. É o que impede o defeito da tabela virada em lista: quatro números soltos, um embaixo
  * do outro, sem dizer o que cada um é.
  */
-export declare function Table<T>({ caption, columns, rows, keyExtractor, onRowPress, empty, virtualized, style, testID, }: TableProps<T>): React.JSX.Element;
+export declare function Table<T>({ caption, columns, rows, keyExtractor, onRowPress, empty, dividers, virtualized, style, testID, }: TableProps<T>): React.JSX.Element;
 export {};

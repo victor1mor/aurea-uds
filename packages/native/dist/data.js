@@ -56,7 +56,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //   .table th         :1185           `subtle-foreground`, fundo `surface-2`, textXs, CAIXA ALTA
 import * as React from "react";
 import { FlatList, Pressable, View, useWindowDimensions, } from "react-native";
-import { aroDoEstilo, canto, criarFolha, marcaDoEstilo, peleDoPonto } from "./estilos.js";
+import { aroDoEstilo, canto, criarFolha, marcaDoEstilo, peleDoPonto, preenchimento } from "./estilos.js";
 import { IconeEmMoldura } from "./moldura.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
@@ -107,6 +107,11 @@ const folha = criarFolha((t) => ({
     linhaTocavel: { minHeight: t.size.targetMin ?? 44 },
     celula: { flexDirection: "row", gap: t.size.space3, alignItems: "flex-start" },
     nomeDaColuna: { flexShrink: 0, maxWidth: "45%" },
+    // `dividers` (MNT-38, 05/11/2026, *"Pode, um cartão só"*): as fileiras juntas num cartão só, e entre elas a linha clara —
+    // o texto a 10%, a mesma da web. Uma faixa de 1, e não borda: a borda colorida é o que a trava do sem linha recusa.
+    grupo: { ...canto(t.size.radiusLg), backgroundColor: t.color.card, overflow: "hidden" },
+    linhaNoGrupo: { borderRadius: 0, backgroundColor: "transparent" },
+    divisoria: { height: t.size.borderWidth, backgroundColor: preenchimento(t, 2) },
     vazio: { paddingVertical: t.size.space6, alignItems: "center" },
 }));
 /**
@@ -240,9 +245,10 @@ export function DataList({ items, layout = "auto", style, testID }) {
  * cartão. É o que impede o defeito da tabela virada em lista: quatro números soltos, um embaixo
  * do outro, sem dizer o que cada um é.
  */
-export function Table({ caption, columns, rows, keyExtractor, onRowPress, empty, virtualized = false, style, testID, }) {
+export function Table({ caption, columns, rows, keyExtractor, onRowPress, empty, dividers, virtualized = false, style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
+    const agrupada = !!dividers && t.brand !== "ember";
     const strings = useAureaStrings();
     const principal = columns.find((c) => c.primary);
     const secundarias = columns.filter((c) => c !== principal);
@@ -270,9 +276,9 @@ export function Table({ caption, columns, rows, keyExtractor, onRowPress, empty,
         // nada — e o leitor de tela a anunciaria como botão.
         // A linha é o item da lista; a tocável é um botão DENTRO dele (o papel de item não pode ir no botão).
         return onRowPress
-            ? _jsx(View, { role: "listitem", children: _jsx(Pressable, { accessibilityRole: "button", onPress: () => onRowPress(linha), style: [s.linha, s.linhaTocavel], children: corpo }) })
-            : _jsx(View, { role: "listitem", style: s.linha, children: corpo });
-    }, [principal, secundarias, conteudo, onRowPress, s]);
+            ? _jsx(View, { role: "listitem", children: _jsx(Pressable, { accessibilityRole: "button", onPress: () => onRowPress(linha), style: [s.linha, s.linhaTocavel, agrupada && s.linhaNoGrupo], children: corpo }) })
+            : _jsx(View, { role: "listitem", style: [s.linha, agrupada && s.linhaNoGrupo], children: corpo });
+    }, [principal, secundarias, conteudo, onRowPress, s, agrupada]);
     const chave = React.useCallback((linha, n) => keyExtractor ? keyExtractor(linha, n) : String(n), [keyExtractor]);
     const nomeDaLista = typeof caption === "string" ? caption : strings.tableLabel;
     if (rows.length === 0) {
@@ -281,7 +287,7 @@ export function Table({ caption, columns, rows, keyExtractor, onRowPress, empty,
                 : _jsx(Text, { size: "sm", tone: "muted", children: strings.dataEmpty }) }));
     }
     if (virtualized) {
-        return (_jsx(FlatList, { accessibilityRole: "list", accessibilityLabel: nomeDaLista, data: rows, keyExtractor: chave, renderItem: ({ item }) => desenharLinha(item), ItemSeparatorComponent: () => _jsx(View, { style: { height: t.size.space2 } }), style: style, testID: testID }));
+        return (_jsx(FlatList, { accessibilityRole: "list", accessibilityLabel: nomeDaLista, data: rows, keyExtractor: chave, renderItem: ({ item }) => desenharLinha(item), ItemSeparatorComponent: () => _jsx(View, { "aria-hidden": true, style: agrupada ? s.divisoria : { height: t.size.space2 } }), style: [agrupada && s.grupo, style], testID: testID }));
     }
-    return (_jsx(View, { accessibilityRole: "list", accessibilityLabel: nomeDaLista, style: [s.tabela, style], testID: testID, children: rows.map((linha, n) => (_jsx(React.Fragment, { children: desenharLinha(linha) }, chave(linha, n)))) }));
+    return (_jsx(View, { accessibilityRole: "list", accessibilityLabel: nomeDaLista, style: [agrupada ? s.grupo : s.tabela, style], testID: testID, children: rows.map((linha, n) => (_jsxs(React.Fragment, { children: [agrupada && n > 0 ? _jsx(View, { "aria-hidden": true, style: s.divisoria }) : null, desenharLinha(linha)] }, chave(linha, n)))) }));
 }
