@@ -6,7 +6,7 @@ Every update to Aurea: what is new, what changed, what was fixed and what may br
 
 November 5, 2026
 
-Motion — the selection slides, menus animate, dragging follows the pointer — and DataGrid fit.
+Motion — the selection slides, menus animate, dragging follows the pointer — DataGrid fit, and recipes as real product screens.
 
 [Read full release notes →](https://aureauds.dev/release-v0-58-0.md)
 

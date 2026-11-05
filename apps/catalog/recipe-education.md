@@ -5,17 +5,40 @@ Lessons, assessment and progress: progress is readable without relying on color 
 ## Usage
 
 ```tsx
-import {Card, Progress, Accordion, Badge, Button} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, Progress, DataList, Stepper, Accordion, RadioGroup, Radio, Alert} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Progress value={60} label="Module progress" />
-  <Badge variant="success">3 of 5 lessons</Badge>
-  <Accordion items={[
-    {id: "l1", title: "Lesson 1 · Tokens", content: "Every visual value has a name."},
-    {id: "l2", title: "Lesson 2 · Density", content: "What density governs, and what it does not."},
-  ]} />
-  <Button variant="primary">Continue</Button>
-</Card>
+import {useState} from "react";
+import {Accordion, Alert, Button, Card, DataList, Heading, Progress, Radio, RadioGroup, Separator, Status, Stepper} from "@aurea-uds/react";
+
+export function Lesson({lessons, parts, question}) {
+  const [done, setDone] = useState(2);
+  const [answer, setAnswer] = useState("");
+  const [checked, setChecked] = useState(false);
+  const right = answer === question.correct;
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>Lesson {done + 1} · {lessons[done]}</Heading> <Status variant="info">In progress</Status>
+        <Button variant="primary" disabled={!checked || !right}
+          onClick={() => { setDone(d => d + 1); setAnswer(""); setChecked(false); }}>Mark as complete</Button>
+      </header>
+      <Separator />
+
+      <Stepper label="Lessons" items={lessons.map((l, i) => ({label: l, state: i < done ? "done" : i === done ? "active" : "default"}))} />
+      <Accordion variant="surface" defaultValue={[parts[0].id]} items={parts} />
+      <RadioGroup label={question.text} value={answer} onValueChange={v => { setAnswer(v); setChecked(false); }}>
+        {question.options.map(o => <Radio key={o.value} value={o.value} label={o.label} />)}
+      </RadioGroup>
+      <Button appearance="soft" tone="brand" disabled={!answer} onClick={() => setChecked(true)}>Check the answer</Button>
+      {checked && <Alert variant={right ? "success" : "warning"} title={right ? "Right" : "Not quite"}>{question.why}</Alert>}
+
+      <div>
+        <Progress value={done / lessons.length * 100} label="Module progress" showLabel />
+      </div>
+    </Card>
+  );
+}
 ```

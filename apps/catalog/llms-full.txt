@@ -17365,17 +17365,57 @@ Landing, docs, blog and portfolio: public content that reads without login and c
 ## Usage
 
 ```tsx
-import {Card, Badge, Button} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, DataList, Badge, SegmentedControl, Field, Input, Alert} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Badge variant="primary">New</Badge>
-  <h2>Ship the interface, not the argument about it.</h2>
-  <p>One system, two themes, three densities.</p>
-  <Button variant="primary" trailingIcon="arrow-right">Get started</Button>
-  <Button variant="outline">Read the docs</Button>
-</Card>
+import {useState} from "react";
+import {Alert, Badge, Button, Card, Field, Heading, Input, SegmentedControl, Text} from "@aurea-uds/react";
+
+export function HomePage({plans, subscribe}) {
+  const [period, setPeriod] = useState("monthly");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState(null);
+  const [done, setDone] = useState(false);
+
+  return (
+    <>
+      <section>
+        <Badge tone="primary">New</Badge>
+        <Heading level={1}>Ship the interface, not the argument about it.</Heading>
+        <Text tone="muted">One system, two themes, three densities.</Text>
+        <Button variant="primary" trailingIcon="arrow-right" href="/start">Get started</Button>
+        <Button appearance="soft" tone="brand" href="/docs">Read the docs</Button>
+      </section>
+
+      <section>
+        <SegmentedControl label="Billing" value={period} onChange={setPeriod}
+          items={[{value: "monthly", label: "Monthly"}, {value: "yearly", label: "Yearly · 2 months free"}]} />
+        {plans.map(p => (
+          <Card key={p.name}>
+            <strong>{p.name}</strong> {p.recommended && <Badge tone="primary">Recommended</Badge>}
+            <Text type="h3" numeric>{period === "monthly" ? p.monthly : p.yearly}</Text>
+            <Button variant={p.recommended ? "primary" : "secondary"} href="/start">Start trial</Button>
+          </Card>
+        ))}
+      </section>
+
+      <section>
+        {done ? <Alert variant="success" title="You are on the list">We will write once a month.</Alert> : (
+          <>
+            <Field label="Email" error={error}>
+              <Input type="email" value={email} onChange={e => setEmail(e.target.value)} aria-invalid={error ? "true" : undefined} />
+            </Field>
+            <Button variant="primary" onClick={async () => {
+              if (!email.includes("@")) return setError("Type an email like name@example.com.");
+              await subscribe(email); setDone(true);
+            }}>Subscribe</Button>
+          </>
+        )}
+      </section>
+    </>
+  );
+}
 ```
 </page>
 
@@ -17387,17 +17427,48 @@ Content authoring: edit, version, publish. Draft and published are distinct, vis
 ## Usage
 
 ```tsx
-import {Card, Badge, Field, Input, Textarea, Button} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, DataList, Timeline, Tabs, Field, Input, Textarea, Prose, TagGroup} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Badge variant="warning">Draft</Badge>
-  <Field label="Title"><Input defaultValue="Measuring instead of counting" /></Field>
-  <Field label="Body" hint="Markdown."><Textarea rows={3} /></Field>
-  <Button variant="ghost">Save draft</Button>
-  <Button variant="primary">Publish</Button>
-</Card>
+import {useState} from "react";
+import {Button, Card, DataList, Field, Heading, Input, Prose, Separator, Status, Tabs, TagGroup, Textarea, Timeline} from "@aurea-uds/react";
+
+export function ArticleEditor({article, save, publish}) {
+  const [title, setTitle] = useState(article.title);
+  const [body, setBody] = useState(article.body);
+  const [tags, setTags] = useState(article.tags);
+  const words = body.trim().split(/\s+/).length;
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>{title}</Heading> <Status variant="warning">Draft</Status>
+        <Button variant="secondary" onClick={() => save({title, body, tags})}>Save draft</Button>
+        <Button variant="primary" onClick={() => publish({title, body, tags})}>Publish</Button>
+      </header>
+      <Separator />
+
+      <Tabs label="Article" panel="plain" tabs={[
+        {id: "write", label: "Write", content: (
+          <>
+            <Field label="Title"><Input value={title} onChange={e => setTitle(e.target.value)} /></Field>
+            <Field label="Body"><Textarea rows={6} value={body} onChange={e => setBody(e.target.value)} /></Field>
+          </>
+        )},
+        {id: "preview", label: "Preview", content: (
+          <Prose><h1>{title}</h1>{body.split(/\n\s*\n/).map((p, i) => <p key={i}>{p}</p>)}</Prose>
+        )},
+      ]} />
+      <TagGroup label="Tags" items={tags} onRemove={ids => setTags(t => t.filter(x => !ids.includes(x.id)))} />
+
+      <div>
+        <DataList items={[{term: "Words", value: words}, {term: "Slug", value: article.slug}]} />
+        <Timeline items={article.versions} />
+      </div>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17409,24 +17480,96 @@ Multi-tenant admin panel: navigate, list, create/edit records, settings and role
 ## Usage
 
 ```tsx
-import {Card, SearchField, Button, Table, Status, Pagination} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, Progress, SegmentedControl, DataGrid, Dialog, Field, Input, Select} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <SearchField placeholder="Filter members…" />
-  <Button variant="outline" leadingIcon="plus">Invite</Button>
-  <Table caption="Workspace members">
-    <thead><tr><th>Member</th><th>Role</th><th>State</th></tr></thead>
-    <tbody>{members.map(m => (
-      <tr key={m.name}>
-        <td>{m.name}</td><td>{m.role}</td>
-        <td><Status variant={m.state}>{m.state}</Status></td>
-      </tr>))}
-    </tbody>
-  </Table>
-  <Pagination page={page} total={4} onPageChange={setPage} />
-</Card>
+import {useState} from "react";
+import {Avatar, Button, Card, Code, Dialog, Field, Heading, Icon, Input, Progress, SegmentedControl, Select,
+  Separator, Status, Text} from "@aurea-uds/react";
+import {DataGrid} from "@aurea-uds/react/data-grid";
+
+const tone = {Active: "success", Invited: "info", Suspended: "warning"};
+const columns = [
+  {accessorKey: "name", header: "Member",
+    cell: ({row}) => (
+      <>
+        <Avatar size="sm" fallback={row.original.name.slice(0, 2)} />
+        {row.original.name}
+        <Text type="body-xs" tone="muted">{row.original.email}</Text>
+      </>
+    )},
+  {accessorKey: "state", header: "State", cell: ({getValue}) => <Status variant={tone[getValue()]}>{getValue()}</Status>},
+  {accessorKey: "role", header: "Role"},
+];
+
+export function MembersAdmin({initial, seats}) {
+  const [members, setMembers] = useState(initial);
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("Editor");
+  const [show, setShow] = useState("All");
+  const [selected, setSelected] = useState(0);
+  const used = members.filter(m => m.state !== "Suspended").length;
+
+  const invite = () => {
+    setMembers(m => [...m, {id: crypto.randomUUID(), name: email.split("@")[0], email, role, state: "Invited"}]);
+    setOpen(false);
+  };
+  const suspend = (rows, clear) => {
+    const ids = new Set(rows.map(r => r.id));
+    setMembers(m => m.map(x => ids.has(x.id) ? {...x, state: "Suspended"} : x));
+    clear();
+  };
+
+  return (
+    <Card>
+      <header>
+        <Avatar size="lg" tone="brand" emphasis="soft" fallback={<Icon name="users" />} />
+        <Text type="body-xs" tone="muted">Settings › Workspace</Text> <Code>ws_acme</Code>
+        <Heading level={3}>Members</Heading> <Status variant="success">Team plan</Status>
+        <Text type="body-sm" tone="muted">{members.length} members · {selected} selected</Text>
+        <Button variant="primary" leadingIcon="user-plus" onClick={() => setOpen(true)}>Invite member</Button>
+      </header>
+      <Separator />
+
+      <Progress value={Math.round(used / seats * 100)} label="Seats in use" showLabel detail={`${used} of ${seats}`} />
+
+      <SegmentedControl label="Show" value={show} onChange={setShow}
+        items={["All", "Active", "Invited", "Suspended"].map(v => ({value: v, label: v}))} />
+
+      <DataGrid
+        label="Workspace members"
+        data={show === "All" ? members : members.filter(m => m.state === show)}
+        columns={columns}
+        getRowId={m => m.id}
+        filterable
+        selectable
+        pageSize={5}
+        onSelectionChange={rows => setSelected(rows.length)}
+        bulkActions={[{id: "suspend", label: "Suspend", icon: "pause", onAction: suspend}]}
+      />
+
+      <Dialog open={open} onClose={() => setOpen(false)} title="Invite a member" size="sm"
+        footer={<><Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button variant="primary" onClick={invite}>Send invite</Button></>}>
+        <Field label="Email" hint="They get a link that expires in 7 days.">
+          <Input type="email" value={email} onChange={e => setEmail(e.target.value)} />
+        </Field>
+        <Field label="Role">
+          <Select items={[{value: "Admin", label: "Admin"}, {value: "Editor", label: "Editor"}, {value: "Viewer", label: "Viewer"}]}
+            value={role} onValueChange={setRole} />
+        </Field>
+      </Dialog>
+
+      <Separator />
+
+      <footer>
+        <Text type="body-sm" tone="muted">Suspended members keep their history and stop using a seat.</Text>
+      </footer>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17438,15 +17581,61 @@ Reading metrics: KPIs, time series, segmentation and drilldown down to the data 
 ## Usage
 
 ```tsx
-import {KPI, SegmentedControl, Table} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Heading, Status, SegmentedControl, Button, KPI, Chart, DataGrid} from "@aurea-uds/react";
 ```
 
 ```tsx
-<SegmentedControl label="Range" value={range} onChange={setRange}
-  items={[{value: "7d", label: "7 days"}, {value: "30d", label: "30 days"}]} />
-<KPI label="Revenue" value="$48.2k" trend="+12%" />
-<KPI label="Active seats" value="312" trend="+4%" />
-<Table caption="Revenue by plan">…</Table>
+import {useState} from "react";
+import {Avatar, Button, Card, Heading, Icon, KPI, SegmentedControl, Separator, Status, Text} from "@aurea-uds/react";
+import {Chart} from "@aurea-uds/react/chart";
+import {DataGrid} from "@aurea-uds/react/data-grid";
+import {Bar, BarChart, CartesianGrid, XAxis} from "recharts";
+
+// The same series twice: as bars and as numbers. Changing the period changes both.
+export function RevenueDashboard({periods, plans, onExport}) {
+  const [period, setPeriod] = useState("30d");
+  const {series, kpis} = periods[period];
+
+  return (
+    <Card>
+      <header>
+        <Avatar size="lg" tone="brand" emphasis="soft" fallback={<Icon name="chart-bar" />} />
+        <Text type="body-xs" tone="muted">Analytics</Text>
+        <Heading level={3}>Revenue</Heading> <Status variant="success">Up to date</Status>
+        <SegmentedControl label="Period" value={period} onChange={setPeriod}
+          items={[{value: "7d", label: "7 days"}, {value: "30d", label: "30 days"}, {value: "90d", label: "90 days"}]} />
+        <Button variant="secondary" leadingIcon="download-simple" onClick={() => onExport(period)}>Export {period}</Button>
+      </header>
+      <Separator />
+
+      {kpis.map(k => (
+        <Card key={k.label} variant="inset">
+          <KPI variant="plain" label={k.label} value={k.value} trend={k.trend} direction={k.direction} tone={k.tone} />
+        </Card>
+      ))}
+
+      <Card variant="inset">
+        <Chart label="Revenue over the period, in thousands of dollars">
+          <BarChart data={series}>
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="x" tickLine={false} axisLine={false} interval={0} />
+            <Bar dataKey="revenue" name="Revenue" fill="var(--chart-2)" />
+          </BarChart>
+        </Chart>
+      </Card>
+
+      <DataGrid label="Revenue by plan" data={plans[period]}
+        columns={[{accessorKey: "plan", header: "Plan"}, {accessorKey: "revenue", header: "Revenue ($k)"},
+          {accessorKey: "seats", header: "Seats"}]} />
+
+      <Separator />
+
+      <footer>
+        <Text type="body-sm" tone="muted">The grid carries the same numbers as the bars.</Text>
+      </footer>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17458,20 +17647,51 @@ A navigable visual collection: facet, toggle grid/list, select and act in bulk. 
 ## Usage
 
 ```tsx
-import {SegmentedControl, Badge, Button, Grid, Card, Checkbox} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, SegmentedControl, Button, Image, DataList, Gallery, DataGrid, ConfirmDialog} from "@aurea-uds/react";
 ```
 
 ```tsx
-<SegmentedControl label="View" value={view} onChange={setView}
-  items={[{value: "grid", label: "Grid"}, {value: "list", label: "List"}]} />
-<Badge variant="primary">2 selected</Badge>
-<Button variant="outline">Export</Button>
-<Grid>{items.map(i => (
-  <Card key={i.id} variant={selected.has(i.id) ? "selected" : "base"}>
-    <Checkbox label={`Select ${i.name}`} />
-    {i.name}
-  </Card>))}
-</Grid>
+import {useState} from "react";
+import {Button, Card, ConfirmDialog, DataList, Gallery, Heading, Image, SegmentedControl, Separator, Status} from "@aurea-uds/react";
+import {DataGrid} from "@aurea-uds/react/data-grid";
+
+export function Catalog({initial, remove}) {
+  const [items, setItems] = useState(initial);
+  const [selected, setSelected] = useState([]);
+  const [current, setCurrent] = useState(initial[0].id);
+  const [view, setView] = useState("grid");
+  const [confirm, setConfirm] = useState(false);
+  const item = items.find(i => i.id === current);
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>Brand assets</Heading> <Status variant="success">{items.length} items</Status>
+        <SegmentedControl label="View" value={view} onChange={setView}
+          items={[{value: "grid", label: "Grid", icon: "squares-four"}, {value: "list", label: "List", icon: "list"}]} />
+        <Button variant="danger-ghost" leadingIcon="trash" disabled={!selected.length} onClick={() => setConfirm(true)}>Remove</Button>
+      </header>
+      <Separator />
+
+      {view === "grid"
+        ? <Gallery label="Brand assets" items={items} selectionMode="multiple" selectedIds={selected}
+            onSelectionChange={setSelected} selected={current} onSelect={setCurrent} />
+        : <DataGrid label="Brand assets" data={items} getRowId={i => i.id} selectable
+            rowSelection={Object.fromEntries(selected.map(id => [id, true]))}
+            onRowSelectionChange={s => setSelected(Object.keys(s).filter(k => s[k]))}
+            columns={[{accessorKey: "caption", header: "Name"}, {accessorKey: "size", header: "Size"}]} />}
+
+      <div>
+        <Image src={item.src} alt={item.alt} ratio="3/2" />
+        <DataList items={[{term: "Type", value: item.kind}, {term: "Size", value: item.size}]} />
+      </div>
+
+      <ConfirmDialog open={confirm} destructive title={`Remove ${selected.length} items?`} confirmLabel="Remove"
+        onConfirm={() => { remove(selected); setItems(i => i.filter(x => !selected.includes(x.id))); setSelected([]); setConfirm(false); }}
+        onCancel={() => setConfirm(false)} />
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17483,15 +17703,41 @@ An audio/video library with queue, playlists, tracks and chapters. A library act
 ## Usage
 
 ```tsx
-import {MediaPlayer, Table, Badge} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Badge, Button, DataList, SortableList, MediaPlayer, ListBox} from "@aurea-uds/react";
 ```
 
 ```tsx
-<MediaPlayer kind="audio" src="/media/ep-14.mp3" title="Episode 14" subtitle="Season 2" />
-<Table caption="Up next">
-  <thead><tr><th>Track</th><th>Length</th></tr></thead>
-  <tbody><tr><td>Episode 15 <Badge>queued</Badge></td><td>41:02</td></tr></tbody>
-</Table>
+import {useState} from "react";
+import {Badge, Button, Card, DataList, Heading, ListBox, MediaPlayer, Separator, SortableList} from "@aurea-uds/react";
+
+export function Player({episodes, chapters}) {
+  const [playing, setPlaying] = useState(episodes[0]);
+  const [queue, setQueue] = useState(episodes.slice(1));
+  const [chapter, setChapter] = useState(chapters[0].id);
+  const move = (from, to) => setQueue(q => { const c = [...q]; const [x] = c.splice(from, 1); c.splice(to, 0, x); return c; });
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>{playing.title}</Heading> <Badge tone="info">Season 2</Badge>
+        <Button variant="primary" leadingIcon="play" disabled={!queue.length}
+          onClick={() => { setPlaying(queue[0]); setQueue(q => [...q.slice(1), playing]); }}>Play next</Button>
+      </header>
+      <Separator />
+
+      <div style={{"--media-ar": "auto", "--media-h": "12rem"}}>
+        <MediaPlayer kind="audio" src={playing.src} poster={playing.cover} title={playing.title} subtitle={playing.show} />
+      </div>
+      <ListBox label="Chapters" selectionMode="single" value={[chapter]} onValueChange={v => v[0] && setChapter(v[0])}
+        items={chapters.map(c => ({id: c.id, label: c.label, description: c.start}))} />
+
+      <div>
+        <DataList items={[{term: "Resume at", value: playing.resumeAt}, {term: "Next up", value: queue[0]?.title}]} />
+        <SortableList label="Up next" items={queue} onReorder={move} />
+      </div>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17503,19 +17749,45 @@ A visual flow builder: nodes and edges, runs with history, version comparison. A
 ## Usage
 
 ```tsx
-import {Card, Status, Button, Timeline, LogStream} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Switch, Button, DependencyGraph, DataList, Badge, LogStream} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Status variant="running">running</Status>
-  <Button variant="ghost" size="sm">Cancel</Button>
-  <Timeline items={[
-    {title: "Trigger · webhook", time: "09:14:02"},
-    {title: "Transform · map fields", time: "09:14:03"},
-  ]} />
-  <LogStream lines={runLog} />
-</Card>
+import {useState} from "react";
+import {Button, Card, Code, DataList, Heading, LogStream, Separator, Status, Switch} from "@aurea-uds/react";
+import {DependencyGraph} from "@aurea-uds/react/graph";
+import "@xyflow/react/dist/base.css";
+
+export function Automation({flow, steps, edges, runLog, run}) {
+  const [selected, setSelected] = useState(steps[0].id);
+  const [enabled, setEnabled] = useState(true);
+  const [lines, setLines] = useState(runLog);
+  const step = steps.find(s => s.id === selected);
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>{flow.name}</Heading> <Status variant={enabled ? "success" : "neutral"}>{enabled ? "On" : "Off"}</Status>
+        <Switch label="Enabled" checked={enabled} onChange={e => setEnabled(e.target.checked)} />
+        <Button variant="primary" leadingIcon="play" disabled={!enabled}
+          onClick={async () => setLines(l => [...l, ...await run()])}>Run now</Button>
+      </header>
+      <Separator />
+
+      <Card variant="inset">
+        <DependencyGraph label={`${flow.name}, step by step`} orientation="vertical" height="24rem"
+          nodes={steps} edges={edges} selectedId={selected} onSelect={id => id && setSelected(id)} />
+      </Card>
+      <Card variant="outline">
+        <LogStream lines={lines} />
+      </Card>
+
+      <div>
+        <DataList items={[{term: "Step", value: step.label}, {term: "Does", value: <Code>{step.detail}</Code>}]} />
+      </div>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17527,13 +17799,42 @@ Dev IDE/platform: workspace, files, editor, terminal, tests, builds and artifact
 ## Usage
 
 ```tsx
-import {TreeView, CodeBlock, LogStream} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, TreeView, DataList, CodeBlock, CodeEditor, LogStream} from "@aurea-uds/react";
 ```
 
 ```tsx
-<TreeView label="Files" defaultExpandedIds={["src"]} items={tree} onSelect={open} />
-<CodeBlock language="tsx" copyable>{source}</CodeBlock>
-<LogStream lines={terminal} />
+import {useState} from "react";
+import {Button, Card, CodeBlock, DataList, Heading, LogStream, Separator, Status, TreeView} from "@aurea-uds/react";
+import {CodeEditor} from "@aurea-uds/react/code-editor";
+
+export function Workbench({files, tree, runTests}) {
+  const [open, setOpen] = useState(Object.keys(files)[0]);
+  const [editing, setEditing] = useState(false);
+  const [lines, setLines] = useState([]);
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>{open}</Heading> <Status variant={editing ? "warning" : "success"}>{editing ? "Editing" : "Saved"}</Status>
+        <Button variant="secondary" onClick={() => setEditing(e => !e)}>{editing ? "Done" : "Edit"}</Button>
+        <Button variant="primary" leadingIcon="play" onClick={async () => setLines(l => [...l, ...await runTests()])}>Run tests</Button>
+      </header>
+      <Separator />
+
+      <Card variant="inset">
+        {editing
+          ? <CodeEditor key={open} defaultValue={files[open]} ariaLabel={`Edit ${open}`} />
+          : <CodeBlock key={open} filename={open} copyable lineNumbers>{files[open]}</CodeBlock>}
+      </Card>
+      <Card variant="outline"><LogStream lines={lines} /></Card>
+
+      <div>
+        <TreeView label="Files" items={tree} selectedId={open} onSelect={node => files[node.id] && setOpen(node.id)} />
+        <DataList items={[{term: "Lines", value: files[open].split("\n").length}]} />
+      </div>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17545,19 +17846,48 @@ Browse, transfer and restore files with verifiable integrity.
 ## Usage
 
 ```tsx
-import {Card, Table, Status, Progress, Button} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, TreeView, DataList, Progress, Button, DataGrid, FileInput} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Table caption="Files">
-    <thead><tr><th>Name</th><th>Size</th><th>Integrity</th></tr></thead>
-    <tbody><tr><td>tokens.json</td><td>18 KB</td>
-      <td><Status variant="success">checksum ok</Status></td></tr></tbody>
-  </Table>
-  <Progress value={62} label="Uploading fonts.woff2" />
-  <Button variant="ghost" size="sm">Pause</Button>
-</Card>
+import {useState} from "react";
+import {Button, Card, Code, DataList, FileInput, Heading, Progress, Separator, Status, TreeView} from "@aurea-uds/react";
+import {DataGrid} from "@aurea-uds/react/data-grid";
+
+export function Files({folders, initialFiles, put}) {
+  const [folder, setFolder] = useState(folders[0].id);
+  const [files, setFiles] = useState(initialFiles);
+  const [selected, setSelected] = useState(null);
+  const inFolder = files.filter(f => f.folder === folder);
+  const file = files.find(f => f.id === selected);
+
+  return (
+    <Card>
+      <header><Heading level={3}>{folder}</Heading> <Status variant="success">All synced</Status></header>
+      <Separator />
+
+      <DataGrid label="Files" data={inFolder} getRowId={f => f.id}
+        columns={[
+          {accessorKey: "name", header: "Name", cell: ({row}) => <Button variant="link" onClick={() => setSelected(row.original.id)}>{row.original.name}</Button>},
+          {accessorKey: "size", header: "Size"},
+          {accessorKey: "state", header: "State", cell: ({getValue}) => <Status variant={variant[getValue()]}>{label[getValue()]}</Status>},
+        ]} />
+      <Card variant="outline">
+        <FileInput label="Add files" multiple maxSize={10_000_000}
+          upload={async (f, {onProgress, signal}) => {
+            await put(f, {onProgress, signal});
+            setFiles(all => [...all, {id: crypto.randomUUID(), folder, name: f.name, state: "uploaded"}]);
+          }} />
+      </Card>
+
+      <div>
+        <TreeView label="Folders" items={folders} selectedId={folder} onSelect={n => setFolder(n.id)} />
+        {file && <DataList items={[{term: "Size", value: file.size}, {term: "Checksum", value: <Code>{file.sum}</Code>}]} />}
+        {file?.state === "transferring" && <Progress value={file.progress} label="Transferring" showLabel />}
+      </div>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17569,15 +17899,42 @@ Conversations, threads and feed: presence and read are signals, not permissions.
 ## Usage
 
 ```tsx
-import {Card, Status, MessageList, MessageComposer} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, NotificationCenter, ListBox, DataList, MessageList, Button, MessageComposer} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Status variant="online">Analyst is online</Status>
-  <MessageList messages={messages} />
-  <MessageComposer placeholder="Message the team…" onSend={send} />
-</Card>
+import {useState} from "react";
+import {Button, Card, DataList, Heading, ListBox, MessageComposer, MessageList, NotificationCenter, Separator, Status} from "@aurea-uds/react";
+
+export function Chat({channels, threads: initialThreads, mentions}) {
+  const [channel, setChannel] = useState(channels[0].id);
+  const [threads, setThreads] = useState(initialThreads);
+  const [replyTo, setReplyTo] = useState(null);
+  const send = (body) => {
+    setThreads(t => ({...t, [channel]: [...t[channel], {id: crypto.randomUUID(), author: "You", direction: "outgoing", body, replyTo}]}));
+    setReplyTo(null);
+  };
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>{channel}</Heading> <Status variant="online">4 online</Status>
+        <NotificationCenter label="Mentions" items={mentions} />
+      </header>
+      <Separator />
+
+      <MessageList label={`Conversation in ${channel}`} messages={threads[channel]} />
+      <Button appearance="soft" tone="brand" size="sm" onClick={() => setReplyTo(threads[channel].at(-1))}>Reply</Button>
+      <MessageComposer label={`Message ${channel}`} attach onSend={send} replyTo={replyTo} onCancelReply={() => setReplyTo(null)} />
+
+      <div>
+        <ListBox label="Channels" selectionMode="single" value={[channel]} onValueChange={v => v[0] && setChannel(v[0])}
+          items={channels.map(c => ({id: c.id, label: c.name, description: c.unread ? `${c.unread} unread` : "all read"}))} />
+        <DataList items={[{term: "Analyst", value: <Status variant="online">online</Status>}]} />
+      </div>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17589,20 +17946,51 @@ Cart, order, payment and reconciliation: a consequential write is idempotent and
 ## Usage
 
 ```tsx
-import {Card, DataList, Alert, Button, Badge} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, DataList, Timeline, ConfirmDialog} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Badge variant="warning">Payment pending</Badge>
-  <DataList items={[
-    {term: "Subtotal", value: "$240.00"},
-    {term: "Tax", value: "$21.60"},
-    {term: "Total", value: "$261.60"},
-  ]} />
-  <Alert variant="info">Charging twice is impossible: the order id is the idempotency key.</Alert>
-  <Button variant="primary">Pay $261.60</Button>
-</Card>
+import {useState} from "react";
+import {Button, Card, Code, ConfirmDialog, DataList, Heading, Separator, Status, Text, Timeline} from "@aurea-uds/react";
+
+export function Checkout({order}) {
+  const [state, setState] = useState("pending");
+  const [events, setEvents] = useState(order.events);
+  const [confirm, setConfirm] = useState(false);
+  const add = (title, description) => setEvents(e => [{title, description, time: now()}, ...e]);
+
+  return (
+    <Card>
+      <header>
+        <Code>{order.id}</Code>
+        <Heading level={3}>{order.total}</Heading>
+        <Status variant={state === "paid" ? "success" : "warning"}>{state === "paid" ? "Paid" : "Payment pending"}</Status>
+        {state === "pending" && (
+          <Button variant="primary" leadingIcon="credit-card"
+            onClick={() => { setState("paid"); add(`Charged ${order.total}`, order.card); }}>Pay {order.total}</Button>
+        )}
+        {state === "paid" && <Button variant="danger-ghost" onClick={() => setConfirm(true)}>Refund</Button>}
+      </header>
+      <Separator />
+
+      <Card variant="inset">
+        <DataList items={order.lines.map(l => ({term: l.label, value: <Text numeric>{l.amount}</Text>}))} />
+      </Card>
+      <Card variant="inset">
+        <Timeline variant="latest" items={events} />
+      </Card>
+
+      <div>
+        <DataList items={[{term: "Order", value: <Code>{order.id}</Code>}, {term: "Idempotency key", value: <Code>{order.id}</Code>}]} />
+      </div>
+
+      <ConfirmDialog open={confirm} destructive title={`Refund ${order.total}?`} confirmLabel="Refund"
+        description="The charge and this refund both stay in the history."
+        onConfirm={() => { setConfirm(false); setState("refunded"); add(`Refunded ${order.total}`, order.card); }}
+        onCancel={() => setConfirm(false)} />
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17614,17 +18002,47 @@ Book a time slot: availability, customer details, payment and confirmation.
 ## Usage
 
 ```tsx
-import {Card, Radio, Field, Input, Button, Badge} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Heading, Badge, Calendar, RadioGroup, Radio, Field, Input, DataList, Button, Alert} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Badge>Europe/Lisbon</Badge>
-  <Radio name="slot" label="09:00 – 09:30" defaultChecked />
-  <Radio name="slot" label="11:00 – 11:30" />
-  <Field label="Name"><Input defaultValue="Curator" /></Field>
-  <Button variant="primary">Confirm booking</Button>
-</Card>
+import {useState} from "react";
+import {Alert, Badge, Button, Card, DataList, Field, Heading, Input, Radio, RadioGroup, Separator} from "@aurea-uds/react";
+import {Calendar} from "@aurea-uds/react/calendar";
+
+export function Booking({slotsFor, timeZone, today}) {
+  const [day, setDay] = useState(new Date(2026, 10, 12));
+  const [time, setTime] = useState(slotsFor(day)[0]);
+  const [name, setName] = useState("");
+  const [booked, setBooked] = useState(false);
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>Book a 30-minute demo</Heading> <Badge tone="info">{timeZone}</Badge>
+      </header>
+      <Separator />
+
+      {booked && <Alert variant="success" title="You are booked">{format(day)} at {time}.</Alert>}
+
+      <Calendar mode="single" label="Day" selected={day}
+        onSelect={d => { setDay(d); setTime(slotsFor(d)[0]); }}
+        disabled={[{before: today}, {dayOfWeek: [0, 6]}]} />
+      <RadioGroup label={`Free on ${format(day)}`} variant="card" value={time} onValueChange={setTime}>
+        {slotsFor(day).map(t => <Radio key={t} value={t} label={t} description="30 min" />)}
+      </RadioGroup>
+      <Field label="Your name"><Input value={name} onChange={e => setName(e.target.value)} /></Field>
+
+      <div>
+        <DataList items={[{term: "Day", value: format(day)}, {term: "Time", value: time}]} />
+      </div>
+      <Separator />
+      <footer>
+        <Button variant="primary" disabled={!name || booked} onClick={() => setBooked(true)}>Confirm booking</Button>
+      </footer>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17636,17 +18054,44 @@ Routes, layers and tracking on the map: every selection mirrors a list and offli
 ## Usage
 
 ```tsx
-import {Card, KPI, Timeline, Status} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, DataList, Alert, KPI, Stepper, DataGrid} from "@aurea-uds/react";
 ```
 
 ```tsx
-// The map is one half; this list is the other, and the invariant is that they
-// always agree. Selecting a stop here selects the marker there.
-<Card>
-  <KPI label="ETA" value="14:42" trend="on time" />
-  <Status variant="warning">position 3 min old</Status>
-  <Timeline items={stops} />
-</Card>
+import {useState} from "react";
+import {Alert, Button, Card, DataList, Heading, KPI, Separator, Status, Stepper} from "@aurea-uds/react";
+import {DataGrid} from "@aurea-uds/react/data-grid";
+
+// The map is the other half. This list is its mirror: selecting a stop here selects it there.
+export function Route({stops}) {
+  const [done, setDone] = useState(2);
+  const [selected, setSelected] = useState(stops[done].id);
+  const stop = stops.find(s => s.id === selected);
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>Harbour loop</Heading> <Status variant="running">On the road</Status>
+        {done < stops.length && (
+          <Button variant="primary" onClick={() => setDone(d => d + 1)}>Mark {stops[done].stop} as delivered</Button>
+        )}
+      </header>
+      <Separator />
+
+      <Card variant="inset"><KPI variant="plain" label="Next stop ETA" value={stops[done]?.eta ?? "—"} /></Card>
+      <Stepper label="Route stops"
+        items={stops.map((s, i) => ({label: s.stop, optional: s.eta, onClick: () => setSelected(s.id),
+          state: i < done ? "done" : i === done ? "active" : "default"}))} />
+      <DataGrid label="Stops" data={stops} getRowId={s => s.id}
+        columns={[{accessorKey: "stop", header: "Stop"}, {accessorKey: "address", header: "Address"}, {accessorKey: "eta", header: "ETA"}]} />
+
+      <div>
+        <DataList items={[{term: "Address", value: stop.address}, {term: "Note", value: stop.note}]} />
+        <Alert variant="warning" title="Position 3 min old">The ETA uses the last known position.</Alert>
+      </div>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17658,19 +18103,51 @@ A device fleet: telemetry, commands and calibration. An unsafe command is gated;
 ## Usage
 
 ```tsx
-import {Card, Status, Switch, Progress, Alert, Button} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, RadioGroup, Radio, DataList, Banner, Alert, KPI, Progress, Slider, Switch, Timeline, ConfirmDialog} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Status variant="online">gateway-04 online</Status>
-  <Switch label="Night mode" defaultChecked />
-  <Progress value={41} label="Tank level" />
-  <Alert variant="warning" title="Confirmation required">
-    Calibration writes to the device. Type the device id to continue.
-  </Alert>
-  <Button variant="danger">Calibrate</Button>
-</Card>
+import {useState} from "react";
+import {Alert, Button, Card, ConfirmDialog, DataList, Heading, KPI, Progress, Radio, RadioGroup, Separator, Slider, Status,
+  Switch, Timeline} from "@aurea-uds/react";
+
+export function Device({fleet, limit, calibrate}) {
+  const [id, setId] = useState(Object.keys(fleet)[0]);
+  const [setpoint, setSetpoint] = useState(62);
+  const [acknowledged, setAcknowledged] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const d = fleet[id];
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>{d.place}</Heading> <Status variant={d.temp > limit ? "warning" : "success"}>{d.state}</Status>
+        <Button variant="danger-ghost" leadingIcon="gauge" onClick={() => setConfirm(true)}>Calibrate</Button>
+      </header>
+      <Separator />
+
+      {d.alert && !acknowledged && (
+        <Alert variant="warning" title={`Temperature above ${limit} °C`}
+          action={<Button variant="secondary" size="sm" onClick={() => setAcknowledged(true)}>Acknowledge</Button>} />
+      )}
+      <Card variant="inset"><KPI variant="plain" label="Temperature" value={`${d.temp} °C`} tone={d.temp > limit ? "danger" : "neutral"} /></Card>
+      <Progress value={d.temp / 90 * 100} label="Temperature against the scale" showLabel detail={`limit ${limit} °C`} />
+      <Slider label="Setpoint" value={setpoint} onValueChange={setSetpoint} min={40} max={80} showValue />
+      <Switch label="Night mode" description="Halves the pump speed at night" />
+      <Timeline items={d.history} />
+
+      <div>
+        <RadioGroup label="Device" labelHidden value={id} onValueChange={setId}>
+          {Object.entries(fleet).map(([key, x]) => <Radio key={key} value={key} label={x.name} description={x.state} />)}
+        </RadioGroup>
+      </div>
+
+      <ConfirmDialog open={confirm} destructive title={`Calibrate ${d.name}?`} confirmLabel="Calibrate"
+        description="This writes to the device and restarts its sensors."
+        onConfirm={() => { setConfirm(false); calibrate(id, setpoint); }} onCancel={() => setConfirm(false)} />
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17682,20 +18159,64 @@ Agent console: conversation, runs with tool calls, explicit approval and an audi
 ## Usage
 
 ```tsx
-import {Card, MessageList, Timeline, Alert, Button} from "@aurea-uds/react";
+import {Card, Avatar, Icon, Text, Code, Heading, AgentStatus, Button, MessageList, MessageComposer, HumanApproval, TraceTimeline, DataList, CostMeter, Separator} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <MessageList messages={turns} />
-  <Timeline items={[
-    {title: "read_file · tokens.json", description: "18 KB", time: "09:14:03"},
-    {title: "write_file · aurea.css", description: "awaiting approval", time: "09:14:05"},
-  ]} />
-  <Alert variant="warning" title="Approval required">This run writes to the repository.</Alert>
-  <Button variant="ghost">Reject</Button>
-  <Button variant="primary">Approve</Button>
-</Card>
+import {useState} from "react";
+import {AgentStatus, Avatar, Button, Card, Code, CostMeter, DataList, Heading, HumanApproval, Icon, MessageComposer,
+  MessageList, Separator, Text, TraceTimeline} from "@aurea-uds/react";
+
+export function AgentConsole({run, turns, spans, spend}) {
+  const [state, setState] = useState("paused");
+  const [decision, setDecision] = useState();
+  const [messages, setMessages] = useState(turns);
+  const say = (author, body) => setMessages(m => [...m, {id: String(m.length + 1), author, body}]);
+  const deny = () => { setDecision("denied"); setState("idle"); };
+
+  return (
+    <Card>
+      <header>
+        <Avatar size="lg" tone="brand" emphasis="soft" fallback={<Icon name="robot" />} />
+        <Text type="body-xs" tone="muted">Agent runs</Text> <Code>{run.id}</Code>
+        <Heading level={3}>{run.title}</Heading>
+        <AgentStatus state={state} />
+        <Button variant="danger-ghost" leadingIcon="x" disabled={state !== "paused"} onClick={deny}>Cancel run</Button>
+      </header>
+      <Separator />
+
+      <Card variant="outline">
+        <MessageList label="Conversation" messages={messages} />
+        <MessageComposer label="Message the agent" onSend={text => say("You", text)} />
+      </Card>
+      <Card variant="inset">
+        <HumanApproval
+          title="Write 4 values to 2 files"
+          risk="medium"
+          decision={decision}
+          details={[{term: "Files", value: "aurea.css, tokens.json"}, {term: "Values", value: "4"}]}
+          onApprove={() => { setDecision("approved"); setState("completed"); }}
+          onDeny={deny}
+        />
+      </Card>
+      <Card variant="inset">
+        <TraceTimeline label={`Run ${run.id}, step by step`} spans={spans} />
+      </Card>
+
+      <div>
+        <DataList items={[{term: "Agent", value: run.agent}, {term: "Resume from", value: run.checkpoint}]} />
+        <Separator />
+        <CostMeter label="Spend this month" spent={spend.total} limit={100} softLimit={80} segments={spend.segments} />
+      </div>
+
+      <Separator />
+
+      <footer>
+        <Text type="body-sm" tone="muted">No change is written without an approval. Cancelling also leaves a receipt.</Text>
+      </footer>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17707,19 +18228,59 @@ Records, pipeline, assignments and automation: an audited history is append-only
 ## Usage
 
 ```tsx
-import {Card, SearchField, Table, Badge, Avatar, Pagination} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, KPI, DataGrid, Badge, Dialog, Field, Input, NumberField, Select} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <SearchField placeholder="Filter deals…" />
-  <Table caption="Pipeline">
-    <thead><tr><th>Deal</th><th>Stage</th><th>Owner</th></tr></thead>
-    <tbody><tr><td>Acme · renewal</td><td><Badge variant="info">Negotiation</Badge></td>
-      <td><Avatar fallback="AN" size="sm" /></td></tr></tbody>
-  </Table>
-  <Pagination page={page} total={9} onPageChange={setPage} />
-</Card>
+import {useState} from "react";
+import {Avatar, Badge, Button, Card, Dialog, Field, Heading, Input, KPI, NumberField, Select, Separator, Status, Text} from "@aurea-uds/react";
+import {DataGrid} from "@aurea-uds/react/data-grid";
+
+const tone = {Lead: "neutral", Qualified: "info", Proposal: "violet", Negotiation: "warning", Won: "success", Lost: "danger"};
+const columns = [
+  {accessorKey: "deal", header: "Deal"},
+  {accessorKey: "stage", header: "Stage", cell: ({getValue}) => <Badge tone={tone[getValue()]}>{getValue()}</Badge>},
+  {accessorKey: "owner", header: "Owner", cell: ({getValue}) => <><Avatar size="sm" fallback={getValue().slice(0, 2)} /> {getValue()}</>},
+  {accessorKey: "amount", header: "Amount", cell: ({getValue}) => <Text numeric>{money(getValue())}</Text>},
+  {accessorKey: "close", header: "Close"},
+];
+
+export function Pipeline({initial}) {
+  const [deals, setDeals] = useState(initial);
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState({deal: "", amount: 10000, stage: "Lead"});
+  const openDeals = deals.filter(d => d.stage !== "Won" && d.stage !== "Lost");
+  const markWon = (rows, clear) => {
+    const ids = new Set(rows.map(r => r.id));
+    setDeals(ds => ds.map(d => ids.has(d.id) ? {...d, stage: "Won"} : d));
+    clear();
+  };
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>Q4 pipeline</Heading> <Status variant="info">On track</Status>
+        <Button variant="primary" leadingIcon="plus" onClick={() => setOpen(true)}>New deal</Button>
+      </header>
+      <Separator />
+      <Card variant="inset">
+        <KPI variant="plain" label="Open pipeline" value={money(sum(openDeals))} trend={`${openDeals.length} deals`} />
+      </Card>
+      <DataGrid label="Deals" data={deals} columns={columns} getRowId={d => d.id} filterable selectable
+        bulkActions={[{id: "won", label: "Mark as won", icon: "check", onAction: markWon}]} />
+      <Dialog open={open} onClose={() => setOpen(false)} title="New deal" size="sm"
+        footer={<Button variant="primary" onClick={() => { setDeals(d => [...d, {...draft, id: crypto.randomUUID()}]); setOpen(false); }}>Add deal</Button>}>
+        <Field label="Deal"><Input value={draft.deal} onChange={e => setDraft({...draft, deal: e.target.value})} /></Field>
+        <NumberField label="Amount" value={draft.amount} onValueChange={amount => setDraft({...draft, amount})}
+          format={{style: "currency", currency: "USD", maximumFractionDigits: 0}} />
+        <Field label="Stage">
+          <Select items={["Lead", "Qualified", "Proposal", "Negotiation"].map(v => ({value: v, label: v}))}
+            value={draft.stage} onValueChange={stage => setDraft({...draft, stage})} />
+        </Field>
+      </Dialog>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17731,19 +18292,42 @@ Lessons, assessment and progress: progress is readable without relying on color 
 ## Usage
 
 ```tsx
-import {Card, Progress, Accordion, Badge, Button} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, Progress, DataList, Stepper, Accordion, RadioGroup, Radio, Alert} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Progress value={60} label="Module progress" />
-  <Badge variant="success">3 of 5 lessons</Badge>
-  <Accordion items={[
-    {id: "l1", title: "Lesson 1 · Tokens", content: "Every visual value has a name."},
-    {id: "l2", title: "Lesson 2 · Density", content: "What density governs, and what it does not."},
-  ]} />
-  <Button variant="primary">Continue</Button>
-</Card>
+import {useState} from "react";
+import {Accordion, Alert, Button, Card, DataList, Heading, Progress, Radio, RadioGroup, Separator, Status, Stepper} from "@aurea-uds/react";
+
+export function Lesson({lessons, parts, question}) {
+  const [done, setDone] = useState(2);
+  const [answer, setAnswer] = useState("");
+  const [checked, setChecked] = useState(false);
+  const right = answer === question.correct;
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>Lesson {done + 1} · {lessons[done]}</Heading> <Status variant="info">In progress</Status>
+        <Button variant="primary" disabled={!checked || !right}
+          onClick={() => { setDone(d => d + 1); setAnswer(""); setChecked(false); }}>Mark as complete</Button>
+      </header>
+      <Separator />
+
+      <Stepper label="Lessons" items={lessons.map((l, i) => ({label: l, state: i < done ? "done" : i === done ? "active" : "default"}))} />
+      <Accordion variant="surface" defaultValue={[parts[0].id]} items={parts} />
+      <RadioGroup label={question.text} value={answer} onValueChange={v => { setAnswer(v); setChecked(false); }}>
+        {question.options.map(o => <Radio key={o.value} value={o.value} label={o.label} />)}
+      </RadioGroup>
+      <Button appearance="soft" tone="brand" disabled={!answer} onClick={() => setChecked(true)}>Check the answer</Button>
+      {checked && <Alert variant={right ? "success" : "warning"} title={right ? "Right" : "Not quite"}>{question.why}</Alert>}
+
+      <div>
+        <Progress value={done / lessons.length * 100} label="Module progress" showLabel />
+      </div>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17755,18 +18339,48 @@ Tasks, notes and calendar: offline editing is recoverable and navigating never d
 ## Usage
 
 ```tsx
-import {Card, Banner, Checkbox, Button} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Switch, ProgressCircle, DataList, Banner, Field, Input, Button, Checkbox, SortableList} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Banner variant="info" title="Offline draft saved">
-    It syncs when the connection returns. Navigating away keeps it.
-  </Banner>
-  <Checkbox label="Write the recipe previews" defaultChecked />
-  <Checkbox label="Regenerate the 169 pages" />
-  <Button variant="ghost" leadingIcon="plus">New task</Button>
-</Card>
+import {useState} from "react";
+import {Banner, Button, Card, Checkbox, Field, Heading, Input, ProgressCircle, Separator, SortableList, Status, Switch} from "@aurea-uds/react";
+
+export function Today({initial}) {
+  const [tasks, setTasks] = useState(initial);
+  const [draft, setDraft] = useState("");
+  const [offline, setOffline] = useState(false);
+  const open = tasks.filter(t => !t.done);
+  const add = () => { if (draft.trim()) setTasks(t => [...t, {id: crypto.randomUUID(), label: draft.trim(), done: false}]); setDraft(""); };
+  const move = (from, to) => setTasks(ts => {
+    const o = ts.filter(t => !t.done); const [x] = o.splice(from, 1); o.splice(to, 0, x); return [...o, ...ts.filter(t => t.done)];
+  });
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>Today</Heading> <Status variant={offline ? "warning" : "success"}>{offline ? "Offline" : "Synced"}</Status>
+        <Switch label="Work offline" checked={offline} onChange={e => setOffline(e.target.checked)} />
+      </header>
+      <Separator />
+
+      {offline && <Banner variant="info" title="Offline — your changes are saved here">They sync when the connection returns.</Banner>}
+      <Field label="Task">
+        <Input value={draft} onChange={e => setDraft(e.target.value)} onKeyDown={e => e.key === "Enter" && add()} />
+      </Field>
+      <Button variant="primary" leadingIcon="plus" onClick={add}>Add</Button>
+      {tasks.map(t => (
+        <Checkbox key={t.id} label={t.label} checked={t.done}
+          onChange={e => setTasks(ts => ts.map(x => x.id === t.id ? {...x, done: e.target.checked} : x))} />
+      ))}
+      <SortableList label="Open tasks by priority" items={open} onReorder={move} />
+
+      <div>
+        <ProgressCircle label="Done today" value={(tasks.length - open.length) / tasks.length * 100} size="lg" />
+      </div>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17778,17 +18392,41 @@ An installable, responsive app: everything works at 320px and touch and keyboard
 ## Usage
 
 ```tsx
-import {Card, Banner, Field, Input, Button} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Switch, DataList, Banner, Alert, NumberField, Button, TaskQueue, EmptyState, BottomNav, Badge} from "@aurea-uds/react";
 ```
 
 ```tsx
-// 320px is the target, not the exception: one column, full-width action,
-// touch target never under 24px.
-<Card>
-  <Banner variant="warning" title="Offline">Saved locally, queued to send.</Banner>
-  <Field label="Reading"><Input inputMode="numeric" defaultValue="41.2" /></Field>
-  <Button variant="primary" fullWidth>Save reading</Button>
-</Card>
+import {useState} from "react";
+import {Alert, Badge, Banner, BottomNav, Button, EmptyState, Heading, NumberField, Status, TaskQueue} from "@aurea-uds/react";
+
+// 320px is the target, not the exception: one column, the action full width, touch targets never under 44px.
+export function MeterApp({online, save}) {
+  const [tab, setTab] = useState("new");
+  const [value, setValue] = useState(41.2);
+  const [queue, setQueue] = useState([]);
+
+  return (
+    <>
+      {tab === "new" && (
+        <>
+          <Heading level={1}>New reading</Heading>
+          {!online && <Banner variant="warning" title="Offline">Saved on this phone, queued to send.</Banner>}
+          <NumberField label="Meter reading (m³)" value={value} onValueChange={setValue} step={0.1} min={0} />
+          <Button variant="primary" fullWidth onClick={async () => online ? save(value) : setQueue(q => [...q, value])}>Save reading</Button>
+        </>
+      )}
+      {tab === "sync" && (queue.length
+        ? <TaskQueue label="Waiting to send" tasks={queue.map((v, i) => ({id: String(i), title: `${v} m³`, state: "queued"}))} />
+        : <EmptyState icon="cloud-check" title="Nothing waiting" />)}
+
+      <BottomNav label="Meter reader" current={tab} items={[
+        {id: "list", label: "Readings", icon: "list", onClick: () => setTab("list")},
+        {id: "new", label: "New", icon: "plus", onClick: () => setTab("new")},
+        {id: "sync", label: "Sync", icon: "cloud-slash", badge: queue.length ? <Badge size="xs" variant="danger" emphasis="solid">{queue.length}</Badge> : undefined, onClick: () => setTab("sync")},
+      ]} />
+    </>
+  );
+}
 ```
 </page>
 
@@ -17800,19 +18438,49 @@ Inbox, case history, SLA and escalation: the identity of the case and the channe
 ## Usage
 
 ```tsx
-import {Card, Table, Badge, Status, Button} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, SegmentedControl, DataGrid, Badge, MessageList, MessageComposer, Button} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Table caption="Inbox">
-    <thead><tr><th>Case</th><th>SLA</th><th>State</th></tr></thead>
-    <tbody><tr><td>#3412 · cannot sign in</td>
-      <td><Badge variant="danger">12 min left</Badge></td>
-      <td><Status variant="busy">with support</Status></td></tr></tbody>
-  </Table>
-  <Button variant="outline">Escalate</Button>
-</Card>
+import {useState} from "react";
+import {Badge, Button, Card, Heading, MessageComposer, MessageList, SegmentedControl, Separator, Status, Text} from "@aurea-uds/react";
+import {DataGrid} from "@aurea-uds/react/data-grid";
+
+export function Inbox({initialCases, initialThreads}) {
+  const [cases, setCases] = useState(initialCases);
+  const [threads, setThreads] = useState(initialThreads);
+  const [openId, setOpenId] = useState(initialCases[0].id);
+  const current = cases.find(c => c.id === openId);
+  const setState = (id, state) => setCases(cs => cs.map(c => c.id === id ? {...c, state} : c));
+  const reply = (id, body) => {
+    setThreads(t => ({...t, [id]: [...t[id], {id: crypto.randomUUID(), author: "You", direction: "outgoing", body}]}));
+    setState(id, "waiting");
+  };
+
+  return (
+    <Card>
+      <header><Heading level={3}>Inbox</Heading> <Status variant="warning">3 open</Status></header>
+      <Separator />
+      <SegmentedControl label="Queue" items={[{value: "All", label: "All"}, {value: "Open", label: "Open"}]} />
+      <DataGrid
+        label="Cases" data={cases} getRowId={c => c.id} filterable
+        columns={[
+          {accessorKey: "subject", header: "Case", cell: ({row}) => (
+            <Button variant="link" onClick={() => setOpenId(row.original.id)}>{row.original.subject}</Button>
+          )},
+          {accessorKey: "sla", header: "SLA", cell: ({row}) => <Badge tone={row.original.tone}>{row.original.sla}</Badge>},
+          {accessorKey: "state", header: "State", cell: ({getValue}) => <Status variant={variant[getValue()]}>{label[getValue()]}</Status>},
+        ]}
+      />
+      <Card variant="outline">
+        <MessageList label={`Case ${current.id}`} messages={threads[current.id]} />
+        <MessageComposer label={`Reply to ${current.customer}`} onSend={text => reply(current.id, text)} />
+        <Button variant="danger-ghost" onClick={() => setState(current.id, "escalated")}>Escalate</Button>
+        <Button appearance="soft" tone="brand" leadingIcon="check" onClick={() => setState(current.id, "resolved")}>Resolve</Button>
+      </Card>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17824,22 +18492,44 @@ Consent, audit, error prevention and retention: least privilege is visible and a
 ## Usage
 
 ```tsx
-import {Card, Alert, Checkbox, DataList, Button} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, Banner, Tabs, DataList, Timeline, EmptyState, Dialog, Checkbox} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <Alert variant="danger" title="This cannot be undone">
-    Deleting a record breaks the retention chain. It is logged with your name.
-  </Alert>
-  <DataList items={[
-    {term: "Consent", value: "given 12/03/2026"},
-    {term: "Retention", value: "7 years"},
-    {term: "Last access", value: "Curator · 09:14"},
-  ]} />
-  <Checkbox label="I understand the consequence" />
-  <Button variant="danger" disabled>Delete record</Button>
-</Card>
+import {useState} from "react";
+import {Banner, Button, Card, Checkbox, DataList, Dialog, Heading, Separator, Status, Tabs, Text, Timeline} from "@aurea-uds/react";
+
+export function Record({record}) {
+  const [deleted, setDeleted] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [understood, setUnderstood] = useState(false);
+  const [log, setLog] = useState(record.log);
+  const remove = () => {
+    setDeleted(true); setOpen(false);
+    setLog(l => [{title: "Record deleted by you", description: "this entry stays for 7 years", time: now()}, ...l]);
+  };
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>{record.name}</Heading>
+        <Status variant={deleted ? "danger" : "success"}>{deleted ? "Deleted" : "Retention active"}</Status>
+        <Button variant="danger-ghost" leadingIcon="trash" disabled={deleted} onClick={() => setOpen(true)}>Delete record</Button>
+      </header>
+      <Separator />
+      {deleted && <Banner variant="danger" title="This record was deleted">The audit log keeps the fact.</Banner>}
+      <Tabs label="Record" panel="plain" tabs={[
+        {id: "details", label: "Details", content: <DataList items={record.fields} />},
+        {id: "audit", label: "Audit log", content: <Timeline items={log} />},
+      ]} />
+      <Dialog open={open} onClose={() => setOpen(false)} title="Delete this record?" icon="warning" iconTone="danger"
+        footer={<Button variant="danger" disabled={!understood} onClick={remove}>Delete record</Button>}>
+        <Text>It cannot be undone, and it is logged with your name.</Text>
+        <Checkbox label="I understand the consequence" checked={understood} onChange={e => setUnderstood(e.target.checked)} />
+      </Dialog>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17851,20 +18541,42 @@ Canvas, assets, versions and comments: every canvas operation has an outline alt
 ## Usage
 
 ```tsx
-import {Card, Timeline, MessageList, Badge} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, RadioGroup, Radio, DataList, Image, ColorSwatch, MessageList, MessageComposer} from "@aurea-uds/react";
 ```
 
 ```tsx
-// The canvas is the other half. Versions and comments are the surface that
-// makes canvas work reviewable — every operation has an outline alternative.
-<Card>
-  <Badge variant="primary">v7 · current</Badge>
-  <Timeline items={[
-    {title: "v7 · exported at 2x", time: "09:20"},
-    {title: "v6 · palette swapped", time: "08:55"},
-  ]} />
-  <MessageList messages={comments} />
-</Card>
+import {useState} from "react";
+import {Button, Card, ColorSwatch, DataList, Heading, Image, MessageComposer, MessageList, Radio, RadioGroup, Separator, Status} from "@aurea-uds/react";
+
+export function Review({art, versions, initialComments, approve}) {
+  const [version, setVersion] = useState(versions[0].id);
+  const [comments, setComments] = useState(initialComments);
+  const [approved, setApproved] = useState(null);
+  const v = versions.find(x => x.id === version);
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>{art.name}</Heading> <Status variant={approved ? "success" : "warning"}>{approved ? "Approved" : "In review"}</Status>
+        <Button variant="primary" onClick={async () => { await approve(version); setApproved(version); }}>Approve {version}</Button>
+      </header>
+      <Separator />
+
+      <Image src={v.src} alt={`${art.name}, ${v.label}`} ratio="16/9" />
+      <ColorSwatch label="Palette" name="palette" options={art.palette} showLabels />
+      <MessageList label={`Comments on ${version}`} messages={comments[version]} />
+      <MessageComposer label={`Comment on ${version}`}
+        onSend={body => setComments(c => ({...c, [version]: [...c[version], {id: crypto.randomUUID(), author: "You", body}]}))} />
+
+      <div>
+        <RadioGroup label="Version" labelHidden value={version} onValueChange={setVersion}>
+          {versions.map(x => <Radio key={x.id} value={x.id} label={x.label} description={x.time} />)}
+        </RadioGroup>
+        <DataList items={[{term: "Size", value: art.size}, {term: "Format", value: art.format}]} />
+      </div>
+    </Card>
+  );
+}
 ```
 </page>
 
@@ -17876,25 +18588,60 @@ Telemetry, logs, alerts and remediation: a live update is pausable and remediati
 ## Usage
 
 ```tsx
-import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, DataList, Link, EventStream, Alert, KPI, Chart, HealthMatrix, LogStream} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Card>
-  <KPI label="p95 latency" value="284 ms" trend="+38 ms" />
-  <Alert variant="danger" title="Error rate above 2%">
-    Started 09:12. The runbook is linked from the alert, not from memory.
-  </Alert>
-  <LogStream lines={tail} />
-  <Button variant="outline">Pause live tail</Button>
-</Card>
+import {useState} from "react";
+import {Alert, Button, Card, DataList, EventStream, HealthMatrix, Heading, KPI, LogStream, Separator, Status} from "@aurea-uds/react";
+import {Chart} from "@aurea-uds/react/chart";
+import {Area, AreaChart, CartesianGrid, XAxis} from "recharts";
+
+export function OnCall({incident, services, latency, events: initialEvents, tail}) {
+  const [phase, setPhase] = useState("open");
+  const [events, setEvents] = useState(initialEvents);
+  const [paused, setPaused] = useState(false);
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>{incident.service}</Heading> <Status variant="danger">Incident</Status>
+        {phase === "open" && <Button variant="primary" onClick={() => setPhase("ack")}>Acknowledge</Button>}
+        {phase === "ack" && <Button variant="primary" onClick={() => setPhase("ok")}>Mitigate: roll back</Button>}
+      </header>
+      <Separator />
+
+      {phase !== "ok" && <Alert variant="danger" title={incident.title}>{incident.cause}</Alert>}
+      <Card variant="inset"><KPI variant="plain" label="p95 latency" value={incident.p95} direction="up" tone="danger" /></Card>
+      <Card variant="inset">
+        <Chart label="p95 latency over the last 20 minutes">
+          <AreaChart data={latency}>
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="t" tickLine={false} axisLine={false} />
+            <Area dataKey="ms" name="p95" stroke="var(--chart-4)" fill="var(--chart-4)" fillOpacity={0.15} />
+          </AreaChart>
+        </Chart>
+      </Card>
+      <Card variant="inset"><HealthMatrix label="Services" entries={services} /></Card>
+      <Card variant="outline">
+        <Button appearance="soft" tone="brand" size="sm" onClick={() => setPaused(p => !p)}>{paused ? "Resume live tail" : "Pause live tail"}</Button>
+        <LogStream lines={tail} />
+      </Card>
+
+      <div>
+        <DataList items={[{term: "Severity", value: incident.severity}, {term: "Owner", value: incident.owner}]} />
+        <EventStream label="Events" events={events} />
+      </div>
+    </Card>
+  );
+}
 ```
 </page>
 
 <page url="https://aureauds.dev/release-v0-58-0.html">
 # v0.58.0
 
-Motion — the selection slides, menus animate, dragging follows the pointer — and DataGrid fit.
+Motion — the selection slides, menus animate, dragging follows the pointer — DataGrid fit, and recipes as real product screens.
 
 Motion arrives in the components that used to jump. Nothing changes at rest, and "reduce motion" turns it all off.
 
@@ -17912,6 +18659,10 @@ Motion arrives in the components that used to jump. Nothing changes at rest, and
 ## Site
 
 - The tables in the documentation are now `DataGrid`s, with row dividers and sortable columns.
+- **Every recipe is now a working product screen.** The 23 recipes were rebuilt as full screens — a header with the breadcrumb, the id, the title and the status; the body; a properties column; a footer — using the specialised components (`HumanApproval`, `TraceTimeline`, `CostMeter`, `DataGrid`, `Chart`, `DependencyGraph`, `CodeEditor`, `HealthMatrix`, `Calendar`, `Gallery`, `MediaPlayer`, `FileInput`, `BottomNav` and more). Each one responds: approve a run, invite a member, pay and refund an order, book a slot, reply to a case, calibrate a device, upload a file, publish an article.
+- **Recipe pages follow the new site layout**: a wide header, numbered sections (Usage, Composition, Capabilities, Invariants, States, Built with) and previous/next.
+- **The Recipes page is a gallery**: search (also by component name) and four groups, each recipe with a thumbnail of its real screen.
+- **"Full width" on every example**: widens the page around the example, and "Normal width" puts it back.
 
 ## Update
 

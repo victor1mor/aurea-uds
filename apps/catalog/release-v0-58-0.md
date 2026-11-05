@@ -1,6 +1,6 @@
 # v0.58.0
 
-Motion — the selection slides, menus animate, dragging follows the pointer — and DataGrid fit.
+Motion — the selection slides, menus animate, dragging follows the pointer — DataGrid fit, and recipes as real product screens.
 
 Motion arrives in the components that used to jump. Nothing changes at rest, and "reduce motion" turns it all off.
 
@@ -18,6 +18,10 @@ Motion arrives in the components that used to jump. Nothing changes at rest, and
 ## Site
 
 - The tables in the documentation are now `DataGrid`s, with row dividers and sortable columns.
+- **Every recipe is now a working product screen.** The 23 recipes were rebuilt as full screens — a header with the breadcrumb, the id, the title and the status; the body; a properties column; a footer — using the specialised components (`HumanApproval`, `TraceTimeline`, `CostMeter`, `DataGrid`, `Chart`, `DependencyGraph`, `CodeEditor`, `HealthMatrix`, `Calendar`, `Gallery`, `MediaPlayer`, `FileInput`, `BottomNav` and more). Each one responds: approve a run, invite a member, pay and refund an order, book a slot, reply to a case, calibrate a device, upload a file, publish an article.
+- **Recipe pages follow the new site layout**: a wide header, numbered sections (Usage, Composition, Capabilities, Invariants, States, Built with) and previous/next.
+- **The Recipes page is a gallery**: search (also by component name) and four groups, each recipe with a thumbnail of its real screen.
+- **"Full width" on every example**: widens the page around the example, and "Normal width" puts it back.
 
 ## Update
 

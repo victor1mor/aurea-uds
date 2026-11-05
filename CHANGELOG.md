@@ -276,9 +276,10 @@ como deveria funcionar"*.
 
 ## [0.58.0] — 2026-11-05
 
-**O movimento e as tabelas do site** (05/11/2026). O primeiro lote da fase 0 do caminho até a 1.0 (*"Sim, nessa ordem"*):
-juntar o que estava construído e aprovado fora do `main` — o movimento (S-04 e S-05, branch `claude/movimento-77dec7`) e
-as tabelas do site (S-02, branch `claude/tabelas-d60668`).
+**O movimento, as tabelas do site e as receitas** (05/11/2026). O primeiro lote da fase 0 do caminho até a 1.0 (*"Sim,
+nessa ordem"*): juntar o que estava construído e aprovado fora do `main` — o movimento (S-04 e S-05, branch
+`claude/movimento-77dec7`), as tabelas do site (S-02, branch `claude/tabelas-d60668`) e as receitas (S-11, branch
+`claude/quirky-jones-b81ce3`; *"Junta as receitas"*).
 
 ### Mudado
 
@@ -317,6 +318,24 @@ as tabelas do site (S-02, branch `claude/tabelas-d60668`).
   (`live/site.tsx`). Ficam como `Table`: os exemplos e os padrões da própria `Table`. Quem cobra:
   `tests/visual/site-tabelas-datagrid.spec.ts` e `tests/unit/saude-rodadas.test.tsx`. Aprovado pelo Victor olhando a página Styling, o antes e o
   depois (*"Aprovado"*, 05/11/2026).
+- **As 23 receitas são telas de produto** (S-11). Cada uma mora em `apps/catalog/content/recipes/<id>.mjs`, na linguagem
+  dos blocos v2 do Victor (`recipes/_tela.mjs`: o cabeçalho com a trilha, o id, o título e o estado; o corpo; a coluna de
+  propriedades; o rodapé; a divisão entre eles, com o `Separator`), com as peças especializadas da Aurea e interação de
+  verdade (aprovar, convidar, pagar e devolver, marcar horário, responder, calibrar, enviar arquivo, publicar…). Antes, as
+  23 eram cortadas para caber na caixa de 354 (ADR-0002) e não reagiam a nada. Toda tabela é a `DataGrid` (S-02). Cada
+  grupo aprovado pelo Victor pela imagem.
+- **A página de cada receita no desenho do site B** (`site-b/paginas/recipe.mjs`): o palco largo, as seções numeradas
+  (Usage, Composition, Capabilities, Invariants, States, Built with), a prévia de cada peça e o anterior/próximo.
+- **A página Recipes no molde de Blocks** (`site-b/paginas/recipes.mjs`): a busca (acha também pelo nome da peça) e as
+  receitas em quatro grupos, cada uma num cartão com a miniatura da tela de verdade. Saem a coluna da lista e a grade dos
+  padrões (o Victor: *"eu fico confuso com esse monte de sidebar"*).
+- **O "Full width"** em toda caixa de exemplo das páginas que não são largas (`site-b/js/_tela-cheia.js`): alarga a
+  própria página (sem o índice da direita) e volta com "Normal width". Sem JavaScript, nada muda.
+- As receitas acendem só pelo `live-motores.js`: o `live.js` leve não leva o motor da grade para toda página.
+- Achados no caminho, consertados nas receitas (as peças não mudaram): o `KPI` e o botão secundário somem dentro do cartão
+  e da caixa cinza da mesma cor (o número vai numa `Card variant="inset"` com `KPI variant="plain"`; o botão usa
+  `appearance="soft" tone="brand"`); três peças translúcidas sobre a caixa cinza reprovavam no contraste (foram para o
+  `Card variant="outline"`); o "hoje" do `Calendar` do exemplo é fixo, para a montagem não mudar a cada dia.
 
 ---
 

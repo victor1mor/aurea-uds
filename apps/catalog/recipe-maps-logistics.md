@@ -5,15 +5,42 @@ Routes, layers and tracking on the map: every selection mirrors a list and offli
 ## Usage
 
 ```tsx
-import {Card, KPI, Timeline, Status} from "@aurea-uds/react";
+import {Card, Separator, Avatar, Icon, Text, Code, Heading, Status, Button, DataList, Alert, KPI, Stepper, DataGrid} from "@aurea-uds/react";
 ```
 
 ```tsx
-// The map is one half; this list is the other, and the invariant is that they
-// always agree. Selecting a stop here selects the marker there.
-<Card>
-  <KPI label="ETA" value="14:42" trend="on time" />
-  <Status variant="warning">position 3 min old</Status>
-  <Timeline items={stops} />
-</Card>
+import {useState} from "react";
+import {Alert, Button, Card, DataList, Heading, KPI, Separator, Status, Stepper} from "@aurea-uds/react";
+import {DataGrid} from "@aurea-uds/react/data-grid";
+
+// The map is the other half. This list is its mirror: selecting a stop here selects it there.
+export function Route({stops}) {
+  const [done, setDone] = useState(2);
+  const [selected, setSelected] = useState(stops[done].id);
+  const stop = stops.find(s => s.id === selected);
+
+  return (
+    <Card>
+      <header>
+        <Heading level={3}>Harbour loop</Heading> <Status variant="running">On the road</Status>
+        {done < stops.length && (
+          <Button variant="primary" onClick={() => setDone(d => d + 1)}>Mark {stops[done].stop} as delivered</Button>
+        )}
+      </header>
+      <Separator />
+
+      <Card variant="inset"><KPI variant="plain" label="Next stop ETA" value={stops[done]?.eta ?? "—"} /></Card>
+      <Stepper label="Route stops"
+        items={stops.map((s, i) => ({label: s.stop, optional: s.eta, onClick: () => setSelected(s.id),
+          state: i < done ? "done" : i === done ? "active" : "default"}))} />
+      <DataGrid label="Stops" data={stops} getRowId={s => s.id}
+        columns={[{accessorKey: "stop", header: "Stop"}, {accessorKey: "address", header: "Address"}, {accessorKey: "eta", header: "ETA"}]} />
+
+      <div>
+        <DataList items={[{term: "Address", value: stop.address}, {term: "Note", value: stop.note}]} />
+        <Alert variant="warning" title="Position 3 min old">The ETA uses the last known position.</Alert>
+      </div>
+    </Card>
+  );
+}
 ```
