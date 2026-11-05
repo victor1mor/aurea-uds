@@ -140,6 +140,15 @@ export default {
           columns: [{accessorKey: "name", header: "Name"}, {accessorKey: "role", header: "Role"}]})),
       },
       {
+        title: "Fit",
+        description: "fit drops the 720 minimum that makes a wide grid scroll sideways — for a grid of a few columns in a " +
+          "narrow column of text. The same fit as Table.",
+        code: `<DataGrid label="Members, fitted" fit data={members} columns={columns} />`,
+        render: () => h("div", {style: {width: "min(24rem, 100%)"}}, h(DataGrid, {label: "Members, fitted", fit: true,
+          data: [{name: "Messenger", role: "Owner"}, {name: "Analyst", role: "Editor"}],
+          columns: [{accessorKey: "name", header: "Name"}, {accessorKey: "role", header: "Role"}]})),
+      },
+      {
         title: "Header pinned to the page",
         description: "stickyHeader=\"page\" keeps the header under whatever stays fixed at the top of the page while the page " +
           "scrolls — no box with its own scroll. stickyHeader alone pins it inside a box with a ceiling instead.",

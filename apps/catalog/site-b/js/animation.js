@@ -41,8 +41,11 @@
 
   // O "Play" de cada token e a corrida: a bolinha vai até a outra ponta (e volta no clique seguinte).
   function correr(bolas) { bolas.forEach(function (b) { b.toggleAttribute("data-ligada"); }); }
-  document.querySelectorAll(".animation-play").forEach(function (botao) {
-    botao.addEventListener("click", function () { correr([botao.closest("tr").querySelector(".animation-bola")]); });
+  // Pela PÁGINA, e não em cada botão: a tabela é uma `DataGrid` que acende por cima do desenho pronto (S-02, 05/11/2026)
+  // e redesenha as fileiras ao ordenar — o botão de agora não é o de quando este script rodou.
+  document.addEventListener("click", function (e) {
+    var botao = e.target.closest && e.target.closest(".animation-play");
+    if (botao) correr([botao.closest("tr").querySelector(".animation-bola")]);
   });
   var corrida = document.querySelector(".animation-corrida");
   var correrBotao = corrida && corrida.querySelector(".animation-correr");

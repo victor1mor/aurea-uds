@@ -9,6 +9,8 @@
 // mesmos `data-starting-style` e `data-ending-style` do motor. Elas são demonstração (fora do leitor de tela e do Tab): o
 // que se lê é o nome do cartão e a frase.
 import {docsB} from "./docs-b/comum.mjs";
+import {gradeDoSite} from "../comum/grade-montagem.mjs";
+
 
 export default function animation(site, doc) {
   const g = docsB(site, doc, {arquivos: ["Example.tsx", "results.css", "app.css", "motion.ts", "FadeIn.tsx"]});
@@ -101,22 +103,21 @@ export default function animation(site, doc) {
   const tokens = g.achar(mt, "tabela");
   const pista = (tempo, curva) => h("span", {className: "animation-pista", "aria-hidden": "true"},
     h("span", {className: "animation-bola", style: {transitionDuration: tempo, transitionTimingFunction: curva}}));
-  const tabelaTokens = h("div", {key: "tokens", className: "docb-tabela animation-tokens"},
-    h(A.Table, {variant: "rows", striped: true, caption: "Motion tokens table"},
-      h("thead", null, h("tr", null, ...tokens.cabecalho.map((c, j) => h("th", {key: j, scope: "col"}, ...g.pedacos(c, g.k()))),
-        h("th", {key: "play", scope: "col"}, h("span", {className: "animation-escondido"}, "Try it")))),
-      h("tbody", null, ...tokens.linhas.map((l, n) => {
+  // A tabela como `DataGrid` (S-02, 05/11/2026): o nome é o `label`; o "Play" continua em cada fileira.
+  const tabelaTokens = h("div", {key: "tokens", className: "docb-tabela docb-grade animation-tokens"},
+    gradeDoSite({label: "Motion tokens table",
+      cabecalho: [...tokens.cabecalho.map((c) => g.textoDe(c)), {texto: "Try it", classe: "animation-escondido", ordenar: false}],
+      linhas: tokens.linhas.map((l) => {
         const nome = g.textoDe(l[0]);
         const duracao = nome.startsWith("--duration");
         // A duração anda na curva padrão; a curva anda em duas vezes a duração longa (560), para se ver a forma dela.
         const tempo = duracao ? `var(${nome})` : "calc(var(--duration-slow) * 2)";
         const curva = duracao ? "var(--ease-standard)" : `var(${nome})`;
-        return h("tr", {key: n},
-          h("td", null, ...g.pedacos(l[0], g.k())),
-          h("td", null, h("span", {className: "animation-valor"}, ...g.pedacos(l[1], g.k()), pista(tempo, curva))),
-          h("td", null, ...g.pedacos(l[2], g.k())),
-          h("td", null, h(A.Button, {size: "md", variant: "tertiary", className: "animation-play", "aria-label": `Play ${nome}`}, "Play")));
-      }))));
+        return [g.pedacos(l[0], g.k()),
+          h("span", {className: "animation-valor"}, ...g.pedacos(l[1], g.k()), pista(tempo, curva)),
+          g.pedacos(l[2], g.k()),
+          h(A.Button, {size: "md", variant: "tertiary", className: "animation-play", "aria-label": `Play ${nome}`}, "Play")];
+      })}));
   const corrida = h("div", {key: "corrida", className: "docb-caixa animation-corrida"},
     h("div", {className: "animation-corrida-topo"}, h("b", null, "The two curves, side by side, at twice --duration-slow"),
       h(A.Button, {size: "md", variant: "primary", className: "animation-correr"}, "Race")),

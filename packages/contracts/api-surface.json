@@ -4983,6 +4983,12 @@
               "values": null
             },
             {
+              "name": "fit",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "hideableColumns",
               "optional": true,
               "type": "boolean",

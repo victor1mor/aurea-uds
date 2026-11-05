@@ -7,6 +7,8 @@
 //
 // O texto continua vindo do `.md` (o "Copy Markdown" copia o arquivo): a página pega os blocos de cada seção pelo título.
 
+import {gradeDoSite} from "../../comum/grade-montagem.mjs";
+
 export function ferramentas(site) {
   const {h, Fragment, A} = site;
 
@@ -50,10 +52,10 @@ export function ferramentas(site) {
   };
   // A tabela do desenho: a `Table` da Aurea em linhas (`variant="rows"`), na caixa do cartão. A legenda é o nome da região
   // que rola (o mesmo cuidado do `docPage`).
-  const tabelaB = (b, chave, legenda = "Table") => h("div", {key: chave, className: "gs-tabela"},
-    h(A.Table, {variant: "rows", striped: true, caption: `${legenda} table`},
-      h("thead", null, h("tr", null, ...b.cabecalho.map((c, j) => h("th", {key: j, scope: "col"}, ...site.pedacos(c, `${chave}h${j}`))))),
-      h("tbody", null, ...b.linhas.map((l, j) => h("tr", {key: j}, ...l.map((c, i) => h("td", {key: i}, ...site.pedacos(c, `${chave}r${j}c${i}`))))))));
+  // ~~A `Table` em linhas~~ → a `DataGrid` (S-02, 05/11/2026), sem o cartão em volta (a grade já tem a moldura dela).
+  const tabelaB = (b, chave, legenda = "Table") => h("div", {key: chave, className: "gs-tabela gs-grade"},
+    gradeDoSite({label: `${legenda} table`, cabecalho: b.cabecalho.map((c) => typeof c === "string" ? c.replace(/`/g, "") : c.map((p) => p.t ?? p.code ?? p.link ?? p.strong ?? "").join("")),
+      linhas: b.linhas.map((l, j) => l.map((c, i) => site.pedacos(c, `${chave}r${j}c${i}`)))}));
 
   // A ABERTURA: o palco da Introduction (o texto à esquerda, as quatro peças que flutuam à direita). `pecas`: os quatro
   // desenhos, na ordem das posições do desenho (que são as da Introduction: intro-peca-1 a 4).

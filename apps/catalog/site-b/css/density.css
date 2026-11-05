@@ -20,9 +20,9 @@
 .density-tokens[data-coluna="compact"] .density-col-compact code,
 .density-tokens[data-coluna="comfortable"] .density-col-comfortable code,
 .density-tokens[data-coluna="spacious"] .density-col-spacious code { background:var(--primary); color:var(--primary-foreground); }
-.density-tokens[data-coluna="compact"] th.density-col-compact,
-.density-tokens[data-coluna="comfortable"] th.density-col-comfortable,
-.density-tokens[data-coluna="spacious"] th.density-col-spacious { color:var(--foreground); }
+.density-tokens[data-coluna="compact"] .density-col-compact,
+.density-tokens[data-coluna="comfortable"] .density-col-comfortable,
+.density-tokens[data-coluna="spacious"] .density-col-spacious { color:var(--foreground); }
 
 /* O botão de cada densidade no toque. */
 .density-toque { align-items:flex-start; gap:var(--space-3); }
