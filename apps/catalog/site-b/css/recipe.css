@@ -1,0 +1,63 @@
+/* A PÁGINA DE UMA RECEITA NO SITE B (05/11/2026, o S-11): o palco, a caixa e os cartões de "Built with." são os da página
+   de um bloco (`_grupo-1.css`, `componente.css`, `pattern.css`); aqui só as quatro seções da receita. Sem linha, canto 22
+   nos cartões, toda medida de token. */
+.rcp-b .intro-sec { scroll-margin-block-start:calc(var(--topbar-height) + var(--space-8)); }
+
+/* 02 · Composition: os padrões em cartões, dois por linha. */
+.rcp-padroes { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:calc(var(--space-3) + var(--space-05)); margin-block-start:var(--space-5); }
+.rcp-padrao { display:flex; flex-direction:column; gap:var(--space-3); }
+.rcp-padrao-topo { display:flex; align-items:center; gap:var(--space-3); }
+.rcp-num { display:inline-grid; place-items:center; min-inline-size:var(--space-10); block-size:var(--space-10); border-radius:var(--radius-full);
+  background:var(--primary); color:var(--primary-foreground); font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+.rcp-padrao-nome { margin:0; font-family:var(--font-code); font-size:var(--text-lg); font-weight:var(--weight-semibold); overflow-wrap:anywhere; }
+.rcp-padrao-texto { margin:0; line-height:var(--leading-relaxed); }
+.rcp-padrao-regra { display:flex; gap:var(--space-2); align-items:flex-start; margin:auto 0 0; padding:var(--space-3); border-radius:var(--radius-lg);
+  background:var(--fill-1); color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--leading-normal); }
+.rcp-padrao-regra > svg { flex:none; margin-block-start:var(--space-05); color:var(--foreground); }
+
+/* 03 · Capabilities: a grade, o nome em código e a frase. */
+.rcp-caps { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, calc(var(--space-24) * 3)), 1fr)); gap:calc(var(--space-3) + var(--space-05));
+  margin:var(--space-5) 0 0; padding:0; list-style:none; }
+.rcp-cap { display:flex; flex-direction:column; gap:var(--space-2); padding:var(--space-4) var(--space-5); border-radius:var(--radius-card); background:var(--fill-1); }
+.rcp-cap-nome { font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
+.rcp-cap-texto { line-height:var(--leading-relaxed); }
+
+/* 04 · Invariants: a promessa grande, o escudo no amarelo. */
+.rcp-invs { display:grid; gap:calc(var(--space-3) + var(--space-05)); margin-block-start:var(--space-5); }
+.rcp-inv { display:flex; gap:var(--space-4); align-items:flex-start; }
+.rcp-inv-corpo { display:grid; gap:var(--space-2); min-inline-size:0; }
+.rcp-inv-marca { flex:none; display:inline-grid; place-items:center; inline-size:var(--space-12); block-size:var(--space-12); border-radius:var(--radius-full);
+  background:var(--primary); color:var(--primary-foreground); }
+.rcp-inv-frase { margin:0; font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold); line-height:var(--leading-tight); }
+.rcp-inv-texto { margin:0; color:var(--muted-foreground); line-height:var(--leading-relaxed); }
+
+/* 05 · States: uma linha por estado. */
+.rcp-estados { display:grid; gap:0; margin:var(--space-5) 0 0; padding:var(--space-2); list-style:none; }
+.rcp-estado { display:grid; grid-template-columns:minmax(calc(var(--space-20) * 2), auto) minmax(0, 1fr); gap:var(--space-4); align-items:baseline;
+  padding:var(--space-3) var(--space-4); border-radius:var(--radius-lg); }
+/* A divisão entre os estados (a ordem do Victor de 05/11/2026): a linha fina do `Separator`, desenhada como fundo — borda
+   não, que a varredura "nenhuma peça desenha linha" mede. */
+.rcp-estado { position:relative; }
+.rcp-estado + .rcp-estado::before { content:""; position:absolute; inset-inline:var(--space-4); inset-block-start:0; block-size:var(--border-width); background:var(--border); }
+.rcp-estado-nome { justify-self:start; font-family:var(--font-code); }
+.rcp-estado-texto { line-height:var(--leading-relaxed); }
+
+@container g1 (max-width: 40rem) {
+  .rcp-padroes { grid-template-columns:minmax(0, 1fr); }
+  .rcp-estado { grid-template-columns:minmax(0, 1fr); gap:var(--space-2); }
+}
+
+/* A TELA DAS RECEITAS (`content/recipes/_tela.mjs`): o corpo e a coluna de propriedades, com a divisão entre eles (a ordem
+   do Victor de 05/11/2026 — as partes de dentro têm divisão). Lado a lado, uma linha vertical na cor do `Separator`;
+   quando a tela é estreita, a coluna desce e a linha deita. */
+.rcp-tela { container:rcp-tela / inline-size; }
+.rcp-tela-corpo { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-5); align-items:start; }
+.rcp-tela-corpo:has(> .rcp-tela-lado) { grid-template-columns:minmax(0, 1fr) var(--border-width) minmax(0, calc(var(--space-24) * 2 + var(--space-12))); }
+/* `minmax(0, 1fr)`: sem coluna definida, a grade cresce até a peça mais larga de dentro (o calendário no celular passava 36
+   da tela — achado pela medição de 05/11/2026). */
+.rcp-tela-principal, .rcp-tela-lado { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-4); min-inline-size:0; }
+.rcp-tela-divisao { align-self:stretch; background:var(--border); }
+@container rcp-tela (max-width: 46rem) {
+  .rcp-tela-corpo:has(> .rcp-tela-lado) { grid-template-columns:minmax(0, 1fr); }
+  .rcp-tela-divisao { block-size:var(--border-width); }
+}

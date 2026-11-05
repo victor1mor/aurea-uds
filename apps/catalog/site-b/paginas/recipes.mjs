@@ -1,10 +1,11 @@
-// A PÁGINA "RECIPES" NO DESENHO B (aprovado em 26/10/2026; o mapa em `bancada-site-b/mapa/grupo-2.md`, "recipes").
-// O palco com as três peças que flutuam; "01 Recipe builder": a receita escolhida (o que cobre e os padrões que usa), a lista
-// das receitas com o filtro, e os 17 padrões que acendem — escolher um padrão marca, na lista, quem o usa; "02 Every recipe":
-// as 23 receitas, cada uma levando à página dela. Os dados são os do contrato (`aurea.contract.json`) e do texto de cada
-// receita (`patterns/<id>.md`). Sem JavaScript, a página mostra a receita do desenho escolhida e todas as listas; o
-// comportamento (escolher, filtrar, copiar) é o `site-b/js/recipes.js`.
+// A PÁGINA "RECIPES" NO SITE B (refeita em 05/11/2026, o S-11 — o Victor: "eu fico confuso com esse monte de sidebar, não
+// sei usar, quero algo intuitivo"). Sai o "Recipe builder" (a lista de receitas numa coluna e a grade dos padrões que
+// acendiam); fica o molde da lista de Blocks: o palco com as peças que flutuam, a busca, e as receitas em grupos, cada uma
+// num cartão grande com a MINIATURA da tela de verdade (o mesmo HTML da caixa da página dela, parado e reduzido), o nome,
+// o texto e os padrões que ela compõe. O nome leva à página da receita (o link cobre o cartão). A busca é a comum do site
+// (`_grupo-1.js`, `data-g1-lista`). Os dados são os do contrato e do texto de cada receita (`patterns/<id>.md`).
 import {readFileSync} from "node:fs";
+import {abertura, achar, buscaDaLista, caminho, dois, pecasQueFlutuam, texto, vazioDaBusca} from "./_grupo-1.mjs";
 
 const PASTA = new URL("../../../../patterns/", import.meta.url);
 // O texto de abertura da receita: o que vem entre o título e a primeira linha de corte (ou o primeiro subtítulo).
@@ -14,126 +15,78 @@ const aberturaDe = id => {
   const fim = linhas.findIndex((l, i) => i >= ini && (/^━/.test(l) || l.startsWith("## ")));
   return linhas.slice(ini, fim < 0 ? undefined : fim).join(" ").replace(/[*`]/g, "").replace(/\s+/g, " ").trim();
 };
-// A receita que abre escolhida é a do desenho.
-const ESCOLHIDA = "developer_tools";
+// Os grupos da lista, pelo tipo de produto. A receita que não estiver em nenhum (uma nova no contrato) vai para o último.
+const GRUPOS = [
+  ["Business apps", "The screens of a product that runs a business: members, numbers, deals, money, bookings and cases.",
+    ["saas_admin", "dashboard_bi", "project_crm_erp", "commerce_finance", "booking_calendar", "support_service", "regulated_records"]],
+  ["Operations and AI", "Work that runs on its own and needs a person at the right moment: agents, automations, devices and systems.",
+    ["agent_ai", "workflow_automation", "developer_tools", "observability_ops", "iot_control", "maps_logistics", "file_cloud"]],
+  ["Content and sites", "Pages people read, watch, learn from or make.",
+    ["public_site", "docs_cms", "catalog_gallery", "media_streaming", "education", "creative_workspace"]],
+  ["Personal and social", "Small screens for one person or a conversation.",
+    ["messaging_social", "personal_productivity", "mobile_pwa"]],
+];
+// A miniatura é desenho, parada e escondida do leitor de tela: sem os nomes que ligam uma parte a outra (o mesmo id duas
+// vezes na página quebraria a busca e os rótulos).
+const semIds = html => html.replace(/\s(id|for|aria-labelledby|aria-describedby|aria-controls|aria-activedescendant|name|list|form)="[^"]*"/g, "");
 
 export default function recipes(site) {
   const {h, A, slug, recipeTitle, contract, textoParaCopiar} = site;
-  const app = contract.applicationPatterns, op = contract.operationalPatterns;
-  const receitas = Object.entries(app.archetypes).map(([id, a]) => ({id, nome: recipeTitle(id), texto: aberturaDe(id),
-    foco: (a.capabilities || []).slice(0, 4), padroes: a.patterns, href: `./recipe-${slug(id)}.html`}));
-  const padroes = [...Object.entries(app.patterns).map(([nome, p]) => ({nome, tipo: "app", p})),
-    ...Object.entries(op.patterns).map(([nome, p]) => ({nome, tipo: "op", p}))]
-    .map(({nome, tipo, p}) => ({nome, tipo, regra: (p.behavior || [])[0] || "", tipos: (p.variants || []).slice(0, 6).join(" · ")}));
-  const usam = nome => receitas.filter(r => r.padroes.includes(nome));
-  const atual = receitas.find(r => r.id === ESCOLHIDA) || receitas[0];
-  const nApp = padroes.filter(p => p.tipo === "app"), nOp = padroes.filter(p => p.tipo === "op");
-  const doGrupo = lista => atual.padroes.filter(x => lista.some(p => p.nome === x)).length;
+  const arquetipos = contract.applicationPatterns.archetypes;
+  const ids = Object.keys(arquetipos);
+  const receitas = ids.map((id, i) => {
+    const pagina = site.recipePage(id, arquetipos[id], i, ids).node;
+    const painel = achar(pagina, e => e.props?.["data-panel"] === "preview" && e.props?.dangerouslySetInnerHTML);
+    // As peças que a receita usa (o import da página dela), para a busca achar "DataGrid", "HumanApproval"…
+    const usa = ((/import \{([^}]*)\}/.exec(texto(achar(pagina, e => String(e.props?.className ?? "").includes("usage-import")))) || [])[1] || "")
+      .split(",").map(x => x.trim()).filter(Boolean);
+    return {id, nome: recipeTitle(id), texto: aberturaDe(id), padroes: arquetipos[id].patterns || [],
+      foco: (arquetipos[id].capabilities || []).slice(0, 4), href: `./recipe-${slug(id)}.html`, html: painel?.props.dangerouslySetInnerHTML.__html || "", usa};
+  });
+  const nosGrupos = new Set(GRUPOS.flatMap(g => g[2]));
+  const grupos = GRUPOS.map(([titulo, frase, lista]) => ({titulo, frase, itens: lista.map(id => receitas.find(r => r.id === id)).filter(Boolean)}));
+  grupos.at(-1).itens.push(...receitas.filter(r => !nosGrupos.has(r.id)));
+  
+  const cabeca = abertura(site, {
+    trilha: ["Recipes", "Overview"], titulo: "Recipes", ponteiro: true,
+    lede: `${receitas.length} whole screens, one for each kind of product. A recipe is bigger than a block: it puts the specialised components together into a working screen, and says which rules the screen must keep.`,
+    extra: caminho(site, ["Component", "Block", "Recipe"]),
+    lado: pecasQueFlutuam(site, [
+      h("span", {className: "g1-numerao"}, h("b", null, receitas.length), "recipes"),
+      h("span", {className: "g1-capsula"}, `${grupos.length} kinds of product`)]),
+  });
 
-  // O PALCO: o número grande, a cápsula dos padrões e o cartão de uma receita (o "Agents · AI" do desenho), que flutuam.
-  const agentes = receitas.find(r => r.id === "agent_ai") || receitas[0];
-  const palco = h("section", {className: "intro-palco cat-palco rec-palco", "aria-labelledby": "rec-h1", "data-palco": ""},
-    h("div", {className: "intro-palco-texto cat-palco-texto"},
-      h("span", {className: "intro-trilha"}, "Recipes ", h("span", {"aria-hidden": "true"}, "/"), " ", h("b", null, "Overview")),
-      h("h1", {className: "intro-h1", id: "rec-h1"}, "Recipes"),
-      h("p", {className: "intro-lede"}, `${receitas.length} product archetypes: how to assemble a whole kind of application by composing the architecture patterns below. A recipe is not a component family — it says which patterns to use and which invariants to hold.`),
-      h("div", {className: "rec-fluxo", role: "img", "aria-label": "Archetype, then patterns, then invariants"},
-        h(A.Badge, {size: "lg", className: "rec-fluxo-passo"}, "Archetype"), h("span", {"aria-hidden": "true"}, "→"),
-        h(A.Badge, {size: "lg", className: "rec-fluxo-passo"}, "Patterns"), h("span", {"aria-hidden": "true"}, "→"),
-        h(A.Badge, {size: "lg", tone: "primary", emphasis: "solid"}, "Invariants"))),
-    h("div", {className: "intro-pecas cat-pecas", "aria-hidden": "true"},
-      h("div", {className: "intro-peca cat-peca-1", "data-fundo": "1"}, h("div", {className: "intro-boia"},
-        h("span", {className: "cat-numerao"}, h("b", null, receitas.length), "recipes"))),
-      h("div", {className: "intro-peca cat-peca-2", "data-fundo": "1.6"}, h("div", {className: "intro-boia"},
-        h(A.Card, {className: "intro-cartao intro-cartao-capsula cat-capsula"}, `${padroes.length} patterns`))),
-      h("div", {className: "intro-peca cat-peca-3 rec-peca-3", "data-fundo": "2"}, h("div", {className: "intro-boia"},
-        h(A.Card, {className: "intro-cartao rec-mini"}, h(A.Badge, {tone: "primary"}, agentes.nome),
-          h("b", null, `${agentes.padroes.length} patterns`), h("span", null, agentes.padroes.join(", ")))))));
-
-  const cabeca = (id, num, titulo, conta, texto) => h("div", {className: "cat-familia-topo rec-cabeca", id},
-    h("span", {className: "cat-familia-num"}, num), h("h2", null, titulo), h("span", {className: "cat-familia-conta"}, conta),
-    h("p", {className: "rec-cabeca-texto"}, texto));
-
-  // A RECEITA ESCOLHIDA: o nome, o texto e o que cobre; ao lado, os padrões que ela compõe e as duas ações.
-  const escolhida = h(A.Card, {className: "rec-escolhida", "aria-labelledby": "rec-nome", "data-rec-escolhida": "", render: h("section")},
-    h("div", null,
-      h("p", {className: "rec-sobre", "data-rec-pos": ""}, `Recipe ${receitas.indexOf(atual) + 1} of ${receitas.length}`),
-      h("h2", {className: "rec-nome", id: "rec-nome", "data-rec-nome": ""}, atual.nome),
-      h("p", {className: "rec-texto", "data-rec-texto": ""}, atual.texto),
-      h("div", {className: "rec-cobre", role: "list", "aria-label": "What it covers", "data-rec-foco": ""},
-        ...atual.foco.map(f => h(A.Badge, {key: f, size: "lg", role: "listitem"}, f)))),
-    h(A.Card, {variant: "inset", className: "rec-usa"},
-      h("div", {className: "rec-usa-n"}, h("b", {"data-rec-conta": ""}, atual.padroes.length),
-        h("span", {"data-rec-conta-palavra": ""}, atual.padroes.length === 1 ? "pattern to compose" : "patterns to compose")),
-      h("div", {className: "rec-usa-lista", role: "list", "aria-label": "Patterns it composes", "data-rec-usa": ""},
-        ...atual.padroes.map(p => h(A.Badge, {key: p, size: "lg", tone: "primary", emphasis: "solid", role: "listitem", className: "rec-codigo"}, p))),
-      h("div", {className: "rec-acoes"},
-        h(A.Button, {size: "lg", variant: "primary", trailingIcon: "arrow-right", href: atual.href, "data-rec-abrir": ""}, "Open the recipe"),
-        h(A.Button, {size: "lg", variant: "tertiary", type: "button", "data-rec-copiar": ""}, "Copy the list"))));
-
-  // A LISTA DAS RECEITAS (coluna presa): o filtro e um botão por receita, a escolhida com o ponto amarelo.
-  const lista = h(A.Card, {variant: "inset", className: "rec-lista", role: "group", "aria-label": "Recipes"},
-    h(A.SearchField, {size: "lg", className: "rec-filtro", "aria-label": "Filter recipes", placeholder: `Filter ${receitas.length} recipes`,
-      autoComplete: "off", "data-rec-filtro": ""}),
-    ...receitas.map(r => h("button", {key: r.id, type: "button", className: "rec-item", "aria-pressed": r.id === atual.id ? "true" : "false",
-      "data-rec-item": r.id},
-      h("span", {className: "rec-item-nome"}, r.nome),
-      h(A.Badge, {size: "sm", className: "rec-item-conta"}, r.padroes.length),
-      h(A.Badge, {size: "sm", tone: "primary", emphasis: "solid", className: "rec-item-usa", hidden: true}, "uses it"))),
-    h("p", {className: "rec-nada", "data-rec-nada": "", hidden: true}, "No recipe matches."));
-
-  // OS PADRÕES: um cartão por padrão, que liga o filtro "quem usa este padrão" (aria-pressed).
-  const ladrilho = p => {
-    const usado = atual.padroes.includes(p.nome), n = usam(p.nome).length;
-    // O cartão clicável que sobe (`lift`, o item 7); o padrão que a receita usa leva o fundo do `Card variant="selected"`
-    // (a classe dele, que o comportamento liga e desliga ao trocar de receita).
-    return h(A.Card, {key: p.nome, variant: "interactive", lift: true, className: usado ? "rec-padrao card-selected" : "rec-padrao",
-      render: h("button", {type: "button"}), "aria-pressed": "false", "data-rec-padrao": p.nome, "data-rec-n": n,
-      title: `Show the ${n} recipes that use it`},
-      h("span", {className: "rec-padrao-topo"}, h("span", {className: "rec-padrao-nome"}, p.nome),
-        h(A.Badge, {size: "sm", tone: "primary", emphasis: "solid", className: "rec-padrao-usado", hidden: !usado}, "In this recipe"),
-        h(A.Badge, {size: "sm", emphasis: "solid", className: "rec-padrao-filtro", hidden: true}, "Filter on")),
-      h("span", {className: "rec-padrao-regra"}, p.regra),
-      h("span", {className: "rec-padrao-tipos"}, p.tipos));
+  let numero = 0;
+  const cartao = (r, grupo) => {
+    const n = dois(++numero);
+    return h(A.Card, {key: r.id, variant: "interactive", lift: true, render: h("div"), className: "rcs-cartao", "data-g1-item": "",
+      "data-busca": `${grupo} ${r.nome} ${r.texto} ${r.padroes.join(" ")} ${r.foco.join(" ")} ${r.usa.join(" ")}`.toLowerCase()},
+      h("span", {className: "rcs-miniatura", "aria-hidden": "true"},
+        h("span", {className: "rcs-miniatura-peca", inert: true, dangerouslySetInnerHTML: {__html: semIds(r.html)}})),
+      h("div", {className: "rcs-texto"},
+        h("p", {className: "rcs-olho"}, `${grupo} · ${n}`),
+        h("h3", null, h("a", {className: "rcs-nome", href: r.href}, r.nome)),
+        h("p", {className: "rcs-lede"}, r.texto),
+        h("div", {className: "rcs-padroes", role: "list", "aria-label": `Patterns in ${r.nome}`},
+          ...r.padroes.map(p => h(A.Badge, {key: p, role: "listitem", className: "g1-selo-mono"}, p))),
+        h("span", {className: "rcs-abrir", "aria-hidden": "true"}, "Open the recipe", h(A.Icon, {name: "arrow-right", size: "sm"}))));
   };
-  const grade = (rotulo, lista, chave) => h(Fragmento, null,
-    h("div", {className: "rec-grade-cabeca"}, h("p", null, `${rotulo} · ${lista.length}`),
-      h("p", {"data-rec-no-grupo": chave}, `${doGrupo(lista)} in this recipe`)),
-    h("div", {className: "rec-padroes"}, ...lista.map(ladrilho)));
-  const Fragmento = site.Fragment;
 
-  const montador = h("div", {className: "rec-colunas"},
-    lista,
-    h("div", {className: "rec-quadro"},
-      h("div", {className: "rec-faixa", role: "status", "data-rec-faixa": "", hidden: true},
-        h("span", {"data-rec-faixa-texto": ""}),
-        h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-rec-limpar": ""}, "Show all recipes")),
-      grade("Application patterns", nApp, "app"),
-      grade("Operational patterns", nOp, "op")));
+  const markdown = [`# Recipes`, "", `${receitas.length} whole screens, one for each kind of product. A recipe puts the specialised components together into a working screen, and says which rules the screen must keep.`, "",
+    ...grupos.flatMap(g => [`## ${g.titulo}`, "", ...g.itens.map(r => `- [${r.nome}](${r.href.replace("./", "")}): ${r.texto}`), ""])].join("\n");
 
-  const todas = h("div", {className: "rec-todas"}, ...receitas.map(r => h(A.Card, {key: r.id, variant: "interactive", lift: true,
-    className: "rec-cartao", render: h("a", {href: r.href})},
-    h("h3", null, r.nome), h("p", null, r.foco.join(" · ")),
-    h("span", {className: "rec-cartao-padroes"}, ...r.padroes.map(p => h(A.Badge, {key: p, className: "rec-codigo"}, p))))));
-
-  // Os dados que o comportamento lê (o `site-b/js/recipes.js`).
-  const dados = h("script", {type: "application/json", id: "rec-dados",
-    dangerouslySetInnerHTML: {__html: JSON.stringify({receitas: receitas.map(({id, nome, texto, foco, padroes, href}) => ({id, nome, texto, foco, padroes, href})),
-      app: nApp.map(p => p.nome), op: nOp.map(p => p.nome)}).replace(/</g, "\\u003c")}});
-
-  const markdown = [`# Recipes`, "", `${receitas.length} product archetypes: how to assemble a whole kind of application by composing the architecture patterns. A recipe says which patterns to use and which invariants to hold.`, "",
-    ...receitas.map(r => `- [${r.nome}](${r.href.replace("./", "")}): ${r.padroes.join(", ")}`)].join("\n");
-
-  const node = h("div", {className: "rec-b", "data-receitas": ""},
-    palco,
-    cabeca("builder", "01", "Recipe builder", "pick one · see what it takes",
-      "Choose a kind of application and its patterns light up. Choose a pattern to see every recipe that needs it."),
-    h("p", {className: "sr-only", role: "status", "data-rec-anuncio": ""}),
-    escolhida,
-    montador,
-    cabeca("every", "02", "Every recipe", String(receitas.length), "Each one has its own page with the code to start from."),
-    todas,
-    dados,
+  const node = h("div", {className: "g1-b g1-largo rcs-b", "data-g1-lista": "", "data-g1-frase": "No recipe mentions"},
+    cabeca,
+    buscaDaLista(site, {rotulo: "Find a recipe", dica: "Find a recipe — try “approval”, “members” or a component, like “DataGrid”", total: receitas.length, chave: "g1"}),
+    ...grupos.map((g, k) => h("section", {key: g.titulo, className: "g1-grupo rcs-grupo", id: `rcs-${slug(g.titulo)}`, "data-g1-grupo": "",
+      "aria-labelledby": `rcs-${slug(g.titulo)}-h`},
+      h("div", {className: "g1-grupo-topo"},
+        h("span", {className: "g1-grupo-num", "aria-hidden": "true"}, dois(k + 1)),
+        h("h2", {id: `rcs-${slug(g.titulo)}-h`}, g.titulo),
+        h("span", {className: "g1-grupo-conta"}, `${g.itens.length} of ${g.itens.length}`)),
+      h("p", {className: "rcs-frase"}, g.frase),
+      h("div", {className: "rcs-cartoes"}, ...g.itens.map(r => cartao(r, g.titulo))))),
+    vazioDaBusca(site, {chave: "g1", titulo: "No recipe found", texto: "Try a kind of product, a component name or a shorter word."}),
     textoParaCopiar(markdown));
   return {node, toc: []};
 }
