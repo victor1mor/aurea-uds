@@ -1,6 +1,6 @@
 // RECEITA · Agents · AI (S-11, 05/11/2026) — o console do agente como tela de produto, na linguagem dos blocos v2 (a
 // `Tela`): o cabeçalho com a trilha, o id da corrida, o estado e as ações (a destrutiva separada); no corpo, a conversa,
-// o portão de aprovação e a cascata das chamadas; ao lado, as propriedades da corrida; embaixo, o gasto contra o teto. Os quatro
+// o portão de aprovação e a cascata das chamadas; ao lado, as propriedades da corrida e o gasto contra o teto. Os quatro
 // padrões da receita (`patterns/agent_ai.md`): RunSession (estado, cascata, ponto de retomada, recibo),
 // ConversationChannel (a conversa e o campo), ResourceWorkbench (os arquivos que o agente toca) e ReviewCompare (a
 // mudança antes de aprovar). Interação de verdade: aprovar, negar ou cancelar muda o estado e responde na conversa;
@@ -39,7 +39,9 @@ function AgentConsole() {
     lado: [
       h(Propriedades, {key: "p", titulo: "Run", itens: [
         {term: "Agent", value: "Curator"}, {term: "Model", value: "opus-5"},
-        {term: "Touches", value: "aurea.css, tokens.json"}, {term: "Resume from", value: "turn 2 · 09:13:41"}]})],
+        {term: "Touches", value: "aurea.css, tokens.json"}, {term: "Resume from", value: "turn 2 · 09:13:41"}]}),
+      h(A.CostMeter, {key: "c", label: "Spend this month", spent: 84.2, limit: 100, softLimit: 80, period: "November",
+        segments: [{id: "i", label: "Input", amount: 31.4}, {id: "o", label: "Output", amount: 49.7}, {id: "k", label: "Cache read", amount: 3.1}]})],
     rodape: "No change is written without an approval. Cancelling also leaves a receipt."},
     h(A.Card, {variant: "inset"}, h("div", {style: {display: "grid", gap: "var(--space-4)"}},
       h(A.Text, {type: "body-xs", tone: "muted", weight: "semibold"}, "Activity"),
@@ -52,17 +54,15 @@ function AgentConsole() {
       onApprove: aprovar, onDeny: negar}))),
     h(A.Card, {variant: "inset"}, h("div", {style: {display: "grid", gap: "var(--space-3)"}},
       h(A.Text, {type: "body-xs", tone: "muted", weight: "semibold"}, "Tool calls"),
-      h(A.TraceTimeline, {label: "Run 184, step by step", spans: PASSOS}))),
-    h(A.CostMeter, {label: "Spend this month", spent: 84.2, limit: 100, softLimit: 80, period: "November",
-      segments: [{id: "i", label: "Input", amount: 31.4}, {id: "o", label: "Output", amount: 49.7}, {id: "k", label: "Cache read", amount: 3.1}]}));
+      h(A.TraceTimeline, {label: "Run 184, step by step", spans: PASSOS}))));
 }
 
 export default {
   uses: ["Card", "Avatar", "Icon", "Text", "Code", "Heading", "AgentStatus", "Button", "MessageList", "MessageComposer",
-    "HumanApproval", "TraceTimeline", "DataList", "CostMeter"],
+    "HumanApproval", "TraceTimeline", "DataList", "CostMeter", "Separator"],
   code: `import {useState} from "react";
 import {AgentStatus, Avatar, Button, Card, Code, CostMeter, DataList, Heading, HumanApproval, Icon, MessageComposer,
-  MessageList, Text, TraceTimeline} from "@aurea-uds/react";
+  MessageList, Separator, Text, TraceTimeline} from "@aurea-uds/react";
 
 export function AgentConsole({run, turns, spans, spend}) {
   const [state, setState] = useState("paused");
@@ -80,6 +80,7 @@ export function AgentConsole({run, turns, spans, spend}) {
         <AgentStatus state={state} />
         <Button variant="danger-ghost" leadingIcon="x" disabled={state !== "paused"} onClick={deny}>Cancel run</Button>
       </header>
+      <Separator />
 
       <Card variant="inset">
         <MessageList label="Conversation" messages={messages} />
@@ -96,11 +97,14 @@ export function AgentConsole({run, turns, spans, spend}) {
       <Card variant="inset">
         <TraceTimeline label={\`Run \${run.id}, step by step\`} spans={spans} />
       </Card>
-      <CostMeter label="Spend this month" spent={spend.total} limit={100} softLimit={80} segments={spend.segments} />
 
       <aside>
         <DataList items={[{term: "Agent", value: run.agent}, {term: "Resume from", value: run.checkpoint}]} />
+        <Separator />
+        <CostMeter label="Spend this month" spent={spend.total} limit={100} softLimit={80} segments={spend.segments} />
       </aside>
+
+      <Separator />
 
       <footer>
         <Text type="body-sm" tone="muted">No change is written without an approval. Cancelling also leaves a receipt.</Text>

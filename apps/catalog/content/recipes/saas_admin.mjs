@@ -73,9 +73,10 @@ function MembersAdmin() {
 }
 
 export default {
-  uses: ["Card", "Avatar", "Icon", "Text", "Code", "Heading", "Status", "Button", "Progress", "SegmentedControl", "DataGrid", "Dialog", "Field", "Input", "Select"],
+  uses: ["Card", "Separator", "Avatar", "Icon", "Text", "Code", "Heading", "Status", "Button", "Progress", "SegmentedControl", "DataGrid", "Dialog", "Field", "Input", "Select"],
   code: `import {useState} from "react";
-import {Avatar, Button, Card, Code, Dialog, Field, Heading, Icon, Input, Progress, SegmentedControl, Select, Status, Text} from "@aurea-uds/react";
+import {Avatar, Button, Card, Code, Dialog, Field, Heading, Icon, Input, Progress, SegmentedControl, Select,
+  Separator, Status, Text} from "@aurea-uds/react";
 import {DataGrid} from "@aurea-uds/react/data-grid";
 
 const tone = {Active: "success", Invited: "info", Suspended: "warning"};
@@ -120,6 +121,7 @@ export function MembersAdmin({initial, seats}) {
         <Text type="body-sm" tone="muted">{members.length} members · {selected} selected</Text>
         <Button variant="primary" leadingIcon="user-plus" onClick={() => setOpen(true)}>Invite member</Button>
       </header>
+      <Separator />
 
       <Progress value={Math.round(used / seats * 100)} label="Seats in use" showLabel detail={\`\${used} of \${seats}\`} />
 
@@ -149,6 +151,8 @@ export function MembersAdmin({initial, seats}) {
             value={role} onValueChange={setRole} />
         </Field>
       </Dialog>
+
+      <Separator />
 
       <footer>
         <Text type="body-sm" tone="muted">Suspended members keep their history and stop using a seat.</Text>

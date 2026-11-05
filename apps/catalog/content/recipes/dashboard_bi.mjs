@@ -8,9 +8,9 @@ import * as A from "../../../../packages/react/dist/index.js";
 import {Chart} from "../../../../packages/react/dist/chart.js";
 import {DataGrid} from "../../../../packages/react/dist/data-grid.js";
 import {BarChart, Bar, CartesianGrid, XAxis} from "recharts";
-import {Tela} from "./_tela.mjs";
+import {Tela, Numero, Grupo} from "./_tela.mjs";
 
-const numeros = {display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, calc(var(--space-24) * 2 + var(--space-8))), 1fr))", gap: "var(--space-3)"};
+const numeros = {display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, calc(var(--space-24) * 2)), 1fr))", gap: "var(--space-3)"};
 
 const PERIODOS = {
   "7d": {serie: [["Mon", 6.1], ["Tue", 6.8], ["Wed", 7.4], ["Thu", 6.9], ["Fri", 8.2], ["Sat", 5.3], ["Sun", 4.9]],
@@ -42,21 +42,21 @@ function RevenueDashboard() {
     rodape: exportado ? `Exported ${exportado} · all plans · all regions, as a CSV with the same numbers as the grid.`
       : `Export scope: ${periodo} · all plans · all regions. The grid carries the same numbers as the bars.`},
     h("div", {style: numeros}, ...kpis.map(([rotulo, valor, tendencia, dir]) =>
-      h(A.KPI, {key: rotulo, label: rotulo, value: valor, trend: tendencia, direction: dir, tone: tomDe(rotulo, dir)}))),
-    h(Chart, {label: "Revenue over the period, in thousands of dollars"},
+      h(Numero, {key: rotulo, label: rotulo, value: valor, trend: tendencia, direction: dir, tone: tomDe(rotulo, dir)}))),
+    h(Grupo, {titulo: "Revenue per period, in thousands of dollars"}, h(Chart, {label: "Revenue over the period, in thousands of dollars"},
       h(BarChart, {data: dados},
         h(CartesianGrid, {vertical: false}),
         h(XAxis, {dataKey: "x", tickLine: false, axisLine: false, interval: 0}),
-        h(Bar, {dataKey: "revenue", name: "Revenue", fill: "var(--chart-2)"}))),
+        h(Bar, {dataKey: "revenue", name: "Revenue", fill: "var(--chart-2)"})))),
     h(DataGrid, {label: "Revenue by plan", columns: COLUNAS,
       data: PLANOS[periodo].map(([plan, revenue, seats]) => ({plan, revenue: revenue.toFixed(1), seats: String(seats)}))}));
 }
 
 export default {
-  uses: ["Card", "Avatar", "Icon", "Text", "Heading", "Status", "SegmentedControl", "Button", "KPI", "Chart", "DataGrid"],
+  uses: ["Card", "Separator", "Avatar", "Icon", "Text", "Heading", "Status", "SegmentedControl", "Button", "KPI", "Chart", "DataGrid"],
   prerender: "recharts-surface",
   code: `import {useState} from "react";
-import {Avatar, Button, Card, Heading, Icon, KPI, SegmentedControl, Status, Text} from "@aurea-uds/react";
+import {Avatar, Button, Card, Heading, Icon, KPI, SegmentedControl, Separator, Status, Text} from "@aurea-uds/react";
 import {Chart} from "@aurea-uds/react/chart";
 import {DataGrid} from "@aurea-uds/react/data-grid";
 import {Bar, BarChart, CartesianGrid, XAxis} from "recharts";
@@ -76,22 +76,29 @@ export function RevenueDashboard({periods, plans, onExport}) {
           items={[{value: "7d", label: "7 days"}, {value: "30d", label: "30 days"}, {value: "90d", label: "90 days"}]} />
         <Button variant="secondary" leadingIcon="download-simple" onClick={() => onExport(period)}>Export {period}</Button>
       </header>
+      <Separator />
 
       {kpis.map(k => (
-        <KPI key={k.label} label={k.label} value={k.value} trend={k.trend} direction={k.direction} tone={k.tone} />
+        <Card key={k.label} variant="inset">
+          <KPI variant="plain" label={k.label} value={k.value} trend={k.trend} direction={k.direction} tone={k.tone} />
+        </Card>
       ))}
 
-      <Chart label="Revenue over the period, in thousands of dollars">
-        <BarChart data={series}>
-          <CartesianGrid vertical={false} />
-          <XAxis dataKey="x" tickLine={false} axisLine={false} interval={0} />
-          <Bar dataKey="revenue" name="Revenue" fill="var(--chart-2)" />
-        </BarChart>
-      </Chart>
+      <Card variant="inset">
+        <Chart label="Revenue over the period, in thousands of dollars">
+          <BarChart data={series}>
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="x" tickLine={false} axisLine={false} interval={0} />
+            <Bar dataKey="revenue" name="Revenue" fill="var(--chart-2)" />
+          </BarChart>
+        </Chart>
+      </Card>
 
       <DataGrid label="Revenue by plan" data={plans[period]}
         columns={[{accessorKey: "plan", header: "Plan"}, {accessorKey: "revenue", header: "Revenue ($k)"},
           {accessorKey: "seats", header: "Seats"}]} />
+
+      <Separator />
 
       <footer>
         <Text type="body-sm" tone="muted">The grid carries the same numbers as the bars.</Text>

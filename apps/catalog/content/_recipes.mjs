@@ -23,6 +23,11 @@ import * as A from "../../../packages/react/dist/index.js";
 import agentAi from "./recipes/agent_ai.mjs";
 import saasAdmin from "./recipes/saas_admin.mjs";
 import dashboardBi from "./recipes/dashboard_bi.mjs";
+import projectCrmErp from "./recipes/project_crm_erp.mjs";
+import commerceFinance from "./recipes/commerce_finance.mjs";
+import bookingCalendar from "./recipes/booking_calendar.mjs";
+import supportService from "./recipes/support_service.mjs";
+import regulatedRecords from "./recipes/regulated_records.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-3)"};
 const between = {...row, justifyContent: "space-between"};
@@ -195,43 +200,8 @@ export default {
           status: {label: "read", variant: "success"}}]}),
       h(A.MessageComposer, {placeholder: "Message the team…", onSend: () => {}})))),
   },
-  commerce_finance: {
-    uses: ["Card", "DataList", "Alert", "Button", "Badge"],
-    code: `<Card>
-  <Badge variant="warning">Payment pending</Badge>
-  <DataList items={[
-    {term: "Subtotal", value: "$240.00"},
-    {term: "Tax", value: "$21.60"},
-    {term: "Total", value: "$261.60"},
-  ]} />
-  <Alert variant="info">Charging twice is impossible: the order id is the idempotency key.</Alert>
-  <Button variant="primary">Pay $261.60</Button>
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h("div", {style: between}, h("strong", null, "Order 4812"),
-        h(A.Badge, {variant: "warning"}, "Payment pending")),
-      h(A.DataList, {items: [{term: "Subtotal", value: "$240.00"},
-        {term: "Tax", value: "$21.60"}, {term: "Total", value: "$261.60"}]}),
-      h(A.Alert, {variant: "info"}, "Charging twice is impossible: the order id is the idempotency key."),
-      h(A.Button, {variant: "primary"}, "Pay $261.60")))),
-  },
-  booking_calendar: {
-    uses: ["Card", "Radio", "Field", "Input", "Button", "Badge"],
-    code: `<Card>
-  <Badge>Europe/Lisbon</Badge>
-  <Radio name="slot" label="09:00 – 09:30" defaultChecked />
-  <Radio name="slot" label="11:00 – 11:30" />
-  <Field label="Name"><Input defaultValue="Curator" /></Field>
-  <Button variant="primary">Confirm booking</Button>
-</Card>`,
-    render: () => h("div", {style: narrow}, h(A.Card, null, h("div", {style: stack},
-      h("div", {style: between}, h("strong", null, "Thursday, 6 August"),
-        h(A.Badge, null, "Europe/Lisbon")),
-      h(A.Radio, {name: "slot", label: "09:00 – 09:30", defaultChecked: true}),
-      h(A.Radio, {name: "slot", label: "11:00 – 11:30"}),
-      h(A.Field, {label: "Name"}, h(A.Input, {defaultValue: "Curator"})),
-      h(A.Button, {variant: "primary"}, "Confirm booking")))),
-  },
+  commerce_finance: {...commerceFinance},
+  booking_calendar: {...bookingCalendar},
   maps_logistics: {
     uses: ["Card", "KPI", "Timeline", "Status"],
     code: `// The map is one half; this list is the other, and the invariant is that they
@@ -272,30 +242,7 @@ export default {
         h(A.Button, {variant: "danger"}, "Calibrate"))))),
   },
   agent_ai: {...agentAi},
-  project_crm_erp: {
-    uses: ["Card", "SearchField", "Table", "Badge", "Avatar", "Pagination"],
-    code: `<Card>
-  <SearchField placeholder="Filter deals…" />
-  <Table caption="Pipeline">
-    <thead><tr><th>Deal</th><th>Stage</th><th>Owner</th></tr></thead>
-    <tbody><tr><td>Acme · renewal</td><td><Badge variant="info">Negotiation</Badge></td>
-      <td><Avatar fallback="AN" size="sm" /></td></tr></tbody>
-  </Table>
-  <Pagination page={page} total={9} onPageChange={setPage} />
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h(A.SearchField, {placeholder: "Filter deals…"}),
-      h(A.Table, {caption: "Pipeline"},
-        h("thead", null, h("tr", null, h("th", null, "Deal"), h("th", null, "Stage"), h("th", null, "Owner"))),
-        h("tbody", null,
-          h("tr", null, h("td", null, "Acme · renewal"),
-            h("td", null, h(A.Badge, {variant: "info"}, "Negotiation")),
-            h("td", null, h(A.Avatar, {fallback: "AN", size: "sm"}))),
-          h("tr", null, h("td", null, "Globex · pilot"),
-            h("td", null, h(A.Badge, {variant: "success"}, "Won")),
-            h("td", null, h(A.Avatar, {fallback: "CU", size: "sm"}))))),
-      h(A.Pagination, {page: 1, total: 9, onPageChange: () => {}})))),
-  },
+  project_crm_erp: {...projectCrmErp},
   education: {
     uses: ["Card", "Progress", "Accordion", "Badge", "Button"],
     code: `<Card>
@@ -348,53 +295,8 @@ export default {
       h(A.Field, {label: "Reading"}, h(A.Input, {inputMode: "numeric", defaultValue: "41.2"})),
       h(A.Button, {variant: "primary", fullWidth: true}, "Save reading")))),
   },
-  support_service: {
-    uses: ["Card", "Table", "Badge", "Status", "Button"],
-    code: `<Card>
-  <Table caption="Inbox">
-    <thead><tr><th>Case</th><th>SLA</th><th>State</th></tr></thead>
-    <tbody><tr><td>#3412 · cannot sign in</td>
-      <td><Badge variant="danger">12 min left</Badge></td>
-      <td><Status variant="busy">with support</Status></td></tr></tbody>
-  </Table>
-  <Button variant="outline">Escalate</Button>
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h(A.Table, {caption: "Inbox"},
-        h("thead", null, h("tr", null, h("th", null, "Case"), h("th", null, "SLA"), h("th", null, "State"))),
-        h("tbody", null,
-          h("tr", null, h("td", null, "#3412 · cannot sign in"),
-            h("td", null, h(A.Badge, {variant: "danger"}, "12 min left")),
-            h("td", null, h(A.Status, {variant: "busy"}, "with support"))),
-          h("tr", null, h("td", null, "#3411 · invoice mismatch"),
-            h("td", null, h(A.Badge, {variant: "warning"}, "2 h left")),
-            h("td", null, h(A.Status, {variant: "away"}, "waiting on customer"))))),
-      h("div", {style: {...row, justifyContent: "flex-end"}},
-        h(A.Button, {variant: "outline"}, "Escalate"))))),
-  },
-  regulated_records: {
-    uses: ["Card", "Alert", "Checkbox", "DataList", "Button"],
-    code: `<Card>
-  <Alert variant="danger" title="This cannot be undone">
-    Deleting a record breaks the retention chain. It is logged with your name.
-  </Alert>
-  <DataList items={[
-    {term: "Consent", value: "given 12/03/2026"},
-    {term: "Retention", value: "7 years"},
-    {term: "Last access", value: "Curator · 09:14"},
-  ]} />
-  <Checkbox label="I understand the consequence" />
-  <Button variant="danger" disabled>Delete record</Button>
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h(A.Alert, {variant: "danger", title: "This cannot be undone"},
-        "Deleting a record breaks the retention chain. It is logged with your name."),
-      h(A.DataList, {items: [{term: "Consent", value: "given 12/03/2026"},
-        {term: "Retention", value: "7 years"}, {term: "Last access", value: "Curator · 09:14"}]}),
-      h(A.Checkbox, {label: "I understand the consequence"}),
-      h("div", {style: {...row, justifyContent: "flex-end"}},
-        h(A.Button, {variant: "danger", disabled: true}, "Delete record"))))),
-  },
+  support_service: {...supportService},
+  regulated_records: {...regulatedRecords},
   creative_workspace: {
     uses: ["Card", "Timeline", "MessageList", "Badge"],
     code: `// The canvas is the other half. Versions and comments are the surface that

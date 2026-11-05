@@ -35,10 +35,27 @@
 .rcp-estados { display:grid; gap:0; margin:var(--space-5) 0 0; padding:var(--space-2); list-style:none; }
 .rcp-estado { display:grid; grid-template-columns:minmax(calc(var(--space-20) * 2), auto) minmax(0, 1fr); gap:var(--space-4); align-items:baseline;
   padding:var(--space-3) var(--space-4); border-radius:var(--radius-lg); }
+/* A divisão entre os estados (a ordem do Victor de 05/11/2026): a linha fina do `Separator`, desenhada como fundo — borda
+   não, que a varredura "nenhuma peça desenha linha" mede. */
+.rcp-estado { position:relative; }
+.rcp-estado + .rcp-estado::before { content:""; position:absolute; inset-inline:var(--space-4); inset-block-start:0; block-size:var(--border-width); background:var(--border); }
 .rcp-estado-nome { justify-self:start; font-family:var(--font-code); }
 .rcp-estado-texto { line-height:var(--leading-relaxed); }
 
 @container g1 (max-width: 40rem) {
   .rcp-padroes { grid-template-columns:minmax(0, 1fr); }
   .rcp-estado { grid-template-columns:minmax(0, 1fr); gap:var(--space-2); }
+}
+
+/* A TELA DAS RECEITAS (`content/recipes/_tela.mjs`): o corpo e a coluna de propriedades, com a divisão entre eles (a ordem
+   do Victor de 05/11/2026 — as partes de dentro têm divisão). Lado a lado, uma linha vertical na cor do `Separator`;
+   quando a tela é estreita, a coluna desce e a linha deita. */
+.rcp-tela { container:rcp-tela / inline-size; }
+.rcp-tela-corpo { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-5); align-items:start; }
+.rcp-tela-corpo:has(> .rcp-tela-lado) { grid-template-columns:minmax(0, 1fr) var(--border-width) minmax(0, calc(var(--space-24) * 2 + var(--space-12))); }
+.rcp-tela-principal, .rcp-tela-lado { display:grid; gap:var(--space-4); min-inline-size:0; }
+.rcp-tela-divisao { align-self:stretch; background:var(--border); }
+@container rcp-tela (max-width: 46rem) {
+  .rcp-tela-corpo:has(> .rcp-tela-lado) { grid-template-columns:minmax(0, 1fr); }
+  .rcp-tela-divisao { block-size:var(--border-width); }
 }
