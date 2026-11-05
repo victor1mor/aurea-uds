@@ -200,7 +200,11 @@ const FOTO = `(sel) => {
   // MESMA classe e sem texto, então a impressão digital antiga era idêntica para as quatro — e a
   // seta, que anda entre elas, saía como "não faz nada". Medido em 22/08/2026: quatro das cinco
   // reprovações da primeira execução eram esta cegueira, não defeito de componente.
-  const todos = [...document.querySelectorAll("*")];
+  // A PEÇA DE PASSAGEM do deslize (S-04, a classe selection-indicator) entra na fila durante a troca e sai sozinha no
+  // fim: enquanto existe, empurra o índice do foco em 1. Medido em 05/11/2026 — o Tabs "respondia" a sete teclas
+  // inertes porque a peça saía entre a foto de antes e a de depois. Marcador transitório, como os de baixo: fora da foto.
+  const passagem = (el) => !!el.closest(".selection-indicator");
+  const todos = [...document.querySelectorAll("*")].filter((el) => !passagem(el));
   const partes = [
     "foco:" + (ativo ? todos.indexOf(ativo) + ":" + ativo.tagName + "#" + (ativo.id || "") +
       "." + (ativo.className || "") + "|" + (ativo.textContent || "").slice(0, 20) : "nenhum"),
@@ -209,6 +213,7 @@ const FOTO = `(sel) => {
   // próprio elemento. O banco do IconButton marcava \`data-ativado\` na seção, e a foto não via —
   // Enter num <button> com onClick saía como tecla inerte. Medido em 27/08/2026.
   for (const el of [raiz, ...raiz.querySelectorAll("*")]) {
+    if (passagem(el)) continue;
     for (const a of el.attributes) {
       // data-starting-style e data-ending-style são marcadores de ANIMAÇÃO do motor: aparecem
       // e somem sozinhos enquanto o painel monta, sem tecla nenhuma. Medido em 22/08/2026 —
@@ -216,7 +221,7 @@ const FOTO = `(sel) => {
       // transitório não é estado, e uma foto que os inclui fotografa o relógio.
       // (sem crase neste bloco: ele vive dentro de um template literal.)
       if ((a.name.startsWith("aria-") || a.name.startsWith("data-")) &&
-          !/^data-(starting|ending)-style$/.test(a.name)) partes.push(el.tagName + a.name + "=" + a.value);
+          !/^data-(starting|ending)-style$|^data-sliding$/.test(a.name)) partes.push(el.tagName + a.name + "=" + a.value);
     }
     if ("value" in el) partes.push(el.tagName + ":v=" + el.value);
     if ("checked" in el) partes.push(el.tagName + ":c=" + el.checked);
