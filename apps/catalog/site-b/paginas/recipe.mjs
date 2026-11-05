@@ -103,9 +103,10 @@ export default function recipe(site, id, arquetipo, i, ids) {
   const secoesB = lista.map((s, n) => ({id: s.id, label: s.label, node: secao(site, s.id, String(n + 1).padStart(2, "0"), s.olho, s.titulo, s.corpo)}));
 
   const {prev, next} = site.vizinhos("recipes", `recipe-${slug(id)}.html`);
-  // `data-pagina-larga`: a página tira o índice da direita e o texto ocupa o lugar dele (`site-b/css/_larga.css`, a forma A
-  // da caixa larga, aprovada pelo Victor em 05/11/2026) — a receita é uma tela inteira, e a grade cabe.
-  const node = h("div", {className: "g1-b item-b rcp-b", "data-pagina-larga": ""},
+  // A PÁGINA LARGA (a forma A da caixa larga, aprovada pelo Victor em 05/11/2026): `g1-largo` é o arranjo das listas do site
+  // (Blocks, Patterns) — a página ocupa também a coluna do índice e perde o teto de largura —, e `data-pagina-larga` tira o
+  // índice da direita (`site-b/css/_larga.css`). A receita é uma tela inteira: o topo e a caixa vão até a borda.
+  const node = h("div", {className: "g1-b g1-largo item-b rcp-b", "data-pagina-larga": ""},
     abertura(site, {trilha: ["Recipes", nome], titulo: nome, lede: intro || (arquetipo.capabilities || []).join(" · "),
       acoes: site.acoesDaPagina(false, "md"),
       selos: h(Fragment, null,
