@@ -83,7 +83,7 @@ export default function showcase(site, doc) {
           h("p", {className: "intro-p gs-p sc-seu-p"}, "Open an issue on GitHub with:"),
           h("ul", {className: "gs-lista gs-ul sc-seu-lista"}, ...["the name,", "a link,", "one sentence about it."].map(x => h("li", {key: x}, x))),
           g.p(pSeu2.texto, "s2", {className: "sc-seu-nota"})),
-        h(A.Button, {size: "lg", variant: "primary", href: link.href, trailingIcon: "arrow-up-right"}, "Open an issue"))));
+        h(A.Button, {size: "lg", variant: "primary", href: link.href, ...site.NOVA_ABA, trailingIcon: "arrow-up-right"}, "Open an issue"))));
   const toc = [[este, "This site"], [blocos, "Blocks"], [padroes, "Patterns and recipes"], [seu, "Your project here"]].map(([s, label]) => ({id: s.id, label}));
   return {node, toc};
 }

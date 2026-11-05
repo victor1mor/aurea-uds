@@ -98,7 +98,7 @@ export default function llmsTxt(site, doc) {
       aviso("info", "sparkle", "Copy Prompt", ...site.pedacos(prompt.texto, "cp"))),
     secao("contributing", "Wrong answer?", "Contributing",
       h("p", {className: "intro-p g5-p"}, ...site.pedacos(contribuir.texto.map(p => p.link !== undefined ? {t: p.link} : p), "c")),
-      h("div", {className: "llms-issue"}, h(A.Button, {size: "lg", variant: "primary", href: `${site.REPO}/issues`, trailingIcon: "arrow-up-right"}, "Open an issue"))),
+      h("div", {className: "llms-issue"}, h(A.Button, {size: "lg", variant: "primary", href: `${site.REPO}/issues`, ...site.NOVA_ABA, trailingIcon: "arrow-up-right"}, "Open an issue"))),
     proxima());
   const toc = [["available-files", "Available files"], ["every-page-as-markdown", "Every page as Markdown"], ["integration", "Integration"],
     ["contributing", "Contributing"]].map(([id, label]) => ({id, label}));

@@ -48,7 +48,7 @@ export default function release(site, r) {
     abertura(site, {
       trilha: ["Releases", `v${r.versao}`], titulo: r.title, lede: r.description, classe: "rel-palco rel-palco-nota",
       acoes: h(Fragment, null, site.acoesDaPagina(false, "md"),
-        h(A.Button, {size: "lg", variant: "tertiary", leadingIcon: "arrow-up-right", href: `${REPO}/blob/main/CHANGELOG.md`, target: "_blank", rel: "noreferrer"}, "Changelog on GitHub")),
+        h(A.Button, {size: "lg", variant: "tertiary", leadingIcon: "arrow-up-right", href: `${REPO}/blob/main/CHANGELOG.md`, ...site.NOVA_ABA}, "Changelog on GitHub")),
       selos: h(Fragment, null,
         ultima ? h(A.Badge, {variant: "primary", emphasis: "solid", size: "lg"}, "Latest") : null,
         h(A.Badge, {size: "lg", className: "g1-selo-mono"}, h("time", {dateTime: r.date}, dataLonga(r.date)))),

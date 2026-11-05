@@ -26,7 +26,7 @@ export default function releases(site) {
     trilha: ["Releases", "Overview"], titulo: "All Releases", ponteiro: true, classe: "rel-palco",
     lede: "Every update to Aurea: what is new, what changed, what was fixed and what may break. All seven packages are released together, with the same version number.",
     acoes: h(Fragment, null, site.acoesDaPagina(false, "md"),
-      h(A.Button, {size: "lg", variant: "tertiary", leadingIcon: "arrow-up-right", href: `${REPO}/blob/main/CHANGELOG.md`, target: "_blank", rel: "noreferrer"}, "Changelog on GitHub")),
+      h(A.Button, {size: "lg", variant: "tertiary", leadingIcon: "arrow-up-right", href: `${REPO}/blob/main/CHANGELOG.md`, ...site.NOVA_ABA}, "Changelog on GitHub")),
     lado: pecasQueFlutuam(site, [
       h("span", {className: "g1-numerao rel-numerao"}, h("b", null, ultima ? `v${ultima.versao}` : "—"), "latest"),
       h("span", {className: "g1-capsula"}, h("span", {className: "g1-capsula-num"}, todas.length),
@@ -51,7 +51,7 @@ export default function releases(site) {
       h("p", {className: "intro-olho"}, "All releases"),
       h("h2", {className: "intro-h2", id: "all-releases"}, "Newest first."),
       buscaDaLista(site, {rotulo: "Find a release", dica: "Find a release — try “BottomNav”, “native” or “0.3”", total: linhas.length, chave: "g1"}),
-      ...meses.map(m => h("section", {key: m.chave, className: "g1-grupo rel-mes", id: `m-${m.chave}`, "data-g1-grupo": "", "aria-labelledby": `m-${m.chave}-h`},
+      ...meses.map(m => h("section", {key: m.chave, className: "g1-grupo rel-mes", id: `m-${m.chave}`, "data-g1-grupo": "", "data-g1-filtro": m.chave, "aria-labelledby": `m-${m.chave}-h`},
         h("div", {className: "g1-grupo-topo"},
           h("span", {className: "g1-grupo-num", "aria-hidden": "true"}, m.chave.slice(5)),
           h("h3", {id: `m-${m.chave}-h`}, nomeDoMes(m.chave)),

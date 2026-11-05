@@ -46,7 +46,7 @@ export default function inicio(site) {
       h("div", {className: "inicio-acoes"},
         h(A.Button, {variant: "primary", size: "xl", trailingIcon: "arrow-right", href: "./getting-started.html"}, "Get started"),
         h(A.Button, {variant: "tertiary", size: "xl", href: "./components.html"}, "View components"),
-        h("a", {className: "inicio-gh", href: REPO}, h(A.Icon, {name: GitHub, size: "sm"}), "Open source on GitHub"))),
+        h("a", {className: "inicio-gh", href: REPO, ...site.NOVA_ABA}, h(A.Icon, {name: GitHub, size: "sm"}), "Open source on GitHub"))),
     h("div", {className: "inicio-pecas"}, h(PecasDoPalco)));
 
   // ── AS CINCO FAMÍLIAS ──────────────────────────────────────────────────────────────────────────────────────────
@@ -72,7 +72,7 @@ export default function inicio(site) {
         h("p", {className: "inicio-sec-p inicio-fim-p"}, "Text at 4.5:1 or more in both themes. Controls you can hit at 44 px. A focus ring you can always see."),
         h("div", {className: "inicio-acoes"},
           h(A.Button, {variant: "primary", size: "xl", href: "./getting-started.html"}, "Get started"),
-          h(A.Button, {variant: "tertiary", size: "xl", href: REPO}, "Open on GitHub"))),
+          h(A.Button, {variant: "tertiary", size: "xl", href: REPO, ...site.NOVA_ABA}, "Open on GitHub"))),
       h("div", {className: "inicio-teste-lugar", "data-inicio": "teste", "data-marcas": JSON.stringify(marcas)}, h(Teste, {marcas}))));
 
   return {node: h("div", {className: "inicio"}, palco, familias, baralho, fecho), toc: []};

@@ -110,6 +110,11 @@ const VERSAO = JSON.parse(readFileSync(join(root, "packages/react/package.json")
 const REPO = "https://github.com/victor1mor/aurea-uds";
 // O endereço do site publicado: os textos para assistentes de IA (SITE-06) são lidos FORA dele.
 const SITE = "https://aureauds.dev";
+// O LINK PARA FORA DO SITE (S-08 — o Victor, 05/11/2026: "ao clicar aqui deve abrir github em nova pagina"): abre em página
+// nova, e quem usa leitor de tela ouve isso — a descrição escondida `site-nova-aba`, que toda página leva (`shell`).
+// Escolha do Victor: o texto escondido, nada muda na tela. O nome do link fica o mesmo.
+const NOVA_ABA = {target: "_blank", rel: "noreferrer", "aria-describedby": "site-nova-aba"};
+const avisoDeNovaAba = () => h("span", {id: "site-nova-aba", hidden: true}, "Opens in a new tab");
 // O ano do rodapé: o da última versão publicada, e não o relógio (a página é gerada e conferida pela CI).
 const ANO = JSON.parse(readFileSync(join(root, "scripts/released-surface.json"), "utf8")).date.slice(0, 4);
 // O LOGO DO GITHUB (o Victor, 15/10/2026: "A, pode baixar o oficial do GitHub") — só no SITE, nunca na biblioteca
@@ -484,7 +489,7 @@ const cabecaDaPagina = (title, lede, pills = [], prompt = false) => h("header", 
   h("div", {className: "page-head-row"}, h("h1", null, title), acoesDaPagina(prompt)),
   h("p", {className: "page-lede"}, lede),
   pills.length ? h("div", {className: "page-pills"}, ...pills.map(([rotulo, icone, href]) =>
-    h(A.Button, {key: rotulo, variant: "tertiary", size: "sm", leadingIcon: icone, href, target: "_blank", rel: "noreferrer"}, rotulo))) : null);
+    h(A.Button, {key: rotulo, variant: "tertiary", size: "sm", leadingIcon: icone, href, ...NOVA_ABA}, rotulo))) : null);
 // rótulo distinto do <nav> do componente Pagination: dois landmarks de navegação com
 // o MESMO nome é violação (axe landmark-unique) e o leitor de tela não distingue.
 // O ANTERIOR E O PRÓXIMO como os da referência (lote T, SITE-09 — o Victor: "nossos botões estão quebrando por conta
@@ -843,7 +848,7 @@ function homePage() {
     h(A.Section, {variant: "hero", align: "center", className: "home-hero",
       // O selo é um LINK para o que mudou, com o foguete, sem borda e com o fundo clarinho — como o da referência
       // (15/10/2026). O `Badge` com `emphasis="flat"` (o tom clarinho, sem a linha) e o ícone no encaixe `leading`.
-      eyebrow: h("a", {className: "home-selo", href: `${REPO}/blob/main/CHANGELOG.md`},
+      eyebrow: h("a", {className: "home-selo", href: `${REPO}/blob/main/CHANGELOG.md`, ...NOVA_ABA},
         h(A.Badge, {tone: "primary", emphasis: "flat", leading: h(A.Icon, {name: "rocket"})}, `Aurea v${VERSAO} — what's new`)),
       title: h(Fragment, null, "One design system.", h("br"), h("span", null, "Web and native, one look.")),
       description: "Aurea is a design system with two outputs: the web, in React and CSS, and mobile, in React Native. The look is one, and it does not change from one side to the other — made for people who see little.",
@@ -854,7 +859,7 @@ function homePage() {
       // Sem o número de estrelas: ele muda sozinho, e a página é gerada e conferida pela CI — o número escrito nela
       // ficaria velho, e buscado na montagem faria a página mudar a cada estrela.
       // Com o logo oficial do GitHub na frente, em 16, como a da referência (15/10/2026).
-      h("a", {className: "home-nota", href: REPO}, h(A.Icon, {name: GitHub, size: "sm"}), "Open source on GitHub")),
+      h("a", {className: "home-nota", href: REPO, ...NOVA_ABA}, h(A.Icon, {name: GitHub, size: "sm"}), "Open source on GitHub")),
     h("section", {className: "home-vitrine", "aria-label": "Showcase"},
       // As abas só a partir de 1024, como na referência: abaixo disso ela mostra só a primeira vitrine (`hide-below-lg`).
       h("div", {className: "segmented home-abas hide-below-lg", role: "tablist", "aria-label": "Showcase"}, ...escolhidos.map(aba)),
@@ -977,7 +982,7 @@ const DEMOS_DOCS = {
 // O negrito também é lido por dentro: `**`Button`**` (o nome de uma peça, em negrito) sairia com as crases à mostra.
 const pedacos = (lista, chave) => lista.map((p, n) => p.strong !== undefined ? h("strong", {key: `${chave}${n}`}, ...pedacos(lerLinha(p.strong, "negrito"), `${chave}${n}s`))
   : p.code !== undefined ? h("code", {key: `${chave}${n}`}, p.code)
-  : p.link !== undefined ? h(A.Link, {key: `${chave}${n}`, href: p.href, external: /^https?:/.test(p.href)}, p.link)
+  : p.link !== undefined ? h(A.Link, {key: `${chave}${n}`, href: p.href, ...(/^https?:/.test(p.href) ? {external: true, ...NOVA_ABA} : {})}, p.link)
   : p.t);
 
 // AS QUATRO ABAS DE INSTALAR (o 3-A, bloco 1 — 23/10/2026): um bloco de código que é UMA linha `pnpm add …` vira o mesmo
@@ -1148,7 +1153,7 @@ function introducaoB(doc) {
           items: [{id: `q${n}`, title: q, content: h("p", null, ...linhaMd(a, `f${n}`))}], ...(n === 0 ? {defaultValue: ["q0"]} : {})})))),
       secaoB("involved", "05", "Get involved", "Ask, help, report.",
         h("div", {className: "intro-grade-3"}, ...ajuda.map(([titulo, icone, cor, href, texto]) => h(A.Card, {key: titulo, variant: "interactive", className: "intro-ajuda",
-          render: h("a", {href})},
+          render: h("a", {href, ...NOVA_ABA})},
           blocoDeTile(icone, cor), h("b", null, titulo, " ", h(A.Icon, {name: "arrow-up-right", size: "sm"})), h("p", null, texto))))),
       next ? h("a", {className: "intro-proxima", href: next.href},
         h("div", null, h("span", {className: "intro-proxima-k"}, "Next"), h("b", null, next.name), h("p", null, next.summary || "")),
@@ -1244,7 +1249,13 @@ function saudePage() {
           h("tr", {"data-modelo": ""}, h("td", null, MODELO_DA_RODADA.data), h("td", null, h("code", null, MODELO_DA_RODADA.commit)),
             h("td", null, h("strong", null, MODELO_DA_RODADA.resultado)), h("td", null, MODELO_DA_RODADA.trabalhos)))),
       h("p", {"data-saude-vazia": ""}, "The list is filled in when the site is published.")),
-    anteriorProximo(vizinhos("releases", "saude.html").prev, vizinhos("releases", "saude.html").next));
+    anteriorProximo(vizinhos("releases", "saude.html").prev, vizinhos("releases", "saude.html").next),
+    // O texto do "Copy Markdown" (S-03, 05/11/2026: o botão não copiava nada aqui). As rodadas entram na publicação, só no
+    // HTML: o texto leva o catálogo e o endereço da lista.
+    textoParaCopiar(["# Health", "", "What the library promises, measured. The site is rebuilt from the measurement, and this page is "
+      + "published even when a check fails — it never hides a failure.", "", "## The catalogue is complete", "",
+      "| What | Count | Result |", "|---|---|---|", ...linhas.map(([o, n, r]) => `| ${o} | ${n} | ${r} |`), "",
+      "## The last 30 checks", "", `Every run of the checks on the main branch, in Brasília time (UTC−3): ${SITE}/saude.html`].join("\n")));
   return {node, toc};
 }
 
@@ -1811,13 +1822,8 @@ const botaoTema = (somenteIcone = false) => somenteIcone
 const chaveDeTema = (classe) => h("span", {className: classe ? `site-theme-switch ${classe}` : "site-theme-switch", "data-site-theme-switch": ""},
   h(A.ThemeToggle, {mode: "light-dark-system"}));
 
-const botaoGitHub = (classe = "hide-below-md") => h(A.IconButton, {icon: GitHub, label: "GitHub", variant: "tertiary", size: "sm", href: REPO, className: classe});
+const botaoGitHub = (classe = "hide-below-md") => h(A.IconButton, {icon: GitHub, label: "GitHub", variant: "tertiary", size: "sm", href: REPO, ...NOVA_ABA, className: classe});
 
-// A SETINHA (15/10/2026), a da referência entre 768 e 1023: a chave de tema e o GitHub não cabem na linha ao lado dos
-// links, e ficam numa janelinha que a setinha abre (a `Popover` da Aurea). Viva no `home.js`; aqui sai a setinha parada,
-// no lugar dela, com o desenho do GitHub nos dados (o vivo monta o mesmo logo).
-const setinhaDoTopo = () => h("span", {id: "site-more-root", className: "site-more", "data-github": DESENHO_GITHUB, "data-repo": REPO},
-  h(A.IconButton, {icon: "caret-down", label: "More", variant: "tertiary", size: "sm"}));
 
 // AS ÁREAS NA FOLHA DO MENU DO CELULAR (o item 10): o ícone num círculo tingido de 40, nas cores e com os ícones da
 // bancada aprovada; a área atual com o selo "You are here". As cores são as de categoria da Aurea.
@@ -1836,26 +1842,9 @@ function topoDoSite(section) {
   // SEM a versão ao lado da logo (o Victor, 15/10/2026: "do topo retire a versão"), como na referência; ela continua
   // no selo da abertura do Início. O nome, com 16 em peso 600, como o dela.
   const brand = h("a", {href: "./index.html", className: "site-brand"}, mark, h("strong", null, "Aurea"));
-  // O TOPO DO INÍCIO é o da página inicial da referência (o Victor, 14/10/2026: "as opções na página inicial devem
-  // ficar com a logo, e não na linha de baixo"): o `Header` com `items` — os links na MESMA linha, colados na marca
-  // (`itemsJustify="start"`) — e as ações na outra ponta. No celular os links vão para o menu do próprio `Header`.
-  if (section === "home") {
-    return {brand, home: {
-      // No Início a área é "Docs", como no Início da referência (conferido na página dela, 18/10/2026): só a barra das
-      // áreas, dentro da documentação, diz "Getting Started". Com o nome longo, o topo quebrava de 776 a 800 (medido).
-      // E sem "Releases", que o Início da referência também não tem (o topo dele já é justo de 768 a 1023).
-      items: AREAS.filter(([, , id]) => id !== "releases").map(([label, href, id]) => ({id, label: id === "start" ? "Docs" : label, href: `./${href}`})),
-      actions: h(Fragment, null,
-        h(A.IconButton, {icon: "magnifying-glass", label: "Search", variant: "tertiary", size: "sm",
-          href: "./components.html", "data-site-search": "", "aria-keyshortcuts": "Control+K"}),
-        botaoTema(),
-        // de 1024 para cima, na linha, como a da referência; de 768 a 1023, dentro da setinha; abaixo, no menu
-        chaveDeTema("hide-below-lg"),
-        botaoGitHub("hide-below-lg"),
-        setinhaDoTopo(),
-        // O menu do celular do site B (o item 10) também no Início, no lugar do menu do `Header` (ver `lugarDoMenu`).
-        lugarDoMenu(section))}};
-  }
+  // O TOPO ÚNICO (S-09 — o Victor, 05/11/2026: "não tem o que desenhar, use o que já foi feito e aprovado"): o Início usa
+  // o MESMO topo das outras páginas. Saiu o topo próprio dele (os links soltos, "Docs", a lupa, o "Theme" com a palavra e
+  // a setinha de 768 a 1023).
   const topbar = h(Fragment, null,
     // A BUSCA (ADR-0067; o Victor, 13/10/2026: "faltou o buscar"): o botão da referência, com o atalho
     // à mostra. Quem abre é o `search.js` (a `CommandPalette` da Aurea, viva), com Ctrl+K ou o clique;
@@ -1903,24 +1892,26 @@ function separarToc(inner) {
 
 function shell(activeHref, inner, section = "components") {
   const {node, toc} = separarToc(inner);
-  const {brand, topbar, home} = topoDoSite(section);
+  const {brand, topbar} = topoDoSite(section);
+  // No nativo, "Components" leva à lista do nativo: a chave troca o site, e as áreas acompanham. No Início, nenhuma área
+  // fica levantada: ele não é área.
+  const areaAtual = section === "native" ? "components" : section === "home" ? "" : section;
+  const areasDoSite = AREAS.map(([label, href, id]) => ({value: id, label, href: `./${section === "native" && id === "components" ? "native.html" : href}`}));
+  // A barra de cima: as áreas numa cápsula (a `SegmentedControl` com links) e as ações. A mesma no Início e nas outras.
+  const barraDeCima = h(Fragment, null,
+    h("div", {className: "site-areas"}, h(A.SegmentedControl, {label: "Sections", size: "xl", value: areaAtual, items: areasDoSite, selectedStyle: "neutral"})),
+    topbar);
   // O sprite é INLINE nesta página (external <use> via file:// esbarra em CORS), então a base é vazia.
   if (section === "home") {
-    // O Início da referência não tem menu: o topo e o conteúdo, sem o AppShell (que sempre desenha a lateral).
-    return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, h("div", {className: "site-home"},
+    // O Início não tem lateral: o topo e o conteúdo, sem o AppShell (que sempre desenha a lateral). O TOPO ÚNICO (S-09,
+    // 05/11/2026): a MESMA pílula das outras páginas — o `Header` `pill` que embaça, na largura `docs`, com a barra de
+    // cima delas; o `site-shell` no Início leva junto as medidas dela. Sem a gaveta do `AppShell`, as áreas que saem da
+    // pílula abaixo de 1121 vão para o menu do site B, que no Início aparece já a partir dessa largura (`celular.css`).
+    return renderToStaticMarkup(h(A.AureaProvider, {spriteUrl: ""}, h("div", {className: "site-home site-shell"},
       h("a", {className: "skip-link", href: "#main"}, "Skip to content"),
-      // `maxWidth="2xl"` (o Victor, 15/10/2026: no monitor de 24" o topo ia para os cantos, e o da referência fica no
-      // centro, com 1400 de largura). A escala do `Container` não tem 1400; o `2xl` (1536) fica mais perto nas duas
-      // telas medidas: a logo a 32 da borda em 1440 (a dela, 36) e a 215 em 1902 (a dela, 276) — o `xl` daria 104 e 343.
-      // O TOPO E O RODAPÉ DO SITE B TAMBÉM NO INÍCIO (02/11/2026, a página inicial no desenho aprovado): a mesma pílula que
-      // flutua das outras páginas (o `Header` `pill`, com as áreas numa cápsula — nenhuma levantada, o Início não é área —
-      // e as mesmas ações, o menu do celular inclusive) e o mesmo rodapé de uma linha.
-      // Como o desenho do Início (`inicio-B`, 02/11/2026): a pílula com os links do Início — "Docs" no lugar de "Getting
-      // Started", sem "Releases" — e a busca só na lupa, como as ações do Início de antes.
-      h(A.Header, {variant: "pill", blurred: true, maxWidth: "docs", brand, className: "site-top site-top-b", items: home.items,
-        actions: home.actions, itemsJustify: "start", navLabel: "Sections"}),
+      h(A.Header, {variant: "pill", blurred: true, maxWidth: "docs", brand}, barraDeCima),
       h("main", {id: "main", tabIndex: -1}, node),
-      rodapeDoSite())));
+      rodapeDoSite(), avisoDeNovaAba())));
   }
   const menu = (MENUS[section] || menuComponentes)();
   // A CHAVE WEB | NATIVE (bloco 1, o 5-A): a "Tabs em pílula" da referência, na ponta da linha das áreas (medida em
@@ -1928,9 +1919,6 @@ function shell(activeHref, inner, section = "components") {
   const nomeAqui = activeHref ? activeHref.replace(/^native-/, "").replace(/\.html$/, "") : null;
   const daWeb = activeHref && section === "native" ? fichas.find(f => slug(f.name) === nomeAqui && f.platforms?.web && f.platforms.web !== "planned") : null;
   const doNativo = activeHref && section !== "native" ? nativos.find(n => slug(n) === nomeAqui) : null;
-  // No nativo, "Components" leva à lista do nativo: a chave troca o site, e as áreas acompanham.
-  const areaAtual = section === "native" ? "components" : section;
-  const areasDoSite = AREAS.map(([label, href, id]) => ({value: id, label, href: `./${section === "native" && id === "components" ? "native.html" : href}`}));
   // No site B (31/10/2026), a chave do desenho: o escolhido levantado, sem o fio, e a janela do navegador no "Web".
   const chavePlataforma = h(A.SegmentedControl, {label: "Platform", size: "lg", fullWidth: true, selectedStyle: "emphasis", value: section === "native" ? "native" : "web",
     items: [
@@ -1948,9 +1936,7 @@ function shell(activeHref, inner, section = "components") {
     // O TOPO DO SITE B (aprovado em 26/10/2026): a pílula que flutua, com as áreas NA linha da marca, numa cápsula com a
     // atual levantada (a `SegmentedControl` com links), e o fundo que embaça. Abaixo de 1024 as áreas saem da pílula e
     // entram na gaveta; a chave Web | Native sobe para o alto da lateral, como no desenho.
-    h(A.AppShell, {brand, topbar: h(Fragment, null,
-        h("div", {className: "site-areas"}, h(A.SegmentedControl, {label: "Sections", size: "xl", value: areaAtual, items: areasDoSite, selectedStyle: "neutral"})),
-        topbar),
+    h(A.AppShell, {brand, topbar: barraDeCima,
       // A LATERAL DO SITE B: o bloco de canto 22 (a `Sidebar` flutuante, a de sempre da Aurea), com o item atual na
       // cápsula levantada e o ponto amarelo (`segment-dot`, ADR-0082).
       topbarVariant: "pill", topbarBlurred: true, contentVariant: "plain", layout: "docs", sidebarIndicator: "segment-dot",
@@ -1975,7 +1961,7 @@ function shell(activeHref, inner, section = "components") {
         h("a", {className: "site-toc-topo", href: "#"}, h(A.Icon, {name: "arrow-up"}), "Back to top")),
         asideLabel: "On this page"} : {})},
       node),
-    rodapeDoSite()));
+    rodapeDoSite(), avisoDeNovaAba()));
 }
 // O RODAPÉ DO SITE B: uma linha, na largura do bloco — o texto à esquerda, os links à direita.
 function rodapeDoSite() {
@@ -1984,8 +1970,8 @@ function rodapeDoSite() {
     // "Site footer", e não "Footer" (31/10/2026): a página do rodapé de exemplo tem o próprio menu "Footer", e dois
     // menus com o mesmo nome confundem o leitor de tela (o axe pegou: `landmark-unique`).
     h("nav", {className: "site-rodape-links", "aria-label": "Site footer"},
-      h("a", {href: `${REPO}/blob/main/CHANGELOG.md`}, "Changelog"), h("a", {href: `${REPO}/blob/main/LICENSE`}, "License"),
-      h("a", {href: REPO}, "GitHub")));
+      h("a", {href: `${REPO}/blob/main/CHANGELOG.md`, ...NOVA_ABA}, "Changelog"), h("a", {href: `${REPO}/blob/main/LICENSE`, ...NOVA_ABA}, "License"),
+      h("a", {href: REPO, ...NOVA_ABA}, "GitHub")));
 }
 
 // ── assets: catalog.css (fontes+core+chrome) e catalog.js (abas+tema) ─────────
@@ -2116,7 +2102,6 @@ a.chip-link:hover { color:var(--primary); border-color:transparent; }
 /* ── O MOLDE NOVO (ADR-0067) ─────────────────────────────────────────────────────────────────
    O topo em duas linhas: em cima, a logo, o nome e a versão, a BUSCA no meio (como a da referência, 400 de
    largura) e as ações; embaixo, as áreas do site. */
-.site-top { flex-wrap:wrap; row-gap:0; }
 .site-brand { display:flex; align-items:center; gap:var(--space-2); color:inherit; text-decoration:none; }
 .site-brand strong { font-size:var(--text-base); font-weight:var(--weight-semibold); }
 .site-actions { display:flex; align-items:center; gap:var(--space-2); }
@@ -2271,11 +2256,7 @@ a.related-card:hover { border-color:transparent; }
 .home-vitrine { display:grid; gap:var(--space-4); }
 /* As abas no CANTO, como na referência: começam na borda da caixa de baixo, 8 para dentro (o Victor, 14/10/2026). */
 .home-abas { justify-self:start; margin-inline-start:var(--space-2); }
-/* A setinha do topo do Início só de 768 a 1023 (o que ela guarda está na linha de 1024 para cima, e no menu abaixo de
-   768); e o "Theme" só de ícone abaixo de 1024. */
-.site-more { display:none; }
-@media (min-width:768px) and (max-width:1023px) { .site-more { display:inline-flex; } }
-.site-more-panel { display:flex; align-items:center; gap:calc(var(--space-1) + var(--space-05)); }
+/* O "Theme" só de ícone abaixo de 1024. */
 .site-so-estreito { display:none !important; }
 /* O celular do arranjo de documentação (lote U, 19/10/2026): a lupa no lugar da busca larga, e a chave de tema no alto da
    gaveta, que é onde a referência a põe. */
@@ -2960,7 +2941,7 @@ const siteBPaginas = {};
 for (const f of existsSync(join(siteBDir, "paginas")) ? readdirSync(join(siteBDir, "paginas")).filter(f => f.endsWith(".mjs")).sort() : [])
   siteBPaginas[f.replace(/\.mjs$/, "")] = (await import(pathToFileURL(join(siteBDir, "paginas", f)).href)).default;
 // As ferramentas que uma página do site B usa — as mesmas das páginas de hoje.
-const site = {h, Fragment, A, REPO, SITE, slug, alfabetico, pedacos, lerLinha, linhaMd, paraTexto, paraMarkdown, acoesDaPagina,
+const site = {h, Fragment, A, REPO, SITE, NOVA_ABA, slug, alfabetico, pedacos, lerLinha, linhaMd, paraTexto, paraMarkdown, acoesDaPagina,
   cabecaDaPagina, anteriorProximo, textoParaCopiar, vizinhos, demoBlock, blocoDeTile, secaoB, identidade, razaoDoTexto,
   contrasteEntre, hexDoToken, tokensDoc, fichas, docs, DOCS, releases, patterns, blocks, archetypeIds, recipeTitle, contract,
   nativos, paginaNativa, componentsIndex, homePage, docPage, componentPage, releasesPage, releasePage, patternsIndex,
@@ -3105,6 +3086,20 @@ const estadosVivos = ["light", "dark", "system"].map(tema =>
 const spriteInline = spriteFor([...paginas, ...embeds].map(([, html]) => html).concat(estadosVivos));
 for (const [file, html] of [...paginas, ...embeds]) write(join(outDir, file), html.replace(SPRITE_SLOT, spriteInline));
 // Os arquivos para assistentes de IA (SITE-06), ao lado das páginas.
+// O "VIEW AS MARKDOWN" EM TODA PÁGINA QUE TEM O MENU (S-03, 05/11/2026): as páginas que não entram no `llms.txt` (as do
+// nativo, Releases, Tokens, Health) também ganham o `.md` ao lado, com o texto do "Copy Markdown" — o item do menu abria
+// um endereço que não existia. A montagem PARA quando uma página tem o menu e não tem o texto.
+{
+  const jaTem = new Set(arquivosDeTexto.map(([f]) => f));
+  for (const [file, html] of paginas) {
+    if (!html.includes("data-page-menu")) continue;
+    const md = file.replace(/\.html$/, ".md");
+    if (jaTem.has(md)) continue;
+    const texto = textoDaPagina(html);
+    if (!texto) throw new Error(`${file}: a página tem o "Copy Markdown" e não tem o texto dele (o JSON page-markdown)`);
+    arquivosDeTexto.push([md, texto]);
+  }
+}
 for (const [file, texto] of arquivosDeTexto) write(join(outDir, file), texto);
 
 const rich = Object.keys(content).length;
