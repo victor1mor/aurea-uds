@@ -50,8 +50,12 @@
   // (data-busca); os grupos ([data-g1-grupo]) mostram os primeiros até o "Show all" ([data-g1-mais]); os itens a mais
   // levam [data-mais]. Os grupos a mais ([data-g1-grupo-mais]) esperam o botão [data-g1-mais-grupos]. Sem script, tudo
   // aparece.
+  // O FILTRO DA LATERAL (S-01, 05/11/2026 — o Victor: "o item fica marcado e a lista não filtra"): o grupo com
+  // [data-g1-filtro] aparece só quando o valor é o escolhido na lateral (o evento "site-filtro" do `_filtro.js`, ou o
+  // `#filtro/<valor>` do endereço), já aberto, com todos os itens; "all" mostra todos, como antes.
+  const filtroDoEndereco = () => { const m = /^#filtro\/(.+)$/.exec(location.hash); return m ? decodeURIComponent(m[1]) : "all"; };
   document.querySelectorAll("[data-g1-lista]").forEach((lista) => {
-    const estado = {q: "", abertos: new Set(), todosOsGrupos: false};
+    const estado = {q: "", abertos: new Set(), todosOsGrupos: false, filtro: filtroDoEndereco()};
     const busca = lista.querySelector("[data-g1-busca] input, input[data-g1-busca]");
     const grupos = [...lista.querySelectorAll("[data-g1-grupo]")];
     const mostrando = lista.querySelector("[data-g1-mostrando]");
@@ -59,20 +63,22 @@
     const tituloDoVazio = lista.querySelector("[data-g1-vazio-titulo]");
     const maisGrupos = lista.querySelector("[data-g1-mais-grupos]");
     const fraseDoVazio = lista.dataset.g1Frase || "Nothing called";
+    const filtravel = grupos.some((g) => g.hasAttribute("data-g1-filtro"));
     const aplicar = () => {
       const q = estado.q.trim().toLowerCase();
+      const f = filtravel && estado.filtro !== "all" ? estado.filtro : null;
       let vistos = 0;
       grupos.forEach((g) => {
         const itens = [...g.querySelectorAll("[data-g1-item]")];
         const acham = itens.filter((c) => !q || (c.dataset.busca || "").includes(q));
-        const resumido = !q && !estado.abertos.has(g);
+        const resumido = !q && !f && !estado.abertos.has(g);
         itens.forEach((c) => { c.hidden = !acham.includes(c) || (resumido && c.hasAttribute("data-mais")); });
-        const escondidoPorQuantidade = !q && !estado.todosOsGrupos && g.hasAttribute("data-g1-grupo-mais");
-        g.hidden = acham.length === 0 || escondidoPorQuantidade;
+        const escondidoPorQuantidade = !q && !f && !estado.todosOsGrupos && g.hasAttribute("data-g1-grupo-mais");
+        g.hidden = (f != null && g.dataset.g1Filtro !== f) || acham.length === 0 || escondidoPorQuantidade;
         const mais = g.querySelector("[data-g1-mais]");
         if (mais) {
           const caixa = mais.closest(".g1-mais") || mais;
-          caixa.hidden = Boolean(q);
+          caixa.hidden = Boolean(q) || f != null;
           const aberto = estado.abertos.has(g);
           mais.setAttribute("aria-expanded", String(aberto));
           const rotulo = mais.querySelector("span:not([class])") || mais;
@@ -86,8 +92,9 @@
         vazio.hidden = vistos > 0;
         if (tituloDoVazio) tituloDoVazio.textContent = fraseDoVazio + " “" + estado.q.trim() + "”";
       }
-      if (maisGrupos) { const c = maisGrupos.closest("[data-g1-mais-grupos-caixa]") || maisGrupos; c.hidden = Boolean(q) || estado.todosOsGrupos; }
+      if (maisGrupos) { const c = maisGrupos.closest("[data-g1-mais-grupos-caixa]") || maisGrupos; c.hidden = Boolean(q) || f != null || estado.todosOsGrupos; }
     };
+    if (filtravel) document.addEventListener("site-filtro", (e) => { estado.filtro = e.detail || "all"; aplicar(); });
     if (busca) busca.addEventListener("input", () => { estado.q = busca.value; aplicar(); });
     lista.querySelectorAll("[data-g1-limpar]").forEach((b) => b.addEventListener("click", () => {
       estado.q = ""; if (busca) { busca.value = ""; busca.focus(); } aplicar();

@@ -59,25 +59,32 @@
   });
 
   // Achar pelo nome: some o que não casa, e a parte que ficou vazia; nada casou, o vazio com o "Clear the search".
+  // E O FILTRO DA LATERAL ("By $type", S-01, 05/11/2026): só os tokens do `$type` escolhido (`data-tk-tipo`), junto da busca.
+  var filtro = "all";
   function busca() { var c = raiz.querySelector("[data-tk-busca]"); return c && (c.matches("input") ? c : c.querySelector("input")); }
   function achar() {
     var t = (busca().value || "").trim().toLowerCase(), achados = 0;
     var itens = todos("[data-tk], [data-tk-copia]").filter(function (el) { return !el.closest(".tk-ferramentas"); });
     itens.forEach(function (el) {
       var nome = (el.dataset.tk || el.dataset.tkCopia || "") + " " + el.textContent;
-      var mostra = !t || nome.toLowerCase().indexOf(t) >= 0;
+      var mostra = (!t || nome.toLowerCase().indexOf(t) >= 0) && (filtro === "all" || el.dataset.tkTipo === filtro);
       var alvo = el.closest(".tk-mov") || el;
       alvo.hidden = !mostra;
       if (mostra) achados++;
     });
     todos("[data-tk-sec]").forEach(function (s) {
-      s.hidden = !!t && !todos("[data-tk], [data-tk-copia]", s).some(function (el) { return !(el.closest(".tk-mov") || el).hidden; });
+      s.hidden = (!!t || filtro !== "all") && !todos("[data-tk], [data-tk-copia]", s).some(function (el) { return !(el.closest(".tk-mov") || el).hidden; });
     });
     var vazio = raiz.querySelector("[data-tk-vazio]");
     vazio.hidden = achados > 0;
-    if (!achados) raiz.querySelector("[data-tk-vazio-titulo]").textContent = "No token called “" + t + "”";
-    estado.textContent = t ? achados + (achados === 1 ? " token" : " tokens") + " match “" + t + "”." : "Press any token to copy it.";
+    if (!achados) raiz.querySelector("[data-tk-vazio-titulo]").textContent = t ? "No token called “" + t + "”" : "No " + filtro + " token";
+    var tipo = filtro === "all" ? "" : " of $type " + filtro;
+    estado.textContent = t ? achados + (achados === 1 ? " token" : " tokens") + tipo + " match “" + t + "”."
+      : filtro !== "all" ? achados + (achados === 1 ? " token" : " tokens") + tipo + "." : "Press any token to copy it.";
   }
+  document.addEventListener("site-filtro", function (e) { filtro = e.detail || "all"; achar(); });
+  var doEndereco = /^#filtro\/(.+)$/.exec(location.hash);
+  if (doEndereco) { filtro = decodeURIComponent(doEndereco[1]); achar(); }
   var campo = busca();
   if (campo) {
     campo.addEventListener("input", achar);

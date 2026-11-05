@@ -799,7 +799,9 @@ test.describe("catálogo · contratos do modelo de página", () => {
     const chave = page.locator("header :is(.site-actions, .topbar-actions)").getByRole("radiogroup", {name: "Theme", exact: true});
     await expect(chave.getByRole("radio")).toHaveCount(3);
     const caixa = await chave.boundingBox();
-    expect(Math.round(caixa!.height), "a cápsula de 34 da referência").toBe(34);
+    // ~~A cápsula de 34 da referência.~~ O TOPO ÚNICO (S-09, 05/11/2026): o Início usa a pílula das outras páginas, em que a
+    // chave tem os 44 de toque (`.site-shell .site-actions .theme-switch-option`: o `--control-h-md` e o recheio).
+    expect(Math.round(caixa!.height), "a cápsula das outras páginas").toBe(44);
     await chave.getByRole("radio", {name: "System"}).check();
     expect(await page.evaluate(() => localStorage.getItem("aurea-theme"))).toBe("system");
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");

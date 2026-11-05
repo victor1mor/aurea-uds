@@ -64,7 +64,7 @@ export default function roadmap(site, doc) {
   const semLink = pedido.filter(x => x !== link).map((x, n) => n === k && x.t ? {t: x.t.replace(/^\.\s*/, "")} : x);
   const pedir = g.secao(s("Ask for something").id, "Your turn", "Ask for something",
     h(A.Card, {variant: "inset", className: "rm-pedido"}, h("p", {className: "intro-p gs-p"}, ...site.pedacos(semLink, "ped")),
-      h(A.Button, {size: "lg", variant: "primary", href: link.href, trailingIcon: "arrow-up-right"}, link.link)));
+      h(A.Button, {size: "lg", variant: "primary", href: link.href, ...site.NOVA_ABA, trailingIcon: "arrow-up-right"}, link.link)));
 
   const node = g.pagina(doc, abertura,
     ...g.corpo(sec.antes, {chave: "a"}),

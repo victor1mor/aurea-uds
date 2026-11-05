@@ -26,16 +26,31 @@ const contar = no => Object.entries(no).reduce((n, [k, v]) => k.startsWith("$") 
 export default function tokens(site) {
   const {h, Fragment, A, tokensDoc, hexDoToken, textoParaCopiar} = site;
   const total = contar(tokensDoc);
+  // O `$type` de cada token, pelo nome da variável (o nome da folha é o da variável — `build-tokens.mjs`); o `$type` de um
+  // grupo vale para os de dentro. O FILTRO DA LATERAL ("By $type", S-01, 05/11/2026) mostra só os do tipo escolhido.
+  const tipos = new Map();
+  const anda = (no, herdado) => {
+    for (const [k, v] of Object.entries(no)) {
+      if (k.startsWith("$") || !v || typeof v !== "object") continue;
+      const tipo = v.$type ?? herdado;
+      if ("$value" in v) { if (tipo && !tipos.has(k)) tipos.set(k, tipo); } else anda(v, tipo);
+    }
+  };
+  anda(tokensDoc, tokensDoc.$type);
+  const tipo = nome => {
+    if (!tipos.has(nome)) throw new Error(`tokens.mjs: a página mostra --${nome}, que não está no arquivo de tokens`);
+    return tipos.get(nome);
+  };
   const marcas = [{id: "", nome: "Gold", cor: hexDoToken(tokensDoc.base["brand-yellow"])},
     ...Object.keys(tokensDoc.brand).filter(id => !id.startsWith("$")).map(id => ({id, nome: id.charAt(0).toUpperCase() + id.slice(1),
       cor: hexDoToken(tokensDoc.brand[id].dark.primary)}))];
 
   // Um token que copia: o botão (o `Card` clicável que sobe, o item 7) com a amostra, o nome e o valor (lido na hora).
   const tk = (nome, amostra, classe = "", extra = {}) => h(A.Card, {key: nome, variant: "interactive", lift: true, className: `tk ${classe}`.trim(),
-    render: h("button", {type: "button"}), "data-tk": nome, "aria-label": `Copy var(--${nome})`, ...extra},
+    render: h("button", {type: "button"}), "data-tk": nome, "data-tk-tipo": tipo(nome), "aria-label": `Copy var(--${nome})`, ...extra},
     amostra, h("code", {className: "tk-nome"}, `--${nome}`), h("span", {className: "tk-valor", "data-tk-valor": nome}));
   // Uma linha que copia: o nome, a barra (ou o texto) e o valor.
-  const linha = (nome, meio, classe = "") => h("button", {key: nome, type: "button", className: `tk-linha ${classe}`.trim(), "data-tk": nome,
+  const linha = (nome, meio, classe = "") => h("button", {key: nome, type: "button", className: `tk-linha ${classe}`.trim(), "data-tk": nome, "data-tk-tipo": tipo(nome),
     "aria-label": `Copy var(--${nome})`}, h("code", {className: "tk-nome"}, `--${nome}`), meio, h("span", {className: "tk-valor", "data-tk-valor": nome}));
   const barra = (nome, prop = "inline-size") => h("span", {className: "tk-barra-trilho"}, h("span", {className: "tk-barra", style: {[prop === "inline-size" ? "inlineSize" : prop]: `var(--${nome})`}}));
   const secao = (id, num, titulo, conta, texto, ...filhos) => h("section", {key: id, className: "tk-sec", id, "data-tk-sec": ""},
@@ -79,12 +94,12 @@ export default function tokens(site) {
       secao("status-scales", "02", "Status scales", `${ESCALAS.length} scales`, "The same in both themes. Fills use the middle step; text and icons use the -400 pair.",
         h("div", {className: "tk-grade-4"}, ...ESCALAS.map(([titulo, base, passos]) => h(A.Card, {key: base, className: "tk-escala"},
           h("div", {className: "tk-escala-topo"}, h("b", null, titulo), h("span", null, `${passos.length} steps`)),
-          h("div", {className: "tk-escala-passos"}, ...passos.map(p => h("button", {key: p, type: "button", className: "tk-passo", "data-tk": `${base}-${p}`,
+          h("div", {className: "tk-escala-passos"}, ...passos.map(p => h("button", {key: p, type: "button", className: "tk-passo", "data-tk": `${base}-${p}`, "data-tk-tipo": tipo(`${base}-${p}`),
             "aria-label": `Copy var(--${base}-${p})`}, h("span", {className: "tk-passo-cor", style: {background: `var(--${base}-${p})`}}),
             h("code", null, `${base}-${p}`)))))))),
       secao("brands", "03", "Brands", `${marcas.length} brands`, "Each brand keeps Aurea's neutrals and redefines the primary color and the roles built on it. Press one to copy its data-brand.",
         h("div", {className: "tk-marcas"}, ...marcas.map(m => h(A.Card, {key: m.nome, variant: "interactive", lift: true, className: "tk tk-marca",
-          render: h("button", {type: "button"}), "data-tk-copia": m.id ? `data-brand="${m.id}"` : "(no data-brand)", "aria-label": `Copy the ${m.nome} brand`},
+          render: h("button", {type: "button"}), "data-tk-copia": m.id ? `data-brand="${m.id}"` : "(no data-brand)", "data-tk-tipo": "color", "aria-label": `Copy the ${m.nome} brand`},
           h(A.ColorSwatch, {color: m.cor, size: "xl", "aria-hidden": true}), h("b", null, m.nome), h("code", {className: "tk-valor"}, m.cor.toUpperCase()))))),
       secao("radius", "04", "Radius", `${RAIOS.length} radii`, "22 on cards, 32 on the bottom sheet, a capsule on controls. Nothing is square.",
         h("div", {className: "tk-raios"}, ...RAIOS.map(r => tk(`radius-${r}`, h("span", {className: "tk-raio", style: {borderRadius: `var(--radius-${r})`}}), "tk-raio-cartao")))),
@@ -102,7 +117,7 @@ export default function tokens(site) {
           h(A.Card, {className: "tk-linhas"}, ...TOQUE.map(n => linha(n, barra(n)))))),
       secao("motion", "08", "Motion", `${TEMPOS.length} durations · ${CURVAS.length} easings`, "Press Play to see each duration and easing move the same distance.",
         h(A.Card, {className: "tk-linhas"}, ...[...TEMPOS, ...CURVAS].map(n => h("div", {key: n, className: "tk-mov"},
-          h("button", {type: "button", className: "tk-mov-nome", "data-tk": n, "aria-label": `Copy var(--${n})`},
+          h("button", {type: "button", className: "tk-mov-nome", "data-tk": n, "data-tk-tipo": tipo(n), "aria-label": `Copy var(--${n})`},
             h("code", {className: "tk-nome"}, `--${n}`), h("span", {className: "tk-valor", "data-tk-valor": n})),
           h("span", {className: "tk-trilho"}, h("span", {className: "tk-bola", "data-tk-mov": n})),
           h(A.Button, {variant: "tertiary", size: "md", type: "button", "data-tk-play": n, "aria-label": `Play ${n}`}, "Play"))))),
@@ -112,15 +127,15 @@ export default function tokens(site) {
         h("div", {className: "tk-dois"},
           h(A.Card, {className: "tk-painel"}, h("h3", null, "Layers"),
             h("div", {className: "tk-camadas"}, ...CAMADAS.map((n, i) => h(A.Button, {key: n, variant: "tertiary", size: "lg", fullWidth: true, type: "button",
-              className: "tk-camada", style: {marginInlineStart: `calc(${i} * var(--space-4))`}, "data-tk": n},
+              className: "tk-camada", style: {marginInlineStart: `calc(${i} * var(--space-4))`}, "data-tk": n, "data-tk-tipo": tipo(n)},
               h("code", null, `--${n}`), h("span", {"data-tk-valor": n}))))),
           h(A.Card, {className: "tk-painel"}, h("h3", null, "Weights"),
             h("div", {className: "tk-pesos"}, ...PESOS.map(([n, v]) => h(A.Card, {key: n, variant: "interactive", lift: true, className: "tk tk-peso",
-              render: h("button", {type: "button"}), "data-tk": `weight-${n}`, "aria-label": `Copy var(--weight-${n})`},
+              render: h("button", {type: "button"}), "data-tk": `weight-${n}`, "data-tk-tipo": tipo(`weight-${n}`), "aria-label": `Copy var(--weight-${n})`},
               h("span", {style: {fontWeight: `var(--weight-${n})`}}, "Aa"), h("span", null, v)))),
             h("h3", null, "Line height and opacity"),
             h("div", {className: "tk-camadas"}, ...LINHAS.map(n => h(A.Button, {key: n, variant: "tertiary", size: "lg", fullWidth: true, type: "button",
-              className: "tk-camada", "data-tk": n}, h("code", null, `--${n}`), h("span", {"data-tk-valor": n})))))))),
+              className: "tk-camada", "data-tk": n, "data-tk-tipo": tipo(n)}, h("code", null, `--${n}`), h("span", {"data-tk-valor": n})))))))),
     h(A.Card, {className: "tk-vazio", "data-tk-vazio": "", hidden: true},
       h(A.EmptyState, {framed: true, icon: "magnifying-glass", titleAs: "h3", title: h("span", {"data-tk-vazio-titulo": ""}, "No token found"),
         description: "Try a shorter word: “space”, “text” or “radius”.",

@@ -22,3 +22,31 @@
   addEventListener("resize", pede);
   pede();
 })();
+
+/* A LATERAL ABRE NO ITEM ATUAL (S-07 — o Victor, 05/11/2026, em Chart: "rolei, cliquei em um item, e a sidebar sobe de novo
+   para o topo"). Cada página é um documento novo, e a lateral nascia rolada no topo, com o item atual fora da vista.
+   Aprovado pela imagem: ao sair, a página guarda a rolagem da lateral (por área, só nesta aba); ao abrir, a lateral volta
+   a ela — e, se o item atual ainda ficar fora da vista (chegou de outra área, ou do endereço direto), rola até ele ficar
+   no meio. Sem script, ou sem onde guardar, só a segunda parte. */
+(function () {
+  var lateral = document.querySelector(".app-shell-docs > .sidebar:not(.app-shell-aside)");
+  if (!lateral) return;
+  var area = (/\bsite-area-([\w-]+)/.exec(lateral.parentElement.className) || [])[1] || "";
+  var chave = "aurea-lateral:" + area;
+  function rola() {
+    // Quem rola: a própria lateral (na coluna, medido) ou a caixa de dentro dela que tiver a rolagem.
+    var rolavel = function (el) { return el && el.clientHeight > 0 && el.scrollHeight > el.clientHeight + 1 && /(auto|scroll)/.test(getComputedStyle(el).overflowY); };
+    var caixa = [lateral, lateral.querySelector(".sidebar-body")].filter(rolavel)[0];
+    if (!caixa) return;
+    var atual = lateral.querySelector('.sidebar-nav a[aria-current="page"]');
+    try { var guardado = sessionStorage.getItem(chave); if (guardado != null) caixa.scrollTop = Number(guardado) || 0; } catch (e) { /* sem onde guardar */ }
+    if (atual) {
+      var c = caixa.getBoundingClientRect(), a = atual.getBoundingClientRect();
+      if (a.top < c.top || a.bottom > c.bottom) caixa.scrollTop += a.top - c.top - (caixa.clientHeight - a.height) / 2;
+    }
+    addEventListener("pagehide", function () {
+      try { sessionStorage.setItem(chave, String(Math.round(caixa.scrollTop))); } catch (e) { /* sem onde guardar */ }
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", rola); else rola();
+})();

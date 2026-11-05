@@ -20,7 +20,7 @@ import {Badge, Button, ColorSwatch, CommandPalette, Drawer, Icon, IconButton, Na
   useAureaTheme, useToast} from "../../../packages/react/dist/index.js";
 // O botão "Theme" (14/10/2026) é a outra peça viva do topo: vai no mesmo pacote, que toda página já carrega, e
 // sob o MESMO provedor (ver `tema.tsx`).
-import {ChavesDeTema, ProvedorDoSite, SetinhaDoTopo, TemaDoTopo} from "./tema";
+import {ChavesDeTema, ProvedorDoSite, TemaDoTopo} from "./tema";
 // A setinha do "Copy Markdown" (SITE-06, 18/10/2026), sob o mesmo provedor.
 import {AcoesDaPagina} from "./acoes";
 
@@ -151,7 +151,10 @@ const SUGESTOES = ["Button", "sidebar", "empty", "useToast", "receipt"];
 type Area = {id: string; label: string; href: string; icon: string; tone: string; current?: boolean};
 const lugarDoMenu = document.getElementById("site-menu-root");
 const areasDoMenu: Area[] = lugarDoMenu ? JSON.parse(lugarDoMenu.dataset.areas || "[]") : [];
-const LARGO = "(min-width: 768px)";
+// No Início (S-09, o topo único) o menu também guarda as áreas que saem da pílula abaixo de 1121: lá não há a gaveta do
+// `AppShell`, e ele aparece desde essa largura (`celular.css`).
+const NOVA_ABA = {target: "_blank", rel: "noreferrer", "aria-describedby": "site-nova-aba"};
+const LARGO = lugarDoMenu?.closest(".site-home") ? "(min-width: 1121px)" : "(min-width: 768px)";
 const TEMAS_DA_CHAVE = [{value: "light", label: "Light", icon: "sun"}, {value: "dark", label: "Dark", icon: "moon"},
   {value: "system", label: "System", icon: "monitor"}];
 
@@ -222,8 +225,9 @@ function MenuDoCelular() {
             ...marcasDoMenu.map((m) => h(Toggle, {key: m.id || "gold", value: m.id || "gold"},
               h(ColorSwatch, {color: m.color, size: "sm", "aria-hidden": true}), m.label)))),
         h("div", {className: "site-menu-links"},
-          h(Button, {variant: "secondary", size: "lg", href: lugarDoMenu.dataset.repo}, "GitHub"),
-          h(Button, {variant: "secondary", size: "lg", href: lugarDoMenu.dataset.changelog}, "Changelog")),
+          // Para fora do site, em página nova, com o aviso escondido que o gerador põe na página (S-08, 05/11/2026).
+          h(Button, {variant: "secondary", size: "lg", href: lugarDoMenu.dataset.repo, ...NOVA_ABA}, "GitHub"),
+          h(Button, {variant: "secondary", size: "lg", href: lugarDoMenu.dataset.changelog, ...NOVA_ABA}, "Changelog")),
         atual && h(ConteudoDaArea, {nomeDaArea: atual.label})))), lugarDoMenu);
 }
 // As marcas vêm do lugar do botão "Theme" (o gerador escreve as 13, com a cor dos tokens).
@@ -260,5 +264,5 @@ export function montarSite(...extras: ReactNode[]) {
   // SÍNCRONO (21/10/2026): o primeiro desenho acontece aqui, dentro do script, e não num quadro depois. As caixas vivas
   // que já estão na tela (`vivo.tsx`) trocam o desenho pronto pelo vivo antes de a página terminar de carregar.
   const r = createRoot(raiz);
-  flushSync(() => r.render(h(ProvedorDoSite, null, h(Busca), h(MenuDoCelular), h(TemaDoTopo), h(ChavesDeTema), h(SetinhaDoTopo), h(AcoesDaPagina), temHooks ? h(PonteDosHooks) : null, ...extras)));
+  flushSync(() => r.render(h(ProvedorDoSite, null, h(Busca), h(MenuDoCelular), h(TemaDoTopo), h(ChavesDeTema), h(AcoesDaPagina), temHooks ? h(PonteDosHooks) : null, ...extras)));
 }
