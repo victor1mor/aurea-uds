@@ -1502,10 +1502,12 @@ function recipePage(id, archetype, i, ids) {
   // consumidor não consegue copiar nada"). O conteúdo mora em content/_recipes.mjs.
   const c = recipeContent[id];
   if (!c) throw new Error(`recipe ${id}: sem preview em content/_recipes.mjs — o modelo exige preview e código`);
+  // `motor: true` (05/11/2026, o S-11): as receitas usam a `DataGrid` e as outras peças de motor, então acendem com o
+  // `live-motores.js`; a entrada leve (`live/main.tsx`) as deixa de fora.
   return itemPage({
     title: recipeTitle(id),
     lede: intro || (archetype.capabilities || []).join(" · "),
-    demo: {render: c.render, code: c.code, description: c.description, vivo: {componente: `receita/${id}`, indice: 0}},
+    demo: {render: c.render, code: c.code, description: c.description, vivo: {componente: `receita/${id}`, indice: 0, motor: true}},
     imports: importLine(c.uses),
     related: relacionados(c.uses),
     markdown: paraMarkdown({title: recipeTitle(id), lede: intro || (archetype.capabilities || []).join(" · "),
