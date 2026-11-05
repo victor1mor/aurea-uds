@@ -302,6 +302,8 @@ const paraPreRender = [
   ...Object.entries(starters).filter(([, v]) => v.prerender),
   ...blocks.filter(b => b.prerender).map(b => [b.slug, b]),
   ...patterns.filter(p => p.prerender).map(p => [p.slug, p]),
+  // E a RECEITA com gráfico (S-11, 05/11/2026): a chave começa em `receita-`.
+  ...Object.entries(recipeContent).filter(([, r]) => r.prerender).map(([id, r]) => [`receita-${id}`, r]),
 ];
 if (paraPreRender.length) {
   const {JSDOM} = await import("jsdom");
@@ -1507,7 +1509,9 @@ function recipePage(id, archetype, i, ids) {
   return itemPage({
     title: recipeTitle(id),
     lede: intro || (archetype.capabilities || []).join(" · "),
-    demo: {render: c.render, code: c.code, description: c.description, vivo: {componente: `receita/${id}`, indice: 0, motor: true}},
+    demo: {render: c.prerender
+      ? () => h("div", {style: {width: "100%"}, dangerouslySetInnerHTML: {__html: preRenderizado[`receita-${id}`]}})
+      : c.render, code: c.code, description: c.description, vivo: {componente: `receita/${id}`, indice: 0, motor: true}},
     imports: importLine(c.uses),
     related: relacionados(c.uses),
     markdown: paraMarkdown({title: recipeTitle(id), lede: intro || (archetype.capabilities || []).join(" · "),

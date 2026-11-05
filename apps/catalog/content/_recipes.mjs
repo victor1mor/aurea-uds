@@ -17,6 +17,12 @@
 // não podem divergir do que o preview realmente usa.
 import {createElement as h} from "react";
 import * as A from "../../../packages/react/dist/index.js";
+// AS RECEITAS REABERTAS (S-11, 05/11/2026): cada uma num arquivo próprio em `content/recipes/`, como tela de produto com as
+// peças especializadas e interação de verdade. A caixa cresce desde a ADR-0081, então nada aqui é cortado para caber. As
+// que ainda não foram reabertas continuam abaixo, como eram.
+import agentAi from "./recipes/agent_ai.mjs";
+import saasAdmin from "./recipes/saas_admin.mjs";
+import dashboardBi from "./recipes/dashboard_bi.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-3)"};
 const between = {...row, justifyContent: "space-between"};
@@ -77,51 +83,8 @@ export default {
         h(A.Button, {variant: "ghost"}, "Save draft"),
         h(A.Button, {variant: "primary"}, "Publish"))))),
   },
-  saas_admin: {
-    uses: ["Card", "SearchField", "Button", "Table", "Status", "Pagination"],
-    code: `<Card>
-  <SearchField placeholder="Filter members…" />
-  <Button variant="outline" leadingIcon="plus">Invite</Button>
-  <Table caption="Workspace members">
-    <thead><tr><th>Member</th><th>Role</th><th>State</th></tr></thead>
-    <tbody>{members.map(m => (
-      <tr key={m.name}>
-        <td>{m.name}</td><td>{m.role}</td>
-        <td><Status variant={m.state}>{m.state}</Status></td>
-      </tr>))}
-    </tbody>
-  </Table>
-  <Pagination page={page} total={4} onPageChange={setPage} />
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h("div", {style: between},
-        h("div", {style: {flex: 1, minWidth: "12rem"}}, h(A.SearchField, {placeholder: "Filter members…"})),
-        h(A.Button, {variant: "outline", leadingIcon: "plus"}, "Invite")),
-      h(A.Table, {caption: "Workspace members"},
-        h("thead", null, h("tr", null, h("th", null, "Member"), h("th", null, "Role"), h("th", null, "State"))),
-        h("tbody", null, ...[["Messenger", "Owner", "online"], ["Analyst", "Editor", "busy"],
-          ["Curator", "Viewer", "offline"]].map(([n, r, s]) => h("tr", {key: n},
-          h("td", null, n), h("td", null, r), h("td", null, h(A.Status, {variant: s}, s)))))),
-      h(A.Pagination, {page: 1, total: 4, onPageChange: () => {}})))),
-  },
-  dashboard_bi: {
-    uses: ["KPI", "SegmentedControl", "Table"],
-    code: `<SegmentedControl label="Range" value={range} onChange={setRange}
-  items={[{value: "7d", label: "7 days"}, {value: "30d", label: "30 days"}]} />
-<KPI label="Revenue" value="$48.2k" trend="+12%" />
-<KPI label="Active seats" value="312" trend="+4%" />
-<Table caption="Revenue by plan">…</Table>`,
-    render: () => h("div", {style: {...stack, ...wide}},
-      h(A.SegmentedControl, {label: "Range", value: "30d", onChange: () => {},
-        items: [{value: "7d", label: "7 days"}, {value: "30d", label: "30 days"}]}),
-      h("div", {style: row}, h(A.KPI, {label: "Revenue", value: "$48.2k", trend: "+12%"}),
-        h(A.KPI, {label: "Active seats", value: "312", trend: "+4%"})),
-      h(A.Table, {caption: "Revenue by plan"},
-        h("thead", null, h("tr", null, h("th", null, "Plan"), h("th", null, "Revenue"))),
-        // Uma linha só desde a 0.24.1: com o número do KPI no `--text-3xl` da ficha, a prévia
-        // passava 3px da caixa (ADR-0002, medido na varredura da CI). O código mostra "…".
-        h("tbody", null, h("tr", null, h("td", null, "Pro"), h("td", null, "$31.0k"))))),
-  },
+  saas_admin: {...saasAdmin},
+  dashboard_bi: {...dashboardBi},
   catalog_gallery: {
     uses: ["SegmentedControl", "Badge", "Button", "Grid", "Card", "Checkbox"],
     code: `<SegmentedControl label="View" value={view} onChange={setView}
@@ -308,39 +271,7 @@ export default {
       h("div", {style: {...row, justifyContent: "flex-end"}},
         h(A.Button, {variant: "danger"}, "Calibrate"))))),
   },
-  agent_ai: {
-    uses: ["Card", "MessageList", "Timeline", "Alert", "Button"],
-    code: `<Card>
-  <MessageList messages={turns} />
-  <Timeline items={[
-    {title: "read_file · tokens.json", description: "18 KB", time: "09:14:03"},
-    {title: "write_file · aurea.css", description: "awaiting approval", time: "09:14:05"},
-  ]} />
-  <Alert variant="warning" title="Approval required">This run writes to the repository.</Alert>
-  <Button variant="ghost">Reject</Button>
-  <Button variant="primary">Approve</Button>
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      // UM turno, e é o do agente: o do humano repetia o que o título da receita já diz. Mesmo
-      // corte que o I1 fez, pelo mesmo motivo medido — a prévia dava 457px num vão de 354.
-      h(A.MessageList, {messages: [
-        {id: "2", author: "Agent", time: "09:14", body: "Two files, four values. Plan below.",
-          avatar: {fallback: "AG"}}]}),
-      // Sem `description`: "18 KB" e "awaiting approval" custavam uma linha cada, e o segundo já
-      // está dito no `Alert` logo abaixo, que é quem pede a aprovação.
-      h(A.Timeline, {items: [
-        {title: "read_file · tokens.json", time: "09:14:03"},
-        {title: "write_file · aurea.css", time: "09:14:05"}]}),
-      // O pedido e a resposta LADO A LADO: empilhados, a barra de dois botões custava uma linha
-      // inteira, e com a escala de letra da 0.8.8 a prévia passava 24px da caixa. O texto vem
-      // antes no DOM, então quem tabula lê o pedido antes de alcançar os botões.
-      h("div", {style: {display: "grid", gridTemplateColumns: "1fr auto", gap: "var(--space-3)", alignItems: "center"}},
-        h(A.Alert, {variant: "warning", title: "Approval required"},
-          "This run writes to the repository."),
-        h("div", {style: row},
-          h(A.Button, {variant: "ghost"}, "Reject"),
-          h(A.Button, {variant: "primary"}, "Approve")))))),
-  },
+  agent_ai: {...agentAi},
   project_crm_erp: {
     uses: ["Card", "SearchField", "Table", "Badge", "Avatar", "Pagination"],
     code: `<Card>

@@ -1,0 +1,32 @@
+/* A CAIXA LARGA DO SITE (05/11/2026, o S-11 — o Victor: "que sirva para todo projeto"; escolheu "A e B juntas").
+   Duas formas, para qualquer página:
+   A · A PÁGINA LARGA: a página que leva `data-pagina-larga` (as receitas) tira o índice da direita, e o texto ocupa o
+       lugar dele — o mesmo arranjo que o site já usa abaixo de 1280 (as quatro colunas do `.app-shell-docs`).
+   B · A TELA CHEIA: toda caixa de exemplo ganha o botão "Full width" (posto pelo `site-b/js/_tela-cheia.js`; sem
+       JavaScript, nada muda). O clique leva a mesma caixa, viva, para uma janela que ocupa a tela; "Close" ou o Esc a
+       devolvem. A camada fica logo acima do topo fixo, e abaixo dos menus e das janelas que a própria caixa abre.
+   Sem linha, canto 22, toda medida de token. */
+
+/* A · a página larga */
+@media (min-width:1280px) {
+  .app-shell-docs:has(> .content [data-pagina-larga]) {
+    grid-template-columns:minmax(0,1fr) var(--docs-sidebar-width) minmax(0,calc(var(--docs-width) - var(--docs-sidebar-width))) minmax(0,1fr);
+  }
+  .app-shell-docs:has(> .content [data-pagina-larga]) > .sidebar.app-shell-aside { display:none; }
+}
+
+/* B · o botão no canto da caixa */
+.demo:has(> .tela-cheia-abrir) { position:relative; }
+.tela-cheia-abrir { position:absolute; inset-block-start:var(--space-3); inset-inline-end:var(--space-3); z-index:1; box-shadow:var(--shadow-sm); }
+
+/* B · a janela que ocupa a tela */
+.tela-cheia { position:fixed; inset:0; z-index:calc(var(--z-sticky) + 1); display:grid; padding:var(--space-4);
+  background:color-mix(in oklab, var(--background) 72%, transparent); backdrop-filter:blur(var(--space-2)); }
+.tela-cheia[hidden] { display:none; }
+.tela-cheia-janela { display:grid; grid-template-rows:auto minmax(0, 1fr); gap:var(--space-4); min-block-size:0; padding:var(--space-5) var(--space-6);
+  border-radius:var(--radius-card); background:var(--background); box-shadow:var(--shadow-lg); }
+.tela-cheia-topo { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--space-3); }
+.tela-cheia-titulo { margin:0; font-family:var(--font-heading); font-size:var(--text-xl); font-weight:var(--weight-bold); line-height:var(--leading-tight); }
+.tela-cheia-corpo { min-block-size:0; overflow:auto; border-radius:var(--radius-card); }
+.tela-cheia-corpo > .demo-panel { max-inline-size:none; min-block-size:100%; }
+html:has(.tela-cheia:not([hidden])) { overflow:hidden; }
