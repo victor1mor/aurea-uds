@@ -5,6 +5,7 @@
 // 40 no médio), e não as do desenho (o mapa: o desenho pintava números que não batem). O comportamento é o
 // `site-b/js/density.js`.
 import {docsB} from "./docs-b/comum.mjs";
+import {gradeDoSite} from "../comum/grade-montagem.mjs";
 
 const DENSIDADES = ["compact", "comfortable", "spacious"];
 
@@ -35,9 +36,9 @@ export default function density(site, doc) {
           h("div", {className: "density-linha"},
             h(A.SearchField, {placeholder: "Filter members…", "aria-label": "Filter members"}),
             h(A.IconButton, {icon: "plus", label: "Add member", variant: "tertiary"})),
-          // Como o desenho: a lista em linhas (`Table variant="rows"`), sem cabeçalho, com o estado na ponta.
-          h(A.Table, {variant: "rows", striped: true, caption: "Members", className: "density-tabela"},
-            h("tbody", null, ...membros.map(([n, s]) => h("tr", {key: n}, h("td", null, n), h("td", null, s))))),
+          // ~~Como o desenho: a lista em linhas (`Table variant="rows"`), sem cabeçalho~~ → a `DataGrid` (S-02, 05/11/2026),
+          // que tem sempre cabeçalho; o estado continua na ponta.
+          gradeDoSite({label: "Members", className: "density-tabela", cabecalho: ["Member", "Status"], linhas: membros.map(([n, s]) => [n, s])}),
           h(A.Card.Footer, null, h(A.Button, {variant: "primary"}, "Invite"), h(A.Button, null, "Cancel"), h(A.Button, {size: "sm"}, "Small")))),
       h("div", {className: "docb-caixa density-medidas", "aria-live": "polite"},
         h("p", {className: "docb-rotulo"}, "Measured now"),
@@ -53,10 +54,12 @@ export default function density(site, doc) {
   const tk = g.secao("the-tokens");
   const tokens = g.achar(tk, "tabela");
   const coluna = j => j === 0 ? "" : `density-col-${DENSIDADES[j - 1]}`;
-  const tabelaTokens = h("div", {key: "tokens", className: "docb-tabela density-tokens", "data-coluna": "comfortable"},
-    h(A.Table, {variant: "rows", striped: true, caption: `${tk.rotulo} table`},
-      h("thead", null, h("tr", null, ...tokens.cabecalho.map((c, j) => h("th", {key: j, scope: "col", className: coluna(j)}, ...g.pedacos(c, g.k()))))),
-      h("tbody", null, ...tokens.linhas.map((l, n) => h("tr", {key: n}, ...l.map((c, j) => h("td", {key: j, className: coluna(j)}, ...g.pedacos(c, g.k()))))))));
+  // A `DataGrid` (S-02, 05/11/2026): a classe da coluna vai no conteúdo da célula e no nome da coluna (a grade não põe
+  // classe na célula), e o CSS da página acende por ela.
+  const tabelaTokens = h("div", {key: "tokens", className: "docb-tabela docb-grade density-tokens", "data-coluna": "comfortable"},
+    gradeDoSite({label: `${tk.rotulo} table`,
+      cabecalho: tokens.cabecalho.map((c, j) => ({texto: g.textoDe(c), classe: coluna(j)})),
+      linhas: tokens.linhas.map((l) => l.map((c, j) => ({no: g.pedacos(c, g.k()), classe: coluna(j)})))}));
 
   // TOUCH SCREENS: o botão de verdade em cada densidade; o script escreve a altura que ele tem AQUI (no toque, 44).
   const ts = g.secao("touch-screens");

@@ -31,6 +31,8 @@
 /* A tabela: o cartão do desenho (recheio 8, canto 22) com a tabela de linhas em cápsula dentro; as linhas pares no texto
    a 6%, como o desenho; a legenda fica só para o leitor de tela (ela também é o nome da região). */
 .docb-tabela { margin-block-start:calc(var(--space-4) + var(--space-05)); padding:var(--space-2); border-radius:var(--radius-card); background:var(--card); }
+/* A tabela como `DataGrid` (S-02, 05/11/2026): a grade já traz a moldura dela — sem o cartão em volta. */
+.docb-tabela.docb-grade { padding:0; background:transparent; }
 .docb-tabela caption { position:absolute; inline-size:1px; block-size:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .docb-tabela .table-rows tbody tr:nth-child(odd) > td { background:var(--fill-1); }
 .docb-tabela .table-rows td { font-size:var(--text-base); }

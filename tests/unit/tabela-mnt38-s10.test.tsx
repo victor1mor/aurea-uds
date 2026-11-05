@@ -35,6 +35,15 @@ describe("MNT-38 · dividers", () => {
   });
 });
 
+describe("S-02 · fit na DataGrid", () => {
+  test("a classe vai na raiz só com a prop", () => {
+    const com = wrap(<DataGrid label="D" fit data={dados} columns={colunas} />);
+    expect(com.container.querySelector(".datagrid")).toHaveClass("datagrid-fit");
+    com.unmount();
+    expect(wrap(<DataGrid label="D" data={dados} columns={colunas} />).container.querySelector(".datagrid")).not.toHaveClass("datagrid-fit");
+  });
+});
+
 describe("S-10 · stickyHeader=\"page\"", () => {
   test("`page` não é a caixa com teto: sai `datagrid-sticky-page`, e não `datagrid-sticky`", () => {
     const {container} = wrap(<DataGrid label="D" stickyHeader="page" data={dados} columns={colunas} />);

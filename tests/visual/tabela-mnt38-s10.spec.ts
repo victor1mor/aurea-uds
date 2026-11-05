@@ -9,6 +9,7 @@ import {DataGrid} from "../../packages/react/dist/data-grid.js";
 //     última; sem a prop, nenhuma linha (ADR-0072); na Ember, nenhuma (*"Pode, sem a Ember"*); a altura da fileira não muda.
 //   • S-10 (`stickyHeader="page"`): a caixa não rola de cima para baixo (uma rolagem só, a da página); rolando a página, o
 //     cabeçalho encosta embaixo da barra do `AppShell`; no fim da página, para acima da última fileira.
+//   • S-02 (`fit` na `DataGrid`): sem o mínimo de 720 — numa caixa de 680, a grade cabe sem rolar de lado.
 // Provado contra o defeito: com o core e a `DataGrid` da 0.55.0, as fileiras não têm linha com `dividers` (a classe nem
 // existia), e com `stickyHeader="page"` a caixa tinha teto de 60vh e rolagem própria (o cabeçalho preso no topo DELA, a
 // 345 da tela depois de rolar 600, e não a 56).
@@ -67,6 +68,16 @@ test("MNT-38 · DataGrid `dividers`: a mesma linha", async ({page: p, baseURL}) 
   expect(grades.map((g) => g.dividers)).toEqual([false, true]);
   expect(grades[0].alfas.every((a) => a === 0), JSON.stringify(grades)).toBe(true);
   expect(grades[1].alfas.slice(0, -1).every((a) => a > 0) && grades[1].alfas.at(-1) === 0, JSON.stringify(grades)).toBe(true);
+});
+
+test("S-02 · DataGrid `fit`: numa caixa de 680, cabe sem rolar de lado; sem ela, o mínimo de 720", async ({page: p, baseURL}) => {
+  const grade = (fit: boolean) => h("div", {style: {width: "680px"}, id: fit ? "com" : "sem"},
+    h(DataGrid, {label: fit ? "Com" : "Sem", fit, data: [{a: "x", b: "y"}], columns: [{accessorKey: "a", header: "A"}, {accessorKey: "b", header: "B"}]}));
+  await abrirEstatico(p, baseURL, "fit", renderToStaticMarkup(h(A.AureaProvider, null, grade(false), grade(true))));
+  const m = await p.evaluate(() => Object.fromEntries(["sem", "com"].map((id) => {
+    const w = document.querySelector<HTMLElement>(`#${id} .table-wrap`)!; return [id, {rola: w.scrollWidth > w.clientWidth, tabela: w.querySelector("table")!.offsetWidth}]; })));
+  expect(m.sem.rola, JSON.stringify(m)).toBe(true);
+  expect(m.com.rola, JSON.stringify(m)).toBe(false);
 });
 
 const cabecalho = (p: Page) => p.evaluate(() => {

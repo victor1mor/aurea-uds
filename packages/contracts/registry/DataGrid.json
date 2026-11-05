@@ -227,6 +227,12 @@
       "description": "A light line between the body rows, none after the last — the frame stays. The line is the text color at 10%, the same light line as the outline card, and no measurement changes. A named exception to the no-line rule, drawn only when the app asks for it; the Ember brand stays without it."
     },
     {
+      "name": "fit",
+      "type": "boolean",
+      "default": "false",
+      "description": "The grid fits its box, without the 720px minimum that makes a wide table scroll sideways — the same fit as Table. For a grid of a few columns in a narrow column of text."
+    },
+    {
       "name": "hideableColumns",
       "type": "boolean",
       "default": "false",

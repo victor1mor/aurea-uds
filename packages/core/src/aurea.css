@@ -2757,6 +2757,9 @@ img,svg { display:block; }
 .table td[data-best],.table-wrap td[data-best] { font-weight:var(--weight-semibold); }
 /* `fit`: sem o mínimo de 720 — a comparação de dois itens cabe num celular de 360. */
 .table.table-fit { min-width:0; }
+/* E na `DataGrid` (S-02, *"Pode, com fit"*, 05/11/2026): o mesmo `fit` — as tabelas do site, numa coluna de texto de ~680,
+   passavam do mínimo de 720 e saíam cortadas, rolando de lado. */
+.datagrid-fit .table-wrap table { min-width:0; }
 /* `differencesOnly`: o "Só diferenças" esconde as linhas que o site marcou como iguais. */
 .table-differences-only tr[data-same] { display:none; }
 /* `stickyHeader`: o mesmo mecanismo do `DataGrid` (F6, mais abaixo). A caixa é o contêiner de

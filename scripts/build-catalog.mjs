@@ -18,6 +18,8 @@ import {dirname, join} from "node:path";
 import * as A from "../packages/react/dist/index.js";
 // As cores do código (lote V, 20/10/2026): o módulo da própria Aurea, `@aurea-uds/react/code-highlight`.
 import {highlightCode} from "../packages/react/dist/code-highlight.js";
+// As tabelas do site são `DataGrid` (S-02, 05/11/2026: "tudo que existe no site de table vira datagrid").
+import {gradeDoSite} from "../apps/catalog/site-b/comum/grade-montagem.mjs";
 import {MARKER, required, pageType} from "./page-model.mjs";
 import {serialize} from "./token-value.mjs";
 import {medirCatalogo, medirNativo, MODELO_DA_RODADA} from "./catalogo-fiel.mjs";
@@ -704,17 +706,14 @@ function componentPage(f, i) {
               ...(f.a11y.keyboard || []).map(chip))),
             f.tokens.length ? h(Fragment, {key: "t"}, h("dt", null, "Tokens"), h("dd", null, h("div", {style: row}, ...f.tokens.map(chip)))) : null,
             h("dt", {key: "p"}, "Platforms"), h("dd", {key: "pd"}, h("div", {style: row}, ...platforms))))},
-      // A tabela é o componente Table.
+      // ~~A tabela é o componente Table~~ → a `DataGrid` (S-02, 05/11/2026).
       f.props?.length ? {id: "api", label: "API Reference",
         node: h("section", {className: "block", id: "api"}, h("h2", null, "API Reference"),
-          h(A.Table, {caption: `${f.name} props`},
-            h("thead", null, h("tr", null, h("th", null, "Prop"), h("th", null, "Type"),
-              h("th", null, "Default"), h("th", null, "Description"))),
-            h("tbody", null, ...f.props.map(pr => h("tr", {key: pr.name},
-              h("td", null, h("code", {className: "chip"}, pr.name)),
-              h("td", null, h("code", {style: {fontSize: "var(--text-xs)", color: "var(--muted-foreground)"}}, pr.type)),
-              h("td", null, h("code", {style: {fontSize: "var(--text-xs)", color: "var(--subtle-foreground)"}}, pr.default || "—")),
-              h("td", null, pr.description))))))} : null,
+          gradeDoSite({label: `${f.name} props`, cabecalho: ["Prop", "Type", "Default", "Description"],
+            linhas: f.props.map(pr => [h("code", {className: "chip"}, pr.name),
+              h("code", {style: {fontSize: "var(--text-xs)", color: "var(--muted-foreground)"}}, pr.type),
+              h("code", {style: {fontSize: "var(--text-xs)", color: "var(--subtle-foreground)"}}, pr.default || "—"),
+              pr.description])}))} : null,
     ],
     ...vizinhos(f.kind === "hook" ? "hooks" : "components", `${slug(f.name)}.html`),
     markdown: paraMarkdown({title: f.name, lede: c?.description || f.summary,
@@ -1021,9 +1020,10 @@ function docPage(doc, {area = "start", sobTitulo = null, markdown = null} = {}) 
     else if (b.tipo === "tabela") {
       const vez = (legendas.get(secao) || 0) + 1;
       legendas.set(secao, vez);
-      filhos.push(h(A.Table, {key: n, caption: vez === 1 ? secao : `${secao} (${vez})`},
-        h("thead", null, h("tr", null, ...b.cabecalho.map((c, k) => h("th", {key: k, scope: "col"}, ...pedacos(c, "t"))))),
-        h("tbody", null, ...b.linhas.map((l, k) => h("tr", {key: k}, ...l.map((c, j) => h("td", {key: j}, ...pedacos(c, "t"))))))));
+      // A `DataGrid` (S-02, 05/11/2026): o nome da tabela é o `label` (o leitor de tela ouve; não aparece).
+      filhos.push(gradeDoSite({key: n, label: vez === 1 ? secao : `${secao} (${vez})`,
+        cabecalho: b.cabecalho.map((c) => renderToStaticMarkup(h(Fragment, null, ...pedacos(c, "t"))).replace(/<[^>]+>/g, "")),
+        linhas: b.linhas.map((l) => l.map((c) => pedacos(c, "t")))}));
     }
     else if (b.tipo === "demo") {
       const desenho = DEMOS_DOCS[b.id];
@@ -1181,12 +1181,11 @@ function nativePage(nome) {
   const api = {id: "api", label: "API Reference", node: h("section", {className: "block", id: "api"}, h("h2", null, "API Reference"),
     h("p", null, "Read from the types of the published package. A prop with the same name on the web means the same "
       + "thing — the two packages share names on purpose; where the native one differs, the description says so."),
-    h(A.Table, {caption: `${nome} props`},
-      h("thead", null, h("tr", null, ...["Prop", "Type", "Description"].map(x => h("th", {key: x, scope: "col"}, x)))),
-      h("tbody", null, ...peca.props.map(p => h("tr", {key: p.name},
-        h("td", null, h("code", null, p.name + (p.optional ? "" : " *"))), h("td", null, h("code", null, tipo(p))),
+    // A `DataGrid` (S-02, 05/11/2026).
+    gradeDoSite({label: `${nome} props`, cabecalho: ["Prop", "Type", "Description"],
+      linhas: peca.props.map(p => [h("code", null, p.name + (p.optional ? "" : " *")), h("code", null, tipo(p)),
         // a frase do NATIVO (`api` no arquivo de exemplos) ganha da da web: onde o nativo é diferente, ela diz o dele
-        h("td", null, c.api?.[p.name] || descricaoDaWeb[p.name] || "—"))))))};
+        c.api?.[p.name] || descricaoDaWeb[p.name] || "—"])}))};
   const exemplos = resto.length ? {id: "examples", label: "Examples",
     toc: resto.map(ex => ({id: slug(ex.title), label: ex.title, sub: true})),
     node: h("section", {className: "block", id: "examples"}, h("h2", null, "Examples"),
@@ -1233,18 +1232,16 @@ function saudePage() {
       h("h2", {id: "catalogue"}, "The catalogue is complete"),
       h("p", null, "Measured on every build of this site, from the published packages — the web one and the React Native one — "
         + "and the code of the examples. The build stops when one of these fails."),
-      h(A.Table, {caption: "The catalogue is complete"},
-        h("thead", null, h("tr", null, ...["What", "Count", "Result"].map(c => h("th", {key: c, scope: "col"}, c)))),
-        h("tbody", null, ...linhas.map(([o, n, r], k) => h("tr", {key: k}, h("td", null, o), h("td", null, h(A.Text, {numeric: true}, n)),
-          h("td", null, r ? h("strong", null, r) : null))))),
+      gradeDoSite({label: "The catalogue is complete", cabecalho: ["What", "Count", "Result"],
+        linhas: linhas.map(([o, n, r]) => [o, h(A.Text, {numeric: true}, n), r ? h("strong", null, r) : null])}),
       h("h2", {id: "checks"}, "The last 30 checks"),
       h("p", null, "Every run of the checks on the main branch: the build, the unit tests, the screenshots and the sweep of every "
         + "page in three browsers. Times in Brasília (UTC−3)."),
-      h(A.Table, {caption: "The last 30 checks"},
-        h("thead", null, h("tr", null, ...["When", "Commit", "Result", "Checks"].map(c => h("th", {key: c, scope: "col"}, c)))),
-        h("tbody", {"data-saude-rodadas": ""},
-          h("tr", {"data-modelo": ""}, h("td", null, MODELO_DA_RODADA.data), h("td", null, h("code", null, MODELO_DA_RODADA.commit)),
-            h("td", null, h("strong", null, MODELO_DA_RODADA.resultado)), h("td", null, MODELO_DA_RODADA.trabalhos)))),
+      // A `DataGrid` (S-02, 05/11/2026), com UMA fileira-modelo: a publicação (`saude-rodadas.mjs`) a copia para cada
+      // rodada, no desenho pronto e nos dados que a parte viva lê. A caixa leva `saude-rodadas` para ser achada.
+      gradeDoSite({label: "The last 30 checks", className: "saude-rodadas", cabecalho: ["When", "Commit", "Result", "Checks"],
+        linhas: [[MODELO_DA_RODADA.data, h("code", null, MODELO_DA_RODADA.commit), h("strong", null, MODELO_DA_RODADA.resultado),
+          MODELO_DA_RODADA.trabalhos]]}),
       h("p", {"data-saude-vazia": ""}, "The list is filled in when the site is published.")),
     anteriorProximo(vizinhos("releases", "saude.html").prev, vizinhos("releases", "saude.html").next),
     // O texto do "Copy Markdown" (S-03, 05/11/2026: o botão não copiava nada aqui). As rodadas entram na publicação, só no
@@ -1610,25 +1607,24 @@ function tokensPage() {
       const list = all.filter(t => (t.type || "other") === g);
       return h("section", {className: "block", key: g, id: `type-${slug(g)}`},
         h("h2", null, g, h("span", {className: "count"}, ` ${list.length}`)),
-        h(A.Table, {caption: `${g} tokens`},
-          h("thead", null, h("tr", null, h("th", null, "Token"), h("th", null, "Applies under"),
-            h("th", null, "Value"), h("th", null, "Preview"))),
-          h("tbody", null, ...list.map(t => h("tr", {key: t.path},
-            h("td", null, h("code", {className: "chip"}, `--${t.varName}`)),
+        // A `DataGrid` (S-02, 05/11/2026).
+        gradeDoSite({label: `${g} tokens`, cabecalho: ["Token", "Applies under", "Value", "Preview"],
+          linhas: list.map(t => [
+            h("code", {className: "chip"}, `--${t.varName}`),
             // A coluna existe porque o nome sozinho NÃO identifica a linha: 70 dos 175 nomes valem
             // em mais de um grupo. Mostrar o seletor é a resposta honesta a "quando este valor
             // vale" — e é literalmente o que está no CSS gerado.
-            h("td", null, h("code", {style: {fontSize: "var(--text-xs)", color: "var(--muted-foreground)"}},
-              SELETORES[t.scope] || ":root")),
-            h("td", null, h("code", {style: {fontSize: "var(--text-xs)", color: "var(--muted-foreground)"}}, t.value)),
+            h("code", {style: {fontSize: "var(--text-xs)", color: "var(--muted-foreground)"}},
+              SELETORES[t.scope] || ":root"),
+            h("code", {style: {fontSize: "var(--text-xs)", color: "var(--muted-foreground)"}}, t.value),
             // O atributo de escopo vai na PRÓPRIA amostra. Sem ele, a linha de `theme.light` era
             // pintada com o valor de `dark` numa página escura — mentira mais discreta que a caixa
             // vazia, e por isso pior.
-            h("td", null, g === "color"
+            g === "color"
               ? h("span", {className: "swatch", ...atributosDoEscopo(t.scope), style: {background: `var(--${t.varName})`}})
               : g === "dimension"
               ? h("span", {className: "ruler", ...atributosDoEscopo(t.scope), style: {inlineSize: `var(--${t.varName})`}})
-              : h("span", {style: {color: "var(--subtle-foreground)"}}, "—")))))));
+              : h("span", {style: {color: "var(--subtle-foreground)"}}, "—")])}));
     })),
     h(A.TableOfContents, {items: toc}));
 }

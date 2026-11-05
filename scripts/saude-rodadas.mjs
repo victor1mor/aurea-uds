@@ -3,7 +3,7 @@
 // O gerador (`build-catalog.mjs`) escreve a página com uma linha-modelo na tabela "The last 30 checks". Este script, no
 // `site.yml`, lê as 30 últimas rodadas da CI no `main` pela API do GitHub e copia a linha-modelo para cada uma, trocando
 // os textos de `MODELO_DA_RODADA`. Não instala nada e não roda o React: troca texto no HTML já montado, então a linha
-// sai com as mesmas classes da `Table` da Aurea.
+// sai com as mesmas classes da ~~`Table`~~ `DataGrid` da Aurea (S-02, 05/11/2026).
 //
 // Decisão do Victor (19/10/2026): "OK"/"FAILED" em palavra, o horário de Brasília e publicada MESMO vermelha.
 //
@@ -24,16 +24,34 @@ export function emBrasilia(iso) {
 const escapa = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 // Troca a linha-modelo por uma linha por rodada e tira o aviso de "lista vazia". Pura: recebe o HTML e as rodadas.
+// Desde o S-02 (05/11/2026) a tabela é uma `DataGrid` (`gradeDoSite`): a fileira-modelo está em DOIS lugares — no desenho
+// pronto (a fileira do `<tbody>` que tem os textos do modelo) e nos dados que a parte viva lê (`data-vivo-grade`, a
+// primeira linha). As duas se copiam; se uma faltar, para, como antes.
+const desescapa = (s) => s.replace(/&quot;/g, "\"").replace(/&#x27;/g, "'").replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+const trocar = (texto, r, esc) => texto
+  .replace(MODELO_DA_RODADA.data, esc(r.data))
+  .replace(MODELO_DA_RODADA.commit, esc(r.commit))
+  .replace(MODELO_DA_RODADA.resultado, esc(r.resultado))
+  .replace(MODELO_DA_RODADA.trabalhos, esc(r.trabalhos));
 export function preencher(html, rodadas) {
-  const modelo = /<tr data-modelo="">[\s\S]*?<\/tr>/.exec(html);
-  if (!modelo) throw new Error("saude-rodadas: a página não tem a linha-modelo (<tr data-modelo>) — o gerador mudou?");
-  const linhas = rodadas.map((r) => modelo[0].replace(' data-modelo=""', "")
-    .replace(MODELO_DA_RODADA.data, escapa(r.data))
-    .replace(MODELO_DA_RODADA.commit, escapa(r.commit))
-    .replace(MODELO_DA_RODADA.resultado, escapa(r.resultado))
-    .replace(MODELO_DA_RODADA.trabalhos, escapa(r.trabalhos))).join("");
-  const saida = html.replace(modelo[0], linhas).replace(/<p data-saude-vazia="">[\s\S]*?<\/p>/, "");
-  if (saida.includes("__DATA__") || saida.includes("data-modelo")) throw new Error("saude-rodadas: sobrou modelo na página");
+  const caixa = /<div class="grade-do-site saude-rodadas" data-vivo-grade="([^"]*)"/.exec(html);
+  if (!caixa) throw new Error("saude-rodadas: a página não tem a tabela das rodadas (grade-do-site saude-rodadas) — o gerador mudou?");
+  // Os dados: a primeira linha é o modelo.
+  const dados = JSON.parse(desescapa(caixa[1]));
+  const linhaModelo = dados.linhas[0];
+  if (!linhaModelo || !JSON.stringify(linhaModelo).includes(MODELO_DA_RODADA.data)) throw new Error("saude-rodadas: os dados da tabela não têm a linha-modelo");
+  dados.linhas = rodadas.map((r) => linhaModelo.map((c) => ({...c, t: trocar(c.t, r, String), h: trocar(c.h, r, escapa)})));
+  const atributo = escapa(JSON.stringify(dados));
+  // O desenho pronto: a fileira do corpo que tem o modelo (depois do atributo, que também o tem).
+  const depois = caixa.index + caixa[0].length;
+  const marca = html.indexOf(MODELO_DA_RODADA.data, depois);
+  const ini = html.lastIndexOf("<tr", marca), fim = html.indexOf("</tr>", marca) + "</tr>".length;
+  if (marca < 0 || ini < depois || fim < marca) throw new Error("saude-rodadas: a página não tem a linha-modelo no desenho — o gerador mudou?");
+  const modelo = html.slice(ini, fim);
+  const linhas = rodadas.map((r) => trocar(modelo, r, escapa)).join("");
+  const saida = (html.slice(0, caixa.index) + `<div class="grade-do-site saude-rodadas" data-vivo-grade="${atributo}"`
+    + html.slice(depois, ini) + linhas + html.slice(fim)).replace(/<p data-saude-vazia="">[\s\S]*?<\/p>/, "");
+  if (Object.values(MODELO_DA_RODADA).some((m) => saida.includes(m))) throw new Error("saude-rodadas: sobrou modelo na página");
   return saida;
 }
 

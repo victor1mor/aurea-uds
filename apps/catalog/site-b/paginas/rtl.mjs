@@ -2,6 +2,7 @@
 // desenho aprovado: o palco, a caixa que espelha (as peças DE VERDADE dentro de um `dir`), os cartões do "dir" e do
 // "direction", o que fica no lugar, a tabela e os links. O clique da chave ltr | rtl é o `site-b/js/rtl.js`.
 import {ferramentas} from "../comum/grupo-5.mjs";
+import {gradeDoSite} from "../comum/grade-montagem.mjs";
 
 export default function rtl(site, doc) {
   const {h, A, blocosDe, bloco, codigo, secao, palco, peca, aviso, links, proxima, segmentos, pagina} = ferramentas(site, doc);
@@ -86,9 +87,10 @@ export default function rtl(site, doc) {
         h("p", null, ...site.pedacos(aparar(ficam.itens[n].filter(p => p.strong === undefined)), `f${n}`)))))),
     secao("your-own-css", "Start and end", "Your own CSS",
       bloco(css[0], "c"),
-      h(A.Table, {variant: "rows", striped: true, caption: "Your own CSS table", className: "rtl-tabela"},
-        h("thead", null, h("tr", null, ...tabela.cabecalho.map((c, k) => h("th", {key: k, scope: "col"}, ...site.pedacos(c, `th${k}`))))),
-        h("tbody", null, ...tabela.linhas.map((l, k) => h("tr", {key: k}, ...l.map((c, j) => h("td", {key: j}, ...site.pedacos(c, `td${k}${j}`))))))),
+      // A `DataGrid` (S-02, 05/11/2026).
+      gradeDoSite({label: "Your own CSS table", className: "rtl-tabela",
+        cabecalho: tabela.cabecalho.map((c) => typeof c === "string" ? c.replace(/`/g, "") : c.map((p) => p.t ?? p.code ?? p.link ?? p.strong ?? "").join("")),
+        linhas: tabela.linhas.map((l, k) => l.map((c, j) => site.pedacos(c, `td${k}${j}`)))}),
       codigo(css.find(b => b.tipo === "codigo").codigo, {arquivo: "order.css", lingua: "css"})),
     secao("known-limit", "Honest", "Known limit",
       aviso("warning", "warning", "Six rules still use :dir(rtl).", ...site.pedacos(resto(limite, "selector:"), "k"))),

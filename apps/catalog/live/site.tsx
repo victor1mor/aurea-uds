@@ -16,6 +16,8 @@
 import {createPortal, flushSync} from "react-dom";
 import {createRoot} from "react-dom/client";
 import {createElement as h, Fragment, type ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
+import {DataGrid} from "../../../packages/react/dist/data-grid.js";
+import {colunasDaGrade} from "../site-b/comum/grade.mjs";
 import {Badge, Button, ColorSwatch, CommandPalette, Drawer, Icon, IconButton, NavList, SegmentedControl, Toggle, ToggleGroup,
   useAureaTheme, useToast} from "../../../packages/react/dist/index.js";
 // O botão "Theme" (14/10/2026) é a outra peça viva do topo: vai no mesmo pacote, que toda página já carrega, e
@@ -257,6 +259,23 @@ const temHooks = document.querySelector("[data-hooks]") != null;
 
 // O sprite está DENTRO da página (inline), então a base dos ícones é vazia — como no gerador.
 // O provedor do site guarda o tema escolhido (15/10/2026); as peças vivas moram todas sob ele.
+// AS TABELAS DO SITE (S-02, 05/11/2026): a montagem desenha cada uma como `DataGrid` e escreve os dados ao lado
+// (`data-vivo-grade`, ver `site-b/comum/grade.mjs`); aqui a grade acende por cima do desenho pronto — ordenar, o teclado da
+// grade —, por portal, sob o provedor único do site. Se os dados não lerem, o desenho pronto fica.
+type Grade = {el: HTMLElement; estatico: ChildNode[]; dados: {label: string; cabecalho: unknown[]; linhas: unknown[][]}};
+function GradesDoSite() {
+  const [grades] = useState<Grade[]>(() => [...document.querySelectorAll<HTMLElement>("[data-vivo-grade]")].flatMap((el) => {
+    try { return [{el, estatico: [...el.childNodes], dados: JSON.parse(el.dataset.vivoGrade!)}]; }
+    catch (erro) { console.error("Aurea: a tabela do site não leu os dados —", erro); el.dataset.ligada = "erro"; return []; }
+  }));
+  return h(Fragment, null, ...grades.map((g, i) => createPortal(h(GradeViva, g), g.el, `grade${i}`)));
+}
+function GradeViva({el, estatico, dados}: Grade) {
+  const colunas = useMemo(() => colunasDaGrade(dados.cabecalho as never), [dados]);
+  useLayoutEffect(() => { for (const n of estatico) n.remove(); el.dataset.ligada = "sim"; }, [el, estatico]);
+  return h(DataGrid, {label: dados.label, fit: true, dividers: true, data: dados.linhas, columns: colunas as never});
+}
+
 export function montarSite(...extras: ReactNode[]) {
   const raiz = document.createElement("div");
   raiz.id = "site-search-root";
@@ -264,5 +283,5 @@ export function montarSite(...extras: ReactNode[]) {
   // SÍNCRONO (21/10/2026): o primeiro desenho acontece aqui, dentro do script, e não num quadro depois. As caixas vivas
   // que já estão na tela (`vivo.tsx`) trocam o desenho pronto pelo vivo antes de a página terminar de carregar.
   const r = createRoot(raiz);
-  flushSync(() => r.render(h(ProvedorDoSite, null, h(Busca), h(MenuDoCelular), h(TemaDoTopo), h(ChavesDeTema), h(AcoesDaPagina), temHooks ? h(PonteDosHooks) : null, ...extras)));
+  flushSync(() => r.render(h(ProvedorDoSite, null, h(Busca), h(MenuDoCelular), h(TemaDoTopo), h(ChavesDeTema), h(AcoesDaPagina), temHooks ? h(PonteDosHooks) : null, h(GradesDoSite), ...extras)));
 }
