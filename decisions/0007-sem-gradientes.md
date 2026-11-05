@@ -1,5 +1,7 @@
 # ADR-0007 — Sem gradientes, nem os funcionais
 
+> **SUBSTITUÍDA pela [ADR-0091](0091-o-degrade-e-permitido.md) em 05/11/2026: o degradê é permitido.** O que segue é histórico.
+
 - **Data:** Fase 0 (07/2026) · registrada como ADR em 30/07/2026 (Fase 10, achado M19)
 - **Estado:** aceita, em vigor e **gateada**
 - **Decidiu:** Victor

@@ -32,7 +32,7 @@ const FILA = `  <ScrollView horizontal contentContainerStyle={{gap: t.size.space
 
 export default {
   install: 'import {ScrollShadow} from "@aurea-uds/native";',
-  description: "Tells that there is more to scroll: a line at the end where content is hidden, and only there — at the top of the list no line above, at the bottom none below. Aurea has no gradients, so the reference's fade becomes a 1-wide line. By default the list sits on an Aurea surface, with the card's 22 corner.",
+  description: "Tells that there is more to scroll: a line at the end where content is hidden, and only there — at the top of the list no line above, at the bottom none below. Here the fade of the reference is a 1-wide line. By default the list sits on an Aurea surface, with the card's 22 corner.",
   api: {
     children: "Required. The scroller — a ScrollView, a FlatList — as one element. It keeps the scroll, layout and size handlers the app already gave it.",
     orientation: "Which axis it watches. Without it, it follows the scroller's horizontal.",

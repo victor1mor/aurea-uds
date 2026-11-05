@@ -505,46 +505,7 @@ for rel in ["packages/core/src/aurea.css", "packages/core/dist/aurea.css",
     if txt.count("{") != txt.count("}"):
         errors.append(f"{rel}: chaves desbalanceadas ({txt.count('{')} '{{' vs {txt.count('}')} '}}')")
 
-# ── 4. sem gradientes (hardRule do contrato) ───────────────────────
-# A terceira era `apps/docs/index.html`, que saiu na Parte D. O catálogo é GERADO, então o
-# gradiente só poderia entrar por três portas: a folha de chrome, o gerador, ou o conteúdo
-# escrito à mão em `apps/catalog/content/`. As três são varridas — varrer as 183 páginas de
-# saída seria medir o mesmo defeito depois de ele já ter sido cometido.
-_sem_gradiente = ["packages/core/dist/aurea.css", "packages/core/src/aurea.css",
-                  "apps/catalog/assets/catalog.css", "scripts/build-catalog.mjs",
-                  "scripts/page-model.mjs"]
-_sem_gradiente += [str(f.relative_to(root)) for f in sorted((root / "apps/catalog/content").rglob("*.mjs"))]
-# A SEGUNDA EXCEÇÃO (ADR-0084, 27/10/2026, do Victor: "Abrimos uma segunda exceção (se não não conseguimos virar UDS de
-# verdade)"): o estilo H da barra de baixo, `data-current-style="brand-gradient"` — o item atual em degradê, só quando o
-# app escolhe. Ela vale SÓ dentro da regra cujo seletor é o desse estilo, e só no CSS do core: o mesmo `gradient(` em
-# qualquer outra regra, ou em outro arquivo, reprova.
-def _gradiente_fora_da_excecao(texto):
-    limpo = re.sub(r"/\*.*?\*/", "", texto, flags=re.S)
-    for m in re.finditer(r"gradient\(", limpo):
-        abre = limpo.rfind("{", 0, m.start())
-        antes = max(limpo.rfind("}", 0, abre), limpo.rfind("{", 0, abre - 1))
-        seletor = limpo[antes + 1:abre]
-        # A TERCEIRA (ADR-0089, 02/11/2026, o Victor: "Com degradê"): o código recolhido da caixa empilhada some num degradê,
-        # como na referência — só na regra `.demo.demo-stacked[data-collapsed]`.
-        if 'data-current-style="brand-gradient"' not in seletor and ".demo.demo-stacked[data-collapsed]" not in seletor:
-            return True
-    return False
-for rel in _sem_gradiente:
-    _txt4 = (root / rel).read_text(encoding="utf-8")
-    # O `catalog.css` é a CÓPIA do CSS do core que o site carrega (CLAUDE.md, a regra da 0.32.0): a mesma exceção vale nele.
-    if rel in ("packages/core/dist/aurea.css", "packages/core/src/aurea.css", "apps/catalog/assets/catalog.css"):
-        if _gradiente_fora_da_excecao(_txt4):
-            errors.append(f"{rel}: contém gradient() fora das regras do brand-gradient (ADR-0084) e da caixa empilhada (ADR-0089)")
-    elif "gradient(" in _txt4:
-        errors.append(f"{rel}: contém gradient()")
-# A QUARTA porta, fechada em 13/10/2026 (ADR-0069): o código dos componentes. Até ali o check olhava só o CSS e
-# o catálogo, e um gradiente posto pelo React (estilo em linha, variável de CSS) passaria calado. A ADR-0069 abre
-# UMA exceção — pintar as cores que se escolhem (a área e a trilha de cor) — e ela mora num arquivo só.
-_gradiente_permitido = {"packages/react/src/color.ts"}
-for f in sorted((root / "packages/react/src").rglob("*.ts*")):
-    rel = f.relative_to(root).as_posix()
-    if rel not in _gradiente_permitido and "gradient(" in f.read_text(encoding="utf-8"):
-        errors.append(f"{rel}: contém gradient() — a única exceção é o color.ts (ADR-0069)")
+# ── 4. (revogado em 05/11/2026: o degradê é permitido — ADR-0091; o número fica vago para os outros não mudarem) ──
 
 def _sem_comentario(texto):
     """COMENTÁRIO NÃO PRODUZ PIXEL. A contagem por eixo (logo abaixo) já descartava comentário

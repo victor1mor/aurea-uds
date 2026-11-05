@@ -54,13 +54,7 @@ Two lines remain, by decision:
 
 The focus ring is not a border. It stays.
 
-### 5. No gradients
-
-Aurea uses no gradients, including functional ones such as progress bars. Depth comes from surface and space. Gradients also disappear when a user forces high-contrast colours.
-
-There is one exception: the colour pickers paint the colours you choose from (the `ColorArea` and the colour track of the `Slider`). That code lives in one file. The validator fails the build if a gradient appears in the stylesheet, the site or any other component file.
-
-### 6. The yellow does not change
+### 5. The yellow does not change
 
 The brand yellow is `oklch(0.795 0.184 86.047)`. It is the same in the dark and the light theme.
 
@@ -68,7 +62,7 @@ A brand (`data-brand`) is a separate axis from the theme. A brand redefines colo
 
 See [Colors](./docs-colors.html) and [Theming](./docs-theming.html).
 
-### 7. Meaning before appearance
+### 6. Meaning before appearance
 
 A button has two independent axes. `appearance` says how it is drawn. `tone` says what it means.
 
@@ -85,13 +79,13 @@ A button has two independent axes. `appearance` says how it is drawn. `tone` say
 
 If two different intentions end up looking the same, the meaning wins and gets its own token. The API does not degrade in silence: a value you ask for is the value you get.
 
-### 8. Behaviour from a proven engine, skin from Aurea
+### 7. Behaviour from a proven engine, skin from Aurea
 
 Aurea does not reimplement focus, keyboard or ARIA. On the web, behaviour comes from Base UI and the skin is entirely Aurea's: no engine style reaches the core stylesheet. On native, components are built on React Native primitives, with a plain `StyleSheet` and Aurea's own theme provider.
 
 Presentation is CSS first. When a prop changes semantics, keyboard or ARIA (for example, the orientation of `Tabs`), JavaScript resolves it, so the drawing and the behaviour never disagree.
 
-### 9. One API across web and native
+### 8. One API across web and native
 
 Props that exist on both targets have the same name and the same values. `tone`, `appearance` and `size` mean the same thing in `@aurea-uds/react` and `@aurea-uds/native`.
 
@@ -111,7 +105,7 @@ import {Button} from "@aurea-uds/native";
 
 The scale is adapted to each target. Web controls are 32, 36 and 40px tall (`sm`, `md`, `lg`, comfortable density). Native controls use a scale made for the finger: 40, 48 and 56 (`--touch-control-h-sm`, `-md`, `-lg`). Both scales move with the three densities: compact, comfortable and spacious. See [Density](./docs-density.html).
 
-### 10. Grow by variation, never by removal
+### 9. Grow by variation, never by removal
 
 A component is corrected, never removed. A new need enters as a variant or a prop of a component that already exists. When a component is renamed, the old name keeps working: `Topbar` still works next to `Header`.
 
@@ -125,7 +119,6 @@ Each principle has a check behind it, so it cannot drift quietly.
 |---|---|
 | Tokens only | the validator's raw-value ratchet |
 | No lines | a unit test that reads the code in every state, and a browser sweep of every page in both themes |
-| No gradients | the validator, on the stylesheet, the site and the component code |
 | Round icon-only buttons | a geometry test, in the three densities |
 | One focus line | a sweep that tabs through every preview |
 | Measured contrast | axe on every page, in both themes |

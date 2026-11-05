@@ -100,7 +100,7 @@ disser "ordem do Victor", ela vale até ele dizer o contrário.
   referência principal — anatomia, partes, medidas, espaçamento, estados, comportamento, teclado,
   onde cada coisa fica — e por cima dela só entra o que é da Aurea: o amarelo e as cores dos temas
   (ADR-0061); os cantos (22 no cartão, 32 na folha de baixo, cápsula nos controles; nada quadrado);
-  a Inter, a Sora e a IBM Plex Mono (ADR-0077) e o Phosphor; as densidades; nenhum degradê; **nenhuma linha** (ADR-0072); e a
+  a Inter, a Sora e a IBM Plex Mono (ADR-0077) e o Phosphor; as densidades; **nenhuma linha** (ADR-0072); e a
   acessibilidade de baixa visão (contraste medido, toque de 44, foco visível). Divergir em qualquer outra coisa é pergunta
   ao Victor, com o motivo.
   - **O alcance, decidido pelo Victor em 11/10/2026:** vale para as peças ~~E para o site da Aurea (o
@@ -211,6 +211,8 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.52.0` | As peças do site B: `AppShell topbarVariant="pill"` e `topbarBlurred`, o `blurred` e o `maxWidth` do `Header` `pill`, `TableOfContents progress` e `indicator="segment"`, o grupo que dobra da `Sidebar` com a seta na ponta, `Accordion indicator="plus"` e `size="lg"` ([ADR-0088](decisions/0088-o-site-b.md)) — pedido #109; e os consertos da auditoria de segurança de 31/10/2026 (`CodeBlock`, `ColorSwatch`, `DataGrid`) — pedido #110. **Publicada em 31/10/2026** (por volta das 21:53, Brasília, medido no npm), pelo terminal do Victor |
 | `0.54.0` | O site B inteiro (as seis partes, o Início na pílula) e as peças que ele pediu — `SegmentedControl selectedStyle="emphasis"`, `Alert appearance="soft"`, `Card fill="brand"`, `Table striped`, `CodeBlock previewLayout="stacked"` ([ADR-0089](decisions/0089-a-caixa-de-exemplo-empilhada.md)) e as 14 do desenho — e o `Chart` do nativo que se anuncia como imagem; leva a `0.53.0` e a `0.52.1` — pedido #112. **Publicada em 03/11/2026** (por volta das 12:35, Brasília), pelo terminal do Victor |
 | `0.54.1` | Os consertos do site B que o Victor achou no ar: o campo da busca grande (`CommandPalette size="lg"`) de 64 para 52, a setinha do "Copy Markdown", a lateral que não sobe no fim da página, a busca com 11 sugestões e as laterais de Recipes e Hooks — pedido #113. **Publicada em 03/11/2026** (por volta das 21:13, Brasília, medido no npm), pelo terminal do Victor |
+| `0.55.0` | O botão dividido com o menu aberto e o menu da referência (pedido #114); e a Ember: o anel de foco do escuro no laranja dela, o link no laranja do botão e o anel do claro no `#ff6600`, como no sistema de origem (pedido #115). **Não saiu sozinha**: foi publicada dentro da `0.56.0` |
+| `0.56.0` | Os modos de leitura no app inteiro: `AppShell highContrast` (o alto contraste, a forma "C") e `textSize="lg"` (o texto grande, a forma "B"), que marcam também a raiz da página; a Ember recebe os dois ([ADR-0090](decisions/0090-o-alto-contraste-e-o-texto-grande-no-app.md)) — pedido #116. **Publicada em 05/11/2026** (por volta das 12:43, Brasília, medido no npm), pelo terminal do Victor. Leva a `0.55.0` junto |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -794,6 +796,28 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    21:13, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #113. O registro entrou no lote seguinte (o
    botão dividido, 0.55.0).
 
+54. **`0.55.0`, o botão dividido e as cores da Ember, feita em 04/11/2026** — o Victor achou no site a ponta da setinha do
+   "Copy Markdown" reta com o menu aberto, e o conserto veio do código da referência (o botão dividido e o menu dela, pedido
+   #114). Depois, a Ember (*"Pode"*, *"Como na origem"*): o anel de foco do escuro no laranja dela, o link no laranja do botão
+   e o anel do claro no `#ff6600` — a varredura das 13 marcas achou o link da Ember herdando o amarelo da Gold (pedido #115).
+   E o foco do campo do nativo com 2 e uma linha só (*"B, 2 pixels"*), medido contra a web nas 13 marcas e nos dois temas.
+   ⚠ **As lições:** (1) o sistema de origem da Ember se lê na BASE dele (`:root` e `.dark`) — a preferência de aparência da
+   conta escreve por cima da página e enganou a primeira medida; (2) na comparação da web com o nativo, compara-se a MESMA
+   peça (o campo `secondary` da web contra o campo padrão do nativo deu uma diferença que não existia). Foi publicada dentro
+   da `0.56.0`.
+
+55. **`0.56.0`, os modos de leitura, feita em 04 e 05/11/2026** ([ADR-0090](decisions/0090-o-alto-contraste-e-o-texto-grande-no-app.md))
+   — o 0-D e o 0-E do bloco 3, o MNT-30: o alto contraste e o texto grande, que só existiam no `DependencyGraph`, passam ao
+   app inteiro pelo `AppShell` (`highContrast`, `textSize="lg"`), com o grupo de tokens `textSize.lg`. As formas saíram do
+   esboço do FigCraft e foram aprovadas na bancada (*"C, B + link e botão"*, *"B, letra e controles"*, *"Aprovo"*); a Ember
+   recebe os dois (*"Sim, recebe"*). A parte do nativo é o lote seguinte. ⚠ **As lições:** (1) as regras dos modos moram
+   numa seção SÓ delas no `aurea.css` — dentro da seção da paleta, a trava cobra a exclusão da Ember; (2) a altura dos
+   controles na bancada do texto grande se mede pelo `--target-min` — o `--touch-control-h-md` não existe sem
+   `data-density`; (3) o teste do `DatePicker` caía no Firefox da CI com a rolagem suave — rolagem instantânea e espera da
+   parte viva (`data-ligada`). **Publicada em 05/11/2026** (por volta das 12:43, Brasília, medido no npm), pelo terminal do
+   Victor, da junção do pedido #116. Leva a `0.55.0` junto. O registro entrou no lote seguinte (as tabelas e o degradê,
+   0.57.0).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -964,13 +988,9 @@ no git.
   (`--success`, `--info`, `--warning`, `--destructive`) é a MESMA cor nos dois temas; letra, ícone,
   borda e barra sobre a tela usam o par `-400`. ⚠ Nunca pintar letra com a cor de fundo de estado:
   `paleta-adr0061.test.tsx` reprova.
-- Sem gradientes (nem funcionais) — com TRÊS exceções estreitas, cada uma cobrada pelo check 4: pintar as cores que se
-  escolhem ([ADR-0069](decisions/0069-escolher-cor-a-excecao-ao-gradiente-e-o-motor-nosso.md), só no `color.ts`) e o item
-  atual da barra de baixo no estilo `brand-gradient` (o H — decisão do Victor, 26/10/2026, *"se não não conseguimos virar UDS
-  de verdade"*; [ADR-0084](decisions/0084-os-estilos-novos-e-as-duas-excecoes.md), só na regra dele e só quando o app escolhe).
-  E o código recolhido da caixa de exemplo empilhada, que some num degradê (`CodeBlock previewLayout="stacked"` —
-  *"Com degradê"*, 02/11/2026; [ADR-0089](decisions/0089-a-caixa-de-exemplo-empilhada.md), só na regra
-  `.demo.demo-stacked[data-collapsed]`).
+- **O degradê é permitido** (ordem do Victor, 05/11/2026 — [ADR-0091](decisions/0091-o-degrade-e-permitido.md): *"faça como
+  se ela nem existisse, assim não se confunde ... como vamos virar UDS se não aceitamos?"*). A regra antiga "sem gradientes"
+  saiu de tudo, com a trava que a cobrava. Nenhum desenho se recusa por ter degradê.
 - **Sem linha** (decisão do Victor, 16/10/2026, [ADR-0072](decisions/0072-sem-linha.md)): nenhuma peça desenha
   borda — a cor de toda borda é transparente (a espessura fica, nenhuma medida muda), e o anel fino de `box-shadow`
   não entra. O que só a linha separava do fundo ganha FUNDO translúcido da cor do texto (`--fill-1` 6%, `--fill-2`
@@ -1163,7 +1183,7 @@ hoje `Header`).
 2. Motor sem aparência: **Base UI** (`@base-ui/react`).
 3. Tokens no formato **DTCG 2025.10** (`$value`/`$type`).
 4. Fontes em pacote próprio, `@aurea-uds/fonts`.
-5. Gradientes substituídos. Não reintroduzir.
+5. ~~Gradientes substituídos. Não reintroduzir.~~ Revogado em 05/11/2026 ([ADR-0091](decisions/0091-o-degrade-e-permitido.md)): o degradê é permitido.
 6. Gestor: pnpm workspaces.
 
 ## 11. Regras de trabalho que moravam só na memória das sessões (passadas para cá em 11/10/2026)

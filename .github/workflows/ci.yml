@@ -36,7 +36,7 @@ jobs:
       - name: Auditoria de dependências (bloqueia em high/critical)
         run: pnpm audit --audit-level=high
 
-      - name: Validate (nomes privados, tokens, dist==build, licenças, sem gradientes)
+      - name: Validate (nomes privados, tokens, dist==build, licenças)
         run: python scripts/validate.py
         # As listas de nomes privados e de referências de construção (check 1b) moram em SEGREDOS
         # do repositório, não no código. O GitHub não entrega segredo a pedido vindo de fork; só

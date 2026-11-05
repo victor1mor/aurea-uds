@@ -4,7 +4,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 //
 // As quatro são as do pacote nativo da referência — anatomia, medidas, estados, comportamento e
 // acessibilidade lidos no pacote publicado dela —, com o que é da Aurea por cima: as cores do tema,
-// o canto 22 do cartão e a cápsula, a Inter e a Sora (ADR-0077), os ícones Phosphor, sem degradê, "menos movimento".
+// o canto 22 do cartão e a cápsula, a Inter e a Sora (ADR-0077), os ícones Phosphor, "menos movimento".
 //
 // Medido no pacote dela antes de escrito (a classe vira dp: `px-3` = 12, `py-4` = 16, `gap-4` = 16):
 //

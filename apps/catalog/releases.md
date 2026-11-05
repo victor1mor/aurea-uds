@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.57.0
+
+November 5, 2026
+
+Row dividers, a header pinned to the page, gradients allowed, and five site fixes.
+
+[Read full release notes →](https://aureauds.dev/release-v0-57-0.md)
+
 ## v0.56.0
 
 November 4, 2026

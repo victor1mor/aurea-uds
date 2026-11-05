@@ -274,7 +274,57 @@ como deveria funcionar"*.
 
 ---
 
+## [0.57.0] — 2026-11-05
+
+**As tabelas com linha, o cabeçalho preso à página, o degradê permitido e cinco consertos do site** (05/11/2026). O primeiro
+lote feito em sessões paralelas — a navegação do site e as tabelas —, juntado na branch `claude/lote-paralelo`; cada
+mudança aprovada pelo Victor olhando a imagem.
+
+### Acrescentado
+
+- **A linha entre as fileiras (MNT-38): `dividers` na `Table` e na `DataGrid`** (web) — a moldura de sempre e uma linha
+  clara entre as fileiras do corpo, menos depois da última (a forma "A" da bancada, *"Pode, sem a Ember"*). A linha é o
+  texto a 10%, a mesma do cartão de contorno; a borda de baixo da célula já existia, transparente, e só ganha cor — nenhuma
+  medida muda. Exceção nomeada ao sem linha (ADR-0072), só quando o app escolhe; a Ember fica sem ela; sem efeito no
+  arranjo `rows`.
+- **`dividers` na `Table` do nativo** — as fileiras ficam juntas num cartão só, com a faixa clara entre elas (*"Pode, um
+  cartão só"*). Na Ember, nada muda.
+- **O cabeçalho preso à página (S-10, o MNT-40): `stickyHeader="page"` na `DataGrid`** — o cabeçalho anda com a página e
+  encosta embaixo do que fica parado no topo dela (a barra do `AppShell`, o cabeçalho do site), sem caixa de rolagem
+  própria: uma rolagem só. Valor novo (*"Pode, valor novo"*): o `stickyHeader` de sempre continua a caixa com teto.
+
+### Mudado
+
+- **O degradê é permitido** ([ADR-0091](decisions/0091-o-degrade-e-permitido.md), ordem do Victor: *"faça como se ela nem
+  existisse ... como vamos virar UDS se não aceitamos?"*). A regra "sem gradientes" (ADR-0007) saiu de tudo: o `CLAUDE.md`,
+  o contrato, o guia para assistentes, as páginas do site (a Design principles passa de dez a nove regras) e a trava do
+  check 4 do `validate.py`. As três "exceções" (a escolha de cor, o `brand-gradient`, a caixa empilhada) continuam como
+  peças, sem o rótulo.
+
+### Site
+
+- **O filtro da lateral filtra (S-01).** Em Patterns, Releases e Tokens, o item ficava marcado e a lista não mudava; agora
+  a lista mostra só o escolhido.
+- **O "View as Markdown" abre o texto da página (S-03).** O endereço publicado não tem `.html`, e o menu reabria a própria
+  página; agora o `.md` sai do caminho. As 82 páginas que tinham o menu sem o arquivo ganharam o `.md`, e o "Copy Markdown"
+  da Health passou a copiar.
+- **A lateral abre no item atual (S-07)** e guarda a rolagem entre as páginas da mesma área.
+- **Os links para fora do site abrem em página nova (S-08)** — o GitHub do topo, o "Open source on GitHub" do Início, o
+  rodapé e os cartões de ajuda —, e o leitor de tela ouve "Opens in a new tab".
+- **O topo único (S-09).** O Início usa o mesmo topo das outras páginas.
+- As tabelas dos exemplos ganharam a bancada `apps/keyboard-probe/tabelas.html`.
+
+### Ferramentas
+
+- **`AUREA_PORTA`** no `playwright.config.ts` — cada cópia de trabalho escolhe a sua porta (padrão 8123, a da CI). Com
+  sessões em paralelo, os testes de uma pasta mediam o site de OUTRA (`reuseExistingServer` na mesma porta).
+
+---
+
 ## [0.56.0] — 2026-11-04
+
+✅ **Publicada em 05/11/2026, por volta das 12:43 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #116.**
+Leva a 0.55.0 junto.
 
 **O alto contraste e o texto grande no app inteiro** (04/11/2026, o MNT-30 — o 0-D e o 0-E do bloco 3,
 [ADR-0090](decisions/0090-o-alto-contraste-e-o-texto-grande-no-app.md)). Até aqui, os dois modos só existiam dentro do
@@ -302,6 +352,8 @@ contraste "C", o texto "B"), aprovou na bancada com as peças de verdade (*"Apro
 ---
 
 ## [0.55.0] — 2026-11-04
+
+**Não saiu sozinha**: foi publicada dentro da 0.56.0, em 05/11/2026.
 
 **O botão dividido com o menu aberto e o menu da referência** (04/11/2026). O Victor achou no site: ao abrir o menu do "Copy
 Markdown", a ponta da setinha ficava reta (*"quando clico botão fica quadrado"*), e mandou pegar o código da referência

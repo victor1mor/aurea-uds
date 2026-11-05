@@ -110,7 +110,7 @@ const folha = criarFolha((t) => ({
     // `dividers` (MNT-38, 05/11/2026, *"Pode, um cartão só"*): as fileiras juntas num cartão só, e entre elas a linha clara —
     // o texto a 10%, a mesma da web. Uma faixa de 1, e não borda: a borda colorida é o que a trava do sem linha recusa.
     grupo: { ...canto(t.size.radiusLg), backgroundColor: t.color.card, overflow: "hidden" },
-    linhaNoGrupo: { borderRadius: 0, backgroundColor: "transparent" },
+    linhaNoGrupo: { ...canto(0), backgroundColor: "transparent" },
     divisoria: { height: t.size.borderWidth, backgroundColor: preenchimento(t, 2) },
     vazio: { paddingVertical: t.size.space6, alignItems: "center" },
 }));

@@ -5,7 +5,10 @@ import {defineConfig, devices} from "@playwright/test";
 // com 183 páginas geradas. O render é determinístico (sem Math.random/Date/timers —
 // check 25), então o gate pode ser estrito (maxDiffPixels: 0). Porta 8123 — a 8090
 // está ocupada nesta máquina.
-const PORT = 8123;
+// SESSÕES EM PARALELO (05/11/2026): com o `reuseExistingServer`, uma pasta que rodava os testes enquanto outra já servia a
+// 8123 testava o site DA OUTRA sem saber (medido pela sessão do site). Cada cópia de trabalho escolhe a sua com
+// `AUREA_PORTA`; sem ela, a 8123 de sempre (e a da CI).
+const PORT = Number(process.env.AUREA_PORTA ?? 8123);
 // Os dois specs de CAPTURA. Ficam só no Chromium — o porquê está ao lado de `projects`.
 const PIXEL = ["**/catalog.spec.ts", "**/matrix.spec.ts"];
 
