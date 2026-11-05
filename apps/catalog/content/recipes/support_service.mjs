@@ -1,11 +1,11 @@
 // RECEITA · Support · service (S-11, 05/11/2026) — a caixa de entrada do atendimento como tela de produto, na linguagem dos
 // blocos v2 (a `Tela`): a fila escolhida, a grade dos casos (`DataGrid`, a decisão S-02) com o prazo e o estado, e o caso
-// aberto ao lado da linha (`renderDetail`) com a conversa e as ações da fase. Interação de verdade: abrir um caso mostra a
+// aberto numa caixa abaixo, com a conversa e as ações da fase. Interação de verdade: abrir um caso mostra a
 // conversa dele; responder entra na conversa e o caso passa a "waiting on customer"; "Escalate" e "Resolve" mudam o estado.
 import {createElement as h, useState} from "react";
 import * as A from "../../../../packages/react/dist/index.js";
 import {DataGrid} from "../../../../packages/react/dist/data-grid.js";
-import {Tela} from "./_tela.mjs";
+import {Tela, Grupo} from "./_tela.mjs";
 
 const ESTADO = {open: ["busy", "With support"], waiting: ["away", "Waiting on customer"], escalated: ["danger", "Escalated"], resolved: ["success", "Resolved"]};
 const CASOS = [
@@ -33,8 +33,9 @@ function Inbox() {
     mudar(id, "waiting");
   };
   const colunas = [
-    {accessorKey: "subject", header: "Case", cell: ({row}) => h("span", {style: {display: "grid"}},
-      h("span", null, `#${row.original.id} · ${row.original.subject}`), h(A.Text, {type: "body-xs", tone: "muted"}, row.original.customer))},
+    {accessorKey: "subject", header: "Case", cell: ({row}) => h("span", {style: {display: "grid", justifyItems: "start"}},
+      h(A.Button, {variant: "link", onClick: () => setAberto(row.original.id), "aria-pressed": aberto === row.original.id ? "true" : "false"},
+        `#${row.original.id} · ${row.original.subject}`), h(A.Text, {type: "body-xs", tone: "muted"}, row.original.customer))},
     {accessorKey: "sla", header: "SLA", cell: ({row}) => h(A.Badge, {tone: row.original.state === "resolved" ? "success" : row.original.tone}, row.original.state === "resolved" ? "met" : row.original.sla)},
     {accessorKey: "state", header: "State", cell: ({getValue}) => h(A.Status, {variant: ESTADO[getValue()][0]}, ESTADO[getValue()][1])},
   ];
@@ -47,13 +48,16 @@ function Inbox() {
       h(A.Button, {variant: "secondary", leadingIcon: "check", disabled: c.state === "resolved", onClick: () => mudar(c.id, "resolved")}, "Resolve")));
   const visiveis = fila === "All" ? casos : casos.filter(c => (fila === "Open" ? c.state !== "resolved" : c.state === "resolved"));
   const abertos = casos.filter(c => c.state !== "resolved").length;
+  const caso = casos.find(c => c.id === aberto);
   return h(Tela, {icone: "headset", trilha: ["Support", "Queues"], id: "q_billing", titulo: "Inbox",
     estado: h(A.Status, {variant: abertos > 2 ? "warning" : "success"}, `${abertos} open`),
     propriedades: [["timer", "First reply under 1 h"], ["users", "3 agents online"], ["tray", `${casos.length} cases`]],
     rodape: "The SLA clock is always visible, and a resolved case keeps its whole conversation."},
     h(A.SegmentedControl, {label: "Queue", value: fila, onChange: setFila, items: ["All", "Open", "Resolved"].map(v => ({value: v, label: v}))}),
-    h(DataGrid, {label: "Cases", data: visiveis, columns: colunas, getRowId: c => c.id, filterable: true,
-      renderDetail: detalhe, detailRowId: aberto, onDetailRowIdChange: setAberto}));
+    h(DataGrid, {label: "Cases", data: visiveis, columns: colunas, getRowId: c => c.id, filterable: true}),
+    // O caso aberto numa caixa ABAIXO da grade, e não ao lado da linha (o detalhe lado a lado da grade passava 16 da coluna a
+    // 768 — achado pela medição de 05/11/2026).
+    caso ? h(Grupo, {titulo: `Case #${caso.id} · ${caso.subject}`}, detalhe(caso)) : null);
 }
 
 export default {
@@ -66,6 +70,7 @@ export function Inbox({initialCases, initialThreads}) {
   const [cases, setCases] = useState(initialCases);
   const [threads, setThreads] = useState(initialThreads);
   const [openId, setOpenId] = useState(initialCases[0].id);
+  const current = cases.find(c => c.id === openId);
   const setState = (id, state) => setCases(cs => cs.map(c => c.id === id ? {...c, state} : c));
   const reply = (id, body) => {
     setThreads(t => ({...t, [id]: [...t[id], {id: crypto.randomUUID(), author: "You", direction: "outgoing", body}]}));
@@ -80,20 +85,19 @@ export function Inbox({initialCases, initialThreads}) {
       <DataGrid
         label="Cases" data={cases} getRowId={c => c.id} filterable
         columns={[
-          {accessorKey: "subject", header: "Case"},
+          {accessorKey: "subject", header: "Case", cell: ({row}) => (
+            <Button variant="link" onClick={() => setOpenId(row.original.id)}>{row.original.subject}</Button>
+          )},
           {accessorKey: "sla", header: "SLA", cell: ({row}) => <Badge tone={row.original.tone}>{row.original.sla}</Badge>},
           {accessorKey: "state", header: "State", cell: ({getValue}) => <Status variant={variant[getValue()]}>{label[getValue()]}</Status>},
         ]}
-        detailRowId={openId} onDetailRowIdChange={setOpenId}
-        renderDetail={c => (
-          <>
-            <MessageList label={\`Case \${c.id}\`} messages={threads[c.id]} />
-            <MessageComposer label={\`Reply to \${c.customer}\`} onSend={text => reply(c.id, text)} />
-            <Button variant="danger-ghost" onClick={() => setState(c.id, "escalated")}>Escalate</Button>
-            <Button variant="secondary" leadingIcon="check" onClick={() => setState(c.id, "resolved")}>Resolve</Button>
-          </>
-        )}
       />
+      <Card variant="inset">
+        <MessageList label={\`Case \${current.id}\`} messages={threads[current.id]} />
+        <MessageComposer label={\`Reply to \${current.customer}\`} onSend={text => reply(current.id, text)} />
+        <Button variant="danger-ghost" onClick={() => setState(current.id, "escalated")}>Escalate</Button>
+        <Button variant="secondary" leadingIcon="check" onClick={() => setState(current.id, "resolved")}>Resolve</Button>
+      </Card>
     </Card>
   );
 }`,

@@ -33,7 +33,9 @@ function Booking() {
       onClick: () => setMarcado(`${dia(data)} at ${hora}`)}, marcado ? "Booked" : "Confirm booking")},
     marcado ? h(A.Alert, {variant: "success", title: "You are booked"}, `${marcado}, Lisbon time. The invitation went to your email.`) : null,
     h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-5)", alignItems: "flex-start"}},
-      h(A.Card, {variant: "inset"}, h(Calendar, {mode: "single", label: "Day", defaultMonth: MES, today: HOJE, selected: data, onSelect: escolher,
+      // O calendário já tem fundo próprio (sem a caixa cinza, que o empurrava para fora no celular); numa tela mais estreita
+      // que ele, ele rola no próprio lugar em vez de vazar.
+      h("div", {style: {minInlineSize: 0, maxInlineSize: "100%", overflowX: "auto"}}, h(Calendar, {mode: "single", label: "Day", defaultMonth: MES, today: HOJE, selected: data, onSelect: escolher,
         disabled: [{before: HOJE}, {dayOfWeek: [0, 6]}]})),
       h("div", {style: {...pilha, flex: "1 1 calc(var(--space-24) * 2)"}},
         h(A.RadioGroup, {label: `Free on ${dia(data)}`, variant: "card", value: hora, onValueChange: setHora},
@@ -62,11 +64,9 @@ export function Booking({slotsFor, timeZone}) {
 
       {booked && <Alert variant="success" title="You are booked">{format(day)} at {time}.</Alert>}
 
-      <Card variant="inset">
-        <Calendar mode="single" label="Day" selected={day}
-          onSelect={d => { setDay(d); setTime(slotsFor(d)[0]); }}
-          disabled={[{before: new Date()}, {dayOfWeek: [0, 6]}]} />
-      </Card>
+      <Calendar mode="single" label="Day" selected={day}
+        onSelect={d => { setDay(d); setTime(slotsFor(d)[0]); }}
+        disabled={[{before: new Date()}, {dayOfWeek: [0, 6]}]} />
       <RadioGroup label={\`Free on \${format(day)}\`} variant="card" value={time} onValueChange={setTime}>
         {slotsFor(day).map(t => <Radio key={t} value={t} label={t} description="30 min" />)}
       </RadioGroup>

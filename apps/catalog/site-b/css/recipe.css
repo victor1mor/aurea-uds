@@ -53,7 +53,9 @@
 .rcp-tela { container:rcp-tela / inline-size; }
 .rcp-tela-corpo { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-5); align-items:start; }
 .rcp-tela-corpo:has(> .rcp-tela-lado) { grid-template-columns:minmax(0, 1fr) var(--border-width) minmax(0, calc(var(--space-24) * 2 + var(--space-12))); }
-.rcp-tela-principal, .rcp-tela-lado { display:grid; gap:var(--space-4); min-inline-size:0; }
+/* `minmax(0, 1fr)`: sem coluna definida, a grade cresce até a peça mais larga de dentro (o calendário no celular passava 36
+   da tela — achado pela medição de 05/11/2026). */
+.rcp-tela-principal, .rcp-tela-lado { display:grid; grid-template-columns:minmax(0, 1fr); gap:var(--space-4); min-inline-size:0; }
 .rcp-tela-divisao { align-self:stretch; background:var(--border); }
 @container rcp-tela (max-width: 46rem) {
   .rcp-tela-corpo:has(> .rcp-tela-lado) { grid-template-columns:minmax(0, 1fr); }

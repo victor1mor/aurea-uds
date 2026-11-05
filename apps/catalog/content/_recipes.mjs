@@ -28,6 +28,12 @@ import commerceFinance from "./recipes/commerce_finance.mjs";
 import bookingCalendar from "./recipes/booking_calendar.mjs";
 import supportService from "./recipes/support_service.mjs";
 import regulatedRecords from "./recipes/regulated_records.mjs";
+import workflowAutomation from "./recipes/workflow_automation.mjs";
+import developerTools from "./recipes/developer_tools.mjs";
+import observabilityOps from "./recipes/observability_ops.mjs";
+import iotControl from "./recipes/iot_control.mjs";
+import mapsLogistics from "./recipes/maps_logistics.mjs";
+import fileCloud from "./recipes/file_cloud.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-3)"};
 const between = {...row, justifyContent: "space-between"};
@@ -129,62 +135,9 @@ export default {
             h(A.Badge, null, "queued"))), h("td", null, "41:02")),
           h("tr", null, h("td", null, "Episode 16"), h("td", null, "38:47"))))),
   },
-  workflow_automation: {
-    uses: ["Card", "Status", "Button", "Timeline", "LogStream"],
-    code: `<Card>
-  <Status variant="running">running</Status>
-  <Button variant="ghost" size="sm">Cancel</Button>
-  <Timeline items={[
-    {title: "Trigger · webhook", time: "09:14:02"},
-    {title: "Transform · map fields", time: "09:14:03"},
-  ]} />
-  <LogStream lines={runLog} />
-</Card>`,
-    render: () => h("div", {style: {...wide, ...logCurto}}, h(A.Card, null, h("div", {style: stack},
-      h("div", {style: between}, h(A.Status, {variant: "running"}, "running"),
-        h(A.Button, {variant: "ghost", size: "sm"}, "Cancel")),
-      h(A.Timeline, {items: [{title: "Trigger · webhook", time: "09:14:02"},
-        {title: "Transform · map fields", time: "09:14:03"}]}),
-      h(A.LogStream, {lines: [{time: "09:14:02", text: "run 184 started"},
-        {time: "09:14:03", level: "warn", text: "field owner missing, using default"}]})))),
-  },
-  developer_tools: {
-    uses: ["TreeView", "CodeBlock", "LogStream"],
-    code: `<TreeView label="Files" defaultExpandedIds={["src"]} items={tree} onSelect={open} />
-<CodeBlock language="tsx" copyable>{source}</CodeBlock>
-<LogStream lines={terminal} />`,
-    render: () => h("div", {style: {...stack, ...wide, ...logCurto}},
-      h(A.TreeView, {label: "Files", defaultExpandedIds: ["src"], items: [
-        {id: "src", label: "src", children: [{id: "index", label: "index.tsx"}]},
-        {id: "readme", label: "README.md"}]}),
-      h(A.CodeBlock, {language: "tsx", copyable: true},
-        'export const total = items.reduce((n, i) => n + i.price, 0);'),
-      h(A.LogStream, {lines: [{time: "09:14", text: "vitest 143/143"},
-        {time: "09:15", text: "playwright 76/76"}]})),
-  },
-  file_cloud: {
-    uses: ["Card", "Table", "Status", "Progress", "Button"],
-    code: `<Card>
-  <Table caption="Files">
-    <thead><tr><th>Name</th><th>Size</th><th>Integrity</th></tr></thead>
-    <tbody><tr><td>tokens.json</td><td>18 KB</td>
-      <td><Status variant="success">checksum ok</Status></td></tr></tbody>
-  </Table>
-  <Progress value={62} label="Uploading fonts.woff2" />
-  <Button variant="ghost" size="sm">Pause</Button>
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h(A.Table, {caption: "Files"},
-        h("thead", null, h("tr", null, h("th", null, "Name"), h("th", null, "Size"), h("th", null, "Integrity"))),
-        h("tbody", null,
-          h("tr", null, h("td", null, "tokens.json"), h("td", null, "18 KB"),
-            h("td", null, h(A.Status, {variant: "success"}, "checksum ok"))),
-          h("tr", null, h("td", null, "fonts.woff2"), h("td", null, "294 KB"),
-            h("td", null, h(A.Status, {variant: "running"}, "transferring"))))),
-      h(A.Progress, {value: 62, label: "Uploading fonts.woff2"}),
-      h("div", {style: {...row, justifyContent: "flex-end"}},
-        h(A.Button, {variant: "ghost", size: "sm"}, "Pause"))))),
-  },
+  workflow_automation: {...workflowAutomation},
+  developer_tools: {...developerTools},
+  file_cloud: {...fileCloud},
   messaging_social: {
     uses: ["Card", "Status", "MessageList", "MessageComposer"],
     code: `<Card>
@@ -202,45 +155,8 @@ export default {
   },
   commerce_finance: {...commerceFinance},
   booking_calendar: {...bookingCalendar},
-  maps_logistics: {
-    uses: ["Card", "KPI", "Timeline", "Status"],
-    code: `// The map is one half; this list is the other, and the invariant is that they
-// always agree. Selecting a stop here selects the marker there.
-<Card>
-  <KPI label="ETA" value="14:42" trend="on time" />
-  <Status variant="warning">position 3 min old</Status>
-  <Timeline items={stops} />
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h("div", {style: between}, h(A.KPI, {label: "ETA", value: "14:42", trend: "on time"}),
-        h(A.Status, {variant: "warning"}, "position 3 min old")),
-      h(A.Timeline, {items: [
-        // Sem `description` ("loaded"): a escala de letra da 0.8.8 fez a prévia passar 24px da
-        // caixa, e a linha que dizia o óbvio do depósito era a mais barata de cortar.
-        {title: "Depot", time: "13:10"},
-        {title: "Stop 2 · Harbour Road", time: "14:05"},
-        {title: "Stop 3 · Central Avenue", time: "14:42"}]})))),
-  },
-  iot_control: {
-    uses: ["Card", "Status", "Switch", "Progress", "Alert", "Button"],
-    code: `<Card>
-  <Status variant="online">gateway-04 online</Status>
-  <Switch label="Night mode" defaultChecked />
-  <Progress value={41} label="Tank level" />
-  <Alert variant="warning" title="Confirmation required">
-    Calibration writes to the device. Type the device id to continue.
-  </Alert>
-  <Button variant="danger">Calibrate</Button>
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h("div", {style: between}, h(A.Status, {variant: "online"}, "gateway-04 online"),
-        h(A.Switch, {label: "Night mode", defaultChecked: true})),
-      h(A.Progress, {value: 41, label: "Tank level"}),
-      h(A.Alert, {variant: "warning", title: "Confirmation required"},
-        "Calibration writes to the device. Type the device id to continue."),
-      h("div", {style: {...row, justifyContent: "flex-end"}},
-        h(A.Button, {variant: "danger"}, "Calibrate"))))),
-  },
+  maps_logistics: {...mapsLogistics},
+  iot_control: {...iotControl},
   agent_ai: {...agentAi},
   project_crm_erp: {...projectCrmErp},
   education: {
@@ -317,24 +233,5 @@ export default {
       h(A.MessageList, {messages: [{id: "1", author: "Curator", time: "09:21",
         body: "The yellow is doing the work. Keep it.", avatar: {fallback: "CU"}}]})))),
   },
-  observability_ops: {
-    uses: ["Card", "KPI", "Alert", "LogStream", "Button"],
-    code: `<Card>
-  <KPI label="p95 latency" value="284 ms" trend="+38 ms" />
-  <Alert variant="danger" title="Error rate above 2%">
-    Started 09:12. The runbook is linked from the alert, not from memory.
-  </Alert>
-  <LogStream lines={tail} />
-  <Button variant="outline">Pause live tail</Button>
-</Card>`,
-    render: () => h("div", {style: {...wide, ...logCurto}}, h(A.Card, null, h("div", {style: stackApertado},
-      h("div", {style: between}, h(A.KPI, {label: "p95 latency", value: "284 ms", trend: "+38 ms"}),
-        h(A.Button, {variant: "outline"}, "Pause live tail")),
-      // Uma linha: o título já diz o quê, e a hora é o que falta. A frase sobre o runbook é
-      // texto da receita, não da prévia — e custava 22px num vão que estourava em 8.
-      h(A.Alert, {variant: "danger", title: "Error rate above 2%"}, "Started 09:12."),
-      h(A.LogStream, {lines: [
-        {time: "09:12:41", level: "error", text: "upstream timeout after 30s"},
-        {time: "09:12:44", level: "warn", text: "retry 1 of 3"}]})))),
-  },
+  observability_ops: {...observabilityOps},
 };
