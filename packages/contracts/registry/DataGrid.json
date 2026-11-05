@@ -216,9 +216,15 @@
     },
     {
       "name": "stickyHeader",
+      "type": "boolean | \"page\"",
+      "default": "false",
+      "description": "Pins the header — and the filter row with it — while the body scrolls. It also gives the scroll box a height, because it has to: the wrapper is the scroll container, and a box with no ceiling never scrolls inside itself, so the header would never have anything to detach from. The ceiling is `--datagrid-max-h` (60vh by default), set in CSS rather than as a prop — only the page knows how much screen it can spare, and a height is not a number this library accepts as an API. With \"page\", the header pins to the top of the PAGE instead, right under whatever stays fixed there (the AppShell bar, a site header): the box gets no ceiling and no scroll of its own top to bottom, so the page has a single scroll. The grid measures as the page scrolls and moves the header cells with translate — CSS alone cannot do it, because the box still scrolls sideways and a sticky element only sticks to its nearest scroll container. The header stops at the end of the grid, with the last row still in view."
+    },
+    {
+      "name": "dividers",
       "type": "boolean",
       "default": "false",
-      "description": "Pins the header — and the filter row with it — while the body scrolls. It also gives the scroll box a height, because it has to: the wrapper is the scroll container, and a box with no ceiling never scrolls inside itself, so the header would never have anything to detach from. The ceiling is `--datagrid-max-h` (60vh by default), set in CSS rather than as a prop — only the page knows how much screen it can spare, and a height is not a number this library accepts as an API."
+      "description": "A light line between the body rows, none after the last — the frame stays. The line is the text color at 10%, the same light line as the outline card, and no measurement changes. A named exception to the no-line rule, drawn only when the app asks for it; the Ember brand stays without it."
     },
     {
       "name": "hideableColumns",

@@ -82,6 +82,10 @@ const PROP_CSS = /(?<![\w-])(border(?:-(?:top|right|bottom|left|block|inline)(?:
 // 3:1 da WCAG 1.4.11. Fora dessa preferência, o mesmo contorno reprova.
 const LINHA_PERMITIDA_CSS: {seletor: string; prop: string; valor?: string; media?: string}[] = [
   {seletor: ".card-outline", prop: "border-color"},
+  // A LINHA ENTRE AS FILEIRAS (MNT-38, `dividers` na `Table` e na `DataGrid`, aprovada em 05/11/2026): só quando o app
+  // escolhe, só a cor da borda de baixo que já existe, e só com a linha clara (o texto a 10%). A Ember fica fora.
+  {seletor: ':is(.table.table-dividers:not(.table-rows),.datagrid-dividers .table-wrap table) tbody tr:not(:last-child) > :is(td,th):where(:not([data-brand="ember"] *))',
+    prop: "border-bottom-color", valor: "color-mix(in oklab,var(--foreground) 10%,transparent)"},
   // O botão ligado CINZA (o `neutral`, ADR-0084) é o mais discreto, e ganha o contorno de 3:1 com "aumentar contraste" —
   // a mesma exceção dos campos, só nessa preferência e só com a cor dela.
   {seletor: ':is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"])',
@@ -259,6 +263,12 @@ describe("sem linha — nenhuma peça da Aurea desenha borda (ADR-0072)", () => 
     expect(linhasNoCss(".card-outline:hover { border-color:var(--primary); }", "x")).toHaveLength(1);
     expect(linhasNoCss(".card-outline { box-shadow:inset 0 0 0 1px var(--border); }", "x")).toHaveLength(1);
     expect(linhasNoCss(".card { border-color:color-mix(in oklab,var(--foreground) 10%,transparent); }", "x")).toHaveLength(1);
+    // A linha entre as fileiras (MNT-38): só na regra do `dividers`, só a borda de baixo e só a linha clara.
+    const fileiras = ':is(.table.table-dividers:not(.table-rows),.datagrid-dividers .table-wrap table) tbody tr:not(:last-child) > :is(td,th):where(:not([data-brand="ember"] *))';
+    expect(linhasNoCss(`${fileiras} { border-bottom-color:color-mix(in oklab,var(--foreground) 10%,transparent); }`, "x")).toEqual([]);
+    expect(linhasNoCss(`${fileiras} { border-bottom-color:var(--border-strong); }`, "x")).toHaveLength(1);
+    expect(linhasNoCss(`${fileiras} { border-top-color:color-mix(in oklab,var(--foreground) 10%,transparent); }`, "x")).toHaveLength(1);
+    expect(linhasNoCss(".table tbody td { border-bottom-color:color-mix(in oklab,var(--foreground) 10%,transparent); }", "x")).toHaveLength(1);
     // O contorno do "aumentar contraste" (ADR-0083) vale SÓ dentro do `@media (prefers-contrast:more)`, só com a cor dele.
     const campos = ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not([data-brand="ember"],[data-brand="ember"] *))';
     expect(linhasNoCss(`@media (prefers-contrast:more) { ${campos} { border-color:var(--input-strong); } }`, "x")).toEqual([]);

@@ -405,7 +405,9 @@ test.describe("catálogo · varredura de todas as páginas", () => {
             // (o nativo marca o mesmo atributo no navegador). Só o anel passa: a borda, nem aqui (`linhas` mede as duas,
             // e o filtro abaixo descarta só o anel).
             const deAro = !!e.closest('[data-segment-style="ring"],[data-current-style="ring"],[data-current-style="white-ring"],[data-current-style="bar-ring"],[data-timeline-style="ring"],[data-ring="true"]');
-            const conta = (x: string) => !(deAro && x.startsWith("anel"));
+            // A LINHA ENTRE AS FILEIRAS (MNT-38): a borda de BAIXO da célula do corpo, só numa tabela que escolheu `dividers`.
+            const entreFileiras = !!e.closest(".table.table-dividers tbody, .datagrid-dividers .table-wrap tbody") && /^(td|th)$/i.test(e.tagName);
+            const conta = (x: string) => !(deAro && x.startsWith("anel")) && !(entreFileiras && x.startsWith("borda bottom"));
             for (const x of linhas(getComputedStyle(e))) if (conta(x)) out.push(`${nome(e)}: ${x}`);
             for (const ps of ["::before", "::after"]) {
               const s = getComputedStyle(e, ps);

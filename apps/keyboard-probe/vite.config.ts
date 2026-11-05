@@ -16,6 +16,7 @@ export default defineConfig({
   // desde 27/10/2026 (as cores, passo A — ADR-0083), o da paleta: as peças que a paleta da 1.0 toca (`paleta.html`).
   // E o dos estilos (o passo B — ADR-0084): as peças em todos os estilos novos (`estilos.html`). E desde 30/10/2026 (MNT-36,
   // ADR-0087), o da lateral de contraste, com o botão de recolher do shell (`contraste.html`). E o da ponta da barra de cima
-  // (MNT-37): o `topbarActions` com a chave de tema (`ponta.html`).
-  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html", rede3: "rede3.html", rede4: "rede4.html", rede5: "rede5.html", "lote-u": "lote-u.html", lateral: "lateral.html", paleta: "paleta.html", estilos: "estilos.html", contraste: "contraste.html", ponta: "ponta.html"}}},
+  // (MNT-37): o `topbarActions` com a chave de tema (`ponta.html`). E o das tabelas (MNT-38, S-10, S-02, 05/11/2026): a linha
+  // entre as fileiras, o cabeçalho preso à página e o título dentro da moldura (`tabelas.html`).
+  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html", rede3: "rede3.html", rede4: "rede4.html", rede5: "rede5.html", "lote-u": "lote-u.html", lateral: "lateral.html", paleta: "paleta.html", estilos: "estilos.html", contraste: "contraste.html", ponta: "ponta.html", tabelas: "tabelas.html"}}},
 });

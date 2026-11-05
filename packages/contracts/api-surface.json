@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 10,
     "aliasesLiterais": 119,
-    "propsDistintas": 407
+    "propsDistintas": 408
   },
   "aliases": {
     "ButtonVariant": {
@@ -4795,6 +4795,12 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "dividers",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         }
@@ -4966,6 +4972,12 @@
             },
             {
               "name": "stickyHeader",
+              "optional": true,
+              "type": "boolean | \"page\"",
+              "values": null
+            },
+            {
+              "name": "dividers",
               "optional": true,
               "type": "boolean",
               "values": null
