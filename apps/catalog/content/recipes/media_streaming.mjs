@@ -65,10 +65,10 @@ export function Player({episodes, chapters}) {
       <ListBox label="Chapters" selectionMode="single" value={[chapter]} onValueChange={v => v[0] && setChapter(v[0])}
         items={chapters.map(c => ({id: c.id, label: c.label, description: c.start}))} />
 
-      <aside>
+      <div>
         <DataList items={[{term: "Resume at", value: playing.resumeAt}, {term: "Next up", value: queue[0]?.title}]} />
         <SortableList label="Up next" items={queue} onReorder={move} />
-      </aside>
+      </div>
     </Card>
   );
 }`,

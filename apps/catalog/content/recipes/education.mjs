@@ -70,9 +70,9 @@ export function Lesson({lessons, parts, question}) {
       <Button appearance="soft" tone="brand" disabled={!answer} onClick={() => setChecked(true)}>Check the answer</Button>
       {checked && <Alert variant={right ? "success" : "warning"} title={right ? "Right" : "Not quite"}>{question.why}</Alert>}
 
-      <aside>
+      <div>
         <Progress value={done / lessons.length * 100} label="Module progress" showLabel />
-      </aside>
+      </div>
     </Card>
   );
 }`,

@@ -77,10 +77,10 @@ export function Catalog({initial, remove}) {
             onRowSelectionChange={s => setSelected(Object.keys(s).filter(k => s[k]))}
             columns={[{accessorKey: "caption", header: "Name"}, {accessorKey: "size", header: "Size"}]} />}
 
-      <aside>
+      <div>
         <Image src={item.src} alt={item.alt} ratio="3/2" />
         <DataList items={[{term: "Type", value: item.kind}, {term: "Size", value: item.size}]} />
-      </aside>
+      </div>
 
       <ConfirmDialog open={confirm} destructive title={\`Remove \${selected.length} items?\`} confirmLabel="Remove"
         onConfirm={() => { remove(selected); setItems(i => i.filter(x => !selected.includes(x.id))); setSelected([]); setConfirm(false); }}

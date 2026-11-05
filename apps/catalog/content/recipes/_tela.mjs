@@ -33,7 +33,9 @@ export function Tela({icone, trilha = [], id, titulo, estado, propriedades = [],
     h("div", {className: "rcp-tela-corpo"},
       h("div", {className: "rcp-tela-principal"}, children),
       lado ? h("span", {className: "rcp-tela-divisao", role: "presentation"}) : null,
-      lado ? h("aside", {className: "rcp-tela-lado"}, ...[].concat(lado).flatMap((x, n) => n ? [h(A.Separator, {key: `d${n}`, spacing: "none"}), x] : [x])) : null),
+      // Um bloco comum, e não `<aside>`: a tela mora dentro da página, e o marco "complementary" só vale no nível de cima
+      // (o axe recusa — achado na varredura de 05/11/2026).
+      lado ? h("div", {className: "rcp-tela-lado"}, ...[].concat(lado).flatMap((x, n) => n ? [h(A.Separator, {key: `d${n}`, spacing: "none"}), x] : [x])) : null),
     rodape || rodapeAcoes ? h(A.Separator, {spacing: "none"}) : null,
     rodape || rodapeAcoes ? h("footer", {style: {display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "var(--space-3)"}},
       rodape ? h(A.Text, {type: "body-sm", tone: "muted"}, rodape) : h("span"),
@@ -52,5 +54,7 @@ export const Numero = props => h(A.Card, {variant: "inset"}, h(A.KPI, {variant: 
 // Um grupo do corpo numa caixa cinza, com o título pequeno em cima (o "Activity", o "Tool calls"). ⚠ O botão secundário e o
 // terciário têm a MESMA cor da caixa cinza (`--secondary`) e somem dentro dela: aqui dentro, o botão que não é o principal
 // usa `appearance="soft" tone="brand"` (achado de 05/11/2026, o mesmo problema dos números soltos).
-export const Grupo = ({titulo, children}) => h(A.Card, {variant: "inset"}, h("div", {style: {display: "grid", gap: "var(--space-3)", minInlineSize: 0}},
+// `contorno`: a peça de fundo translúcido (a conversa, o registro, a caixa de envio) clareia sobre a caixa cinza e o texto
+// apagado dela perde o contraste (o axe achou, 05/11/2026) — esse grupo vai no cartão de contorno, que tem o fundo do cartão.
+export const Grupo = ({titulo, contorno, children}) => h(A.Card, {variant: contorno ? "outline" : "inset"}, h("div", {style: {display: "grid", gap: "var(--space-3)", minInlineSize: 0}},
   titulo ? h(A.Text, {type: "body-xs", tone: "muted", weight: "semibold"}, titulo) : null, children));

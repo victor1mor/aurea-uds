@@ -18,6 +18,8 @@ const ARQUIVOS = [
 ];
 const tamanho = b => b > 1e6 ? `${(b / 1e6).toFixed(1)} MB` : `${Math.max(1, Math.round(b / 1e3))} KB`;
 const espera = ms => new Promise(r => setTimeout(r, ms));
+// O id do arquivo enviado sai de um contador (e não do relógio, que o validador recusa no conteúdo do catálogo).
+let enviados = 0;
 
 function Files() {
   const [pasta, setPasta] = useState("marks");
@@ -29,7 +31,7 @@ function Files() {
   // O envio de exemplo: o progresso anda em passos e o arquivo entra na grade da pasta aberta.
   const enviar = async (file, {onProgress, signal}) => {
     for (let i = 1; i <= 10; i++) { if (signal.aborted) throw new Error("canceled"); await espera(120); onProgress(i / 10); }
-    const id = `n${Date.now()}`;
+    const id = `n${++enviados}`;
     setArquivos(as => [...as, {id, folder: pasta, name: file.name, size: tamanho(file.size), state: "uploaded", progress: 100, sum: "not computed yet"}]);
     setEscolhido(id);
   };
@@ -57,7 +59,7 @@ function Files() {
         onClick: () => muda(f.id, {state: "verified", sum: f.sum === "not computed yet" ? "sha256 7d1e…aa04" : f.sum})}, "Verify checksum") : null].filter(Boolean),
     rodape: "Only the actions the file's phase allows are shown: a transfer can be paused, a finished file can be verified."},
     h(DataGrid, {label: `Files in ${nomeDaPasta(pasta)}`, data: daPasta, columns: colunas, getRowId: a => a.id}),
-    h(Grupo, {titulo: "Upload"}, h(A.FileInput, {label: `Add to ${nomeDaPasta(pasta)}`, hint: "Any file, up to 10 MB", maxSize: 10000000, multiple: true, upload: enviar})));
+    h(Grupo, {titulo: "Upload", contorno: true}, h(A.FileInput, {label: `Add to ${nomeDaPasta(pasta)}`, hint: "Any file, up to 10 MB", maxSize: 10000000, multiple: true, upload: enviar})));
 }
 
 export default {
@@ -84,7 +86,7 @@ export function Files({folders, initialFiles, put}) {
           {accessorKey: "size", header: "Size"},
           {accessorKey: "state", header: "State", cell: ({getValue}) => <Status variant={variant[getValue()]}>{label[getValue()]}</Status>},
         ]} />
-      <Card variant="inset">
+      <Card variant="outline">
         <FileInput label="Add files" multiple maxSize={10_000_000}
           upload={async (f, {onProgress, signal}) => {
             await put(f, {onProgress, signal});
@@ -92,11 +94,11 @@ export function Files({folders, initialFiles, put}) {
           }} />
       </Card>
 
-      <aside>
+      <div>
         <TreeView label="Folders" items={folders} selectedId={folder} onSelect={n => setFolder(n.id)} />
         {file && <DataList items={[{term: "Size", value: file.size}, {term: "Checksum", value: <Code>{file.sum}</Code>}]} />}
         {file?.state === "transferring" && <Progress value={file.progress} label="Transferring" showLabel />}
-      </aside>
+      </div>
     </Card>
   );
 }`,

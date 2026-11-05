@@ -45,7 +45,7 @@ function Workbench() {
     h(Grupo, {titulo: "Editor"}, editando
       ? h(CodeEditor, {key: aberto, defaultValue: textos[aberto], ariaLabel: `Edit ${aberto}`, onChange: t => setTextos(x => ({...x, [aberto]: t}))})
       : h(A.CodeBlock, {key: aberto, language: ARQUIVOS[aberto].lang, filename: aberto, copyable: true, lineNumbers: true}, textos[aberto])),
-    h(Grupo, {titulo: "Terminal"}, h(A.LogStream, {lines: linhas})));
+    h(Grupo, {titulo: "Terminal", contorno: true}, h(A.LogStream, {lines: linhas})));
 }
 
 export default {
@@ -73,12 +73,12 @@ export function Workbench({files, tree, runTests}) {
           ? <CodeEditor key={open} defaultValue={files[open]} ariaLabel={\`Edit \${open}\`} />
           : <CodeBlock key={open} filename={open} copyable lineNumbers>{files[open]}</CodeBlock>}
       </Card>
-      <Card variant="inset"><LogStream lines={lines} /></Card>
+      <Card variant="outline"><LogStream lines={lines} /></Card>
 
-      <aside>
+      <div>
         <TreeView label="Files" items={tree} selectedId={open} onSelect={node => files[node.id] && setOpen(node.id)} />
         <DataList items={[{term: "Lines", value: files[open].split("\\n").length}]} />
-      </aside>
+      </div>
     </Card>
   );
 }`,

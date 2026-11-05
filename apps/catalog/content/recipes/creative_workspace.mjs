@@ -37,7 +37,7 @@ function Review() {
     rodape: "Every comment belongs to one version, and every canvas action has a version you can go back to."},
     h(Grupo, {titulo: `${v.label} · ${v.time}`}, h(A.Image, {src: arte(v.cor, v.forma), alt: `Cover artwork, ${v.label}`, ratio: "16/9"})),
     h(Grupo, {titulo: "Palette"}, h(A.ColorSwatch, {label: "Palette", name: "palette", options: PALETA, value: cor, onChange: e => setCor(e.target.value), showLabels: true})),
-    h(Grupo, {titulo: `Comments on ${versao}`},
+    h(Grupo, {titulo: `Comments on ${versao}`, contorno: true},
       comentarios[versao].length ? h(A.MessageList, {label: `Comments on ${versao}`, messages: comentarios[versao]})
         : h(A.Text, {tone: "muted"}, "No comments on this version yet."),
       h(A.MessageComposer, {label: `Comment on ${versao}`, placeholder: "Leave a comment…", onSend: comentar})));
@@ -68,12 +68,12 @@ export function Review({art, versions, initialComments, approve}) {
       <MessageComposer label={\`Comment on \${version}\`}
         onSend={body => setComments(c => ({...c, [version]: [...c[version], {id: crypto.randomUUID(), author: "You", body}]}))} />
 
-      <aside>
+      <div>
         <RadioGroup label="Version" labelHidden value={version} onValueChange={setVersion}>
           {versions.map(x => <Radio key={x.id} value={x.id} label={x.label} description={x.time} />)}
         </RadioGroup>
         <DataList items={[{term: "Size", value: art.size}, {term: "Format", value: art.format}]} />
-      </aside>
+      </div>
     </Card>
   );
 }`,

@@ -73,10 +73,10 @@ export function ArticleEditor({article, save, publish}) {
       ]} />
       <TagGroup label="Tags" items={tags} onRemove={ids => setTags(t => t.filter(x => !ids.includes(x.id)))} />
 
-      <aside>
+      <div>
         <DataList items={[{term: "Words", value: words}, {term: "Slug", value: article.slug}]} />
         <Timeline items={article.versions} />
-      </aside>
+      </div>
     </Card>
   );
 }`,

@@ -79,9 +79,9 @@ export function Checkout({order}) {
         <Timeline variant="latest" items={events} />
       </Card>
 
-      <aside>
+      <div>
         <DataList items={[{term: "Order", value: <Code>{order.id}</Code>}, {term: "Idempotency key", value: <Code>{order.id}</Code>}]} />
-      </aside>
+      </div>
 
       <ConfirmDialog open={confirm} destructive title={\`Refund \${order.total}?\`} confirmLabel="Refund"
         description="The charge and this refund both stay in the history."

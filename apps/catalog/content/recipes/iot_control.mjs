@@ -87,11 +87,11 @@ export function Device({fleet, limit, calibrate}) {
       <Switch label="Night mode" description="Halves the pump speed at night" />
       <Timeline items={d.history} />
 
-      <aside>
+      <div>
         <RadioGroup label="Device" labelHidden value={id} onValueChange={setId}>
           {Object.entries(fleet).map(([key, x]) => <Radio key={key} value={key} label={x.name} description={x.state} />)}
         </RadioGroup>
-      </aside>
+      </div>
 
       <ConfirmDialog open={confirm} destructive title={\`Calibrate \${d.name}?\`} confirmLabel="Calibrate"
         description="This writes to the device and restarts its sensors."

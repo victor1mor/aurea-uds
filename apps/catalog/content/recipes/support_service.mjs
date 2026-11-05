@@ -57,7 +57,7 @@ function Inbox() {
     h(DataGrid, {label: "Cases", data: visiveis, columns: colunas, getRowId: c => c.id, filterable: true}),
     // O caso aberto numa caixa ABAIXO da grade, e não ao lado da linha (o detalhe lado a lado da grade passava 16 da coluna a
     // 768 — achado pela medição de 05/11/2026).
-    caso ? h(Grupo, {titulo: `Case #${caso.id} · ${caso.subject}`}, detalhe(caso)) : null);
+    caso ? h(Grupo, {titulo: `Case #${caso.id} · ${caso.subject}`, contorno: true}, detalhe(caso)) : null);
 }
 
 export default {
@@ -92,7 +92,7 @@ export function Inbox({initialCases, initialThreads}) {
           {accessorKey: "state", header: "State", cell: ({getValue}) => <Status variant={variant[getValue()]}>{label[getValue()]}</Status>},
         ]}
       />
-      <Card variant="inset">
+      <Card variant="outline">
         <MessageList label={\`Case \${current.id}\`} messages={threads[current.id]} />
         <MessageComposer label={\`Reply to \${current.customer}\`} onSend={text => reply(current.id, text)} />
         <Button variant="danger-ghost" onClick={() => setState(current.id, "escalated")}>Escalate</Button>

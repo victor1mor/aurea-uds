@@ -55,7 +55,7 @@ function OnCall() {
       {id: "a", name: "checkout-api", state: fase === "ok" ? "operational" : "degraded", detail: fase === "ok" ? "0.3% errors" : "2.4% errors"},
       {id: "b", name: "payments", state: fase === "ok" ? "operational" : "down", detail: fase === "ok" ? "180 ms" : "timeouts"},
       {id: "c", name: "catalog", state: "operational", detail: "90 ms"}, {id: "d", name: "search", state: "maintenance", detail: "until 10:00"}]})),
-    h(Grupo, {titulo: "Live tail"},
+    h(Grupo, {titulo: "Live tail", contorno: true},
       h("div", null, h(A.Button, {appearance: "soft", tone: "brand", size: "sm", leadingIcon: pausado ? "play" : "pause", onClick: () => setPausado(p => !p)}, pausado ? "Resume live tail" : "Pause live tail")),
       h(A.LogStream, {lines: registro})));
 }
@@ -94,15 +94,15 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
         </Chart>
       </Card>
       <Card variant="inset"><HealthMatrix label="Services" entries={services} /></Card>
-      <Card variant="inset">
+      <Card variant="outline">
         <Button appearance="soft" tone="brand" size="sm" onClick={() => setPaused(p => !p)}>{paused ? "Resume live tail" : "Pause live tail"}</Button>
         <LogStream lines={tail} />
       </Card>
 
-      <aside>
+      <div>
         <DataList items={[{term: "Severity", value: incident.severity}, {term: "Owner", value: incident.owner}]} />
         <EventStream label="Events" events={events} />
-      </aside>
+      </div>
     </Card>
   );
 }`,

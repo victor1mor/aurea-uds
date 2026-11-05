@@ -7,7 +7,7 @@
 // mandar uma mensagem entra na conversa. O primeiro desenho (o HTML pronto) é o estado "esperando aprovação".
 import {createElement as h, useState} from "react";
 import * as A from "../../../../packages/react/dist/index.js";
-import {Tela, Propriedades} from "./_tela.mjs";
+import {Tela, Propriedades, Grupo} from "./_tela.mjs";
 
 const CONVERSA = [
   {id: "1", author: "You", time: "09:13", direction: "outgoing", body: "Raise the contrast of the muted text in both themes."},
@@ -43,15 +43,16 @@ function AgentConsole() {
       h(A.CostMeter, {key: "c", label: "Spend this month", spent: 84.2, limit: 100, softLimit: 80, period: "November",
         segments: [{id: "i", label: "Input", amount: 31.4}, {id: "o", label: "Output", amount: 49.7}, {id: "k", label: "Cache read", amount: 3.1}]})],
     rodape: "No change is written without an approval. Cancelling also leaves a receipt."},
-    h(A.Card, {variant: "inset"}, h("div", {style: {display: "grid", gap: "var(--space-4)"}},
+    h(A.Card, {variant: "outline"}, h("div", {style: {display: "grid", gap: "var(--space-4)"}},
       h(A.Text, {type: "body-xs", tone: "muted", weight: "semibold"}, "Activity"),
       h(A.MessageList, {label: "Conversation", messages: conversa}),
-      h(A.MessageComposer, {label: "Message the agent", placeholder: "Ask for a change…", onSend: texto => fala("You", texto, {direction: "outgoing"})}),
-      h(A.HumanApproval, {title: "Write 4 values to 2 files", risk: "medium", decision: decisao,
+      h(A.MessageComposer, {label: "Message the agent", placeholder: "Ask for a change…", onSend: texto => fala("You", texto, {direction: "outgoing"})}))),
+    // O portão numa caixa cinza própria: ele é um cartão, e no cartão de contorno da conversa a caixa dele sumia.
+    h(Grupo, {titulo: "Approval"}, h(A.HumanApproval, {title: "Write 4 values to 2 files", risk: "medium", decision: decisao,
       description: "The agent will change the muted text colour in both themes.",
       details: [{term: "Files", value: "aurea.css, tokens.json"}, {term: "Values", value: "4"}, {term: "Scope", value: "light and dark"}],
       reasoning: "The muted text measured 4.1:1 on the page; the change brings it to 4.7:1.",
-      onApprove: aprovar, onDeny: negar}))),
+      onApprove: aprovar, onDeny: negar})),
     h(A.Card, {variant: "inset"}, h("div", {style: {display: "grid", gap: "var(--space-3)"}},
       h(A.Text, {type: "body-xs", tone: "muted", weight: "semibold"}, "Tool calls"),
       h(A.TraceTimeline, {label: "Run 184, step by step", spans: PASSOS}))));
@@ -82,9 +83,11 @@ export function AgentConsole({run, turns, spans, spend}) {
       </header>
       <Separator />
 
-      <Card variant="inset">
+      <Card variant="outline">
         <MessageList label="Conversation" messages={messages} />
         <MessageComposer label="Message the agent" onSend={text => say("You", text)} />
+      </Card>
+      <Card variant="inset">
         <HumanApproval
           title="Write 4 values to 2 files"
           risk="medium"
@@ -98,11 +101,11 @@ export function AgentConsole({run, turns, spans, spend}) {
         <TraceTimeline label={\`Run \${run.id}, step by step\`} spans={spans} />
       </Card>
 
-      <aside>
+      <div>
         <DataList items={[{term: "Agent", value: run.agent}, {term: "Resume from", value: run.checkpoint}]} />
         <Separator />
         <CostMeter label="Spend this month" spent={spend.total} limit={100} softLimit={80} segments={spend.segments} />
-      </aside>
+      </div>
 
       <Separator />
 

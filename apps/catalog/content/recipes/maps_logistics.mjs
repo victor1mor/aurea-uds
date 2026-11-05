@@ -77,10 +77,10 @@ export function Route({stops}) {
       <DataGrid label="Stops" data={stops} getRowId={s => s.id}
         columns={[{accessorKey: "stop", header: "Stop"}, {accessorKey: "address", header: "Address"}, {accessorKey: "eta", header: "ETA"}]} />
 
-      <aside>
+      <div>
         <DataList items={[{term: "Address", value: stop.address}, {term: "Note", value: stop.note}]} />
         <Alert variant="warning" title="Position 3 min old">The ETA uses the last known position.</Alert>
-      </aside>
+      </div>
     </Card>
   );
 }`,

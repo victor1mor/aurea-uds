@@ -44,7 +44,7 @@ function Chat() {
       h(Propriedades, {key: "p", titulo: "Here now", itens: [{term: "Analyst", value: h(A.Status, {variant: "online"}, "online")},
         {term: "Curator", value: h(A.Status, {variant: "busy"}, "in a call")}, {term: "Writer", value: h(A.Status, {variant: "away"}, "away")}]})],
     rodape: "A new message is announced once, off-screen; the conversation stays readable when the connection drops."},
-    h(Grupo, {titulo: `Conversation in ${atual.nome}`},
+    h(Grupo, {titulo: `Conversation in ${atual.nome}`, contorno: true},
       h(A.MessageList, {label: `Conversation in ${atual.nome}`, messages: conversas[canal]}),
       ultima ? h("div", null, h(A.Button, {appearance: "soft", tone: "brand", size: "sm", leadingIcon: "arrow-bend-up-left", onClick: () => setCitada(ultima)}, `Reply to ${ultima.author}`)) : null,
       h(A.MessageComposer, {label: `Message ${atual.nome}`, placeholder: `Message ${atual.nome}…`, attach: true, onSend: mandar,
@@ -77,11 +77,11 @@ export function Chat({channels, threads: initialThreads, mentions}) {
       <Button appearance="soft" tone="brand" size="sm" onClick={() => setReplyTo(threads[channel].at(-1))}>Reply</Button>
       <MessageComposer label={\`Message \${channel}\`} attach onSend={send} replyTo={replyTo} onCancelReply={() => setReplyTo(null)} />
 
-      <aside>
+      <div>
         <ListBox label="Channels" selectionMode="single" value={[channel]} onValueChange={v => v[0] && setChannel(v[0])}
           items={channels.map(c => ({id: c.id, label: c.name, description: c.unread ? \`\${c.unread} unread\` : "all read"}))} />
         <DataList items={[{term: "Analyst", value: <Status variant="online">online</Status>}]} />
-      </aside>
+      </div>
     </Card>
   );
 }`,

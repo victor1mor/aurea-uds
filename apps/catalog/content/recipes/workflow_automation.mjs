@@ -42,7 +42,7 @@ function Automation() {
     rodape: "Every step can be reached from the list too: the flow is a picture of the order, not the only way in."},
     h(Grupo, {titulo: "Flow"}, h(DependencyGraph, {label: "Invoice sync, step by step", orientation: "vertical", height: "24rem",
       nodes: PASSOS.map(({id, label, kind}) => ({id, label, kind})), edges: LIGACOES, selectedId: escolhido, onSelect: id => id && setEscolhido(id)})),
-    h(Grupo, {titulo: "Runs"}, h(A.LogStream, {lines: linhas})),
+    h(Grupo, {titulo: "Runs", contorno: true}, h(A.LogStream, {lines: linhas})),
     // As variáveis no corpo, que é largo (na coluna, o selo do segredo passava 30 da borda — o Victor achou, 05/11/2026).
     h(Grupo, {titulo: "Variables"}, h(A.DataList, {items: [{term: "BILLING_URL", value: h(A.Code, null, "billing.example.com")},
       {term: "BILLING_TOKEN", value: h(A.Badge, {tone: "info"}, "secret · never shown")}]})));
@@ -75,13 +75,13 @@ export function Automation({flow, steps, edges, runLog, run}) {
         <DependencyGraph label={\`\${flow.name}, step by step\`} orientation="vertical" height="24rem"
           nodes={steps} edges={edges} selectedId={selected} onSelect={id => id && setSelected(id)} />
       </Card>
-      <Card variant="inset">
+      <Card variant="outline">
         <LogStream lines={lines} />
       </Card>
 
-      <aside>
+      <div>
         <DataList items={[{term: "Step", value: step.label}, {term: "Does", value: <Code>{step.detail}</Code>}]} />
-      </aside>
+      </div>
     </Card>
   );
 }`,

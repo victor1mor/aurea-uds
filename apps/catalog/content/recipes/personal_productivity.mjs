@@ -14,13 +14,16 @@ const TAREFAS = [
   {id: "t4", label: "Book the demo for Thursday", done: false},
 ];
 
+// O id da tarefa nova sai de um contador (e não do relógio, que o validador recusa no conteúdo do catálogo).
+let criadas = TAREFAS.length;
+
 function Today() {
   const [tarefas, setTarefas] = useState(TAREFAS);
   const [nova, setNova] = useState("");
   const [semRede, setSemRede] = useState(false);
   const [pendentes, setPendentes] = useState(0);
   const muda = f => { setTarefas(f); if (semRede) setPendentes(n => n + 1); };
-  const por = () => { if (!nova.trim()) return; muda(ts => [...ts, {id: `t${ts.length + 1}${Date.now()}`, label: nova.trim(), done: false}]); setNova(""); };
+  const por = () => { if (!nova.trim()) return; muda(ts => [...ts, {id: `t${++criadas}`, label: nova.trim(), done: false}]); setNova(""); };
   const marcar = (id, done) => muda(ts => ts.map(t => t.id === id ? {...t, done} : t));
   const abertas = tarefas.filter(t => !t.done);
   const mover = (de, para) => muda(ts => {
@@ -82,9 +85,9 @@ export function Today({initial}) {
       ))}
       <SortableList label="Open tasks by priority" items={open} onReorder={move} />
 
-      <aside>
+      <div>
         <ProgressCircle label="Done today" value={(tasks.length - open.length) / tasks.length * 100} size="lg" />
-      </aside>
+      </div>
     </Card>
   );
 }`,

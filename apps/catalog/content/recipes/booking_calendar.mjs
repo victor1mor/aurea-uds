@@ -49,7 +49,7 @@ export default {
 import {Alert, Badge, Button, Card, DataList, Field, Heading, Input, Radio, RadioGroup, Separator} from "@aurea-uds/react";
 import {Calendar} from "@aurea-uds/react/calendar";
 
-export function Booking({slotsFor, timeZone}) {
+export function Booking({slotsFor, timeZone, today}) {
   const [day, setDay] = useState(new Date(2026, 10, 12));
   const [time, setTime] = useState(slotsFor(day)[0]);
   const [name, setName] = useState("");
@@ -66,15 +66,15 @@ export function Booking({slotsFor, timeZone}) {
 
       <Calendar mode="single" label="Day" selected={day}
         onSelect={d => { setDay(d); setTime(slotsFor(d)[0]); }}
-        disabled={[{before: new Date()}, {dayOfWeek: [0, 6]}]} />
+        disabled={[{before: today}, {dayOfWeek: [0, 6]}]} />
       <RadioGroup label={\`Free on \${format(day)}\`} variant="card" value={time} onValueChange={setTime}>
         {slotsFor(day).map(t => <Radio key={t} value={t} label={t} description="30 min" />)}
       </RadioGroup>
       <Field label="Your name"><Input value={name} onChange={e => setName(e.target.value)} /></Field>
 
-      <aside>
+      <div>
         <DataList items={[{term: "Day", value: format(day)}, {term: "Time", value: time}]} />
-      </aside>
+      </div>
       <Separator />
       <footer>
         <Button variant="primary" disabled={!name || booked} onClick={() => setBooked(true)}>Confirm booking</Button>
