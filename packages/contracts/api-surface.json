@@ -7846,6 +7846,21 @@
                 "surface",
                 "plain"
               ]
+            },
+            {
+              "name": "highContrast",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "textSize",
+              "optional": true,
+              "type": "\"md\" | \"lg\"",
+              "values": [
+                "md",
+                "lg"
+              ]
             }
           ]
         },

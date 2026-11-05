@@ -41,7 +41,8 @@
         "brand.emerald.dark": "[data-brand=\"emerald\"][data-theme=\"dark\"]",
         "brand.emerald.light": "[data-brand=\"emerald\"][data-theme=\"light\"]",
         "brand.lime.dark": "[data-brand=\"lime\"][data-theme=\"dark\"]",
-        "brand.lime.light": "[data-brand=\"lime\"][data-theme=\"light\"]"
+        "brand.lime.light": "[data-brand=\"lime\"][data-theme=\"light\"]",
+        "textSize.lg": "[data-text=\"lg\"]"
       }
     }
   },
@@ -11456,6 +11457,64 @@
           "value": 2.0,
           "unit": "rem"
         }
+      }
+    }
+  },
+  "textSize": {
+    "lg": {
+      "$description": "O TEXTO GRANDE no app inteiro (o MNT-30, bloco 3, ADR-0090): liga com `data-text=\"lg\"` em qualquer contêiner, a raiz do app inclusive, ou com o `textSize=\"lg\"` do `AppShell`. Cada degrau da letra sobe 2 (12 → 14, 14 → 16…) e o controle médio vai ao alvo de toque (36 → 44). A forma B do esboço, aprovada na bancada pelo Victor em 04/11/2026.",
+      "text-xs": {
+        "$type": "dimension",
+        "$value": {
+          "value": 0.875,
+          "unit": "rem"
+        },
+        "$description": "12 → 14."
+      },
+      "text-sm": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1,
+          "unit": "rem"
+        },
+        "$description": "14 → 16: a letra do corpo."
+      },
+      "text-base": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1.125,
+          "unit": "rem"
+        },
+        "$description": "16 → 18."
+      },
+      "text-lg": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1.25,
+          "unit": "rem"
+        },
+        "$description": "18 → 20."
+      },
+      "text-xl": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1.375,
+          "unit": "rem"
+        },
+        "$description": "20 → 22."
+      },
+      "text-2xl": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1.625,
+          "unit": "rem"
+        },
+        "$description": "24 → 26."
+      },
+      "control-h-md": {
+        "$type": "dimension",
+        "$value": "{target-min}",
+        "$description": "O controle médio no alvo de toque (44, o mesmo em toda densidade): a altura de toque do nativo daria 48 no conforto."
       }
     }
   }

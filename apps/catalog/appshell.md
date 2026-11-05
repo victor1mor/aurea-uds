@@ -87,6 +87,26 @@ topbarVariant="pill" puts the top bar in a capsule that floats over the page, as
 </AppShell>
 ```
 
+### High contrast and large text
+
+highContrast draws an outline on fields, cards and buttons, darkens the supporting text and underlines links; textSize="lg" makes every text step 2px larger and the medium control 44px tall. Both mark the page root, so menus and dialogs match.
+
+```tsx
+<AppShell
+  highContrast
+  textSize="lg"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+>
+  <h1>Inbox</h1>
+  <Field label="Search the inbox">
+    <Input placeholder="Sender or subject" />
+  </Field>
+  <p>Read the <Link href="/help">inbox guide</Link>.</p>
+  <Button variant="primary">New message</Button>
+</AppShell>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -110,6 +130,8 @@ topbarVariant="pill" puts the top bar in a capsule that floats over the page, as
 | `sidebarIndicator` | `"brand" \| "segment" \| "segment-dot" \| "segment-line" \| "subtle"` | brand | How the current item of the sidebar is drawn — the indicator of the Sidebar: brand (the default), segment, segment-dot, segment-line or subtle. |
 | `sidebarPanel` | `"docked" \| "overlay"` | — | Sections with a panel — the panel of the Sidebar: the first level of navItems becomes sections. docked puts the list beside the rail (collapsing hides the list); overlay opens it over the page. |
 | `sidebarContrast` | `boolean` | false | A dark sidebar on any page — the contrast of the Sidebar, forwarded to it: dark on a light page, darker than the page on a dark one. |
+| `highContrast` | `boolean` | false | High contrast across the whole app: an outline on fields, cards and buttons, the supporting text closer to the text, and links always underlined. It marks the shell and the page root (data-contrast="high"), so menus and dialogs, which open outside the shell, match. Every brand. |
+| `textSize` | `"md" \| "lg"` | "md" | Large text across the whole app: every text step 2px larger, and the medium control at the 44px touch target. It marks the shell and the page root (data-text="lg"). Every brand. |
 | `defaultSidebarCollapsed` | `boolean` | — | Starts collapsed without controlling it. The person's choice holds until the window crosses 1280px; then the width decides again. |
 | `onSidebarCollapsedChange` | `(collapsed: boolean) => void` | — | Called on every change — the button, or the width crossing 1280px. Keeping the preference is the app's job, as before. |
 | `children` | `ReactNode` | — | Page content. Rendered inside the <main> the shell owns. |

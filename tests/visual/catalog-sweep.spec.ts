@@ -404,6 +404,9 @@ test.describe("catálogo · varredura de todas as páginas", () => {
             // `ring`, `white-ring` e `bar-ring` da barra de baixo, o ponto `ring` da linha do tempo. Na web e no nativo
             // (o nativo marca o mesmo atributo no navegador). Só o anel passa: a borda, nem aqui (`linhas` mede as duas,
             // e o filtro abaixo descarta só o anel).
+            // O ALTO CONTRASTE QUE O APP LIGA (ADR-0090, 04/11/2026): dentro de `[data-contrast="high"]`, o contorno dos
+            // campos, do cartão e do botão É o modo — a exceção nomeada à ADR-0072. Só nessas peças, e só lá dentro.
+            if (e.closest('[data-contrast="high"]') && e.matches(".input,.textarea,.select,.input-group,.combobox-multi,.card,.btn")) continue;
             const deAro = !!e.closest('[data-segment-style="ring"],[data-current-style="ring"],[data-current-style="white-ring"],[data-current-style="bar-ring"],[data-timeline-style="ring"],[data-ring="true"]');
             const conta = (x: string) => !(deAro && x.startsWith("anel"));
             for (const x of linhas(getComputedStyle(e))) if (conta(x)) out.push(`${nome(e)}: ${x}`);

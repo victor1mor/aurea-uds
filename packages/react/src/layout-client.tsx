@@ -157,7 +157,17 @@ function useLargura(query:string){
 function ProvedorDaLateral({ligado,children,...p}:{ligado:boolean;collapsed:boolean;onCollapsedChange:(v:boolean)=>void;collapsible?:SidebarCollapsible;shortcut:boolean;children?:ReactNode}){
   return ligado?<Sidebar.Provider id={SHELL_NAV_ID} {...p}>{children}</Sidebar.Provider>:<>{children}</>}
 function AppShellSidebarToggle(props:Omit<IconButtonProps,"icon"|"label"|"onClick"|"variant">){return <Sidebar.Toggle {...props}/>}
-export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar,topbarVariant="floating",topbarDivider,topbarTabs,topbarCurrentTab,topbarTabsLabel,topbarTabsEnd,topbarActions,topbarBlurred,layout="app",sidebarVariant,sidebarScrollbar,sidebarFooter,sidebarCollapsed,sidebarCollapsible,sidebarToggle="edge",sidebarShortcut=true,sidebarIndicator,sidebarPanel,sidebarContrast,defaultSidebarCollapsed,onSidebarCollapsedChange,contentVariant="surface",aside,asideLabel,asideVariant,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{brand:ReactNode;navigation?:ReactNode;navItems?:SidebarEntry[];currentNavId?:string;navLabel?:string;topbar?:ReactNode;topbarVariant?:HeaderVariant;topbarDivider?:boolean;sidebarVariant?:SidebarVariant;
+// O modo de leitura (o alto contraste, o texto grande) também na RAIZ da página (ADR-0090): menus, janelas e avisos abrem
+// fora do `AppShell`, presos ao fim do documento, e sem isto sairiam sem o modo. Devolve a raiz como estava ao sair.
+function useModoNaRaiz(atributo:string,valor:string|undefined){
+  React.useEffect(()=>{
+    if(valor===undefined||typeof document==="undefined")return;
+    const raiz=document.documentElement;const antes=raiz.getAttribute(atributo);
+    raiz.setAttribute(atributo,valor);
+    return()=>{if(antes===null)raiz.removeAttribute(atributo);else raiz.setAttribute(atributo,antes);};
+  },[atributo,valor]);
+}
+export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar,topbarVariant="floating",topbarDivider,topbarTabs,topbarCurrentTab,topbarTabsLabel,topbarTabsEnd,topbarActions,topbarBlurred,layout="app",sidebarVariant,sidebarScrollbar,sidebarFooter,sidebarCollapsed,sidebarCollapsible,sidebarToggle="edge",sidebarShortcut=true,sidebarIndicator,sidebarPanel,sidebarContrast,defaultSidebarCollapsed,onSidebarCollapsedChange,contentVariant="surface",highContrast,textSize,aside,asideLabel,asideVariant,children,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{brand:ReactNode;navigation?:ReactNode;navItems?:SidebarEntry[];currentNavId?:string;navLabel?:string;topbar?:ReactNode;topbarVariant?:HeaderVariant;topbarDivider?:boolean;sidebarVariant?:SidebarVariant;
   /** O arranjo (lote T, 17/10/2026): `"app"` (o padrão, o de sempre) ou `"docs"`, o da documentação da referência — um
    *  bloco CENTRALIZADO de 1400 com a lateral de 220, o texto e o índice de 268 (de 1280 para cima), a barra de cima de 56
    *  com a linha das áreas (`topbarTabs`) embaixo. A lateral fica onde a variante dela mandar (`plain`: sem caixa).
@@ -218,7 +228,14 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
   defaultSidebarCollapsed?:boolean;
   /** AN-01: avisa cada troca — pelo botão, ou pela largura cruzando 1280. Guardar a preferência é do app. */
   onSidebarCollapsedChange?:(collapsed:boolean)=>void;
-  contentVariant?:"surface"|"plain"}){const s=useAureaStrings();const docs=layout==="docs",lateral=layout==="sidebar";useGavetaFechaNoDesktop(docs);
+  contentVariant?:"surface"|"plain";
+  /** O alto contraste no app inteiro (o MNT-30, ADR-0090): contorno nos campos, nos cartões e nos botões, o texto de apoio
+   *  mais perto do texto e o link sempre sublinhado. Marca o `AppShell` e a raiz da página (`data-contrast="high"`), para
+   *  os menus e as janelas, que abrem fora dele, saírem iguais. */
+  highContrast?:boolean;
+  /** O texto grande no app inteiro (o MNT-30, ADR-0090): cada letra 2 acima e o controle médio a 44. `data-text="lg"` no
+   *  `AppShell` e na raiz da página, pela mesma razão do `highContrast`. */
+  textSize?:"md"|"lg"}){const s=useAureaStrings();useModoNaRaiz("data-contrast",highContrast?"high":undefined);useModoNaRaiz("data-text",textSize==="lg"?"lg":undefined);const docs=layout==="docs",lateral=layout==="sidebar";useGavetaFechaNoDesktop(docs);
   const controlado=sidebarCollapsed!==undefined;
   // O jeito de recolher (4-A): `true` é a trilha de sempre.
   const forma:SidebarCollapsible|undefined=sidebarCollapsible===true?"icon":sidebarCollapsible||undefined;
@@ -260,7 +277,7 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
   // No arranjo, o topo é o pequeno (`size="sm"`), e o botão também: com o tamanho de sempre ele ficava 4 maior que os
   // vizinhos e fora da linha deles (medido a 375, sem toque; com toque, todos sobem para 44).
   const botaoDaGaveta=<IconButton className="nav-toggle" icon="list" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID} {...(docs?{size:"sm" as const}:{})}/>;
-  return <div className={cx("app-shell",layout==="docs"&&"app-shell-docs",lateral&&"app-shell-lateral",!lateral&&topbarVariant==="flush"&&"app-shell-flush",!lateral&&topbarVariant==="pill"&&"app-shell-pill",recolhe&&"app-shell-collapsible",aside!=null&&"app-shell-with-aside",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
+  return <div data-contrast={highContrast?"high":undefined} data-text={textSize==="lg"?"lg":undefined} className={cx("app-shell",layout==="docs"&&"app-shell-docs",lateral&&"app-shell-lateral",!lateral&&topbarVariant==="flush"&&"app-shell-flush",!lateral&&topbarVariant==="pill"&&"app-shell-pill",recolhe&&"app-shell-collapsible",aside!=null&&"app-shell-with-aside",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
     quando este arquivo entrou da `main`; quem denunciou foi o gate da fronteira do core, com
     `.skip-link` no CSS sem ninguém a emitir.
     É requisito de acessibilidade, não enfeite (WCAG 2.4.1, "pular blocos"): sem ele, quem navega

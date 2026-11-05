@@ -274,6 +274,33 @@ como deveria funcionar"*.
 
 ---
 
+## [0.56.0] — 2026-11-04
+
+**O alto contraste e o texto grande no app inteiro** (04/11/2026, o MNT-30 — o 0-D e o 0-E do bloco 3,
+[ADR-0090](decisions/0090-o-alto-contraste-e-o-texto-grande-no-app.md)). Até aqui, os dois modos só existiam dentro do
+`DependencyGraph`. A referência não tem nenhum dos dois: são peça nossa. O Victor escolheu no esboço do FigCraft (o
+contraste "C", o texto "B"), aprovou na bancada com as peças de verdade (*"Aprovo"*) e decidiu que a Ember recebe os dois
+(*"Sim, recebe"*). Na web; o nativo vem no lote seguinte.
+
+### Acrescentado
+
+- **`AppShell highContrast`** e **`AppShell textSize="lg"`** — os nomes que o `DependencyGraph` já usava. Marcam a caixa do
+  shell e a raiz da página (`data-contrast="high"`, `data-text="lg"`), porque menus, janelas e avisos abrem fora dele; ao
+  sair, a raiz volta ao que era.
+- **`data-contrast="high"`** em qualquer contêiner: o contorno de 3:1 nos campos, as marcas dos controles na tinta e o foco
+  do campo no `--focus-strong` (o mesmo do "aumentar contraste" do sistema), e mais: o texto de apoio a 80% do texto, o
+  contorno no cartão, o link sempre sublinhado e o contorno do botão, por dentro. As linhas que só ele acende são exceção
+  nomeada à ADR-0072.
+- **`data-text="lg"`** em qualquer contêiner, e o grupo de tokens **`textSize.lg`**: cada degrau da letra sobe 2 (do
+  `--text-xs` ao `--text-2xl`; o corpo vai de 14 a 16) e o `--control-h-md` vai ao `--target-min` (44 em toda densidade).
+- Sem os atributos, nada muda, em nenhuma marca.
+
+### Site
+
+- A página Accessibility diz os dois modos e como ligar.
+
+---
+
 ## [0.55.0] — 2026-11-04
 
 **O botão dividido com o menu aberto e o menu da referência** (04/11/2026). O Victor achou no site: ao abrir o menu do "Copy

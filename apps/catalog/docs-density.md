@@ -77,6 +77,8 @@ These tokens change with the density. Every other token stays the same.
 | `--touch-control-h-md` | `2.75rem` | `3rem` | `3.25rem` |
 | `--touch-control-h-lg` | `3.25rem` | `3.5rem` | `3.75rem` |
 
+With large text on (`data-text="lg"`, or `textSize="lg"` on `AppShell`), `--control-h-md` becomes `--target-min`, 44px in every density. See [Accessibility](./docs-accessibility.html).
+
 ## What follows the density
 
 - **Controls**, through `--control-h-*`: buttons, icon buttons, inputs, selects, textareas, tabs, segmented controls, menu items, list box items, pagination, sidebar items and switches.
