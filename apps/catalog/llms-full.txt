@@ -17850,6 +17850,13 @@ Two reading modes your app can turn on, in every brand. Nothing changes until yo
 - **`AppShell textSize="lg"`** — every text step 2px larger (body text goes from 14px to 16px), and the medium control grows to the 44px touch target. Or set `data-text="lg"` on any container.
 - Both mark the page root as well, so menus and dialogs that open outside the shell match. The new `textSize.lg` token group holds the larger steps.
 
+## Includes v0.55.0
+
+- **`ButtonGroup`** — a split button keeps its round end and its divider with the menu open.
+- **`DropdownMenu align`**, and **`description` and `trailingIcon`** on menu items.
+- **Aurea Ember** — the dark focus ring and the links in the brand's own orange; in the light theme, links and the focus ring as in the system the brand was made for.
+- **Native field focus** — a 2px border, one line in the browser too.
+
 ## Update
 
 On the web:
