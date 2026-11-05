@@ -91,9 +91,4 @@ describe("o core: a seção do passo B", () => {
   it("as medidas saem de token: nenhum número cru em px ou rem na seção", () => {
     expect(secao.match(/(?<![\w.-])\d*\.?\d+(px|rem)\b/g) ?? []).toEqual([]);
   });
-  it("o degradê só na regra do `brand-gradient` (a segunda exceção à ADR-0007)", () => {
-    const comDegrade = regras.filter((r) => r.corpo.includes("gradient("));
-    expect(comDegrade).toHaveLength(1);
-    expect(comDegrade[0].sel).toContain('[data-current-style="brand-gradient"]');
-  });
 });

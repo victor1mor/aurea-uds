@@ -43,10 +43,11 @@ test("a nota tem a data e o comando de atualizar; o do React Native só desde a 
   expect((await page.locator(".rel-atualizar pre").allTextContents()).join("\n")).not.toContain("@aurea-uds/native");
 });
 
-test("o Início não leva a área Releases, como o Início da referência", async ({page}) => {
+// ~~O Início não leva a área Releases, como o Início da referência.~~ O TOPO ÚNICO (S-09, 05/11/2026): o Início leva as
+// mesmas áreas das outras páginas, Releases inclusive.
+test("o Início leva a área Releases, como toda outra página", async ({page}) => {
   await page.goto(`${base}/apps/catalog/index.html`);
-  await expect(page.locator("header nav a", {hasText: "Docs"}).first()).toBeAttached();
-  await expect(page.locator("header nav a", {hasText: "Releases"})).toHaveCount(0);
+  await expect(page.locator(".site-areas a", {hasText: "Releases"})).toHaveAttribute("href", "./releases.html");
   // E toda outra página leva a aba.
   await page.goto(`${base}/apps/catalog/button.html`);
   await expect(page.locator(".site-areas a", {hasText: "Releases"})).toHaveAttribute("href", "./releases.html");

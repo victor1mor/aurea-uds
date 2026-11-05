@@ -93,6 +93,12 @@
       "description": "The 'differences only' view — hides the rows the page marked as identical with <tr data-same>. The table does not compare cells itself; the page knows which rows are equal and owns the switch."
     },
     {
+      "name": "dividers",
+      "type": "boolean",
+      "default": "false",
+      "description": "A light line between the body rows, none after the last — the frame stays. The line is the text color at 10%, the same light line as the outline card, and no measurement changes: the cell's bottom border already exists and only gains a color. A named exception to the no-line rule, drawn only when the app asks for it. No effect with variant=\"rows\", and the Ember brand stays without it."
+    },
+    {
       "name": "variant",
       "type": "\"default\" | \"rows\"",
       "default": "\"default\"",

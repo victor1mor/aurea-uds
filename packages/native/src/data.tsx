@@ -59,7 +59,7 @@ import {
   type StyleProp, type ViewStyle,
 } from "react-native";
 import type {AureaBadgeCategory, AureaBadgeTone} from "./display.js";
-import {aroDoEstilo, canto, criarFolha, marcaDoEstilo, peleDoPonto} from "./estilos.js";
+import {aroDoEstilo, canto, criarFolha, marcaDoEstilo, peleDoPonto, preenchimento} from "./estilos.js";
 import type {AureaIcon} from "./icon.js";
 import {IconeEmMoldura} from "./moldura.js";
 import {Text} from "./text.js";
@@ -115,6 +115,11 @@ const folha = criarFolha((t: AureaTokens) => ({
   linhaTocavel: {minHeight: t.size.targetMin ?? 44},
   celula: {flexDirection: "row", gap: t.size.space3, alignItems: "flex-start"},
   nomeDaColuna: {flexShrink: 0, maxWidth: "45%"},
+  // `dividers` (MNT-38, 05/11/2026, *"Pode, um cartão só"*): as fileiras juntas num cartão só, e entre elas a linha clara —
+  // o texto a 10%, a mesma da web. Uma faixa de 1, e não borda: a borda colorida é o que a trava do sem linha recusa.
+  grupo: {...canto(t.size.radiusLg), backgroundColor: t.color.card, overflow: "hidden"},
+  linhaNoGrupo: {...canto(0), backgroundColor: "transparent"},
+  divisoria: {height: t.size.borderWidth, backgroundColor: preenchimento(t, 2)},
   vazio: {paddingVertical: t.size.space6, alignItems: "center"},
 }));
 
@@ -401,6 +406,11 @@ export interface TableProps<T> extends Virtualizavel {
   onRowPress?: (linha: T) => void;
   /** O que mostrar sem linhas. Sem isto, a frase de vazio da tabela de frases. */
   empty?: React.ReactNode;
+  /**
+   * MNT-38: as fileiras juntas num cartão só, com uma linha clara entre elas (menos depois da última) — o `dividers` da web,
+   * no arranjo do aparelho, onde cada fileira já é um cartão. Sem efeito na marca Ember, como na web.
+   */
+  dividers?: boolean;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 }
@@ -426,11 +436,12 @@ export interface TableProps<T> extends Virtualizavel {
  * do outro, sem dizer o que cada um é.
  */
 export function Table<T>({
-  caption, columns, rows, keyExtractor, onRowPress, empty,
+  caption, columns, rows, keyExtractor, onRowPress, empty, dividers,
   virtualized = false, style, testID,
 }: TableProps<T>) {
   const t = useAureaTokens();
   const s = folha(t);
+  const agrupada = !!dividers && t.brand !== "ember";
   const strings = useAureaStrings();
   const principal = columns.find((c) => c.primary);
   const secundarias = columns.filter((c) => c !== principal);
@@ -475,9 +486,9 @@ export function Table<T>({
     // A linha é o item da lista; a tocável é um botão DENTRO dele (o papel de item não pode ir no botão).
     return onRowPress
       ? <View role="listitem"><Pressable accessibilityRole="button" onPress={() => onRowPress(linha)}
-                   style={[s.linha, s.linhaTocavel]}>{corpo}</Pressable></View>
-      : <View role="listitem" style={s.linha}>{corpo}</View>;
-  }, [principal, secundarias, conteudo, onRowPress, s]);
+                   style={[s.linha, s.linhaTocavel, agrupada && s.linhaNoGrupo]}>{corpo}</Pressable></View>
+      : <View role="listitem" style={[s.linha, agrupada && s.linhaNoGrupo]}>{corpo}</View>;
+  }, [principal, secundarias, conteudo, onRowPress, s, agrupada]);
 
   const chave = React.useCallback(
     (linha: T, n: number) => keyExtractor ? keyExtractor(linha, n) : String(n),
@@ -504,17 +515,20 @@ export function Table<T>({
         data={rows as T[]}
         keyExtractor={chave}
         renderItem={({item}) => desenharLinha(item)}
-        ItemSeparatorComponent={() => <View style={{height: t.size.space2}} />}
-        style={style}
+        ItemSeparatorComponent={() => <View aria-hidden style={agrupada ? s.divisoria : {height: t.size.space2}} />}
+        style={[agrupada && s.grupo, style]}
         testID={testID} />
     );
   }
 
   return (
     <View accessibilityRole="list" accessibilityLabel={nomeDaLista}
-          style={[s.tabela, style]} testID={testID}>
+          style={[agrupada ? s.grupo : s.tabela, style]} testID={testID}>
       {rows.map((linha, n) => (
-        <React.Fragment key={chave(linha, n)}>{desenharLinha(linha)}</React.Fragment>
+        <React.Fragment key={chave(linha, n)}>
+          {agrupada && n > 0 ? <View aria-hidden style={s.divisoria} /> : null}
+          {desenharLinha(linha)}
+        </React.Fragment>
       ))}
     </View>
   );

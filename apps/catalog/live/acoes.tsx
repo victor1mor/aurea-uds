@@ -18,8 +18,10 @@ const tamanho = (grupo?.querySelector("[data-copy-page]")?.className.match(/\bbt
 parada?.remove();
 
 function Menu() {
-  // O `.md` da página fica ao lado dela, com o mesmo nome (o gerador escreve os dois).
-  const md = location.href.split(/[?#]/)[0].replace(/\.html$/, ".md");
+  // O `.md` da página fica ao lado dela, com o mesmo nome (o gerador escreve os dois). O nome sai do CAMINHO, com e sem o
+  // `.html` (S-03, 05/11/2026): no site publicado o endereço é `/chart`, sem `.html`, e trocar só o `.html` dava o
+  // endereço da própria página — o "View as Markdown" abria a página de novo.
+  const md = new URL(`${location.pathname.replace(/\/$/, "/index").replace(/\.html$/, "")}.md`, location.href).href;
   const pergunta = `Read ${md}, I want to ask questions about it.`;
   return h(DropdownMenu, {
     label: "Page actions",

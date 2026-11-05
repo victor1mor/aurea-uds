@@ -67,9 +67,8 @@ const ICONES = criarRegistroDeIcones({
   image: glifoDe("image"),
 });
 
-// Conteúdo de demonstração, em `data:` — sem rede e sem arquivo no repositório. Formas chapadas
-// de propósito: **gradiente é proibido na Aurea desde a Fase 0**, e mesmo sendo conteúdo e não
-// desenho, não vou pôr um na imagem que prova o design system.
+// Conteúdo de demonstração, em `data:` — sem rede e sem arquivo no repositório. Formas chapadas:
+// a foto de mentira só precisa ser reconhecível.
 const svgFoto = (fundo: string, marca: string) =>
   "data:image/svg+xml;utf8," + encodeURIComponent(
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90">` +

@@ -15,7 +15,6 @@
 // não acha a sexta opção. A saída óbvia do React Native **não serve** — `fadingEdgeLength` é
 // `@platform android` (medido no tipo do RN), e usá-la daria o aviso no Android e **nada no
 // iPhone**. É a armadilha de um alvo só que este projeto já pagou várias vezes.
-// Gradiente também não: proibido desde a Fase 0.
 //
 // **O que fica, e é o mesmo da web:** a opção cortada pela borda é o sinal, e ele vem do recorte.
 // O que este módulo acrescenta é MEDIR se há transbordo, para (1) mostrar a barra de rolagem só

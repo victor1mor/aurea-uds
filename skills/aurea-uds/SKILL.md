@@ -47,7 +47,6 @@ Wrap the app in `AureaProvider` from `@aurea-uds/native`. Load the fonts with `A
 - **Props first.** A button has `appearance` (`solid`, `outline`, `ghost`, `link`, `nav`, `soft`) and `tone` (`neutral`, `brand`, `danger`, `success`, `warning`, `info`); `variant` is a shortcut for common pairs. Reach for CSS only when no prop does the job.
 - **Every value is a token.** Use `var(--space-4)`, `var(--radius-card)`, `var(--text-sm)`, `var(--card)`, never a raw pixel size or a hex color. The list is on https://aureauds.dev/tokens.html.
 - **No lines.** Aurea draws no borders around pieces. To set something apart, use a translucent fill: `--fill-1`, `--fill-2`, `--fill-3`.
-- **No gradients.**
 - **Do not recolor the brand.** The yellow (`--primary`) is the same in both themes. Another palette comes in as a brand (`data-brand`), not by overriding the yellow.
 - **Pair fills with their text.** `--card` with `--card-foreground`, `--primary` with `--primary-foreground`. Never paint text with a status fill (`--success`, `--warning`, `--destructive`, `--info`); text, icons and bars on the page use the `-400` pair (`--success-400`).
 - **Icons are Phosphor names**, checked by TypeScript: `caret-down`, not `chevron-down`. The selected item uses the filled form; the components switch it themselves.

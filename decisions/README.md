@@ -46,7 +46,7 @@ errado nos dois casos.
 | [0004](0004-motor-headless-base-ui.md) | Motor headless: Base UI | aceita | 16/07/2026 |
 | [0005](0005-tokens-em-dtcg.md) | Tokens no formato DTCG | aceita | 16/07/2026 |
 | [0006](0006-fontes-em-pacote-proprio.md) | As fontes moram num pacote próprio | aceita | 16/07/2026 |
-| [0007](0007-sem-gradientes.md) | Sem gradientes, nem os funcionais | aceita · gateada | Fase 0 (07/2026) |
+| [0007](0007-sem-gradientes.md) | ~~Sem gradientes, nem os funcionais~~ | **substituída pela [0091](0091-o-degrade-e-permitido.md)** (05/11/2026) | Fase 0 (07/2026) |
 | [0008](0008-licenca-e-gestor-de-pacotes.md) | Apache-2.0 e pnpm workspaces | aceita · gateada | 16/07/2026 |
 | [0009](0009-modelo-push-e-travar-depois.md) | Construir tudo na Aurea e travar depois | aceita · condição pendente | 26/07/2026 |
 | [0010](0010-distribuicao-npm-publico.md) | Distribuição: npm público, escopo `@aurea-uds` | aceita · **não executada** | 30/07/2026 |
@@ -154,6 +154,7 @@ de 86 KB que ninguém consumia). Ficam aqui contabilizadas, com onde vivem e que
 | **O site B** (a forma do desenho aprovado, com as cores e a letra da Aurea de hoje — a letra no degrau mais perto da ADR-0050; "igual" medido texto por texto; as larguras medidas, o índice só de 1280 para cima; as cinco peças: a pílula no `AppShell`, o `Header` `pill` largo que embaça, o anel e a cápsula do `TableOfContents`, o grupo que dobra da `Sidebar` e o "+" e a linha de 60 do `Accordion` — o Victor, *"pode"*) | 31/10/2026 | [ADR-0088](0088-o-site-b.md) | `site-b-pecas.test.tsx` + `site-b-pecas.spec.ts` + `catalogo-fiel.mjs` |
 | **A caixa de exemplo empilhada** (`CodeBlock previewLayout="stacked"`: a peça em cima e o código embaixo, recolhido em 150 com o "Expand code"; o degradê do código recolhido é a 3ª exceção à regra sem gradiente — o Victor, *"preciso que seja fiel a referencia"*, *"Com degradê"*) | 02/11/2026 | [ADR-0089](0089-a-caixa-de-exemplo-empilhada.md) | `site-b-pecas-0-54.test.tsx` + check 4 |
 | **O alto contraste e o texto grande no app inteiro** (`data-contrast="high"` e `data-text="lg"`, ou o `highContrast` e o `textSize="lg"` do `AppShell`, que marca também a raiz; o contraste "C" e o texto "B" escolhidos no esboço do FigCraft e aprovados na bancada — *"Aprovo"*; a Ember recebe — *"Sim, recebe"*) | 04/11/2026 | [ADR-0090](0090-o-alto-contraste-e-o-texto-grande-no-app.md) | `acessibilidade-modos.spec.ts` + `appshell-modos.test.tsx` + `sem-linha.test.tsx` |
+| **O degradê é permitido** (a regra "sem gradientes" da ADR-0007 revogada inteira, com as três exceções e a trava do check 4; o Victor: *"faça como se ela nem existisse ... como vamos virar UDS se não aceitamos?"*) | 05/11/2026 | [ADR-0091](0091-o-degrade-e-permitido.md) | — (a regra deixou de existir) |
 | `.empty-state` é centralizado, ao contrário de uma das referências | Fase 11 | `REFERENCES.md` (a razão: coerência com `.notification-empty` e `.datagrid-empty`, que já estão em produção) | `tests/visual/skin.spec.ts` |
 
 **Ainda abertas, e portanto sem ADR:** a **D2** (índice reverso "Used here" — metade já entrou

@@ -7,7 +7,7 @@
     "componentes": 90,
     "hooks": 16,
     "aliasesLiterais": 69,
-    "propsDistintas": 208
+    "propsDistintas": 209
   },
   "aliases": {
     "AureaButtonAppearance": {
@@ -3199,6 +3199,12 @@
               "name": "empty",
               "optional": true,
               "type": "React.ReactNode",
+              "values": null
+            },
+            {
+              "name": "dividers",
+              "optional": true,
+              "type": "boolean",
               "values": null
             },
             {

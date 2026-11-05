@@ -408,7 +408,9 @@ test.describe("catálogo · varredura de todas as páginas", () => {
             // campos, do cartão e do botão É o modo — a exceção nomeada à ADR-0072. Só nessas peças, e só lá dentro.
             if (e.closest('[data-contrast="high"]') && e.matches(".input,.textarea,.select,.input-group,.combobox-multi,.card,.btn")) continue;
             const deAro = !!e.closest('[data-segment-style="ring"],[data-current-style="ring"],[data-current-style="white-ring"],[data-current-style="bar-ring"],[data-timeline-style="ring"],[data-ring="true"]');
-            const conta = (x: string) => !(deAro && x.startsWith("anel"));
+            // A LINHA ENTRE AS FILEIRAS (MNT-38): a borda de BAIXO da célula do corpo, só numa tabela que escolheu `dividers`.
+            const entreFileiras = !!e.closest(".table.table-dividers tbody, .datagrid-dividers .table-wrap tbody") && /^(td|th)$/i.test(e.tagName);
+            const conta = (x: string) => !(deAro && x.startsWith("anel")) && !(entreFileiras && x.startsWith("borda bottom"));
             for (const x of linhas(getComputedStyle(e))) if (conta(x)) out.push(`${nome(e)}: ${x}`);
             for (const ps of ["::before", "::after"]) {
               const s = getComputedStyle(e, ps);
@@ -799,7 +801,9 @@ test.describe("catálogo · contratos do modelo de página", () => {
     const chave = page.locator("header :is(.site-actions, .topbar-actions)").getByRole("radiogroup", {name: "Theme", exact: true});
     await expect(chave.getByRole("radio")).toHaveCount(3);
     const caixa = await chave.boundingBox();
-    expect(Math.round(caixa!.height), "a cápsula de 34 da referência").toBe(34);
+    // ~~A cápsula de 34 da referência.~~ O TOPO ÚNICO (S-09, 05/11/2026): o Início usa a pílula das outras páginas, em que a
+    // chave tem os 44 de toque (`.site-shell .site-actions .theme-switch-option`: o `--control-h-md` e o recheio).
+    expect(Math.round(caixa!.height), "a cápsula das outras páginas").toBe(44);
     await chave.getByRole("radio", {name: "System"}).check();
     expect(await page.evaluate(() => localStorage.getItem("aurea-theme"))).toBe("system");
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");

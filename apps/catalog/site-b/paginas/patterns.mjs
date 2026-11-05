@@ -34,7 +34,7 @@ export default function patterns(site) {
   const node = h("div", {className: "g1-b g1-largo pat-b", "data-g1-lista": "", "data-g1-frase": "No pattern mentions"},
     cabeca,
     buscaDaLista(site, {rotulo: "Find a pattern", dica: "Find a pattern — try “empty”, “sidebar” or “confirm”", total: todos.length, chave: "g1"}),
-    ...porComponente.map((g, n) => h("section", {key: g.nome, className: "g1-grupo pat-grupo", id: `pat-${slug(g.nome)}`, "data-g1-grupo": "",
+    ...porComponente.map((g, n) => h("section", {key: g.nome, className: "g1-grupo pat-grupo", id: `pat-${slug(g.nome)}`, "data-g1-grupo": "", "data-g1-filtro": slug(g.nome),
       "data-g1-grupo-mais": n >= GRUPOS_DE_INICIO ? "" : undefined, "aria-labelledby": `pat-${slug(g.nome)}-h`},
       h("div", {className: "g1-grupo-topo"},
         h("span", {className: "g1-grupo-num", "aria-hidden": "true"}, dois(n + 1)),

@@ -26,7 +26,6 @@ On the web, the interactive behavior comes from [Base UI](https://base-ui.com): 
 - Buttons with text, fields, filters and tabs are capsules.
 - The primary color is a yellow that stays the same in light and dark.
 - No borders around components: pieces are set apart by fill. The one exception is the outline card.
-- No gradients.
 - Icons from Phosphor, with the filled form on the selected item.
 
 ## The packages

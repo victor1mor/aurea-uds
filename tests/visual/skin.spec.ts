@@ -2722,7 +2722,7 @@ for (const theme of ["dark", "light"] as const) {
     const p12 = e.passo12;
     expect([p12.area.w, p12.area.h], "ColorArea: quadrada, até 224").toEqual([224, 224]);
     expect(p12.area.raio, "canto 16 (--radius-lg)").toBe(16);
-    expect(p12.area.pintada, "a pintura chega pela variável — o gradiente da exceção").toMatch(/^linear-gradient/);
+    expect(p12.area.pintada, "a pintura chega pela variável").toMatch(/^linear-gradient/);
     // Sem linha (ADR-0072): o pino era um aro branco de 3; agora é desenho cheio — o branco por baixo e a cor numa
     // bolinha por cima, com sombra. A medida (16) não muda.
     expect([p12.area.pino, p12.area.anel], "o pino tem 16, sem aro").toEqual([16, 0]);

@@ -7,9 +7,10 @@
 @media (max-width:767px) {
   .site-menu-lugar { display:inline-flex; }
   html[data-site-menu] .site-shell .nav-toggle { display:none; }
-  /* No Início, o menu do `Header` (os links e a chave) dá lugar à mesma folha. */
-  html[data-site-menu] .site-home .topbar-menu-toggle { display:none; }
 }
+/* NO INÍCIO (S-09, o topo único): sem a gaveta do `AppShell`, o menu é quem leva às áreas quando elas saem da pílula —
+   abaixo de 1121, a mesma largura em que elas saem nas outras páginas. */
+@media (max-width:1120px) { .site-home .site-menu-lugar { display:inline-flex; } }
 .site-menu-botao { --step-h:var(--target-min); inline-size:var(--target-min); }
 
 /* A FOLHA (`Drawer side="bottom"`): o título "Menu" em Sora 24 extranegrito (a peça tem 16), os rótulos GO TO / COLOR THEME

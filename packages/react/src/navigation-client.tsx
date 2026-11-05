@@ -709,7 +709,7 @@ export type BottomNavWidth="full"|"content";
 // A COR DO ITEM ATUAL é o quarto eixo (ADR-0084, 27/10/2026): o `indicator` escolhe a FORMA, o `currentStyle` a COR.
 // Treze estilos aprovados pelo Victor em 26/10/2026, todos na barra flutuante e na fixa: `current` (o de sempre, o padrão),
 // `neutral`, `contrast`, `brand`, `ring`, `plain`; com amarelo e branco, `brand-white` (reprova a WCAG: o branco no amarelo
-// mede 1,91:1 — aprovado sabendo disso), `white-ring` e `brand-gradient` (o degradê, a segunda exceção à ADR-0007); e a
+// mede 1,91:1 — aprovado sabendo disso), `white-ring` e `brand-gradient` (o degradê); e a
 // barra inteira amarela, `bar-ink`, `bar-ring`, `bar-plain` e `bar-light`. Vai como `data-current-style`.
 export type BottomNavCurrentStyle="current"|"neutral"|"contrast"|"brand"|"ring"|"plain"|"brand-white"|"white-ring"|"brand-gradient"|"bar-ink"|"bar-ring"|"bar-plain"|"bar-light";
 /** @deprecated Os quatro nomes de 17/08/2026. Use `variant` + `indicator`. */

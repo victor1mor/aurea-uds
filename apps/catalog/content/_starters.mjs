@@ -1707,6 +1707,25 @@ export function Actions() {
             h("tr", null, h("td", null, "data-density"), h("td", null, "compact, comfortable, spacious")),
             h("tr", null, h("td", null, "data-brand"), h("td", null, "ember, sun, honey…"))))),
       },
+      {
+        title: "Dividers",
+        description: "dividers draws a light line between the body rows, none after the last — the frame stays and nothing " +
+          "moves. Without it, the rows are told apart by the white of the cells alone.",
+        code: `<Table dividers caption="Team, with dividers">
+  <thead><tr><th>Name</th><th>Role</th></tr></thead>
+  <tbody>
+    <tr><td>Messenger</td><td>Owner</td></tr>
+    <tr><td>Analyst</td><td>Editor</td></tr>
+    <tr><td>Curator</td><td>Viewer</td></tr>
+  </tbody>
+</Table>`,
+        render: () => h("div", {style: {width: "100%"}}, h(A.Table, {dividers: true, caption: "Team, with dividers"},
+          h("thead", null, h("tr", null, h("th", null, "Name"), h("th", null, "Role"))),
+          h("tbody", null,
+            h("tr", null, h("td", null, "Messenger"), h("td", null, "Owner")),
+            h("tr", null, h("td", null, "Analyst"), h("td", null, "Editor")),
+            h("tr", null, h("td", null, "Curator"), h("td", null, "Viewer"))))),
+      },
     ],
   },
   TableOfContents: {

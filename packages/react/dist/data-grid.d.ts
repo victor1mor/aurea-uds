@@ -12,7 +12,7 @@ export interface GridFilterSpec {
         label: string;
     }>;
 }
-export declare function DataGrid<T>({ data, columns, label, filterable, pageSize, selectable, onSelectionChange, getRowId, className, sorting: sortingProp, onSortingChange, globalFilter: globalFilterProp, onGlobalFilterChange, page, onPageChange, rowSelection: rowSelectionProp, onRowSelectionChange, manualSorting, manualFiltering, manualPagination, rowCount, filters, columnFilters: columnFiltersProp, onColumnFiltersChange, bulkActions, stickyHeader, hideableColumns, columnVisibility: columnVisibilityProp, onColumnVisibilityChange, resizableColumns, columnSizing: columnSizingProp, onColumnSizingChange, state, stateMessage, renderDetail, detailRowId: detailRowIdProp, onDetailRowIdChange, onExport }: {
+export declare function DataGrid<T>({ data, columns, label, filterable, pageSize, selectable, onSelectionChange, getRowId, className, sorting: sortingProp, onSortingChange, globalFilter: globalFilterProp, onGlobalFilterChange, page, onPageChange, rowSelection: rowSelectionProp, onRowSelectionChange, manualSorting, manualFiltering, manualPagination, rowCount, filters, columnFilters: columnFiltersProp, onColumnFiltersChange, bulkActions, stickyHeader, dividers, hideableColumns, columnVisibility: columnVisibilityProp, onColumnVisibilityChange, resizableColumns, columnSizing: columnSizingProp, onColumnSizingChange, state, stateMessage, renderDetail, detailRowId: detailRowIdProp, onDetailRowIdChange, onExport }: {
     data: T[];
     columns: Array<ColumnDef<T, any>>;
     label?: string;
@@ -43,7 +43,8 @@ export declare function DataGrid<T>({ data, columns, label, filterable, pageSize
         icon?: IconName;
         onAction: (rows: T[], clear: () => void) => void;
     }>;
-    stickyHeader?: boolean;
+    stickyHeader?: boolean | "page";
+    dividers?: boolean;
     hideableColumns?: boolean;
     columnVisibility?: VisibilityState;
     onColumnVisibilityChange?: (v: VisibilityState) => void;

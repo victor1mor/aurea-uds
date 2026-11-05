@@ -27,7 +27,6 @@ On the web, the interactive behavior comes from [Base UI](https://base-ui.com): 
 - Buttons with text, fields, filters and tabs are capsules.
 - The primary color is a yellow that stays the same in light and dark.
 - No borders around components: pieces are set apart by fill. The one exception is the outline card.
-- No gradients.
 - Icons from Phosphor, with the filled form on the selected item.
 
 ## The packages
@@ -254,13 +253,7 @@ Two lines remain, by decision:
 
 The focus ring is not a border. It stays.
 
-### 5. No gradients
-
-Aurea uses no gradients, including functional ones such as progress bars. Depth comes from surface and space. Gradients also disappear when a user forces high-contrast colours.
-
-There is one exception: the colour pickers paint the colours you choose from (the `ColorArea` and the colour track of the `Slider`). That code lives in one file. The validator fails the build if a gradient appears in the stylesheet, the site or any other component file.
-
-### 6. The yellow does not change
+### 5. The yellow does not change
 
 The brand yellow is `oklch(0.795 0.184 86.047)`. It is the same in the dark and the light theme.
 
@@ -268,7 +261,7 @@ A brand (`data-brand`) is a separate axis from the theme. A brand redefines colo
 
 See [Colors](./docs-colors.html) and [Theming](./docs-theming.html).
 
-### 7. Meaning before appearance
+### 6. Meaning before appearance
 
 A button has two independent axes. `appearance` says how it is drawn. `tone` says what it means.
 
@@ -285,13 +278,13 @@ A button has two independent axes. `appearance` says how it is drawn. `tone` say
 
 If two different intentions end up looking the same, the meaning wins and gets its own token. The API does not degrade in silence: a value you ask for is the value you get.
 
-### 8. Behaviour from a proven engine, skin from Aurea
+### 7. Behaviour from a proven engine, skin from Aurea
 
 Aurea does not reimplement focus, keyboard or ARIA. On the web, behaviour comes from Base UI and the skin is entirely Aurea's: no engine style reaches the core stylesheet. On native, components are built on React Native primitives, with a plain `StyleSheet` and Aurea's own theme provider.
 
 Presentation is CSS first. When a prop changes semantics, keyboard or ARIA (for example, the orientation of `Tabs`), JavaScript resolves it, so the drawing and the behaviour never disagree.
 
-### 9. One API across web and native
+### 8. One API across web and native
 
 Props that exist on both targets have the same name and the same values. `tone`, `appearance` and `size` mean the same thing in `@aurea-uds/react` and `@aurea-uds/native`.
 
@@ -311,7 +304,7 @@ import {Button} from "@aurea-uds/native";
 
 The scale is adapted to each target. Web controls are 32, 36 and 40px tall (`sm`, `md`, `lg`, comfortable density). Native controls use a scale made for the finger: 40, 48 and 56 (`--touch-control-h-sm`, `-md`, `-lg`). Both scales move with the three densities: compact, comfortable and spacious. See [Density](./docs-density.html).
 
-### 10. Grow by variation, never by removal
+### 9. Grow by variation, never by removal
 
 A component is corrected, never removed. A new need enters as a variant or a prop of a component that already exists. When a component is renamed, the old name keeps working: `Topbar` still works next to `Header`.
 
@@ -325,7 +318,6 @@ Each principle has a check behind it, so it cannot drift quietly.
 |---|---|
 | Tokens only | the validator's raw-value ratchet |
 | No lines | a unit test that reads the code in every state, and a browser sweep of every page in both themes |
-| No gradients | the validator, on the stylesheet, the site and the component code |
 | Round icon-only buttons | a geometry test, in the three densities |
 | One focus line | a sweep that tabs through every preview |
 | Measured contrast | axe on every page, in both themes |
@@ -1308,9 +1300,8 @@ In Aurea every color, radius, font size and space comes from a token. The tokens
 }
 ```
 
-Two rules of the system apply to your CSS as well:
+One rule of the system applies to your CSS as well:
 
-- **No gradients.** Aurea uses flat color only.
 - **No lines.** Components draw no visible border; the `outline` card and the `Header` divider are the only lines — and the 3:1 outline of fields, which appears only when the system asks for more contrast (`prefers-contrast: more`). A piece that needs to stand out from the page gets a translucent fill (`--fill-1`, `--fill-2`, `--fill-3`) instead of an outline; in the light theme, a field is white with a soft shadow instead, everywhere (`--field-fill`, `--field-lift`). The focus ring stays.
 
 All tokens, with their values in each theme, are on the [Tokens](./tokens.html) page. To change the tokens themselves, see [Theming](./docs-theming.html).
@@ -2249,7 +2240,7 @@ Ask it, for example, to:
 ## What's included
 
 - Installation and setup, for the web and for React Native.
-- The rules the look depends on: tokens only, no lines, no gradients, the yellow that does not change, Phosphor icon names.
+- The rules the look depends on: tokens only, no lines, the yellow that does not change, Phosphor icon names.
 - The accessibility the app must keep, so the result stays readable for people with low vision.
 - Where to read each component: the [LLMs.txt](./docs-llms-txt.html) files.
 
@@ -5672,6 +5663,22 @@ loading and error replace the rows; the other states keep the rows you already h
 <DataGrid label="Members, waiting_dependency" data={members} columns={columns} state="waiting_dependency" />
 ```
 
+### Dividers
+
+dividers draws a light line between the body rows, none after the last — the frame stays.
+
+```tsx
+<DataGrid label="Members, with dividers" dividers data={members} columns={columns} />
+```
+
+### Header pinned to the page
+
+stickyHeader="page" keeps the header under whatever stays fixed at the top of the page while the page scrolls — no box with its own scroll. stickyHeader alone pins it inside a box with a ceiling instead.
+
+```tsx
+<DataGrid label="Devices, header pinned to the page" stickyHeader="page" data={devices} columns={columns} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -5697,7 +5704,8 @@ loading and error replace the rows; the other states keep the rows you already h
 | `columnFilters` | `ColumnFiltersState` | — | Controlled per-column filters, same rule as `sorting`: with it, typing and picking report and nothing narrows until you say so. To put it in the address bar, `gridStateToParams` and `gridStateFromParams` are the format — imported from the package root, not from this subpath, because the code that reads a URL runs on the server and this subpath is client-only. The grid never writes the URL itself: only you know whether a change should push a history entry or replace one. |
 | `onColumnFiltersChange` | `(filters: ColumnFiltersState) => void` | — | Fires whenever a column filter changes, controlled or not. |
 | `rowCount` | `number` | — | Total rows on the server, used to compute the page count under `manualPagination`. A count, not a dimension. |
-| `stickyHeader` | `boolean` | false | Pins the header — and the filter row with it — while the body scrolls. It also gives the scroll box a height, because it has to: the wrapper is the scroll container, and a box with no ceiling never scrolls inside itself, so the header would never have anything to detach from. The ceiling is `--datagrid-max-h` (60vh by default), set in CSS rather than as a prop — only the page knows how much screen it can spare, and a height is not a number this library accepts as an API. |
+| `stickyHeader` | `boolean \| "page"` | false | Pins the header — and the filter row with it — while the body scrolls. It also gives the scroll box a height, because it has to: the wrapper is the scroll container, and a box with no ceiling never scrolls inside itself, so the header would never have anything to detach from. The ceiling is `--datagrid-max-h` (60vh by default), set in CSS rather than as a prop — only the page knows how much screen it can spare, and a height is not a number this library accepts as an API. With "page", the header pins to the top of the PAGE instead, right under whatever stays fixed there (the AppShell bar, a site header): the box gets no ceiling and no scroll of its own top to bottom, so the page has a single scroll. The grid measures as the page scrolls and moves the header cells with translate — CSS alone cannot do it, because the box still scrolls sideways and a sticky element only sticks to its nearest scroll container. The header stops at the end of the grid, with the last row still in view. |
+| `dividers` | `boolean` | false | A light line between the body rows, none after the last — the frame stays. The line is the text color at 10%, the same light line as the outline card, and no measurement changes. A named exception to the no-line rule, drawn only when the app asks for it; the Ember brand stays without it. |
 | `hideableColumns` | `boolean` | false | Adds a picker that turns columns on and off — the same multi-select the facet filter uses, because choosing several from a list is that component. When it is the only control, the search field keeps the full width it always had; the two only share a row when both are there. |
 | `columnVisibility` | `VisibilityState` | — | Controlled map of column id to visible. It is a plain serialisable object, which is what makes the choice persistable — where it is persisted (local storage, user profile, the URL) is yours to decide, exactly as in F4. |
 | `onColumnVisibilityChange` | `(visibility: VisibilityState) => void` | — | Fires whenever a column is shown or hidden. |
@@ -10318,6 +10326,21 @@ striped gives every other body row a fill — the 1st, the 3rd — so the eye ca
 </Table>
 ```
 
+### Dividers
+
+dividers draws a light line between the body rows, none after the last — the frame stays and nothing moves. Without it, the rows are told apart by the white of the cells alone.
+
+```tsx
+<Table dividers caption="Team, with dividers">
+  <thead><tr><th>Name</th><th>Role</th></tr></thead>
+  <tbody>
+    <tr><td>Messenger</td><td>Owner</td></tr>
+    <tr><td>Analyst</td><td>Editor</td></tr>
+    <tr><td>Curator</td><td>Viewer</td></tr>
+  </tbody>
+</Table>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -10327,6 +10350,7 @@ striped gives every other body row a fill — the 1st, the 3rd — so the eye ca
 | `stickyFirstColumn` | `boolean` | false | The first column — the name of each row — stays put while the table scrolls sideways, on an opaque background so the rest slides under it, with a hairline at its end. With stickyHeader too, the corner stays above both. |
 | `fit` | `boolean` | false | The table fits its box, without the 720px minimum that makes a wide table scroll sideways. This is what lets a comparison of TWO items fit a 360px phone with no sideways scroll; which two is the page's choice (a Select above the table). |
 | `differencesOnly` | `boolean` | false | The 'differences only' view — hides the rows the page marked as identical with <tr data-same>. The table does not compare cells itself; the page knows which rows are equal and owns the switch. |
+| `dividers` | `boolean` | false | A light line between the body rows, none after the last — the frame stays. The line is the text color at 10%, the same light line as the outline card, and no measurement changes: the cell's bottom border already exists and only gains a color. A named exception to the no-line rule, drawn only when the app asks for it. No effect with variant="rows", and the Ember brand stays without it. |
 | `variant` | `"default" \| "rows"` | "default" | rows drops the frame: each row is a 54 capsule, 4 apart; --fill-1 on hover; a row with data-selected (the one the app marked) the yellow at 14%. The head in uppercase code font, muted, without fill or column dividers. It fits the width. |
 | `striped` | `boolean` | false | Gives every other body row a fill — the 1st, the 3rd and so on — so the eye can follow a row across a wide table. Works with both variants; in rows, the striped rows take the 16 corner. It is a fill, not a line. |
 | `children` | `ReactNode` | — | The <thead> and <tbody>, written by you. This is the presentational table; the one that sorts, filters and pages is DataGrid. |
@@ -17834,6 +17858,45 @@ import {Card, KPI, Alert, LogStream, Button} from "@aurea-uds/react";
   <LogStream lines={tail} />
   <Button variant="outline">Pause live tail</Button>
 </Card>
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-57-0.html">
+# v0.57.0
+
+Row dividers, a header pinned to the page, gradients allowed, and five site fixes.
+
+New options on tables, and gradients are no longer off-limits. Nothing changes unless you use the new options.
+
+## New
+
+- **Row dividers.** `Table` and `DataGrid` take `dividers`: a light line between the body rows, none after the last — the frame stays and no measurement changes. On React Native, `Table` with `dividers` groups the rows into a single card with the same light line between them. Not applied with the Aurea Ember brand.
+- **A header pinned to the page.** `DataGrid` takes `stickyHeader="page"`: the header follows the page as it scrolls and stops right under whatever stays fixed at the top (the `AppShell` bar, a site header) — no box with its own scroll. `stickyHeader` alone still pins the header inside a box with a ceiling.
+
+## Changed
+
+- **Gradients are allowed.** The old "no gradients" rule is gone, from the guidelines and from the checks.
+
+## Site
+
+- The sidebar filters now filter. On Patterns (by component), Releases (by month) and Tokens (by `$type`), choosing a filter shows only the matching group or tokens.
+- "View as Markdown" opens the page's Markdown. It used to reopen the same page. Every page with the page menu now has its `.md` next to it.
+- The sidebar opens at the current page, and keeps its scroll position as you move from page to page.
+- Links that leave the site open in a new tab, and screen readers announce it.
+- The home page uses the same top bar as every other page.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.57.0 @aurea-uds/core@0.57.0 @aurea-uds/fonts@0.57.0 @aurea-uds/icons@0.57.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.57.0
 ```
 </page>
 

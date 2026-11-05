@@ -27,15 +27,15 @@ test("cada grupo da lateral da área tem o número e o ícone, e os itens ficam 
   for (const g of await grupos.all()) await expect(g.locator(".site-grupo-tile svg")).toHaveCount(1);
 });
 
-// O SITE B (0.54.0): o topo do Início é a pílula do desenho `inicio-B` — os links do Início ("Docs", sem "Releases") e a busca
-// só na lupa —, e o rodapé é o das outras páginas.
-test("no Início o topo é a pílula do desenho B — Docs e as áreas, sem Releases, a busca só na lupa — e o rodapé é o das outras páginas", async ({page}) => {
+// ~~O SITE B (0.54.0): o topo do Início é a pílula do desenho `inicio-B` — os links do Início ("Docs", sem "Releases") e a
+// busca só na lupa.~~ O TOPO ÚNICO (S-09, 05/11/2026 — o Victor: "use o que já foi feito e aprovado"): o Início usa o topo das
+// outras páginas, com as oito áreas na cápsula, "Getting Started" inclusive. O rodapé continua o das outras páginas.
+test("no Início o topo é o das outras páginas — as oito áreas na cápsula, nenhuma levantada — e o rodapé também", async ({page}) => {
   await page.setViewportSize({width: 1280, height: 663});
   await page.goto(`${base}/apps/catalog/index.html`);
-  const links = page.locator("header.topbar-pill nav a");
-  await expect(links.first()).toHaveText("Docs");
-  await expect(links.filter({hasText: "Releases"})).toHaveCount(0);
-  await expect(page.locator("header.topbar-pill [data-site-search]").first()).toHaveClass(/\bbtn-icon\b/);
+  const links = page.locator("header.topbar-pill .site-areas a");
+  await expect(links).toHaveText(["Getting Started", "Components", "Releases", "Patterns", "Blocks", "Recipes", "Hooks", "Tokens"]);
+  await expect(page.locator("header.topbar-pill .site-areas a[aria-current]")).toHaveCount(0);
   await expect(page.locator("footer.site-rodape")).toBeVisible();
 });
 

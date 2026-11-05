@@ -91,23 +91,6 @@ export function ChavesDeTema() {
   return h(Fragment, null, ...lugaresDaChave.map((l, i) => createPortal(h(ThemeToggle, {mode: "light-dark-system"}), l, `chave-${i}`)));
 }
 
-// A SETINHA DO TOPO DO INÍCIO (15/10/2026), a da referência entre 768 e 1023: abre uma janelinha com a chave de tema e o
-// GitHub, que não cabem na linha ao lado dos links. O logo do GitHub vem dos dados do lugar (o desenho oficial, lido pelo
-// gerador do arquivo do GitHub), pintado em branco ou preto pela regra do site.
-const lugarDaSetinha = document.getElementById("site-more-root");
-const desenhoGitHub = lugarDaSetinha?.dataset.github;
-const repositorio = lugarDaSetinha?.dataset.repo;
-if (lugarDaSetinha && desenhoGitHub) lugarDaSetinha.replaceChildren();
-const GitHub = (p: SVGProps<SVGSVGElement>) => h("svg", {...p, viewBox: "0 0 98 96", fill: "none"},
-  h("path", {d: desenhoGitHub, className: "site-github-ink"}));
-export function SetinhaDoTopo() {
-  if (!lugarDaSetinha || !desenhoGitHub) return null;
-  return createPortal(h(Popover, {trigger: h(IconButton, {icon: "caret-down", label: "More", variant: "tertiary", size: "sm"}), side: "bottom"},
-    h("div", {className: "site-more-panel"},
-      h(ThemeToggle, {mode: "light-dark-system"}),
-      h(IconButton, {icon: GitHub, label: "GitHub", variant: "tertiary", size: "sm", href: repositorio}))), lugarDaSetinha);
-}
-
 // O PROVEDOR DO SITE: o tema é a escolha guardada ("dark", "light" ou "system"); sem escolha, o provedor adota o que o
 // documento trouxe (o script do <head> já aplicou). Escolher grava; o `catalog.js` espelha o tema nas molduras de prévia.
 const TEMAS: AureaThemePreference[] = ["dark", "light", "system"];

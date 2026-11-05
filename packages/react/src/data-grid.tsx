@@ -110,7 +110,51 @@ function useMaybe<S>(outer:S|undefined,onChange:((v:S)=>void)|undefined,initial:
   const value=controlled?outer:inner;
   return [value,u=>{const next=typeof u==="function"?(u as (old:S)=>S)(value):u;if(!controlled)setInner(next);onChange?.(next)}];
 }
-export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,onSelectionChange,getRowId,className,sorting:sortingProp,onSortingChange,globalFilter:globalFilterProp,onGlobalFilterChange,page,onPageChange,rowSelection:rowSelectionProp,onRowSelectionChange,manualSorting,manualFiltering,manualPagination,rowCount,filters,columnFilters:columnFiltersProp,onColumnFiltersChange,bulkActions,stickyHeader,hideableColumns,columnVisibility:columnVisibilityProp,onColumnVisibilityChange,resizableColumns,columnSizing:columnSizingProp,onColumnSizingChange,state,stateMessage,renderDetail,detailRowId:detailRowIdProp,onDetailRowIdChange,onExport}:{data:T[];columns:Array<ColumnDef<T,any>>;label?:string;filterable?:boolean;pageSize?:number;selectable?:boolean;onSelectionChange?:(rows:T[])=>void;getRowId?:(row:T,index:number)=>string;className?:string;sorting?:SortingState;onSortingChange?:(sorting:SortingState)=>void;globalFilter?:string;onGlobalFilterChange?:(filter:string)=>void;page?:number;onPageChange?:(page:number)=>void;rowSelection?:RowSelectionState;onRowSelectionChange?:(selection:RowSelectionState)=>void;manualSorting?:boolean;manualFiltering?:boolean;manualPagination?:boolean;rowCount?:number;filters?:GridFilterSpec[];columnFilters?:ColumnFiltersState;onColumnFiltersChange?:(filters:ColumnFiltersState)=>void;bulkActions?:Array<{id:string;label:string;icon?:IconName;onAction:(rows:T[],clear:()=>void)=>void}>;stickyHeader?:boolean;hideableColumns?:boolean;columnVisibility?:VisibilityState;onColumnVisibilityChange?:(v:VisibilityState)=>void;resizableColumns?:boolean;columnSizing?:ColumnSizingState;onColumnSizingChange?:(s:ColumnSizingState)=>void;state?:"loading"|"error"|UniversalState;stateMessage?:string;renderDetail?:(row:T)=>React.ReactNode;detailRowId?:string|null;onDetailRowIdChange?:(id:string|null)=>void;onExport?:(rows:T[],scope:{count:number;filtered:boolean;selected:boolean})=>void}){
+/** O que fica parado no topo da página na coluna da grade: o fundo da pilha de elementos no alto da tela, subindo até o
+ *  primeiro ancestral `fixed` ou `sticky` que não é da própria grade. Devolve onde ele termina (0 se não houver). */
+function topoParado(caixa:HTMLElement):number{
+  const r=caixa.getBoundingClientRect();
+  const x=Math.min(Math.max(r.left+r.width/2,0),innerWidth-1);
+  let fundo=0;
+  // Sem `elementsFromPoint` (um ambiente sem desenho), não há o que medir: o cabeçalho fica onde está.
+  for(const el of document.elementsFromPoint?.(x,0)??[]){
+    if(caixa.contains(el))continue;
+    for(let a:Element|null=el;a&&a!==document.documentElement;a=a.parentElement){
+      const pos=getComputedStyle(a).position;
+      if(pos==="fixed"||pos==="sticky"){fundo=Math.max(fundo,a.getBoundingClientRect().bottom);break;}
+    }
+  }
+  return fundo;
+}
+/** S-10: o cabeçalho da grade anda com a página. Cada `th` do `thead` ganha um `translate` — a caixa continua rolando de
+ *  lado, e o cabeçalho, que está dentro dela, vai junto. Para no fim da caixa, com a última fileira ainda à vista. */
+function usePresoNaPagina(ligado:boolean,grade:React.RefObject<HTMLTableElement|null>,montagem:unknown){
+  React.useLayoutEffect(()=>{
+    const tabela=grade.current;
+    if(!ligado||!tabela)return;
+    const caixa=tabela.closest<HTMLElement>(".table-wrap");
+    if(!caixa)return;
+    let quadro=0;
+    const medir=()=>{
+      quadro=0;
+      const cab=tabela.tHead;
+      if(!cab)return;
+      const r=caixa.getBoundingClientRect();
+      const ultima=tabela.tBodies[0]?.rows[tabela.tBodies[0].rows.length-1]?.offsetHeight??0;
+      const y=Math.round(Math.max(0,Math.min(topoParado(caixa)-r.top,r.height-cab.offsetHeight-ultima)));
+      for(const th of cab.querySelectorAll<HTMLElement>(":scope > tr > th"))th.style.translate=y?`0 ${y}px`:"";
+    };
+    const pedir=()=>{if(!quadro)quadro=requestAnimationFrame(medir);};
+    medir();
+    addEventListener("scroll",pedir,{passive:true,capture:true});
+    addEventListener("resize",pedir);
+    const vigia=typeof ResizeObserver==="undefined"?null:new ResizeObserver(pedir);vigia?.observe(tabela);
+    return()=>{cancelAnimationFrame(quadro);removeEventListener("scroll",pedir,{capture:true});removeEventListener("resize",pedir);vigia?.disconnect();
+      for(const th of tabela.querySelectorAll<HTMLElement>("thead th"))th.style.translate="";};
+  // `montagem`: a linha aberta do painel de detalhe muda o lugar da tabela na árvore, e a tabela nasce de novo.
+  },[ligado,grade,montagem]);
+}
+export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,onSelectionChange,getRowId,className,sorting:sortingProp,onSortingChange,globalFilter:globalFilterProp,onGlobalFilterChange,page,onPageChange,rowSelection:rowSelectionProp,onRowSelectionChange,manualSorting,manualFiltering,manualPagination,rowCount,filters,columnFilters:columnFiltersProp,onColumnFiltersChange,bulkActions,stickyHeader,dividers,hideableColumns,columnVisibility:columnVisibilityProp,onColumnVisibilityChange,resizableColumns,columnSizing:columnSizingProp,onColumnSizingChange,state,stateMessage,renderDetail,detailRowId:detailRowIdProp,onDetailRowIdChange,onExport}:{data:T[];columns:Array<ColumnDef<T,any>>;label?:string;filterable?:boolean;pageSize?:number;selectable?:boolean;onSelectionChange?:(rows:T[])=>void;getRowId?:(row:T,index:number)=>string;className?:string;sorting?:SortingState;onSortingChange?:(sorting:SortingState)=>void;globalFilter?:string;onGlobalFilterChange?:(filter:string)=>void;page?:number;onPageChange?:(page:number)=>void;rowSelection?:RowSelectionState;onRowSelectionChange?:(selection:RowSelectionState)=>void;manualSorting?:boolean;manualFiltering?:boolean;manualPagination?:boolean;rowCount?:number;filters?:GridFilterSpec[];columnFilters?:ColumnFiltersState;onColumnFiltersChange?:(filters:ColumnFiltersState)=>void;bulkActions?:Array<{id:string;label:string;icon?:IconName;onAction:(rows:T[],clear:()=>void)=>void}>;stickyHeader?:boolean|"page";dividers?:boolean;hideableColumns?:boolean;columnVisibility?:VisibilityState;onColumnVisibilityChange?:(v:VisibilityState)=>void;resizableColumns?:boolean;columnSizing?:ColumnSizingState;onColumnSizingChange?:(s:ColumnSizingState)=>void;state?:"loading"|"error"|UniversalState;stateMessage?:string;renderDetail?:(row:T)=>React.ReactNode;detailRowId?:string|null;onDetailRowIdChange?:(id:string|null)=>void;onExport?:(rows:T[],scope:{count:number;filtered:boolean;selected:boolean})=>void}){
   const s=useAureaStrings();
   const [sorting,setSorting]=useMaybe<SortingState>(sortingProp,onSortingChange,[]);
   const [globalFilter,setGlobalFilter]=useMaybe<string>(globalFilterProp,onGlobalFilterChange,"");
@@ -373,7 +417,12 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
   // O marcador vai na GRADE, não no recado: quem está obsoleto é a tabela, e o `Alert` é só
   // como ela conta isso. Achado pelo check 30 na primeira execução dele — eu tinha marcado o
   // recado, e com `state="loading"` não há recado nenhum, então o estado não chegava ao DOM.
-  return <div className={cx("datagrid",stickyHeader&&"datagrid-sticky",className)} data-state={state}>
+  // S-10 (o MNT-40, aprovado em 05/11/2026 como valor novo): com `stickyHeader="page"` a caixa não ganha teto nem rolagem
+  // de cima para baixo, e o cabeçalho anda com a PÁGINA até encostar embaixo do que fica parado no topo dela (a barra do
+  // `AppShell`, o cabeçalho do site). Só com CSS não dá: a caixa rola de lado, e um elemento grudento gruda no contêiner de
+  // rolagem mais próximo — a caixa, não a página. Então o deslocamento é medido aqui, a cada rolagem.
+  usePresoNaPagina(stickyHeader==="page",grade,detailRowId);
+  return <div className={cx("datagrid",stickyHeader===true&&"datagrid-sticky",stickyHeader==="page"&&"datagrid-sticky-page",dividers&&"datagrid-dividers",className)} data-state={state}>
     {emLote.length>0&&<Toolbar label={s.dataGridBulkLabel}>
       <span className="hint">{emLote.length} {s.dataGridSelected}</span>
       <ToolbarSeparator/>

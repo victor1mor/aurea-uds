@@ -27,7 +27,7 @@ const ESPERA = q.has("rapido") ? 0 : 700;
 if (q.get("dir") === "rtl") document.documentElement.dir = "rtl";
 const esperar = <T,>(v: T, ms = ESPERA) => new Promise<T>((r) => setTimeout(() => r(v), ms));
 
-// Foto de mentira: um quadro de cor lisa com o número (sem gradiente — CLAUDE.md §5).
+// Foto de mentira: um quadro de cor lisa com o número.
 const CORES = ["#3a6ea5", "#7a4f9a", "#2f7d62", "#a5563a", "#5b6470", "#8a7a2b"];
 const foto = (n: number) => `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="240" height="180"><rect width="240" height="180" fill="${CORES[n % CORES.length]}"/><text x="120" y="100" font-family="sans-serif" font-size="40" fill="#fff" text-anchor="middle">${n}</text></svg>`)}`;
 
