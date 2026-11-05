@@ -45,7 +45,7 @@ function Inbox() {
       : h(A.MessageComposer, {label: `Reply to ${c.customer}`, placeholder: "Write a reply…", onSend: t => responder(c.id, t)}),
     h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-2)", justifyContent: "flex-end"}},
       h(A.Button, {variant: "danger-ghost", disabled: c.state === "escalated" || c.state === "resolved", onClick: () => mudar(c.id, "escalated")}, "Escalate"),
-      h(A.Button, {variant: "secondary", leadingIcon: "check", disabled: c.state === "resolved", onClick: () => mudar(c.id, "resolved")}, "Resolve")));
+      h(A.Button, {appearance: "soft", tone: "brand", leadingIcon: "check", disabled: c.state === "resolved", onClick: () => mudar(c.id, "resolved")}, "Resolve")));
   const visiveis = fila === "All" ? casos : casos.filter(c => (fila === "Open" ? c.state !== "resolved" : c.state === "resolved"));
   const abertos = casos.filter(c => c.state !== "resolved").length;
   const caso = casos.find(c => c.id === aberto);
@@ -96,7 +96,7 @@ export function Inbox({initialCases, initialThreads}) {
         <MessageList label={\`Case \${current.id}\`} messages={threads[current.id]} />
         <MessageComposer label={\`Reply to \${current.customer}\`} onSend={text => reply(current.id, text)} />
         <Button variant="danger-ghost" onClick={() => setState(current.id, "escalated")}>Escalate</Button>
-        <Button variant="secondary" leadingIcon="check" onClick={() => setState(current.id, "resolved")}>Resolve</Button>
+        <Button appearance="soft" tone="brand" leadingIcon="check" onClick={() => setState(current.id, "resolved")}>Resolve</Button>
       </Card>
     </Card>
   );

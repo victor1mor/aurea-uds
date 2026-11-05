@@ -49,6 +49,8 @@ export const Propriedades = ({titulo, itens}) => h("div", {style: {display: "gri
 // normal já é um cartão, da MESMA cor do cartão da tela — dentro dela, a caixa dele some (o Victor: "pq esses componentes
 // ficam soltos?", 05/11/2026).
 export const Numero = props => h(A.Card, {variant: "inset"}, h(A.KPI, {variant: "plain", ...props}));
-// Um grupo do corpo numa caixa cinza, com o título pequeno em cima (o "Activity", o "Tool calls").
+// Um grupo do corpo numa caixa cinza, com o título pequeno em cima (o "Activity", o "Tool calls"). ⚠ O botão secundário e o
+// terciário têm a MESMA cor da caixa cinza (`--secondary`) e somem dentro dela: aqui dentro, o botão que não é o principal
+// usa `appearance="soft" tone="brand"` (achado de 05/11/2026, o mesmo problema dos números soltos).
 export const Grupo = ({titulo, children}) => h(A.Card, {variant: "inset"}, h("div", {style: {display: "grid", gap: "var(--space-3)", minInlineSize: 0}},
   titulo ? h(A.Text, {type: "body-xs", tone: "muted", weight: "semibold"}, titulo) : null, children));

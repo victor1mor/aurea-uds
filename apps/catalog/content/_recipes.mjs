@@ -34,6 +34,12 @@ import observabilityOps from "./recipes/observability_ops.mjs";
 import iotControl from "./recipes/iot_control.mjs";
 import mapsLogistics from "./recipes/maps_logistics.mjs";
 import fileCloud from "./recipes/file_cloud.mjs";
+import publicSite from "./recipes/public_site.mjs";
+import docsCms from "./recipes/docs_cms.mjs";
+import catalogGallery from "./recipes/catalog_gallery.mjs";
+import mediaStreaming from "./recipes/media_streaming.mjs";
+import education from "./recipes/education.mjs";
+import creativeWorkspace from "./recipes/creative_workspace.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-3)"};
 const between = {...row, justifyContent: "space-between"};
@@ -60,81 +66,12 @@ const narrow = {width: "min(24rem,100%)"};
 const muted = {color: "var(--muted-foreground)", fontSize: "var(--text-sm)"};
 
 export default {
-  public_site: {
-    uses: ["Card", "Badge", "Button"],
-    code: `<Card>
-  <Badge variant="primary">New</Badge>
-  <h2>Ship the interface, not the argument about it.</h2>
-  <p>One system, two themes, three densities.</p>
-  <Button variant="primary" trailingIcon="arrow-right">Get started</Button>
-  <Button variant="outline">Read the docs</Button>
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h(A.Badge, {variant: "primary"}, "New"),
-      h("strong", null, "Ship the interface, not the argument about it."),
-      h("span", {style: muted}, "One system, two themes, three densities."),
-      h("div", {style: row}, h(A.Button, {variant: "primary", trailingIcon: "arrow-right"}, "Get started"),
-        h(A.Button, {variant: "outline"}, "Read the docs"))))),
-  },
-  docs_cms: {
-    uses: ["Card", "Badge", "Field", "Input", "Textarea", "Button"],
-    code: `<Card>
-  <Badge variant="warning">Draft</Badge>
-  <Field label="Title"><Input defaultValue="Measuring instead of counting" /></Field>
-  <Field label="Body" hint="Markdown."><Textarea rows={3} /></Field>
-  <Button variant="ghost">Save draft</Button>
-  <Button variant="primary">Publish</Button>
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h("div", {style: between}, h("strong", null, "Article"), h(A.Badge, {variant: "warning"}, "Draft")),
-      h(A.Field, {label: "Title"}, h(A.Input, {defaultValue: "Measuring instead of counting"})),
-      h(A.Field, {label: "Body", hint: "Markdown."},
-        h(A.Textarea, {rows: 3, defaultValue: "A claim about state needs a command behind it."})),
-      h("div", {style: {...row, justifyContent: "flex-end"}},
-        h(A.Button, {variant: "ghost"}, "Save draft"),
-        h(A.Button, {variant: "primary"}, "Publish"))))),
-  },
+  public_site: {...publicSite},
+  docs_cms: {...docsCms},
   saas_admin: {...saasAdmin},
   dashboard_bi: {...dashboardBi},
-  catalog_gallery: {
-    uses: ["SegmentedControl", "Badge", "Button", "Grid", "Card", "Checkbox"],
-    code: `<SegmentedControl label="View" value={view} onChange={setView}
-  items={[{value: "grid", label: "Grid"}, {value: "list", label: "List"}]} />
-<Badge variant="primary">2 selected</Badge>
-<Button variant="outline">Export</Button>
-<Grid>{items.map(i => (
-  <Card key={i.id} variant={selected.has(i.id) ? "selected" : "base"}>
-    <Checkbox label={\`Select \${i.name}\`} />
-    {i.name}
-  </Card>))}
-</Grid>`,
-    render: () => h("div", {style: {...stack, ...wide}},
-      h("div", {style: between},
-        h(A.SegmentedControl, {label: "View", value: "grid", onChange: () => {},
-          items: [{value: "grid", label: "Grid"}, {value: "list", label: "List"}]}),
-        h("div", {style: row}, h(A.Badge, {variant: "primary"}, "2 selected"),
-          h(A.Button, {variant: "outline"}, "Export"))),
-      h(A.Grid, null, ...[["Cover art", true], ["Poster", true], ["Thumbnail", false]]
-        .map(([name, sel]) => h(A.Card, {key: name, variant: sel ? "selected" : "base"},
-          h("div", {style: row}, h(A.Checkbox, {label: `Select ${name}`, labelHidden: true, defaultChecked: sel}),
-            h("span", null, name)))))),
-  },
-  media_streaming: {
-    uses: ["MediaPlayer", "Table", "Badge"],
-    code: `<MediaPlayer kind="audio" src="/media/ep-14.mp3" title="Episode 14" subtitle="Season 2" />
-<Table caption="Up next">
-  <thead><tr><th>Track</th><th>Length</th></tr></thead>
-  <tbody><tr><td>Episode 15 <Badge>queued</Badge></td><td>41:02</td></tr></tbody>
-</Table>`,
-    render: () => h("div", {style: {...stack, ...wide, ...playerCurto}},
-      h(A.MediaPlayer, {kind: "audio", title: "Episode 14", subtitle: "Season 2"}),
-      h(A.Table, {caption: "Up next"},
-        h("thead", null, h("tr", null, h("th", null, "Track"), h("th", null, "Length"))),
-        h("tbody", null,
-          h("tr", null, h("td", null, h("div", {style: row}, "Episode 15",
-            h(A.Badge, null, "queued"))), h("td", null, "41:02")),
-          h("tr", null, h("td", null, "Episode 16"), h("td", null, "38:47"))))),
-  },
+  catalog_gallery: {...catalogGallery},
+  media_streaming: {...mediaStreaming},
   workflow_automation: {...workflowAutomation},
   developer_tools: {...developerTools},
   file_cloud: {...fileCloud},
@@ -159,27 +96,7 @@ export default {
   iot_control: {...iotControl},
   agent_ai: {...agentAi},
   project_crm_erp: {...projectCrmErp},
-  education: {
-    uses: ["Card", "Progress", "Accordion", "Badge", "Button"],
-    code: `<Card>
-  <Progress value={60} label="Module progress" />
-  <Badge variant="success">3 of 5 lessons</Badge>
-  <Accordion items={[
-    {id: "l1", title: "Lesson 1 · Tokens", content: "Every visual value has a name."},
-    {id: "l2", title: "Lesson 2 · Density", content: "What density governs, and what it does not."},
-  ]} />
-  <Button variant="primary">Continue</Button>
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h("div", {style: between}, h("strong", null, "Foundations"),
-        h(A.Badge, {variant: "success"}, "3 of 5 lessons")),
-      h(A.Progress, {value: 60, label: "Module progress"}),
-      h(A.Accordion, {items: [
-        {id: "l1", title: "Lesson 1 · Tokens", content: "Every visual value has a name."},
-        {id: "l2", title: "Lesson 2 · Density", content: "What density governs, and what it does not."}]}),
-      h("div", {style: {...row, justifyContent: "flex-end"}},
-        h(A.Button, {variant: "primary"}, "Continue"))))),
-  },
+  education: {...education},
   personal_productivity: {
     uses: ["Card", "Banner", "Checkbox", "Button"],
     code: `<Card>
@@ -213,25 +130,6 @@ export default {
   },
   support_service: {...supportService},
   regulated_records: {...regulatedRecords},
-  creative_workspace: {
-    uses: ["Card", "Timeline", "MessageList", "Badge"],
-    code: `// The canvas is the other half. Versions and comments are the surface that
-// makes canvas work reviewable — every operation has an outline alternative.
-<Card>
-  <Badge variant="primary">v7 · current</Badge>
-  <Timeline items={[
-    {title: "v7 · exported at 2x", time: "09:20"},
-    {title: "v6 · palette swapped", time: "08:55"},
-  ]} />
-  <MessageList messages={comments} />
-</Card>`,
-    render: () => h("div", {style: wide}, h(A.Card, null, h("div", {style: stack},
-      h("div", {style: between}, h("strong", null, "Cover · hero"),
-        h(A.Badge, {variant: "primary"}, "v7 · current")),
-      h(A.Timeline, {items: [{title: "v7 · exported at 2x", time: "09:20"},
-        {title: "v6 · palette swapped", time: "08:55"}]}),
-      h(A.MessageList, {messages: [{id: "1", author: "Curator", time: "09:21",
-        body: "The yellow is doing the work. Keep it.", avatar: {fallback: "CU"}}]})))),
-  },
+  creative_workspace: {...creativeWorkspace},
   observability_ops: {...observabilityOps},
 };

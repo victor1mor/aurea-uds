@@ -56,7 +56,7 @@ function OnCall() {
       {id: "b", name: "payments", state: fase === "ok" ? "operational" : "down", detail: fase === "ok" ? "180 ms" : "timeouts"},
       {id: "c", name: "catalog", state: "operational", detail: "90 ms"}, {id: "d", name: "search", state: "maintenance", detail: "until 10:00"}]})),
     h(Grupo, {titulo: "Live tail"},
-      h("div", null, h(A.Button, {variant: "secondary", size: "sm", leadingIcon: pausado ? "play" : "pause", onClick: () => setPausado(p => !p)}, pausado ? "Resume live tail" : "Pause live tail")),
+      h("div", null, h(A.Button, {appearance: "soft", tone: "brand", size: "sm", leadingIcon: pausado ? "play" : "pause", onClick: () => setPausado(p => !p)}, pausado ? "Resume live tail" : "Pause live tail")),
       h(A.LogStream, {lines: registro})));
 }
 
@@ -95,7 +95,7 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
       </Card>
       <Card variant="inset"><HealthMatrix label="Services" entries={services} /></Card>
       <Card variant="inset">
-        <Button variant="secondary" size="sm" onClick={() => setPaused(p => !p)}>{paused ? "Resume live tail" : "Pause live tail"}</Button>
+        <Button appearance="soft" tone="brand" size="sm" onClick={() => setPaused(p => !p)}>{paused ? "Resume live tail" : "Pause live tail"}</Button>
         <LogStream lines={tail} />
       </Card>
 
