@@ -49,6 +49,7 @@ export default {
     keyExtractor: "A stable identity for each row. Without it, the index — enough for a list that does not reorder.",
     onRowPress: "Makes each row a button that receives the row. Without it a row is not a target, and does not pretend to be.",
     empty: "What to show with no rows. Without it, the empty phrase from the strings table.",
+    dividers: "The rows together in one card, with a light line between them and none after the last — the web's dividers, in the phone's layout, where each row is already a card. No effect with the Ember brand.",
     style: "Style for the list.",
     testID: "Test id of the list.",
   },
@@ -78,6 +79,14 @@ const withStatus = [...columns,
 
 <Table caption="October invoices" columns={withStatus} rows={invoices} keyExtractor={row => row.id} />`,
       render: () => h("div", {style: largura}, h(Table, {caption: "October invoices", columns: COM_ESTADO, rows: LINHAS_COM_ESTADO, keyExtractor: (l) => l.id})),
+    },
+    {
+      title: "Dividers",
+      description: "dividers puts the rows together in one card, with a light line between them — none after the last.",
+      code: `${DADOS_CODIGO}
+
+<Table caption="October expenses, together" columns={columns} rows={rows} keyExtractor={row => row.id} dividers />`,
+      render: () => h("div", {style: largura}, h(Table, {caption: "October expenses, together", columns: COLUNAS, rows: LINHAS, keyExtractor: (l) => l.id, dividers: true})),
     },
     {
       title: "Empty",

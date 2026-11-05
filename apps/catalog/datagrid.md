@@ -38,6 +38,22 @@ loading and error replace the rows; the other states keep the rows you already h
 <DataGrid label="Members, waiting_dependency" data={members} columns={columns} state="waiting_dependency" />
 ```
 
+### Dividers
+
+dividers draws a light line between the body rows, none after the last — the frame stays.
+
+```tsx
+<DataGrid label="Members, with dividers" dividers data={members} columns={columns} />
+```
+
+### Header pinned to the page
+
+stickyHeader="page" keeps the header under whatever stays fixed at the top of the page while the page scrolls — no box with its own scroll. stickyHeader alone pins it inside a box with a ceiling instead.
+
+```tsx
+<DataGrid label="Devices, header pinned to the page" stickyHeader="page" data={devices} columns={columns} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -63,7 +79,8 @@ loading and error replace the rows; the other states keep the rows you already h
 | `columnFilters` | `ColumnFiltersState` | — | Controlled per-column filters, same rule as `sorting`: with it, typing and picking report and nothing narrows until you say so. To put it in the address bar, `gridStateToParams` and `gridStateFromParams` are the format — imported from the package root, not from this subpath, because the code that reads a URL runs on the server and this subpath is client-only. The grid never writes the URL itself: only you know whether a change should push a history entry or replace one. |
 | `onColumnFiltersChange` | `(filters: ColumnFiltersState) => void` | — | Fires whenever a column filter changes, controlled or not. |
 | `rowCount` | `number` | — | Total rows on the server, used to compute the page count under `manualPagination`. A count, not a dimension. |
-| `stickyHeader` | `boolean` | false | Pins the header — and the filter row with it — while the body scrolls. It also gives the scroll box a height, because it has to: the wrapper is the scroll container, and a box with no ceiling never scrolls inside itself, so the header would never have anything to detach from. The ceiling is `--datagrid-max-h` (60vh by default), set in CSS rather than as a prop — only the page knows how much screen it can spare, and a height is not a number this library accepts as an API. |
+| `stickyHeader` | `boolean \| "page"` | false | Pins the header — and the filter row with it — while the body scrolls. It also gives the scroll box a height, because it has to: the wrapper is the scroll container, and a box with no ceiling never scrolls inside itself, so the header would never have anything to detach from. The ceiling is `--datagrid-max-h` (60vh by default), set in CSS rather than as a prop — only the page knows how much screen it can spare, and a height is not a number this library accepts as an API. With "page", the header pins to the top of the PAGE instead, right under whatever stays fixed there (the AppShell bar, a site header): the box gets no ceiling and no scroll of its own top to bottom, so the page has a single scroll. The grid measures as the page scrolls and moves the header cells with translate — CSS alone cannot do it, because the box still scrolls sideways and a sticky element only sticks to its nearest scroll container. The header stops at the end of the grid, with the last row still in view. |
+| `dividers` | `boolean` | false | A light line between the body rows, none after the last — the frame stays. The line is the text color at 10%, the same light line as the outline card, and no measurement changes. A named exception to the no-line rule, drawn only when the app asks for it; the Ember brand stays without it. |
 | `hideableColumns` | `boolean` | false | Adds a picker that turns columns on and off — the same multi-select the facet filter uses, because choosing several from a list is that component. When it is the only control, the search field keeps the full width it always had; the two only share a row when both are there. |
 | `columnVisibility` | `VisibilityState` | — | Controlled map of column id to visible. It is a plain serialisable object, which is what makes the choice persistable — where it is persisted (local storage, user profile, the URL) is yours to decide, exactly as in F4. |
 | `onColumnVisibilityChange` | `(visibility: VisibilityState) => void` | — | Fires whenever a column is shown or hidden. |

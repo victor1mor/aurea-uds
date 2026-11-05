@@ -947,8 +947,12 @@ if (catalogo) {
   // (data-busca); os grupos ([data-g1-grupo]) mostram os primeiros até o "Show all" ([data-g1-mais]); os itens a mais
   // levam [data-mais]. Os grupos a mais ([data-g1-grupo-mais]) esperam o botão [data-g1-mais-grupos]. Sem script, tudo
   // aparece.
+  // O FILTRO DA LATERAL (S-01, 05/11/2026 — o Victor: "o item fica marcado e a lista não filtra"): o grupo com
+  // [data-g1-filtro] aparece só quando o valor é o escolhido na lateral (o evento "site-filtro" do `_filtro.js`, ou o
+  // `#filtro/<valor>` do endereço), já aberto, com todos os itens; "all" mostra todos, como antes.
+  const filtroDoEndereco = () => { const m = /^#filtro\/(.+)$/.exec(location.hash); return m ? decodeURIComponent(m[1]) : "all"; };
   document.querySelectorAll("[data-g1-lista]").forEach((lista) => {
-    const estado = {q: "", abertos: new Set(), todosOsGrupos: false};
+    const estado = {q: "", abertos: new Set(), todosOsGrupos: false, filtro: filtroDoEndereco()};
     const busca = lista.querySelector("[data-g1-busca] input, input[data-g1-busca]");
     const grupos = [...lista.querySelectorAll("[data-g1-grupo]")];
     const mostrando = lista.querySelector("[data-g1-mostrando]");
@@ -956,20 +960,22 @@ if (catalogo) {
     const tituloDoVazio = lista.querySelector("[data-g1-vazio-titulo]");
     const maisGrupos = lista.querySelector("[data-g1-mais-grupos]");
     const fraseDoVazio = lista.dataset.g1Frase || "Nothing called";
+    const filtravel = grupos.some((g) => g.hasAttribute("data-g1-filtro"));
     const aplicar = () => {
       const q = estado.q.trim().toLowerCase();
+      const f = filtravel && estado.filtro !== "all" ? estado.filtro : null;
       let vistos = 0;
       grupos.forEach((g) => {
         const itens = [...g.querySelectorAll("[data-g1-item]")];
         const acham = itens.filter((c) => !q || (c.dataset.busca || "").includes(q));
-        const resumido = !q && !estado.abertos.has(g);
+        const resumido = !q && !f && !estado.abertos.has(g);
         itens.forEach((c) => { c.hidden = !acham.includes(c) || (resumido && c.hasAttribute("data-mais")); });
-        const escondidoPorQuantidade = !q && !estado.todosOsGrupos && g.hasAttribute("data-g1-grupo-mais");
-        g.hidden = acham.length === 0 || escondidoPorQuantidade;
+        const escondidoPorQuantidade = !q && !f && !estado.todosOsGrupos && g.hasAttribute("data-g1-grupo-mais");
+        g.hidden = (f != null && g.dataset.g1Filtro !== f) || acham.length === 0 || escondidoPorQuantidade;
         const mais = g.querySelector("[data-g1-mais]");
         if (mais) {
           const caixa = mais.closest(".g1-mais") || mais;
-          caixa.hidden = Boolean(q);
+          caixa.hidden = Boolean(q) || f != null;
           const aberto = estado.abertos.has(g);
           mais.setAttribute("aria-expanded", String(aberto));
           const rotulo = mais.querySelector("span:not([class])") || mais;
@@ -983,8 +989,9 @@ if (catalogo) {
         vazio.hidden = vistos > 0;
         if (tituloDoVazio) tituloDoVazio.textContent = fraseDoVazio + " “" + estado.q.trim() + "”";
       }
-      if (maisGrupos) { const c = maisGrupos.closest("[data-g1-mais-grupos-caixa]") || maisGrupos; c.hidden = Boolean(q) || estado.todosOsGrupos; }
+      if (maisGrupos) { const c = maisGrupos.closest("[data-g1-mais-grupos-caixa]") || maisGrupos; c.hidden = Boolean(q) || f != null || estado.todosOsGrupos; }
     };
+    if (filtravel) document.addEventListener("site-filtro", (e) => { estado.filtro = e.detail || "all"; aplicar(); });
     if (busca) busca.addEventListener("input", () => { estado.q = busca.value; aplicar(); });
     lista.querySelectorAll("[data-g1-limpar]").forEach((b) => b.addEventListener("click", () => {
       estado.q = ""; if (busca) { busca.value = ""; busca.focus(); } aplicar();
@@ -1023,6 +1030,34 @@ if (catalogo) {
   addEventListener("scroll", pede, {passive: true});
   addEventListener("resize", pede);
   pede();
+})();
+
+/* A LATERAL ABRE NO ITEM ATUAL (S-07 — o Victor, 05/11/2026, em Chart: "rolei, cliquei em um item, e a sidebar sobe de novo
+   para o topo"). Cada página é um documento novo, e a lateral nascia rolada no topo, com o item atual fora da vista.
+   Aprovado pela imagem: ao sair, a página guarda a rolagem da lateral (por área, só nesta aba); ao abrir, a lateral volta
+   a ela — e, se o item atual ainda ficar fora da vista (chegou de outra área, ou do endereço direto), rola até ele ficar
+   no meio. Sem script, ou sem onde guardar, só a segunda parte. */
+(function () {
+  var lateral = document.querySelector(".app-shell-docs > .sidebar:not(.app-shell-aside)");
+  if (!lateral) return;
+  var area = (/\bsite-area-([\w-]+)/.exec(lateral.parentElement.className) || [])[1] || "";
+  var chave = "aurea-lateral:" + area;
+  function rola() {
+    // Quem rola: a própria lateral (na coluna, medido) ou a caixa de dentro dela que tiver a rolagem.
+    var rolavel = function (el) { return el && el.clientHeight > 0 && el.scrollHeight > el.clientHeight + 1 && /(auto|scroll)/.test(getComputedStyle(el).overflowY); };
+    var caixa = [lateral, lateral.querySelector(".sidebar-body")].filter(rolavel)[0];
+    if (!caixa) return;
+    var atual = lateral.querySelector('.sidebar-nav a[aria-current="page"]');
+    try { var guardado = sessionStorage.getItem(chave); if (guardado != null) caixa.scrollTop = Number(guardado) || 0; } catch (e) { /* sem onde guardar */ }
+    if (atual) {
+      var c = caixa.getBoundingClientRect(), a = atual.getBoundingClientRect();
+      if (a.top < c.top || a.bottom > c.bottom) caixa.scrollTop += a.top - c.top - (caixa.clientHeight - a.height) / 2;
+    }
+    addEventListener("pagehide", function () {
+      try { sessionStorage.setItem(chave, String(Math.round(caixa.scrollTop))); } catch (e) { /* sem onde guardar */ }
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", rola); else rola();
 })();
 
 /* site-b/js/accessibility.js */
@@ -2295,25 +2330,32 @@ document.addEventListener("site-filtro", (e) => {
   });
 
   // Achar pelo nome: some o que não casa, e a parte que ficou vazia; nada casou, o vazio com o "Clear the search".
+  // E O FILTRO DA LATERAL ("By $type", S-01, 05/11/2026): só os tokens do `$type` escolhido (`data-tk-tipo`), junto da busca.
+  var filtro = "all";
   function busca() { var c = raiz.querySelector("[data-tk-busca]"); return c && (c.matches("input") ? c : c.querySelector("input")); }
   function achar() {
     var t = (busca().value || "").trim().toLowerCase(), achados = 0;
     var itens = todos("[data-tk], [data-tk-copia]").filter(function (el) { return !el.closest(".tk-ferramentas"); });
     itens.forEach(function (el) {
       var nome = (el.dataset.tk || el.dataset.tkCopia || "") + " " + el.textContent;
-      var mostra = !t || nome.toLowerCase().indexOf(t) >= 0;
+      var mostra = (!t || nome.toLowerCase().indexOf(t) >= 0) && (filtro === "all" || el.dataset.tkTipo === filtro);
       var alvo = el.closest(".tk-mov") || el;
       alvo.hidden = !mostra;
       if (mostra) achados++;
     });
     todos("[data-tk-sec]").forEach(function (s) {
-      s.hidden = !!t && !todos("[data-tk], [data-tk-copia]", s).some(function (el) { return !(el.closest(".tk-mov") || el).hidden; });
+      s.hidden = (!!t || filtro !== "all") && !todos("[data-tk], [data-tk-copia]", s).some(function (el) { return !(el.closest(".tk-mov") || el).hidden; });
     });
     var vazio = raiz.querySelector("[data-tk-vazio]");
     vazio.hidden = achados > 0;
-    if (!achados) raiz.querySelector("[data-tk-vazio-titulo]").textContent = "No token called “" + t + "”";
-    estado.textContent = t ? achados + (achados === 1 ? " token" : " tokens") + " match “" + t + "”." : "Press any token to copy it.";
+    if (!achados) raiz.querySelector("[data-tk-vazio-titulo]").textContent = t ? "No token called “" + t + "”" : "No " + filtro + " token";
+    var tipo = filtro === "all" ? "" : " of $type " + filtro;
+    estado.textContent = t ? achados + (achados === 1 ? " token" : " tokens") + tipo + " match “" + t + "”."
+      : filtro !== "all" ? achados + (achados === 1 ? " token" : " tokens") + tipo + "." : "Press any token to copy it.";
   }
+  document.addEventListener("site-filtro", function (e) { filtro = e.detail || "all"; achar(); });
+  var doEndereco = /^#filtro\/(.+)$/.exec(location.hash);
+  if (doEndereco) { filtro = decodeURIComponent(doEndereco[1]); achar(); }
   var campo = busca();
   if (campo) {
     campo.addEventListener("input", achar);

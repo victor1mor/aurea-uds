@@ -3801,6 +3801,13 @@ img,svg { display:block; }
 .table tbody tr:last-child > :last-child,.table-wrap tbody tr:last-child > :last-child { border-end-end-radius:var(--table-cell-r); }
 .table tr:last-child td,.table-wrap tr:last-child td { border-bottom:0; }
 @media (hover:hover) { .table tbody tr:hover > :is(td,th),.table-wrap tbody tr:hover > :is(td,th) { background:color-mix(in oklab,var(--card) 40%,var(--surface-2)); } }
+/* A LINHA ENTRE AS FILEIRAS (MNT-38, `dividers` na `Table` e na `DataGrid` — a forma "A", aprovada pela bancada em 05/11/2026,
+   *"Pode, sem a Ember"*): a moldura de sempre e uma linha clara entre as fileiras do corpo, menos depois da última, como a
+   referência (a linha de baixo da célula, a 50% do separador). A borda de baixo da célula já existe, transparente (ADR-0072);
+   a variação só lhe dá cor — o texto a 10%, a mesma linha clara do cartão de contorno —, e nenhuma medida muda. É uma exceção
+   NOMEADA ao sem linha: só com a escolha do app, e só esta regra (`tests/unit/sem-linha.test.tsx`). A Ember fica sem ela. Sem
+   efeito no arranjo `rows`, onde cada fileira já é uma cápsula solta. */
+:is(.table.table-dividers:not(.table-rows),.datagrid-dividers .table-wrap table) tbody tr:not(:last-child) > :is(td,th):where(:not([data-brand="ember"] *)) { border-bottom-color:color-mix(in oklab,var(--foreground) 10%,transparent); }
 /* AS LINHAS EM CÁPSULA (`Table variant="rows"`, o site B — a lista de membros da página inicial, aprovada pela bancada em
    01/11/2026, o D-7.6): sem a caixa em volta; cada linha é uma cápsula de 54 (`--target-min` + 10), 4 entre elas; com o
    mouse o `--fill-1`; a linha com `data-selected` (a que o app marcou), o amarelo a 14% (18% com o mouse). O cabeçalho em
@@ -5339,6 +5346,10 @@ th[aria-sort] .datagrid-sort-icon { color:var(--primary); }
    provadas. */
 .datagrid-sticky thead th { position:sticky; inset-block-start:0; z-index:1; }
 .datagrid-sticky .datagrid-filters th { inset-block-start:var(--table-head-h); }
+/* S-10 (o MNT-40), `stickyHeader="page"`: o cabeçalho preso ao topo da PÁGINA, sem caixa de rolagem própria — a caixa
+   continua sem teto (uma rolagem só, a da página) e o `DataGrid` move as células do cabeçalho com `translate` enquanto a
+   página rola. Aqui só a camada: as fileiras passam POR BAIXO do cabeçalho, que já tem o fundo da moldura. */
+.datagrid-sticky-page thead th { z-index:1; }
 
 /* F7: a alça de redimensionar. Fina, colada no fim da célula e da altura toda —
    alvo estreito de propósito, porque largo demais rouba o clique do cabeçalho

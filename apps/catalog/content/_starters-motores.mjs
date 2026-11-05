@@ -131,6 +131,23 @@ export default {
         base: (v) => ({label: `Members, ${v}`, data: [{name: "Messenger", role: "Owner"}, {name: "Analyst", role: "Editor"}],
           columns: [{accessorKey: "name", header: "Name"}, {accessorKey: "role", header: "Role"}]}),
         estilo: {display: "grid", gap: "var(--space-4)", ...wide}}),
+      {
+        title: "Dividers",
+        description: "dividers draws a light line between the body rows, none after the last — the frame stays.",
+        code: `<DataGrid label="Members, with dividers" dividers data={members} columns={columns} />`,
+        render: () => h("div", {style: wide}, h(DataGrid, {label: "Members, with dividers", dividers: true,
+          data: [{name: "Messenger", role: "Owner"}, {name: "Analyst", role: "Editor"}, {name: "Curator", role: "Viewer"}],
+          columns: [{accessorKey: "name", header: "Name"}, {accessorKey: "role", header: "Role"}]})),
+      },
+      {
+        title: "Header pinned to the page",
+        description: "stickyHeader=\"page\" keeps the header under whatever stays fixed at the top of the page while the page " +
+          "scrolls — no box with its own scroll. stickyHeader alone pins it inside a box with a ceiling instead.",
+        code: `<DataGrid label="Devices, header pinned to the page" stickyHeader="page" data={devices} columns={columns} />`,
+        render: () => h("div", {style: wide}, h(DataGrid, {label: "Devices, header pinned to the page", stickyHeader: "page",
+          data: ["core-sw-01", "core-sw-02", "edge-rt-01", "edge-rt-02", "ap-floor-1", "ap-floor-2"].map((name, i) => ({name, uptime: `${i * 7 + 1} d`})),
+          columns: [{accessorKey: "name", header: "Device"}, {accessorKey: "uptime", header: "Uptime"}]})),
+      },
     ],
   },
   DependencyGraph: {

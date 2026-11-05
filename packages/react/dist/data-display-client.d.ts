@@ -17,8 +17,11 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement>, RefAttribu
     /** As linhas ímpares do corpo com fundo (o site B, 02/11/2026, a "B" na imagem): a 1ª, a 3ª… — o olho segue a linha
      *  numa tabela larga. Nos dois arranjos (`default` e `rows`). */
     striped?: boolean;
+    /** MNT-38: uma linha clara entre as fileiras do corpo, menos depois da última (a forma "A", aprovada em 05/11/2026). Uma
+     *  exceção nomeada ao sem linha (ADR-0072): só aparece quando o app escolhe. Sem efeito no arranjo `rows` e na Ember. */
+    dividers?: boolean;
 }
-export declare function Table({ caption, stickyHeader, stickyFirstColumn, fit, differencesOnly, striped, variant, children, className, ...props }: TableProps): React.JSX.Element;
+export declare function Table({ caption, stickyHeader, stickyFirstColumn, fit, differencesOnly, striped, dividers, variant, children, className, ...props }: TableProps): React.JSX.Element;
 export interface SortableItem {
     id: string;
     label: ReactNode;
