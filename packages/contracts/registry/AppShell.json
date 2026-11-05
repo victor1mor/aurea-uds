@@ -125,6 +125,18 @@
       "description": "A dark sidebar on any page — the contrast of the Sidebar, forwarded to it: dark on a light page, darker than the page on a dark one."
     },
     {
+      "name": "highContrast",
+      "type": "boolean",
+      "default": "false",
+      "description": "High contrast across the whole app: an outline on fields, cards and buttons, the supporting text closer to the text, and links always underlined. It marks the shell and the page root (data-contrast=\"high\"), so menus and dialogs, which open outside the shell, match. Every brand."
+    },
+    {
+      "name": "textSize",
+      "type": "\"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "Large text across the whole app: every text step 2px larger, and the medium control at the 44px touch target. It marks the shell and the page root (data-text=\"lg\"). Every brand."
+    },
+    {
       "name": "defaultSidebarCollapsed",
       "type": "boolean",
       "default": "—",
@@ -303,6 +315,10 @@
       "segment-dot",
       "segment-line",
       "subtle"
+    ],
+    "textSize": [
+      "lg",
+      "md"
     ]
   }
 }

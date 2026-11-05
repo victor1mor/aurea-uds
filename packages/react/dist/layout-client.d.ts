@@ -3,7 +3,7 @@ import { type Orientation, type Responsive } from "./pure.js";
 import { type IconButtonProps } from "./actions.js";
 import { type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarEntry, type SidebarCollapsible, type SidebarIndicator } from "./navigation.js";
 declare function AppShellSidebarToggle(props: Omit<IconButtonProps, "icon" | "label" | "onClick" | "variant">): React.JSX.Element;
-export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, topbarActions, topbarBlurred, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, sidebarToggle, sidebarShortcut, sidebarIndicator, sidebarPanel, sidebarContrast, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export declare function AppShell({ brand, navigation, navItems, currentNavId, navLabel, topbar, topbarVariant, topbarDivider, topbarTabs, topbarCurrentTab, topbarTabsLabel, topbarTabsEnd, topbarActions, topbarBlurred, layout, sidebarVariant, sidebarScrollbar, sidebarFooter, sidebarCollapsed, sidebarCollapsible, sidebarToggle, sidebarShortcut, sidebarIndicator, sidebarPanel, sidebarContrast, defaultSidebarCollapsed, onSidebarCollapsedChange, contentVariant, highContrast, textSize, aside, asideLabel, asideVariant, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     brand: ReactNode;
     navigation?: ReactNode;
     navItems?: SidebarEntry[];
@@ -74,6 +74,13 @@ export declare function AppShell({ brand, navigation, navItems, currentNavId, na
     /** AN-01: avisa cada troca — pelo botão, ou pela largura cruzando 1280. Guardar a preferência é do app. */
     onSidebarCollapsedChange?: (collapsed: boolean) => void;
     contentVariant?: "surface" | "plain";
+    /** O alto contraste no app inteiro (o MNT-30, ADR-0090): contorno nos campos, nos cartões e nos botões, o texto de apoio
+     *  mais perto do texto e o link sempre sublinhado. Marca o `AppShell` e a raiz da página (`data-contrast="high"`), para
+     *  os menus e as janelas, que abrem fora dele, saírem iguais. */
+    highContrast?: boolean;
+    /** O texto grande no app inteiro (o MNT-30, ADR-0090): cada letra 2 acima e o controle médio a 44. `data-text="lg"` no
+     *  `AppShell` e na raiz da página, pela mesma razão do `highContrast`. */
+    textSize?: "md" | "lg";
 }): React.JSX.Element;
 export declare namespace AppShell {
     export { AppShellSidebarToggle as SidebarToggle };

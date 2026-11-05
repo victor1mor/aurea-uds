@@ -98,7 +98,7 @@ There are four status colors: success, warning, danger and info. Each one has th
 |---|---|
 | `--foreground` | Body text |
 | `--foreground-strong` | Text that must stand out a little more |
-| `--muted-foreground` | Secondary text: hints, descriptions, metadata |
+| `--muted-foreground` | Secondary text: hints, descriptions, metadata. With high contrast on (`data-contrast="high"`), it is the text colour at 80% |
 | `--subtle-foreground` | Quiet text |
 | `--text-muted` | Another name for `--muted-foreground` |
 

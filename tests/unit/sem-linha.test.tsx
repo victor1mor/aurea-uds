@@ -88,6 +88,13 @@ const LINHA_PERMITIDA_CSS: {seletor: string; prop: string; valor?: string; media
     prop: "box-shadow", valor: "inset 0 0 0 var(--border-width) var(--input-strong)", media: "@media (prefers-contrast:more)"},
   {seletor: ':is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary):where(:not([data-brand="ember"],[data-brand="ember"] *))',
     prop: "border-color", valor: "var(--input-strong)", media: "@media (prefers-contrast:more)"},
+  // O ALTO CONTRASTE QUE O APP LIGA (ADR-0090, 04/11/2026 — a forma "C", aprovada na bancada): as mesmas linhas de 3:1, e
+  // mais o cartão e o botão (por dentro). Só sob `[data-contrast="high"]`, cada uma só no seletor e na cor dela.
+  {seletor: '[data-contrast="high"] :is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary)',
+    prop: "border-color", valor: "var(--input-strong)"},
+  {seletor: '[data-contrast="high"] .card', prop: "border-color", valor: "var(--input-strong)"},
+  {seletor: '[data-contrast="high"] .btn', prop: "box-shadow", valor: "inset 0 0 0 var(--border-width) var(--input-strong)"},
+  {seletor: '[data-contrast="high"] .btn.btn-primary', prop: "box-shadow", valor: "inset 0 0 0 var(--border-width) var(--primary-foreground)"},
 ];
 
 // OS ESTILOS DE ARO (ADR-0084, 27/10/2026): o Victor aprovou em 26/10/2026, pelo nome, os estilos que SÃO um aro — o

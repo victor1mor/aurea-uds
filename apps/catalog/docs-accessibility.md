@@ -126,9 +126,13 @@ When the system forces its own colours (`forced-colors: active`), the focus ring
 
 When the system asks for more contrast (`prefers-contrast: more`), fields get an outline that measures at least 3:1, the marks inside a chosen control (the switch thumb, the checkbox mark, the radio dot) turn to the ink, the focus of a field turns graphite in the light theme, and a pressed button in the neutral style gets an outline. Outside that preference, none of this is drawn. The Aurea Ember brand keeps its fields and marks as they are.
 
+Your app can also turn high contrast on itself, without waiting for the system: `<AppShell highContrast>`, or `data-contrast="high"` on any container (the root included). It draws everything above and more: an outline on cards and buttons, the supporting text closer to the text, and links always underlined. It works in every brand, Aurea Ember included, and nothing changes until the app turns it on.
+
 ## Text size and reflow
 
 A sweep sets the root text size to 200% on every page of this site and fails any page that then scrolls sideways. A second sweep checks that no page scrolls sideways at any width.
+
+For large text across the app, use `<AppShell textSize="lg">`, or `data-text="lg"` on any container. Every text step grows by 2px (14px body text becomes 16px), and the medium control grows to the 44px touch target. It works in every brand.
 
 ## Right-to-left
 

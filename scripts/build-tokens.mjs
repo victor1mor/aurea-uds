@@ -56,6 +56,9 @@ for (const [nome, marca] of Object.entries(dtcg.brand ?? {})) {
 css += emitGroup(sel["density.compact"], dtcg.density.compact);
 css += emitGroup(sel["density.comfortable"], dtcg.density.comfortable);
 css += emitGroup(sel["density.spacious"], dtcg.density.spacious);
+// O TEXTO GRANDE (ADR-0090, 04/11/2026): DEPOIS da densidade, porque ele troca a altura do controle médio que ela define
+// (o mesmo peso de seletor; ganha quem vem depois).
+css += emitGroup(sel["textSize.lg"], dtcg.textSize.lg);
 
 writeFileSync(OUT, css);
 writeFileSync(join(root, "packages/tokens/dist/aurea.tokens.css.d.ts"),

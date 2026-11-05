@@ -290,6 +290,35 @@ export default {
       cascaDeApp("The pill on top", "topbarVariant=\"pill\" puts the top bar in a capsule that floats over the page, as wide as "
         + "the block; with layout=\"docs\" the columns sit 28 apart and the aside is as tall as what it shows. topbarBlurred "
         + "blurs what scrolls under the capsule.", {layout: "docs", topbarVariant: "pill", sidebarIndicator: "segment-dot"}),
+      // O alto contraste e o texto grande (ADR-0090, 0.56.0): numa moldura própria, como todo exemplo do shell — o modo
+      // marca a raiz do documento, e aqui o documento é a moldura, não a página do site.
+      {
+        title: "High contrast and large text",
+        description: "highContrast draws an outline on fields, cards and buttons, darkens the supporting text and underlines "
+          + "links; textSize=\"lg\" makes every text step 2px larger and the medium control 44px tall. Both mark the page "
+          + "root, so menus and dialogs match.",
+        embed: true, layoutProprio: true, tituloProprio: true,
+        code: `<AppShell
+  highContrast
+  textSize="lg"
+  brand={<strong>Acme</strong>}
+  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}
+>
+  <h1>Inbox</h1>
+  <Field label="Search the inbox">
+    <Input placeholder="Sender or subject" />
+  </Field>
+  <p>Read the <Link href="/help">inbox guide</Link>.</p>
+  <Button variant="primary">New message</Button>
+</AppShell>`,
+        render: () => h(A.AppShell, {highContrast: true, textSize: "lg", brand: h("strong", null, "Acme"),
+          navigation: h("nav", {className: "doc-nav", "aria-label": "Contents"},
+            h("a", {href: "#", className: "active", "aria-current": "page"}, "Inbox"), h("a", {href: "#"}, "Archive"))},
+          h("h1", null, "Inbox"),
+          h(A.Field, {label: "Search the inbox"}, h(A.Input, {placeholder: "Sender or subject"})),
+          h("p", null, "Read the ", h(A.Link, {href: "#"}, "inbox guide"), "."),
+          h(A.Button, {variant: "primary"}, "New message")),
+      },
     ],
   },
   AureaProvider: {

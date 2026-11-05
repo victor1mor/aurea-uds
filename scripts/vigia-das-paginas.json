@@ -24,7 +24,7 @@
     "css:--card*": "4b280a29e05ad27a",
     "css:--fill-*": "a2658d78c94cba5c",
     "css:--foreground": "4aa3f1562d5947c4",
-    "css:--muted-foreground": "f31204658f155ed4",
+    "css:--muted-foreground": "9ae53f3d9891de3c",
     "css:--accent*": "b183385e8a4094f5",
     "css:--success*": "f07ef43f82cc2564",
     "css:--warning*": "422ce37b6c893c81",
@@ -35,7 +35,7 @@
   "composition": {
     "ts:Card": "8db73ade7d093995",
     "ts:Header": "646693ff53f98171",
-    "ts:AppShell": "f93c3fcdbde7e9fc",
+    "ts:AppShell": "1f56cfcb0ae08ff6",
     "ts:RadioGroup": "bf52f6ea45e660f3"
   },
   "dark-mode": {
@@ -44,7 +44,7 @@
     "pkg:core": "d3ffb7033c64dc05"
   },
   "density": {
-    "css:--control-h-*": "6ec7fe3e8052e6d6",
+    "css:--control-h-*": "e164de7e0b1b74be",
     "css:--touch-control-h-*": "d9503f8a8c4e4b2b",
     "css:--row-h": "79710a12ea62da2a",
     "css:--card-pad": "fc740b0b096b684b",
