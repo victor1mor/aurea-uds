@@ -5,7 +5,7 @@
   "totals": {
     "modulos": 40,
     "componentes": 145,
-    "hooks": 10,
+    "hooks": 11,
     "aliasesLiterais": 119,
     "propsDistintas": 408
   },
@@ -7623,6 +7623,7 @@
     "internal": {
       "components": [],
       "hooks": [
+        "useDeslize",
         "useReorder",
         "useAureaStrings",
         "useSpriteUrl",

@@ -169,6 +169,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [useAureaStrings](https://aureauds.dev/useaureastrings.md): Read the string dictionary the provider is using, to translate your own labels with it.
 - [useAureaTheme](https://aureauds.dev/useaureatheme.md): Read theme and density straight from the document, and set them — for a host that owns the <html> attributes.
 - [useDensity](https://aureauds.dev/usedensity.md): Read the current density and switch it, from anywhere inside AureaProvider.
+- [useDeslize](https://aureauds.dev/usedeslize.md): Slides the selected item of SegmentedControl and Tabs from the previous position to the new one, copying its paint onto a passing indicator; instant under reduced motion.
 - [usePortalContainer](https://aureauds.dev/useportalcontainer.md): The node every Aurea popup is mounted into, as configured once on AureaProvider.
 - [useReorder](https://aureauds.dev/usereorder.md): The accessible drag-and-drop reordering protocol, shared by SortableList and BlockEditor.
 - [useSidebar](https://aureauds.dev/usesidebar.md): The sidebar state — collapsed, setCollapsed, toggle — inside Sidebar.Provider or an AppShell with sidebarCollapsible.

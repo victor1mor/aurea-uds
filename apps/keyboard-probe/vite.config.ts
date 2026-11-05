@@ -18,5 +18,7 @@ export default defineConfig({
   // ADR-0087), o da lateral de contraste, com o botão de recolher do shell (`contraste.html`). E o da ponta da barra de cima
   // (MNT-37): o `topbarActions` com a chave de tema (`ponta.html`). E o das tabelas (MNT-38, S-10, S-02, 05/11/2026): a linha
   // entre as fileiras, o cabeçalho preso à página e o título dentro da moldura (`tabelas.html`). E o do bloco 3 (ADR-0090): o alto contraste e o texto grande (`acessibilidade.html`).
-  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html", rede3: "rede3.html", rede4: "rede4.html", rede5: "rede5.html", "lote-u": "lote-u.html", lateral: "lateral.html", paleta: "paleta.html", estilos: "estilos.html", contraste: "contraste.html", ponta: "ponta.html", tabelas: "tabelas.html", acessibilidade: "acessibilidade.html"}}},
+  // E desde 05/11/2026 (S-04 e S-05), o do movimento: o escolhido que desliza, os menus que entram e o arrasto que anda
+  // (`movimento.html`, com `?tema=dark&marca=ember&reduzir=1`).
+  build: {outDir: "out", emptyOutDir: true, rollupOptions: {input: {index: "index.html", shell: "shell.html", "lote-h": "lote-h.html", rede: "rede.html", rede2: "rede2.html", rede3: "rede3.html", rede4: "rede4.html", rede5: "rede5.html", "lote-u": "lote-u.html", lateral: "lateral.html", paleta: "paleta.html", estilos: "estilos.html", contraste: "contraste.html", ponta: "ponta.html", tabelas: "tabelas.html", acessibilidade: "acessibilidade.html", movimento: "movimento.html"}}},
 });

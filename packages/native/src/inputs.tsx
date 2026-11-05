@@ -56,6 +56,7 @@ import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
 import {Icon, type AureaIconRegistry, type AureaIcon} from "./icon.js";
 import {useReduceMotion, driverNativo} from "./movimento.js";
+import {IndicadorQueDesliza, useFilaQueDesliza} from "./deslize.js";
 import {RecuoDaFolha} from "./screen.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens, useTokensDoApp, usePeleSobreAMarca, ForaDaMarca} from "./theme.js";
@@ -1204,6 +1205,11 @@ export function SegmentedControl({
   const pele = peleDoSegmento(t, selectedStyle);
   const campo = useCampo();
   const inativo = disabled ?? campo?.disabled;
+  // S-04 (05/11/2026): o escolhido DESLIZA de um segmento ao outro (`deslize.tsx`). A pintura do indicador é a mesma do
+  // segmento aceso; enquanto ele não está no lugar, o segmento se pinta sozinho, como sempre.
+  const fila = useFilaQueDesliza(value);
+  const pinturaDoAceso = [s.segmentoAtivo, pele && {backgroundColor: pele.fundo,
+    boxShadow: [...(pele.aro ? [aroDoEstilo(t, pele.aro)] : []), ...(pele.sombra ? t.shadowLayers.shadowSm : [])]}];
   return (
     // 🔴 ELE NÃO ROLAVA, E ISSO NÃO ERA ESCOLHA — ERA TRADUÇÃO QUE FALTOU.
     // O consumidor mediu em 17/09/2026: seis tipos de manutenção não cabem numa tela de 360dp, e
@@ -1223,19 +1229,19 @@ export function SegmentedControl({
         style={[s.segmentada, fullWidth && s.segmentadaCheia, inativo && s.desabilitado, style]}
         {...marcaDoEstilo("segmentStyle", selectedStyle)}
         {...rest}>
+        <IndicadorQueDesliza alvo={fila.alvo} aoFicarPronto={fila.aoFicarPronto} style={[canto(t.size.radiusControl), pinturaDoAceso]} />
         {items.map((it) => {
           const ativo = it.value === value;
           return (
             <Pressable
               key={it.value}
+              onLayout={fila.medir(it.value)}
               onPress={inativo ? undefined : () => onChange?.(it.value)}
               disabled={inativo}
               accessibilityRole="radio"
               {...estadoAcessivel({checked: ativo, disabled: !!inativo})}
               accessibilityLabel={typeof it.label === "string" ? it.label : undefined}
-              style={[s.segmento, fullWidth && s.segmentoCheio, ativo && s.segmentoAtivo,
-                ativo && pele && {backgroundColor: pele.fundo,
-                  boxShadow: [...(pele.aro ? [aroDoEstilo(t, pele.aro)] : []), ...(pele.sombra ? t.shadowLayers.shadowSm : [])]},
+              style={[s.segmento, fullWidth && s.segmentoCheio, ativo && !fila.pronto && pinturaDoAceso,
                 pele?.ponto && s.segmentoComPonto]}>
             {/* O ponto do `dot`: o lugar existe em todos os segmentos, e só o aceso o pinta. `collapsable={false}`: caixa
                 só com raio que ganha cor depois de montada sai QUADRADA no Android (react-native#52415, a regra do

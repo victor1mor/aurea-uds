@@ -52,6 +52,7 @@ import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
 import { useReduceMotion, driverNativo } from "./movimento.js";
+import { IndicadorQueDesliza, useFilaQueDesliza } from "./deslize.js";
 import { RecuoDaFolha } from "./screen.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens, useTokensDoApp, usePeleSobreAMarca, ForaDaMarca } from "./theme.js";
@@ -600,34 +601,37 @@ export function SegmentedControl({ items, value, onChange, label, disabled, just
     const pele = peleDoSegmento(t, selectedStyle);
     const campo = useCampo();
     const inativo = disabled ?? campo?.disabled;
-    return (_jsx(FilaRolante, { justify: justify, fill: fullWidth, children: _jsx(View, { accessibilityRole: "radiogroup", accessibilityLabel: label ?? campo?.label, style: [s.segmentada, fullWidth && s.segmentadaCheia, inativo && s.desabilitado, style], ...marcaDoEstilo("segmentStyle", selectedStyle), ...rest, children: items.map((it) => {
-                const ativo = it.value === value;
-                return (_jsxs(Pressable, { onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: ativo, disabled: !!inativo }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, fullWidth && s.segmentoCheio, ativo && s.segmentoAtivo,
-                        ativo && pele && { backgroundColor: pele.fundo,
-                            boxShadow: [...(pele.aro ? [aroDoEstilo(t, pele.aro)] : []), ...(pele.sombra ? t.shadowLayers.shadowSm : [])] },
-                        pele?.ponto && s.segmentoComPonto], children: [pele?.ponto && _jsx(View, { collapsable: false, style: [s.pontoDoSegmento, ativo && { backgroundColor: t.color.primary }] }), typeof it.label === "string"
-                            ? _jsx(Text, { size: "sm", weight: ativo ? 600 : 400, 
-                                // 🔴 ERA `foreground`, E ISSO QUEBRAVA A LINGUAGEM DE SELECIONADO.
-                                // Achado pelo consumidor em 17/09/2026. A web pinta o escolhido com a
-                                // MARCA (`aurea.css:937-938`), e o comentário de cima daquela regra diz
-                                // que nav ativo, aba ativa, item de lista e botão ligado mostram o mesmo
-                                // sinal — ordem do Victor, 24/07. O `SegmentedControl` daqui discordava
-                                // da web **e do `BottomNav` deste mesmo pacote**, que já usa este token.
-                                //
-                                // ⚠ **`primaryEmphasis` e NÃO `primary`, e a razão está no CSS:** *"sem
-                                // fundo, a marca vira TEXTO, e o amarelo puro"* não se lê no claro
-                                // (`aurea.css:358`). É a mesma lição que a `0.8.3` pagou no `Button`.
-                                // No escuro os dois valem o mesmo amarelo; no claro este aprofunda.
-                                //
-                                // ~~⚠ Uma divergência declarada: o token, e não a mistura da web.~~ → A COR
-                                // DA WEB (bloco 1, 23/10/2026): desde a ADR-0076 o token é o AZUL no claro,
-                                // e o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web não é
-                                // azul?"*). ~~A aba escolhida é a mistura da web, `corDoEscolhido`.~~ → Desde
-                                // 24/10/2026 a cápsula escolhida é o amarelo do botão (ver `segmentoAtivo`), e
-                                // o nome vai na tinta do botão.
-                                style: { color: ativo ? (pele?.letra ?? t.color.primaryForeground) : t.color.mutedForeground }, children: it.label })
-                            : it.label] }, it.value));
-            }) }) }));
+    // S-04 (05/11/2026): o escolhido DESLIZA de um segmento ao outro (`deslize.tsx`). A pintura do indicador é a mesma do
+    // segmento aceso; enquanto ele não está no lugar, o segmento se pinta sozinho, como sempre.
+    const fila = useFilaQueDesliza(value);
+    const pinturaDoAceso = [s.segmentoAtivo, pele && { backgroundColor: pele.fundo,
+            boxShadow: [...(pele.aro ? [aroDoEstilo(t, pele.aro)] : []), ...(pele.sombra ? t.shadowLayers.shadowSm : [])] }];
+    return (_jsx(FilaRolante, { justify: justify, fill: fullWidth, children: _jsxs(View, { accessibilityRole: "radiogroup", accessibilityLabel: label ?? campo?.label, style: [s.segmentada, fullWidth && s.segmentadaCheia, inativo && s.desabilitado, style], ...marcaDoEstilo("segmentStyle", selectedStyle), ...rest, children: [_jsx(IndicadorQueDesliza, { alvo: fila.alvo, aoFicarPronto: fila.aoFicarPronto, style: [canto(t.size.radiusControl), pinturaDoAceso] }), items.map((it) => {
+                    const ativo = it.value === value;
+                    return (_jsxs(Pressable, { onLayout: fila.medir(it.value), onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: ativo, disabled: !!inativo }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, fullWidth && s.segmentoCheio, ativo && !fila.pronto && pinturaDoAceso,
+                            pele?.ponto && s.segmentoComPonto], children: [pele?.ponto && _jsx(View, { collapsable: false, style: [s.pontoDoSegmento, ativo && { backgroundColor: t.color.primary }] }), typeof it.label === "string"
+                                ? _jsx(Text, { size: "sm", weight: ativo ? 600 : 400, 
+                                    // 🔴 ERA `foreground`, E ISSO QUEBRAVA A LINGUAGEM DE SELECIONADO.
+                                    // Achado pelo consumidor em 17/09/2026. A web pinta o escolhido com a
+                                    // MARCA (`aurea.css:937-938`), e o comentário de cima daquela regra diz
+                                    // que nav ativo, aba ativa, item de lista e botão ligado mostram o mesmo
+                                    // sinal — ordem do Victor, 24/07. O `SegmentedControl` daqui discordava
+                                    // da web **e do `BottomNav` deste mesmo pacote**, que já usa este token.
+                                    //
+                                    // ⚠ **`primaryEmphasis` e NÃO `primary`, e a razão está no CSS:** *"sem
+                                    // fundo, a marca vira TEXTO, e o amarelo puro"* não se lê no claro
+                                    // (`aurea.css:358`). É a mesma lição que a `0.8.3` pagou no `Button`.
+                                    // No escuro os dois valem o mesmo amarelo; no claro este aprofunda.
+                                    //
+                                    // ~~⚠ Uma divergência declarada: o token, e não a mistura da web.~~ → A COR
+                                    // DA WEB (bloco 1, 23/10/2026): desde a ADR-0076 o token é o AZUL no claro,
+                                    // e o Victor viu a aba "Mês" azul no app (*"pq ficou azul se na web não é
+                                    // azul?"*). ~~A aba escolhida é a mistura da web, `corDoEscolhido`.~~ → Desde
+                                    // 24/10/2026 a cápsula escolhida é o amarelo do botão (ver `segmentoAtivo`), e
+                                    // o nome vai na tinta do botão.
+                                    style: { color: ativo ? (pele?.letra ?? t.color.primaryForeground) : t.color.mutedForeground }, children: it.label })
+                                : it.label] }, it.value));
+                })] }) }));
 }
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 // Select — o "motor novo sobre `Modal`" que a §5.2.4 previu

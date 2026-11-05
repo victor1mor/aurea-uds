@@ -39,6 +39,7 @@ import {NaSuperficie} from "./superficie.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {Card} from "./layout.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
+import {IndicadorQueDesliza, useFilaQueDesliza} from "./deslize.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
@@ -1008,6 +1009,8 @@ export function Tabs({
   const strings = useAureaStrings();
   const aberta = tabs.find((it) => it.id === value);
   const secundaria = variant === "secondary";
+  // S-04 (05/11/2026): a aba escolhida DESLIZA (`deslize.tsx`) — a cápsula amarela, e na secundária o fio de baixo.
+  const fila = useFilaQueDesliza(value);
 
   return (
     <View style={style} {...rest}>
@@ -1022,11 +1025,16 @@ export function Tabs({
       <FilaRolante justify={justify}>
         <View accessibilityRole="tablist" accessibilityLabel={label ?? strings.tabsLabel}
               style={secundaria ? s.abasSecundarias : s.abas}>
+          <IndicadorQueDesliza alvo={fila.alvo} aoFicarPronto={fila.aoFicarPronto}
+            style={secundaria ? undefined : [canto(t.size.radiusControl), s.abaDeTabAtiva]}>
+            {secundaria ? <View style={s.fioDaAba} /> : null}
+          </IndicadorQueDesliza>
           {tabs.map((it) => {
             const ativa = it.id === value;
             return (
               <Pressable
                 key={it.id}
+                onLayout={fila.medir(it.id)}
                 onPress={it.disabled ? undefined : () => onChange?.(it.id)}
                 disabled={it.disabled}
                 accessibilityRole="tab"
@@ -1034,7 +1042,7 @@ export function Tabs({
                 accessibilityLabel={typeof it.label === "string" ? it.label : undefined}
                 style={[
                   secundaria ? s.abaSecundaria : s.abaDeTab,
-                  ativa && !secundaria && s.abaDeTabAtiva,
+                  ativa && !secundaria && !fila.pronto && s.abaDeTabAtiva,
                   it.disabled && {opacity: t.size.opacityDisabled},
                 ]}>
                 {/* Na cápsula, o rótulo é 16 em peso médio, escolhido ou não — o da referência, e o
@@ -1049,7 +1057,7 @@ export function Tabs({
                       {it.label}
                     </Text>
                   : it.label}
-                {ativa && secundaria && <View style={s.fioDaAba} />}
+                {ativa && secundaria && !fila.pronto && <View style={s.fioDaAba} />}
               </Pressable>
             );
           })}
