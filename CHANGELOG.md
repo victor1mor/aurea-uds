@@ -17,15 +17,6 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-### O movimento: S-04 e S-05 (05/11/2026)
-
-- **O escolhido desliza** no `SegmentedControl` e no `Tabs`, na web e no nativo (o gancho interno `useDeslize` na web, o
-  `IndicadorQueDesliza` no nativo); **os menus e a paleta entram e saem** (toda lista `.menu` do motor e a
-  `CommandPalette`); **o arrasto anda** no `SortableList` e no `BlockEditor` (o `useReorder`). Em repouso nada muda; os
-  tempos são os tokens que já existem; "reduzir movimento" desliga tudo; a Ember recebe também. Aprovado pelo Victor na
-  bancada rodando (`apps/keyboard-probe/movimento.html`, *"Pode, Ember também"*). O texto da versão está com a
-  coordenação.
-
 ### O site B: a All Components e a lateral de Components no padrão da Docs (01/11/2026)
 
 - **A página All Components no desenho B** (aprovada pelo Victor na bancada da página inteira, *"Pode"*, 01/11/2026): o palco
@@ -280,6 +271,52 @@ como deveria funcionar"*.
   dependências que o `@aurea-uds/react` declara; e nenhuma página puxa script, folha, imagem ou
   moldura de outro endereço. O `montar-site.mjs` confere a segunda metade de novo na publicação.
 - Não muda nenhum pacote publicado.
+
+---
+
+## [0.58.0] — 2026-11-05
+
+**O movimento e as tabelas do site** (05/11/2026). O primeiro lote da fase 0 do caminho até a 1.0 (*"Sim, nessa ordem"*):
+juntar o que estava construído e aprovado fora do `main` — o movimento (S-04 e S-05, branch `claude/movimento-77dec7`) e
+as tabelas do site (S-02, branch `claude/tabelas-d60668`).
+
+### Mudado
+
+- **O escolhido DESLIZA, em vez de pular** (S-04): no `SegmentedControl` e no `Tabs` (as duas formas — na secundária,
+  quem anda é o fio de baixo), na web e no nativo. Em repouso o escolhido continua IDÊNTICO (as sete cores do segmento,
+  as treze marcas e os dois temas): na troca, uma peça de passagem copia a pintura do novo escolhido e anda da posição de
+  antes até a nova (`--duration-slow`, `--ease-emphasized`). A letra troca de cor no mesmo passo. Na web, o gancho é o
+  `useDeslize` (interno) e a classe `.selection-indicator`; no nativo, o `IndicadorQueDesliza` (`deslize.tsx`, interno),
+  que anda pelo relógio da tela. Aprovado na bancada rodando (*"Pode, Ember também"*).
+- **Os menus e a paleta ENTRAM e SAEM** (S-04, web): toda lista `.menu` que o motor abre (`DropdownMenu`,
+  `ContextMenu`, `Menubar`, o submenu, `Select`, `Combobox`) esmaece e cresce um pouco a partir do gatilho
+  (`--duration-base`; fechar em `--duration-fast`); a `CommandPalette` e a `CommandPaletteShell` entram como o `Dialog`.
+  No nativo, os menus já entravam com movimento.
+- **O arrasto ANDA** (S-05, web): no `SortableList` e no `BlockEditor` (o `useReorder`), a linha pega segue o ponteiro,
+  fica por cima das outras e, ao soltar, desliza até o lugar; os vizinhos deslizam para abrir espaço (também pelo
+  teclado). A troca de lugar mede o lugar da linha (`offsetTop`), e não a caixa na tela, para o alvo não tremer.
+- **"Reduzir movimento"** desliga tudo: a regra global do CSS para o que é CSS, e o código pergunta ao sistema para o que
+  é animação feita por código (a linha arrastada continua seguindo o ponteiro: é manipulação direta). A Ember recebe o
+  movimento, como as outras marcas.
+- Sem dependência nova (*"Construir nós"*): CSS e `Element.animate` na web, o relógio da tela no nativo; só os tokens
+  de duração e de curva que já existem. Quem cobra: `tests/unit/s04-s05-movimento.test.tsx` e
+  `tests/unit/native-s04-deslize.test.tsx`, os dois provados contra o código de antes.
+
+### Acrescentado
+
+- **`fit` na `DataGrid`** (S-02, *"Pode, com fit"*) — sem o mínimo de 720, como a `Table`: numa coluna de texto de ~680,
+  a grade cabia só rolando de lado. Quem cobra: `tabela-mnt38-s10.spec.ts`.
+- A bancada `apps/keyboard-probe/movimento.html` (hoje × proposta, com `?tema=dark&marca=ember&reduzir=1`).
+
+### Site
+
+- **As tabelas do site são `DataGrid`** (S-02, o Victor: *"tudo que existe no site de table vira datagrid"*): as das
+  páginas de documentação, as props das páginas do nativo e as duas da página de status, com `fit`, a linha entre as
+  fileiras (`dividers`, *"Com a linha"*) e ordenar por coluna. O título não aparece; o nome continua para o leitor de
+  tela. A montagem desenha cada uma (`site-b/comum/grade-montagem.mjs`) e a parte viva acende por cima
+  (`live/site.tsx`). Ficam como `Table`: os exemplos e os padrões da própria `Table`. Quem cobra:
+  `tests/visual/site-tabelas-datagrid.spec.ts` e `tests/unit/saude-rodadas.test.tsx`. Aprovado pelo Victor olhando a página Styling, o antes e o
+  depois (*"Aprovado"*, 05/11/2026).
 
 ---
 

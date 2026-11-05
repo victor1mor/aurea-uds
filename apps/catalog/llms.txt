@@ -457,6 +457,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.58.0](https://aureauds.dev/release-v0-58-0.md): Motion — the selection slides, menus animate, dragging follows the pointer — and DataGrid fit.
 - [v0.57.0](https://aureauds.dev/release-v0-57-0.md): Row dividers, a header pinned to the page, gradients allowed, and five site fixes.
 - [v0.56.0](https://aureauds.dev/release-v0-56-0.md): High contrast and large text for the whole app, turned on by the app.
 - [v0.55.0](https://aureauds.dev/release-v0-55-0.md): A split button that keeps its round end with the menu open, and menu items with a description and an end icon.

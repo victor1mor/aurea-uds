@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.58.0
+
+November 5, 2026
+
+Motion — the selection slides, menus animate, dragging follows the pointer — and DataGrid fit.
+
+[Read full release notes →](https://aureauds.dev/release-v0-58-0.md)
+
 ## v0.57.0
 
 November 5, 2026

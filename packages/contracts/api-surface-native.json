@@ -3,11 +3,11 @@
   "_regra": "Quando isto e a ficha do registry discordam, isto ganha: veio do compilador. O check 26 do validate.py reprova a divergência.",
   "schemaVersion": "1.0",
   "totals": {
-    "modulos": 33,
-    "componentes": 90,
-    "hooks": 16,
+    "modulos": 34,
+    "componentes": 91,
+    "hooks": 17,
     "aliasesLiterais": 69,
-    "propsDistintas": 209
+    "propsDistintas": 211
   },
   "aliases": {
     "AureaButtonAppearance": {
@@ -75,6 +75,11 @@
     "AureaDataListItem": {
       "module": "data",
       "raw": "{ term: React.ReactNode; value: React.ReactNode; }",
+      "union": null
+    },
+    "CaixaDoItem": {
+      "module": "deslize",
+      "raw": "{ x: number; y: number; width: number; height: number; }",
       "union": null
     },
     "AureaBadgeCategory": {
@@ -3260,6 +3265,45 @@
         }
       ],
       "hooks": [],
+      "clientDirective": false
+    },
+    "deslize": {
+      "components": [
+        {
+          "name": "IndicadorQueDesliza",
+          "kind": "function",
+          "propsType": null,
+          "props": [
+            {
+              "name": "alvo",
+              "optional": false,
+              "type": "CaixaDoItem | null",
+              "values": null
+            },
+            {
+              "name": "aoFicarPronto",
+              "optional": false,
+              "type": "(pronto: boolean) => void",
+              "values": null
+            },
+            {
+              "name": "style",
+              "optional": true,
+              "type": "StyleProp<ViewStyle>",
+              "values": null
+            },
+            {
+              "name": "children",
+              "optional": true,
+              "type": "React.ReactNode",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [
+        "useFilaQueDesliza"
+      ],
       "clientDirective": false
     },
     "display": {
