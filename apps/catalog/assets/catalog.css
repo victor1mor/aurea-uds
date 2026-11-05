@@ -4168,6 +4168,17 @@ img,svg { display:block; }
 .tabs-secondary .tab { border-radius:0; }
 .tabs-secondary .tab.active,.tabs-secondary .tab[data-active] { background:transparent; box-shadow:none; color:var(--foreground); }
 .tabs-secondary .tab[data-active]::after { display:block; }
+/* O ESCOLHIDO DESLIZA (S-04, 05/11/2026): no `SegmentedControl` e no `Tabs` ele PULAVA, porque o fundo do escolhido é
+   pintado no próprio item. A referência tem uma peça separada atrás dos itens, que anda. Aqui o desenho do escolhido NÃO
+   muda (as sete cores do segmento, as treze marcas e os dois temas continuam nas regras de sempre): quando a escolha
+   troca, o gancho `useDeslize` copia a pintura do NOVO escolhido para uma peça de passagem (`.selection-indicator`, atrás
+   dos itens), esconde a do item e a leva da posição de antes até a nova — a cápsula, a sombra, o aro e o fio de baixo,
+   que na aba secundária é o próprio indicador. No fim, a peça sai e o item volta a se pintar. Quem pede "reduzir
+   movimento" vê a troca de uma vez, como antes. A letra troca de cor no mesmo passo, em vez de saltar. */
+.segmented :is(button,a),.tab { transition:color var(--duration-base) var(--ease-standard); }
+.selection-indicator { position:absolute; z-index:-1; pointer-events:none; }
+.selection-indicator > span { position:absolute; }
+:is(.segmented :is(button,a),.tab)[data-sliding]::after { visibility:hidden; }
 /* `panel="plain"` (MNT-05 e C9, 06/10/2026): o painel sem caixa, como o painel de abas da
    referência. Sem recheio dos lados — o conteúdo começa na linha do que está fora do `Tabs` —, e o
    espaço de cima é o mesmo `space-3` do painel do nativo. Na vertical, quem separa é o `gap` da
@@ -5202,6 +5213,14 @@ button.tag-main { cursor:pointer; }
 .sortable-item[data-grabbed] { border-color:transparent; box-shadow:var(--shadow-lg); }
 .sortable-handle { display:grid; place-items:center; min-width:var(--space-6); min-height:var(--space-6); padding:0; border:0; border-radius:var(--radius-sm); background:transparent; color:var(--muted-foreground); cursor:grab; touch-action:none; }
 .sortable-handle[aria-pressed="true"] { cursor:grabbing; color:var(--primary); }
+/* O ARRASTO QUE ANDA (S-05, 05/11/2026): era "meio estático" — a linha pulava de casa em casa e os vizinhos pulavam junto.
+   Agora a linha pega SEGUE o ponteiro (o `useReorder` a desloca com `translate`, sem transição: é a mão que move) e os
+   vizinhos deslizam para abrir o lugar (o mesmo gancho, pela animação do navegador). A linha pega fica POR CIMA das outras
+   (`z-index`) — e o fundo dela é o do cartão, opaco, então o texto de baixo não aparece através. A sombra de erguer entra
+   e sai em vez de aparecer de uma vez. Quem pede "reduzir movimento": a linha continua seguindo o ponteiro (é
+   manipulação direta, não animação), e os vizinhos trocam de lugar sem deslizar. */
+:is(.sortable-item,.block-item) { transition:box-shadow var(--duration-base) var(--ease-standard); }
+:is(.sortable-item,.block-item)[data-dragging] { position:relative; z-index:1; cursor:grabbing; }
 .sortable-label { min-width:0; }
 
 /* EDITOR POR BLOCOS (PLANO-1.0, item N1). A Aurea é dona da MOLDURA; o texto rico de dentro é do
@@ -5422,6 +5441,14 @@ button.tag-main { cursor:pointer; }
    fica preso, então não declaramos modalidade que não entregamos. */
 .command-overlay { position:fixed; inset:0; z-index:var(--z-modal); display:grid; place-items:start center; padding:var(--space-16) var(--space-5) var(--space-5); background:var(--overlay); backdrop-filter:blur(5px); }
 .command-palette { display:grid; gap:var(--space-2); width:min(680px,100%); max-height:100%; overflow:auto; padding:var(--space-4); border:1px solid transparent; border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); }
+/* A PALETA ENTRA E SAI (S-04, 05/11/2026), como o `Dialog`: o fundo esmaece e a caixa cresce um pouco, pelos estados
+   de abrir e fechar que o motor marca na moldura (`Viewport`) e na caixa (`Popup`). Fechar é mais rápido que abrir. */
+.command-overlay { transition:opacity var(--duration-slow) var(--ease-standard); }
+.command-overlay[data-starting-style],.command-overlay[data-ending-style] { opacity:0; }
+.command-overlay[data-ending-style] { transition-duration:var(--duration-fast); }
+.command-palette { transition:scale var(--duration-slow) var(--ease-emphasized); }
+.command-palette[data-starting-style],.command-palette[data-ending-style] { scale:.95; }
+.command-palette[data-ending-style] { transition-duration:var(--duration-fast); }
 /* Camadas flutuantes (Base UI): tooltip, popover, menu. z-modal para funcionarem sobre diálogos; empilhamento mútuo pela ordem do portal no DOM. */
 /* 0.32.0, a dica da referência: recheio de 8, letra de 12/16, até 320 de largura, o fundo das janelas
    (era o fundo afundado), e a palavra longa quebra onde precisar. O canto continua o 10 da Aurea (o
@@ -5455,6 +5482,15 @@ button.tag-main { cursor:pointer; }
    e `--space-1` de respiro. Vale para toda lista que usa `.menu`: Combobox, MultiCombobox,
    DropdownMenu, ContextMenu, Menubar e a lista da CommandPalette. */
 .menu { --menu-px:10px; z-index:var(--z-modal); min-width:200px; max-width:min(320px,calc(100vw - 32px)); padding:var(--space-1); border:1px solid transparent; border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); box-shadow:var(--shadow-lg); }
+/* O MENU ENTRA E SAI (S-04, 05/11/2026): aparecia de uma vez. Como o `Popover` e a dica daqui, e como a lista da
+   referência: esmaece e cresce um pouco a partir do lado do gatilho (`--transform-origin`, que o motor publica), pelos
+   estados de abrir e fechar que o motor marca (`data-starting-style`/`data-ending-style`). Vale para toda lista `.menu`
+   que o motor abre: `DropdownMenu`, `ContextMenu`, `Menubar`, o submenu, o `Select`, o `Combobox`. A lista de DENTRO da
+   `CommandPalette` (`.command-list`) não abre sozinha — quem entra é a janela, abaixo. Quem pede "reduzir movimento" não
+   vê movimento: a regra global do fim da folha zera a duração. */
+.menu { transform-origin:var(--transform-origin,center); transition:opacity var(--duration-base) var(--ease-standard),scale var(--duration-base) var(--ease-standard); }
+.menu[data-starting-style],.menu[data-ending-style] { opacity:0; scale:.95; }
+.menu[data-ending-style] { transition-duration:var(--duration-fast); }
 .menu-item { display:flex; align-items:center; gap:10px; width:100%; min-height:var(--control-h-md); padding:0 var(--menu-px,10px); border:0; border-radius:calc(var(--radius-card) - var(--space-1)); background:transparent; color:var(--foreground); font:inherit; text-align:start; text-decoration:none; cursor:pointer; }
 /* O ITEM COM EXPLICAÇÃO e o ÍCONE NA PONTA (0.55.0, o Victor, 04/11/2026: "pegue o código" da referência): a anatomia do
    item dela — o nome e, embaixo, a explicação na letra pequena e na cor de apoio; o recheio de 6 em cima e embaixo; o ícone

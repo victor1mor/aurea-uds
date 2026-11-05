@@ -17,6 +17,15 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O movimento: S-04 e S-05 (05/11/2026)
+
+- **O escolhido desliza** no `SegmentedControl` e no `Tabs`, na web e no nativo (o gancho interno `useDeslize` na web, o
+  `IndicadorQueDesliza` no nativo); **os menus e a paleta entram e saem** (toda lista `.menu` do motor e a
+  `CommandPalette`); **o arrasto anda** no `SortableList` e no `BlockEditor` (o `useReorder`). Em repouso nada muda; os
+  tempos são os tokens que já existem; "reduzir movimento" desliga tudo; a Ember recebe também. Aprovado pelo Victor na
+  bancada rodando (`apps/keyboard-probe/movimento.html`, *"Pode, Ember também"*). O texto da versão está com a
+  coordenação.
+
 ### O site B: a All Components e a lateral de Components no padrão da Docs (01/11/2026)
 
 - **A página All Components no desenho B** (aprovada pelo Victor na bancada da página inteira, *"Pode"*, 01/11/2026): o palco

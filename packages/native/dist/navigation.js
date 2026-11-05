@@ -8,6 +8,7 @@ import { NaSuperficie } from "./superficie.js";
 import { Icon } from "./icon.js";
 import { Card } from "./layout.js";
 import { FilaRolante } from "./rolagem.js";
+import { IndicadorQueDesliza, useFilaQueDesliza } from "./deslize.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
 const folha = criarFolha((t) => ({
@@ -630,18 +631,20 @@ export function Tabs({ tabs, value, onChange, label, justify, variant = "primary
     const strings = useAureaStrings();
     const aberta = tabs.find((it) => it.id === value);
     const secundaria = variant === "secondary";
-    return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { justify: justify, children: _jsx(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: secundaria ? s.abasSecundarias : s.abas, children: tabs.map((it) => {
-                        const ativa = it.id === value;
-                        return (_jsxs(Pressable, { onPress: it.disabled ? undefined : () => onChange?.(it.id), disabled: it.disabled, accessibilityRole: "tab", ...estadoAcessivel({ selected: ativa, disabled: !!it.disabled }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [
-                                secundaria ? s.abaSecundaria : s.abaDeTab,
-                                ativa && !secundaria && s.abaDeTabAtiva,
-                                it.disabled && { opacity: t.size.opacityDisabled },
-                            ], children: [typeof it.label === "string"
-                                    ? _jsx(Text, { size: "sm", weight: secundaria ? (ativa ? 600 : 400) : 500, 
-                                        // Na cápsula escolhida (amarela, 24/10/2026), o nome vai na tinta do botão; na secundária, a
-                                        // cor do texto de sempre, sobre o fio amarelo.
-                                        style: { color: !ativa ? t.color.mutedForeground
-                                                : secundaria ? t.color.foreground : t.color.primaryForeground }, children: it.label })
-                                    : it.label, ativa && secundaria && _jsx(View, { style: s.fioDaAba })] }, it.id));
-                    }) }) }), aberta && panel === "plain" ? (_jsx(View, { accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content })) : aberta ? (_jsx(Card, { variant: "inset", accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content })) : null] }));
+    // S-04 (05/11/2026): a aba escolhida DESLIZA (`deslize.tsx`) — a cápsula amarela, e na secundária o fio de baixo.
+    const fila = useFilaQueDesliza(value);
+    return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { justify: justify, children: _jsxs(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: secundaria ? s.abasSecundarias : s.abas, children: [_jsx(IndicadorQueDesliza, { alvo: fila.alvo, aoFicarPronto: fila.aoFicarPronto, style: secundaria ? undefined : [canto(t.size.radiusControl), s.abaDeTabAtiva], children: secundaria ? _jsx(View, { style: s.fioDaAba }) : null }), tabs.map((it) => {
+                            const ativa = it.id === value;
+                            return (_jsxs(Pressable, { onLayout: fila.medir(it.id), onPress: it.disabled ? undefined : () => onChange?.(it.id), disabled: it.disabled, accessibilityRole: "tab", ...estadoAcessivel({ selected: ativa, disabled: !!it.disabled }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [
+                                    secundaria ? s.abaSecundaria : s.abaDeTab,
+                                    ativa && !secundaria && !fila.pronto && s.abaDeTabAtiva,
+                                    it.disabled && { opacity: t.size.opacityDisabled },
+                                ], children: [typeof it.label === "string"
+                                        ? _jsx(Text, { size: "sm", weight: secundaria ? (ativa ? 600 : 400) : 500, 
+                                            // Na cápsula escolhida (amarela, 24/10/2026), o nome vai na tinta do botão; na secundária, a
+                                            // cor do texto de sempre, sobre o fio amarelo.
+                                            style: { color: !ativa ? t.color.mutedForeground
+                                                    : secundaria ? t.color.foreground : t.color.primaryForeground }, children: it.label })
+                                        : it.label, ativa && secundaria && !fila.pronto && _jsx(View, { style: s.fioDaAba })] }, it.id));
+                        })] }) }), aberta && panel === "plain" ? (_jsx(View, { accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content })) : aberta ? (_jsx(Card, { variant: "inset", accessibilityLabel: typeof aberta.label === "string" ? aberta.label : undefined, style: s.painel, children: aberta.content })) : null] }));
 }

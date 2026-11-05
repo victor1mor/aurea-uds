@@ -10,7 +10,7 @@ import { Autocomplete as BaseAutocomplete } from "@base-ui/react/autocomplete";
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { Popover as BasePopover } from "@base-ui/react/popover";
 import { useValorResponsivo } from "./responsivo-runtime.js";
-import { cx, fundirRender, useAureaStrings, usePortalContainer } from "./internal.js";
+import { cx, fundirRender, useAureaStrings, usePortalContainer, useDeslize } from "./internal.js";
 import { Kbd, ProgressCircle } from "./markup.js";
 import { Icon } from "./system.js";
 import { Button, IconButton } from "./actions.js";
@@ -37,7 +37,7 @@ export function Stepper({ items, label, variant = "default", startContent, endCo
     return lista;
 }
 export function Breadcrumb({ items, label }) { const s = useAureaStrings(); return _jsx("nav", { className: "breadcrumb", "aria-label": label ?? s.breadcrumbLabel, children: items.map((i, n) => _jsxs(React.Fragment, { children: [n > 0 && _jsx(Icon, { name: "caret-right", size: "sm" }), " ", i.render ? fundirRender(i.render, { children: i.label }, "a") : i.href ? _jsx("a", { href: i.href, children: i.label }) : _jsx("strong", { "aria-current": "page", children: i.label })] }, n)) }); }
-export function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus = true, loopFocus, panel = "card", variant = "primary" }) { const s = useAureaStrings(); const ancora = useRef(null); const resolvida = useValorResponsivo(orientation, "horizontal", ancora); return _jsxs(BaseTabs.Root, { ref: ancora, value: value, onValueChange: v => onChange(String(v)), orientation: resolvida, className: "tabs-root", children: [_jsx(BaseTabs.List, { className: cx("tabs", variant === "secondary" && "tabs-secondary"), "aria-label": label ?? s.tabsLabel, activateOnFocus: activateOnFocus, loopFocus: loopFocus, children: tabs.map(t => _jsx(BaseTabs.Tab, { value: t.id, className: "tab", children: t.label }, t.id)) }), tabs.map(t => _jsx(BaseTabs.Panel, { value: t.id, className: panel === "plain" ? "tabs-panel" : "card card-inset", tabIndex: 0, children: t.content }, t.id))] }); }
+export function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus = true, loopFocus, panel = "card", variant = "primary" }) { const s = useAureaStrings(); const ancora = useRef(null); const resolvida = useValorResponsivo(orientation, "horizontal", ancora); const lista = useRef(null); useDeslize(lista, ".tab[data-active]", value); return _jsxs(BaseTabs.Root, { ref: ancora, value: value, onValueChange: v => onChange(String(v)), orientation: resolvida, className: "tabs-root", children: [_jsx(BaseTabs.List, { ref: lista, className: cx("tabs", variant === "secondary" && "tabs-secondary"), "aria-label": label ?? s.tabsLabel, activateOnFocus: activateOnFocus, loopFocus: loopFocus, children: tabs.map(t => _jsx(BaseTabs.Tab, { value: t.id, className: "tab", children: t.label }, t.id)) }), tabs.map(t => _jsx(BaseTabs.Panel, { value: t.id, className: panel === "plain" ? "tabs-panel" : "card card-inset", tabIndex: 0, children: t.content }, t.id))] }); }
 function paginasVisiveis(page, total, siblings) {
     if (total <= 5 + siblings * 2)
         return Array.from({ length: total }, (_, i) => i + 1);

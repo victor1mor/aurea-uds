@@ -15,7 +15,7 @@ import { Slider as BaseSlider } from "@base-ui/react/slider";
 import { RadioGroup as BaseRadioGroup } from "@base-ui/react/radio-group";
 import { Radio as BaseRadio } from "@base-ui/react/radio";
 import { useDirection } from "@base-ui/react/direction-provider";
-import { cx, useAureaStrings, usePortalContainer, useReorder, controlesRotulaveis } from "./internal.js";
+import { cx, useAureaStrings, usePortalContainer, useReorder, useDeslize, controlesRotulaveis } from "./internal.js";
 import { COLOR_CHANNELS, areaBackground, channelRange, colorName, corToHex, formatChannel, getChannel, hsbToRgb, parseColor, pureHue, setChannel, spaceOf, trackBackground } from "./color.js";
 import { Popover as BasePopover } from "@base-ui/react/popover";
 // Os seis controles abaixo saíram deste arquivo no item O1 e moram no `markup.tsx`, sem a
@@ -734,11 +734,15 @@ export function OTPField({ length, value, defaultValue, onValueChange, mask, dis
 // cheia), `size="2xl"` (segmento de 48), `wrap` (quebra linha, o trilho com canto 22) e `orientation="vertical"` (em pé).
 export function SegmentedControl({ items, value, onChange, label, fullWidth, size = "md", selectedStyle, wrap, orientation = "horizontal" }) {
     const s = useAureaStrings();
+    // S-04 (05/11/2026): o escolhido DESLIZA de um segmento ao outro, em vez de pular (`useDeslize`, no `internal`). Só na
+    // escolha: com `href` a troca é de página, e a página nova já nasce com o escolhido no lugar.
+    const fila = React.useRef(null);
+    useDeslize(fila, ".active", value);
     const classe = cx("segmented", fullWidth && "segmented-full", size === "sm" && "segmented-sm", size === "lg" && "segmented-lg", size === "xl" && "segmented-xl", size === "2xl" && "segmented-2xl", wrap && orientation !== "vertical" && "segmented-wrap", orientation === "vertical" && "segmented-vertical");
     const miolo = (i) => i.icon ? _jsxs(_Fragment, { children: [_jsx(Icon, { name: i.icon, weight: i.value === value ? "fill" : "regular" }), i.label] }) : i.label;
     if (items.length > 0 && items.every(i => i.href != null))
         return _jsx("nav", { className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, children: items.map(i => _jsx("a", { href: i.href, className: i.value === value ? "active" : undefined, "aria-current": i.value === value ? "page" : undefined, children: miolo(i) }, i.value)) });
-    return _jsx(BaseRadioGroup, { className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, "aria-orientation": orientation === "vertical" ? "vertical" : undefined, value: value, onValueChange: v => onChange?.(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: miolo(i) }, i.value)) });
+    return _jsx(BaseRadioGroup, { ref: fila, className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, "aria-orientation": orientation === "vertical" ? "vertical" : undefined, value: value, onValueChange: v => onChange?.(String(v)), children: items.map(i => _jsx(BaseRadio.Root, { value: i.value, className: i.value === value ? "active" : undefined, nativeButton: true, render: _jsx("button", { type: "button" }), children: miolo(i) }, i.value)) });
 }
 const ehAgrupado = (items) => items != null && items.length > 0 && typeof items[0] === "object" && items[0] != null && "items" in items[0];
 // UM renderizador e UMA lista para os dois combobox: duas cópias da mesma árvore é como a
