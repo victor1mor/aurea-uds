@@ -274,6 +274,56 @@ como deveria funcionar"*.
 
 ---
 
+## [0.59.1] — 2026-11-06
+
+**A auditoria externa, as travas e o processo** (06/11/2026). A segunda parte dos consertos da auditoria externa (*"Pode
+corrigir tudo"*): o que não muda aparência e não é código de peça — dependências, o site, a publicação e as travas. O
+que muda aparência (o alto contraste, o código numa página da direita para a esquerda, o texto a 200%) está desenhado no
+FigCraft e espera o "pode".
+
+### Consertado
+
+- O foco do `CodeEditor` sai dos tokens (`--focus-width`, e o afastamento de dentro), como o de toda peça; antes era
+  `2px` e `-2px` escritos à mão. Na tela, o mesmo de antes.
+
+### O site
+
+- **Os cabeçalhos de segurança** (A-011): a política de conteúdo (só o próprio domínio; os dois scripts embutidos das
+  páginas pelo resumo, calculado na montagem), HSTS, `nosniff`, `X-Frame-Options`, `Referrer-Policy` e a política de
+  permissões (tela cheia, compartilhar e copiar; câmera, microfone, localização, pagamento e USB, não). Quem cobra:
+  `tests/visual/site-cabecalhos.spec.ts`, que aplica a política e reprova violação na página inicial, numa com a parte
+  viva, numa com os motores, na do nativo, na da cor, numa receita e numa moldura — e prova que, sem os resumos, o
+  navegador bloqueia.
+
+### Publicação
+
+- O `release.yml` instala o `npm` 11.21.2, fixo (era `npm@latest`).
+- O disparo à mão do `site.yml` publica o último commit do `main` que a CI aprovou (antes publicava o `main` do
+  momento, sem olhar a CI); sem commit verde, não publica nada.
+
+### Dependências
+
+- `vitest` 4.1.12 (GHSA-qxg6-89mg-rqv8 e GHSA-xp26-3454-mjgp); `glob` 14 e `minimatch` 11 por `overrides`, só na faixa
+  vulnerável (GHSA-3g3m-2fjr-6pw4 e GHSA-g3hv-75wg-m249) — lido no código do Expo, que é quem os usa, que as funções
+  que ele chama continuam; o `metro` 0.87.3, dentro da faixa, que já não usa o `image-size`.
+- **Nenhum aceite de alerta sobra**: os dois do `image-size` morreram com o `metro` novo, e o do `braces` foi retirado
+  pelo GitHub em 23/10/2026. O `pnpm audit` acha só um aviso baixo, sem correção, de ferramenta (`deepmerge`).
+
+### Travas
+
+- **21b, nova:** todo componente exportado está no `built-components.json` — eram 11 fora, e por isso fora das travas
+  22, 24 e 30. As 11 entraram, com a pele medida no `skin.spec.ts`; o `AspectRatio` e o `ContainerScope`, que não usam
+  token nenhum, ganham uma exceção MEDIDA na 22 (o vazio só passa enquanto o CSS delas não tiver `var(--…)`).
+- **4b** lê `rem`, `em` e decimal: o `47.5rem` (760) do `Accordion` horizontal escapava. Ele fica nomeado como pendente
+  da decisão D4, e o fecho a 0,02 (`639.98px`) passa a valer como a mesma escala.
+- **12** conta o tamanho de letra em `em`, `rem` e `%` (o `0.9em` do código na prosa passava); a baseline sobe de 4
+  para 5 porque ele passou a ser CONTADO, não porque entrou.
+- **19** pega o subcaminho (`elkjs/lib/…`), o `import()` e o `export … from`.
+- **44** lê o foco escrito no código da web (o tema do `CodeEditor`), não só no CSS.
+- **31 e 31b** leem todas as versões datadas que ainda não saíram.
+
+---
+
 ## [0.59.0] — 2026-11-05
 
 **A auditoria externa, os consertos de código** (05/11/2026). Uma auditoria externa da 0.56.0 trouxe 21 achados; cada um

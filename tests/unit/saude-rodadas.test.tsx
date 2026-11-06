@@ -65,6 +65,8 @@ describe("saude-rodadas · um erro passageiro do GitHub não derruba o site", ()
 // dados que a parte viva lê; as duas se copiam. Provado contra o defeito: com o `preencher` da 0.55.0, a página nova
 // para em "não tem a linha-modelo (<tr data-modelo>)" — a `DataGrid` não marca fileira.
 describe("saude-rodadas · a tabela das rodadas como DataGrid", () => {
+  // 15 s, e não os 5 de sempre (06/11/2026): ele importa e monta a `DataGrid` inteira, e com a suíte toda rodando junto
+  // esgotou o tempo duas vezes seguidas (sozinho, leva menos de 3 s). O defeito que ele cobra continua o mesmo.
   test("cada rodada vira uma fileira no desenho e nos dados, e não sobra modelo", async () => {
     const {createElement: h} = await import("react");
     const {renderToStaticMarkup} = await import("react-dom/server");
@@ -88,5 +90,5 @@ describe("saude-rodadas · a tabela das rodadas como DataGrid", () => {
     expect(dados.linhas.map((l: {t: string}[]) => l.map((c) => c.t).join("|"))).toEqual(
       ["2026-11-05 10:00|abc1234|OK|6 of 6", "2026-11-04 09:00|def5678|FAILED|5 of 6 <x>"]);
     expect(dados.linhas[1][3].h).toBe("5 of 6 &lt;x&gt;");
-  });
+  }, 15_000);
 });

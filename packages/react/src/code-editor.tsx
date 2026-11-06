@@ -39,7 +39,7 @@ import {cx, useAureaStrings} from "./internal.js";
 // CodeEditor (e o CodeMirror) somem quando não usados. Split por subpath = decisão do Victor.
 export const aureaEditorTheme=/*@__PURE__*/EditorView.theme({
   "&":{backgroundColor:"var(--surface-inset)",color:"var(--foreground)",border:"var(--border-width) solid transparent",borderRadius:"var(--radius-lg)",fontSize:"var(--text-xs)"},
-  "&.cm-focused":{outline:"2px solid var(--focus-strong)",outlineOffset:"-2px"},
+  "&.cm-focused":{outline:"var(--focus-width) solid var(--focus-strong)",outlineOffset:"calc(-1 * var(--focus-width))"},
   ".cm-scroller":{fontFamily:"var(--font-code)",lineHeight:"var(--leading-relaxed)",borderRadius:"inherit"},
   ".cm-content":{caretColor:"var(--foreground)",padding:"var(--space-2) 0"},
   ".cm-line":{padding:"0 var(--space-3)"},

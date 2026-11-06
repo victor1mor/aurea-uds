@@ -77,40 +77,28 @@ overrides:
   # `DevToolsPlugin.js`), e a entrada CommonJS da 4 tem todos. E aqui ele nem roda: so' serve aos tipos, e o
   # `apps/native-smoke`, que roda o Expo, fica fora do workspace. Sai quando o @expo/cli pedir a 4.6.6 sozinho.
   'zod@<4.6.6': '^4.6.6'
+  # 06/11/2026, a auditoria externa (A-003): dois moderados, os dois de FERRAMENTA e por UM caminho — @aurea-uds/native
+  # (devDependencies) > @react-native-community/datetimepicker > expo > @expo/* (cli, config, config-plugins, fingerprint,
+  # metro-config) — nenhum tarball os contem (`pnpm audit --prod` da zero):
+  #   • GHSA-3g3m-2fjr-6pw4: glob >=9.0.0 <=14.0.1, o AbortSignal nao para a busca depois do prazo. Corrigido na 14.0.2;
+  #   • GHSA-g3hv-75wg-m249: minimatch >=7.0.0 <11.0.1, negacao de servico por padrao que se multiplica. Corrigido na 11.0.1.
+  # Os dois sao salto de versao maior (o Expo pede glob 13 e minimatch 10). Lido no codigo do Expo em 06/11/2026: o
+  # @expo/* chama do glob so' `glob`, `globSync`, `sync` e `globStream`, e do minimatch so' a classe `Minimatch` com
+  # `.pattern`, `.negate` e `.match` — tudo continua na 14 e na 11 (lido nas declaracoes publicadas delas). O que a 14 e
+  # a 11 tiraram (`makeRe`, `Minimatch#regexp`, `walk()` devolvendo Set) ninguem daqui usa. Saem quando o Expo pedir as
+  # versoes corrigidas sozinho.
+  'glob@>=9.0.0 <14.0.2': '^14.0.2'
+  'minimatch@>=7.0.0 <11.0.1': '^11.0.1'
 
 auditConfig:
-  # DUAS VULNERABILIDADES `high` SEM PATCH PUBLICADO, aceitas em 02/09/2026 com registro.
-  #
-  # As duas sao do mesmo pacote — `image-size` — e chegam por UM caminho so:
-  #   @aurea-uds/native (devDependencies) > react-native > metro > image-size
-  #
-  # Por que nao ha override, que e' o que este repositorio faz com undici e nanoid: **nao existe
-  # versao corrigida.** Medido em 02/09/2026 contra o registro: os dois advisories dizem "patched
-  # >=2.0.3" e a ultima versao PUBLICADA e' a `2.0.2` (dist-tags: latest 2.0.2, legacy 1.2.1).
-  # Nao ha para onde subir; um override apontaria para uma versao que nao existe.
-  #
-  # Por que aceitar em vez de tirar o react-native:
-  #   • ele e' **devDependency**, e so' para o typecheck. Nao entra em tarball nenhum — o
-  #     `check-pack.mjs` mede isso, e `@aurea-uds/native` publica 11 linhas, todas nossas;
-  #   • `image-size` roda dentro do **Metro**, que e' o bundler do CONSUMIDOR. Ele nao esta' no
-  #     caminho de execucao de nada que a Aurea publique;
-  #   • as duas sao DoS por laco infinito ao PARSEAR uma imagem JXL/HEIF maliciosa. Para morder,
-  #     alguem teria de por uma imagem dessas no bundle;
-  #   • a alternativa e' declarar os tipos do React Native a mao, e isso e' pior: uma segunda
-  #     verdade sobre uma API que ninguem aqui consegue rodar em aparelho.
-  #
-  # SAI quando o `image-size` publicar a 2.0.3 e o Metro subir — ai vira override, como os outros.
-  ignoreGhsas:
-    - GHSA-w3rx-r6r6-pgpr
-    - GHSA-5p2g-fcmc-qvqq
-    # ~~node-forge (GHSA-86w9-cpqp-85rv), aceita em 01/10/2026~~ — saiu em 31/10/2026: virou o override
-    # node-forge '^1.4.2' (ver `overrides`), fora da faixa <=1.4.0 do alerta.
-    # braces (high, CVE-2026-93687), achada pela CI do pedido #32 em 03/10/2026; o `main`
-    # reprova junto. Mesmo registro das de cima:
-    #   • sem correcao: "patched: none", e a ultima publicada (3.0.3) esta' na faixa <=3.0.3;
-    #   • so' ferramenta de desenvolvimento (micromatch > braces, sob vite, vitest, metro);
-    #     `pnpm why braces --prod` da' zero nos sete pacotes, e nenhum tarball a contem;
-    #   • derruba o processo com um padrao de chaves aninhado de proposito — padrao que so'
-    #     sai da configuracao do proprio repositorio.
-    # SAI quando o braces publicar a correcao (3.0.4 em diante) — ai vira override.
-    - GHSA-vfj7-8cjw-p6xm
+  # SEM ACEITE NENHUM desde 06/11/2026 (a auditoria externa, A-004). Os tres que havia morreram, cada um medido:
+  #   • image-size (GHSA-w3rx-r6r6-pgpr e GHSA-5p2g-fcmc-qvqq, `high`, aceitos em 02/09/2026 porque nao havia versao
+  #     corrigida): o `metro` 0.87.1 em diante nao usa mais o `image-size`, e o React Native pede `metro ^0.87.0` — o
+  #     `pnpm update metro` subiu para a 0.87.3 dentro da faixa, e o `image-size` saiu da arvore (`pnpm-lock.yaml`);
+  #   • braces (GHSA-vfj7-8cjw-p6xm, `high`, aceito em 03/10/2026): o GitHub RETIROU o alerta em 23/10/2026
+  #     (`withdrawn_at`, lido em `gh api advisories/GHSA-vfj7-8cjw-p6xm`); o `pnpm audit` sem o aceite nao o acha mais;
+  #   • ~~node-forge (GHSA-86w9-cpqp-85rv)~~ — ja tinha saido em 31/10/2026 (virou o override `node-forge`).
+  # Sobra um aviso `low` (deepmerge, GHSA-gcqx-w48m-w2h4, sem correcao publicada), so' de ferramenta (> expo >
+  # @expo/config) — abaixo do `--audit-level=high` da CI, entao nao precisa de aceite.
+  # Alerta novo sem correcao volta para ca', com o registro como os de antes: o que e', por onde chega, por que aceitar.
+  ignoreGhsas: []
