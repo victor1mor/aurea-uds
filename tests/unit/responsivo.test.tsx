@@ -42,8 +42,8 @@ test("o prefixo diz o MENSURÁVEL, e é isso que tira a ambiguidade de `md`", ()
   const ct = classesResponsivas("size", {base: "sm", container: {md: "lg"}});
   expect(vp).toBe("size-sm vp-md:size-lg");
   expect(ct).toBe("size-sm ct-md:size-lg");
-  // mesmo ponto, mesmo número de pixels, mensuráveis diferentes — uma escala só
-  expect(css).toContain("@media (min-width:768px)");
+  // mesmo ponto, mensuráveis diferentes — uma escala só (a tela em `em`, ADR-0092: 768 ÷ 16; a caixa em px)
+  expect(css).toContain("@media (min-width:48em)");
   expect(css).toContain("@container aurea (min-width:768px)");
 });
 

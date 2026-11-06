@@ -285,7 +285,8 @@ já tinha desenho aprovado ou decisão tomada; a logo e as decisões D1 a D8 da 
   quebra de tela é em `em` — no CSS do core, na camada responsiva gerada, no `matchMedia` do `AppShell` e das props
   responsivas. Com a fonte padrão do navegador aumentada (quem tem baixa visão faz isso em vez do zoom), o app se arruma
   como no zoom: com a fonte em dobro, a tela de 1280 se comporta como a de 640. Com a fonte normal, nada muda. O
-  `@container` continua em px (mede a caixa, não a tela).
+  `@container` continua em px (mede a caixa, não a tela). O `aurea.js` (a gaveta sem React) também: em px, com a fonte
+  aumentada, ele fechava a gaveta enquanto o CSS ainda a mostrava.
 - **No alto contraste do sistema, mais sete escolhidos se veem** (a forma "B", a mesma da 0.60.0): o botão ligado
   (`Toggle`, `ToggleGroup`, `Button pressed`), a etiqueta escolhida do `TagGroup`, o item escolhido da `ListBox`, o dia
   escolhido do `Calendar` e do `DatePicker`, a linha escolhida da `Table`/`DataGrid`; e o ponto do `Carousel`, que é fundo
