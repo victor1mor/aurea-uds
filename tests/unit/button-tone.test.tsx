@@ -110,6 +110,10 @@ function regrasDe(classes: string, prop: string): Regra[] {
   semComentario.split("}").forEach((bloco, ordem) => {
     const i = bloco.indexOf("{");
     if (i < 0 || !new RegExp(`${prop}\\s*:`).test(bloco.slice(i))) return;
+    // DENTRO DE `@media`/`@container` NÃO É O REPOUSO (06/11/2026): a divisão por `}` lia o começo do bloco
+    // (`@media (forced-colors:active)`) como SELETOR — sem classe, ele "casava" com todo botão, e o `:active` da condição
+    // contava como pseudo-classe. A matriz mede o modo normal; regra de modo (alto contraste, toque) tem teste próprio.
+    if (/^\s*@(media|container|supports)\b/.test(bloco.slice(0, i))) return;
     // GAR-05 (06/10/2026): as regras de tema claro levam a guarda
     // `:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)`. Duas coisas
     // a modelar, e esta função errava as duas: a VÍRGULA de dentro dos parênteses não separa

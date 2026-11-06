@@ -1,7 +1,7 @@
 import {createElement as h} from "react";
 import {Accordion} from "../../../packages/react/dist/index.js";
 
-const wide = {width: "100%", maxWidth: "32rem"};
+const wide = {width: "100%", maxWidth: "var(--demo-limite, 32rem)"};
 const ITENS = [
   {id: "ship", title: "How do I install it?", content: "Install the packages and import the CSS once, at the root of the app."},
   {id: "theme", title: "Can I change the colours?", content: "Every visual value is a token. A brand redefines the colours and nothing else."},

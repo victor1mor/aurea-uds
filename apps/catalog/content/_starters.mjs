@@ -27,17 +27,22 @@ import {highlightCode} from "../../../packages/react/dist/code-highlight.js";
 // consumidor consome, e é assim que se descobre se a fronteira da Fase 9 é usável. Os pesados (gráficos, editor,
 // grade, mapa, QR) moram no `_starters-motores.mjs` desde 21/10/2026; aqui fica o calendário, que é leve.
 import {Calendar} from "../../../packages/react/dist/calendar.js";
-import {ComOrdem, ComValor} from "./_estado.mjs";
+import {ComAtual, ComIndice, ComOrdem, ComTrilha, ComValor, NavComAtual} from "./_estado.mjs";
+// O atual que o clique move (06/11/2026): o shell guarda o item atual da lateral, como a rota do app guardaria (`ComAtual`).
+const AppShellVivo = (p) => h(ComAtual, {componente: A.AppShell, valor: "currentNavId", lista: "navItems", ...p});
 // O exemplo de cada valor de variação, com o código e a peça da mesma lista (bloco 1, o catálogo fiel — 23/10/2026).
 import {cada, eixo} from "./_eixos.mjs";
 
 // A fileira que quebra centraliza cada linha, como a `linha` do `_eixos.mjs` (bloco 1, 23/10/2026).
 export const row = {display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "var(--space-3)"};
 const stack = {display: "grid", gap: "var(--space-3)"};
-export const wide = {width: "min(30rem,100%)"};
+// O LIMITE DA PEÇA NA CAIXA (06/11/2026): `--demo-limite`, 30rem na largura normal; no modo "Full width" o site o põe
+// em 100% (`_tela-cheia.js`), e a peça ocupa a caixa — antes a caixa crescia e a peça ficava nos 480 (o desenho do
+// FigCraft aprovado pelo Victor). O número continua aqui como reserva: fora do site, nada muda.
+export const wide = {width: "min(var(--demo-limite, 30rem),100%)"};
 // O mesmo limite, para peça que tem a largura do conteúdo (21/10/2026): a caixa encolhe até ela e o painel a
 // centraliza. Com `wide`, a lista curta ficava encostada à esquerda de uma caixa de 30rem (o Victor apontou).
-const ate = {maxWidth: "min(30rem,100%)"};
+const ate = {maxWidth: "min(var(--demo-limite, 30rem),100%)"};
 // O de dentro dos exemplos de arranjo (bloco 1, o catálogo fiel — 23/10/2026): o mesmo grupo em cada valor, para só o
 // arranjo mudar de uma linha para a outra.
 const GRUPO_DE_TRES = {codigo: "\n  <Badge>one</Badge>\n  <Badge>two</Badge>\n  <Badge>three</Badge>\n",
@@ -89,9 +94,8 @@ const cascaDeApp = (titulo, descricao, props) => ({
   code: `<AppShell\n${Object.entries(props).map(([k, v]) => `  ${k}="${v}"`).join("\n")}\n  brand={<strong>Acme</strong>}\n`
     + `  navigation={<nav aria-label="Contents"><a href="/inbox" aria-current="page">Inbox</a></nav>}\n`
     + `  aside={<p>On this page</p>}\n>\n  <h1>Inbox</h1>\n</AppShell>`,
-  render: () => h(A.AppShell, {...props, brand: h("strong", null, "Acme"),
-    navigation: h("nav", {className: "doc-nav", "aria-label": "Contents"},
-      h("a", {href: "#", className: "active", "aria-current": "page"}, "Inbox"), h("a", {href: "#"}, "Archive")),
+  render: () => h(AppShellVivo, {...props, brand: h("strong", null, "Acme"),
+    navigation: h(NavComAtual, {className: "doc-nav", label: "Contents", itens: [{rotulo: "Inbox"}, {rotulo: "Archive"}], atual: "Inbox", classeAtiva: "active"}),
     aside: h("p", null, "On this page"), asideLabel: "On this page"},
     h("h1", null, "Inbox"), h("p", null, "Twelve new messages since yesterday.")),
 });
@@ -267,15 +271,13 @@ export default {
 >
   <h1>Inbox</h1>
 </AppShell>`,
-    render: () => h(A.AppShell, {
+    render: () => h(AppShellVivo, {
       brand: h("strong", null, "Acme"),
       // `.doc-nav` é a pele de navegação do PRÓPRIO catálogo, não do sistema: link de
       // navegação lateral ainda não é componente da Aurea (é o achado A8, Fase 8). Sem
       // classe nenhuma o link sai com a cor padrão e reprova contraste sobre a lateral —
       // medido. O código mostra o <nav> puro porque é isso que o consumidor tem hoje.
-      navigation: h("nav", {className: "doc-nav", "aria-label": "Contents"},
-        h("a", {href: "#", className: "active", "aria-current": "page"}, "Inbox"),
-        h("a", {href: "#"}, "Archive")),
+      navigation: h(NavComAtual, {className: "doc-nav", label: "Contents", itens: [{rotulo: "Inbox"}, {rotulo: "Archive"}], atual: "Inbox", classeAtiva: "active"}),
       topbar: h(A.Button, {variant: "primary", size: "sm"}, "New"),
     }, h("h1", null, "Inbox")),
     examples: [
@@ -311,9 +313,8 @@ export default {
   <p>Read the <Link href="/help">inbox guide</Link>.</p>
   <Button variant="primary">New message</Button>
 </AppShell>`,
-        render: () => h(A.AppShell, {highContrast: true, textSize: "lg", brand: h("strong", null, "Acme"),
-          navigation: h("nav", {className: "doc-nav", "aria-label": "Contents"},
-            h("a", {href: "#", className: "active", "aria-current": "page"}, "Inbox"), h("a", {href: "#"}, "Archive"))},
+        render: () => h(AppShellVivo, {highContrast: true, textSize: "lg", brand: h("strong", null, "Acme"),
+          navigation: h(NavComAtual, {className: "doc-nav", label: "Contents", itens: [{rotulo: "Inbox"}, {rotulo: "Archive"}], atual: "Inbox", classeAtiva: "active"})},
           h("h1", null, "Inbox"),
           h(A.Field, {label: "Search the inbox"}, h(A.Input, {placeholder: "Sender or subject"})),
           h("p", null, "Read the ", h(A.Link, {href: "#"}, "inbox guide"), "."),
@@ -417,7 +418,7 @@ export default {
   {label: "Patterns", href: "/patterns"},
   {label: "QR code"},
 ]} />`,
-    render: () => h(A.Breadcrumb, {items: [{label: "Home", href: "#"},
+    render: () => h(ComTrilha, {componente: A.Breadcrumb, items: [{label: "Home", href: "#"},
       {label: "Patterns", href: "#"}, {label: "QR code"}]}),
   },
   // 0.33.0: as partes da referência — o cabeçalho com título e descrição colados, o conteúdo e o rodapé, 12 entre elas.
@@ -1740,7 +1741,7 @@ export function Actions() {
     // dois <nav> com o mesmo nome acessível é violação (axe landmark-unique), medido.
     // Numa caixa simples (21/10/2026): o índice se prende ao TOPO (`.toc`: `align-self:start`, `sticky`), que é o certo
     // ao lado do texto e saía grudado no alto da prévia. A caixa é que o painel centraliza.
-    render: () => h("div", null, h(A.TableOfContents, {label: "Example sections", current: "preview", items: [
+    render: () => h("div", null, h(ComIndice, {componente: A.TableOfContents, label: "Example sections", current: "preview", items: [
       {id: "preview", label: "Preview"}, {id: "installation", label: "Installation"},
       {id: "reference", label: "Reference"},
     ]})),
@@ -1749,7 +1750,7 @@ export function Actions() {
       description: "progress puts a ring in place of the heading icon, with how much of the page has been read, in ring and "
         + "number; indicator=\"segment\" raises the current item in a capsule, like the Sidebar's.",
       code: `<TableOfContents progress indicator="segment" current="preview" items={items} />`,
-      render: () => h("div", null, h(A.TableOfContents, {label: "Sections, with the ring", progress: true, indicator: "segment",
+      render: () => h("div", null, h(ComIndice, {componente: A.TableOfContents, label: "Sections, with the ring", progress: true, indicator: "segment",
         current: "preview", items: [{id: "preview", label: "Preview"}, {id: "installation", label: "Installation"},
           {id: "reference", label: "Reference"}]})),
     }],

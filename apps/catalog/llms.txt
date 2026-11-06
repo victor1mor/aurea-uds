@@ -457,6 +457,8 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.60.0](https://aureauds.dev/release-v0-60-0.md): Selected segments and tabs stay visible in Windows high contrast; code stays left-to-right on right-to-left pages.
+- [v0.59.1](https://aureauds.dev/release-v0-59-1.md): The CodeEditor focus ring follows the focus tokens; security headers on the documentation site.
 - [v0.59.0](https://aureauds.dev/release-v0-59-0.md): Fixes from an external audit — KPI bars, the native Toast for VoiceOver, ToastHost and BottomNav without SafeAreaProvider.
 - [v0.58.0](https://aureauds.dev/release-v0-58-0.md): Motion — the selection slides, menus animate, dragging follows the pointer — DataGrid fit, and recipes as real product screens.
 - [v0.57.0](https://aureauds.dev/release-v0-57-0.md): Row dividers, a header pinned to the page, gradients allowed, and five site fixes.

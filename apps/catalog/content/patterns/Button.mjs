@@ -15,6 +15,7 @@
 //   render      — o elemento de verdade (Preview dogfooded)
 import {createElement as h} from "react";
 import {Avatar, Button, ButtonGroup, Checkbox, IconButton, Badge, Kbd, Switch} from "../../../../packages/react/dist/index.js";
+import {ComLigado} from "../_estado.mjs";
 
 // A moldura das provas de eixo responsivo: contêineres de largura FIXA, lado a lado, na mesma
 // viewport. É o que separa os dois mecanismos aos olhos — se as três colunas medissem igual,
@@ -130,11 +131,15 @@ export default [
     name: "Pinned filter",
     description: "A filter that stays on: aria-pressed keeps the state visible and audible after the click.",
     uses: ["Button"],
-    code: ['<Button pressed leadingIcon="star">Starred</Button>',
-      '<Button pressed={false}>Archived</Button>'].join("\n"),
+    // o código mostra o estado que o clique troca (06/11/2026), como o exemplo vivo faz
+    code: ['const [starred, setStarred] = useState(true);',
+      'const [archived, setArchived] = useState(false);',
+      '',
+      '<Button pressed={starred} onClick={() => setStarred(!starred)} leadingIcon="star">Starred</Button>',
+      '<Button pressed={archived} onClick={() => setArchived(!archived)}>Archived</Button>'].join("\n"),
     render: () => h("div", {style: row},
-      h(Button, {pressed: true, leadingIcon: "star"}, "Starred"),
-      h(Button, {pressed: false}, "Archived")),
+      h(ComLigado, {componente: Button, pressed: true, leadingIcon: "star"}, "Starred"),
+      h(ComLigado, {componente: Button, pressed: false}, "Archived")),
   },
   {
     variant: "Primary",

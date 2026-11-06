@@ -4,6 +4,7 @@
 // contra cobertura total em duas das referências. O alvo é nenhum componente em zero.
 import {createElement as h} from "react";
 import * as A from "../../../../packages/react/dist/index.js";
+import {ComAtual} from "../_estado.mjs";
 export default [
   {
     variant: "Navigation",
@@ -31,7 +32,7 @@ export default [
     {id: "members", label: "Members", icon: "users", href: "#"},
   ]}
 />`,
-    render: () => h("div", {style: {width: "min(260px,100%)"}}, h(A.Sidebar, {
+    render: () => h("div", {style: {width: "min(260px,100%)"}}, h(ComAtual, {componente: A.Sidebar, 
       // `role="presentation"` na PRÉVIA, como o `Sidebar.mjs` de conteúdo rico já fazia: o
       // <aside> é um landmark `complementary`, e dentro do <main> da página do catálogo ele
       // vira complementary aninhado — o axe reprovou em 22/08/2026. Num app de verdade ele é

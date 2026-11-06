@@ -2,7 +2,7 @@ import {createElement as h} from "react";
 import {Tabs} from "../../../packages/react/dist/index.js";
 import {ComValor} from "./_estado.mjs";
 
-const wide = {width: "100%", maxWidth: "32rem"};
+const wide = {width: "100%", maxWidth: "var(--demo-limite, 32rem)"};
 const ABAS = [
   {id: "overview", label: "Overview", content: "One number per row."},
   {id: "detail", label: "Detail", content: "Every row, unaggregated."},

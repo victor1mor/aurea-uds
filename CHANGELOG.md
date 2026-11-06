@@ -274,6 +274,45 @@ como deveria funcionar"*.
 
 ---
 
+## [0.60.0] — 2026-11-06
+
+**A auditoria externa, o que muda aparência** (06/11/2026). Desenhado no FigCraft (o antes e a proposta, com os tokens
+como variáveis e as peças como componentes) e aprovado pelo Victor: *"Pode, o alto contraste aprovo a B"*.
+
+### Mudou
+
+- **No alto contraste do sistema, o escolhido se vê** (A-015, a forma "B"): o segmento do `SegmentedControl` e a aba do
+  `Tabs` escolhidos pintam o fundo no destaque do sistema (`Highlight`) com a letra sobre ele (`HighlightText`) — antes,
+  o fundo era apagado pela troca de cores e o escolhido ficava igual aos outros. O ponto do `Badge` (`dot`) sai da troca
+  na cor do texto (sumia). Em todas as marcas, a Ember também (*"Ember entra"*). Só na web: o nativo não tem esse modo.
+- **O código fica da esquerda para a direita numa página da direita para a esquerda** (A-014): o `CodeBlock` não espelha
+  mais o código (a pontuação pulava, `;"import …`, e o número de linha ia para a direita); a moldura continua espelhada —
+  o botão de copiar no fim da linha dela — e o código reserva o lugar dele desse lado. Só na web: o `CodeBlock` do nativo
+  é planejado.
+
+### O site
+
+- **O "Full width" faz a peça crescer**: os exemplos davam à peça no máximo 30rem (480) e, no modo largo, a caixa crescia
+  e a peça não. O limite é a variável `--demo-limite`, que o modo largo põe em 100%. Na largura normal, nada muda.
+- **A busca do topo**, só com a lupa (abaixo de 1335 de largura), é o círculo de 44 dos vizinhos com a lupa no centro (era
+  38 × 44, a lupa a 14 de um lado e 8 do outro).
+- No alto contraste, o logo do GitHub pinta na cor do texto do sistema (no tema claro, era preto sobre o preto da tela).
+- O selo do pacote fica da esquerda para a direita numa página da direita para a esquerda (`aurea-uds/react@`).
+- **Os exemplos que mostram uma escolha deixam trocar** (o pedido do Victor, *"ainda estou encontrando componentes no site
+  que não interage"*, e o desenho do FigCraft aprovado com *"Pode"*). A varredura de 578 páginas e 87 molduras achou 41
+  exemplos com um atual que o clique não movia — e, nas molduras da `Sidebar`, o link do item levava a MOLDURA para outra
+  página do site. Agora o exemplo guarda a escolha como o app guardaria (`apps/catalog/content/_estado.mjs`: `ComAtual`,
+  `ComLigado`, `ComPassos`, `ComIndice`, `ComTrilha`, `NavComAtual`): `Sidebar` e `AppShell` (o item atual), `Header`,
+  `Pagination` (a página), o filtro fixo e a estrela (`pressed`, com o estado também no código mostrado), o `Stepper` de
+  voltar a um passo, o índice da página, a trilha e a biblioteca de mídia. Os botões de ação sem efeito ("Save",
+  "Publish") ficam como são — é o normal de catálogo. Quem cobra: `tests/visual/site-exemplos-escolha.spec.ts`, provado
+  contra o site de antes.
+
+Quem cobra: `tests/visual/alto-contraste-escolhido.spec.ts`, `tests/visual/rtl-codigo.spec.ts` e
+`tests/visual/site-full-width.spec.ts`, provados contra o CSS de antes.
+
+---
+
 ## [0.59.1] — 2026-11-06
 
 **A auditoria externa, as travas e o processo** (06/11/2026). A segunda parte dos consertos da auditoria externa (*"Pode

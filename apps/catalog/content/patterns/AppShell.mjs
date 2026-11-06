@@ -13,6 +13,9 @@
 // que o consumidor tem hoje; o `render` veste para não reprovar contraste sobre a lateral.
 import {createElement as h, useState} from "react";
 import * as A from "../../../../packages/react/dist/index.js";
+import {ComAtual, NavComAtual} from "../_estado.mjs";
+// O atual que o clique move (06/11/2026): o shell guarda o item atual da lateral, como a rota do app guardaria (`ComAtual`).
+const AppShellVivo = (p) => h(ComAtual, {componente: A.AppShell, valor: "currentNavId", lista: "navItems", ...p});
 
 // As listas dos padrões do bloco 2 (0.44.0): os itens de uma lateral e as seções da trilha com o painel.
 const ITENS = [
@@ -40,7 +43,7 @@ const JEITOS = [
 ];
 function CincoJeitos() {
   const [jeito, setJeito] = useState("segment");
-  return h(A.AppShell, {layout: "sidebar", sidebarIndicator: jeito,
+  return h(AppShellVivo, {layout: "sidebar", sidebarIndicator: jeito,
     brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme"}),
     navItems: ITENS, currentNavId: "tasks",
   }, h("h1", null, "Tasks"), h(A.RadioGroup, {label: "The current item", orientation: "horizontal", value: jeito, onValueChange: setJeito},
@@ -50,9 +53,9 @@ function CincoJeitos() {
 const titulo = (texto) => h("div", {style: {display: "flex", alignItems: "center", gap: "var(--space-3)"}},
   h(A.AppShell.SidebarToggle, null), h("h1", {style: {margin: 0}}, texto));
 
-const nav = (...itens) => h("nav", {className: "doc-nav", "aria-label": "Sections"},
-  ...itens.map(([rotulo, atual]) => h("a", {key: rotulo, href: "#",
-    ...(atual ? {className: "active", "aria-current": "page"} : {})}, rotulo)));
+// O atual que o clique move (06/11/2026): a mesma marcação, com o atual guardado (`NavComAtual`).
+const nav = (...itens) => h(NavComAtual, {className: "doc-nav", label: "Sections", itens: itens.map(([rotulo]) => ({rotulo})),
+  atual: (itens.find(([, atual]) => atual) || [])[0], classeAtiva: "active"});
 
 export default [
   {
@@ -75,7 +78,7 @@ export default [
   <h1>Inbox</h1>
   <p>Nothing needs your attention.</p>
 </AppShell>`,
-    render: () => h(A.AppShell, {
+    render: () => h(AppShellVivo, {
       brand: h("strong", null, "Acme"),
       navigation: nav(["Inbox", true], ["Archive"], ["Settings"]),
       topbar: h("div", {style: {display: "flex", gap: "var(--space-2)", alignItems: "center"}},
@@ -103,7 +106,7 @@ export default [
 >
   <h1>Reports</h1>
 </AppShell>`,
-    render: () => h(A.AppShell, {
+    render: () => h(AppShellVivo, {
       topbarVariant: "flush",
       brand: h("strong", null, "Acme"),
       navigation: nav(["Overview"], ["Reports", true], ["Exports"]),
@@ -133,7 +136,7 @@ export default [
 >
   <h1>Editor</h1>
 </AppShell>`,
-    render: () => h(A.AppShell, {
+    render: () => h(AppShellVivo, {
       brand: h("strong", null, "Acme"),
       sidebarCollapsed: true,
       navigation: nav(["Editor", true], ["Preview"], ["Publish"]),
@@ -166,7 +169,7 @@ export default [
     <h1>Reports</h1>
   </div>
 </AppShell>`,
-    render: () => h(A.AppShell, {
+    render: () => h(AppShellVivo, {
       layout: "sidebar", sidebarVariant: "flush", sidebarCollapsible: true,
       brand: h(A.Sidebar.Brand, {logo: "A", name: "Acme", description: "Workspace"}),
       sidebarFooter: h(A.Sidebar.User, {avatar: h(A.Avatar, {fallback: "KM", alt: ""}), name: "Kate Moore", description: "Admin",
@@ -197,7 +200,7 @@ export default [
 >
   <h1>Reports</h1>
 </AppShell>`,
-    render: () => h(A.AppShell, {
+    render: () => h(AppShellVivo, {
       layout: "sidebar", sidebarVariant: "flush", sidebarCollapsible: true,
       brand: h(A.Sidebar.Brand, {logo: "A", name: "Acme", description: "Workspace"}),
       // MNT-37: a busca vai na ponta (`topbarActions`). Antes, o exemplo empurrava a busca com `margin-inline-start: auto` no
@@ -232,7 +235,7 @@ export default [
     <h1>Tasks</h1>
   </div>
 </AppShell>`,
-    render: () => h(A.AppShell, {
+    render: () => h(AppShellVivo, {
       layout: "sidebar", sidebarCollapsible: "capsule", defaultSidebarCollapsed: true,
       brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme"}),
       navItems: ITENS, currentNavId: "tasks",
@@ -259,7 +262,7 @@ export default [
     <h1>Docs</h1>
   </div>
 </AppShell>`,
-    render: () => h(A.AppShell, {
+    render: () => h(AppShellVivo, {
       layout: "sidebar", sidebarVariant: "flush", sidebarCollapsible: "offcanvas",
       brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme"}),
       navItems: ITENS, currentNavId: "docs",
@@ -284,7 +287,7 @@ export default [
 >
   <h1>Schedule</h1>
 </AppShell>`,
-    render: () => h(A.AppShell, {
+    render: () => h(AppShellVivo, {
       layout: "sidebar", sidebarVariant: "flush", sidebarCollapsible: "icon", sidebarToggle: "none",
       brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme", action: h(A.Sidebar.Toggle, null)}),
       navItems: ITENS, currentNavId: "schedule",
@@ -316,7 +319,7 @@ export default [
 >
   <h1>Orders</h1>
 </AppShell>`,
-    render: () => h(A.AppShell, {
+    render: () => h(AppShellVivo, {
       layout: "sidebar", sidebarCollapsible: true, sidebarPanel: "docked",
       brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme"}),
       navItems: SECOES, currentNavId: "orders",
@@ -339,7 +342,7 @@ export default [
 >
   <h1>Orders</h1>
 </AppShell>`,
-    render: () => h(A.AppShell, {
+    render: () => h(AppShellVivo, {
       layout: "sidebar", sidebarPanel: "overlay",
       brand: h(A.Sidebar.Brand, {variant: "plain", logo: h(A.Icon, {name: "cube"}), name: "Acme"}),
       navItems: SECOES, currentNavId: "orders",

@@ -4,6 +4,7 @@
 // contra cobertura total em duas das referências. O alvo é nenhum componente em zero.
 import {createElement as h} from "react";
 import * as A from "../../../../packages/react/dist/index.js";
+import {ComTrilha} from "../_estado.mjs";
 export default [
   {
     variant: "Path",
@@ -15,7 +16,7 @@ export default [
   {label: "Actions", href: "./index.html#actions"},
   {label: "Button"},
 ]} />`,
-    render: () => h(A.Breadcrumb, {items: [
+    render: () => h(ComTrilha, {componente: A.Breadcrumb, items: [
       {label: "Components", href: "#"}, {label: "Actions", href: "#"}, {label: "Button"}]}),
   },
 ];

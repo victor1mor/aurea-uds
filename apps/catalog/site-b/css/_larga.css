@@ -13,3 +13,9 @@
 /* B · o botão no canto da caixa */
 .demo:has(> .tela-cheia-abrir) { position:relative; }
 .tela-cheia-abrir { position:absolute; inset-block-start:var(--space-3); inset-inline-end:var(--space-3); z-index:1; box-shadow:var(--shadow-sm); }
+
+/* B · no modo largo, a PEÇA também cresce (06/11/2026, o desenho do FigCraft aprovado pelo Victor): os exemplos dão à peça
+   `--demo-limite` (30rem, ou o limite da página dela) — aqui ele vira 100%, e a peça ocupa a caixa menos o recheio. Só no
+   modo que a pessoa ligou: a página que já nasce larga e a largura normal ficam como estão. Quem cobra:
+   `tests/visual/site-full-width.spec.ts`. */
+[data-pagina-larga-ligada] .demo-panel { --demo-limite:100%; }

@@ -2252,6 +2252,9 @@ a.related-card:hover { border-color:transparent; }
 /* O logo do GitHub só em preto ou branco, os oficiais (a regra do GitHub): branco no escuro, preto no claro. */
 .site-github-ink { fill:var(--white); }
 [data-theme="light"] .site-github-ink { fill:var(--black); }
+/* No alto contraste do sistema (06/11/2026, a auditoria externa A-015): o preto do claro some no fundo preto do sistema.
+   O logo pinta na cor do texto do sistema — a mesma de tudo em volta, em toda marca (a Ember também: "Ember entra"). */
+@media (forced-colors:active) { .site-github-ink { fill:CanvasText; } }
 .home-vitrine { display:grid; gap:var(--space-4); }
 /* As abas no CANTO, como na referência: começam na borda da caixa de baixo, 8 para dentro (o Victor, 14/10/2026). */
 .home-abas { justify-self:start; margin-inline-start:var(--space-2); }
@@ -2544,6 +2547,9 @@ a.related-card:hover { border-color:transparent; }
    1121 para cima. Abaixo de 1121 as áreas saem da pílula e vão para o alto da lateral, e abaixo de 1024 para a gaveta. */
 @media (max-width:1334px) {
   .site-shell .site-search > span:not([class]), .site-shell .site-search > .btn-kbds { display:none; }
+  /* Só a lupa, e o recheio do campo largo ficava (13 de um lado, 7 do outro): 38 × 44, oval, a lupa fora do centro. O
+     círculo de 44 dos vizinhos (a paleta, o GitHub), a lupa no meio — o desenho do FigCraft aprovado pelo Victor, 06/11/2026. */
+  .site-shell .site-search { inline-size:var(--target-min); padding-inline:0; justify-content:center; gap:0; }
   .site-shell .site-areas .segmented a { padding-inline:calc(var(--space-2) + var(--space-05) / 2); }
 }
 @media (min-width:1121px) and (max-width:1279px) { .site-areas { display:block; } .site-gaveta-areas { display:none !important; } }
