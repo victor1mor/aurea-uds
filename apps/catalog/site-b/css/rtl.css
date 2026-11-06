@@ -32,6 +32,6 @@
 
 .rtl-tabela { margin-block-start:calc(var(--space-4) + var(--space-05)); }
 
-@media (max-width:900px) {
+@media (max-width:56.25em) {
   .rtl-espelho-ui { grid-template-columns:minmax(0, 1fr); }
 }

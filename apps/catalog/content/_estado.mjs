@@ -32,15 +32,12 @@ export function ComOrdem({componente, lista = "items", ...props}) {
 // (`current`) e o app o move pela rota; no exemplo não há rota, e o atual ficava parado — e o link do item levava a MOLDURA
 // para outra página. Aqui o atual mora no estado, e o clique num item (que não seja grupo) o move. O `href` fica (o item
 // continua link, com o endereço na barra de status); a navegação é impedida, como o roteador do app faria.
-// `porRender`: a peça que não liga o `onClick` do item (o `Header`) recebe o link pela porta `render` — o mesmo caminho que
-// o app usa para pôr o link do roteador dele.
-export function ComAtual({componente, valor = "current", lista = "items", porRender = false, ...props}) {
+export function ComAtual({componente, valor = "current", lista = "items", ...props}) {
   const [atual, setAtual] = useState(props[valor]);
   const liga = (xs) => Array.isArray(xs) ? xs.map((it) => {
     if (!it || typeof it !== "object" || !("id" in it)) return it;
     if (Array.isArray(it.items)) return {...it, items: liga(it.items)};
-    const clique = (e) => { e?.preventDefault?.(); it.onClick?.(e); setAtual(it.id); };
-    return porRender ? {...it, render: h("a", {href: it.href ?? "#", onClick: clique})} : {...it, onClick: clique};
+    return {...it, onClick: (e) => { e?.preventDefault?.(); it.onClick?.(e); setAtual(it.id); }};
   }) : xs;
   return h(componente, {...props, [valor]: atual, [lista]: liga(props[lista])});
 }

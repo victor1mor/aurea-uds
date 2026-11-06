@@ -274,6 +274,40 @@ como deveria funcionar"*.
 
 ---
 
+## [0.61.0] — 2026-11-06
+
+**As pendências antes da 1.0** (06/11/2026, o Victor: *"vamos fazer logo todas agora, para não atrapalhar a 1.0"*). O que
+já tinha desenho aprovado ou decisão tomada; a logo e as decisões D1 a D8 da auditoria vão ao Victor à parte.
+
+### Mudou
+
+- **Os pontos de quebra seguem a fonte** ([ADR-0092](decisions/0092-os-pontos-de-quebra-seguem-a-fonte.md)): todo ponto de
+  quebra de tela é em `em` — no CSS do core, na camada responsiva gerada, no `matchMedia` do `AppShell` e das props
+  responsivas. Com a fonte padrão do navegador aumentada (quem tem baixa visão faz isso em vez do zoom), o app se arruma
+  como no zoom: com a fonte em dobro, a tela de 1280 se comporta como a de 640. Com a fonte normal, nada muda. O
+  `@container` continua em px (mede a caixa, não a tela).
+- **No alto contraste do sistema, mais sete escolhidos se veem** (a forma "B", a mesma da 0.60.0): o botão ligado
+  (`Toggle`, `ToggleGroup`, `Button pressed`), a etiqueta escolhida do `TagGroup`, o item escolhido da `ListBox`, o dia
+  escolhido do `Calendar` e do `DatePicker`, a linha escolhida da `Table`/`DataGrid`; e o ponto do `Carousel`, que é fundo
+  e sumia INTEIRO — os pontos na cor do texto, o atual no destaque. Todas as marcas. Só na web.
+- **`Header`: o `onClick` do item chega ao app**, como na `Sidebar` (o mesmo `SidebarItem`; a ficha dizia que era
+  ignorado). O `Header` do nativo não tem itens.
+
+### O site
+
+- Os pontos de quebra do site em `em`, como os do core: com a fonte do navegador a 200% numa tela de 1280, a página do
+  componente vira uma coluna (o título numa linha, o topo baixo), e não três colunas espremidas.
+
+### Registro
+
+- A `0.59.0` foi publicada em 06/11/2026 (com a `0.57.0` e a `0.58.0` dentro): o `released-surface.json`, o CLAUDE.md e
+  a nota dela.
+
+Quem cobra: `tests/visual/texto-200.spec.ts` (a fonte padrão do Chromium em 32), `tests/visual/alto-contraste-escolhido.spec.ts`
+(as sete, nas páginas do site) e `tests/unit/header-onclick.test.tsx` — todos provados contra o código de antes.
+
+---
+
 ## [0.60.0] — 2026-11-06
 
 **A auditoria externa, o que muda aparência** (06/11/2026). Desenhado no FigCraft (o antes e a proposta, com os tokens
@@ -365,6 +399,9 @@ FigCraft e espera o "pode".
 
 ## [0.59.0] — 2026-11-05
 
+✅ **Publicada em 06/11/2026, por volta das 13:52 (Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #119.**
+Leva a 0.58.0 e a 0.57.0 junto.
+
 **A auditoria externa, os consertos de código** (05/11/2026). Uma auditoria externa da 0.56.0 trouxe 21 achados; cada um
 foi conferido no código de hoje antes de virar trabalho (muito do que ela citava não existia), e o Victor mandou corrigir
 os reais (*"Pode corrigir tudo"*). Este lote é a parte que não muda aparência; o que muda aparência vem depois, com
@@ -412,6 +449,8 @@ imagem antes.
 ---
 
 ## [0.58.0] — 2026-11-05
+
+**Não saiu sozinha**: foi publicada dentro da 0.59.0, em 06/11/2026.
 
 **O movimento, as tabelas do site e as receitas** (05/11/2026). O primeiro lote da fase 0 do caminho até a 1.0 (*"Sim,
 nessa ordem"*): juntar o que estava construído e aprovado fora do `main` — o movimento (S-04 e S-05, branch
@@ -477,6 +516,8 @@ nessa ordem"*): juntar o que estava construído e aprovado fora do `main` — o 
 ---
 
 ## [0.57.0] — 2026-11-05
+
+**Não saiu sozinha**: foi publicada dentro da 0.59.0, em 06/11/2026.
 
 **As tabelas com linha, o cabeçalho preso à página, o degradê permitido e cinco consertos do site** (05/11/2026). O primeiro
 lote feito em sessões paralelas — a navegação do site e as tabelas —, juntado na branch `claude/lote-paralelo`; cada

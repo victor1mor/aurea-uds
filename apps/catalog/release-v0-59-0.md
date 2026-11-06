@@ -14,6 +14,17 @@ Fixes from an external audit. Nothing changes on screen.
 - The API docs of `Code`, `Heading` and `Paragraph` no longer say native takes `tone` (native takes `color`), and `ToolbarButton`'s `glow` no longer says it works on native, where the component is planned.
 - The `LICENSE` of `@aurea-uds/native` and `@aurea-uds/icons` is now the same as the other packages.
 
+## Includes v0.58.0
+
+- **Motion** — the selection slides in `SegmentedControl` and `Tabs` (web and React Native), menus and the command palette animate, and dragging in `SortableList` and `BlockEditor` follows the pointer. "Reduce motion" turns it all off.
+- **`DataGrid fit`**, like `Table`.
+
+## Includes v0.57.0
+
+- **Row dividers** — `dividers` on `Table` and `DataGrid`.
+- **`DataGrid stickyHeader="page"`** — the header follows the page as it scrolls.
+- **Gradients are allowed.**
+
 ## Update
 
 On the web:

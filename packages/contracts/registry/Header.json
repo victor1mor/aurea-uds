@@ -103,7 +103,7 @@
       "name": "items",
       "type": "SidebarItem[]",
       "default": "—",
-      "description": "The website's links — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href and render (the router link); sub-items, icon and onClick are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel."
+      "description": "The website's links — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href, render (the router link) and onClick, as the Sidebar does; sub-items and icon are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel."
     },
     {
       "name": "current",

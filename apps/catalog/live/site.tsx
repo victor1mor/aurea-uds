@@ -156,7 +156,8 @@ const areasDoMenu: Area[] = lugarDoMenu ? JSON.parse(lugarDoMenu.dataset.areas |
 // No Início (S-09, o topo único) o menu também guarda as áreas que saem da pílula abaixo de 1121: lá não há a gaveta do
 // `AppShell`, e ele aparece desde essa largura (`celular.css`).
 const NOVA_ABA = {target: "_blank", rel: "noreferrer", "aria-describedby": "site-nova-aba"};
-const LARGO = lugarDoMenu?.closest(".site-home") ? "(min-width: 1121px)" : "(min-width: 768px)";
+// em `em`, como o CSS do site (06/11/2026, o texto a 200%): 1121px = 70.0625em, 768px = 48em
+const LARGO = lugarDoMenu?.closest(".site-home") ? "(min-width: 70.0625em)" : "(min-width: 48em)";
 const TEMAS_DA_CHAVE = [{value: "light", label: "Light", icon: "sun"}, {value: "dark", label: "Dark", icon: "moon"},
   {value: "system", label: "System", icon: "monitor"}];
 

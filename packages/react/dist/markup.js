@@ -219,7 +219,9 @@ export function MediaPlayerShell({ children, className, ...props }) { return _js
 // O item da barra e o do painel são o MESMO elemento com a mesma pele: o atual é o atual nos dois.
 function linksDoHeader(items, current) {
     return _jsx("ul", { className: "topbar-links", children: items.map(it => {
-            const p = { className: "topbar-link", "aria-current": it.id === current ? "page" : undefined, children: it.label };
+            // O `onClick` do item vale aqui também (06/11/2026): a `Sidebar` o liga e o `Header` o jogava fora — o mesmo `SidebarItem`
+            // fazia coisas diferentes nas duas peças. Não é hook: é a prop do `<a>`, que a marcação pura pode passar.
+            const p = { className: "topbar-link", "aria-current": it.id === current ? "page" : undefined, onClick: it.onClick, children: it.label };
             return _jsx("li", { children: it.render ? fundirRender(it.render, p, "a") : _jsx("a", { href: it.href, ...p }) }, it.id);
         }) });
 }

@@ -735,7 +735,9 @@ export interface HeaderTab{id:string;label:ReactNode;href?:string;icon?:ReactNod
 // O item da barra e o do painel são o MESMO elemento com a mesma pele: o atual é o atual nos dois.
 function linksDoHeader(items:SidebarItem[],current:string|undefined){
   return <ul className="topbar-links">{items.map(it=>{
-    const p={className:"topbar-link","aria-current":it.id===current?"page" as const:undefined,children:it.label};
+    // O `onClick` do item vale aqui também (06/11/2026): a `Sidebar` o liga e o `Header` o jogava fora — o mesmo `SidebarItem`
+    // fazia coisas diferentes nas duas peças. Não é hook: é a prop do `<a>`, que a marcação pura pode passar.
+    const p={className:"topbar-link","aria-current":it.id===current?"page" as const:undefined,onClick:it.onClick,children:it.label};
     return <li key={it.id}>{it.render?fundirRender(it.render,p,"a"):<a href={it.href} {...p}/>}</li>;
   })}</ul>;
 }

@@ -6686,7 +6686,7 @@ itemsJustify="start" puts the links right after the brand; end, the default, put
 | `brand` | `ReactNode` | — | The lockup. It lives here and not in the sidebar: the top crosses the full width and the side panel starts below it. Inside a shell this is also where the drawer toggle sits, injected before what you pass. |
 | `children` | `ReactNode` | — | Everything beside the brand: sections, search, actions, account. Presentational — the bar never decides what collapses. It wraps by content, so text at 200% breaks it to a second line instead of overflowing; hide what is secondary with hide-below-md/lg. |
 | `divider` | `boolean` | false | Only on `flush`: a hairline under the bar. flush has the page's background and sticks to the top, so without a line the content scrolls under it with nothing saying where the bar ends. |
-| `items` | `SidebarItem[]` | — | The website's links — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href and render (the router link); sub-items, icon and onClick are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel. |
+| `items` | `SidebarItem[]` | — | The website's links — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href, render (the router link) and onClick, as the Sidebar does; sub-items and icon are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel. |
 | `current` | `string` | — | The id of the current page's item: it gets aria-current="page", the highlight colour and the medium weight, in the bar and in the menu panel. |
 | `actions` | `ReactNode` | — | What sits on the right: search, a call to action, the account. It stays in the bar on a phone too. |
 | `maxWidth` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl" \| "docs" \| "full"` | — | How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding. docs is the documentation block, 1400 (--docs-width), with 24 of padding from 768 up. On pill, the capsule itself takes that width, instead of hugging its content. |
@@ -18646,6 +18646,32 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
 ```
 </page>
 
+<page url="https://aureauds.dev/release-v0-61-0.html">
+# v0.61.0
+
+Breakpoints follow the browser font size, more selected items in Windows high contrast, and Header passes item clicks.
+
+## Changed
+
+- **Breakpoints follow the font size.** Every screen breakpoint is now in `em`, in the CSS and in the JavaScript that asks about the screen (`AppShell` and responsive props). People who enlarge the browser's default font — instead of zooming — get the same layout zoom gives them: with the font doubled, a 1280px screen behaves like a 640px one. At the default font size nothing changes. Container queries stay in px.
+- **Windows high contrast:** the pressed button (`Toggle`, `ToggleGroup`, `Button pressed`), the selected tag in `TagGroup`, the selected `ListBox` item, the selected day in `Calendar` and `DatePicker`, and the selected `Table`/`DataGrid` row use the system highlight colour, like the segment and the tab in v0.60.0. The `Carousel` dots no longer disappear: they use the system text colour, and the current one the highlight. Web only.
+- **`Header`** calls the item's `onClick`, like `Sidebar` does with the same item type.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.61.0 @aurea-uds/core@0.61.0 @aurea-uds/fonts@0.61.0 @aurea-uds/icons@0.61.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.61.0
+```
+</page>
+
 <page url="https://aureauds.dev/release-v0-60-0.html">
 # v0.60.0
 
@@ -18717,6 +18743,17 @@ Fixes from an external audit. Nothing changes on screen.
 - Submenus of `Menubar` use the app's portal container, like `DropdownMenu` and `ContextMenu`.
 - The API docs of `Code`, `Heading` and `Paragraph` no longer say native takes `tone` (native takes `color`), and `ToolbarButton`'s `glow` no longer says it works on native, where the component is planned.
 - The `LICENSE` of `@aurea-uds/native` and `@aurea-uds/icons` is now the same as the other packages.
+
+## Includes v0.58.0
+
+- **Motion** — the selection slides in `SegmentedControl` and `Tabs` (web and React Native), menus and the command palette animate, and dragging in `SortableList` and `BlockEditor` follows the pointer. "Reduce motion" turns it all off.
+- **`DataGrid fit`**, like `Table`.
+
+## Includes v0.57.0
+
+- **Row dividers** — `dividers` on `Table` and `DataGrid`.
+- **`DataGrid stickyHeader="page"`** — the header follows the page as it scrolls.
+- **Gradients are allowed.**
 
 ## Update
 

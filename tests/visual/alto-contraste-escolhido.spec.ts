@@ -54,3 +54,27 @@ test("alto contraste: a Ember também — o segmento no destaque e o ponto na co
   const m = await abrir(page, baseURL, "ember");
   expect([m.seg.esc, m.seg.cor, m.ponto]).toEqual([m.destaque, m.textoDestaque, m.texto]);
 });
+
+// AS OUTRAS SETE (06/11/2026, "vamos fazer logo todas agora"): a mesma forma B no dia escolhido do calendário, na linha
+// escolhida da tabela e no botão ligado; e o ponto do carrossel, que é fundo e sumia inteiro — o atual no destaque, os
+// outros na cor do texto. Medido nas páginas do site, onde a peça está viva.
+// Provado contra o defeito: contra o CSS de antes, os quatro reprovam (o fundo saía na cor da tela).
+for (const [pag, sel, ps, cor] of [
+  ["calendar.html", ".calendar td[data-selected] button", null, "Highlight"],
+  ["table.html", "tr[data-selected] > td", null, "Highlight"],
+  ["pattern-button-pinned-filter.html", '.demo .btn[aria-pressed="true"]', null, "Highlight"],
+  ["carousel.html", '.carousel-dot[aria-current="true"]', "::before", "Highlight"],
+  ["carousel.html", '.carousel-dot:not([aria-current="true"])', "::before", "CanvasText"],
+] as const) {
+  test(`alto contraste: ${pag} — ${sel}${ps ?? ""} em ${cor}`, async ({page}) => {
+    await page.emulateMedia({forcedColors: "active"});
+    await page.goto(`/apps/catalog/${pag}`);
+    await page.evaluate(() => document.querySelectorAll("details").forEach((d) => { d.open = true; }));
+    await expect(page.locator(sel).first()).toBeAttached();
+    const m = await page.evaluate(([sel, ps, cor]) => {
+      const s = document.createElement("i"); s.style.color = cor; document.body.append(s); const alvo = getComputedStyle(s).color; s.remove();
+      return {alvo, pintado: getComputedStyle(document.querySelector(sel)!, ps).backgroundColor};
+    }, [sel, ps, cor] as const);
+    expect(m.pintado).toBe(m.alvo);
+  });
+}

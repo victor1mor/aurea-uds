@@ -58,7 +58,7 @@
 .sc-seu-p { margin:0; }
 .sc-seu-nota { margin:calc(var(--space-2) + var(--space-05)) 0 0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-relaxed); }
 
-@media (max-width:899px) {
+@media (max-width:56.1875em) {
   .sc-inspetor, .sc-seu { grid-template-columns:minmax(0, 1fr); }
   .sc-mini-grade { grid-template-columns:minmax(0, 1fr); }
   .sc-mini-lateral, .sc-mini-indice { min-block-size:0; }

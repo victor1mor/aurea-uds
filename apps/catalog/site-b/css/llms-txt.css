@@ -46,7 +46,7 @@
 .llms-endereco > code { flex:1; min-inline-size:0; font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); overflow-wrap:break-word; }
 .llms-issue { margin-block-start:calc(var(--space-3) + var(--space-05)); }
 
-@media (max-width:900px) {
+@media (max-width:56.25em) {
   .llms-cartoes .radio-group-cards { grid-auto-flow:row; grid-auto-columns:auto; }
   .llms-qual, .llms-conversao { grid-template-columns:minmax(0, 1fr); }
   .llms-conversao-seta { rotate:90deg; justify-self:center; }

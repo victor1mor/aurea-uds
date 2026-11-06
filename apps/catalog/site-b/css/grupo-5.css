@@ -64,7 +64,7 @@
 .g5-mono-longo { max-inline-size:calc(var(--space-12) * 4); }
 .g5-mono-longo > span { font-family:var(--font-code); font-size:var(--text-sm); line-height:var(--leading-normal); }
 
-@media (max-width:900px) {
+@media (max-width:56.25em) {
   /* No estreito, o código do texto quebra (o desenho): um `prefers-reduced-motion: reduce` inteiro passava da tela a 320. */
   .g5 :is(.g5-p, .g5-ul, .g5-ol, .g5-h3, .g5-cartao p, .alert) code { white-space:normal; overflow-wrap:anywhere; }
   .g5-grade-2, .g5-links { grid-template-columns:minmax(0, 1fr); }

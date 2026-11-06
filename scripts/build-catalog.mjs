@@ -2131,7 +2131,7 @@ a.related-card:hover { border-color:transparent; }
 /* A "ALL COMPONENTS" NO SITE B (aprovada pela bancada em 01/11/2026). O palco é o da Introduction ("intro-palco"), com a
    busca e a chave Grade | Lista; as três peças que flutuam são as dela ("intro-peca", "intro-boia"). */
 /* Sem o índice da direita (o desenho não tem): a página ocupa também a coluna dele, e o bloco não para nos 900 do texto. */
-@media (min-width:1280px) { .site-shell:has(.cat-b) > .content.content { grid-column:3 / 5; } }
+@media (min-width:80em) { .site-shell:has(.cat-b) > .content.content { grid-column:3 / 5; } }
 .app-shell-docs > .content > .cat-b { max-inline-size:none; }
 .cat-vista .segmented :is(button,a) { display:inline-flex; align-items:center; gap:var(--space-2); }
 .cat-vista .segmented .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
@@ -2225,8 +2225,8 @@ a.related-card:hover { border-color:transparent; }
 .cat-vazio[hidden] { display:none; }
 .cat-vazio .empty-title { font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold); }
 .cat-vazio .empty-state p { font-size:var(--text-base); }
-@media (max-width:1240px) { .cat-cartoes { grid-template-columns:repeat(3, minmax(0,1fr)); } }
-@media (max-width:900px) {
+@media (max-width:77.5em) { .cat-cartoes { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+@media (max-width:56.25em) {
   .cat-cartoes { grid-template-columns:repeat(2, minmax(0,1fr)); }
   .cat-palco-texto { inline-size:auto; }
   /* No celular, como o desenho: as peças que flutuam saem (e a página não rola de lado). */
@@ -2264,11 +2264,11 @@ a.related-card:hover { border-color:transparent; }
    gaveta, que é onde a referência a põe. */
 .site-so-celular { display:none !important; }
 .site-gaveta-topo { display:none; }
-@media (max-width:767px) { .site-so-celular { display:inline-flex !important; }
+@media (max-width:47.9375em) { .site-so-celular { display:inline-flex !important; }
   /* Sem a busca larga no meio, as ações vão para a ponta, junto do botão da gaveta, como na referência. */
   .site-shell .site-actions { margin-inline-start:auto; }
   .site-gaveta-topo { display:flex; justify-content:flex-end; padding:var(--space-2) var(--space-2) var(--space-4); } }
-@media (max-width:1023px) { .site-so-estreito { display:inline-flex !important; } }
+@media (max-width:63.9375em) { .site-so-estreito { display:inline-flex !important; } }
 /* O TOPO DO SITE B (30/10/2026): as áreas no meio da pílula, entre a marca e a busca, como no desenho aprovado. A chave
    Web | Native no alto da lateral, na largura dela. As oito áreas só cabem na pílula de 1280 para cima (medido: na tela de
    1280 sobram 5); abaixo disso elas saem da pílula e sobem para o alto da lateral (de 1024 a 1279) ou da gaveta (abaixo
@@ -2282,7 +2282,7 @@ a.related-card:hover { border-color:transparent; }
    trilho sumia na lateral do claro. */
 .site-plataforma { padding-block-end:var(--space-3); --muted:var(--fill-2); }
 .site-gaveta-areas { display:none; padding-block-end:var(--space-3); }
-@media (max-width:1279px) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
+@media (max-width:79.9375em) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
 /* A LATERAL DO SITE B: o nome do grupo numerado, com o ícone numa bolinha na cor da categoria (o desenho aprovado). */
 .site-grupo-num { display:inline-block; inline-size:var(--space-5); margin-inline-end:var(--space-2); text-align:end; vertical-align:middle;
   font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); color:var(--muted-foreground); }
@@ -2411,7 +2411,7 @@ a.related-card:hover { border-color:transparent; }
 .intro-proxima-seta { flex:none; display:grid; place-items:center; margin-inline-start:auto; inline-size:calc(var(--space-12) + var(--space-2));
   block-size:calc(var(--space-12) + var(--space-2)); border-radius:var(--radius-full); background:var(--primary); color:var(--primary-foreground); }
 @media (prefers-reduced-motion:reduce) { .intro-motivo, .intro-ajuda, .intro-proxima { transition:none; } }
-@media (max-width:767px) {
+@media (max-width:47.9375em) {
   .intro-palco { padding:var(--space-6) var(--space-5); }
   .intro-palco-texto { inline-size:auto; }
   .intro-pecas { position:relative; inset:auto; display:flex; flex-wrap:wrap; gap:var(--space-3); margin-block-start:var(--space-6); }
@@ -2545,22 +2545,22 @@ a.related-card:hover { border-color:transparent; }
 /* AS LARGURAS. A pílula cheia precisa de 1302 (medido); com as margens de 16, cabe de 1335 para cima. Abaixo disso, o topo
    APERTADO do desenho (o dele abaixo de 1240): a busca só com a lupa e as áreas mais juntas — precisa de 1089 e cabe de
    1121 para cima. Abaixo de 1121 as áreas saem da pílula e vão para o alto da lateral, e abaixo de 1024 para a gaveta. */
-@media (max-width:1334px) {
+@media (max-width:83.375em) {
   .site-shell .site-search > span:not([class]), .site-shell .site-search > .btn-kbds { display:none; }
   /* Só a lupa, e o recheio do campo largo ficava (13 de um lado, 7 do outro): 38 × 44, oval, a lupa fora do centro. O
      círculo de 44 dos vizinhos (a paleta, o GitHub), a lupa no meio — o desenho do FigCraft aprovado pelo Victor, 06/11/2026. */
   .site-shell .site-search { inline-size:var(--target-min); padding-inline:0; justify-content:center; gap:0; }
   .site-shell .site-areas .segmented a { padding-inline:calc(var(--space-2) + var(--space-05) / 2); }
 }
-@media (min-width:1121px) and (max-width:1279px) { .site-areas { display:block; } .site-gaveta-areas { display:none !important; } }
-@media (max-width:1120px) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
+@media (min-width:70.0625em) and (max-width:79.9375em) { .site-areas { display:block; } .site-gaveta-areas { display:none !important; } }
+@media (max-width:70em) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
 /* De 1024 a 1279, sem o índice: a lateral de 248 do desenho e o conteúdo até a borda do bloco. */
-@media (min-width:1024px) and (max-width:1279px) {
+@media (min-width:64em) and (max-width:79.9375em) {
   .site-shell { --docs-sidebar-width:calc(var(--docs-toc-width) + var(--space-2)); }
   .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) 0 0 var(--space-7); }
 }
 /* O celular do desenho: o bloco a 16 das bordas; os botões do topo com 44, 6 entre eles (a lupa na cápsula de 38). */
-@media (max-width:767px) {
+@media (max-width:47.9375em) {
   .site-shell > .topbar-pill > .topbar-inner { gap:calc(var(--space-1) + var(--space-05)); }
   .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) var(--space-4) 0; }
   .site-shell .site-so-celular { --step-h:var(--target-min); inline-size:auto; border-radius:var(--radius-full); background:var(--fill-2);
@@ -2618,20 +2618,20 @@ a.related-card:hover { border-color:transparent; }
 .vit-salvar { width:100%; }
 .vit-salvar .card-header { align-items:flex-start; gap:var(--space-2); padding-inline:var(--space-1); }
 .vit-salvar .card-footer { flex-wrap:nowrap; padding-inline:var(--space-05); }
-@media (min-width:768px) {
+@media (min-width:48em) {
   .vit-c { grid-template-columns:repeat(2, auto); width:fit-content; max-width:100%; }
   .vit-col-a { order:1; } .vit-col-b { order:2; }
   .vit-col-c { grid-column:span 2; grid-template-columns:repeat(2, minmax(0,1fr)); max-width:none; }
   .vit-col-c > .vit-conta { grid-row:span 2; }
 }
-@media (min-width:1024px) {
+@media (min-width:64em) {
   .vit-c { grid-template-columns:repeat(3, auto); }
   .vit-col-c { grid-column:auto; grid-template-columns:minmax(0,1fr); max-width:var(--breakpoint-2xs); }
   .vit-col-c > .vit-conta { grid-row:auto; }
 }
 /* O cartão de salvar com 340 nas telas largas, como o dela (o 360 menos o --space-5): é ele que dá a largura da coluna.
    Ela troca em 1200; aqui, no ponto da escala mais perto, o 1280. */
-@media (min-width:1280px) { .vit-salvar { width:calc(var(--breakpoint-2xs) - var(--space-5)); } }
+@media (min-width:80em) { .vit-salvar { width:calc(var(--breakpoint-2xs) - var(--space-5)); } }
 `;
 
 // O catálogo NÃO tem comportamento próprio: abas (setas/Home/End), copiar e o índice que

@@ -72,7 +72,7 @@
 .gs-cartao p { margin:var(--space-1) 0 0; color:var(--muted-foreground); font-size:var(--text-base); line-height:var(--leading-normal); }
 .gs-cartao code { font-family:var(--font-code); font-size:var(--text-sm); }
 
-@media (max-width:899px) {
+@media (max-width:56.1875em) {
   .gs-links, .gs-grade-2 { grid-template-columns:minmax(0, 1fr); }
 }
 

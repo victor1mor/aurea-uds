@@ -58,7 +58,8 @@ export function ContainerScope({ children, className, ...props }) {
 const temMatchMedia = () => typeof window !== "undefined" && typeof window.matchMedia === "function";
 const mqls = new Map();
 const mql = (px) => {
-    const q = `(min-width:${px}px)`;
+    // em `em`, como o CSS gerado (06/11/2026): a fonte que a pessoa escolheu no navegador entra na conta
+    const q = `(min-width:${px / 16}em)`;
     let m = mqls.get(q);
     if (!m) {
         m = window.matchMedia(q);

@@ -40,7 +40,7 @@ export default [
   menuLabel="Menu"
   actions={<Button variant="primary" size="sm">Sign up</Button>}
 />`,
-    render: () => h("div", {style: {width: "100%", position: "relative"}}, h(ComAtual, {componente: A.Header, porRender: true, variant: "flush", divider: true,
+    render: () => h("div", {style: {width: "100%", position: "relative"}}, h(ComAtual, {componente: A.Header, variant: "flush", divider: true,
       maxWidth: "xl", brand: h("strong", null, "Acme"), items: ITENS, current: "pricing",
       actions: h(A.Button, {variant: "primary", size: "sm"}, "Sign up")})),
   },
