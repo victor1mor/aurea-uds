@@ -1920,6 +1920,15 @@ const container = usePortalContainer();`,
     note: "The state lives in Sidebar.Provider (or in an AppShell with sidebarCollapsible). Ctrl+B toggles it too, except while you type in a field.",
     render: () => h(A.Sidebar.Provider, {shortcut: false}, h(UsaLateral)),
   },
+  useDeslize: {
+    code: `const fila = useRef(null);
+useDeslize(fila, ".active", valor);
+
+// Na troca, o escolhido desliza do item de antes até o novo, com o tempo dos tokens;
+// em repouso, ele continua se pintando como sempre. Com "reduzir movimento", troca de uma vez.
+<div ref={fila} className="segmented">{/* os itens, o escolhido com .active */}</div>`,
+    render: () => h("p", {className: "muted"}, "O escolhido que desliza no SegmentedControl e no Tabs."),
+  },
   useReorder: {
     code: `const {itens, aoSoltar, propsDoItem} = useReorder(lista, setLista);
 

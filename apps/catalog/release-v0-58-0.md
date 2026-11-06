@@ -1,0 +1,38 @@
+# v0.58.0
+
+Motion — the selection slides, menus animate, dragging follows the pointer — DataGrid fit, and recipes as real product screens.
+
+Motion arrives in the components that used to jump. Nothing changes at rest, and "reduce motion" turns it all off.
+
+## Motion
+
+- **The selected item now slides.** In `SegmentedControl` and `Tabs` (both variants — in `secondary`, the underline moves), on web and React Native, the selection glides from the previous item to the new one instead of jumping. At rest it looks exactly as before, in every `selectedStyle`, brand and theme.
+- **Menus and the command palette animate in and out.** Every menu list (`DropdownMenu`, `ContextMenu`, `Menubar`, submenus, `Select`, `Combobox`) fades and scales slightly from its trigger; `CommandPalette` and `CommandPaletteShell` open like `Dialog`.
+- **Dragging feels direct.** In `SortableList` and `BlockEditor`, the grabbed row follows the pointer, stays above the others and settles into place on release, while its neighbours slide out of the way — also when reordering with the keyboard.
+- Durations and easing come from the existing motion tokens. With "reduce motion" turned on, every change happens instantly. No new dependencies.
+
+## New
+
+- **`DataGrid` takes `fit`**, like `Table`: no 720px minimum, for a grid of a few columns in a narrow column of text.
+
+## Site
+
+- The tables in the documentation are now `DataGrid`s, with row dividers and sortable columns.
+- **Every recipe is now a working product screen.** The 23 recipes were rebuilt as full screens — a header with the breadcrumb, the id, the title and the status; the body; a properties column; a footer — using the specialised components (`HumanApproval`, `TraceTimeline`, `CostMeter`, `DataGrid`, `Chart`, `DependencyGraph`, `CodeEditor`, `HealthMatrix`, `Calendar`, `Gallery`, `MediaPlayer`, `FileInput`, `BottomNav` and more). Each one responds: approve a run, invite a member, pay and refund an order, book a slot, reply to a case, calibrate a device, upload a file, publish an article.
+- **Recipe pages follow the new site layout**: a wide header, numbered sections (Usage, Composition, Capabilities, Invariants, States, Built with) and previous/next.
+- **The Recipes page is a gallery**: search (also by component name) and four groups, each recipe with a thumbnail of its real screen.
+- **"Full width" on every example**: widens the page around the example, and "Normal width" puts it back.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.58.0 @aurea-uds/core@0.58.0 @aurea-uds/fonts@0.58.0 @aurea-uds/icons@0.58.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.58.0
+```

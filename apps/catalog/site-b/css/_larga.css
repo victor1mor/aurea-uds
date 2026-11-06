@@ -1,0 +1,15 @@
+/* A CAIXA LARGA DO SITE (05/11/2026, o S-11 — o Victor: "que sirva para todo projeto"; escolheu "A e B juntas", e depois
+   pediu a B sem janela por cima: "só quero que ele cresça na própria página").
+   A · A PÁGINA LARGA: a página que leva `g1-largo` + `data-pagina-larga` (as receitas) usa o arranjo das listas do site
+       (`_grupo-1.css`: ocupa também a coluna do índice, sem o teto de largura) e esconde o índice da direita.
+   B · O "FULL WIDTH": toda caixa de exemplo das outras páginas ganha o botão (posto pelo `site-b/js/_tela-cheia.js`; sem
+       JavaScript, nada muda). O clique põe a PÁGINA no arranjo A — a caixa cresce ali mesmo, até a borda —, e o mesmo botão
+       ("Normal width") a devolve.
+   Sem linha, toda medida de token. */
+
+/* A · sem o índice da direita */
+.site-shell:has(> .content [data-pagina-larga]) > .sidebar.app-shell-aside { display:none; }
+
+/* B · o botão no canto da caixa */
+.demo:has(> .tela-cheia-abrir) { position:relative; }
+.tela-cheia-abrir { position:absolute; inset-block-start:var(--space-3); inset-inline-end:var(--space-3); z-index:1; box-shadow:var(--shadow-sm); }

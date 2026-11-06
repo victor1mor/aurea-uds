@@ -49,7 +49,8 @@ describe("a trava no catálogo de verdade", () => {
     const html = readFileSync(join(raiz, "apps/catalog/saude.html"), "utf8");
     expect(html).toContain("The catalogue is complete");
     expect(html).toContain("The last 30 checks");
-    expect(html).toContain('data-modelo=""');
+    // Desde o S-02 (05/11/2026) a tabela é uma `DataGrid`: a publicação acha a caixa por esta classe (`saude-rodadas.mjs`).
+    expect(html).toContain('class="grade-do-site saude-rodadas" data-vivo-grade=');
     expect(html).toContain(MODELO_DA_RODADA.data);
     expect(html).not.toContain("FAILED");
   });

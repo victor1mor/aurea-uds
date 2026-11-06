@@ -1,0 +1,39 @@
+{
+  "name": "useDeslize",
+  "kind": "hook",
+  "category": "Utilities",
+  "layer": "Foundation",
+  "maturity": "Ready",
+  "summary": "Slides the selected item of SegmentedControl and Tabs from the previous position to the new one, copying its paint onto a passing indicator; instant under reduced motion.",
+  "icon": "arrow-right",
+  "platforms": {
+    "web": "stable",
+    "native": "n-a"
+  },
+  "variants": [],
+  "sizes": [],
+  "states": [
+    "sliding"
+  ],
+  "tokens": [],
+  "a11y": {
+    "role": "none",
+    "apg": "n-a",
+    "keyboard": [],
+    "nota": "Movimento, nao semantica: a peca de passagem e aria-hidden e nao recebe ponteiro; o escolhido continua sendo o item (o radio ou a aba) para o leitor de tela. Quem pede reduzir movimento ve a troca de uma vez (S-04, 05/11/2026)."
+  },
+  "dependencies": {
+    "engine": null,
+    "icons": []
+  },
+  "related": {
+    "components": [
+      "SegmentedControl",
+      "Tabs"
+    ],
+    "patterns": []
+  },
+  "source": {
+    "react": "packages/react/src/internal.tsx#useDeslize"
+  }
+}

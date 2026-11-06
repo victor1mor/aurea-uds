@@ -33,6 +33,12 @@ export declare const DentroDoProviderContext: React.Context<boolean>;
 export declare const avisosAncorados: import("@base-ui/react").ToastManager<any>;
 export declare const PortalContext: React.Context<HTMLElement | null | undefined>;
 export declare const usePortalContainer: () => HTMLElement | null | undefined;
+export declare const reduzMovimento: () => boolean;
+export declare function tempoDoToken(el: Element, duracao: string, curva: string): {
+    duration: number;
+    easing: string;
+} | null;
+export declare function useDeslize(ref: React.RefObject<HTMLElement | null>, seletor: string, chave: unknown): void;
 export interface Reordenavel<E extends HTMLElement> {
     ref: React.RefObject<E | null>;
     pego: number | null;

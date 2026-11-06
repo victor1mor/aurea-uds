@@ -60,3 +60,33 @@ describe("saude-rodadas · um erro passageiro do GitHub não derruba o site", ()
     expect(chamadas.filter((u) => u.includes("/runs/2/jobs"))).toHaveLength(1);
   });
 });
+
+// S-02 (05/11/2026): a tabela das rodadas virou `DataGrid` (`gradeDoSite`). A fileira-modelo mora no desenho pronto E nos
+// dados que a parte viva lê; as duas se copiam. Provado contra o defeito: com o `preencher` da 0.55.0, a página nova
+// para em "não tem a linha-modelo (<tr data-modelo>)" — a `DataGrid` não marca fileira.
+describe("saude-rodadas · a tabela das rodadas como DataGrid", () => {
+  test("cada rodada vira uma fileira no desenho e nos dados, e não sobra modelo", async () => {
+    const {createElement: h} = await import("react");
+    const {renderToStaticMarkup} = await import("react-dom/server");
+    const {gradeDoSite} = await import("../../apps/catalog/site-b/comum/grade-montagem.mjs");
+    const {preencher} = await import("../../scripts/saude-rodadas.mjs");
+    const {MODELO_DA_RODADA: M} = await import("../../scripts/catalogo-fiel.mjs");
+    const pagina = renderToStaticMarkup(h("main", null,
+      gradeDoSite({label: "The last 30 checks", className: "saude-rodadas", cabecalho: ["When", "Commit", "Result", "Checks"],
+        linhas: [[M.data, h("code", null, M.commit), h("strong", null, M.resultado), M.trabalhos]]}),
+      h("p", {"data-saude-vazia": ""}, "The list is filled in when the site is published.")));
+    const saida = preencher(pagina, [
+      {data: "2026-11-05 10:00", commit: "abc1234", resultado: "OK", trabalhos: "6 of 6"},
+      {data: "2026-11-04 09:00", commit: "def5678", resultado: "FAILED", trabalhos: "5 of 6 <x>"},
+    ]);
+    for (const m of Object.values(M)) expect(saida).not.toContain(m);
+    expect(saida).not.toContain("data-saude-vazia");
+    const doc = new DOMParser().parseFromString(saida, "text/html");
+    const fileiras = [...doc.querySelectorAll(".saude-rodadas tbody tr")].map((tr) => tr.textContent);
+    expect(fileiras).toEqual(["2026-11-05 10:00abc1234OK6 of 6", "2026-11-04 09:00def5678FAILED5 of 6 <x>"]);
+    const dados = JSON.parse(doc.querySelector<HTMLElement>(".saude-rodadas")!.dataset.vivoGrade!);
+    expect(dados.linhas.map((l: {t: string}[]) => l.map((c) => c.t).join("|"))).toEqual(
+      ["2026-11-05 10:00|abc1234|OK|6 of 6", "2026-11-04 09:00|def5678|FAILED|5 of 6 <x>"]);
+    expect(dados.linhas[1][3].h).toBe("5 of 6 &lt;x&gt;");
+  });
+});

@@ -5,7 +5,6 @@
 // acrescentava 1,15 MB). Os de motor pesado moram no `_starters-motores.mjs` e só entram no outro arquivo — medido
 // (gzip): 436 KB este, 1,16 MB os dois juntos.
 import startersLeves from "../content/_starters.mjs";
-import receitas from "../content/_recipes.mjs";
 import {ligar, type Extras} from "./vivo";
 
 // Os padrões e os blocos (bloco 1, o 3-C/3-D), MENOS os que usam motor pesado — esses acendem com o `live-motores.js`. A
@@ -17,4 +16,6 @@ const padroes = import.meta.glob<Extras["padroes"] extends Record<string, infer 
 const blocos = import.meta.glob<Extras["blocos"] extends Record<string, infer T> | undefined ? T : never>(
   ["../content/blocks/*.mjs", "!../content/blocks/insight.mjs"], {import: "default", eager: true});
 
-ligar(startersLeves, {padroes, blocos, receitas});
+// As RECEITAS ficam de fora (05/11/2026, o S-11): elas usam a `DataGrid` e as outras peças de motor, e acendem só com o
+// `live-motores.js` — a página de receita o carrega (`motor: true` na `recipePage` do gerador).
+ligar(startersLeves, {padroes, blocos});

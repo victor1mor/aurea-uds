@@ -14,7 +14,7 @@
 // NÃO é subpath — `@aurea-uds/react/internal` não existe, de propósito.
 // Kbd mora aqui por dependência, não por categoria: o Button precisa dele e ele não precisa de
 // ninguém. A casa pública dele continua sendo `/data-display`, que o reexporta.
-import React, {createContext, useContext, useEffect, useRef, useState, type HTMLAttributes, type RefAttributes} from "react";
+import React, {createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type HTMLAttributes, type RefAttributes} from "react";
 import {Toast as BaseToast} from "@base-ui/react/toast";
 import {cx, fundirRender, defaultStrings, defaultSpriteUrl, type AureaStrings,
   type AureaTheme, type AureaThemePreference, type AureaDensity} from "./pure.js";
@@ -83,6 +83,86 @@ export const usePortalContainer=()=>useContext(PortalContext);
 // espelha sozinho por propriedade lógica, mas depende do atributo dir no DOM:
 // quem consome precisa pôr dir="rtl" no <html>. Este provider não mexe no DOM.
 
+// ── O MOVIMENTO (S-04 e S-05, 05/11/2026) ─────────────────────────────────────────────────────
+// O Victor achou a Aurea "estática": o escolhido do `SegmentedControl` e do `Tabs` PULAVA, e o arrasto do
+// `SortableList` e do `BlockEditor` ia de casa em casa. Decidido por ele (05/11/2026, "Construir nós"): sem biblioteca
+// nova, CSS e a animação do próprio navegador (`Element.animate`). O tempo e a curva NÃO se escrevem aqui: saem dos
+// tokens da folha (`--duration-*`, `--ease-*`), lidos no elemento — o mesmo número que o CSS usa. Sem a folha, não há
+// token, e não há animação: a troca acontece de uma vez, como antes. E quem pediu "reduzir movimento" também vê de
+// uma vez — a regra global do CSS não alcança a animação feita por código, então quem pergunta é este arquivo.
+export const reduzMovimento=()=>typeof matchMedia==="function"&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+export function tempoDoToken(el:Element,duracao:string,curva:string):{duration:number;easing:string}|null{
+  const cs=getComputedStyle(el);
+  const d=cs.getPropertyValue(duracao).trim(),easing=cs.getPropertyValue(curva).trim();
+  const duration=d.endsWith("ms")?parseFloat(d):d.endsWith("s")?parseFloat(d)*1000:NaN;
+  return Number.isFinite(duration)&&duration>0&&easing?{duration,easing}:null;
+}
+// O nome das animações deste arquivo: para cancelar só as nossas, e não a transição de CSS da mesma peça.
+const ANIMACAO="aurea-movimento";
+
+// ── useDeslize (S-04) ─────────────────────────────────────────────────────────────────────────
+// O ESCOLHIDO DESLIZA. A referência tem uma peça separada atrás dos itens. Aqui o escolhido continua se pintando — as
+// sete cores do segmento, as treze marcas e os dois temas são regras de CSS que este gancho NÃO repete —, e só na troca
+// entra uma peça de passagem: ela COPIA a pintura do novo escolhido (o fundo, a sombra, o aro e o fio de baixo, que na
+// aba secundária é o único sinal), esconde a do item e anda da posição de antes até a nova. No fim, sai, e o item volta
+// a se pintar. Copiar o que o navegador calculou, em vez de reescrever as cores, é o que garante que o escolhido em
+// repouso fique IDÊNTICO ao de hoje. Troca no meio do caminho parte de onde a peça está, e não do item de antes.
+// `seletor` acha o escolhido dentro de `ref`; `chave` é o valor escolhido.
+export function useDeslize(ref:React.RefObject<HTMLElement|null>,seletor:string,chave:unknown){
+  const anterior=useRef<HTMLElement|null>(null);
+  const emCurso=useRef<(()=>DOMRect)|null>(null);
+  React.useLayoutEffect(()=>()=>{emCurso.current?.()},[]);
+  React.useLayoutEffect(()=>{
+    const raiz=ref.current;if(!raiz)return;
+    const novo=raiz.querySelector<HTMLElement>(seletor);
+    const velho=anterior.current;anterior.current=novo;
+    const corrente=emCurso.current;emCurso.current=null;
+    const de=corrente?corrente():velho&&velho!==novo&&velho.isConnected?velho.getBoundingClientRect():null;
+    if(!novo||!de||!de.width||reduzMovimento()||typeof novo.animate!=="function")return;
+    const tempo=tempoDoToken(raiz,"--duration-slow","--ease-emphasized");if(!tempo)return;
+    const para=novo.getBoundingClientRect();if(!para.width)return;
+    const cs=getComputedStyle(novo),fio=getComputedStyle(novo,"::after");
+    const passagem=document.createElement("span");
+    passagem.className="selection-indicator";passagem.setAttribute("aria-hidden","true");
+    Object.assign(passagem.style,{left:"0px",top:"0px",borderRadius:cs.borderRadius,backgroundColor:cs.backgroundColor,
+      backgroundImage:cs.backgroundImage,boxShadow:cs.boxShadow});
+    if(fio.content&&fio.content!=="none"&&fio.content!=="normal"&&fio.display!=="none"){
+      const linha=document.createElement("span");
+      Object.assign(linha.style,{left:fio.left,right:fio.right,bottom:fio.bottom,height:fio.height,
+        borderRadius:fio.borderRadius,backgroundColor:fio.backgroundColor});
+      passagem.append(linha);
+    }
+    // A peça mora DENTRO da fila, atrás dos itens (`z-index:-1` num contexto de empilhamento só dela), e a fila só
+    // ganha posição e contexto durante a passagem — em repouso, nada nela muda.
+    const antes={position:raiz.style.position,isolation:raiz.style.isolation};
+    if(getComputedStyle(raiz).position==="static")raiz.style.position="relative";
+    raiz.style.isolation="isolate";
+    const rr=raiz.getBoundingClientRect();
+    const quadro=(r:DOMRect)=>({transform:`translate(${r.left-rr.left-raiz.clientLeft+raiz.scrollLeft}px,${r.top-rr.top-raiz.clientTop+raiz.scrollTop}px)`,
+      width:`${r.width}px`,height:`${r.height}px`});
+    const pintura=["background-color","background-image","box-shadow"].map(p=>[p,novo.style.getPropertyValue(p),novo.style.getPropertyPriority(p)] as const);
+    for(const [p] of pintura)novo.style.setProperty(p,p==="background-color"?"transparent":"none","important");
+    novo.setAttribute("data-sliding","");
+    raiz.prepend(passagem);
+    const a=passagem.animate([quadro(de),quadro(para)],{...tempo,fill:"forwards",id:ANIMACAO});
+    let feito=false;
+    const encerra=()=>{
+      const onde=passagem.getBoundingClientRect();
+      if(feito)return onde;feito=true;
+      a.cancel();passagem.remove();
+      for(const [p,v,pr] of pintura){if(v)novo.style.setProperty(p,v,pr);else novo.style.removeProperty(p)}
+      if(!novo.getAttribute("style"))novo.removeAttribute("style");
+      novo.removeAttribute("data-sliding");
+      raiz.style.position=antes.position;raiz.style.isolation=antes.isolation;
+      if(!raiz.getAttribute("style"))raiz.removeAttribute("style");
+      if(emCurso.current===encerra)emCurso.current=null;
+      return onde;
+    };
+    emCurso.current=encerra;
+    a.onfinish=()=>{encerra()};
+  },[chave]);
+}
+
 // ── useReorder (PLANO-1.0, item N1) ──────────────────────────────────────────────────────────
 // EXTRAÍDO do SortableList (L3), não escrito de novo. O motivo é a regra do `CLAUDE.md`:
 // correção local é proibida sem responder "quem mais tem esse problema?". O `BlockEditor` é o
@@ -119,12 +199,40 @@ export function useReorder<E extends HTMLElement>({count,order,onReorder,rowSele
   const [aviso,setAviso]=useState("");
   const origem=useRef<number|null>(null);
   const arrasto=useRef<number|null>(null);
+  // S-05: a MÃO — a linha que o ponteiro pegou, onde o ponteiro estava ao pegar e agora, e o topo dela ao pegar. Com isso a
+  // linha anda com o ponteiro (`translate`), e não só pula de casa em casa.
+  const mao=useRef<{linha:HTMLElement;y0:number;topo0:number;y:number}|null>(null);
+  // S-05: onde cada linha estava NA TELA antes da troca — a conta do "First, Last, Invert, Play": depois de a ordem nova
+  // entrar, cada vizinho parte de onde estava e desliza até o lugar novo.
+  const antes=useRef<Map<HTMLElement,number>|null>(null);
   const anuncia=(verbo:string,i:number)=>setAviso(`${verbo}: ${i+1} ${s.positionOf} ${count}`);
   const alcas=()=>[...(ref.current?.querySelectorAll<HTMLButtonElement>(handleSelector)??[])];
+  const linhas=()=>[...(ref.current?.querySelectorAll<HTMLElement>(rowSelector)??[])];
+  // `offsetTop` não conta o `translate` nem a animação: é o lugar da linha na lista, e não onde ela aparece agora.
+  const seguir=(m:NonNullable<typeof mao.current>)=>{m.linha.style.translate=`0 ${m.y-m.y0-(m.linha.offsetTop-m.topo0)}px`};
   // Vai por efeito e não por `requestAnimationFrame`: o React precisa ter commitado a ordem nova
   // antes de procurar a alça.
   useEffect(()=>{if(foco!==null){alcas()[foco]?.focus();setFoco(null)}},[foco,order]);
-  const mover=(de:number,para:number)=>{if(para>=0&&para<count&&de!==para)onReorder(de,para)};
+  // A ordem nova entrou: a linha pega volta para baixo do ponteiro, e os vizinhos deslizam de onde estavam.
+  useLayoutEffect(()=>{
+    const m=mao.current;if(m)seguir(m);
+    const mapa=antes.current;antes.current=null;
+    if(!mapa||!ref.current||reduzMovimento())return;
+    const tempo=tempoDoToken(ref.current,"--duration-base","--ease-emphasized");if(!tempo)return;
+    for(const l of linhas()){
+      if(m&&l===m.linha)continue;
+      const de=mapa.get(l);if(de==null||typeof l.animate!=="function")continue;
+      for(const a of l.getAnimations?.()??[])if(a.id===ANIMACAO)a.cancel();
+      const d=de-l.getBoundingClientRect().top;
+      if(Math.abs(d)>=1)l.animate([{transform:`translateY(${d}px)`},{transform:"none"}],{...tempo,id:ANIMACAO});
+    }
+  },[order]);
+  const mover=(de:number,para:number)=>{
+    if(para>=0&&para<count&&de!==para){
+      antes.current=new Map(linhas().map(l=>[l,l.getBoundingClientRect().top]));
+      onReorder(de,para);
+    }
+  };
   const teclado=(e:React.KeyboardEvent<HTMLButtonElement>,i:number)=>{
     if(e.key===" "||e.key==="Enter"){
       e.preventDefault();
@@ -147,21 +255,46 @@ export function useReorder<E extends HTMLElement>({count,order,onReorder,rowSele
     }
   };
   // O alvo é a primeira linha cujo MEIO ainda está abaixo do ponteiro — a conta que faz o item
-  // trocar de lugar ao passar da metade da linha vizinha, e não ao encostar nela.
+  // trocar de lugar ao passar da metade da linha vizinha, e não ao encostar nela. O meio é o do LUGAR da linha
+  // (`offsetTop`), e não o de onde ela aparece: a linha pega anda com o ponteiro e os vizinhos estão deslizando, e medir a
+  // caixa na tela faria o alvo tremer. A origem dos `offsetTop` na tela sai da própria lista.
   const ponteiroMove=(e:React.PointerEvent)=>{
     const de=arrasto.current;if(de===null)return;
-    const linhas=[...(ref.current?.querySelectorAll<HTMLElement>(rowSelector)??[])];
-    const achado=linhas.findIndex(l=>{const r=l.getBoundingClientRect();return e.clientY<r.top+r.height/2});
-    const para=achado===-1?linhas.length-1:achado;
+    const m=mao.current;if(m){m.y=e.clientY;seguir(m)}
+    const lista=ref.current;if(!lista)return;
+    const ls=linhas();
+    const caixa=lista.getBoundingClientRect();
+    const zero=ls[0]?.offsetParent===lista?caixa.top+lista.clientTop-lista.scrollTop:caixa.top-lista.offsetTop;
+    const achado=ls.findIndex(l=>e.clientY<zero+l.offsetTop+l.offsetHeight/2);
+    const para=achado===-1?ls.length-1:achado;
     if(para!==de){mover(de,para);arrasto.current=para;setPego(para)}
+  };
+  // Ao soltar, a linha desliza do ponteiro até o lugar dela, e só então desce de volta para o nível das outras.
+  const pousa=()=>{
+    const m=mao.current;mao.current=null;if(!m)return;
+    const d=m.y-m.y0-(m.linha.offsetTop-m.topo0);
+    m.linha.style.translate="";
+    if(!m.linha.getAttribute("style"))m.linha.removeAttribute("style");
+    const fim=()=>m.linha.removeAttribute("data-dragging");
+    const tempo=ref.current&&!reduzMovimento()&&typeof m.linha.animate==="function"?tempoDoToken(ref.current,"--duration-base","--ease-emphasized"):null;
+    if(!tempo||Math.abs(d)<1){fim();return}
+    const a=m.linha.animate([{transform:`translateY(${d}px)`},{transform:"none"}],{...tempo,id:ANIMACAO});
+    a.onfinish=fim;a.oncancel=fim;
   };
   const ponteiroSolta=()=>{
     if(arrasto.current===null)return;
+    pousa();
     anuncia(s.sortableDropped,arrasto.current);arrasto.current=null;setPego(null);
   };
   const ponteiroBaixo=(e:React.PointerEvent<HTMLButtonElement>,i:number)=>{
     if(e.pointerType==="mouse"&&e.button!==0)return;
     e.currentTarget.setPointerCapture(e.pointerId);arrasto.current=i;setPego(i);
+    const linha=e.currentTarget.closest<HTMLElement>(rowSelector);
+    if(linha){
+      for(const a of linha.getAnimations?.()??[])if(a.id===ANIMACAO)a.finish();
+      linha.setAttribute("data-dragging","");
+      mao.current={linha,y0:e.clientY,topo0:linha.offsetTop,y:e.clientY};
+    }
   };
   return {ref,pego,aviso,teclado,ponteiroBaixo,ponteiroMove,ponteiroSolta};
 }

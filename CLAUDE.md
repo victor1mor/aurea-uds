@@ -908,8 +908,15 @@ no git.
   Actions: `build`, `test`, `visual` e `varredura` nos três navegadores. A `visual-update` não
   (só roda à mão). Não exige a branch atualizada com o `main`. Continuam as três proteções de
   antes: não apagar, não reescrever o histórico, entrar só por pedido de junção.
-  - **A junção automática do GitHub está permitida** no repositório. Ligá-la num pedido continua
-    exigindo o "pode" do Victor para AQUELE pedido.
+  - **A junção automática do GitHub está permitida** no repositório. ~~Ligá-la num pedido continua
+    exigindo o "pode" do Victor para AQUELE pedido.~~ → **A sessão liga a junção automática, sem perguntar, no
+    pedido que ela abriu e cujo conteúdo o Victor JÁ APROVOU OLHANDO** (na bancada ou pela imagem) — ordem do
+    Victor, 05/11/2026, 21:00 (*"aceito"*, à proposta "só em pedido cujo conteúdo você já aprovou olhando"). Junção
+    do merge comum (`merge`), como as de antes. ⚠ Juntar no `main` PUBLICA O SITE: pedido com qualquer coisa que
+    ele ainda não viu continua perguntando. **Publicar no npm continua só dele.**
+  - **O Auto-fix (consertar a CI que reprovou) liga sempre**, em todo pedido que a sessão abrir, sem perguntar
+    (o Victor, 05/11/2026: *"você sempre pode Liga o Auto-fix para consertar a CI se ela reprovar! qualquer que
+    seja"*).
   - **Pedido com a CI vermelha fica travado**, inclusive o do Victor. O caso que mais acontece: o
     número de componentes muda e as fotos `index` e `topo` do catálogo vencem. Conserto: rodar a
     CI no modo de regerar fotos (`gh workflow run CI --ref <branch> -f update_snapshots=true`),

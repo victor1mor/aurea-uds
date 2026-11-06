@@ -6,6 +6,8 @@
 // (`Table variant="rows"`), os avisos, os cartões de "Next steps" e o "Next" do fim. O texto continua vindo do `.md`: cada
 // página só escolhe o olho de cada seção, o nome de cada arquivo de código e o que o desenho põe no meio.
 
+import {gradeDoSite} from "../../comum/grade-montagem.mjs";
+
 // O texto corrido de um bloco (para achar um parágrafo pelo começo).
 const textoDe = lista => (lista || []).map(p => p.t ?? p.code ?? p.link ?? p.strong ?? "").join("");
 
@@ -46,13 +48,12 @@ export function docsB(site, doc, {arquivos = [], grupo = "Handbook"} = {}) {
   // O código: o bloco com a cabeça do arquivo (a variação aprovada no item 6), sem cor e sem número de linha, como o desenho.
   const codigo = (b, extra = "") => h(A.CodeBlock, {key: k(), className: `docb-codigo ${extra}`.trim(), filename: nomeDoArquivo.get(b) ?? "Code",
     copyable: true, language: b.lingua}, b.codigo);
-  // A tabela: a de linhas em cápsula (a variação aprovada no D-7.6), dentro do cartão do desenho. A legenda é o nome da
-  // região (o leitor de tela), escondida da vista como no desenho.
-  const celula = (tag, c, i) => h(tag, {key: i, ...(tag === "th" ? {scope: "col"} : {})}, ...pedacos(c, k()));
-  const cabeca = b => h("thead", null, h("tr", null, ...b.cabecalho.map((c, j) => celula("th", c, j))));
-  const corpo = b => h("tbody", null, ...b.linhas.map((l, j) => h("tr", {key: j}, ...l.map((c, i) => celula("td", c, i)))));
-  const tabela = (b, legenda) => h("div", {key: k(), className: "docb-tabela"},
-    h(A.Table, {variant: "rows", striped: true, caption: `${legenda} table`}, cabeca(b), corpo(b)));
+  // A tabela: ~~a de linhas em cápsula (a variação aprovada no D-7.6), dentro do cartão do desenho~~ → a `DataGrid` (S-02,
+  // o Victor, 05/11/2026: "tudo que existe no site de table vira datagrid"). O nome da tabela é o `label` da grade (o
+  // leitor de tela ouve; não aparece, como a legenda escondida de antes).
+  const tabela = (b, legenda) => h("div", {key: k(), className: "docb-tabela docb-grade"},
+    gradeDoSite({label: `${legenda} table`, cabecalho: b.cabecalho.map(c => typeof c === "string" ? c.replace(/`/g, "") : textoDe(c)),
+      linhas: b.linhas.map(l => l.map(c => pedacos(c, k())))}));
   // O aviso: o `Alert` da Aurea, com o arranjo da Introduction (`intro-nota`).
   const aviso = (b, variant = "info", title) => h(A.Alert, {appearance: "soft", key: k(), variant, className: "intro-nota docb-aviso", ...(title ? {title} : {})},
     ...pedacos(b.texto, k()));

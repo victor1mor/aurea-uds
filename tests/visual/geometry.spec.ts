@@ -181,7 +181,9 @@ test.describe("catálogo · geometria de todas as páginas", () => {
           for (const s of sels) {
             // A miniatura do cartão do catálogo (`.cat-card-preview`) é a peça com `zoom: 0.8`, e o navegador devolve a altura
             // dela com o arredondamento do zoom (40,47 para a de 40, medido em 01/11/2026): não é outro tamanho. Fica de fora.
-            const els = [...document.querySelectorAll(s)].filter(e => (e as HTMLElement).offsetParent !== null && !e.closest(".cat-card-preview"));
+            // A miniatura da receita (`.rcs-miniatura`, a página Recipes, 05/11/2026) é a mesma coisa com `zoom: .55` (o selo
+            // de 24 dava 23,98).
+            const els = [...document.querySelectorAll(s)].filter(e => (e as HTMLElement).offsetParent !== null && !e.closest(".cat-card-preview,.rcs-miniatura"));
             if (els.length < 2) continue;
             const hs = [...new Set(els.map(e => Math.round(parseFloat(getComputedStyle(e).height) * 100) / 100))];
             if (hs.length > 1) out[s] = hs.sort((a, b) => a - b);

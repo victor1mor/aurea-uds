@@ -60,7 +60,9 @@ test("a busca: o All vazio mostra as sugestões, e o texto digitado entra inteir
   const busca = page.getByRole("dialog", {name: "Search the site"});
   const opcoes = busca.getByRole("option");
   await expect(opcoes).toHaveCount(11);
-  expect(await busca.locator(".command-field").evaluate((c) => Math.round(c.getBoundingClientRect().height))).toBe(52);
+  // `offsetHeight`, e não a caixa na tela: desde o S-04 a paleta ENTRA crescendo de 95% (`scale`), e a caixa medida no
+  // meio da entrada dava 50 (52 × ~0,96). A altura de layout não sofre a escala.
+  expect(await busca.locator(".command-field").evaluate((c) => (c as HTMLElement).offsetHeight)).toBe(52);
   // A primeira letra troca a lista; ela não pode se perder (medido no conserto: "time" virava "ime").
   const campo = busca.getByRole("combobox");
   await campo.pressSequentially("time");

@@ -21,6 +21,11 @@ const DIR = join(process.cwd(), "apps/catalog");
 const PAGES = [...readdirSync(DIR).filter(f => f.endsWith(".html")).sort(),
   ...readdirSync(join(DIR, "embeds")).filter(f => f.endsWith(".html")).sort().map(f => `embeds/${f}`)];
 const url = (f: string) => `/apps/catalog/${f}`;
+// O ORÇAMENTO DO AXE SAI DA CONTA, não de um número redondo (a lição do `teclado-motor.spec.ts`, 28/08/2026). Com 607
+// páginas, os 15 minutos fixos davam menos de 1,5 s por página, e o WebKit da CI estourou no tema claro no pedido #118
+// (05/11/2026) — as 23 receitas viraram telas inteiras, mais pesadas, sem nenhuma reprovação de verdade. 3 s por
+// página, com os 15 minutos como piso.
+const ORCAMENTO_AXE = Math.max(15 * 60 * 1000, PAGES.length * 3_000);
 // A queda do WebKit que `abrir` repete fica escrita no relatório e no log — para se medir.
 const avisar = (texto: string) => {
   test.info().annotations.push({type: "queda-do-webkit", description: texto});
@@ -255,6 +260,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
 
   for (const theme of ["dark", "light"] as const) {
     test(`axe sem violação em todas as páginas · tema ${theme}`, async ({page}) => {
+      test.setTimeout(ORCAMENTO_AXE);
       const falhas: string[] = [];
       for (const f of PAGES) {
         await abrir(page, url(f), avisar);

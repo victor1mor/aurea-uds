@@ -29,6 +29,8 @@
 /* O bloco de código com o nome do arquivo (ITEM 6), o aviso e a tabela, a 18 do que vem antes (--space-4 + --space-05). */
 .gs-corpo .gs-codigo, .gs-aviso, .gs-tabela { margin-block-start:calc(var(--space-4) + var(--space-05)); }
 .gs-tabela { padding:var(--space-2); border-radius:var(--radius-card); background:var(--card); }
+/* A tabela como `DataGrid` (S-02, 05/11/2026): a grade já traz a moldura — sem o cartão em volta. */
+.gs-tabela.gs-grade { padding:0; background:transparent; }
 .gs-tabela .table-wrap, .gs-tabela table { margin:0; }
 /* Como o desenho: na tabela, só a primeira coluna é a cápsula de código (o nome); nas outras o valor fica no texto da
    linha, sem mudar de fonte. */

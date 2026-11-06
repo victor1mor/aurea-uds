@@ -1060,6 +1060,58 @@ if (catalogo) {
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", rola); else rola();
 })();
 
+/* site-b/js/_tela-cheia.js */
+/* O "FULL WIDTH" DAS CAIXAS (05/11/2026, o S-11 — a forma B da caixa larga; o Victor: "não quero flutuante … só quero
+   que ele cresça na própria página"). Toda caixa de exemplo de uma página que não é larga ganha o botão "Full width". O
+   clique põe a página no arranjo largo (`g1-largo` + `data-pagina-larga` no conteúdo, o mesmo das receitas: sem o índice
+   da direita e sem o teto de largura) e traz a caixa de volta à vista; o botão vira "Normal width" e desfaz. Um botão só
+   vale pela página inteira: todos trocam juntos. O botão mora no invólucro (`.demo`), fora do painel — a parte viva tira
+   do painel tudo o que era desenho pronto quando acende. As molduras (`.demo-frame`) ficam de fora. Script comum, sem
+   `import`: entra no fim do `assets/catalog.js`. */
+(function () {
+  var raiz = function () { return document.querySelector(".site-shell > .content > *"); };
+  // O sprite da página só leva os ícones que o HTML de alguma página usa: sem o símbolo, o botão sai só com o texto.
+  var icone = function (nome) {
+    return document.getElementById("i-" + nome)
+      ? '<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-' + nome + '"></use></svg>' : "";
+  };
+  var botoes = [];
+  var desenhar = function (largo) {
+    botoes.forEach(function (b) {
+      b.innerHTML = icone(largo ? "arrows-in-simple" : "arrows-out") + (largo ? "Normal width" : "Full width");
+    });
+  };
+  function trocar(botao) {
+    var r = raiz();
+    if (!r) return;
+    var largo = !r.hasAttribute("data-pagina-larga-ligada");
+    r.classList.toggle("g1-largo", largo);
+    r.toggleAttribute("data-pagina-larga", largo);
+    r.toggleAttribute("data-pagina-larga-ligada", largo);
+    desenhar(largo);
+    var caixa = botao.closest(".demo");
+    if (caixa) caixa.scrollIntoView({block: "nearest"});
+    botao.focus();
+  }
+  function ligar() {
+    var r = raiz();
+    // A página que já nasce larga (as receitas, as listas) não precisa do botão.
+    if (!r || r.hasAttribute("data-pagina-larga") || r.classList.contains("g1-largo")) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.demo > .demo-panel[data-panel="preview"]'), function (painel) {
+      if (painel.querySelector(".demo-frame")) return;
+      var botao = document.createElement("button");
+      botao.type = "button";
+      botao.className = "btn btn-tertiary btn-sm tela-cheia-abrir";
+      botao.addEventListener("click", function () { trocar(botao); });
+      painel.before(botao);
+      botoes.push(botao);
+    });
+    desenhar(false);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ligar);
+  else ligar();
+})();
+
 /* site-b/js/accessibility.js */
 // A PÁGINA "Accessibility" DO SITE B (02/11/2026, o grupo 5): o campo que fica inválido (o anel muda de cor), a área de
 // toque de 44 pintada, e o texto a 200% numa JANELA PRÓPRIA — um `iframe` com a folha do site, em que a régua muda o
@@ -1266,8 +1318,11 @@ if (catalogo) {
 
   // O "Play" de cada token e a corrida: a bolinha vai até a outra ponta (e volta no clique seguinte).
   function correr(bolas) { bolas.forEach(function (b) { b.toggleAttribute("data-ligada"); }); }
-  document.querySelectorAll(".animation-play").forEach(function (botao) {
-    botao.addEventListener("click", function () { correr([botao.closest("tr").querySelector(".animation-bola")]); });
+  // Pela PÁGINA, e não em cada botão: a tabela é uma `DataGrid` que acende por cima do desenho pronto (S-02, 05/11/2026)
+  // e redesenha as fileiras ao ordenar — o botão de agora não é o de quando este script rodou.
+  document.addEventListener("click", function (e) {
+    var botao = e.target.closest && e.target.closest(".animation-play");
+    if (botao) correr([botao.closest("tr").querySelector(".animation-bola")]);
   });
   var corrida = document.querySelector(".animation-corrida");
   var correrBotao = corrida && corrida.querySelector(".animation-correr");
@@ -1974,109 +2029,6 @@ document.addEventListener("site-filtro", (e) => {
   aplicar();
   alvoDoEndereco();
   addEventListener("hashchange", alvoDoEndereco);
-})();
-
-/* site-b/js/recipes.js */
-// A PÁGINA "RECIPES" DO SITE B: escolher a receita (os padrões dela acendem), filtrar a lista, ligar um padrão (a lista marca
-// quem o usa) e copiar a lista de padrões. Só age na página dela (o `[data-receitas]`). Os dados vêm do `#rec-dados`.
-(function () {
-  var raiz = document.querySelector("[data-receitas]");
-  var fonte = document.getElementById("rec-dados");
-  if (!raiz || !fonte) return;
-  var dados = JSON.parse(fonte.textContent);
-  var R = dados.receitas;
-  var atual = R.find(function (r) { return raiz.querySelector('[data-rec-item="' + r.id + '"][aria-pressed="true"]'); }) || R[0];
-  var padrao = "";
-  var q = function (s) { return raiz.querySelector(s); };
-  var todos = function (s) { return Array.prototype.slice.call(raiz.querySelectorAll(s)); };
-  var anuncio = q("[data-rec-anuncio]");
-
-  // Uma etiqueta do mesmo jeito das que o gerador desenhou (copiada da primeira, para a pele ser a mesma).
-  function etiquetas(lugar, textos) {
-    var molde = lugar.firstElementChild;
-    if (!molde) return;
-    lugar.replaceChildren.apply(lugar, textos.map(function (t) { var e = molde.cloneNode(false); e.textContent = t; return e; }));
-  }
-
-  function desenhar() {
-    q("[data-rec-pos]").textContent = "Recipe " + (R.indexOf(atual) + 1) + " of " + R.length;
-    q("[data-rec-nome]").textContent = atual.nome;
-    q("[data-rec-texto]").textContent = atual.texto;
-    etiquetas(q("[data-rec-foco]"), atual.foco);
-    etiquetas(q("[data-rec-usa]"), atual.padroes);
-    q("[data-rec-conta]").textContent = atual.padroes.length;
-    q("[data-rec-conta-palavra]").textContent = atual.padroes.length === 1 ? "pattern to compose" : "patterns to compose";
-    q("[data-rec-abrir]").setAttribute("href", atual.href);
-    q("[data-rec-copiar]").textContent = "Copy the list";
-    todos("[data-rec-item]").forEach(function (b) {
-      var r = R.find(function (x) { return x.id === b.dataset.recItem; });
-      var usa = !!padrao && r.padroes.indexOf(padrao) >= 0;
-      b.setAttribute("aria-pressed", r.id === atual.id ? "true" : "false");
-      b.toggleAttribute("data-apagado", !!padrao && !usa);
-      b.querySelector(".rec-item-conta").hidden = usa;
-      b.querySelector(".rec-item-usa").hidden = !usa;
-    });
-    todos("[data-rec-padrao]").forEach(function (c) {
-      var nome = c.dataset.recPadrao, usado = atual.padroes.indexOf(nome) >= 0, ligado = padrao === nome;
-      c.classList.toggle("card-selected", usado);
-      c.setAttribute("aria-pressed", ligado ? "true" : "false");
-      c.querySelector(".rec-padrao-usado").hidden = !usado || ligado;
-      c.querySelector(".rec-padrao-filtro").hidden = !ligado;
-    });
-    var noGrupo = function (lista) { return atual.padroes.filter(function (x) { return lista.indexOf(x) >= 0; }).length + " in this recipe"; };
-    q('[data-rec-no-grupo="app"]').textContent = noGrupo(dados.app);
-    q('[data-rec-no-grupo="op"]').textContent = noGrupo(dados.op);
-    var faixa = q("[data-rec-faixa]");
-    faixa.hidden = !padrao;
-    if (padrao) {
-      var n = R.filter(function (r) { return r.padroes.indexOf(padrao) >= 0; }).length;
-      q("[data-rec-faixa-texto]").textContent = padrao + " is used by " + n + (n === 1 ? " recipe" : " recipes") + " — marked in the list.";
-    }
-  }
-
-  raiz.addEventListener("click", function (e) {
-    var item = e.target.closest("[data-rec-item]");
-    if (item) {
-      atual = R.find(function (r) { return r.id === item.dataset.recItem; }) || atual;
-      desenhar();
-      if (anuncio) anuncio.textContent = atual.nome + ": " + atual.padroes.length + " patterns, " + atual.padroes.join(", ") + ".";
-      return;
-    }
-    var cartao = e.target.closest("[data-rec-padrao]");
-    if (cartao) {
-      padrao = padrao === cartao.dataset.recPadrao ? "" : cartao.dataset.recPadrao;
-      desenhar();
-      return;
-    }
-    if (e.target.closest("[data-rec-limpar]")) { padrao = ""; desenhar(); return; }
-    var copiar = e.target.closest("[data-rec-copiar]");
-    if (copiar) {
-      var texto = atual.nome + ": " + atual.padroes.join(", ");
-      var feito = function () {
-        copiar.textContent = "Copied";
-        setTimeout(function () { copiar.textContent = "Copy the list"; }, 1600);
-      };
-      if (navigator.clipboard) navigator.clipboard.writeText(texto).then(feito, function () {});
-    }
-  });
-
-  // O filtro da lista: pelo nome, pelo que a receita cobre e pelo texto; o Esc limpa.
-  var campo = q("[data-rec-filtro]");
-  var campoInput = campo && (campo.matches("input") ? campo : campo.querySelector("input"));
-  if (campoInput) {
-    var filtrar = function () {
-      var t = campoInput.value.trim().toLowerCase(), vistos = 0;
-      todos("[data-rec-item]").forEach(function (b) {
-        var r = R.find(function (x) { return x.id === b.dataset.recItem; });
-        var mostra = !t || (r.nome + " " + r.foco.join(" ") + " " + r.texto).toLowerCase().indexOf(t) >= 0;
-        b.hidden = !mostra;
-        if (mostra) vistos++;
-      });
-      q("[data-rec-nada]").hidden = vistos > 0;
-    };
-    campoInput.addEventListener("input", filtrar);
-    campoInput.addEventListener("keydown", function (e) { if (e.key === "Escape") { campoInput.value = ""; filtrar(); } });
-  }
 })();
 
 /* site-b/js/roadmap.js */
