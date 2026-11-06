@@ -1,5 +1,6 @@
 import {createElement as h} from "react";
 import {ButtonGroup, Button, IconButton, SegmentedControl} from "../../../../packages/react/dist/index.js";
+import {ComLigado} from "../_estado.mjs";
 
 export default [
   {
@@ -23,16 +24,20 @@ export default [
     description: "Many-of-many: each button is its own toggle, so two can be on at once.",
     uses: ["ButtonGroup", "Button"],
     code: [
+      // o código mostra o estado que o clique troca (06/11/2026), como o exemplo vivo faz
+      'const [on, setOn] = useState({starred: true, archived: false, shared: true});',
+      'const toggle = (k) => setOn({...on, [k]: !on[k]});',
+      '',
       '<ButtonGroup label="Filters">',
-      '  <Button pressed>Starred</Button>',
-      '  <Button pressed={false}>Archived</Button>',
-      '  <Button pressed>Shared</Button>',
+      '  <Button pressed={on.starred} onClick={() => toggle("starred")}>Starred</Button>',
+      '  <Button pressed={on.archived} onClick={() => toggle("archived")}>Archived</Button>',
+      '  <Button pressed={on.shared} onClick={() => toggle("shared")}>Shared</Button>',
       '</ButtonGroup>',
     ].join("\n"),
     render: () => h(ButtonGroup, {label: "Filters"},
-      h(Button, {pressed: true}, "Starred"),
-      h(Button, {pressed: false}, "Archived"),
-      h(Button, {pressed: true}, "Shared")),
+      h(ComLigado, {componente: Button, pressed: true}, "Starred"),
+      h(ComLigado, {componente: Button, pressed: false}, "Archived"),
+      h(ComLigado, {componente: Button, pressed: true}, "Shared")),
   },
   {
     variant: "Single selection",

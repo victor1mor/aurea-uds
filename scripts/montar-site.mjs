@@ -9,6 +9,7 @@
 // moldura de outro endereço). O site é feito só com a Aurea, servido do próprio domínio. A trava das
 // IMPORTAÇÕES (só a Aurea e as dependências que o `@aurea-uds/react` declara) é o check 45 do
 // `validate.py`, que roda antes, na CI.
+import {createHash} from "node:crypto";
 import {cpSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync} from "node:fs";
 import {dirname, join, relative} from "node:path";
 import {fileURLToPath} from "node:url";
@@ -34,6 +35,43 @@ export function recursosExternos(texto) {
 export const CABECALHOS = "/*\n  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
   + "/*.md\n  Content-Type: text/markdown; charset=utf-8\n"
   + "/*.txt\n  Content-Type: text/plain; charset=utf-8\n";
+
+/** Os resumos (sha256, base64) dos scripts EMBUTIDOS que rodam — o bloco de dados (`application/json`) não roda e não
+ *  entra. Medido em 06/11/2026: 695 páginas e só 2 scripts embutidos diferentes; por isso a política lista os dois pelo
+ *  resumo, e não `'unsafe-inline'`. Sai da montagem: script embutido novo entra sozinho, e nunca fica velho. */
+export function resumosDosScripts(textos) {
+  const r = new Set();
+  for (const t of textos) for (const m of t.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/g)) {
+    if (/\btype=["'](application\/(ld\+)?json|text\/plain)["']/.test(m[1])) continue;
+    r.add(createHash("sha256").update(m[2], "utf8").digest("base64"));
+  }
+  return [...r].sort();
+}
+
+/** OS CABEÇALHOS DE SEGURANÇA (06/11/2026, a auditoria externa A-011). Cada permissão foi medida no site montado:
+ *  - script: só o próprio domínio e os embutidos pelo resumo (nada de `eval`; nenhum `WebAssembly` nos pacotes);
+ *  - style `'unsafe-inline'`: 14.566 atributos `style` nas páginas e os estilos que o React escreve — sem ele, nada se
+ *    desenha; estilo não executa código;
+ *  - img/font/media `data:` e `blob:`: os desenhos por máscara do CSS (`data:image/svg+xml`), a fonte embutida do CSS
+ *    (`data:font/woff`), o som de exemplo (`data:audio/wav`) e o exportar do mapa (`createObjectURL`);
+ *  - worker `blob:`/`data:`: o `layoutWorker` do mapa nasce de um `data:text/javascript` e de `blob:`;
+ *  - frame `'self'`: as 87 molduras de exemplo são do próprio site; e ninguém de fora põe o site numa moldura;
+ *  - permissões: tela cheia, compartilhar e copiar (o site usa); câmera, microfone, localização, pagamento e USB, não.
+ *  O HSTS vai sem `preload` (entrar na lista dos navegadores é compromisso do domínio, decisão do Victor). */
+export function cabecalhos(resumos) {
+  const csp = ["default-src 'self'", `script-src 'self'${resumos.map((h) => ` 'sha256-${h}'`).join("")}`,
+    "style-src 'self' 'unsafe-inline'", "img-src 'self' data: blob:", "font-src 'self' data:", "media-src 'self' data: blob:",
+    "connect-src 'self' data: blob:", "worker-src 'self' blob: data:", "frame-src 'self'", "frame-ancestors 'self'",
+    "object-src 'none'", "base-uri 'self'", "form-action 'self'", "upgrade-insecure-requests"].join("; ");
+  return "/*\n  Cache-Control: public, max-age=0, must-revalidate, no-transform\n"
+    + `  Content-Security-Policy: ${csp}\n`
+    + "  Strict-Transport-Security: max-age=31536000; includeSubDomains\n"
+    + "  X-Content-Type-Options: nosniff\n"
+    + "  X-Frame-Options: SAMEORIGIN\n"
+    + "  Referrer-Policy: strict-origin-when-cross-origin\n"
+    + "  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), hid=(), fullscreen=(self), web-share=(self), clipboard-write=(self)\n"
+    + CABECALHOS.split("\n").slice(2).join("\n");
+}
 
 function arquivos(dir) {
   return readdirSync(dir).flatMap((n) => {
@@ -79,7 +117,9 @@ if (isMain && conferir > 0) {
   // que um navegador pede — medido em aureauds.dev em 01/10/2026: o `curl` comum não via, o de
   // navegador via. É recurso de fora, e a trava proíbe. O `no-transform` impede a injeção pelo lado
   // do site, mesmo que alguém religue a estatística no painel. O resto é o padrão da Cloudflare.
-  writeFileSync(join(destino, "_headers"), CABECALHOS);
+  // E os cabeçalhos de segurança, com o resumo de cada script embutido das páginas que vão sair (`cabecalhos`, acima).
+  const htmls = arquivos(destino).filter((f) => f.endsWith(".html")).map((f) => readFileSync(f, "utf8"));
+  writeFileSync(join(destino, "_headers"), cabecalhos(resumosDosScripts(htmls)));
 
   const todos = arquivos(destino);
   const maus = [];

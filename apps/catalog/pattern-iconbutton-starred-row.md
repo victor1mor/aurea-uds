@@ -9,5 +9,7 @@ import {IconButton} from "@aurea-uds/react";
 ```
 
 ```tsx
-<IconButton icon="star" label="Star this row" pressed />
+const [starred, setStarred] = useState(true);
+
+<IconButton icon="star" label="Star this row" pressed={starred} onClick={() => setStarred(!starred)} />
 ```

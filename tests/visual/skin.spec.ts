@@ -3519,3 +3519,78 @@ test("pele: Chip é o Badge com outro nome — a mesma marcação", () => {
     expect(renderToStaticMarkup(h(A.Chip, props, "x"))).toBe(renderToStaticMarkup(h(A.Badge, props, "x")));
   }
 });
+
+// AS 11 QUE FICARAM FORA DA LISTA (06/11/2026, a auditoria externa A-008): AspectRatio, Collapsible, ContainerScope,
+// InputGroup, InputGroupAddon, Label, MediaEmbed, Menubar, PasswordField, RadioGroup e ToggleGroup estavam fora do
+// `built-components.json`, e por isso fora deste arquivo. Cada uma aqui com o que a pele dela FAZ, só com o core, e cada
+// número contra o token que o produz (a sonda), não escrito à mão. Toda asserção foi medida no navegador antes.
+const ONZE = renderToStaticMarkup(P(h("div", null,
+  h("div", {key: "ar", style: {inlineSize: "320px"}}, h(A.AspectRatio, {id: "ar", ratio: 16 / 9}, h("div", null))),
+  h(A.Collapsible, {key: "co", id: "co", trigger: "Details", defaultOpen: true}, "Body"),
+  h(A.ContainerScope, {key: "cs", id: "cs"}, h("div", null, "x")),
+  h(A.InputGroup, {key: "ig", id: "ig"}, h(A.InputGroupAddon, {id: "iga"}, "https://"), h(A.Input, {"aria-label": "Site"})),
+  h(A.Label, {key: "lb", id: "lb", htmlFor: "x"}, "Name"),
+  h("div", {key: "me", style: {inlineSize: "320px"}}, h(A.MediaEmbed, {src: "about:blank", title: "Video"})),
+  h(A.Menubar, {key: "mb", menus: [{label: "File", items: [{label: "New"}]}, {label: "Edit", items: [{label: "Undo"}]}]}),
+  h("div", {key: "pf", id: "pf"}, h(A.PasswordField, {"aria-label": "Password"})),
+  h(A.RadioGroup, {key: "rg", label: "Plan", defaultValue: "a"}, h(A.Radio, {value: "a", label: "A"}), h(A.Radio, {value: "b", label: "B"})),
+  h(A.ToggleGroup, {key: "tg", label: "Style", defaultValue: ["b"]}, h(A.Toggle, {value: "b"}, "Bold"), h(A.Toggle, {value: "i"}, "Italic")))));
+
+test("pele: as 11 da auditoria externa fazem o que a pele promete", async ({page: p, baseURL}) => {
+  const url = `${baseURL}/__onze`;
+  await p.route(url, r => r.fulfill({contentType: "text/html; charset=utf-8",
+    body: `<!doctype html><html data-theme="light"><head>
+      <link rel="stylesheet" href="/packages/fonts/dist/fonts.css">
+      <link rel="stylesheet" href="/packages/core/dist/aurea.css"></head>
+      <body style="width:600px">${ONZE}</body></html>`}));
+  await p.goto(url, {waitUntil: "networkidle"});
+  const m = await p.evaluate(() => {
+    const q = (s: string) => document.querySelector(s) as HTMLElement;
+    const cs = (s: string) => getComputedStyle(q(s));
+    const r = (s: string) => q(s).getBoundingClientRect();
+    const sonda = (prop: string, valor: string) => {
+      const s = document.createElement("div");
+      s.style.cssText = `position:absolute;visibility:hidden;${prop}:${valor}`;
+      document.body.append(s); const v = getComputedStyle(s).getPropertyValue(prop); s.remove(); return v;
+    };
+    const radios = [...document.querySelectorAll(".radio-group > .radio")].map(e => e.getBoundingClientRect());
+    const toggles = [...document.querySelectorAll(".toggle-group > *")].map(e => e.getBoundingClientRect());
+    const pfInput = q("#pf .input").getBoundingClientRect(), pfAddon = q("#pf .input-group-addon").getBoundingClientRect();
+    return {
+      ar: {w: r("#ar").width, h: r("#ar").height, min: cs("#ar").minInlineSize, overflow: cs("#ar").overflow},
+      co: {display: cs(".collapsible").display, painel: getComputedStyle(q(".collapsible .collapsible-panel")).overflow},
+      cs: {tipo: cs("#cs").containerType, nome: cs("#cs").containerName},
+      ig: {display: cs("#ig").display, alinha: cs("#ig").alignItems, altura: cs("#ig").minHeight, raio: cs("#ig").borderTopLeftRadius,
+        alturaToken: sonda("min-height", "var(--control-h-md)"), raioToken: sonda("border-top-left-radius", "var(--radius-control)")},
+      iga: {display: cs("#iga").display, cor: cs("#iga").color, corToken: sonda("color", "var(--subtle-foreground)"),
+        gap: cs("#iga").columnGap, gapToken: sonda("column-gap", "var(--space-1)")},
+      lb: {display: cs("#lb").display, fs: cs("#lb").fontSize, fsToken: sonda("font-size", "var(--text-sm)"),
+        peso: cs("#lb").fontWeight, pesoToken: sonda("font-weight", "var(--weight-medium)")},
+      me: {raio: getComputedStyle(q(".media-embed-frame")).borderTopLeftRadius, raioToken: sonda("border-top-left-radius", "var(--radius-card)"),
+        w: r(".media-embed-frame").width, h: r(".media-embed-frame").height,
+        iframeCobre: r(".media-embed-frame iframe").width === r(".media-embed-frame").width - 2},
+      mb: {display: cs(".menubar").display, gap: cs(".menubar").columnGap, gapToken: sonda("column-gap", "var(--space-05)"),
+        alturaGatilho: getComputedStyle(q(".menubar-trigger")).minHeight, alturaToken: sonda("min-height", "var(--control-h-sm)"),
+        recheio: getComputedStyle(q(".menubar-trigger")).paddingLeft, recheioToken: sonda("padding-left", "var(--space-3)")},
+      pf: {display: getComputedStyle(q("#pf .input-group")).display, botaoNoFim: pfAddon.left >= pfInput.right - 1},
+      rg: {direcao: cs(".radio-group").flexDirection, empilhados: radios.length === 2 && radios[1].top >= radios[0].bottom},
+      tg: {display: cs(".toggle-group").display, colados: toggles.length === 2 && Math.abs(toggles[1].left - toggles[0].right) < 1},
+    };
+  });
+  expect(m.ar.h, "AspectRatio: 320 de largura em 16/9 dá 180").toBeCloseTo(180, 0);
+  expect([m.ar.min, m.ar.overflow], "e não estoura a grade").toEqual(["0px", "hidden"]);
+  expect([m.co.display, m.co.painel]).toEqual(["grid", "hidden"]);
+  expect([m.cs.tipo, m.cs.nome], "ContainerScope: o contêiner das props responsivas").toEqual(["inline-size", "aurea"]);
+  expect([m.ig.display, m.ig.alinha]).toEqual(["flex", "center"]);
+  expect([m.ig.altura, m.ig.raio]).toEqual([m.ig.alturaToken, m.ig.raioToken]);
+  // `inline-flex` no CSS, `flex` medido: filho de um contêiner flex vira bloco (a regra do CSS, não defeito da pele)
+  expect([m.iga.display, m.iga.cor, m.iga.gap]).toEqual(["flex", m.iga.corToken, m.iga.gapToken]);
+  expect([m.lb.display, m.lb.fs, m.lb.peso]).toEqual(["flex", m.lb.fsToken, m.lb.pesoToken]);
+  expect(m.me.raio, "MediaEmbed: o canto do cartão").toBe(m.me.raioToken);
+  expect(m.me.h, "MediaEmbed: 16/9 sem o padding-top de 2015").toBeCloseTo(m.me.w * 9 / 16, 0);
+  expect(m.me.iframeCobre, "o iframe cobre a moldura").toBe(true);
+  expect([m.mb.display, m.mb.gap, m.mb.alturaGatilho, m.mb.recheio]).toEqual(["flex", m.mb.gapToken, m.mb.alturaToken, m.mb.recheioToken]);
+  expect([m.pf.display, m.pf.botaoNoFim], "PasswordField: o botão de mostrar no fim do campo").toEqual(["flex", true]);
+  expect([m.rg.direcao, m.rg.empilhados], "RadioGroup: em pé").toEqual(["column", true]);
+  expect([m.tg.display, m.tg.colados], "ToggleGroup: os botões colados").toEqual(["inline-flex", true]);
+});

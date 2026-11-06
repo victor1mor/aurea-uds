@@ -4299,6 +4299,14 @@ button.tag-main { cursor:pointer; }
    botão (a distância da borda, o botão e um vão), e a linha mais longa ROLA antes de chegar nele. Vale para todo bloco
    com copiar: o sozinho, o do texto do site (`.prose pre`) e o do exemplo (`.demo-code`) — por isso vem depois deles. */
 .code-block-wrap > .code-block { padding-inline-end:calc(var(--space-3) + var(--control-h-md) + var(--space-2)); }
+/* O CÓDIGO É SEMPRE DA ESQUERDA PARA A DIREITA (06/11/2026, a auditoria externa A-014 — o desenho do FigCraft aprovado
+   pelo Victor). Numa página `dir="rtl"` o navegador espelhava o código: a pontuação pulava para o outro lado
+   (`;"import …`) e o número de linha ia para a direita. O código fica da esquerda para a direita, como em todo editor; a
+   moldura em volta continua espelhada — o botão de copiar fica no fim da linha DELA (à esquerda), e o código reserva o
+   lugar dele também desse lado. `[dir="rtl"]`, e não `:dir()`: o empacotador do app reescreve o `:dir()` (§11 do
+   CLAUDE.md). Quem cobra: `tests/visual/rtl-codigo.spec.ts`. */
+.code-block { direction:ltr; unicode-bidi:isolate; text-align:left; }
+[dir="rtl"] .code-block-wrap > .code-block { padding-inline-start:calc(var(--space-3) + var(--control-h-md) + var(--space-2)); }
 .copy-code .c-done { display:none; }
 .copy-code.is-done .c-copy { display:none; } .copy-code.is-done .c-done { display:block; color:var(--primary); }
 /* A CABEÇA DO ARQUIVO (`CodeBlock filename`, o site B — aprovada pela bancada em 01/11/2026, o item 6, "Ícone + nome"): o
@@ -5846,6 +5854,15 @@ button.graph-node-body { cursor:pointer; }
      cor do texto), e o glifo pinta na cor do texto. */
   .accordion-plus .accordion-chevron, .accordion-plus .accordion-item[open] > summary .accordion-chevron { background:transparent; }
   .accordion-plus .accordion-chevron::before { forced-color-adjust:none; background:CanvasText; }
+  /* O ESCOLHIDO SE VÊ (06/11/2026, a auditoria externa A-015 — a forma "B" do desenho no FigCraft, aprovada pelo Victor:
+     *"o alto contraste aprovo a B"*). O segmento e a aba escolhidos se distinguiam só pelo FUNDO, que a troca apaga: ficavam
+     iguais aos outros. Agora o fundo é o destaque do sistema (Highlight) e a letra a cor sobre ele (HighlightText) — as
+     duas são cores do sistema, que a troca respeita. A referência não trata esse modo. E o ponto do selo (`.badge-dot`),
+     que é fundo, sai da troca na cor do texto. A Ember recebe também (o Victor, 06/11/2026: *"Ember entra"* — no alto
+     contraste o sistema troca as cores de toda marca, e a dela sumia igual).
+     Quem cobra: `tests/visual/alto-contraste-escolhido.spec.ts`. */
+  /* (o segmento e a aba: a regra está depois das do tema escolhido, mais abaixo — ver "O ESCOLHIDO NO ALTO CONTRASTE") */
+  .badge-dot { forced-color-adjust:none; background:CanvasText; }
 }
 
 
@@ -6302,6 +6319,17 @@ button.graph-node-body { cursor:pointer; }
    Aqui só a letra do corpo: o `body` resolve a dele com os tokens de onde ELE está, então um contêiner que liga o modo
    (o `AppShell`) refaz a conta para o que tem dentro. Na raiz (`<html>`) não: lá o `font-size` mudaria o `rem`. */
 [data-text="lg"]:not(:root) { font-size:var(--text-sm); }
+
+/* O ESCOLHIDO NO ALTO CONTRASTE (06/11/2026, a auditoria externa A-015, a forma "B" — ver a nota no bloco
+   `forced-colors` lá em cima). Mora AQUI, na seção dos modos — depois das regras do escolhido de cada tema (na paleta, lá em cima) e fora da paleta,
+   que deixa a Ember de fora —, e com a forma
+   `[data-theme] …`, que pesa o mesmo que elas: antes, a do claro (mais forte) ganhava e a letra ficava preta sobre o
+   ciano. A Ember recebe também (o Victor, 06/11/2026: *"Ember entra"*). */
+@media (forced-colors:active) {
+  :is(.segmented :is(button,a).active,.tab[data-active]),
+  [data-theme] :is(.segmented :is(button,a).active,.tab[data-active])
+    { background:Highlight; color:HighlightText; }
+}
 
 /* >>> camada responsiva — GERADA por scripts/build-responsive-layer.mjs <<< */
 /* As variáveis de passo NÃO HERDAM. Ver o comentário de VARIAVEIS no gerador: um ícone dentro

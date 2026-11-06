@@ -62,9 +62,13 @@ jobs:
       # A ADR-0013 mediu o piso: npm >= 11.5.1 e Node >= 22.14 para OIDC. O Node vem do passo
       # acima; o npm que acompanha a imagem pode estar abaixo, então ele sobe explicitamente.
       # Sem isto a falha aparece como "need auth", que manda investigar o lugar errado.
+      # A VERSÃO É FIXA (06/11/2026, a auditoria externa A-012): `npm@latest` instalava o que saísse no dia — um salto de
+      # versão maior podia entrar no passo que publica sem ninguém ver. A linha 11 é a do terminal do Victor e a do piso
+      # da ADR-0013; a 11.21.2 (03/11/2026) é a última correção dela. A 12 é salto maior (pede Node ^22.22.2 ou ^24.15.0)
+      # e entra só deliberadamente, como as ações fixadas pelo commit no ci.yml.
       - name: npm com suporte a OIDC
         run: |
-          npm install -g npm@latest
+          npm install -g npm@11.21.2
           npm --version
 
       - name: Install

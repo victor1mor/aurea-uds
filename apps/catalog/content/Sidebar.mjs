@@ -1,5 +1,8 @@
 import {createElement as h, Fragment} from "react";
 import {Sidebar, Badge, Avatar, IconButton, Kbd, SearchField, useSidebar} from "../../../packages/react/dist/index.js";
+import {ComAtual, NavComAtual} from "./_estado.mjs";
+// O atual que o clique move (06/11/2026): o exemplo guarda o atual, como a rota do app guardaria — ver `ComAtual`.
+const SidebarVivo = (p) => h(ComAtual, {componente: Sidebar, ...p});
 
 // A CAIXA DE RECORTE SAIU (18/08/2026). Ela existia porque a `.sidebar` mede a altura em
 // `calc(100vh - …)` e não cabia num painel de demo — e a saída de então foi CORTAR, com o
@@ -42,7 +45,7 @@ const moldura = (props, rotulo = "Sidebar") => {
     // é a moldura, não a lateral: o componente continua com a geometria do shell intacta.
     "--topbar-height": "0px"}},
     direita && h("main", null),
-    h(Sidebar, props),
+    h(SidebarVivo, props),
     // A MOLDURA É UM LAYOUT DE APLICATIVO EM MINIATURA, e isso não é enfeite: o embed é um
     // DOCUMENTO de verdade, que alguém pode abrir direto. Sem `<main>` e sem `h1` o axe reprova
     // com `landmark-one-main` e `page-has-heading-one`, e a varredura do catálogo reprova junto —
@@ -117,7 +120,7 @@ function Arranjo() {
   // Na tela estreita, a coluna deixa sempre o lugar do botão ao lado (64): a 320 ele passava da tela.
   const coluna = estado?.collapsed ? "0px" : "min(calc(var(--sidebar-width) + var(--space-4) * 2), calc(100% - var(--space-16)))";
   return h("div", {style: {display: "grid", gridTemplateColumns: `${coluna} minmax(0,1fr)`, height: "100vh"}},
-    h(Sidebar, {label: "Components offcanvas", current: "button", items: ITENS, footer: h(Sidebar.Toggle, {variant: "item"})}),
+    h(SidebarVivo, {label: "Components offcanvas", current: "button", items: ITENS, footer: h(Sidebar.Toggle, {variant: "item"})}),
     h("main", {style: {padding: "var(--space-4) var(--space-2)"}}, h(Sidebar.Toggle, null)));
 }
 
@@ -306,11 +309,9 @@ export default {
 </Sidebar>`,
       embed: true,
       layoutProprio: true,
-      render: () => demo({children: h("nav", {className: "sidebar-nav", "aria-label": "Project"},
-        h("a", {href: "../button.html", className: "sidebar-item", "aria-current": "page"},
-          h("span", {className: "sidebar-label"}, "Button")),
-        h("a", {href: "../sidebar.html", className: "sidebar-item"},
-          h("span", {className: "sidebar-label"}, "Sidebar")))}),
+      render: () => demo({children: h(NavComAtual, {className: "sidebar-nav", label: "Project", classeDoItem: "sidebar-item",
+        rotuloEmSpan: "sidebar-label", atual: "Button",
+        itens: [{rotulo: "Button", href: "../button.html"}, {rotulo: "Sidebar", href: "../sidebar.html"}]})}),
     },
     {
       title: "Plain — no box",
@@ -354,7 +355,7 @@ export default {
       layoutProprio: true,
       render: () => h("div", {style: {display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(15rem, 1fr))", gap: "var(--space-4)",
         padding: "var(--space-4)", alignContent: "start", minHeight: "100vh"}},
-        ...INDICADORES.map(([valor, rotulo]) => h(Sidebar, {key: valor, indicator: valor, label: rotulo, "aria-label": rotulo, current: "button", items: ITENS,
+        ...INDICADORES.map(([valor, rotulo]) => h(SidebarVivo, {key: valor, indicator: valor, label: rotulo, "aria-label": rotulo, current: "button", items: ITENS,
           style: {position: "static", height: "auto", margin: 0}})),
         h("main", null)),
     },
@@ -438,7 +439,7 @@ export default {
       embed: true,
       layoutProprio: true,
       render: () => h("div", {style: {display: "flex", height: "100vh", "--topbar-height": "0px"}},
-        h(Sidebar, {panel: "docked", label: "Sections", current: "orders", items: SECOES}), h("main", null)),
+        h(SidebarVivo, {panel: "docked", label: "Sections", current: "orders", items: SECOES}), h("main", null)),
     },
     {
       title: "Sections in a panel over the page",
@@ -448,7 +449,7 @@ export default {
       embed: true,
       layoutProprio: true,
       render: () => h("div", {style: {display: "flex", height: "100vh"}},
-        h(Sidebar, {panel: "overlay", label: "Sections", current: "orders", items: SECOES}), h("main", null)),
+        h(SidebarVivo, {panel: "overlay", label: "Sections", current: "orders", items: SECOES}), h("main", null)),
     },
     {
       title: "Groups that fold, with actions",

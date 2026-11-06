@@ -12764,8 +12764,11 @@ import {Button} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Button pressed leadingIcon="star">Starred</Button>
-<Button pressed={false}>Archived</Button>
+const [starred, setStarred] = useState(true);
+const [archived, setArchived] = useState(false);
+
+<Button pressed={starred} onClick={() => setStarred(!starred)} leadingIcon="star">Starred</Button>
+<Button pressed={archived} onClick={() => setArchived(!archived)}>Archived</Button>
 ```
 </page>
 
@@ -12995,10 +12998,13 @@ import {ButtonGroup, Button} from "@aurea-uds/react";
 ```
 
 ```tsx
+const [on, setOn] = useState({starred: true, archived: false, shared: true});
+const toggle = (k) => setOn({...on, [k]: !on[k]});
+
 <ButtonGroup label="Filters">
-  <Button pressed>Starred</Button>
-  <Button pressed={false}>Archived</Button>
-  <Button pressed>Shared</Button>
+  <Button pressed={on.starred} onClick={() => toggle("starred")}>Starred</Button>
+  <Button pressed={on.archived} onClick={() => toggle("archived")}>Archived</Button>
+  <Button pressed={on.shared} onClick={() => toggle("shared")}>Shared</Button>
 </ButtonGroup>
 ```
 </page>
@@ -14541,7 +14547,9 @@ import {IconButton} from "@aurea-uds/react";
 ```
 
 ```tsx
-<IconButton icon="star" label="Star this row" pressed />
+const [starred, setStarred] = useState(true);
+
+<IconButton icon="star" label="Star this row" pressed={starred} onClick={() => setStarred(!starred)} />
 ```
 </page>
 
@@ -18635,6 +18643,61 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-60-0.html">
+# v0.60.0
+
+Selected segments and tabs stay visible in Windows high contrast; code stays left-to-right on right-to-left pages.
+
+## Changed
+
+- **Windows high contrast:** the selected segment of `SegmentedControl` and the selected tab of `Tabs` are painted with the system highlight colour (`Highlight` and `HighlightText`). Before, the system replaced their background and they looked like the others. The status dot of `Badge` keeps the system text colour instead of disappearing. Web only.
+- **Right-to-left pages:** `CodeBlock` keeps the code left-to-right, with the line numbers before it, like every code editor. The frame around it still follows the page direction, and the code leaves room for the copy button on that side. Web only.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.60.0 @aurea-uds/core@0.60.0 @aurea-uds/fonts@0.60.0 @aurea-uds/icons@0.60.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.60.0
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-59-1.html">
+# v0.59.1
+
+The CodeEditor focus ring follows the focus tokens; security headers on the documentation site.
+
+Nothing changes on screen.
+
+## Fixed
+
+- The `CodeEditor` focus ring follows `--focus-width` like every other component. Before, its width and offset were fixed numbers, so changing the token did not reach the editor.
+
+## The documentation site
+
+- The site now sends security headers: a content security policy, HSTS, `nosniff`, `X-Frame-Options` and a permissions policy.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.59.1 @aurea-uds/core@0.59.1 @aurea-uds/fonts@0.59.1 @aurea-uds/icons@0.59.1
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.59.1
 ```
 </page>
 

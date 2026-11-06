@@ -1,7 +1,10 @@
 import {createElement as h} from "react";
 import {Pagination} from "../../../packages/react/dist/index.js";
+import {ComValor} from "./_estado.mjs";
+// A página atual que o clique move (06/11/2026): o exemplo guarda a página, como o app guardaria (`ComValor`).
+const PaginacaoViva = (p) => h(ComValor, {componente: Pagination, valor: "page", aviso: "onPageChange", ...p});
 
-const wide = {width: "100%", maxWidth: "36rem"};
+const wide = {width: "100%", maxWidth: "var(--demo-limite, 36rem)"};
 
 export default {
   description:
@@ -25,31 +28,31 @@ export default {
       title: "Numbers",
       description: "The current page in the light highlight; the gap becomes an ellipsis.",
       code: '<Pagination label="Search results" page={page} total={12} onPageChange={setPage} />',
-      render: () => h(Pagination, {label: "Search results", page: 5, total: 12, onPageChange: () => {}}),
+      render: () => h(PaginacaoViva, {label: "Search results", page: 5, total: 12, onPageChange: () => {}}),
     },
     {
       title: "With a summary",
       description: "The line on the left says what the pages hold.",
       code: '<Pagination label="Orders" page={1} total={10} summary="1 to 5 of 50 orders" onPageChange={setPage} />',
-      render: () => h("div", {style: wide}, h(Pagination, {label: "Orders", page: 1, total: 10, summary: "1 to 5 of 50 orders", onPageChange: () => {}})),
+      render: () => h("div", {style: wide}, h(PaginacaoViva, {label: "Orders", page: 1, total: 10, summary: "1 to 5 of 50 orders", onPageChange: () => {}})),
     },
     {
       title: "Simple",
       description: "Only previous and next — for an article split into parts.",
       code: '<Pagination variant="simple" label="Article parts" page={2} total={4} onPageChange={setPage} />',
-      render: () => h(Pagination, {variant: "simple", label: "Article parts", page: 2, total: 4, onPageChange: () => {}}),
+      render: () => h(PaginacaoViva, {variant: "simple", label: "Article parts", page: 2, total: 4, onPageChange: () => {}}),
     },
     {
       title: "Links",
       description: "With href each page is a real link, which a search engine follows and a person can open in a new tab.",
       code: '<Pagination label="Blog posts" page={2} total={6} href={(p) => `/blog?page=${p}`} />',
-      render: () => h(Pagination, {label: "Blog posts", page: 2, total: 6, href: (p) => `#page-${p}`}),
+      render: () => h(PaginacaoViva, {label: "Blog posts", page: 2, total: 6, href: (p) => `#page-${p}`}),
     },
     {
       title: "Compact",
       description: "The look up to 0.31.0, for a tight toolbar.",
       code: '<Pagination variant="compact" label="Log entries" page={3} total={12} onPageChange={setPage} />',
-      render: () => h(Pagination, {variant: "compact", label: "Log entries", page: 3, total: 12, onPageChange: () => {}}),
+      render: () => h(PaginacaoViva, {variant: "compact", label: "Log entries", page: 3, total: 12, onPageChange: () => {}}),
     },
   ],
 };

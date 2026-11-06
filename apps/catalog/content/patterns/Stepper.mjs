@@ -8,6 +8,7 @@
 // Não existe padrão APG para stepper; a prática adotada é `role="list"` com `aria-current="step"`.
 import {createElement as h} from "react";
 import * as A from "../../../../packages/react/dist/index.js";
+import {ComPassos} from "../_estado.mjs";
 
 const cheio = {width: "min(680px,100%)"};
 
@@ -74,7 +75,7 @@ export default [
   {label: "Payment", state: "active"},
   {label: "Review"},
 ]} />`,
-    render: () => h("div", {style: cheio}, h(A.Stepper, {label: "Checkout", items: [
+    render: () => h("div", {style: cheio}, h(ComPassos, {componente: A.Stepper, label: "Checkout", items: [
       {label: "Cart", state: "done", onClick: () => {}},
       {label: "Address", state: "done", onClick: () => {}},
       {label: "Payment", state: "active"},

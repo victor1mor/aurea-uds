@@ -542,7 +542,14 @@ SCALE = {int(v) for v in re.findall(r"--breakpoint-[a-z0-9]+:\s*(\d+)px", bp_src
 LEGACY_BP = {400}
 # `max-width` fecha em breakpoint-1 (639/767/1023…) pra não empatar com o `min-width` do
 # mesmo ponto — é a convenção mobile-first. Ambos os lados representam a mesma escala.
-VALID_BP = SCALE | {v - 1 for v in SCALE} | LEGACY_BP
+# PENDENTE DE DECISÃO (06/11/2026, a auditoria externa A-013): com a leitura de `rem` (abaixo), o gate passou a ver o
+# `@container (max-width:47.5rem)` do `Accordion` horizontal — 760, fora da escala. Ele é limiar de DESENHO (quando o
+# acordeão deitado vira o de pé), e a peça inteira é a decisão D4 do Victor; trocá-lo por 767 aqui seria mover limiar
+# medido sem ele. Fica nomeado, e cai com a resposta da D4.
+PENDENTE_BP = {760}
+# E o fecho a 0,02 (`max-width:639.98px`), a outra forma da mesma convenção — três regras do core a usam; o gate só a
+# via depois de ler decimal (06/11/2026).
+VALID_BP = SCALE | {v - 1 for v in SCALE} | {round(v - 0.02, 2) for v in SCALE} | LEGACY_BP | PENDENTE_BP
 core_src = (root / "packages/core/src/aurea.css").read_text(encoding="utf-8")
 # DOIS buracos, um de cada linhagem, e este merge fecha os dois de uma vez.
 # (a) COMENTÁRIO NÃO É REGRA — o gate lia o fonte inteiro, então a prosa que explica por que um
@@ -551,8 +558,14 @@ core_src = (root / "packages/core/src/aurea.css").read_text(encoding="utf-8")
 # (b) `@container` ENTRA NA MESMA CONTA (G-AXIS-04, 22/08/2026): a camada responsiva usa os dois
 #     mensuráveis, e um ponto de container fora da escala escapava de um gate que só via `@media`.
 #     Uma escala só para os dois é o que impede `md` de significar duas coisas.
-used_bp = {int(v) for cond in re.findall(r"@(?:media|container)([^{]*)\{", _sem_comentario(core_src))
-           for v in re.findall(r"(?:max|min)-(?:width|height)\s*:\s*(\d+)px", cond)}
+# (c) `rem` e `em` ENTRAM NA CONTA (06/11/2026, a auditoria externa A-013): o gate só lia `px`, e o
+#     `@container (max-width:47.5rem)` (760) passava. Numa consulta de mídia e de contêiner, `rem` e `em` são o tamanho
+#     de letra INICIAL (16), não o da folha — a conta é ×16. E a forma de faixa (`width < 640px`) também entra.
+def _bp_px(n, u):
+    v = float(n) * (16 if u in ("rem", "em") else 1)
+    return int(v) if v == int(v) else v
+used_bp = {_bp_px(n, u) for cond in re.findall(r"@(?:media|container)([^{]*)\{", _sem_comentario(core_src))
+           for n, u in re.findall(r"(?:(?:max|min)-(?:width|height)\s*:|(?:width|height)\s*[<>]=?)\s*([\d.]+)(px|rem|em)\b", cond)}
 stray_bp = sorted(used_bp - VALID_BP)
 if not SCALE:
     errors.append("tokens: escala de breakpoints (--breakpoint-*) não encontrada")
@@ -860,7 +873,10 @@ RAW_PX_INLINE = re.compile(r"(?<![a-z-])(?:" + PROP + r")[A-Za-z-]*\s*:\s*\"[^\"
 # A contagem é na FONTE e ignora comentário: valor citado em prosa não é valor aplicado.
 EIXOS = {
     "raio": r"border-radius\s*:\s*[^;{}]*?\d+px",
-    "tamanho de fonte": r"font-size\s*:\s*\d+(?:\.\d+)?px",
+    # `em`, `rem` e `%` contam também (06/11/2026, a auditoria externa A-013): o `font-size:0.9em` do `.prose code`
+    # passava porque o eixo só via `px`. Ele é o único hoje e entra na baseline como cru que já existia — trocá-lo por
+    # token muda o tamanho do código dentro de um título, e isso é desenho (pergunta ao Victor, não conserto daqui).
+    "tamanho de fonte": r"font-size\s*:\s*(?:\d+(?:\.\d+)?|\.\d+)(?:px|r?em|%)",
     "peso de fonte": r"font-weight\s*:\s*\d",
     "entrelinha": r"line-height\s*:\s*[\d.]+(?![a-z%])",
 }
@@ -1170,11 +1186,15 @@ PESADAS = {"codemirror": "code-editor", "@codemirror/": ("code-editor", "code-hi
            "elkjs": "graph", "modern-screenshot": "graph",
            # Rodada 2 (ADR-0065): o desvio de linhas, peer OPCIONAL, também só por `import()` no graph.tsx.
            "@tisoap/react-flow-smart-edge": "graph"}
+# (06/11/2026, a auditoria externa A-013) O SUBCAMINHO e as outras portas: o gate comparava o nome inteiro, e
+# `elkjs/lib/elk.bundled.js` não é igual a `elkjs` — passava. E só lia o `import` estático do começo da linha; o
+# `import("...")` dinâmico e o `export … from` também puxam o pacote para quem empacota.
+_PORTAS19 = re.compile(r'(?:^\s*import[^"\';]*?|^\s*export[^"\';]*?\bfrom\s*|\bimport\(\s*)["\']([^"\']+)["\']', re.M)
 for fp in sorted((root / "packages/react/src").glob("*.tsx")):
-    fonte = fp.read_text(encoding="utf-8")
-    for imp in re.findall(r'^import[^"\']*["\']([^"\']+)["\']', fonte, re.M):
+    fonte = _sem_comentario(fp.read_text(encoding="utf-8"))
+    for imp in _PORTAS19.findall(fonte):
         for pacote, dono in PESADAS.items():
-            if imp == pacote or (pacote.endswith("/") and imp.startswith(pacote)):
+            if imp == pacote or imp.startswith(pacote if pacote.endswith("/") else pacote + "/"):
                 # Lote V (20/10/2026): o `@lezer/` e o `@codemirror/` têm DOIS donos — o editor e as cores do
                 # `CodeBlock` (`code-highlight`), cada um no seu módulo, nenhum no barril principal.
                 donos = dono if isinstance(dono, tuple) else (dono,)
@@ -1195,6 +1215,15 @@ CONSTRUIDOS = _built_doc.get("componentes", [])
 if not BUILT_PATH.is_file():
     errors.append("BUILDING.md: falta scripts/built-components.json — a lista dos componentes "
                   "construídos sob o procedimento não tem referência")
+# ── 21b. a lista É a biblioteca: todo componente exportado está nela ─────────────────────
+# A lista diz de si mesma, desde 07/08/2026, que é "a biblioteca INTEIRA" — e nenhum check cobrava isso. A auditoria
+# externa (A-008, 05/11/2026) achou 11 peças da web fora dela (AspectRatio, Collapsible, ContainerScope, InputGroup,
+# InputGroupAddon, Label, MediaEmbed, Menubar, PasswordField, RadioGroup, ToggleGroup), e por isso fora dos checks 22, 24
+# e 30. Peça nova sem nome aqui reprova aqui, no mesmo commit que a cria.
+_fora21b = sorted(exported - NAO_COMPONENTE - set(CONSTRUIDOS))
+if _fora21b:
+    errors.append(f"built-components.json: {len(_fora21b)} componente(s) exportado(s) fora da lista — a lista é a "
+                  f"biblioteca inteira, e quem fica fora escapa dos checks 22, 24 e 30: {', '.join(_fora21b)}")
 
 # ── 21. (saiu em 07/10/2026) ──────────────────────────────────────────────
 # O registro da leitura de referência de cada componente mora fora do repositório, com o
@@ -1229,7 +1258,7 @@ if not BUILT_PATH.is_file():
 # A causa real do vazio era outra: a pele do `.toolbar-group` era `gap:4px`, pixel cru. `4px` é
 # exatamente `--space-1` (0.25rem), então a correção é dar o token — e de quebra o espaçamento
 # passa a acompanhar o tamanho de fonte da raiz, que é o que o achado M12 decidiu. O campo
-# `tokens` segue obrigatório e sem exceção nenhuma.
+# `tokens` segue obrigatório. (06/11/2026: com UMA exceção, MEDIDA — `SEM_TOKEN_MEDIDO`, logo abaixo.)
 #
 # As duas medidas leem o fonte SEM COMENTÁRIO, e isso não é zelo: a primeira versão desta medição
 # disse que o `Grid` emite `aria-expanded`, e o que havia era o comentário do `AppShell` logo
@@ -1283,6 +1312,9 @@ def _corpo_do_componente(nome):
     return ""
 
 
+# A exceção medida do campo `tokens` (ver abaixo): componente → as classes que ele emite. Só entra quem foi medido sem
+# token nenhum no CSS; a trava confere a cada rodada.
+SEM_TOKEN_MEDIDO = {"AspectRatio": ["aspect-ratio"], "ContainerScope": ["container-scope"]}
 for c in CONSTRUIDOS:
     fp = root / f"packages/contracts/registry/{c}.json"
     if not fp.is_file():
@@ -1295,7 +1327,15 @@ for c in CONSTRUIDOS:
     if not f.get("states") and SINAL_DE_ESTADO.search(_corpo_do_componente(c)):
         vazios.append("states (o componente EMITE sinal de estado — aria-*, data-* ou classe)")
     if not f.get("tokens"):
-        vazios.append("tokens")
+        # A EXCEÇÃO MEDIDA (06/11/2026, a auditoria externa A-008 trouxe 11 peças para esta lista): o `AspectRatio` só
+        # segura a proporção e o `ContainerScope` só marca o contêiner — nenhuma regra delas usa token, e inventar um na
+        # ficha seria o contrato de enchimento que o C3 recusa. O vazio só passa enquanto o CSS das classes delas não
+        # tiver `var(--…)`: no dia em que tiver, a ficha volta a ser cobrada.
+        _classes22 = SEM_TOKEN_MEDIDO.get(c)
+        _regras22 = [m.group(0) for cl in (_classes22 or []) for m in
+                     re.finditer(r"[^{}]*\." + re.escape(cl) + r"(?![\w-])[^{}]*\{[^}]*\}", _sem_comentario(core_src))]
+        if not _classes22 or any("var(--" in r for r in _regras22) or not _regras22:
+            vazios.append("tokens")
     a11y = f.get("a11y") or {}
     # Papel NULO é legítimo — um Card é uma `<div>` e o catálogo desenha isso como "native
     # semantics". O que não é legítimo é nulo sem ninguém ter pensado. Mesmo idioma do teclado.
@@ -3493,6 +3533,16 @@ if _CSS44.is_file():
             _maus44.append(f"`{_sel44}` afasta o foco com `outline-offset:{_decl44['outline-offset']}`")
         if "box-shadow" in _decl44 and _decl44["box-shadow"] != "none":
             _maus44.append(f"`{_sel44}` usa sombra no lugar da linha de foco")
+    # O FOCO ESCRITO NO CÓDIGO (06/11/2026, a auditoria externa A-013): o tema do `CodeEditor` é um objeto do motor
+    # (`EditorView.theme`), não CSS — e escrevia `outline:"2px solid …"` e `outlineOffset:"-2px"` em número cru, fora
+    # do alcance deste check. Agora a mesma régua vale para todo `outline`/`outlineOffset` escrito num `.tsx` da web.
+    for _fp44 in sorted((root / "packages/react/src").glob("*.tsx")):
+        _src44 = _sem_comentario(_fp44.read_text(encoding="utf-8"))
+        for _k44, _v44 in re.findall(r"\b(outline|outlineOffset)\s*:\s*(\"[^\"]*\"|'[^']*'|-?\d+)", _src44):
+            _v44 = _v44.strip("\"'")
+            _ok44 = (_v44 == "none" or bool(_LINHA44.match(_v44))) if _k44 == "outline" else _v44 in _OFFSET44
+            if not _ok44:
+                _maus44.append(f"`{_fp44.name}` escreve o foco como `{_k44}:{_v44}`")
     if _maus44:
         errors.append(
             "check 44: " + "; ".join(_maus44) + ". O foco é uma linha só: "

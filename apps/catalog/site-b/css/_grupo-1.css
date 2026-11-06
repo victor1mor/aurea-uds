@@ -19,7 +19,9 @@
 /* A sombra do grupo segue a cápsula dos botões (04/11/2026): o grupo não tinha canto, e a sombra desenhava um retângulo atrás. */
 .g1-acoes .btn-group { border-radius:var(--radius-full); }
 .g1-selos { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-block-start:calc(var(--space-4) + var(--space-05)); }
-.g1-selo-mono { font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); }
+.g1-selo-mono { font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); direction:ltr; unicode-bidi:isolate; }
+/* ^ `direction:ltr` (06/11/2026, a auditoria externa A-014): o selo é nome de pacote e de plataforma — numa página da direita
+   para a esquerda, `@aurea-uds/react` virava `aurea-uds/react@`. O selo fica no lugar dele; o texto dentro, da esquerda para a direita. */
 
 /* As peças que flutuam no palco das listas, à direita do texto, como as da All Components. */
 .g1-pecas { inset-inline-start:62%; }

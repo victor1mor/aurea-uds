@@ -4,6 +4,7 @@
 // barra de aplicativo de sempre; o segundo, o cabeçalho de SITE (`items`, `current`, `actions`).
 import {createElement as h} from "react";
 import * as A from "../../../../packages/react/dist/index.js";
+import {ComAtual} from "../_estado.mjs";
 const ITENS = [
   {id: "home", label: "Home", href: "#"},
   {id: "pricing", label: "Pricing", href: "#"},
@@ -39,7 +40,7 @@ export default [
   menuLabel="Menu"
   actions={<Button variant="primary" size="sm">Sign up</Button>}
 />`,
-    render: () => h("div", {style: {width: "100%", position: "relative"}}, h(A.Header, {variant: "flush", divider: true,
+    render: () => h("div", {style: {width: "100%", position: "relative"}}, h(ComAtual, {componente: A.Header, porRender: true, variant: "flush", divider: true,
       maxWidth: "xl", brand: h("strong", null, "Acme"), items: ITENS, current: "pricing",
       actions: h(A.Button, {variant: "primary", size: "sm"}, "Sign up")})),
   },

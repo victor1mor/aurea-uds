@@ -33,12 +33,18 @@ jobs:
           CONCLUSAO: ${{ github.event.workflow_run.conclusion }}
           APROVADO: ${{ github.event.workflow_run.head_sha || github.sha }}
           REPO: ${{ github.repository }}
+        # O DISPARO À MÃO também publica só o verde (06/11/2026, a auditoria externa A-012): antes ele publicava o `main`
+        # do momento, sem olhar a CI — um commit reprovado ia ao ar. Agora o disparo à mão cai no mesmo caminho da rodada
+        # vermelha: o último commit do `main` que a CI aprovou.
         run: |
-          if [ "$EVENTO" = "workflow_dispatch" ] || [ "$CONCLUSAO" = "success" ]; then
+          if [ "$EVENTO" != "workflow_dispatch" ] && [ "$CONCLUSAO" = "success" ]; then
             echo "sha=$APROVADO" >> "$GITHUB_OUTPUT"
           else
             verde=$(gh api "repos/$REPO/actions/workflows/ci.yml/runs?branch=main&event=push&status=success&per_page=1" --jq '.workflow_runs[0].head_sha')
-            echo "A rodada falhou ($CONCLUSAO): o site é o do último verde, $verde; só a saúde traz a rodada nova."
+            # sem verde achado, o checkout com `ref` vazio pegaria o `main` do momento — o que esta guarda existe para impedir
+            if [ -z "$verde" ] || [ "$verde" = "null" ]; then echo "Nenhum commit verde no main: nada é publicado."; exit 1; fi
+            if [ "$EVENTO" = "workflow_dispatch" ]; then echo "Disparo à mão: o site é o do último verde, $verde."
+            else echo "A rodada falhou ($CONCLUSAO): o site é o do último verde, $verde; só a saúde traz a rodada nova."; fi
             echo "sha=$verde" >> "$GITHUB_OUTPUT"
           fi
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6

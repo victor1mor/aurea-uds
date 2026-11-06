@@ -1,5 +1,6 @@
 import {createElement as h} from "react";
 import {IconButton, ButtonGroup, Card, Badge, Toolbar, ToolbarSeparator} from "../../../../packages/react/dist/index.js";
+import {ComLigado} from "../_estado.mjs";
 
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-2)"};
 const between = {...row, justifyContent: "space-between", width: "min(420px,100%)"};
@@ -45,10 +46,12 @@ export default [
     name: "Starred row",
     description: "State that survives the click: aria-pressed keeps it visible and audible.",
     uses: ["IconButton"],
-    code: '<IconButton icon="star" label="Star this row" pressed />',
+    // o código mostra o estado que o clique troca (06/11/2026), como o exemplo vivo faz
+    code: ['const [starred, setStarred] = useState(true);', '',
+      '<IconButton icon="star" label="Star this row" pressed={starred} onClick={() => setStarred(!starred)} />'].join("\n"),
     render: () => h("div", {style: row},
-      h(IconButton, {icon: "star", label: "Star this row", pressed: true}),
-      h(IconButton, {icon: "star", label: "Star this row", pressed: false})),
+      h(ComLigado, {componente: IconButton, icon: "star", label: "Star this row", pressed: true}),
+      h(ComLigado, {componente: IconButton, icon: "star", label: "Star this row", pressed: false})),
   },
   {
     variant: "Outline",

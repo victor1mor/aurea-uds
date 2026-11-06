@@ -1,4 +1,4 @@
-import {createElement as h} from "react";
+import {createElement as h, useState} from "react";
 import {Card, KPI, Badge, Button, IconButton, Status, Timeline, DataList, Avatar, Alert, CodeBlock,
   MessageList, InvocationPanel, HumanApproval, Toolbar, ToolbarButton,
   TreeView, Table, Progress, SegmentedControl, Select, EmptyState,
@@ -980,7 +980,11 @@ const FAIXAS = [
 // "resume position and history are EXPLICIT" — a posição em número, não "continue de onde parou".
 const RETOMADA = {em: "12:04", quando: "3 days ago"};
 
-export function mediaLibrary(state) {
+// A ESCOLHA QUE O CLIQUE MOVE (06/11/2026, o pedido do Victor e o desenho aprovado): a galeria marcava o episódio com
+// `aria-current` e o clique não trocava. Agora a escolha mora no estado, e a galeria, o player e o detalhe leem dela.
+function BibliotecaViva({state}) {
+  const [selecao, setSelecao] = useState(SELECAO);
+  const item = BIBLIOTECA.find(i => i.id === selecao);
   const e = ESTADO_MEDIA[state];
   const acoes = mediaActions(state);
   const vazio = state === "empty";
@@ -1005,9 +1009,9 @@ export function mediaLibrary(state) {
       h("div", {style: {...row, gap: "var(--space-3)"}},
         // Título e meta na MESMA linha do crachá, e não empilhados: duas linhas por tile custavam
         // 20px na faixa mais alta, e o meta é curto o bastante para caber ao lado.
-        ...BIBLIOTECA.map(i => h("button", {key: i.id, type: "button",
+        ...BIBLIOTECA.map(i => h("button", {key: i.id, type: "button", onClick: () => setSelecao(i.id),
           className: "card card-interactive",
-          "aria-current": i.id === SELECAO ? "true" : undefined,
+          "aria-current": i.id === selecao ? "true" : undefined,
           // `inlineSize:"auto"` desfaz o `inline-size:100%` que o core dá ao `.card-interactive`.
           // Aquela regra existe para o cartão-ALVO, que ocupa a fatia inteira dele; aqui os três
           // ladrilhos são uma FILA, e com ela cada um virava uma linha — a faixa media 141px em
@@ -1017,16 +1021,16 @@ export function mediaLibrary(state) {
           style: {font: "inherit", textAlign: "start", cursor: "pointer", inlineSize: "auto",
             padding: "var(--space-2) var(--space-3)", display: "flex", gap: "var(--space-2)", alignItems: "baseline"}},
           h("strong", null, i.titulo),
-          h("span", {className: "hint"}, i.id === SELECAO ? `${i.meta} · selected` : i.meta)))),
+          h("span", {className: "hint"}, i.id === selecao ? `${i.meta} · selected` : i.meta)))),
       h(Status, e.state ? {state: e.state} : {variant: e.variant}, e.label))),
     vazio
       ? regiao("Player", h(EmptyState, {icon: "playlist", title: "Nothing to play yet", titleAs: "h2"}))
       // O `MediaPlayer` é `role="group"` nomeado pelo próprio `title`, então ele É a região —
       // mesma escolha do `Chart` no I4 e do `HealthMatrix` no I6.
-      : h(MediaPlayer, {kind: "audio", title: ITEM.titulo, subtitle: "Measuring instead of counting"}),
+      : h(MediaPlayer, {kind: "audio", title: item.titulo, subtitle: "Measuring instead of counting"}),
     h("div", {style: {display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3)", alignItems: "start"}},
       regiao("Item detail", h(DataList, {items: [
-        {term: "Duration", value: ITEM.meta},
+        {term: "Duration", value: item.meta},
         // A retomada é explícita e mora nas DUAS regiões que o contrato separa: o número aqui,
         // porque é propriedade do item, e o histórico abaixo, porque é quando aconteceu.
         {term: "Resume at", value: RETOMADA.em}]})),
@@ -1052,6 +1056,7 @@ export function mediaLibrary(state) {
         h(ToolbarButton, {variant: "outline"}, ACAO_MEDIA.favorite),
         h(ToolbarButton, {variant: "outline"}, ACAO_MEDIA.playlist)))));
 }
+export function mediaLibrary(state) { return h(BibliotecaViva, {state}); }
 
 // ── I8 · VisualBuilder — a composição do PLANO-1.0 §12 ───────────────────────
 // As SETE regiões do contrato (`applicationPatterns.patterns.VisualBuilder.regions`

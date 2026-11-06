@@ -1,7 +1,7 @@
 {
   "name": "aurea-uds-workspace",
   "private": true,
-  "version": "0.59.0",
+  "version": "0.60.0",
   "description": "Aurea Universal Design System — o repositório dos sete pacotes @aurea-uds/*.",
   "repository": {
     "type": "git",
@@ -58,6 +58,6 @@
     "react-dom": "19.2.7",
     "recharts": "^3.10.1",
     "typescript": "^7.0.2",
-    "vitest": "4.1.11"
+    "vitest": "4.1.12"
   }
 }

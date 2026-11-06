@@ -274,6 +274,95 @@ como deveria funcionar"*.
 
 ---
 
+## [0.60.0] — 2026-11-06
+
+**A auditoria externa, o que muda aparência** (06/11/2026). Desenhado no FigCraft (o antes e a proposta, com os tokens
+como variáveis e as peças como componentes) e aprovado pelo Victor: *"Pode, o alto contraste aprovo a B"*.
+
+### Mudou
+
+- **No alto contraste do sistema, o escolhido se vê** (A-015, a forma "B"): o segmento do `SegmentedControl` e a aba do
+  `Tabs` escolhidos pintam o fundo no destaque do sistema (`Highlight`) com a letra sobre ele (`HighlightText`) — antes,
+  o fundo era apagado pela troca de cores e o escolhido ficava igual aos outros. O ponto do `Badge` (`dot`) sai da troca
+  na cor do texto (sumia). Em todas as marcas, a Ember também (*"Ember entra"*). Só na web: o nativo não tem esse modo.
+- **O código fica da esquerda para a direita numa página da direita para a esquerda** (A-014): o `CodeBlock` não espelha
+  mais o código (a pontuação pulava, `;"import …`, e o número de linha ia para a direita); a moldura continua espelhada —
+  o botão de copiar no fim da linha dela — e o código reserva o lugar dele desse lado. Só na web: o `CodeBlock` do nativo
+  é planejado.
+
+### O site
+
+- **O "Full width" faz a peça crescer**: os exemplos davam à peça no máximo 30rem (480) e, no modo largo, a caixa crescia
+  e a peça não. O limite é a variável `--demo-limite`, que o modo largo põe em 100%. Na largura normal, nada muda.
+- **A busca do topo**, só com a lupa (abaixo de 1335 de largura), é o círculo de 44 dos vizinhos com a lupa no centro (era
+  38 × 44, a lupa a 14 de um lado e 8 do outro).
+- No alto contraste, o logo do GitHub pinta na cor do texto do sistema (no tema claro, era preto sobre o preto da tela).
+- O selo do pacote fica da esquerda para a direita numa página da direita para a esquerda (`aurea-uds/react@`).
+- **Os exemplos que mostram uma escolha deixam trocar** (o pedido do Victor, *"ainda estou encontrando componentes no site
+  que não interage"*, e o desenho do FigCraft aprovado com *"Pode"*). A varredura de 578 páginas e 87 molduras achou 41
+  exemplos com um atual que o clique não movia — e, nas molduras da `Sidebar`, o link do item levava a MOLDURA para outra
+  página do site. Agora o exemplo guarda a escolha como o app guardaria (`apps/catalog/content/_estado.mjs`: `ComAtual`,
+  `ComLigado`, `ComPassos`, `ComIndice`, `ComTrilha`, `NavComAtual`): `Sidebar` e `AppShell` (o item atual), `Header`,
+  `Pagination` (a página), o filtro fixo e a estrela (`pressed`, com o estado também no código mostrado), o `Stepper` de
+  voltar a um passo, o índice da página, a trilha e a biblioteca de mídia. Os botões de ação sem efeito ("Save",
+  "Publish") ficam como são — é o normal de catálogo. Quem cobra: `tests/visual/site-exemplos-escolha.spec.ts`, provado
+  contra o site de antes.
+
+Quem cobra: `tests/visual/alto-contraste-escolhido.spec.ts`, `tests/visual/rtl-codigo.spec.ts` e
+`tests/visual/site-full-width.spec.ts`, provados contra o CSS de antes.
+
+---
+
+## [0.59.1] — 2026-11-06
+
+**A auditoria externa, as travas e o processo** (06/11/2026). A segunda parte dos consertos da auditoria externa (*"Pode
+corrigir tudo"*): o que não muda aparência e não é código de peça — dependências, o site, a publicação e as travas. O
+que muda aparência (o alto contraste, o código numa página da direita para a esquerda, o texto a 200%) está desenhado no
+FigCraft e espera o "pode".
+
+### Consertado
+
+- O foco do `CodeEditor` sai dos tokens (`--focus-width`, e o afastamento de dentro), como o de toda peça; antes era
+  `2px` e `-2px` escritos à mão. Na tela, o mesmo de antes.
+
+### O site
+
+- **Os cabeçalhos de segurança** (A-011): a política de conteúdo (só o próprio domínio; os dois scripts embutidos das
+  páginas pelo resumo, calculado na montagem), HSTS, `nosniff`, `X-Frame-Options`, `Referrer-Policy` e a política de
+  permissões (tela cheia, compartilhar e copiar; câmera, microfone, localização, pagamento e USB, não). Quem cobra:
+  `tests/visual/site-cabecalhos.spec.ts`, que aplica a política e reprova violação na página inicial, numa com a parte
+  viva, numa com os motores, na do nativo, na da cor, numa receita e numa moldura — e prova que, sem os resumos, o
+  navegador bloqueia.
+
+### Publicação
+
+- O `release.yml` instala o `npm` 11.21.2, fixo (era `npm@latest`).
+- O disparo à mão do `site.yml` publica o último commit do `main` que a CI aprovou (antes publicava o `main` do
+  momento, sem olhar a CI); sem commit verde, não publica nada.
+
+### Dependências
+
+- `vitest` 4.1.12 (GHSA-qxg6-89mg-rqv8 e GHSA-xp26-3454-mjgp); `glob` 14 e `minimatch` 11 por `overrides`, só na faixa
+  vulnerável (GHSA-3g3m-2fjr-6pw4 e GHSA-g3hv-75wg-m249) — lido no código do Expo, que é quem os usa, que as funções
+  que ele chama continuam; o `metro` 0.87.3, dentro da faixa, que já não usa o `image-size`.
+- **Nenhum aceite de alerta sobra**: os dois do `image-size` morreram com o `metro` novo, e o do `braces` foi retirado
+  pelo GitHub em 23/10/2026. O `pnpm audit` acha só um aviso baixo, sem correção, de ferramenta (`deepmerge`).
+
+### Travas
+
+- **21b, nova:** todo componente exportado está no `built-components.json` — eram 11 fora, e por isso fora das travas
+  22, 24 e 30. As 11 entraram, com a pele medida no `skin.spec.ts`; o `AspectRatio` e o `ContainerScope`, que não usam
+  token nenhum, ganham uma exceção MEDIDA na 22 (o vazio só passa enquanto o CSS delas não tiver `var(--…)`).
+- **4b** lê `rem`, `em` e decimal: o `47.5rem` (760) do `Accordion` horizontal escapava. Ele fica nomeado como pendente
+  da decisão D4, e o fecho a 0,02 (`639.98px`) passa a valer como a mesma escala.
+- **12** conta o tamanho de letra em `em`, `rem` e `%` (o `0.9em` do código na prosa passava); a baseline sobe de 4
+  para 5 porque ele passou a ser CONTADO, não porque entrou.
+- **19** pega o subcaminho (`elkjs/lib/…`), o `import()` e o `export … from`.
+- **44** lê o foco escrito no código da web (o tema do `CodeEditor`), não só no CSS.
+- **31 e 31b** leem todas as versões datadas que ainda não saíram.
+
+---
+
 ## [0.59.0] — 2026-11-05
 
 **A auditoria externa, os consertos de código** (05/11/2026). Uma auditoria externa da 0.56.0 trouxe 21 achados; cada um

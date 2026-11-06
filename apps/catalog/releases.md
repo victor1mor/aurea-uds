@@ -2,6 +2,22 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.60.0
+
+November 6, 2026
+
+Selected segments and tabs stay visible in Windows high contrast; code stays left-to-right on right-to-left pages.
+
+[Read full release notes →](https://aureauds.dev/release-v0-60-0.md)
+
+## v0.59.1
+
+November 6, 2026
+
+The CodeEditor focus ring follows the focus tokens; security headers on the documentation site.
+
+[Read full release notes →](https://aureauds.dev/release-v0-59-1.md)
+
 ## v0.59.0
 
 November 5, 2026

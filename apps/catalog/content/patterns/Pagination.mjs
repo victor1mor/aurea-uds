@@ -4,6 +4,7 @@
 // contra cobertura total em duas das referências. O alvo é nenhum componente em zero.
 import {createElement as h} from "react";
 import * as A from "../../../../packages/react/dist/index.js";
+import {ComValor} from "../_estado.mjs";
 export default [
   {
     variant: "Pages",
@@ -13,6 +14,6 @@ export default [
     code: `const [page, setPage] = useState(1);
 
 <Pagination page={page} total={12} onPageChange={setPage} />`,
-    render: () => h(A.Pagination, {page: 3, total: 12, onPageChange: () => {}}),
+    render: () => h(ComValor, {componente: A.Pagination, valor: "page", aviso: "onPageChange", page: 3, total: 12, onPageChange: () => {}}),
   },
 ];
