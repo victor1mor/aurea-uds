@@ -97,7 +97,6 @@ grande contra um problema que já não existia. O critério é o comportamento, 
 | # | Critério | Quem cobra |
 |---|---|---|
 | 19 | `python scripts/validate.py` OK | ele mesmo — quantos checks são está em `manifest.json` (`gates.validate`), medido, porque escrever o número aqui é o achado I1 e esta linha já esteve vencida em três |
-| 19 | `python scripts/validate.py` OK | ele mesmo (**30 checks**) |
 | 20 | `pnpm test` verde | vitest |
 | 21 | Gates duros de Playwright verdes | `pnpm exec playwright test` |
 | 22 | **Gate de pixel ativo e verde** | **sim, desde a Fase 10**: as baselines `-linux.png` do repositório (22 em 09/10/2026); a CI compara e bloqueia. ~~⚠️ **Mas ele não é estrito**: `maxDiffPixels: 0` sem `threshold: 0` tolera 20% de desvio de cor POR PIXEL. Medido em 21/08/2026 — uma mudança de cor passou. Ver `G-GATE-01`~~ → **`G-GATE-01` fechado em 09/10/2026**: `threshold: 0.02` (decisão do Victor). Com o 0,2 padrão, a troca de paleta da `0.27.0` passou em 14 das 22 fotos; com 0, o serrilhado (no máximo 2 tons de cinza) reprovou 3 de 5 rodadas sem mudança. Os números estão no comentário do `playwright.config.ts` |

@@ -274,6 +274,54 @@ como deveria funcionar"*.
 
 ---
 
+## [0.59.0] — 2026-11-05
+
+**A auditoria externa, os consertos de código** (05/11/2026). Uma auditoria externa da 0.56.0 trouxe 21 achados; cada um
+foi conferido no código de hoje antes de virar trabalho (muito do que ela citava não existia), e o Victor mandou corrigir
+os reais (*"Pode corrigir tudo"*). Este lote é a parte que não muda aparência; o que muda aparência vem depois, com
+imagem antes.
+
+### Consertado
+
+- **`KPI` com barras: dois na mesma página não dividem mais o grupo de rádios.** O nome do grupo vinha só do título, e
+  dois `KPI` com o mesmo título (ou com o título em JSX) caíam no mesmo grupo — no navegador, o primeiro perdia a barra
+  escolhida ao carregar. O nome agora junta o `id` do `KPI` (quando o app passa um), o título e uma assinatura das
+  barras; dois `KPI` idênticos se separam pelo `id`. Continua marcação pura, sem hook.
+- **`Toast` do nativo: o X e a ação voltam ao VoiceOver.** A moldura era um grupo lido (`accessible`) com a ação e o
+  `CloseButton` dentro, e no iPhone o que fica dentro de um grupo lido some para o leitor de tela: o aviso persistente
+  não se fechava. Agora é a forma do `Alert`: o ícone e o texto são o grupo lido; a ação e o X, irmãos dele. Nada muda
+  de lugar na tela.
+- **`ToastHost` e `BottomNav` do nativo não quebram sem `SafeAreaProvider`.** Os dois chamavam o gancho da área segura,
+  que levanta erro sem o provedor em cima — e o exemplo de uso do `ToastHost` não pedia o provedor. Agora leem o recuo
+  pelo contexto, com a medida da abertura e o zero como reserva, como os menus já faziam.
+- **`CodeBlock` e `Banner`: os hooks vêm antes de todo `return`.** Trocar o `copyable` (ou a variante `consent`) entre
+  renderizações mudava a ordem dos hooks: o React avisava e o "copiado" se perdia.
+- O `Menubar` passa o portal do app também aos submenus, como o `DropdownMenu` e o `ContextMenu` (hoje o motor já os
+  punha no lugar certo; a diferença quebraria se ele mudar).
+- As fichas: o `tone` do `Code`, do `Heading` e do `Paragraph` dizia que o nativo tem a mesma prop — lá esses três usam
+  `color`; e o `glow` do `ToolbarButton` dizia "Web and native", e a peça ainda não existe no nativo.
+- A licença do `@aurea-uds/native` e do `@aurea-uds/icons` ainda era a cópia do Carbon, com `Copyright 2015 IBM Corp.`
+  no apêndice; agora é a mesma dos outros cinco pacotes.
+
+### Travas
+
+- **O check 43 enxerga `Animated.View` e `CloseButton`** (e o `LinkButton`). Era por isso que o `Toast` passava. Provado
+  contra o `toast.tsx` de antes.
+- **O dublê de teste da área segura é honesto:** o gancho levanta o mesmo erro da biblioteca real quando falta o
+  provedor. Com o dublê de antes, que devolvia o recuo sempre, nenhum teste via a quebra.
+- Quem cobra: `tests/unit/auditoria-externa-0-59.test.tsx` e `tests/unit/native-auditoria-externa-0-59.test.tsx`, os
+  dois provados contra o código de antes. Limite declarado: o `Banner` foi consertado junto, mas lá o hook pulado só lê
+  contexto, e o React não avisa — a trava que pegaria a classe inteira (hook depois de `return`) fica pendente.
+- **Os checks 31 e 31b leem TODAS as versões datadas que ainda não saíram**, não só a dos pacotes. Com a 0.57.0 e a
+  0.58.0 esperando a publicação, o `useDeslize` (citado na seção da 0.58.0) saiu do recorte e o validador reprovou.
+
+### Documentos
+
+- `docs/PLANO-1.0.md` perde a tabela velha colada embaixo do TOTAL; `docs/QUALITY.md`, a linha repetida da trava 19
+  ("30 checks"); e o `docs/MAP.md` deixa de dizer que o nativo não tem componente.
+
+---
+
 ## [0.58.0] — 2026-11-05
 
 **O movimento, as tabelas do site e as receitas** (05/11/2026). O primeiro lote da fase 0 do caminho até a 1.0 (*"Sim,

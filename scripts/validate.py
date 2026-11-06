@@ -1952,9 +1952,12 @@ else:
         # E a versão já DATADA, com os pacotes subidos, que ainda não foi registrada como publicada (20/10/2026, ao
         # fechar a 0.36.0): enquanto o `released-surface.json` não anda, a seção dela é o que ainda não saiu. Vale junto
         # com a em construção: o lote seguinte pode começar antes de o registro da anterior chegar ao `main`.
-        _vpac = json.loads((root / "packages/react/package.json").read_text(encoding="utf-8"))["version"]
-        if _vpac != _rel["version"] and f"## [{_vpac}]" in _ch:
-            _corpo += _ch.split(f"## [{_vpac}]", 1)[1].split("\n## [", 1)[0]
+        # E TODAS as datadas acima da registrada, não só a dos pacotes (05/11/2026, a 0.59.0): a 0.57.0 e a 0.58.0
+        # ficaram sem publicar quando a 0.59.0 começou, e o `useDeslize`, citado na seção da 0.58.0, saiu do recorte.
+        _num = lambda v: tuple(int(p) for p in v.split("."))
+        for _m in re.finditer(r"^## \[([0-9]+\.[0-9]+\.[0-9]+)\] — \d{4}-\d{2}-\d{2}", _ch, re.M):
+            if _num(_m.group(1)) > _num(_rel["version"]):
+                _corpo += _ch[_m.end():].split("\n## [", 1)[0]
         # `\b` não serve: `Chart` casaria dentro de `ChartLegend` e daria por documentado o
         # que não está. A borda é o que NÃO pode ser parte de um nome de componente.
         _faltando = [c for c in _novos
@@ -1997,6 +2000,12 @@ if CHANGELOG.is_file() and SURFACE.is_file():
         _vs31b = []
         if _vpac31b != _rel31b["version"]:
             _vs31b.append(_vpac31b)
+        # E toda datada acima da registrada (05/11/2026, como no check 31): com duas versões esperando a publicação, a
+        # frase nova da mais antiga sumia do recorte.
+        _num31b = lambda v: tuple(int(p) for p in v.split("."))
+        for _m31 in re.finditer(r"^## \[([0-9]+\.[0-9]+\.[0-9]+)\] — \d{4}-\d{2}-\d{2}", _ch31b, re.M):
+            if _num31b(_m31.group(1)) > _num31b(_rel31b["version"]) and _m31.group(1) not in _vs31b:
+                _vs31b.append(_m31.group(1))
         _emc31b = re.search(r"^## \[([0-9.]+)\] — em construção$", _ch31b, re.M)
         if _emc31b and _emc31b.group(1) not in _vs31b:
             _vs31b.append(_emc31b.group(1))
@@ -3343,8 +3352,11 @@ if _rel42.is_file():
 _ALVO43 = root / "packages/native/src"
 # `Card` entra porque o `KPI` é um `Card` marcado `accessible` (display.tsx) — a forma do
 # defeito não depende do nome da tag, e listar só `View` deixaria essa porta aberta.
-_TAGS43 = ("Pressable", "View", "Card")
-_TOCAVEL43 = re.compile(r"<(Pressable|IconButton|Button|Touchable\w*)\b")
+# `Animated.View` e `CloseButton` entraram em 05/11/2026 (auditoria externa): o `Toast` era um `<Animated.View
+# accessible>` com o `CloseButton` dentro — o MESMO defeito do `Alert` — e passava, porque a tag não era `View` e o X
+# (que desde a 0.32.0 é o `CloseButton`, não o `IconButton`) não estava na lista. O `LinkButton` entra pelo mesmo motivo.
+_TAGS43 = ("Pressable", "View", "Animated.View", "Card")
+_TOCAVEL43 = re.compile(r"<(Pressable|IconButton|CloseButton|LinkButton|Button|Touchable\w*)\b")
 # `accessible` que NÃO seja `accessible={false}`. A fronteira de palavra é obrigatória: sem ela
 # `accessibilityLabel` casaria, e um gate com falso positivo é um gate que alguém desliga.
 _ACESSIVEL43 = re.compile(r"\baccessible\b(?!\s*=\s*\{\s*false\s*\})")
@@ -3358,7 +3370,7 @@ def _blocos43(txt, tag):
     com dois irmãos `<View>…</View><View>…</View>` ela via o primeiro engolindo o segundo.
     """
     saida = []
-    for m in re.finditer(r"<" + tag + r"\b", txt):
+    for m in re.finditer(r"<" + re.escape(tag) + r"\b", txt):
         i = m.start()
         # o fim da tag de ABERTURA: o primeiro `>` fora de chaves (props têm `{}` dentro)
         j, prof = i, 0

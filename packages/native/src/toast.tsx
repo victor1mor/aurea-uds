@@ -54,7 +54,8 @@
 // `<x>Bg`/`<x>` que o `Alert` do Lote 2 usa (`feedback.tsx:60-63`).
 import * as React from "react";
 import {Animated, Easing, View, type StyleProp, type ViewStyle} from "react-native";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {SafeAreaInsetsContext, initialWindowMetrics} from "react-native-safe-area-context";
+
 import {CloseButton} from "./actions.js";
 import {canto, criarFolha} from "./estilos.js";
 import {Icon, type AureaIcon} from "./icon.js";
@@ -63,6 +64,9 @@ import {useReduceMotion, driverNativo} from "./movimento.js";
 import {Text} from "./text.js";
 import {AvisosContext, useAureaStrings, useAureaTokens} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
+
+// Sem `SafeAreaProvider` nem medida da abertura: nenhum recuo.
+const SEM_RECUO = {top: 0, right: 0, bottom: 0, left: 0} as const;
 
 /** As mesmas quatro faces do `AureaToastType` da web (`system.tsx:65`). */
 export type AureaToastType = AureaAlertVariant;
@@ -86,6 +90,9 @@ const folha = criarFolha((t: AureaTokens) => ({
     ...(t.shadow.shadowMd ? {boxShadow: [t.shadow.shadowMd]} : null),
   },
   texto: {flex: 1, minWidth: 0, gap: 2},
+  // O grupo LIDO (ícone + texto), irmão da ação e do X — a forma do `Alert` (auditoria externa de 05/11/2026). O vão é
+  // o mesmo da moldura, então nada muda de lugar na tela.
+  grupo: {flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: 11},
   // 0.32.0: o tipo deixou de tingir o fundo e a borda (eram `aviso_info`…`aviso_danger`). Como o aviso
   // da web desta versão e o da referência: o fundo é o da janela, e a cor do tipo vai no ícone e no
   // TÍTULO.
@@ -177,7 +184,10 @@ export function ToastHost({
 }: ToastHostProps) {
   const t = useAureaTokens();
   const s = folha(t);
-  const inset = useSafeAreaInsets();
+  // O recuo pelo CONTEXTO, com a medida da abertura e o zero como reserva (o jeito do `menu.tsx`): o gancho
+  // `useSafeAreaInsets()` LEVANTA ERRO sem `SafeAreaProvider` em cima, e o exemplo de uso desta peça nunca pediu o
+  // provedor — o app sem expo-router nem react-navigation quebrava ao montar (auditoria externa, 05/11/2026).
+  const inset = React.useContext(SafeAreaInsetsContext) ?? initialWindowMetrics?.insets ?? SEM_RECUO;
   const [avisos, setAvisos] = React.useState<AureaToast[]>([]);
   const proximo = React.useRef(0);
   // Os relógios vivem numa `ref` porque fechar um aviso à mão tem de PARAR o dele — senão o
@@ -271,11 +281,11 @@ export function Toast({toast, onClose}: {toast: AureaToast; onClose: () => void}
   const glifo = toast.icon === false ? null : (toast.icon ?? ICONE_DA_VARIANTE[tipo]);
 
   return (
+    // 🔴 A MOLDURA NÃO É `accessible` (auditoria externa de 05/11/2026): ela envolvia a ação e o X, e no iOS um
+    // recipiente `accessible` apaga o que tem dentro — quem usa o VoiceOver não fechava o aviso nem tocava a ação. É o
+    // MESMO defeito que o `Alert` teve em 17/09/2026 (o comentário longo em `feedback.tsx`), e a mesma forma de
+    // consertar: a moldura é layout e região viva; o GRUPO de dentro é a unidade de leitura; a ação e o X são irmãos.
     <Animated.View
-      accessible
-      // Mesma correção do `Alert` — ver o comentário longo em `feedback.tsx`. `status` NÃO é um
-      // papel do RN, e usá-lo derruba o app com "Invalid accessibility role value".
-      {...(tipo === "danger" ? {accessibilityRole: "alert"} : null)}
       accessibilityLiveRegion={tipo === "danger" ? "assertive" : "polite"}
       style={[
         s.aviso,
@@ -285,15 +295,22 @@ export function Toast({toast, onClose}: {toast: AureaToast; onClose: () => void}
         })}]},
       ]}
       testID={`toast-${toast.id}`}>
-      {glifo ? <Icon name={glifo} size="md" color={corDoIcone} weight={toast.icon ? undefined : "fill"} /> : null}
-      <View style={s.texto}>
-        {/* 0.32.0: o título é 16 em peso médio, como no nativo da referência (era seminegrito). */}
-        <Text size="base" weight={500} style={{color: corDoIcone}}>{toast.title}</Text>
-        {toast.description != null
-          ? (typeof toast.description === "string"
-              ? <Text size="sm" tone="muted">{toast.description}</Text>
-              : toast.description)
-          : null}
+      <View
+        accessible
+        // Mesma correção do `Alert` — ver o comentário longo em `feedback.tsx`. `status` NÃO é um
+        // papel do RN, e usá-lo derruba o app com "Invalid accessibility role value".
+        {...(tipo === "danger" ? {accessibilityRole: "alert"} : null)}
+        style={s.grupo}>
+        {glifo ? <Icon name={glifo} size="md" color={corDoIcone} weight={toast.icon ? undefined : "fill"} /> : null}
+        <View style={s.texto}>
+          {/* 0.32.0: o título é 16 em peso médio, como no nativo da referência (era seminegrito). */}
+          <Text size="base" weight={500} style={{color: corDoIcone}}>{toast.title}</Text>
+          {toast.description != null
+            ? (typeof toast.description === "string"
+                ? <Text size="sm" tone="muted">{toast.description}</Text>
+                : toast.description)
+            : null}
+        </View>
       </View>
       {toast.action}
       {/* 0.32.0: o X é o `CloseButton` (HER-12), como no aviso da web. */}

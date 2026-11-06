@@ -21,7 +21,7 @@ documento, quase certamente está editando a **saída** — e o gate vai reprova
 | mudar a estrutura de TODA página do catálogo | `scripts/page-model.mjs` (o modelo é dado) + `scripts/build-catalog.mjs` | o gate do modelo cobra nas 170 |
 | mudar o texto de uma receita | `patterns/<arquétipo>.md` | check 9 valida contra o contrato |
 | adicionar um gate | `scripts/validate.py` (sem navegador) ou `tests/visual/*.spec.ts` (com) | **prove contra o defeito** (QUALITY.md #29) |
-| mexer no alvo NATIVO (tema, tokens resolvidos) | `packages/native/src/` — e **só** os três arquivos que já existem; componente novo é Lote 1, não autorizado | `pnpm build:native`; checks 37/38/39 |
+| mexer no alvo NATIVO (componentes, tema, tokens resolvidos) | `packages/native/src/` — o como está no [`NATIVE.md`](NATIVE.md) | `pnpm build:native`; checks 37/38/39/41/43 |
 | regerar os ícones do nativo | `packages/native/build-icons-native.mjs` (a fonte é o `@phosphor-icons/core`, a mesma do sprite web — ADR-0053) | `pnpm build:icons-native`; o check 38 compara os dois alvos |
 | trocar/acrescentar uma fonte | `packages/fonts/build-fonts.mjs` + os binários em `files/` (web) **e** `files-native/` (nativo) | `pnpm build:fonts`; o check 37 reprova se um lado ficar para trás |
 | registrar uma decisão | `decisions/` | tabela no `decisions/README.md` |
@@ -44,11 +44,11 @@ packages/
               <categoria>-client.tsx.                            [ADR-0026]
   contracts/  o contrato do projeto + o registry por componente. [ADR-0011]
   native/     o alvo REACT NATIVE, pacote IRMÃO do react — não   [ADR-0037]
-              um wrapper dele. Hoje é só o CHÃO (Lote 0):        [ADR-0038]
-              src/ = provider de tema × densidade (3 arquivos,   [ADR-0039]
-              e o check 39 reprova o quarto até o Lote 1 ser
-              autorizado); icons/ = 2571 módulos GERADOS.
-              Zero componente de interface, de propósito.
+              um wrapper dele. src/ = os componentes do nativo   [ADR-0038]
+              (quantos são se MEDE pelo que o index.ts exporta — [ADR-0039]
+              CLAUDE.md §8) e o provider de tema × densidade
+              × marca; icons/ = módulos
+              GERADOS. O check 39 cobra teste de cada componente.
 ```
 
 Dependência entre os módulos do pacote React é um **DAG**, e a ordem é:
