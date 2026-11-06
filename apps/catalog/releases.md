@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.59.0
+
+November 5, 2026
+
+Fixes from an external audit — KPI bars, the native Toast for VoiceOver, ToastHost and BottomNav without SafeAreaProvider.
+
+[Read full release notes →](https://aureauds.dev/release-v0-59-0.md)
+
 ## v0.58.0
 
 November 5, 2026

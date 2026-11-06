@@ -53,17 +53,6 @@ Mais `node scripts/check-pack.mjs`, a conferência visual nos dois temas, e o re
 | **N** | Editor de conteúdo | 1 | 0 | aberta — §18 |
 | **O** | As fronteiras que sobraram | 2 | 0 | aberta — §19 |
 | | **TOTAL** | **97** | **92** | |
-| **C** | Defeitos de semântica abertos | 3 | 0 | aberta |
-| **D** | Aposentar a página manual | 4 | 0 | aberta |
-| **E** | Contrato de API completo (M8) | 12 | 0 | aberta |
-| **F** | Grade de dados profissional | 11 | 0 | aberta |
-| **G** | Transferência de arquivos | 6 | 0 | aberta |
-| **H** | Camada operacional | 16 | 0 | aberta — **sem referência local** |
-| **I** | Composições de aplicação | 8 | 0 | aberta |
-| **J** | Estados universais | 3 | 0 | aberta |
-| **K** | Prova de plataforma e 1.0 | 4 | 0 | aberta |
-| **L** | Component Lab e Stress Lab | 10 | 0 | **aberta — AUTORIZADA em 28/08/2026** |
-| | **TOTAL** | **87** | **10** | |
 
 > Esta tabela é escrita à mão e **é a única exceção** à regra de contagem gerada — porque conta
 > intenção, não código. A contagem do que EXISTE continua no [`STATE.md`](../STATE.md), gerado.

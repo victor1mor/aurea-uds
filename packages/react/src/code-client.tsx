@@ -108,12 +108,16 @@ export function CodeBlock({children,language="text",copyable,preview,previewLayo
    *  da caixa, e um código por aba. Com `tabs`, o `children` não é lido. */
   tabs?:CodeBlockTab[];
   className?:string}){
+// Os hooks ANTES de todo `return` (auditoria externa, 05/11/2026): moravam depois dos três retornos da caixa e dos dois do
+// bloco sem cópia, e trocar `copyable` entre renderizações mudava a ordem dos hooks — o React avisava e o "copiado" se
+// perdia. Regra dos hooks do React: mesma ordem, em toda renderização.
+const s=useAureaStrings();
+const [copiado,setCopiado]=React.useState(false);
 if(tabs&&tabs.length>0)return <CodigoEmAbas tabs={tabs} language={language} copyable={copyable} highlight={highlight} className={className}/>;
 if(preview!==undefined&&previewLayout==="stacked")return <CaixaEmpilhada preview={preview} className={className} linhas={(children??"").split("\n").length}
   codigo={<CodeBlock language={language} copyable={copyable} lineNumbers={lineNumbers} highlight={highlight}>{children}</CodeBlock>}/>;
 if(preview!==undefined)return <CaixaDeExemplo preview={preview} className={className}
   codigo={<CodeBlock language={language} copyable={copyable} lineNumbers={lineNumbers} highlight={highlight}>{children}</CodeBlock>}/>;
-const s=useAureaStrings();
 // tabIndex no <pre>: `.code-block` é `overflow:auto` por construção, então é REGIÃO ROLÁVEL
 // e não tem nada focável dentro — quem navega por teclado não alcança o código que passa da
 // largura. É a regra `scrollable-region-focusable` do axe, e o mesmo defeito que o painel de
@@ -132,7 +136,6 @@ if(!copyable&&filename==null)return pre;
 if(!copyable)return <div className={cx("code-block-wrap","code-block-file",className)}><div className="code-block-head"><span className="code-block-title">{filename}</span></div>{pre}</div>;
 // 0.28.0: o "copiado" é dito ao leitor de tela. Com o `aurea.js` na página, é ele quem diz (pelo
 // texto do `data-aurea-copy-done`, na língua do app); sem ele, a região de status daqui.
-const [copiado,setCopiado]=React.useState(false);
 const onCopy=(e:React.MouseEvent<HTMLButtonElement>)=>{e.stopPropagation();const vanilla=(window as any).Aurea;
   if(vanilla?.copy){vanilla.copy(e.currentTarget);return}
   // Sem área de transferência (ou sem promessa), não há o que avisar — e não pode quebrar o clique.

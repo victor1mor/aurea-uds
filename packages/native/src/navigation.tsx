@@ -31,7 +31,8 @@
 import * as React from "react";
 import {
   Pressable, View, type ImageSourcePropType, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
-import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {SafeAreaInsetsContext, initialWindowMetrics} from "react-native-safe-area-context";
+
 import {useAnotarBottomNav} from "./barranav.js";
 import {Avatar, Badge} from "./display.js";
 import {canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca, aroDoEstilo, fundoDaPele, marcaDoEstilo, peleDoAtual, type PeleDoAtual} from "./estilos.js";
@@ -43,6 +44,9 @@ import {IndicadorQueDesliza, useFilaQueDesliza} from "./deslize.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useAureaTokens} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
+
+// Sem `SafeAreaProvider` nem medida da abertura: nenhum recuo.
+const SEM_RECUO = {top: 0, right: 0, bottom: 0, left: 0} as const;
 
 const folha = criarFolha((t: AureaTokens) => ({
   // ── Topbar ─────────────────────────────────────────────────────────────────────────────────
@@ -468,7 +472,9 @@ export function BottomNav({
   const t = useAureaTokens();
   const s = folha(t);
   const strings = useAureaStrings();
-  const inset = useSafeAreaInsets();
+  // O recuo pelo CONTEXTO, com a medida da abertura e o zero como reserva (o jeito do `menu.tsx`): o gancho
+  // `useSafeAreaInsets()` LEVANTA ERRO sem `SafeAreaProvider` em cima (auditoria externa, 05/11/2026).
+  const inset = React.useContext(SafeAreaInsetsContext) ?? initialWindowMetrics?.insets ?? SEM_RECUO;
   const redondo = indicator.startsWith("circle");
   const disco = indicator === "circle-bold";
   const capsula = indicator === "capsule";

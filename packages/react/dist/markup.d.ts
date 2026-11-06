@@ -200,7 +200,8 @@ export interface KPIProps extends HTMLAttributes<HTMLDivElement>, RefAttributes<
     /** As barras embaixo do número (o site B, 0.54.0): cada uma é um botão de opção nativo; a escolhida fica branca no
      *  `brand` (na cor do texto, fora dele) e a leitura diz o nome e o valor dela. */
     bars?: KPIBar[];
-    /** A barra que começa escolhida (o índice). Padrão: a última. */
+    /** A barra que começa escolhida (o índice). Padrão: a última. Dois `KPI` com o mesmo título E as mesmas barras na
+     *  mesma página precisam de `id` diferentes, para cada um guardar a sua barra. */
     defaultBar?: number;
 }
 export declare function KPI({ label, value, trend, direction, tone, directionLabel, variant, bars, defaultBar, className, ...props }: KPIProps): React.JSX.Element;

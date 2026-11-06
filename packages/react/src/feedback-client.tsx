@@ -102,9 +102,12 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>,"title"
   onConsent?:(choice:ConsentChoice,action:ConsentAction)=>void;
 }
 export function Banner(props:BannerProps){
+  // O hook ANTES do `return` do `consent` (auditoria externa, 05/11/2026): trocar a variante entre renderizações mudava a
+  // ordem dos hooks.
+  const s=useAureaStrings();
   if(props.variant==="consent")return <BannerConsent {...props}/>;
   const {variant,state,title,icon,onDismiss,children,className,categories:_c,value:_v,onConsent:_o,...rest}=props;
-  const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("banner",`banner-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...rest}>{icon?<Icon name={icon}/>:<span/>}<div>{title&&<strong>{title}</strong>}{children??(state?proprio(s.universalState,state):null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="x" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
+  const v=variant??(state?stateSeverity(state):"info");return <div className={cx("banner",`banner-${v}`,className)} role={v==="danger"?"alert":"status"} data-state={state} {...rest}>{icon?<Icon name={icon}/>:<span/>}<div>{title&&<strong>{title}</strong>}{children??(state?proprio(s.universalState,state):null)}</div>{onDismiss?<IconButton variant="ghost" size="sm" icon="x" label={s.close} onClick={onDismiss}/>:<span/>}</div>}
 // GAR-19 (lote U, 19/10/2026): o aviso de cookies é uma VARIAÇÃO do Banner (decisão do Victor). Nenhuma referência da fila
 // tem a peça aberta; as regras vêm de duas fontes primárias, lidas em 19/10/2026:
 // - o guia de cookies da ANPD (págs. 30–33): no primeiro nível, o botão de rejeitar os não necessários, tão fácil de ver

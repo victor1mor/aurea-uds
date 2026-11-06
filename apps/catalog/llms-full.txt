@@ -4549,7 +4549,7 @@ start and end follow the writing direction, so the same value mirrors in a right
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `color` | `"default" \| "muted"` | "default" | Two colours only, like the reference library: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface. |
-| `tone` | `"default" \| "muted" \| "subtle" \| "primary" \| "link" \| "danger" \| "success" \| "warning" \| "info"` | — | The text colour with the native package's name — the same names on web and native. link is for a real link only: the text colour with the yellow highlighter behind it on the light theme, the yellow underlined on the dark one — both say "tap here". For emphasis that is not a link, use primary: the text colour on the light theme, where the yellow is never text, and the yellow on the dark one, with nothing under it. The state colours are the -400 pair. It wins over color when both are given. |
+| `tone` | `"default" \| "muted" \| "subtle" \| "primary" \| "link" \| "danger" \| "success" \| "warning" \| "info"` | — | The text colour, with the names of the native Text. The native Code takes color instead (default or muted). link is for a real link only: the text colour with the yellow highlighter behind it on the light theme, the yellow underlined on the dark one — both say "tap here". For emphasis that is not a link, use primary: the text colour on the light theme, where the yellow is never text, and the yellow on the dark one, with nothing under it. The state colours are the -400 pair. It wins over color when both are given. |
 | `weight` | `"normal" \| "medium" \| "semibold" \| "bold" \| "extrabold"` | — (the role's own) | Overrides the weight of the role. Headings are semibold and body text is regular by default. "extrabold" (800, --weight-extrabold) is for a cover title; the default title weight is still semibold. |
 | `align` | `"start" \| "center" \| "end" \| "justify"` | — (inherited) | Text alignment. start and end follow the writing direction, so the same value mirrors in RTL. |
 | `truncate` | `boolean` | false | One line, cut with an ellipsis. Turns the element into a block so the cut has a width to measure against. |
@@ -6769,7 +6769,7 @@ start and end follow the writing direction, so the same value mirrors in a right
 |---|---|---|---|
 | `level` | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | 1 | The heading level: it renders h1…h6 and takes that role's size (4xl down to base, semibold, tight leading). There is no separate size prop, as in the reference library — the level is the design. |
 | `color` | `"default" \| "muted"` | "default" | Two colours only, like the reference library: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface. |
-| `tone` | `"default" \| "muted" \| "subtle" \| "primary" \| "link" \| "danger" \| "success" \| "warning" \| "info"` | — | The text colour with the native package's name — the same names on web and native. link is for a real link only: the text colour with the yellow highlighter behind it on the light theme, the yellow underlined on the dark one — both say "tap here". For emphasis that is not a link, use primary: the text colour on the light theme, where the yellow is never text, and the yellow on the dark one, with nothing under it. The state colours are the -400 pair. It wins over color when both are given. |
+| `tone` | `"default" \| "muted" \| "subtle" \| "primary" \| "link" \| "danger" \| "success" \| "warning" \| "info"` | — | The text colour, with the names of the native Text. The native Heading takes color instead (default or muted). link is for a real link only: the text colour with the yellow highlighter behind it on the light theme, the yellow underlined on the dark one — both say "tap here". For emphasis that is not a link, use primary: the text colour on the light theme, where the yellow is never text, and the yellow on the dark one, with nothing under it. The state colours are the -400 pair. It wins over color when both are given. |
 | `weight` | `"normal" \| "medium" \| "semibold" \| "bold" \| "extrabold"` | — (the role's own) | Overrides the weight of the role. Headings are semibold and body text is regular by default. "extrabold" (800, --weight-extrabold) is for a cover title; the default title weight is still semibold. |
 | `align` | `"start" \| "center" \| "end" \| "justify"` | — (inherited) | Text alignment. start and end follow the writing direction, so the same value mirrors in RTL. |
 | `truncate` | `boolean` | false | One line, cut with an ellipsis. Turns the element into a block so the cut has a width to measure against. |
@@ -8398,7 +8398,7 @@ start and end follow the writing direction, so the same value mirrors in a right
 |---|---|---|---|
 | `size` | `"base" \| "sm" \| "xs"` | "base" | Body text at 16, 14 or 12px, all with relaxed leading. The same three sizes the reference library's Paragraph has. |
 | `color` | `"default" \| "muted"` | "default" | Two colours only, like the reference library: the text colour or the muted one. A closed list protects contrast — both pass AA on every Aurea surface. |
-| `tone` | `"default" \| "muted" \| "subtle" \| "primary" \| "link" \| "danger" \| "success" \| "warning" \| "info"` | — | The text colour with the native package's name — the same names on web and native. link is for a real link only: the text colour with the yellow highlighter behind it on the light theme, the yellow underlined on the dark one — both say "tap here". For emphasis that is not a link, use primary: the text colour on the light theme, where the yellow is never text, and the yellow on the dark one, with nothing under it. The state colours are the -400 pair. It wins over color when both are given. |
+| `tone` | `"default" \| "muted" \| "subtle" \| "primary" \| "link" \| "danger" \| "success" \| "warning" \| "info"` | — | The text colour, with the names of the native Text. The native Paragraph takes color instead (default or muted). link is for a real link only: the text colour with the yellow highlighter behind it on the light theme, the yellow underlined on the dark one — both say "tap here". For emphasis that is not a link, use primary: the text colour on the light theme, where the yellow is never text, and the yellow on the dark one, with nothing under it. The state colours are the -400 pair. It wins over color when both are given. |
 | `weight` | `"normal" \| "medium" \| "semibold" \| "bold" \| "extrabold"` | — (the role's own) | Overrides the weight of the role. Headings are semibold and body text is regular by default. "extrabold" (800, --weight-extrabold) is for a cover title; the default title weight is still semibold. |
 | `align` | `"start" \| "center" \| "end" \| "justify"` | — (inherited) | Text alignment. start and end follow the writing direction, so the same value mirrors in RTL. |
 | `truncate` | `boolean` | false | One line, cut with an ellipsis. Turns the element into a block so the cut has a width to measure against. |
@@ -11284,7 +11284,7 @@ pressedStyle (ADR-0084), when the button is pressed: brand — the default — n
 | `render` | `ReactElement` | — | Inherited from Button: the element that renders the button — the router's link, for example — receiving the Aurea skin and the content. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller — the Button's quiet. |
 | `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. |
-| `glow` | `boolean` | — | A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native. |
+| `glow` | `boolean` | — | A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web only: ToolbarButton is planned on native. |
 | `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to "no line", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing. |
 </page>
 
@@ -18635,6 +18635,38 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-59-0.html">
+# v0.59.0
+
+Fixes from an external audit — KPI bars, the native Toast for VoiceOver, ToastHost and BottomNav without SafeAreaProvider.
+
+Fixes from an external audit. Nothing changes on screen.
+
+## Fixed
+
+- **Two `KPI`s with bars on the same page keep their own selected bar.** Before, two `KPI`s with the same label — or with a label in JSX — shared one radio group, and the first lost its selected bar on load. Two identical `KPI`s are told apart by their `id`.
+- **The native `Toast` is fully usable with VoiceOver.** Its action and close button were inside the group the screen reader reads as one item, which hides them on iOS. The icon and text are now the read group; the action and the close button sit next to it. Nothing moves on screen.
+- **Native `ToastHost` and `BottomNav` no longer crash without `SafeAreaProvider`.** They read the safe area from context, falling back to the initial window metrics and then to zero, like the menus already did.
+- `CodeBlock` and `Banner` call their hooks before any early return, so switching `copyable` or the `consent` variant between renders keeps their state.
+- Submenus of `Menubar` use the app's portal container, like `DropdownMenu` and `ContextMenu`.
+- The API docs of `Code`, `Heading` and `Paragraph` no longer say native takes `tone` (native takes `color`), and `ToolbarButton`'s `glow` no longer says it works on native, where the component is planned.
+- The `LICENSE` of `@aurea-uds/native` and `@aurea-uds/icons` is now the same as the other packages.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.59.0 @aurea-uds/core@0.59.0 @aurea-uds/fonts@0.59.0 @aurea-uds/icons@0.59.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.59.0
 ```
 </page>
 

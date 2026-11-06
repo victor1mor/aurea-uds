@@ -1,6 +1,37 @@
 import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+// Aurea nativo — a categoria **Navigation**: `BottomNav`, `Header` (o antigo `Topbar`), `NavList` e `Stepper`.
+//
+// Lote 3 do `NATIVE.md` §5.5 — a moldura. O consumidor medido (§5.1) especifica ela **literal**:
+// *navegação inferior fixa com quatro abas e contador de não lidos*, *o botão central abrindo uma
+// folha*, *pull-to-refresh na lista e no painel*, e um *onboarding de 3 passos*.
+//
+// ⚠ **E a primeira coisa a dizer é o que este módulo NÃO faz: roteamento.** Isso está escrito no
+// `NATIVE.md` §5.5 desde 31/08/2026 e não é lacuna — `expo-router`/`react-navigation` é escolha do
+// app. O que a Aurea entrega é a **pele** que se pluga nele: um `BottomNav` recebe `items` e
+// `current` e avisa por `onPress`. Quem troca de tela é o app.
+//
+// Medido antes de escrito, com a linha:
+//
+//   .topbar             aurea.css:81    linha, space-between, gap space-4, minH topbar-height
+//   .topbar-floating    :82             raio de CARTÃO, borda, margem space-4
+//   .topbar-pill        :87             largura de conteúdo, centrado, raio de controle
+//   .bottom-nav         :270            linha, gap space-1, margem space-4, raio de controle, sombra
+//   .bottom-nav-item    :273            coluna centrada, minH control-h-lg, textXs, mutedForeground
+//   .bottom-nav-mark    :306            a caixa de 2rem que ANCORA o contador
+//   .bottom-nav-badge   :310            canto do ícone, deslocado por -space-05
+//   [aria-current]      :331            foreground + peso médio, e o ícone perde a transparência
+//   os sete indicadores :360-397        de `none` a `circle-bold`
+//   .nav-list           :405            coluna com gap space-05
+//   .nav-list-row       :416            linha, gap space-3, ~~minH control-h-lg~~, raio card − space-1
+//                                       (0.32.0: recheio e letra da linha nativa da referência)
+//   .stepper            :1141           colunas iguais
+//   .step-dot           :1145           32 redondo, borda border-strong, fundo surface-1
+//
+// A semântica veio do FONTE (`navigation-client.tsx`), e é dela que sai a decisão mais importante
+// deste módulo — a de acessibilidade, logo abaixo.
+import * as React from "react";
 import { Pressable, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaInsetsContext, initialWindowMetrics } from "react-native-safe-area-context";
 import { useAnotarBottomNav } from "./barranav.js";
 import { Avatar, Badge } from "./display.js";
 import { canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca, aroDoEstilo, fundoDaPele, marcaDoEstilo, peleDoAtual } from "./estilos.js";
@@ -11,6 +42,8 @@ import { FilaRolante } from "./rolagem.js";
 import { IndicadorQueDesliza, useFilaQueDesliza } from "./deslize.js";
 import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens } from "./theme.js";
+// Sem `SafeAreaProvider` nem medida da abertura: nenhum recuo.
+const SEM_RECUO = { top: 0, right: 0, bottom: 0, left: 0 };
 const folha = criarFolha((t) => ({
     // ── Topbar ─────────────────────────────────────────────────────────────────────────────────
     // ⚠ Sem `position: sticky` — ele não existe no React Native. Na web o `.topbar` gruda no topo
@@ -347,7 +380,9 @@ export function BottomNav({ items, current, variant = "floating", indicator = "c
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();
-    const inset = useSafeAreaInsets();
+    // O recuo pelo CONTEXTO, com a medida da abertura e o zero como reserva (o jeito do `menu.tsx`): o gancho
+    // `useSafeAreaInsets()` LEVANTA ERRO sem `SafeAreaProvider` em cima (auditoria externa, 05/11/2026).
+    const inset = React.useContext(SafeAreaInsetsContext) ?? initialWindowMetrics?.insets ?? SEM_RECUO;
     const redondo = indicator.startsWith("circle");
     const disco = indicator === "circle-bold";
     const capsula = indicator === "capsule";

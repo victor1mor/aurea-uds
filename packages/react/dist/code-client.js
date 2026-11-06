@@ -70,13 +70,17 @@ function linhasDoCodigo(codigo, language, highlight) {
 // arquivo à esquerda e, com `copyable`, o "Copy" ESCRITO (o botão secundário, com o ícone antes do nome; vira "Copied").
 // O bloco vira o cartão (canto 22, a cor do cartão) e a linha longa DESCE em vez de rolar. Sem `filename`, o de sempre.
 export function CodeBlock({ children, language = "text", copyable, preview, previewLayout = "tabs", lineNumbers, highlight, tabs, filename, className }) {
+    // Os hooks ANTES de todo `return` (auditoria externa, 05/11/2026): moravam depois dos três retornos da caixa e dos dois do
+    // bloco sem cópia, e trocar `copyable` entre renderizações mudava a ordem dos hooks — o React avisava e o "copiado" se
+    // perdia. Regra dos hooks do React: mesma ordem, em toda renderização.
+    const s = useAureaStrings();
+    const [copiado, setCopiado] = React.useState(false);
     if (tabs && tabs.length > 0)
         return _jsx(CodigoEmAbas, { tabs: tabs, language: language, copyable: copyable, highlight: highlight, className: className });
     if (preview !== undefined && previewLayout === "stacked")
         return _jsx(CaixaEmpilhada, { preview: preview, className: className, linhas: (children ?? "").split("\n").length, codigo: _jsx(CodeBlock, { language: language, copyable: copyable, lineNumbers: lineNumbers, highlight: highlight, children: children }) });
     if (preview !== undefined)
         return _jsx(CaixaDeExemplo, { preview: preview, className: className, codigo: _jsx(CodeBlock, { language: language, copyable: copyable, lineNumbers: lineNumbers, highlight: highlight, children: children }) });
-    const s = useAureaStrings();
     // tabIndex no <pre>: `.code-block` é `overflow:auto` por construção, então é REGIÃO ROLÁVEL
     // e não tem nada focável dentro — quem navega por teclado não alcança o código que passa da
     // largura. É a regra `scrollable-region-focusable` do axe, e o mesmo defeito que o painel de
@@ -97,7 +101,6 @@ export function CodeBlock({ children, language = "text", copyable, preview, prev
         return _jsxs("div", { className: cx("code-block-wrap", "code-block-file", className), children: [_jsx("div", { className: "code-block-head", children: _jsx("span", { className: "code-block-title", children: filename }) }), pre] });
     // 0.28.0: o "copiado" é dito ao leitor de tela. Com o `aurea.js` na página, é ele quem diz (pelo
     // texto do `data-aurea-copy-done`, na língua do app); sem ele, a região de status daqui.
-    const [copiado, setCopiado] = React.useState(false);
     const onCopy = (e) => {
         e.stopPropagation();
         const vanilla = window.Aurea;

@@ -119,6 +119,10 @@ export function Section({ surface = "background", spacing = "md", theme, variant
 }
 const TOM_DA_DIRECAO = { up: "success", down: "danger", flat: "neutral" };
 const PALAVRA_DA_DIRECAO = { up: "Up", down: "Down", flat: "No change" };
+// Uma assinatura curta e determinística de um texto (djb2, em base 36): o mesmo texto dá o mesmo nome no servidor e no
+// navegador, sem hook.
+const assinatura = (texto) => { let h = 5381; for (let i = 0; i < texto.length; i++)
+    h = ((h << 5) + h + texto.charCodeAt(i)) | 0; return (h >>> 0).toString(36); };
 export function KPI({ label, value, trend, direction, tone, directionLabel, variant = "card", bars, defaultBar, className, ...props }) {
     const tom = direction ? (tone ?? TOM_DA_DIRECAO[direction]) : undefined;
     const miolo = _jsxs(_Fragment, { children: [_jsx("span", { className: "muted", children: label }), _jsx("strong", { children: value }), (trend || trend === 0 || direction) && _jsxs("small", { className: direction ? cx("kpi-trend", `kpi-trend-${direction}`, `kpi-tone-${tom}`) : undefined, children: [direction && _jsx("span", { className: "kpi-trend-icon", "aria-hidden": "true" }), direction && _jsx("span", { className: "sr-only", children: directionLabel ?? PALAVRA_DA_DIRECAO[direction] }), trend] })] });
@@ -127,8 +131,13 @@ export function KPI({ label, value, trend, direction, tone, directionLabel, vari
     const leituraDe = (b) => `${b.label} · ${typeof b.value === "string" || typeof b.value === "number" ? b.value : ""}`;
     // As barras são botões de opção NATIVOS (o KPI é marcação pura, roda no servidor): o grupo é um `fieldset` com o rótulo
     // do KPI, cada barra o `label` de um rádio com a leitura dela; o CSS mostra a leitura da escolhida e a da que está sob o
-    // mouse. O `name` vem do rótulo quando é texto.
-    const nomeDoGrupo = `kpi-bars-${typeof label === "string" ? label.toLowerCase().replace(/[^a-z0-9]+/g, "-") : "x"}`;
+    // mouse.
+    // O `name` do grupo (auditoria externa de 05/11/2026): vinha SÓ do rótulo, e dois KPI com o mesmo título — ou com o
+    // título em JSX, que virava "x" — caíam no mesmo grupo de rádios; medido no Chromium e no Firefox, o primeiro já
+    // perdia a barra escolhida ao carregar. Marcação pura não chama `useId` (a mesma regra do `menuId` do `Header`), então
+    // o nome junta o `id` do KPI, quando o app passa um, o rótulo e uma assinatura das próprias barras: dois KPI com dados
+    // diferentes nunca colidem, e dois idênticos se separam pelo `id`.
+    const nomeDoGrupo = bars && bars.length > 0 ? `kpi-bars-${props.id ? `${props.id}-` : ""}${typeof label === "string" ? label.toLowerCase().replace(/[^a-z0-9]+/g, "-") : "x"}-${assinatura(bars.map(b => `${b.label}:${b.amount}`).join("|"))}` : "";
     const barras = bars && bars.length > 0 && _jsxs("fieldset", { className: "kpi-bars-wrap", children: [typeof label === "string" && _jsx("legend", { className: "sr-only", children: label }), _jsx("div", { className: "kpi-bars", style: { "--kpi-bars": bars.length }, children: bars.map((b, i) => _jsxs("label", { className: "kpi-bar", children: [_jsx("input", { type: "radio", className: "kpi-bar-input", name: nomeDoGrupo, value: String(i), defaultChecked: i === escolhida, "aria-label": leituraDe(b) }), _jsx("span", { className: "kpi-bar-fill", style: { "--kpi-bar-h": `${Math.round(b.amount / maior * 100)}%` } }), _jsx("span", { className: "kpi-bar-reading", "aria-hidden": "true", children: leituraDe(b) })] }, i)) }), _jsx("div", { className: "kpi-bars-x", "aria-hidden": "true", style: { "--kpi-bars": bars.length }, children: bars.map((b, i) => _jsx("span", { children: b.label }, i)) })] });
     return variant === "plain" ? _jsxs("div", { className: cx("kpi", className), ...props, children: [miolo, barras] })
         : _jsxs(Card, { className: cx("kpi", variant === "brand" && "kpi-brand", className), ...props, children: [miolo, barras] });

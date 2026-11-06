@@ -55,7 +55,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // `<x>Bg`/`<x>` que o `Alert` do Lote 2 usa (`feedback.tsx:60-63`).
 import * as React from "react";
 import { Animated, Easing, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaInsetsContext, initialWindowMetrics } from "react-native-safe-area-context";
 import { CloseButton } from "./actions.js";
 import { canto, criarFolha } from "./estilos.js";
 import { Icon } from "./icon.js";
@@ -63,6 +63,8 @@ import { ICONE_DA_VARIANTE } from "./feedback.js";
 import { useReduceMotion, driverNativo } from "./movimento.js";
 import { Text } from "./text.js";
 import { AvisosContext, useAureaStrings, useAureaTokens } from "./theme.js";
+// Sem `SafeAreaProvider` nem medida da abertura: nenhum recuo.
+const SEM_RECUO = { top: 0, right: 0, bottom: 0, left: 0 };
 const folha = criarFolha((t) => ({
     hospedeiro: { flex: 1 },
     pilha: {
@@ -82,6 +84,9 @@ const folha = criarFolha((t) => ({
         ...(t.shadow.shadowMd ? { boxShadow: [t.shadow.shadowMd] } : null),
     },
     texto: { flex: 1, minWidth: 0, gap: 2 },
+    // O grupo LIDO (ícone + texto), irmão da ação e do X — a forma do `Alert` (auditoria externa de 05/11/2026). O vão é
+    // o mesmo da moldura, então nada muda de lugar na tela.
+    grupo: { flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: 11 },
     // 0.32.0: o tipo deixou de tingir o fundo e a borda (eram `aviso_info`…`aviso_danger`). Como o aviso
     // da web desta versão e o da referência: o fundo é o da janela, e a cor do tipo vai no ícone e no
     // TÍTULO.
@@ -121,7 +126,10 @@ export function useToast() {
 export function ToastHost({ children, max = 3, duration = DURACAO_PADRAO, offset = 0, style, testID, }) {
     const t = useAureaTokens();
     const s = folha(t);
-    const inset = useSafeAreaInsets();
+    // O recuo pelo CONTEXTO, com a medida da abertura e o zero como reserva (o jeito do `menu.tsx`): o gancho
+    // `useSafeAreaInsets()` LEVANTA ERRO sem `SafeAreaProvider` em cima, e o exemplo de uso desta peça nunca pediu o
+    // provedor — o app sem expo-router nem react-navigation quebrava ao montar (auditoria externa, 05/11/2026).
+    const inset = React.useContext(SafeAreaInsetsContext) ?? initialWindowMetrics?.insets ?? SEM_RECUO;
     const [avisos, setAvisos] = React.useState([]);
     const proximo = React.useRef(0);
     // Os relógios vivem numa `ref` porque fechar um aviso à mão tem de PARAR o dele — senão o
@@ -197,15 +205,15 @@ export function Toast({ toast, onClose }) {
             : tipo === "danger" ? (t.color.danger400 ?? t.color.destructive)
                 : (t.color.info400 ?? t.color.info);
     const glifo = toast.icon === false ? null : (toast.icon ?? ICONE_DA_VARIANTE[tipo]);
-    return (_jsxs(Animated.View, { accessible: true, ...(tipo === "danger" ? { accessibilityRole: "alert" } : null), accessibilityLiveRegion: tipo === "danger" ? "assertive" : "polite", style: [
+    return (_jsxs(Animated.View, { accessibilityLiveRegion: tipo === "danger" ? "assertive" : "polite", style: [
             s.aviso,
             // Os mesmos 12dp de baixo que o `.toast[data-starting-style]` da web usa.
             { opacity: entrada, transform: [{ translateY: entrada.interpolate({
                             inputRange: [0, 1], outputRange: [12, 0],
                         }) }] },
-        ], testID: `toast-${toast.id}`, children: [glifo ? _jsx(Icon, { name: glifo, size: "md", color: corDoIcone, weight: toast.icon ? undefined : "fill" }) : null, _jsxs(View, { style: s.texto, children: [_jsx(Text, { size: "base", weight: 500, style: { color: corDoIcone }, children: toast.title }), toast.description != null
-                        ? (typeof toast.description === "string"
-                            ? _jsx(Text, { size: "sm", tone: "muted", children: toast.description })
-                            : toast.description)
-                        : null] }), toast.action, _jsx(CloseButton, { label: strings.dismissNotification, onPress: onClose })] }));
+        ], testID: `toast-${toast.id}`, children: [_jsxs(View, { accessible: true, ...(tipo === "danger" ? { accessibilityRole: "alert" } : null), style: s.grupo, children: [glifo ? _jsx(Icon, { name: glifo, size: "md", color: corDoIcone, weight: toast.icon ? undefined : "fill" }) : null, _jsxs(View, { style: s.texto, children: [_jsx(Text, { size: "base", weight: 500, style: { color: corDoIcone }, children: toast.title }), toast.description != null
+                                ? (typeof toast.description === "string"
+                                    ? _jsx(Text, { size: "sm", tone: "muted", children: toast.description })
+                                    : toast.description)
+                                : null] })] }), toast.action, _jsx(CloseButton, { label: strings.dismissNotification, onPress: onClose })] }));
 }

@@ -233,7 +233,7 @@
       "name": "glow",
       "type": "boolean",
       "default": "—",
-      "description": "A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native."
+      "description": "A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web only: ToolbarButton is planned on native."
     },
     {
       "name": "ring",

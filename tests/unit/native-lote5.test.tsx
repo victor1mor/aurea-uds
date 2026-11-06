@@ -378,13 +378,17 @@ describe("useToast — o hospedeiro é explícito, e o silêncio é proibido", (
     const Usa = () => { gerente = useToast(); return null; };
     render(<Envolve><ToastHost><Usa /></ToastHost></Envolve>);
     act(() => { gerente!.add({title: "Falhou", type: "danger"}); });
+    // Desde 05/11/2026 (auditoria externa) a moldura é só a região viva, e o papel mora no GRUPO lido de dentro (o
+    // ícone e o texto) — o X e a ação são irmãos dele, como no `Alert`.
+    const grupoLido = () => todos("View").filter((v) => v?.accessible === true).at(-1);
     const grave = todos("Animated.View").at(-1);
-    expect(grave?.accessibilityRole).toBe("alert");
+    expect(grave?.accessible).toBeUndefined();
+    expect(grupoLido()?.accessibilityRole).toBe("alert");
     expect(grave?.accessibilityLiveRegion).toBe("assertive");
 
     act(() => { gerente!.add({title: "Salvo", type: "success"}); });
     const leve = todos("Animated.View").at(-1);
-    expect(leve?.accessibilityRole).toBeUndefined();
+    expect(grupoLido()?.accessibilityRole).toBeUndefined();
     expect(leve?.accessibilityLiveRegion).toBe("polite");
   });
 

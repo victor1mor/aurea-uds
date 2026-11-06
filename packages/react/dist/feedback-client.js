@@ -59,10 +59,12 @@ const ICONE_DA_VARIANTE = { info: "info",
 // na cor do texto. Sem ele (`"card"`), o cartão de sempre.
 export function Alert({ variant, state, title, icon, onDismiss, action, appearance, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? stateSeverity(state) : "info"); return _jsxs("div", { className: cx("alert", `alert-${v}`, appearance === "soft" && "alert-soft", action != null && "alert-has-action", className), role: v === "danger" ? "alert" : "status", "data-state": state, ...props, children: [_jsx(Icon, { name: icon ?? proprio(ICONE_DA_VARIANTE, v) ?? "info", weight: icon ? undefined : "fill" }), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? proprio(s.universalState, state) : null)] }), action != null && _jsx("div", { className: "alert-action", children: action }), onDismiss ? _jsx(CloseButton, { onClick: onDismiss }) : _jsx("span", {})] }); }
 export function Banner(props) {
+    // O hook ANTES do `return` do `consent` (auditoria externa, 05/11/2026): trocar a variante entre renderizações mudava a
+    // ordem dos hooks.
+    const s = useAureaStrings();
     if (props.variant === "consent")
         return _jsx(BannerConsent, { ...props });
     const { variant, state, title, icon, onDismiss, children, className, categories: _c, value: _v, onConsent: _o, ...rest } = props;
-    const s = useAureaStrings();
     const v = variant ?? (state ? stateSeverity(state) : "info");
     return _jsxs("div", { className: cx("banner", `banner-${v}`, className), role: v === "danger" ? "alert" : "status", "data-state": state, ...rest, children: [icon ? _jsx(Icon, { name: icon }) : _jsx("span", {}), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? proprio(s.universalState, state) : null)] }), onDismiss ? _jsx(IconButton, { variant: "ghost", size: "sm", icon: "x", label: s.close, onClick: onDismiss }) : _jsx("span", {})] });
 }

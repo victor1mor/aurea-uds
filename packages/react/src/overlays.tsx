@@ -396,7 +396,7 @@ export function Menubar({menus,label,modal,disabled,loopFocus,orientation,classN
     {menus.map((m,i)=><BaseMenu.Root key={i} disabled={m.disabled}>
       <BaseMenu.Trigger className="menubar-trigger">{m.label}</BaseMenu.Trigger>
       <BaseMenu.Portal container={portal}><BaseMenu.Positioner className="positioner" side={vertical?"inline-end":"bottom"} align="start" sideOffset={4}>
-        <BaseMenu.Popup className="menu">{renderMenuItems(m.items,undefined,`${ids}-${i}`)}</BaseMenu.Popup>
+        <BaseMenu.Popup className="menu">{renderMenuItems(m.items,portal,`${ids}-${i}`)}</BaseMenu.Popup>
       </BaseMenu.Positioner></BaseMenu.Portal>
     </BaseMenu.Root>)}
   </BaseMenubar>;
