@@ -164,7 +164,7 @@
       "name": "channel",
       "type": "ColorChannel",
       "default": "—",
-      "description": "The colour track (ADR-0069), a variation of this Slider: hue, saturation, brightness, lightness, red, green, blue or alpha. The value becomes the COLOUR (hex), as in the reference, so several tracks share one colour; the track is painted with the channel, the thumb shows the colour, alpha has the checkerboard, and the screen reader hears the channel and the colour's name."
+      "description": "The colour track, a variation of this Slider: hue, saturation, brightness, lightness, red, green, blue or alpha. The value becomes the COLOUR (hex), as in the reference, so several tracks share one colour; the track is painted with the channel, the thumb shows the colour, alpha has the checkerboard, and the screen reader hears the channel and the colour's name."
     },
     {
       "name": "colorSpace",

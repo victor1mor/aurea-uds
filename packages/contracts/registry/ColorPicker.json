@@ -111,7 +111,7 @@
       "name": "variant",
       "type": "\"full\" | \"swatches\"",
       "default": "\"full\"",
-      "description": "\"swatches\": the closed palette (ADR-0069, the \"C\") — only the swatches and the hex field."
+      "description": "\"swatches\": the closed palette (the \"C\") — only the swatches and the hex field."
     },
     {
       "name": "children",

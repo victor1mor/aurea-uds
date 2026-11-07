@@ -148,7 +148,7 @@
       "name": "leading / trailing",
       "type": "ReactNode",
       "default": "—",
-      "description": "A glyph before or after the text. They take a NODE, not an icon name, and that is a boundary decision, not laziness: Icon reads the sprite through a hook, so importing it here would drag this module to the client and undo the 118.5 KB that ADR-0026 saved."
+      "description": "A glyph before or after the text. They take a NODE, not an icon name, and that is a boundary decision, not laziness: Icon reads the sprite through a hook, so importing it here would drag this module to the client and undo the 118.5 KB that keeping it on the server saved."
     },
     {
       "name": "image / imageAlt",
@@ -202,7 +202,7 @@
       "name": "ring",
       "type": "boolean",
       "default": "—",
-      "description": "A finish the app chooses (ADR-0086): around a badge that is not solid, its tone at 30%, inside the edge — it never changes the size. It is a line — the named exception to \"no line\", only when chosen. Writes data-ring; the same attribute on a container (or <html>) covers the badges inside, and ring={false} takes one out. On solid it draws nothing. Web and native."
+      "description": "A finish the app chooses: around a badge that is not solid, its tone at 30%, inside the edge — it never changes the size. It is a line — the named exception to \"no line\", only when chosen. Writes data-ring; the same attribute on a container (or <html>) covers the badges inside, and ring={false} takes one out. On solid it draws nothing. Web and native."
     }
   ],
   "notes": [

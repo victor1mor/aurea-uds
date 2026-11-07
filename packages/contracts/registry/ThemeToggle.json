@@ -95,7 +95,7 @@
       "name": "size",
       "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
       "default": "\"md\"",
-      "description": "The IconButton size. The button is round, like every icon-only button (ADR-0052)."
+      "description": "The IconButton size. The button is round, like every icon-only button."
     },
     {
       "name": "disabled",

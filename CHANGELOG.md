@@ -274,6 +274,44 @@ como deveria funcionar"*.
 
 ---
 
+## [0.62.0] — 2026-11-06
+
+**A logo e as decisões da auditoria externa** (06/11/2026). A logo e a D1 desenhadas no FigCraft e decididas pelo Victor
+olhando: o nome *"B · Sora ExtraBold"*, nos quatro lugares; e as respostas às decisões D1 a D8.
+
+### ⚠ Pode quebrar a compilação
+
+- **`IconButtonProps` do nativo virou um tipo de união** (o ícone por `name` OU por `icon`): quem escreve
+  `interface X extends IconButtonProps` passa a escrever `type X = IconButtonProps & {…}`. Quem só usa a peça não muda nada.
+
+### Acrescentado
+
+- **`icon` no `IconButton` do nativo** (D2), o mesmo nome da web; o `name` continua.
+
+### Mudou
+
+- **O `Accordion` de lado (`orientation="horizontal"`) abre o primeiro item** que não está desativado, quando o app não diz
+  qual (`defaultValue`) — fechado, ele era uma fileira de títulos sem conteúdo (D4). O de cima para baixo continua fechado.
+- **O `MediaEmbed` só monta endereço `https:`** (D5): o `src` e o `href` com outro começo não aparecem. **O menu do
+  nativo** (`DropdownMenu`) só abre link `https:`, `mailto:` e `tel:`.
+- **As fichas não citam ADR** (D6): o texto que vai ao site e ao pacote diz a regra, não o número da decisão. Quem cobra é
+  a trava 22b do `validate.py`.
+
+### O site
+
+- **A logo nova**: a estrela 2E no topo, no lugar da de quatro pétalas, com o nome em Sora ExtraBold; a estrela pequena
+  como ícone da aba. Os arquivos da logo moram em `apps/catalog/assets/logo/` (gerados por `scripts/gerar-logo.py`, o
+  nome tirado da própria Sora).
+- **A página de acessibilidade declara o botão primário da Ember no claro** (D1): a letra branca no laranja dá 3,08:1, e
+  fica, porque são as cores do sistema onde a Ember nasceu.
+- O README abre com a logo de festa e o nome, no claro e no escuro.
+
+Quem cobra: `tests/unit/native-iconbutton-icon.test.tsx`, `tests/unit/accordion-horizontal-abre.test.tsx`,
+`tests/unit/mediaembed-https.test.tsx` e o caso novo de `tests/unit/native-lote-q-9b-menu.test.tsx` — todos provados contra
+o código de antes.
+
+---
+
 ## [0.61.0] — 2026-11-06
 
 **As pendências antes da 1.0** (06/11/2026, o Victor: *"vamos fazer logo todas agora, para não atrapalhar a 1.0"*). O que

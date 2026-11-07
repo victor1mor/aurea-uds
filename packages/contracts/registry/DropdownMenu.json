@@ -83,7 +83,7 @@
       "name": "items",
       "type": "Array<MenuItemDef | \"separator\">",
       "default": "—",
-      "description": "The menu, as data: {label, onClick?, disabled?, leadingIcon?, description?, trailingIcon?}. The literal string \"separator\" draws a rule — a separator is not an item, so it never takes focus. description is a line under the label, in the small muted text; trailingIcon sits at the end of the item (for example, arrow-square-out on a link that opens another site)."
+      "description": "The menu, as data: {label, onClick?, disabled?, leadingIcon?, description?, trailingIcon?}. The literal string \"separator\" draws a rule — a separator is not an item, so it never takes focus. description is a line under the label, in the small muted text; trailingIcon sits at the end of the item (for example, arrow-square-out on a link that opens another site). On native, a link item opens only https:, mailto: and tel: addresses; any other scheme is ignored."
     },
     {
       "name": "side",

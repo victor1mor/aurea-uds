@@ -39,13 +39,13 @@
       "name": "children",
       "type": "ReactNode",
       "default": "—",
-      "description": "Vertical flow: a column with --space-4 between items. The gap has three steps and no others (ADR-0051) — a layout primitive that takes any spacing is how a system stops having spacing."
+      "description": "Vertical flow: a column with --space-4 between items. The gap has three steps and no others — a layout primitive that takes any spacing is how a system stops having spacing."
     },
     {
       "name": "gap",
       "type": "\"tight\" | \"normal\" | \"loose\"",
       "default": "\"normal\"",
-      "description": "Three steps and no others (ADR-0051): tight is --space-2, normal is --space-4, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters."
+      "description": "Three steps and no others: tight is --space-2, normal is --space-4, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters."
     },
     {
       "name": "align",

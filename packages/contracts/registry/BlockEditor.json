@@ -82,7 +82,7 @@
     }
   ],
   "notes": [
-    "This component does NOT own the rich text. There is no bold, no italic, no bubble menu and no formatting toolbar — that engine stays with you, and ADR-0025 has the four measurements behind that decision. The most important one is security: a browser does not sanitize pasted HTML, so whoever owns the editing surface owns the XSS. Aurea cannot decide what is safe to render inside your domain.",
+    "This component does NOT own the rich text. There is no bold, no italic, no bubble menu and no formatting toolbar — that engine stays with you. The most important one is security: a browser does not sanitize pasted HTML, so whoever owns the editing surface owns the XSS. Aurea cannot decide what is safe to render inside your domain.",
     "There is no insert affordance, and that is deliberate rather than missing: adding a block is appending to your own collection, and the reorder here carries the new block to any position."
   ]
 }

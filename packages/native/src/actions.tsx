@@ -402,11 +402,14 @@ export function LinkButton(props: LinkButtonProps) {
 // Sem `leading` e `trailing` (bloco 1, 24/10/2026): o botão só de ícone não tem onde pôr peça antes ou depois do glifo, e as
 // duas props chegavam pelo `ButtonProps`, apareciam na ficha e não desenhavam nada. O desenho próprio do app vai no `name`
 // (R-11: toda prop de ícone aceita o `AureaIcon`). O `ThemeToggle` herda daqui.
-export interface IconButtonProps extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "leading" | "trailing" | "fullWidth"> {
-  name: AureaIcon;
+export interface IconButtonBase extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "leading" | "trailing" | "fullWidth"> {
   /** **Obrigatório**: um botão que só tem glifo não tem texto para o leitor de tela anunciar. */
   label: string;
 }
+/** O ícone vem em `name` ou em `icon` — os dois nomes valem, e um deles é obrigatório. `icon` é o nome da WEB (a D2 da
+ *  auditoria externa, decisão do Victor de 06/11/2026: "mesmo nome de prop nos dois alvos", CLAUDE.md §11); `name` fica
+ *  para quem já usa, e nada quebra. */
+export type IconButtonProps = IconButtonBase & ({name: AureaIcon; icon?: undefined} | {icon: AureaIcon; name?: undefined});
 
 /**
  * Botão REDONDO, só glifo.
@@ -418,8 +421,8 @@ export interface IconButtonProps extends Omit<ButtonProps, "children" | "leading
  * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
  */
-export function IconButton(props: IconButtonProps) {
-  return <BotaoDeIcone {...props} />;
+export function IconButton({icon, name, ...props}: IconButtonProps) {
+  return <BotaoDeIcone {...props} name={(name ?? icon)!} />;
 }
 
 /**
@@ -439,7 +442,7 @@ export function folgaDoToque(t: AureaTokens, size: AureaButtonSize = "md"): numb
 function BotaoDeIcone({
   name, label, appearance = "ghost", tone = "neutral", size = "md",
   icons, pressed, disabled, corDoIcone, pesoDoIcone, share, glow, ring, onPress, ...comSobras
-}: IconButtonProps & {corDoIcone?: string; pesoDoIcone?: IconWeight}) {
+}: IconButtonBase & {name: AureaIcon; corDoIcone?: string; pesoDoIcone?: IconWeight}) {
   // Quem chama de JavaScript, sem o tipo, ainda pode mandar `leading`/`trailing`: elas não descem ao `Pressable`.
   const {leading: _antes, trailing: _depois, ...rest} = comSobras as typeof comSobras & {leading?: unknown; trailing?: unknown};
   const t = useAureaTokens();
@@ -492,7 +495,7 @@ function BotaoDeIcone({
 // do texto; no escuro o SOL, no amarelo da marca. ⚠ Os glifos `moon` e `sun` (na forma cheia, `moon-fill` e `sun-fill`) saem do registro do
 // app, como os do `Alert`: sem eles o ícone não desenha, e o `Icon` avisa no desenvolvimento.
 /** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
-export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone" | "share" | "glow" | "ring"> {}
+export interface ThemeToggleProps extends Omit<IconButtonBase, "label" | "onPress" | "appearance" | "tone" | "share" | "glow" | "ring"> {}
 export function ThemeToggle(props: ThemeToggleProps) {
   const {theme, toggleTheme} = useAureaTheme();
   const t = useAureaTokens();

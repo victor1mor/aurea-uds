@@ -65,7 +65,7 @@
       "name": "src",
       "type": "string",
       "default": "—",
-      "description": "The provider's EMBED address, e.g. https://www.youtube.com/embed/<id>. Any other <iframe> attribute is accepted and forwarded, and wins over the defaults."
+      "description": "The provider's EMBED address, e.g. https://www.youtube.com/embed/<id>. Any other <iframe> attribute is accepted and forwarded, and wins over the defaults. Only https: addresses are embedded; with any other scheme the frame stays empty."
     },
     {
       "name": "title",
@@ -89,7 +89,7 @@
       "name": "href",
       "type": "string",
       "default": "—",
-      "description": "The video on its own site. Shown as a link under the frame — the way out when the owner blocks embedding, which the page cannot detect."
+      "description": "The video on its own site. Shown as a link under the frame — the way out when the owner blocks embedding, which the page cannot detect. Only https: addresses are shown."
     },
     {
       "name": "autoplay",

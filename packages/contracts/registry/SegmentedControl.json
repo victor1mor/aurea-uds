@@ -36,7 +36,7 @@
   ],
   "a11y": {
     "role": "radiogroup",
-    "apg": "radio group. Single choice among a few visible options is a radio group, not a row of independent toggles — that was finding M20, closed by ADR-0016 on 07/08/2026. Each option is a <button role=\"radio\"> with aria-checked, the group is one tab stop, and the arrows both move and select. The engine ships the pattern; the skin is ours.",
+    "apg": "radio group. Single choice among a few visible options is a radio group, not a row of independent toggles. Each option is a <button role=\"radio\"> with aria-checked, the group is one tab stop, and the arrows both move and select. The engine ships the pattern; the skin is ours.",
     "keyboard": [
       "Tab",
       "ArrowLeft",
@@ -46,7 +46,7 @@
       "Home",
       "End"
     ],
-    "keyboardNote": "Re-measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: ArrowLeft, ArrowRight, ArrowUp, ArrowDown. Declared and not confirmed in this snapshot: Home, End — absence of an observable change does not prove absence of effect; a generic DOM snapshot can prove a key does something, never that it does not. Tab is not measurable here by construction: it moves focus anywhere on the page, so it never distinguishes one component from another. This note is NOT the one the other lineage carried: that one measured a role=\"group\" row of aria-pressed buttons, and ADR-0016 replaced it with the engine's radio group. Keeping the old prose would have been a measurement of a component that no longer exists."
+    "keyboardNote": "Re-measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). Confirmed: ArrowLeft, ArrowRight, ArrowUp, ArrowDown. Declared and not confirmed in this snapshot: Home, End — absence of an observable change does not prove absence of effect; a generic DOM snapshot can prove a key does something, never that it does not. Tab is not measurable here by construction: it moves focus anywhere on the page, so it never distinguishes one component from another. This note is NOT the one the other lineage carried: that one measured a role=\"group\" row of aria-pressed buttons, and it was replaced with the engine's radio group. Keeping the old prose would have been a measurement of a component that no longer exists."
   },
   "dependencies": {
     "engine": "@base-ui/react/radio-group",
@@ -103,7 +103,7 @@
       "name": "selectedStyle",
       "type": "\"current\" | \"neutral\" | \"contrast\" | \"brand\" | \"ring\" | \"dot\" | \"emphasis\"",
       "default": "\"current\"",
-      "description": "The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump) or emphasis (the raised capsule with the emphasis letter — yellow in the dark theme, the text colour in the light one — and no line). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native."
+      "description": "The colour of the selected segment: current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump) or emphasis (the raised capsule with the emphasis letter — yellow in the dark theme, the text colour in the light one — and no line). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native."
     },
     {
       "name": "items[].icon",
