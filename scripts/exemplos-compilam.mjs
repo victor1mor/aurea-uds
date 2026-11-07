@@ -121,8 +121,8 @@ const GLOBAIS_DO_NAVEGADOR = ["open", "close", "name", "status", "history", "loc
 // `(props: any) => any`. Peça em maiúscula FORA desta lista que nenhum pacote exporta é DEFEITO: o nome errado de uma
 // peça da Aurea. Nome que nenhum trecho usa mais reprova (a lista não envelhece calada).
 export const PECAS_DO_APP = {
-  App: "o app de quem usa", Home: "uma tela do app", Tela: "uma tela do app (README em português)",
-  Screen: "uma tela do app, no Quick Start (o navegador tem um `Screen` global: sem a declaração, ele não falta)",
+  App: "o app de quem usa", Home: "uma tela do app",
+  Screen: "uma tela do app, no Quick Start e no README (o navegador tem um `Screen` global: sem a declaração, ele não falta)",
   Reports: "uma tela do app", Space: "o conteúdo do app", Balance: "um pedaço do app que pode quebrar",
   Profile: "o conteúdo de uma aba", Notifications: "o conteúdo de uma aba", Billing: "o conteúdo de uma aba",
   Summary: "o conteúdo de uma aba", Runs: "o conteúdo de uma aba", AuditLog: "o conteúdo de uma aba", Preview: "o conteúdo de uma aba",
