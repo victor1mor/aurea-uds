@@ -1,6 +1,6 @@
 /* A PÁGINA "TOKENS" DO SITE B (o desenho "tokens"; o mapa, grupo 2). Toda medida é um token; as peças são as da Aurea. */
 .tk-b { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-4); container-type:inline-size; }
-@media (min-width:1280px) { .site-shell:has(.tk-b) > .content.content { grid-column:3 / 5; } }
+@media (min-width:80em) { .site-shell:has(.tk-b) > .content.content { grid-column:3 / 5; } }
 .tk-acoes { display:flex; flex-wrap:wrap; gap:var(--space-2); }
 .tk-guia.btn { background:var(--segment); box-shadow:var(--shadow-sm); }
 .tk-bolinha { inline-size:var(--space-6); block-size:var(--space-6); border-radius:var(--radius-full); background:var(--brand-yellow); }
@@ -99,7 +99,7 @@
   .tk-mov { grid-template-columns:minmax(0,1fr) auto; }
   .tk-mov .tk-trilho { grid-column:1 / -1; grid-row:2; }
 }
-@media (max-width:900px) {
+@media (max-width:56.25em) {
   .tk-palco .cat-pecas { display:none; }
   .tk-ferramentas { position:static; border-radius:var(--radius-card); }
   .tk-amostras { padding:var(--space-2); }

@@ -62,10 +62,10 @@
 .th-faixa-linha { display:flex; gap:calc(var(--space-2) + var(--space-05)); margin-block-start:var(--space-3); }
 .th-faixa-linha span { flex:1; block-size:var(--target-min); border-radius:calc(var(--radius-lg) - var(--space-05)); box-shadow:var(--shadow-sm); }
 
-@media (max-width:1240px) {
+@media (max-width:77.5em) {
   .th-marcas > .radio-group-cards { grid-template-columns:repeat(3, minmax(0, 1fr)); }
 }
-@media (max-width:899px) {
+@media (max-width:56.1875em) {
   .th-lab, .th-sufixos { grid-template-columns:minmax(0, 1fr); }
   .th-previa { position:static; }
   .th-marcas > .radio-group-cards { grid-template-columns:repeat(2, minmax(0, 1fr)); }

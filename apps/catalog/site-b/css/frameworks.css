@@ -38,7 +38,7 @@
 .fw-lado .gs-lista { margin:0; }
 .fw-lado .gs-lista > li { font-size:var(--text-base); }
 
-@media (max-width:899px) {
+@media (max-width:56.1875em) {
   .fw-escolha > .radio-group-cards { grid-auto-flow:row; grid-template-columns:repeat(2, minmax(0, 1fr)); }
   .fw-prova { flex-wrap:wrap; }
 }

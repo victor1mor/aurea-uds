@@ -29,7 +29,7 @@ describe("ADR-0050 · a escala de letras é a da referência", () => {
 
   test("web: no telefone o texto digitado sobe para 16 (o Safari amplia a página abaixo disso)", () => {
     const core = readFileSync("packages/core/src/aurea.css", "utf8");
-    expect(core).toMatch(/@media \(max-width:639\.98px\) \{ \.input,\.textarea,[^}]*font-size:var\(--text-base\)/);
+    expect(core).toMatch(/@media \(max-width:39\.99875em\) \{ \.input,\.textarea,[^}]*font-size:var\(--text-base\)/);
   });
 
   test("nativo: a peça é 16 e o apoio 14 — um degrau acima da web, como a referência no nativo", () => {

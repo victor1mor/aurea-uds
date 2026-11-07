@@ -12,8 +12,9 @@
 1. **A caixa do exemplo cresce com ele** (substitui a ADR-0002). Com toda variação à mostra (o bloco 1), 42 caixas rolavam
    por dentro na altura da varredura — na tela do Victor (1280 × 663), mais. A referência faz a caixa com altura mínima e
    deixa crescer com o exemplo. Fica: a mesma fórmula de antes (`clamp(14rem, 100dvh − 19rem, 32rem)`, 359 na tela do
-   Victor, perto dos 350 da referência) vira a **mínima**; a caixa cresce. A prévia em documento próprio (`iframe`) mantém
-   a altura fixa — ela rola dentro do próprio documento. A varredura "nenhuma prévia rola dentro da caixa" passa a medir
+   Victor, perto dos 350 da referência) vira a **mínima**; a caixa cresce. ~~A prévia em documento próprio (`iframe`) mantém
+   a altura fixa — ela rola dentro do próprio documento.~~ → A moldura também cresce, até o conteúdo caber
+   ([ADR-0093](0093-a-moldura-cresce-com-o-conteudo.md), 06/11/2026). A varredura "nenhuma prévia rola dentro da caixa" passa a medir
    na tela do Victor.
 2. **A letra do `tone="primary"` é a de destaque** (`--primary-emphasis`: o azul no claro, o amarelo no escuro). Antes era
    o amarelo de preencher, de propósito — 1,75:1 no claro. Na web (o `Text`, o `Paragraph`, o `Heading`, o `Code`).

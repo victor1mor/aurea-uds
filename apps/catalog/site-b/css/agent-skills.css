@@ -44,7 +44,7 @@
 .skills-arvore > p a { font-weight:var(--weight-semibold); }
 .skills-comeco pre { max-block-size:calc(var(--space-12) * 6 - var(--space-2)); overflow:auto; color:var(--muted-foreground); }
 
-@media (max-width:900px) {
+@media (max-width:56.25em) {
   .skills-onde .radio-group-cards { grid-auto-flow:row; grid-auto-columns:auto; }
   .skills-pasta { grid-template-columns:minmax(0, 1fr); }
 }

@@ -53,7 +53,7 @@
   padding:var(--space-7); }
 .rm-pedido .gs-p { margin:0; }
 
-@media (max-width:899px) {
+@media (max-width:56.1875em) {
   .rm-naos, .rm-pedido { grid-template-columns:minmax(0, 1fr); }
   .rm-pedido { justify-items:start; }
 }

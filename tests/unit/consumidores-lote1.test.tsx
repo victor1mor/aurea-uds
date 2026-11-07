@@ -111,7 +111,7 @@ describe("A-07 · a gaveta fecha ao subir para o desktop", () => {
 
   test("cruzar lg para cima fecha a gaveta; descer não mexe nela", () => {
     const {unmount} = wrap(<AppShell brand="A" navigation={<a href="#x">X</a>}>conteúdo</AppShell>);
-    expect(consultas).toContain(`(min-width: ${ESCALA.lg}px)`);
+    expect(consultas).toContain(`(min-width: ${ESCALA.lg / 16}em)`);
     const fechar = comoGavetaAberta(document.getElementById("aurea-shell-nav")!);
     act(() => ouvintes.forEach(f => f({matches: false})));
     expect(fechar).not.toHaveBeenCalled();
@@ -122,11 +122,12 @@ describe("A-07 · a gaveta fecha ao subir para o desktop", () => {
   });
 
   // O runtime sem React tem o mesmo número escrito à mão. Se o token mudar e ele não, a gaveta
-  // volta a ficar presa numa faixa de largura — e só esta linha avisa.
-  test("o 1024 do aurea.js é o lg da escala, e o 1023 do CSS é lg − 1", () => {
+  // volta a ficar presa numa faixa de largura — e só esta linha avisa. Em `em` (ADR-0092): o runtime em px, com o CSS
+  // em `em`, discordava com a fonte do navegador aumentada.
+  test("o 64em do aurea.js é o lg da escala, e o 63.9375em do CSS é lg − 1", () => {
     const js = readFileSync("packages/core/src/aurea.js", "utf8");
-    expect(js).toContain(`matchMedia("(min-width: ${ESCALA.lg}px)")`);
-    expect(css).toContain(`@media (max-width:${ESCALA.lg - 1}px)`);
+    expect(js).toContain(`matchMedia("(min-width: ${ESCALA.lg / 16}em)")`);
+    expect(css).toContain(`@media (max-width:${(ESCALA.lg - 1) / 16}em)`);
   });
 
   test("runtime sem React: escolher item e subir para o desktop fecham a gaveta", () => {

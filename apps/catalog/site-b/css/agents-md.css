@@ -27,6 +27,6 @@
 .agents-comeco pre { max-block-size:calc(var(--space-12) * 5 + var(--space-5)); overflow:auto; color:var(--muted-foreground); }
 .agents-quando { align-self:flex-start; }
 
-@media (max-width:900px) {
+@media (max-width:56.25em) {
   .agents-pasta { grid-template-columns:minmax(0, 1fr); }
 }

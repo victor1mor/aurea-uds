@@ -112,9 +112,9 @@ function useGavetaFechaNoDesktop(docs = false) {
             }
             catch { /* motor sem popover */ }
         };
-        const pares = [[window.matchMedia(`(min-width: ${docs ? ESCALA.md : ESCALA.lg}px)`), fechar(SHELL_NAV_ID)]];
+        const pares = [[window.matchMedia(`(min-width: ${(docs ? ESCALA.md : ESCALA.lg) / 16}em)`), fechar(SHELL_NAV_ID)]];
         if (docs)
-            pares.push([window.matchMedia(`(min-width: ${ESCALA.xl}px)`), fechar(SHELL_TOC_ID)]);
+            pares.push([window.matchMedia(`(min-width: ${ESCALA.xl / 16}em)`), fechar(SHELL_TOC_ID)]);
         for (const [mq, f] of pares)
             mq.addEventListener?.("change", f);
         return () => { for (const [mq, f] of pares)
@@ -142,7 +142,9 @@ function useGavetaFechaNoDesktop(docs = false) {
 //
 // Tudo LIGADO por `sidebarCollapsible`: sem ele o shell é o de antes, e quem já usa
 // `sidebarCollapsed` com o próprio botão não ganha um segundo.
-const MEDIA_MEDIA = `(min-width: ${ESCALA.lg}px) and (max-width: ${ESCALA.xl - 1}px)`;
+// Em `em`, como o CSS (06/11/2026, o texto a 200%): `em` numa consulta de mídia é a fonte que a pessoa escolheu no
+// navegador — com a fonte em dobro, a tela "encolhe" para a metade, e o JS tem de concordar com o CSS.
+const MEDIA_MEDIA = `(min-width: ${ESCALA.lg / 16}em) and (max-width: ${(ESCALA.xl - 1) / 16}em)`;
 const MEDIA_ESTREITA = `(max-width: ${ESCALA.lg - 1}px)`;
 // A largura pela API do navegador, e não por `resize`: o `useSyncExternalStore` dá a resposta certa
 // já no primeiro desenho do lado do cliente, e no servidor (sem janela) diz "não" — a folha cuida da

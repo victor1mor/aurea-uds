@@ -583,7 +583,9 @@ const embeds = [];
 // `chave` nomeia o ARQUIVO e `rotulo` nomeia o iframe. Eram a mesma coisa até 18/08/2026, quando
 // o `embed` passou a valer para qualquer exemplo e não só para o primeiro: dois embeds do mesmo
 // componente escreviam o mesmo arquivo e um sobrescrevia o outro, calado.
-function embedPreview(chave, render, rotulo = chave, alvo = null, layoutProprio = false, tituloProprio = false) {
+// `alturaFixa` (06/11/2026, ADR-0093): a moldura cresce até o conteúdo dela caber; a que mostra a ROLAGEM de propósito
+// (a barra sempre à vista) fica na altura de sempre.
+function embedPreview(chave, render, rotulo = chave, alvo = null, layoutProprio = false, tituloProprio = false, alturaFixa = false) {
   const arquivo = `embeds/${slug(chave)}.html`;
   embeds.push([arquivo, `<!doctype html>
 <html lang="en" data-theme="dark">
@@ -618,10 +620,27 @@ ${tituloProprio ? "" : `<header><h1 class="sr-only">${rotulo} preview</h1></head
 // proibido. Então ele PEDE o tema por mensagem, e o catalog.js responde (e reenvia ao trocar).
 addEventListener("message", e => { if (!e.data) return; if (e.data.aureaTheme) document.documentElement.dataset.theme = e.data.aureaTheme; if (e.data.aureaBrand !== undefined) { if (e.data.aureaBrand) document.documentElement.dataset.brand = e.data.aureaBrand; else delete document.documentElement.dataset.brand; } });
 parent.postMessage({aureaThemeRequest: 1}, "*");
+// A ALTURA DO CONTEÚDO (06/11/2026, ADR-0093). A moldura tinha a altura da caixa, e o que passava dela era cortado: o
+// AppShell (366 numa de 270), o BottomNav (405), a abertura de página (668), a lista da Sidebar que rola por dentro. Quem
+// mede é a PÁGINA (o catalog.js): fora da tela, este documento nem sabe o próprio tamanho (ao carregar, a altura dele é 0).
+// Aqui só se avisa quando algo pode ter mudado: carregou, a fonte chegou, a parte viva acendeu, o tamanho mudou.
+(() => {
+  const pede = () => parent.postMessage({aureaFrameMeasure: 1}, "*");
+  addEventListener("load", pede);
+  addEventListener("resize", pede);
+  document.fonts.ready.then(pede);
+  new ResizeObserver(pede).observe(document.body);
+  const raiz = document.getElementById("root");
+  if (raiz) {
+    new ResizeObserver(pede).observe(raiz);
+    new MutationObserver(pede).observe(raiz, {attributes: true, attributeFilter: ["data-ligada"]});
+  }
+})();
 </script></body>
 </html>
 `]);
-  return () => h("iframe", {className: "demo-frame", src: `./${arquivo}`, title: `${rotulo} preview`, loading: "lazy"});
+  return () => h("iframe", {className: "demo-frame", src: `./${arquivo}`, title: `${rotulo} preview`, loading: "lazy",
+    ...(alturaFixa ? {"data-altura": "fixa"} : {})});
 }
 
 // ── página de UM componente ───────────────────────────────────────────────────
@@ -636,7 +655,7 @@ function componentPage(f, i) {
       // pelo mesmo caminho, `exemplo()` do `live/vivo.tsx`). Era `null` sem arquivo próprio, e a primeira prévia do
       // AppShell saía parada (bloco 1, 25/10/2026).
       {componente: f.name, indice: 0, motor: COM_MOTOR.has(f.name)},
-      bruto.layoutProprio === true, bruto.tituloProprio === true)} : {}),
+      bruto.layoutProprio === true, bruto.tituloProprio === true, bruto.alturaFixa === true)} : {}),
     // `width:100%` no involucro não é enfeite: o `.demo-panel` é flex, então um <div> solto
     // entra como item de largura automática, encolhe para zero e o `.chart{width:100%}` de
     // dentro resolve 100% de zero. Medido no navegador em 01/08/2026: a caixa media 0×220 e o
@@ -694,7 +713,7 @@ function componentPage(f, i) {
               ? embedPreview(`${f.name}-${slug(ex.title)}`, ex.render, `${f.name} — ${ex.title}`,
                   // `n` é o índice DENTRO de `slice(1)`, então o índice real é `n + 1`
                   {componente: f.name, indice: n + 1, motor: COM_MOTOR.has(f.name)}, ex.layoutProprio === true,
-                  ex.tituloProprio === true)
+                  ex.tituloProprio === true, ex.alturaFixa === true)
               : ex.render, ex.code, undefined, ex.embed ? null : {componente: f.name, indice: n + 1}))))} : null,
       // A "Reference" da Aurea, no nome e no lugar da referência ("Styling Reference"): os eixos, a
       // acessibilidade, os tokens e as plataformas. Toda linha é uma fila de chips do MESMO tamanho.
@@ -1365,7 +1384,7 @@ function patternPage(p, i) {
       // padrão eram HTML morto — o botão de recolher a lateral não respondia (bloco 1, 25/10/2026).
       : p.embed ? embedPreview(p.slug, p.render, p.name,
           {componente: `padrao/${p.component}.${p.idx}`, indice: 0, motor: ARQUIVOS_COM_MOTOR.has(`patterns/${p.component}`)},
-          p.layoutProprio === true, p.tituloProprio === true)
+          p.layoutProprio === true, p.tituloProprio === true, p.alturaFixa === true)
       : p.render, code: p.code, description: p.note,
       // A PARTE VIVA (bloco 1, o 3-C): a caixa do padrão acende como a do componente, pela chave `padrao/<Arquivo>.<n>`.
       vivo: p.embed ? null : {componente: `padrao/${p.component}.${p.idx}`, indice: 0, motor: ARQUIVOS_COM_MOTOR.has(`patterns/${p.component}`)}},
@@ -2039,11 +2058,16 @@ const chrome = `
 .block > h2 .count { color:var(--subtle-foreground); font-family:var(--font-code); font-size:var(--text-sm); }
 /* A CAIXA CRESCE COM O EXEMPLO (ADR-0081, 24/10/2026 — substitui a altura fixa da ADR-0002): com toda variação à mostra,
    42 caixas rolavam por dentro. A fórmula de antes vira a MÍNIMA — o teto é o 32rem da referência; abaixo disso ela cede
-   à janela (19rem cobre topo + cabeçalho da página + respiro): 359 na tela do Victor, perto dos 350 da referência. A
-   prévia em documento próprio (o iframe) mantém a altura fixa: ela rola dentro do documento dela.
+   à janela (19rem cobre topo + cabeçalho da página + respiro): 359 na tela do Victor, perto dos 350 da referência.
+   ~~A prévia em documento próprio (o iframe) mantém a altura fixa: ela rola dentro do documento dela.~~ → A MOLDURA TAMBÉM
+   CRESCE (06/11/2026, ADR-0093): a altura fixa é a de partida; o documento dela diz a altura do conteúdo, e o pai a põe na
+   moldura (data-altura="conteudo") — a caixa solta a altura e a acompanha. Só a moldura data-altura="fixa" (a que
+   mostra a rolagem) fica.
    O padding zerado é obrigatório: a .demo do core carrega --card-pad, e essa moldura de 20px
    é o que fazia o painel flutuar dentro do card em vez de preencher. */
 .demo:has(.demo-frame) { height:var(--demo-height); }
+.demo:has(.demo-frame[data-altura="conteudo"]) { height:auto; }
+.demo-frame[data-altura="conteudo"] { flex:none; }
 .demo { --demo-height:clamp(14rem, calc(100dvh - 19rem), 32rem); min-height:var(--demo-height); display:flex; flex-direction:column; padding:0; border:var(--border-width) solid transparent; border-radius:var(--radius-card); background:var(--card); overflow:hidden; }
 /* As abas (.demo-tabs), os painéis (.demo-panel) e o código (.demo-code) do demo são os do core (a peça
    CodeBlock preview): o site não repete as regras deles (a trava do site, lote T, 17/10/2026). */
@@ -2131,7 +2155,7 @@ a.related-card:hover { border-color:transparent; }
 /* A "ALL COMPONENTS" NO SITE B (aprovada pela bancada em 01/11/2026). O palco é o da Introduction ("intro-palco"), com a
    busca e a chave Grade | Lista; as três peças que flutuam são as dela ("intro-peca", "intro-boia"). */
 /* Sem o índice da direita (o desenho não tem): a página ocupa também a coluna dele, e o bloco não para nos 900 do texto. */
-@media (min-width:1280px) { .site-shell:has(.cat-b) > .content.content { grid-column:3 / 5; } }
+@media (min-width:80em) { .site-shell:has(.cat-b) > .content.content { grid-column:3 / 5; } }
 .app-shell-docs > .content > .cat-b { max-inline-size:none; }
 .cat-vista .segmented :is(button,a) { display:inline-flex; align-items:center; gap:var(--space-2); }
 .cat-vista .segmented .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
@@ -2225,8 +2249,8 @@ a.related-card:hover { border-color:transparent; }
 .cat-vazio[hidden] { display:none; }
 .cat-vazio .empty-title { font-family:var(--font-heading); font-size:var(--text-2xl); font-weight:var(--weight-bold); }
 .cat-vazio .empty-state p { font-size:var(--text-base); }
-@media (max-width:1240px) { .cat-cartoes { grid-template-columns:repeat(3, minmax(0,1fr)); } }
-@media (max-width:900px) {
+@media (max-width:77.5em) { .cat-cartoes { grid-template-columns:repeat(3, minmax(0,1fr)); } }
+@media (max-width:56.25em) {
   .cat-cartoes { grid-template-columns:repeat(2, minmax(0,1fr)); }
   .cat-palco-texto { inline-size:auto; }
   /* No celular, como o desenho: as peças que flutuam saem (e a página não rola de lado). */
@@ -2264,11 +2288,11 @@ a.related-card:hover { border-color:transparent; }
    gaveta, que é onde a referência a põe. */
 .site-so-celular { display:none !important; }
 .site-gaveta-topo { display:none; }
-@media (max-width:767px) { .site-so-celular { display:inline-flex !important; }
+@media (max-width:47.9375em) { .site-so-celular { display:inline-flex !important; }
   /* Sem a busca larga no meio, as ações vão para a ponta, junto do botão da gaveta, como na referência. */
   .site-shell .site-actions { margin-inline-start:auto; }
   .site-gaveta-topo { display:flex; justify-content:flex-end; padding:var(--space-2) var(--space-2) var(--space-4); } }
-@media (max-width:1023px) { .site-so-estreito { display:inline-flex !important; } }
+@media (max-width:63.9375em) { .site-so-estreito { display:inline-flex !important; } }
 /* O TOPO DO SITE B (30/10/2026): as áreas no meio da pílula, entre a marca e a busca, como no desenho aprovado. A chave
    Web | Native no alto da lateral, na largura dela. As oito áreas só cabem na pílula de 1280 para cima (medido: na tela de
    1280 sobram 5); abaixo disso elas saem da pílula e sobem para o alto da lateral (de 1024 a 1279) ou da gaveta (abaixo
@@ -2282,7 +2306,7 @@ a.related-card:hover { border-color:transparent; }
    trilho sumia na lateral do claro. */
 .site-plataforma { padding-block-end:var(--space-3); --muted:var(--fill-2); }
 .site-gaveta-areas { display:none; padding-block-end:var(--space-3); }
-@media (max-width:1279px) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
+@media (max-width:79.9375em) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
 /* A LATERAL DO SITE B: o nome do grupo numerado, com o ícone numa bolinha na cor da categoria (o desenho aprovado). */
 .site-grupo-num { display:inline-block; inline-size:var(--space-5); margin-inline-end:var(--space-2); text-align:end; vertical-align:middle;
   font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); color:var(--muted-foreground); }
@@ -2411,7 +2435,7 @@ a.related-card:hover { border-color:transparent; }
 .intro-proxima-seta { flex:none; display:grid; place-items:center; margin-inline-start:auto; inline-size:calc(var(--space-12) + var(--space-2));
   block-size:calc(var(--space-12) + var(--space-2)); border-radius:var(--radius-full); background:var(--primary); color:var(--primary-foreground); }
 @media (prefers-reduced-motion:reduce) { .intro-motivo, .intro-ajuda, .intro-proxima { transition:none; } }
-@media (max-width:767px) {
+@media (max-width:47.9375em) {
   .intro-palco { padding:var(--space-6) var(--space-5); }
   .intro-palco-texto { inline-size:auto; }
   .intro-pecas { position:relative; inset:auto; display:flex; flex-wrap:wrap; gap:var(--space-3); margin-block-start:var(--space-6); }
@@ -2545,22 +2569,22 @@ a.related-card:hover { border-color:transparent; }
 /* AS LARGURAS. A pílula cheia precisa de 1302 (medido); com as margens de 16, cabe de 1335 para cima. Abaixo disso, o topo
    APERTADO do desenho (o dele abaixo de 1240): a busca só com a lupa e as áreas mais juntas — precisa de 1089 e cabe de
    1121 para cima. Abaixo de 1121 as áreas saem da pílula e vão para o alto da lateral, e abaixo de 1024 para a gaveta. */
-@media (max-width:1334px) {
+@media (max-width:83.375em) {
   .site-shell .site-search > span:not([class]), .site-shell .site-search > .btn-kbds { display:none; }
   /* Só a lupa, e o recheio do campo largo ficava (13 de um lado, 7 do outro): 38 × 44, oval, a lupa fora do centro. O
      círculo de 44 dos vizinhos (a paleta, o GitHub), a lupa no meio — o desenho do FigCraft aprovado pelo Victor, 06/11/2026. */
   .site-shell .site-search { inline-size:var(--target-min); padding-inline:0; justify-content:center; gap:0; }
   .site-shell .site-areas .segmented a { padding-inline:calc(var(--space-2) + var(--space-05) / 2); }
 }
-@media (min-width:1121px) and (max-width:1279px) { .site-areas { display:block; } .site-gaveta-areas { display:none !important; } }
-@media (max-width:1120px) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
+@media (min-width:70.0625em) and (max-width:79.9375em) { .site-areas { display:block; } .site-gaveta-areas { display:none !important; } }
+@media (max-width:70em) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
 /* De 1024 a 1279, sem o índice: a lateral de 248 do desenho e o conteúdo até a borda do bloco. */
-@media (min-width:1024px) and (max-width:1279px) {
+@media (min-width:64em) and (max-width:79.9375em) {
   .site-shell { --docs-sidebar-width:calc(var(--docs-toc-width) + var(--space-2)); }
   .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) 0 0 var(--space-7); }
 }
 /* O celular do desenho: o bloco a 16 das bordas; os botões do topo com 44, 6 entre eles (a lupa na cápsula de 38). */
-@media (max-width:767px) {
+@media (max-width:47.9375em) {
   .site-shell > .topbar-pill > .topbar-inner { gap:calc(var(--space-1) + var(--space-05)); }
   .app-shell-docs.app-shell-pill > .content.content { padding:calc(var(--space-4) + var(--space-05)) var(--space-4) 0; }
   .site-shell .site-so-celular { --step-h:var(--target-min); inline-size:auto; border-radius:var(--radius-full); background:var(--fill-2);
@@ -2618,20 +2642,20 @@ a.related-card:hover { border-color:transparent; }
 .vit-salvar { width:100%; }
 .vit-salvar .card-header { align-items:flex-start; gap:var(--space-2); padding-inline:var(--space-1); }
 .vit-salvar .card-footer { flex-wrap:nowrap; padding-inline:var(--space-05); }
-@media (min-width:768px) {
+@media (min-width:48em) {
   .vit-c { grid-template-columns:repeat(2, auto); width:fit-content; max-width:100%; }
   .vit-col-a { order:1; } .vit-col-b { order:2; }
   .vit-col-c { grid-column:span 2; grid-template-columns:repeat(2, minmax(0,1fr)); max-width:none; }
   .vit-col-c > .vit-conta { grid-row:span 2; }
 }
-@media (min-width:1024px) {
+@media (min-width:64em) {
   .vit-c { grid-template-columns:repeat(3, auto); }
   .vit-col-c { grid-column:auto; grid-template-columns:minmax(0,1fr); max-width:var(--breakpoint-2xs); }
   .vit-col-c > .vit-conta { grid-row:auto; }
 }
 /* O cartão de salvar com 340 nas telas largas, como o dela (o 360 menos o --space-5): é ele que dá a largura da coluna.
    Ela troca em 1200; aqui, no ponto da escala mais perto, o 1280. */
-@media (min-width:1280px) { .vit-salvar { width:calc(var(--breakpoint-2xs) - var(--space-5)); } }
+@media (min-width:80em) { .vit-salvar { width:calc(var(--breakpoint-2xs) - var(--space-5)); } }
 `;
 
 // O catálogo NÃO tem comportamento próprio: abas (setas/Home/End), copiar e o índice que
@@ -2645,6 +2669,39 @@ const espelhaTema = alvo => (alvo ? [alvo] : [...document.querySelectorAll("ifra
   .map(f => f.contentWindow)).forEach(w => w && w.postMessage({aureaTheme: document.documentElement.dataset.theme,
     aureaBrand: document.documentElement.dataset.brand || ""}, "*"));
 addEventListener("message", e => { if (e.data && e.data.aureaThemeRequest) espelhaTema(e.source); });
+// A ALTURA DA MOLDURA (06/11/2026, ADR-0093): quando o documento dela avisa, a página mede o que passa da moldura — o
+// documento e o que rola por dentro dele — e cresce a moldura até caber; nunca encolhe abaixo da caixa de sempre. A lista
+// que rola numa altura PRÓPRIA (a moldura cresceu e a sobra dela não diminuiu) sai da conta, ou a moldura cresceria sem fim.
+// Só a moldura desta página que mandou o aviso; em file:// o documento é de outra origem e a moldura fica como está.
+const listaPropria = new WeakSet(), sobraDeAntes = new WeakMap();
+const ajustaMoldura = f => {
+  if (f.dataset.altura === "fixa") return;
+  let doc;
+  try { doc = f.contentDocument; } catch (err) { return; }
+  const alto = f.clientHeight;
+  if (!doc || !doc.body || !alto) return;
+  let sobra = 0;
+  for (const e of doc.body.querySelectorAll("*")) {
+    if (listaPropria.has(e)) continue;
+    const o = doc.defaultView.getComputedStyle(e).overflowY;
+    if ((o !== "auto" && o !== "scroll") || !e.clientHeight) continue;
+    const s = e.scrollHeight - e.clientHeight;
+    if (s <= 1) continue;
+    const a = sobraDeAntes.get(e);
+    if (a && alto > a.alto && s >= a.s) { listaPropria.add(e); continue; }
+    sobraDeAntes.set(e, {alto, s});
+    sobra = Math.max(sobra, s);
+  }
+  const quer = doc.documentElement.scrollHeight + sobra;
+  if (quer <= alto + 1) return;
+  f.style.blockSize = Math.ceil(quer) + "px";
+  f.dataset.altura = "conteudo";
+};
+addEventListener("message", e => {
+  if (!e.data || !e.data.aureaFrameMeasure) return;
+  const f = [...document.querySelectorAll("iframe.demo-frame")].find(x => x.contentWindow === e.source);
+  if (f) ajustaMoldura(f);
+});
 // O TEMA (15/10/2026): quem escolhe é a chave de três posições, viva no search.js, que grava a escolha (pode ser
 // "system"); quem aplica no primeiro quadro é o script inline do <head>. Aqui só se ESPELHA nas molduras de prévia o tema
 // e a marca que estiverem no <html> — observados, e não avisados: o "system" muda o tema sem clique nenhum.

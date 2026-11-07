@@ -67,13 +67,13 @@
 .docb-bolinha { flex:none; display:grid; place-items:center; inline-size:var(--space-8); block-size:var(--space-8); border-radius:var(--radius-full);
   background:var(--primary); color:var(--primary-foreground); font-family:var(--font-code); font-size:var(--text-sm); font-weight:var(--weight-semibold); }
 
-@media (max-width:900px) {
+@media (max-width:56.25em) {
   /* No celular, o código do meio do texto quebra, como o desenho (ele quebra de 900 para baixo). */
   .docb-corpo :is(.docb-p, .docb-lista, .docb-aviso, .docb-h3) code { white-space:normal; overflow-wrap:anywhere; }
   .docb-links, .docb-grade-2, .docb-grade-3 { grid-template-columns:minmax(0, 1fr); }
   .docb-grade-4 { grid-template-columns:repeat(2, minmax(0, 1fr)); }
 }
-@media (max-width:479px) {
+@media (max-width:29.9375em) {
   .docb-grade-4 { grid-template-columns:minmax(0, 1fr); }
   /* No celular estreito, o nome longo da primeira coluna e a etiqueta do palco quebram, para a página não rolar de lado. */
   .docb-corpo .docb-tabela td:nth-child(n) code { white-space:normal; overflow-wrap:anywhere; }

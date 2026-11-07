@@ -80,7 +80,7 @@
 @media (prefers-reduced-motion:reduce) { .g1-pn { transition:none; } }
 
 /* No celular: o palco com menos recheio, as peças que flutuam somem, o anterior e o próximo um embaixo do outro. */
-@media (max-width:767px) {
+@media (max-width:47.9375em) {
   .page-head.g1-palco { padding:var(--space-6) var(--space-5); }
   .g1-palco[data-palco] .g1-palco-texto { inline-size:auto; }
   .g1-pecas { display:none; }
@@ -97,7 +97,7 @@
 .g1-b .intro-h2 { overflow-wrap:break-word; }
 
 /* As LISTAS sem o índice da direita (o desenho não tem): a página ocupa também a coluna dele, como a All Components. */
-@media (min-width:1280px) { .site-shell:has(.g1-largo) > .content.content { grid-column:3 / 5; } }
+@media (min-width:80em) { .site-shell:has(.g1-largo) > .content.content { grid-column:3 / 5; } }
 .app-shell-docs > .content > .g1-largo { max-inline-size:none; }
 
 /* Os cartões de "Related Components" (a página de componente, de padrão e de bloco; o arranjo está no `componente.css`):

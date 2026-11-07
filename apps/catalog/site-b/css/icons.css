@@ -33,7 +33,7 @@
 .icons-veredito > .badge { margin-inline-start:auto; }
 .icons-roteador { margin-block-start:calc(var(--space-4) + var(--space-05)); }
 
-@media (max-width:767px) { .icons-grade { grid-template-columns:repeat(3, minmax(0, 1fr)); } }
+@media (max-width:47.9375em) { .icons-grade { grid-template-columns:repeat(3, minmax(0, 1fr)); } }
 
 /* Texto a 200%: a chave das abas rola dentro dela, em vez de empurrar a página. */
 .icons-abas { max-inline-size:100%; overflow-x:auto; }

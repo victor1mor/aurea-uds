@@ -10,8 +10,10 @@ const ITENS = [{id: "a", label: "Início", icon: "house", href: "#a"}, {id: "b",
 // A janela simulada: `largura` decide quais consultas casam, como o navegador faria.
 function janela(largura: number) {
   vi.stubGlobal("matchMedia", (q: string) => {
-    const min = /min-width:\s*(\d+)px/.exec(q), max = /max-width:\s*(\d+)px/.exec(q);
-    const casa = (!min || largura >= +min[1]) && (!max || largura <= +max[1]);
+    // os pontos de quebra são em `em` (ADR-0092): com a fonte padrão, 1em = 16px
+    const px = (m: RegExpExecArray | null) => m && +m[1] * (m[2] === "em" ? 16 : 1);
+    const min = px(/min-width:\s*([\d.]+)(px|em)/.exec(q)), max = px(/max-width:\s*([\d.]+)(px|em)/.exec(q));
+    const casa = (min === null || largura >= min) && (max === null || largura <= max);
     return {matches: casa, media: q, addEventListener: () => {}, removeEventListener: () => {}};
   });
 }

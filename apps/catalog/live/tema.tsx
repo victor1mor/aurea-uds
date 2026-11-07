@@ -20,7 +20,7 @@ type Marca = {id: string; label: string; color: string};
 // Abaixo de 1024 a palavra sai e fica só o balde — na Aurea, o botão só de ícone é o `IconButton` redondo (ADR-0052).
 // Era abaixo de 768, como a referência no celular; desde 15/10/2026 é abaixo de 1024, porque com a palavra o topo do
 // Início não cabia numa linha entre 768 e 1023 (medido; o Victor viu a barra cortada). O gerador faz o mesmo no parado.
-const ESTREITO = "(max-width: 1023px)";
+const ESTREITO = "(max-width: 63.9375em)"; // 1023px, em `em` como o CSS (06/11/2026)
 const assina = (avisa: () => void) => { const m = matchMedia(ESTREITO); m.addEventListener("change", avisa); return () => m.removeEventListener("change", avisa); };
 
 // A amostra redonda da marca, desenhada na cor dela, com o contorno fraco da amostra da Aurea (o `ColorSwatch`): some

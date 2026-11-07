@@ -1,6 +1,6 @@
 /* A PÁGINA "HOOKS" DO SITE B (o desenho "hooks"; o mapa, grupo 2). Toda medida é um token; as peças são as da Aurea. */
 .hk-b { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-4); container-type:inline-size; }
-@media (min-width:1280px) { .site-shell:has(.hk-b) > .content.content { grid-column:3 / 5; } }
+@media (min-width:80em) { .site-shell:has(.hk-b) > .content.content { grid-column:3 / 5; } }
 .hk-palco .intro-palco-texto { inline-size:72%; }
 /* Os atalhos: o `Button` secundário xl (50; o desenho tem 52) com a sombra pequena e o número num ladrilho redondo de 36. */
 .hk-atalhos { display:flex; flex-wrap:wrap; gap:var(--space-2); margin-block-start:var(--space-6); }
@@ -58,7 +58,7 @@
 
 @container (max-width:820px) { .hk-grade { grid-template-columns:minmax(0,1fr); } .hk-notas { grid-template-columns:repeat(2, minmax(0,1fr)); } }
 @container (max-width:640px) { .hk-notas { grid-template-columns:minmax(0,1fr); } .hk-lateral-demo { grid-template-columns:minmax(0,1fr); } }
-@media (max-width:900px) {
+@media (max-width:56.25em) {
   .hk-palco .cat-pecas { display:none; }
   .hk-palco .intro-palco-texto { inline-size:auto; }
   .hk-pagina { margin-inline-start:0; }

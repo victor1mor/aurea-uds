@@ -395,10 +395,11 @@
   });
   // 2. Subir para o desktop fecha. O top layer é estado do DOM, e nenhuma media query tira um
   // elemento de lá: sem isto a gaveta ficava flutuando, sem véu, e o botão que a fecharia sumia.
-  // 1024 é o `--breakpoint-lg`, o mesmo corte do `@media (max-width:1023px)` acima; o
-  // `consumidores-lote1.test` reprova se os dois divergirem.
+  // 64em é o `--breakpoint-lg` (1024 ÷ 16), o mesmo corte do `@media (max-width:63.9375em)` acima — em `em`, como
+  // os pontos de quebra do CSS (ADR-0092): em px, com a fonte do navegador aumentada, o CSS ainda mostrava a gaveta e
+  // isto já a fechava. O `consumidores-lote1.test` reprova se os dois divergirem.
   if (typeof window.matchMedia === "function") {
-    var desktop = window.matchMedia("(min-width: 1024px)");
+    var desktop = window.matchMedia("(min-width: 64em)");
     var aoSubir = function (e) {
       if (!e.matches) return;
       var abertas = document.querySelectorAll(".sidebar[popover]");
@@ -485,6 +486,39 @@ const espelhaTema = alvo => (alvo ? [alvo] : [...document.querySelectorAll("ifra
   .map(f => f.contentWindow)).forEach(w => w && w.postMessage({aureaTheme: document.documentElement.dataset.theme,
     aureaBrand: document.documentElement.dataset.brand || ""}, "*"));
 addEventListener("message", e => { if (e.data && e.data.aureaThemeRequest) espelhaTema(e.source); });
+// A ALTURA DA MOLDURA (06/11/2026, ADR-0093): quando o documento dela avisa, a página mede o que passa da moldura — o
+// documento e o que rola por dentro dele — e cresce a moldura até caber; nunca encolhe abaixo da caixa de sempre. A lista
+// que rola numa altura PRÓPRIA (a moldura cresceu e a sobra dela não diminuiu) sai da conta, ou a moldura cresceria sem fim.
+// Só a moldura desta página que mandou o aviso; em file:// o documento é de outra origem e a moldura fica como está.
+const listaPropria = new WeakSet(), sobraDeAntes = new WeakMap();
+const ajustaMoldura = f => {
+  if (f.dataset.altura === "fixa") return;
+  let doc;
+  try { doc = f.contentDocument; } catch (err) { return; }
+  const alto = f.clientHeight;
+  if (!doc || !doc.body || !alto) return;
+  let sobra = 0;
+  for (const e of doc.body.querySelectorAll("*")) {
+    if (listaPropria.has(e)) continue;
+    const o = doc.defaultView.getComputedStyle(e).overflowY;
+    if ((o !== "auto" && o !== "scroll") || !e.clientHeight) continue;
+    const s = e.scrollHeight - e.clientHeight;
+    if (s <= 1) continue;
+    const a = sobraDeAntes.get(e);
+    if (a && alto > a.alto && s >= a.s) { listaPropria.add(e); continue; }
+    sobraDeAntes.set(e, {alto, s});
+    sobra = Math.max(sobra, s);
+  }
+  const quer = doc.documentElement.scrollHeight + sobra;
+  if (quer <= alto + 1) return;
+  f.style.blockSize = Math.ceil(quer) + "px";
+  f.dataset.altura = "conteudo";
+};
+addEventListener("message", e => {
+  if (!e.data || !e.data.aureaFrameMeasure) return;
+  const f = [...document.querySelectorAll("iframe.demo-frame")].find(x => x.contentWindow === e.source);
+  if (f) ajustaMoldura(f);
+});
 // O TEMA (15/10/2026): quem escolhe é a chave de três posições, viva no search.js, que grava a escolha (pode ser
 // "system"); quem aplica no primeiro quadro é o script inline do <head>. Aqui só se ESPELHA nas molduras de prévia o tema
 // e a marca que estiverem no <html> — observados, e não avisados: o "system" muda o tema sem clique nenhum.
@@ -1066,8 +1100,10 @@ if (catalogo) {
    clique põe a página no arranjo largo (`g1-largo` + `data-pagina-larga` no conteúdo, o mesmo das receitas: sem o índice
    da direita e sem o teto de largura) e traz a caixa de volta à vista; o botão vira "Normal width" e desfaz. Um botão só
    vale pela página inteira: todos trocam juntos. O botão mora no invólucro (`.demo`), fora do painel — a parte viva tira
-   do painel tudo o que era desenho pronto quando acende. As molduras (`.demo-frame`) ficam de fora. Script comum, sem
-   `import`: entra no fim do `assets/catalog.js`. */
+   do painel tudo o que era desenho pronto quando acende. Script comum, sem `import`: entra no fim do `assets/catalog.js`.
+   AS MOLDURAS TAMBÉM (06/11/2026, ADR-0093): elas ficavam de fora, e 87 exemplos de 25 páginas (a Sidebar, o BottomNav, o
+   AppShell, as peças de cor) saíam sem o botão — o Victor achou na Sidebar. A moldura cresce com a página como qualquer
+   caixa. */
 (function () {
   var raiz = function () { return document.querySelector(".site-shell > .content > *"); };
   // O sprite da página só leva os ícones que o HTML de alguma página usa: sem o símbolo, o botão sai só com o texto.
@@ -1098,7 +1134,6 @@ if (catalogo) {
     // A página que já nasce larga (as receitas, as listas) não precisa do botão.
     if (!r || r.hasAttribute("data-pagina-larga") || r.classList.contains("g1-largo")) return;
     Array.prototype.forEach.call(document.querySelectorAll('.demo > .demo-panel[data-panel="preview"]'), function (painel) {
-      if (painel.querySelector(".demo-frame")) return;
       var botao = document.createElement("button");
       botao.type = "button";
       botao.className = "btn btn-tertiary btn-sm tela-cheia-abrir";

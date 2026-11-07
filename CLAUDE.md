@@ -213,6 +213,9 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.54.1` | Os consertos do site B que o Victor achou no ar: o campo da busca grande (`CommandPalette size="lg"`) de 64 para 52, a setinha do "Copy Markdown", a lateral que não sobe no fim da página, a busca com 11 sugestões e as laterais de Recipes e Hooks — pedido #113. **Publicada em 03/11/2026** (por volta das 21:13, Brasília, medido no npm), pelo terminal do Victor |
 | `0.55.0` | O botão dividido com o menu aberto e o menu da referência (pedido #114); e a Ember: o anel de foco do escuro no laranja dela, o link no laranja do botão e o anel do claro no `#ff6600`, como no sistema de origem (pedido #115). **Não saiu sozinha**: foi publicada dentro da `0.56.0` |
 | `0.56.0` | Os modos de leitura no app inteiro: `AppShell highContrast` (o alto contraste, a forma "C") e `textSize="lg"` (o texto grande, a forma "B"), que marcam também a raiz da página; a Ember recebe os dois ([ADR-0090](decisions/0090-o-alto-contraste-e-o-texto-grande-no-app.md)) — pedido #116. **Publicada em 05/11/2026** (por volta das 12:43, Brasília, medido no npm), pelo terminal do Victor. Leva a `0.55.0` junto |
+| `0.57.0` | As tabelas com linha (`dividers` na `Table` e na `DataGrid`), o cabeçalho preso à página (`DataGrid stickyHeader="page"`), o degradê permitido ([ADR-0091](decisions/0091-o-degrade-e-permitido.md)) e cinco consertos do site — pedido #117. **Não saiu sozinha**: foi publicada dentro da `0.59.0` |
+| `0.58.0` | O movimento (o escolhido desliza, os menus entram, o arrasto anda — web e nativo), `DataGrid fit`, as tabelas do site em `DataGrid` e as 23 receitas como telas de produto — pedido #118. **Não saiu sozinha**: foi publicada dentro da `0.59.0` |
+| `0.59.0` | A auditoria externa, os consertos de código: o `KPI` com barras, o `Toast` do nativo para o VoiceOver, o `ToastHost` e o `BottomNav` sem `SafeAreaProvider`, os hooks do `CodeBlock` e do `Banner`, o portal do `Menubar`, as fichas e as licenças — pedido #119. **Publicada em 06/11/2026** (por volta das 13:52, Brasília, medido no npm), pelo terminal do Victor. Leva a `0.57.0` e a `0.58.0` junto |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -817,6 +820,16 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    parte viva (`data-ligada`). **Publicada em 05/11/2026** (por volta das 12:43, Brasília, medido no npm), pelo terminal do
    Victor, da junção do pedido #116. Leva a `0.55.0` junto. O registro entrou no lote seguinte (as tabelas e o degradê,
    0.57.0).
+
+56. **`0.57.0`, `0.58.0` e `0.59.0`, feitas em 05/11/2026 e publicadas juntas em 06/11/2026** — a fase 0 do caminho até a 1.0
+   (*"Sim, nessa ordem"*: fechar o que estava pronto — as tabelas com linha e o degradê, pedido #117; o movimento, as tabelas do
+   site e as receitas, pedido #118) e os consertos de código da auditoria externa (*"Pode corrigir tudo"*, pedido #119), cada
+   achado conferido no código antes de virar trabalho. ⚠ **As lições:** (1) as travas 31 e 31b liam só a versão dos pacotes —
+   com duas versões esperando a publicação, o nome de uma saía do recorte; agora leem toda versão datada acima da registrada;
+   (2) a varredura do axe do WebKit tinha 15 minutos fixos, e as receitas mais pesadas passaram disso — o orçamento sai da conta
+   (3 s por página); (3) o teste que conta o rádio marcado passava com o defeito (o jsdom não desmarca rádio de mesmo nome) —
+   a prova passou a ser a causa (os nomes dos grupos). **Publicada em 06/11/2026** (por volta das 13:52, Brasília, medido no
+   npm), pelo terminal do Victor, da junção do pedido #119. O registro entrou no lote seguinte (as pendências antes da 1.0).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

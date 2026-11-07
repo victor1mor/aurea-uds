@@ -217,7 +217,9 @@ const linhas = [
   ".container-scope { container:aurea / inline-size; }",
   "",
   "/* por VIEWPORT — a decisão depende do tamanho da APLICAÇÃO */",
-  ...ORDEM.map(([n, px]) => `@media (min-width:${px}px) { ${bloco("vp", n)} ${eixoCorpo("vp", n)} }`),
+  // `em` na mídia (06/11/2026, o texto a 200%): a fonte que a pessoa escolheu no navegador entra na conta; o contêiner
+  // (abaixo) continua em px, porque mede o ESPAÇO da caixa, e não a tela.
+  ...ORDEM.map(([n, px]) => `@media (min-width:${px / 16}em) { ${bloco("vp", n)} ${eixoCorpo("vp", n)} }`),
   "",
   "/* por CONTAINER — o componente responde ao ESPAÇO EM QUE FOI COLOCADO */",
   ...ORDEM.filter(([, px]) => px <= ATE_CONTAINER)

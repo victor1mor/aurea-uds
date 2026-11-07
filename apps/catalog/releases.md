@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.61.0
+
+November 6, 2026
+
+Breakpoints follow the browser font size, more selected items in Windows high contrast, and Header passes item clicks.
+
+[Read full release notes →](https://aureauds.dev/release-v0-61-0.md)
+
 ## v0.60.0
 
 November 6, 2026

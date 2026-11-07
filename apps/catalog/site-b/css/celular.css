@@ -4,13 +4,13 @@
 /* O MENU: o botão "Menu" (vivo, no `site.tsx`) no lugar do botão da gaveta do `AppShell`, com os 44 dos botões do topo.
    A gaveta do lado só sai quando o botão vivo existe (`data-site-menu` no <html>): sem JavaScript, ela continua. */
 .site-menu-lugar { display:none; }
-@media (max-width:767px) {
+@media (max-width:47.9375em) {
   .site-menu-lugar { display:inline-flex; }
   html[data-site-menu] .site-shell .nav-toggle { display:none; }
 }
 /* NO INÍCIO (S-09, o topo único): sem a gaveta do `AppShell`, o menu é quem leva às áreas quando elas saem da pílula —
    abaixo de 1121, a mesma largura em que elas saem nas outras páginas. */
-@media (max-width:1120px) { .site-home .site-menu-lugar { display:inline-flex; } }
+@media (max-width:70em) { .site-home .site-menu-lugar { display:inline-flex; } }
 .site-menu-botao { --step-h:var(--target-min); inline-size:var(--target-min); }
 
 /* A FOLHA (`Drawer side="bottom"`): o título "Menu" em Sora 24 extranegrito (a peça tem 16), os rótulos GO TO / COLOR THEME
@@ -34,7 +34,7 @@
    tem 52) sem o "Esc", com o "Cancel" ao lado; os filtros numa linha só que rola de lado; a lista rola, o campo fica; o pé
    (as teclas, as sugestões e a chave Web | Native) sai, como no desenho. */
 .site-busca-cancelar { display:none; }
-@media (max-width:767px) {
+@media (max-width:47.9375em) {
   .command-overlay:has(.command-palette-lg) { padding:var(--space-4) 0 0; place-items:stretch; grid-template-columns:minmax(0,1fr); }
   .command-palette-lg { position:relative; align-self:stretch; inline-size:100%; min-inline-size:0; max-block-size:none; overflow:hidden;
     grid-template-columns:minmax(0,1fr); grid-template-rows:auto auto minmax(0,1fr) auto; padding:var(--space-4) var(--space-3) 0;

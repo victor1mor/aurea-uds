@@ -25,5 +25,21 @@
 // proibido. Então ele PEDE o tema por mensagem, e o catalog.js responde (e reenvia ao trocar).
 addEventListener("message", e => { if (!e.data) return; if (e.data.aureaTheme) document.documentElement.dataset.theme = e.data.aureaTheme; if (e.data.aureaBrand !== undefined) { if (e.data.aureaBrand) document.documentElement.dataset.brand = e.data.aureaBrand; else delete document.documentElement.dataset.brand; } });
 parent.postMessage({aureaThemeRequest: 1}, "*");
+// A ALTURA DO CONTEÚDO (06/11/2026, ADR-0093). A moldura tinha a altura da caixa, e o que passava dela era cortado: o
+// AppShell (366 numa de 270), o BottomNav (405), a abertura de página (668), a lista da Sidebar que rola por dentro. Quem
+// mede é a PÁGINA (o catalog.js): fora da tela, este documento nem sabe o próprio tamanho (ao carregar, a altura dele é 0).
+// Aqui só se avisa quando algo pode ter mudado: carregou, a fonte chegou, a parte viva acendeu, o tamanho mudou.
+(() => {
+  const pede = () => parent.postMessage({aureaFrameMeasure: 1}, "*");
+  addEventListener("load", pede);
+  addEventListener("resize", pede);
+  document.fonts.ready.then(pede);
+  new ResizeObserver(pede).observe(document.body);
+  const raiz = document.getElementById("root");
+  if (raiz) {
+    new ResizeObserver(pede).observe(raiz);
+    new MutationObserver(pede).observe(raiz, {attributes: true, attributeFilter: ["data-ligada"]});
+  }
+})();
 </script></body>
 </html>

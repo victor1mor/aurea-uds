@@ -40,7 +40,7 @@
 .qs-valores { display:flex; flex-wrap:wrap; gap:calc(var(--space-1) + var(--space-05)); margin-block-start:var(--space-3); }
 .qs-valor { font-family:var(--font-code); }
 
-@media (max-width:899px) {
+@media (max-width:56.1875em) {
   .qs-trilho { flex-direction:column; align-items:stretch; }
   .qs-alvos { flex-basis:auto; }
   .qs-alvos > .radio-group-cards { grid-auto-flow:row; }

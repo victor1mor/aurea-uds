@@ -173,7 +173,7 @@
 [aria-pressed="true"] .inicio-visto { visibility:visible; }
 
 /* ── ABAIXO DE 1024 (o desenho: 1100): as peças descem para baixo do texto, em fluxo; o baralho e o fecho em coluna ── */
-@media (max-width:1023px) {
+@media (max-width:63.9375em) {
   .inicio-palco { min-block-size:0; padding:var(--space-10) var(--space-8) var(--space-8); }
   .inicio-palco-texto { position:static; inline-size:auto; }
   .inicio-pecas { position:relative; inset:auto; display:flex; flex-wrap:wrap; align-items:flex-start; gap:var(--space-5); margin-block-start:var(--space-10); }
@@ -182,7 +182,7 @@
   .inicio-baralho, .inicio-fim { grid-template-columns:minmax(0, 1fr); }
 }
 /* ABAIXO DE 768 (o desenho: 760): menos recheio. */
-@media (max-width:767px) {
+@media (max-width:47.9375em) {
   .inicio-palco { padding:var(--space-7) var(--space-4); }
   .inicio-fim { padding:var(--space-7) var(--space-5); }
   .inicio-carta { inset-inline:0 var(--space-6); padding:var(--space-4); }
