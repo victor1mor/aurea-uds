@@ -1796,11 +1796,12 @@ const menuNativo = () => [item("All Components", "native.html"),
 const MENUS = {native: menuNativo, start: menuDocs, releases: menuReleases, components: menuComponentes, hooks: menuHooks, tokens: menuTokens,
   patterns: menuPatterns, blocks: menuBlocks, recipes: menuRecipes};
 
-// A LOGO da Aurea (06/11/2026, as decisões do Victor depois de ver o FigCraft): a estrela 2E (21/10/2026) no topo, a pequena
-// de 32 (com brilho), no lugar das quatro pétalas — que ficam guardadas em `assets/logo/antiga-quatro-petalas.svg` (o
+// A LOGO da Aurea (06/11/2026, as decisões do Victor depois de ver o FigCraft): a estrela 2E (21/10/2026) no topo, a
+// COMPLETA, com a boca e as bochechas (o Victor, 07/11/2026, olhando as três no topo: "B, com boca" — era a pequena de 32,
+// sem boca), no lugar das quatro pétalas — que ficam guardadas em `assets/logo/antiga-quatro-petalas.svg` (o
 // Victor, 13/10/2026: "não a perca"). Os arquivos saem de `scripts/gerar-logo.py`. A estrela tem as cores DELA (é a
 // identidade), e não a da marca escolhida no site. O nome do lado é o texto do link, em Sora ExtraBold (o CSS do topo).
-const LOGO_TOPO = readFileSync(join(outDir, "assets/logo/estrela-2e-pequena-de-32.svg"), "utf8")
+const LOGO_TOPO = readFileSync(join(outDir, "assets/logo/estrela-2e.svg"), "utf8")
   .replace(/ role="img"| aria-label="[^"]*"/g, "").replace("<svg ", '<svg width="100%" height="100%" ');
 const mark = h("span", {className: "site-logo", "aria-hidden": "true", style: {display: "inline-flex", flex: "none"},
   dangerouslySetInnerHTML: {__html: LOGO_TOPO}});
@@ -2453,7 +2454,7 @@ a.related-card:hover { border-color:transparent; }
 
 /* O topo: 14 entre a marca, as áreas e as ações; os botões com o toque de 44 (--target-min). */
 .site-shell > .topbar-pill > .topbar-inner { gap:calc(var(--space-3) + var(--space-05)); padding-inline:var(--space-5) calc(var(--space-2) + var(--space-05)); }
-.site-shell .site-brand { gap:calc(var(--space-2) + var(--space-05)); }
+.site-shell .site-brand { gap:var(--space-1); } /* a estrela perto do nome (o Victor, 07/11/2026, olhando três vãos: "2, mais perto"; 8 da ponta da estrela ao A, com a margem do desenho) */
 .site-shell .site-brand > :is(svg,.site-logo) { inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
 .site-shell .site-brand strong { font-family:var(--font-heading); font-size:var(--text-xl); font-weight:var(--weight-extrabold); line-height:normal; } /* Sora ExtraBold, o nome da logo (06/11/2026) */
 .site-shell .site-areas .segmented { gap:var(--space-05); padding:var(--space-1); border:0; background:var(--fill-1); }

@@ -292,8 +292,8 @@ export function LinkButton(props) {
  * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
  */
-export function IconButton(props) {
-    return _jsx(BotaoDeIcone, { ...props });
+export function IconButton({ icon, name, ...props }) {
+    return _jsx(BotaoDeIcone, { ...props, name: (name ?? icon) });
 }
 /**
  * Quanto a ÁREA DE TOQUE do `IconButton` passa do círculo desenhado, de cada lado — R-24

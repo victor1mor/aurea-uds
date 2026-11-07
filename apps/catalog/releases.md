@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.62.0
+
+November 6, 2026
+
+The new Aurea logo, an icon prop on the native IconButton, a horizontal Accordion that opens its first item, and https-only embeds.
+
+[Read full release notes →](https://aureauds.dev/release-v0-62-0.md)
+
 ## v0.61.0
 
 November 6, 2026

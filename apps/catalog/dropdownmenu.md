@@ -66,7 +66,7 @@ description puts a line under the label, in the small muted text; trailingIcon s
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `trigger` | `ReactElement` | — | The element that opens the menu. Usually a Button or an IconButton. |
-| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onClick?, disabled?, leadingIcon?, description?, trailingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. description is a line under the label, in the small muted text; trailingIcon sits at the end of the item (for example, arrow-square-out on a link that opens another site). |
+| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onClick?, disabled?, leadingIcon?, description?, trailingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. description is a line under the label, in the small muted text; trailingIcon sits at the end of the item (for example, arrow-square-out on a link that opens another site). On native, a link item opens only https:, mailto: and tel: addresses; any other scheme is ignored. |
 | `side` | `top \| right \| bottom \| left` | bottom | Preferred side; it flips when there is no room. |
 | `align` | `start \| center \| end` | center | How the menu lines up with the trigger along that side. end puts the menu's edge on the trigger's edge, as on a split button. |
 | `label` | `string` | — | Accessible name of the menu itself. Worth setting when a page has more than one — otherwise a screen reader lists several menus with nothing to tell them apart. |

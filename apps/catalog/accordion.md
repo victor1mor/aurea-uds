@@ -70,7 +70,7 @@ orientation="horizontal" stands the items side by side, each a card; a closed on
 | `items` | `Array<{id: string; title: ReactNode; content: ReactNode}>` | — | The sections. Built on native <details>/<summary>, so opening, closing, keyboard and find-in-page come from the browser and the component ships no JavaScript at all. Several can be open at once: exclusivity would need the `name` attribute, and hiding what someone just opened is rarely what they wanted. |
 | `variant` | `default \| surface` | default | surface puts the items in a card, with the line at 94% and the neutral hover. |
 | `multiple` | `boolean` | false | Lets several items stay open. Without it, opening one closes the other, as in the reference. |
-| `defaultValue` | `string[]` | — | The ids of the items that start open. |
+| `defaultValue` | `string[]` | — | The ids of the items that start open. Without it, the vertical accordion starts all closed; the horizontal one opens its first enabled item, so there is always one in view. |
 | `indicator` | `chevron \| plus` | chevron | How opening is drawn: the arrow at the end, or a plus in a circle that turns 45° into a yellow × when the item opens (the FAQ of this site). |
 | `size` | `md \| lg` | md | lg is the 60-tall row with body-size (16) text, 22 from the edge, for questions that stand alone. |
 | `orientation` | `"vertical" \| "horizontal"` | "vertical" | horizontal is the accordion on its side: the items stand side by side, 12 apart, each a card (radius 22); a closed one is 104 wide and the open one takes the rest of the row. One open at a time, and the open one does not close on click. The height is the parent's. Under a 47.5rem container it becomes the upright accordion. |

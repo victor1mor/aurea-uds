@@ -78,11 +78,20 @@ export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullW
 }
 /** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` da referência. */
 export declare function LinkButton(props: LinkButtonProps): React.JSX.Element;
-export interface IconButtonProps extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "leading" | "trailing" | "fullWidth"> {
-    name: AureaIcon;
+export interface IconButtonBase extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "leading" | "trailing" | "fullWidth"> {
     /** **Obrigatório**: um botão que só tem glifo não tem texto para o leitor de tela anunciar. */
     label: string;
 }
+/** O ícone vem em `name` ou em `icon` — os dois nomes valem, e um deles é obrigatório. `icon` é o nome da WEB (a D2 da
+ *  auditoria externa, decisão do Victor de 06/11/2026: "mesmo nome de prop nos dois alvos", CLAUDE.md §11); `name` fica
+ *  para quem já usa, e nada quebra. */
+export type IconButtonProps = IconButtonBase & ({
+    name: AureaIcon;
+    icon?: undefined;
+} | {
+    icon: AureaIcon;
+    name?: undefined;
+});
 /**
  * Botão REDONDO, só glifo.
  *
@@ -93,7 +102,7 @@ export interface IconButtonProps extends Omit<ButtonProps, "children" | "leading
  * ⚠ **`label` é obrigatório no tipo**, e é a única prop deste pacote que obriga texto. Um ícone
  * sozinho não diz nada a quem não o vê, e deixar isso opcional é o mesmo que deixá-lo vazio.
  */
-export declare function IconButton(props: IconButtonProps): React.JSX.Element;
+export declare function IconButton({ icon, name, ...props }: IconButtonProps): React.JSX.Element;
 /**
  * Quanto a ÁREA DE TOQUE do `IconButton` passa do círculo desenhado, de cada lado — R-24
  * (08/10/2026). O alvo é o maior entre o desenho e o `targetMin` (44), centrado; o círculo de
@@ -103,7 +112,7 @@ export declare function IconButton(props: IconButtonProps): React.JSX.Element;
  */
 export declare function folgaDoToque(t: AureaTokens, size?: AureaButtonSize): number;
 /** Fechado: sem `appearance` e sem `tone`, porque a cor é a do glifo. */
-export interface ThemeToggleProps extends Omit<IconButtonProps, "name" | "label" | "onPress" | "appearance" | "tone" | "share" | "glow" | "ring"> {
+export interface ThemeToggleProps extends Omit<IconButtonBase, "label" | "onPress" | "appearance" | "tone" | "share" | "glow" | "ring"> {
 }
 export declare function ThemeToggle(props: ThemeToggleProps): React.JSX.Element;
 export interface CloseButtonProps {

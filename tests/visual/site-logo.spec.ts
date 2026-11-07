@@ -1,9 +1,11 @@
 import {test, expect} from "@playwright/test";
 
 // A LOGO NO SITE (06/11/2026, a decisão do Victor depois de ver o FigCraft: a estrela 2E nos quatro lugares, o nome em
-// Sora ExtraBold). No topo, a 2E pequena (a de 32, com brilho) no lugar da estrela de quatro pétalas, no tamanho da marca
+// Sora ExtraBold). No topo, a 2E COMPLETA, com a boca e as bochechas (07/11/2026, "B, com boca" — era a pequena de 32, sem
+// boca), no lugar da estrela de quatro pétalas, a 8 do nome ("2, mais perto"; eram 14), no tamanho da marca
 // de antes (30, o `--space-7` com o `--space-05`); o nome no peso 800; e a aba do navegador com a 2E pequena sem brilho (a de até 24).
-// Provado contra o defeito: contra o site de antes (a estrela de quatro pétalas, o nome em 700, sem ícone), os três reprovam.
+// Provado contra o defeito: contra o site de antes (a estrela de quatro pétalas, o nome em 700, sem ícone), os três reprovam;
+// e contra a pequena de 32 com o vão de 10, a boca e o vão reprovam.
 
 test("o topo do site tem a estrela 2E, no tamanho da marca, e o nome em ExtraBold", async ({page}) => {
   await page.goto("/apps/catalog/button.html");
@@ -15,6 +17,15 @@ test("o topo do site tem a estrela 2E, no tamanho da marca, e o nome em ExtraBol
       tem: !!logo?.querySelector("svg"),
       // a 2E tem os olhos (o contorno escuro) — a de quatro pétalas era só amarela
       olhos: !!logo?.innerHTML.includes("#242424"),
+      // a COMPLETA tem as bochechas rosadas; a pequena de 32 não tem
+      bochechas: !!logo?.innerHTML.includes("#f39098"),
+      // da ponta direita do desenho da estrela ao começo do texto do nome (o texto, pelo Range, e não a caixa)
+      vao: (() => {
+        const d = logo?.querySelector("path")?.getBoundingClientRect();
+        if (!d || !nome) return -1;
+        const t = document.createRange(); t.selectNodeContents(nome);
+        return Math.round(t.getBoundingClientRect().left - d.right);
+      })(),
       l: r?.width ?? 0, a: r?.height ?? 0,
       peso: nome ? getComputedStyle(nome).fontWeight : "",
       escondida: logo?.getAttribute("aria-hidden"),
@@ -22,6 +33,8 @@ test("o topo do site tem a estrela 2E, no tamanho da marca, e o nome em ExtraBol
   });
   expect(m.tem, "a logo é um desenho dentro da marca").toBe(true);
   expect(m.olhos, "é a estrela 2E, e não a de quatro pétalas").toBe(true);
+  expect(m.bochechas, "é a 2E completa, com a boca e as bochechas").toBe(true);
+  expect(m.vao, "a estrela perto do nome: 8 da ponta dela ao A").toBe(8);
   expect(Math.round(m.l)).toBe(30);
   expect(Math.round(m.a)).toBe(30);
   expect(m.peso, "o nome em Sora ExtraBold").toBe("800");

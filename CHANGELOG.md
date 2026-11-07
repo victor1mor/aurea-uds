@@ -299,7 +299,8 @@ olhando: o nome *"B · Sora ExtraBold"*, nos quatro lugares; e as respostas às 
 
 ### O site
 
-- **A logo nova**: a estrela 2E no topo, no lugar da de quatro pétalas, com o nome em Sora ExtraBold; a estrela pequena
+- **A logo nova**: a estrela 2E completa (com a boca e as bochechas) no topo, no lugar da de quatro pétalas, perto do nome
+  em Sora ExtraBold (*"B, com boca"* e *"2, mais perto"*, 07/11/2026, olhando as formas no topo); a estrela pequena
   como ícone da aba. Os arquivos da logo moram em `apps/catalog/assets/logo/` (gerados por `scripts/gerar-logo.py`, o
   nome tirado da própria Sora).
 - **A página de acessibilidade declara o botão primário da Ember no claro** (D1): a letra branca no laranja dá 3,08:1, e
@@ -310,9 +311,19 @@ Quem cobra: `tests/unit/native-iconbutton-icon.test.tsx`, `tests/unit/accordion-
 `tests/unit/mediaembed-https.test.tsx` e o caso novo de `tests/unit/native-lote-q-9b-menu.test.tsx` — todos provados contra
 o código de antes.
 
+### O registro da 0.61.0 (07/11/2026)
+
+- **A 0.61.0 publicada entre 08:45 e 08:49 de 07/11/2026** (Brasília, medido no npm; o `tokens` às 08:45 e o `native`, o
+  último, às 08:49), da junção do pedido #121, com a 0.60.0 e a 0.59.1 dentro (pedido #120): o `released-surface.json` do
+  commit do publish (`9c61f428`) — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo. O CHANGELOG ([0.61.0]
+  publicada, a [0.60.0] e a [0.59.1] dentro dela) e o CLAUDE.md (as linhas na tabela e o item 57).
+
 ---
 
 ## [0.61.0] — 2026-11-06
+
+✅ **Publicada em 07/11/2026, entre 08:45 e 08:49 (Brasília, medido no npm; o `tokens` às 08:45 e o `native`, o último, às
+08:49), pelo terminal do Victor, da junção do pedido #121.** Leva a 0.60.0 e a 0.59.1 junto.
 
 **As pendências antes da 1.0** (06/11/2026, o Victor: *"vamos fazer logo todas agora, para não atrapalhar a 1.0"*). O que
 já tinha desenho aprovado ou decisão tomada; a logo e as decisões D1 a D8 da auditoria vão ao Victor à parte.
@@ -359,6 +370,8 @@ páginas com moldura) — todos provados contra o código de antes.
 
 ## [0.60.0] — 2026-11-06
 
+**Não saiu sozinha**: foi publicada dentro da 0.61.0, em 07/11/2026.
+
 **A auditoria externa, o que muda aparência** (06/11/2026). Desenhado no FigCraft (o antes e a proposta, com os tokens
 como variáveis e as peças como componentes) e aprovado pelo Victor: *"Pode, o alto contraste aprovo a B"*.
 
@@ -397,6 +410,8 @@ Quem cobra: `tests/visual/alto-contraste-escolhido.spec.ts`, `tests/visual/rtl-c
 ---
 
 ## [0.59.1] — 2026-11-06
+
+**Não saiu sozinha**: foi publicada dentro da 0.61.0, em 07/11/2026.
 
 **A auditoria externa, as travas e o processo** (06/11/2026). A segunda parte dos consertos da auditoria externa (*"Pode
 corrigir tudo"*): o que não muda aparência e não é código de peça — dependências, o site, a publicação e as travas. O

@@ -157,7 +157,7 @@ indicator replaces the check on the chosen colour; it gets the ink that contrast
 | `color` | `string` | — | REQUIRED without options. Any CSS colour: hex (#f0c200), a name, the CSS colour functions (rgb(), hsl(), oklch(), color()…) or var(--primary). Anything else (with ;, braces, quotes, a comment or url()) is not written into the style. |
 | `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | "md" | 16, 24, 32, 36, 40 — the reference library's scale. Round only (Victor's decision); the checkerboard shows only under a transparent colour. |
 | `label` | `string` | color | The name a screen reader announces ("Aurea yellow"); without it, the colour value. With options, the name of the group ("Accent colour"), and REQUIRED. |
-| `options` | `(string \| {color, label?})[]` | — | The picker variation (ADR-0069): the colours to pick from, as a colour string or {color, label?, disabled?}. Turns the swatch into a radio group; a disabled option cannot be chosen. |
+| `options` | `(string \| {color, label?})[]` | — | The picker variation: the colours to pick from, as a colour string or {color, label?, disabled?}. Turns the swatch into a radio group; a disabled option cannot be chosen. |
 | `name` | `string` | — | With options, REQUIRED: the group's name in a form, and what makes the swatches one group (the arrows move between them). |
 | `value` | `string` | — | With options: the chosen colour, controlled. |
 | `defaultValue` | `string` | — | With options: the colour chosen at the start. |

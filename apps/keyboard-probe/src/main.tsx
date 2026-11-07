@@ -299,9 +299,10 @@ function App() {
 
       {/* MediaEmbed (N-10): a fachada é um <button> nativo. Enter e Espaço trocam a fachada pelo
           <iframe> e o foco vai para ele — é essa troca que a foto vê, sem contador. O endereço é
-          about:blank: o banco mede o teclado, não o YouTube, e não pode depender de rede. */}
+          um `https:` que nunca resolve (o `.invalid` é reservado): o banco mede o teclado, não o YouTube, e não pode
+          depender de rede. Era `about:blank`, e desde a D5 (0.62.0, só `https:`) a fachada não aparecia. */}
       <section data-probe="MediaEmbed">
-        <MediaEmbed src="about:blank" title="Trailer" poster="data:image/gif;base64,R0lGODlhAQABAAAAACw=" autoplay={false} />
+        <MediaEmbed src="https://example.invalid/embed" title="Trailer" poster="data:image/gif;base64,R0lGODlhAQABAAAAACw=" autoplay={false} />
       </section>
 
       <section data-probe="Button" data-ativado={ativado.button ?? 0}>

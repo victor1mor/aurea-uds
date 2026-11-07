@@ -392,7 +392,10 @@ function renderizar(items, prefixo, paiSub, ctx) {
                 const l = it;
                 return (_jsx(Linha, { ctx: ctx, papel: "link", rotulo: l.label, icone: l.leadingIcon, inativo: apagado(k, subAberto), aoTocar: () => {
                         // Endereço que nenhum app abre rejeita a promessa; não há o que dizer, e não pode virar erro solto.
-                        void Linking.openURL(l.href).catch(() => { });
+                        // Só `https:`, `mailto:` e `tel:` (06/11/2026, a D5 da auditoria externa — decisão do Victor): o menu abria
+                        // qualquer esquema (`sms:`, o de outro app…); o resto é ignorado.
+                        if (/^(https|mailto|tel):/i.test(l.href.trim()))
+                            void Linking.openURL(l.href).catch(() => { });
                         if (l.closeOnClick ?? true)
                             ctx.fechar();
                     } }, k));
