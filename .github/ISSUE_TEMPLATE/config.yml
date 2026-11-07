@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Falha de segurança
+  - name: Security vulnerability
     url: https://github.com/victor1mor/aurea-uds/security/advisories/new
-    about: Relate em particular, não numa issue pública.
+    about: Report it privately, not in a public issue.

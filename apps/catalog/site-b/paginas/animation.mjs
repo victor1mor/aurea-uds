@@ -151,7 +151,7 @@ export default function animation(site, doc) {
     g.doMd("reduced-motion", "prefers-reduced-motion", g.blocos(rm.blocos, {troca: b => b === grupos ? cartoesRm : undefined})),
     g.doMd("react-native", "useReduceMotion()"),
     g.doMd("next-steps", "Keep going", [g.proximos(g.secao("next-steps"), [["paint-brush", "teal", "Target state attributes."],
-      ["hexagon", "orange", "See every token."], ["eye", "blue", "How Aurea serves low vision."]])]),
+      ["hexagon", "orange", "See every token."], ["eye", "blue", "How Aurea handles accessibility."]])]),
   ];
   return g.pagina({pecas, antes: [...g.blocos(g.intro), simulador], partes});
 }

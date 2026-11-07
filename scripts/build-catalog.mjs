@@ -871,7 +871,7 @@ function homePage() {
       eyebrow: h("a", {className: "home-selo", href: `${REPO}/blob/main/CHANGELOG.md`, ...NOVA_ABA},
         h(A.Badge, {tone: "primary", emphasis: "flat", leading: h(A.Icon, {name: "rocket"})}, `Aurea v${VERSAO} — what's new`)),
       title: h(Fragment, null, "One design system.", h("br"), h("span", null, "Web and native, one look.")),
-      description: "Aurea is a design system with two outputs: the web, in React and CSS, and mobile, in React Native. The look is one, and it does not change from one side to the other — made for people who see little.",
+      description: "Aurea is a design system with two outputs: the web, in React and CSS, and mobile, in React Native. The look is one, and it does not change from one side to the other — with contrast measured in every theme.",
       actions: h(Fragment, null,
         h(A.Button, {variant: "primary", href: "./getting-started.html"}, "Get started"),
         h(A.Button, {variant: "outline", href: "./components.html"}, "View components"))},
@@ -3111,7 +3111,7 @@ const arquivosDeTexto = [
   ...GRUPOS_LLMS.flatMap(([, lista]) => lista.map(e => [e.arquivo.replace(/\.html$/, ".md"), e.md])),
   ["llms.txt", [
     "# Aurea UDS",
-    "> A design system with one look for the web (React and plain CSS) and for React Native, made to be read by people with low vision.",
+    "> A design system with one look for the web (React and plain CSS) and for React Native, with contrast measured in every theme and brand.",
     `Every page below is Markdown. The whole documentation in one file: ${SITE}/llms-full.txt. Notes for AI coding agents: ${SITE}/aurea-agents.md.`,
     ...GRUPOS_LLMS.map(([grupo, lista]) => [`## ${grupo}`, ...lista.map(e =>
       `- [${e.nome}](${SITE}/${e.arquivo.replace(/\.html$/, ".md")})${e.resumo ? `: ${e.resumo.replace(/\s+/g, " ")}` : ""}`)].join("\n")),

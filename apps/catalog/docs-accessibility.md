@@ -1,8 +1,8 @@
 # Accessibility
 
-What Aurea does for people with low vision, keyboard and screen-reader users, and how each part is checked.
+What Aurea does for contrast, keyboard and screen-reader users, and how each part is checked.
 
-Low vision is the first audience Aurea designs for. This page lists what the components do on their own, what the test suite checks, and the places where Aurea knowingly falls short.
+Aurea measures its accessibility instead of promising it. This page lists what the components do on their own, what the test suite checks, and the places where Aurea knowingly falls short.
 
 ## At a glance
 

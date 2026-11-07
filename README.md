@@ -5,28 +5,31 @@
   </picture>
 </h1>
 
-**Aurea Universal Design System** — um design system com duas saídas: a **web** (React e CSS) e o
-**mobile** (React Native). A aparência é uma só, e ela não muda de um lado para o outro.
+**Aurea Universal Design System** — one design system with two outputs: the **web** (React and CSS) and
+**mobile** (React Native). The look is one, and it does not change from one side to the other.
 
-## A identidade
+Documentation, live examples and release notes: **[aureauds.dev](https://aureauds.dev)**.
 
-- superfícies flutuantes e independentes;
-- cartões, janelas e painéis com raio de 22 px;
-- botões de texto, campos, filtros e abas em cápsula;
-- o amarelo principal é o mesmo nos temas claro e escuro;
-- a letra é a Inter no texto, a Sora nos títulos e a IBM Plex Mono no código (ADR-0077);
-- ícones do Phosphor, com a forma cheia no item escolhido;
-- três densidades: compacta, confortável e espaçosa;
-- todo valor de cor, raio, letra e espaço sai de um token.
+## The look
 
-## Instalar
+- floating, independent surfaces;
+- cards, dialogs and panels with a 22 px radius;
+- text buttons, fields, filters and tabs shaped as capsules;
+- the main yellow is the same in the light and the dark theme;
+- Inter for text, Sora for headings and IBM Plex Mono for code;
+- Phosphor icons, with the filled shape on the selected item;
+- three densities: compact, comfortable and spacious;
+- every colour, radius, type and space value comes from a token;
+- contrast is measured by the test suite, in both themes and every brand.
 
-Os pacotes estão no npm público desde 31/07/2026, sob o escopo `@aurea-uds`. **A versão não é
-escrita aqui de propósito**: ela mora no [CHANGELOG](CHANGELOG.md) e em cada `package.json`, e o
-validador reprova se ela voltar a aparecer neste arquivo. O que um número `0.x` promete está na
-[ADR-0014](decisions/0014-primeira-versao-publica-0-1-0.md).
+## Install
 
-**Para a web** (o mesmo comando nos quatro gerenciadores; use o do seu projeto):
+The packages are on the public npm registry under the `@aurea-uds` scope. The current version and what
+changed in each one are in the [CHANGELOG](CHANGELOG.md) and on the
+[release notes](https://aureauds.dev/releases.html). Before `1.0`, a minor version can include breaking
+changes; they are listed under "Breaking changes" in the release notes.
+
+**For the web** (the same packages with any of the four package managers):
 
 ```bash
 npm install @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
@@ -35,77 +38,71 @@ yarn add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
 bun add @aurea-uds/react @aurea-uds/core @aurea-uds/fonts @aurea-uds/icons
 ```
 
-Sem React? `@aurea-uds/core` e `@aurea-uds/fonts` bastam: o core traz a folha de estilo e um pouco
-de comportamento em JavaScript puro.
+No React? `@aurea-uds/core` and `@aurea-uds/fonts` are enough: the core brings the stylesheet and a little
+behaviour in plain JavaScript.
 
-O conjunto de ícones de `@aurea-uds/icons` é um arquivo estático: copie `dist/aurea-icons.svg` para
-onde o seu app serve arquivos e aponte o `AureaProvider` para ele.
+The icon set in `@aurea-uds/icons` is a static file: copy `dist/aurea-icons.svg` to where your app serves
+files and point the `AureaProvider` to it.
 
-**Depois de atualizar a Aurea, reinicie o servidor de desenvolvimento** (`vite`, `next dev`). Um
-servidor que já estava rodando continua servindo a versão de antes, e o sintoma engana: ícones
-pedidos por nomes antigos, ou componentes sem a novidade da versão. Reiniciar resolve; não é
-preciso apagar cache.
+**After updating Aurea, restart the development server** (`vite`, `next dev`). A server that was already
+running keeps serving the previous version, and the symptom is misleading: icons requested by old names, or
+components without the new feature. Restarting fixes it; there is no cache to clear.
 
-**Para mobile (React Native):** é outro pacote, `@aurea-uds/native`, publicado desde
-11/09/2026. A lista de componentes dele **não é a da web com itens a menos**: é outra, com
-instalação e dependências próprias. Comece pelo
-[`packages/native/README.md`](packages/native/README.md) e não instale os pacotes da web.
+**For mobile (React Native):** it is a separate package, `@aurea-uds/native`. Its component list **is not
+the web list with items missing**: it is its own, with its own installation and dependencies. Start with
+[`packages/native/README.md`](packages/native/README.md) and do not install the web packages.
 
-## Usar em HTML
+## Use in HTML
 
-Carregue as fontes **antes** do core. HTML puro não entende nome de pacote (`@aurea-uds/...`):
-aponte para o arquivo instalado (ajuste o caminho) ou sirva o `dist` por um bundler.
+Load the fonts **before** the core. Plain HTML does not understand package names (`@aurea-uds/...`): point
+to the installed file (adjust the path) or serve the `dist` folder through a bundler.
 
 ```html
 <html data-theme="dark" data-density="comfortable">
   <link rel="stylesheet" href="node_modules/@aurea-uds/fonts/dist/fonts.css">
   <link rel="stylesheet" href="node_modules/@aurea-uds/core/dist/aurea.css">
-  <button class="btn btn-primary" type="button">Salvar</button>
+  <button class="btn btn-primary" type="button">Save</button>
 </html>
 ```
 
-Com bundler, prefira os entry points: `import "@aurea-uds/fonts/css"` e `"@aurea-uds/core/css"`.
+With a bundler, prefer the entry points: `import "@aurea-uds/fonts/css"` and `"@aurea-uds/core/css"`.
 
-## Usar em React
+## Use in React
 
-Exige React 19 ou mais novo: os componentes recebem `ref` como prop comum, que é comportamento do
-React 19.
+Requires React 19 or newer: components take `ref` as a regular prop, which is React 19 behaviour.
 
-Envolva a aplicação no `AureaProvider`. Ele entrega as frases padrão, diz aos componentes onde está o
-sprite de ícones e monta o que os tooltips e os toasts usam.
+Wrap the application in `AureaProvider`. It provides the default strings, tells the components where the
+icon sprite is, and mounts what tooltips and toasts use.
 
 ```tsx
-import { AureaProvider, ptBR } from "@aurea-uds/react";
-import "@aurea-uds/fonts/css"; // antes do core
+import { AureaProvider } from "@aurea-uds/react";
+import "@aurea-uds/fonts/css"; // before the core
 import "@aurea-uds/core/css";
 
 export default function App() {
-  return <AureaProvider strings={ptBR}><Tela /></AureaProvider>;
+  return <AureaProvider><Screen /></AureaProvider>;
 }
 ```
 
-**As frases padrão são em inglês.** Para português, passe `strings={ptBR}`, como acima, ou troque
-frases soltas: `<AureaProvider strings={{ close: "Fechar" }}>`.
+**The default strings are in English.** For Brazilian Portuguese, pass `strings={ptBR}` (also exported
+by `@aurea-uds/react`), or replace single strings: `<AureaProvider strings={{ close: "Fechar" }}>`.
 
 ### Server Components
 
-O entry point principal é um módulo de **servidor**, então importar dele num Server Component
-funciona. Os módulos interativos carregam `"use client"` sozinhos, e ficam no servidor: o entry
-point principal, as peças que são só marcação (`Card`, `Stack`, `Cluster`, `Grid` e as outras do
-`markup.tsx`, [ADR-0026](decisions/0026-marcacao-pura-e-de-servidor.md)) e as funções de apoio —
-`cx`, `defaultStrings`, `ptBR`, `defaultSpriteUrl` —, que por isso podem ser *chamadas* no servidor.
+The main entry point is a **server** module, so importing from it in a Server Component works. Interactive
+modules carry `"use client"` themselves. These stay on the server: the main entry point, the markup-only
+components (`Card`, `Stack`, `Cluster`, `Grid` and the others in `markup.tsx`) and the helper functions —
+`cx`, `defaultStrings`, `ptBR`, `defaultSpriteUrl` —, which can therefore be *called* on the server.
 
-Duas aplicações de prova são construídas a cada verificação — uma num framework com componentes de
-servidor, outra num bundler só de cliente —, e o build reprova se uma diretiva faltar ou
-aparecer onde não precisa.
+Two proof applications are built on every check — one in a framework with server components, one in a
+client-only bundler —, and the build fails if a directive is missing or appears where it is not needed.
 
-### Seis módulos com engine opcional, cada um no seu entry point
+### Six modules with an optional engine, each on its own entry point
 
-`@aurea-uds/react` tem **uma** dependência obrigatória: `@base-ui/react`. Seis módulos precisam de uma
-engine mais pesada, e cada uma é declarada como **optional peer dependency**, para o resto da biblioteca
-não custar nada:
+`@aurea-uds/react` has **one** required dependency: `@base-ui/react`. Six modules need a heavier engine,
+and each one is declared as an **optional peer dependency**, so the rest of the library costs nothing:
 
-| Componente | Importe de | Instale junto |
+| Component | Import from | Install with it |
 |---|---|---|
 | `CodeEditor` | `@aurea-uds/react/code-editor` | `codemirror`, `@codemirror/*`, `@lezer/highlight` |
 | `DataGrid` | `@aurea-uds/react/data-grid` | `@tanstack/react-table` |
@@ -114,133 +111,131 @@ não custar nada:
 | `Chart`, `ChartLegend`, `ChartTooltip` | `@aurea-uds/react/chart` | `recharts` |
 | `DependencyGraph` | `@aurea-uds/react/graph` | `@xyflow/react` |
 
-Eles **não** saem pelo entry point principal: se saíssem, importar um `Button` carregaria uma
-dependência que você não instalou, e a importação quebraria.
+They are **not** exported from the main entry point: if they were, importing a `Button` would load a
+dependency you did not install, and the import would break.
 
-Todo o resto está no entry point principal e também por categoria (`@aurea-uds/react/actions`,
-`/inputs`, `/navigation`, `/overlays`, `/disclosure`, `/feedback`, `/data-display`, `/identity`,
-`/media`, `/code`, `/communication`, `/layout`, `/system`, `/agents`) — a mesma divisão do registry.
-O pacote é ESM com `sideEffects: false`, então o bundler descarta o que você não importa de
-qualquer jeito; os entry points por categoria servem para ler e para adotar por partes.
+Everything else is on the main entry point and also by category (`@aurea-uds/react/actions`, `/inputs`,
+`/navigation`, `/overlays`, `/disclosure`, `/feedback`, `/data-display`, `/identity`, `/media`, `/code`,
+`/communication`, `/layout`, `/system`, `/agents`). The package is ESM with `sideEffects: false`, so the
+bundler drops what you do not import either way; the category entry points are for reading and for
+adopting in parts.
 
-### Ícones: aponte o provider para o seu sprite
+### Icons: point the provider to your sprite
 
-O `Icon` desenha um glifo como `<use href="{spriteUrl}#i-{nome}">`. O padrão é `/aurea-icons.svg`,
-que só funciona quando o app é servido na raiz do domínio. **Se não for o seu caso, configure uma
-vez no provider**, ou todo ícone de todo componente falha em silêncio:
+`Icon` draws a glyph as `<use href="{spriteUrl}#i-{name}">`. The default is `/aurea-icons.svg`, which only
+works when the app is served from the domain root. **If that is not your case, set it once on the
+provider**, or every icon of every component fails silently:
 
 ```tsx
 <AureaProvider spriteUrl="/assets/aurea-icons.svg">{children}</AureaProvider>
 ```
 
-Copie `node_modules/@aurea-uds/icons/dist/aurea-icons.svg` para esse caminho, ou empacote e passe a
-URL resultante. Numa página que embute os ícones como `<symbol>`, passe `spriteUrl=""` para a
-referência ficar local — é o que o catálogo faz.
+Copy `node_modules/@aurea-uds/icons/dist/aurea-icons.svg` to that path, or bundle it and pass the resulting
+URL. On a page that inlines the icons as `<symbol>`, pass `spriteUrl=""` so the reference stays local.
 
-**O nome do ícone é checado pelo TypeScript**: `<Icon name="chevron-down">` (o nome do Phosphor é
-`caret-down`) não compila, nem em `leadingIcon`, `icon` ou qualquer prop que recebe
-ícone. Quem usa um sprite próprio declara os nomes dele **uma vez**:
+**Icon names are checked by TypeScript**: `<Icon name="chevron-down">` (the Phosphor name is
+`caret-down`) does not compile, in `leadingIcon`, `icon` or any prop that takes an icon. If you use your
+own sprite, declare its names **once**:
 
 ```tsx
 declare module "@aurea-uds/react" {
-  interface AureaIconNames { marca: true }
+  interface AureaIconNames { brand: true }
 }
 ```
 
-### Overlays acessíveis
+### Accessible overlays
 
-Prender o foco, fechar com Esc, devolver o foco e travar a rolagem vêm do
-[Base UI](https://base-ui.com): `Dialog`, `Drawer`, `Tooltip`, `Popover`, `DropdownMenu`,
-`ContextMenu`, `Combobox`, `Tabs` e `useToast()`.
+Focus trapping, closing with Esc, returning focus and scroll locking come from
+[Base UI](https://base-ui.com): `Dialog`, `Drawer`, `Tooltip`, `Popover`, `DropdownMenu`, `ContextMenu`,
+`Combobox`, `Tabs` and `useToast()`.
 
-### Tema e densidade
+### Theme and density
 
-`useAureaTheme()` lê e escreve os dois eixos que a Aurea põe no `<html>`: `data-theme` e
-`data-density`. Ele lê o DOM em vez de guardar estado próprio, então segue quem de fato muda o
-atributo. `theme` é `null` enquanto não se sabe — no servidor não dá para saber, e fingir o
-contrário causa hydration mismatch.
+`useAureaTheme()` reads and writes the two axes Aurea puts on `<html>`: `data-theme` and `data-density`.
+It reads the DOM instead of keeping its own state, so it follows whoever actually changes the attribute.
+`theme` is `null` while it is unknown — on the server it cannot be known, and pretending otherwise causes a
+hydration mismatch.
 
-**Ele não guarda nada, de propósito.** Lembrar a preferência é trabalho da aplicação. Para guardar,
-seguir o sistema e evitar o piscar na carga, o [`next-themes`](https://github.com/pacocoursey/next-themes)
-já faz tudo e escreve `data-theme` no `<html>` — o mesmo atributo que a Aurea lê. O que nenhuma
-biblioteca de tema cobre é a **densidade**, que é eixo da Aurea; é para isso que o hook existe.
+**It stores nothing, on purpose.** Remembering the preference is the application's job. To store it,
+follow the system and avoid the flash on load, [`next-themes`](https://github.com/pacocoursey/next-themes)
+already does it all and writes `data-theme` on `<html>` — the same attribute Aurea reads. What no theme
+library covers is **density**, which is an Aurea axis; that is what the hook is for.
 
-### RTL
+### Right-to-left
 
-O CSS usa propriedades lógicas no eixo da linha e se espelha sozinho. São dois passos:
+The CSS uses logical properties on the inline axis and mirrors itself. It takes two steps:
 
 ```tsx
-<html dir="rtl">                        {/* espelha o CSS */}
-  <AureaProvider direction="rtl">       {/* avisa o Base UI */}
+<html dir="rtl">                        {/* mirrors the CSS */}
+  <AureaProvider direction="rtl">       {/* tells Base UI */}
     {children}
   </AureaProvider>
 </html>
 ```
 
-O provider não mexe no DOM: pôr `dir` no `<html>` é da aplicação. Não se espelham, de propósito: o
-visto do `Checkbox`, o spinner (glifos desenhados com borda) e o
-`Drawer side="left"|"right"` (o nome promete um lado físico).
+The provider does not touch the DOM: putting `dir` on `<html>` is the application's job. Not mirrored, on
+purpose: the `Checkbox` check, the spinner (glyphs drawn with a border) and `Drawer side="left"|"right"`
+(the name promises a physical side).
 
-## Para assistentes de IA
+## For AI assistants
 
-A documentação também sai em texto para assistentes de IA: o índice em `https://aureauds.dev/llms.txt`, tudo num
-arquivo só em `https://aureauds.dev/llms-full.txt`, e cada página em `.md`, ao lado do `.html`. A skill da Aurea mora em
-[`skills/aurea-uds/SKILL.md`](skills/aurea-uds/SKILL.md) e se instala com:
+The documentation is also published as text for AI assistants: the index at `https://aureauds.dev/llms.txt`,
+everything in one file at `https://aureauds.dev/llms-full.txt`, and every page as `.md`, next to the
+`.html`. The Aurea skill lives in [`skills/aurea-uds/SKILL.md`](skills/aurea-uds/SKILL.md) and installs
+with:
 
 ```bash
 npx skills add victor1mor/aurea-uds
 ```
 
-## Ver o catálogo
+## Build the catalog locally
 
-Construa e abra qualquer página direto do disco — as páginas não precisam de servidor:
+Build, then open any page straight from disk — the pages do not need a server:
 
 ```bash
 pnpm build
 ```
 
-Abra `apps/catalog/index.html`. Para servir (porta 8123):
+Open `apps/catalog/index.html`. To serve it (port 8123):
 
 ```bash
 python -m http.server 8123
 ```
 
-O parágrafo abaixo é gerado a partir do repositório por `python scripts/validate.py --write-state`
-e conferido — editado à mão, a validação reprova. Os números completos estão no
-[STATE.md](STATE.md).
+The numbers below are generated from the repository; the full figures are in [STATE.md](STATE.md).
 
 <!-- state:begin -->
-612 páginas geradas — 228 de componente, 234 de padrão, 15 de bloco, 23 de receita, 101 de documentação e 11 índices de área — a partir de 138 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 105 trazem um starter — o preview real e o código, ainda sem exemplos extras. 150 componentes publicam a tabela de props.
+612 pages generated — 228 component, 234 pattern, 15 block, 23 recipe, 101 documentation and 11 area index pages — from 138 component records. Every page has the same core: breadcrumb, preview, the code that produces it, installation, provenance and previous/next. 44 components have hand-written content; the other 105 have a starter — the real preview and the code, without extra examples yet. 150 components publish the props table.
 <!-- state:end -->
 
-## Como o repositório se organiza
+## Repository layout
 
-- `apps/catalog`: o catálogo, **gerado** a partir do registry por `scripts/build-catalog.mjs`;
-- `packages/tokens`: os tokens no formato DTCG 2025.10 e o CSS gerado;
-- `packages/fonts`: a Inter, a Sora e a IBM Plex Mono (WOFF2) e o `fonts.css`; e, para o React Native, as mesmas três em TTF estático, um por peso (ADR-0077);
-- `packages/contracts`: o contrato do projeto e o registry (uma ficha por componente);
-- `packages/core`: o CSS gerado (tokens e componentes) e o comportamento em JavaScript puro;
-- `packages/icons`: o sprite de ícones do Phosphor e a tabela de nomes do Carbon para o Phosphor;
-- `packages/react`: os componentes React, tipados;
-- `packages/native`: os componentes React Native;
-- [`decisions/`](decisions/README.md): as decisões registradas (ADRs);
-- [`docs/`](docs/): como se constrói, onde mexer, quando algo está pronto e o caminho até a `1.0`.
+- `apps/catalog`: the documentation site, **generated** from the registry by `scripts/build-catalog.mjs`;
+- `packages/tokens`: the tokens in the DTCG 2025.10 format and the generated CSS;
+- `packages/fonts`: Inter, Sora and IBM Plex Mono (WOFF2) and `fonts.css`; and, for React Native, the same three as static TTF, one file per weight;
+- `packages/contracts`: the project contract and the registry (one record per component);
+- `packages/core`: the generated CSS (tokens and components) and the plain JavaScript behaviour;
+- `packages/icons`: the Phosphor icon sprite;
+- `packages/react`: the React components, typed;
+- `packages/native`: the React Native components;
+- [`decisions/`](decisions/README.md): the recorded design decisions;
+- [`docs/`](docs/): how components are built, where to change what, when something is done, and the road to `1.0`.
 
-## Suporte
+## Support
 
-A Aurea é gratuita para todo mundo, e eu a mantenho sozinho.
+Aurea is free for everyone, and I maintain it on my own.
 
-Pedidos, dúvidas e falhas são bem-vindos: abra uma issue. Eu leio tudo, e o que fizer sentido entra
-na fila e é corrigido no ritmo do projeto, sem prazo prometido.
+Requests, questions and bug reports are welcome: open an issue. I read everything, and what makes sense goes
+into the queue and is fixed at the project's pace, with no promised deadline.
 
-A ideia é ajudar, principalmente quem não pode pagar por uma biblioteca de interface.
+The idea is to help, especially people who cannot pay for a UI library.
 
-## Contribuir
+## Contributing
 
-Leia o [CONTRIBUTING.md](CONTRIBUTING.md). Para relatar uma falha de segurança, siga o
-[SECURITY.md](SECURITY.md) — não abra uma issue pública.
+Read [CONTRIBUTING.md](CONTRIBUTING.md). To report a security issue, follow [SECURITY.md](SECURITY.md) —
+do not open a public issue.
 
-## Licença
+## License
 
-Apache 2.0 — veja o [LICENSE](LICENSE) e o [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (Inter, Sora
-e IBM Plex Mono sob OFL 1.1, Phosphor Icons sob MIT).
+Apache 2.0 — see [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) (Inter, Sora and
+IBM Plex Mono under OFL 1.1, Phosphor Icons under MIT).

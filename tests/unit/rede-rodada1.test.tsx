@@ -42,8 +42,9 @@ describe("MNT-01 e MNT-03", () => {
       expect(NOMES_PHOSPHOR.has(tabela[nome])).toBe(true);
     });
   }
+  // O README passou para o inglês em 07/11/2026 (o Victor: "tudo deve ser em inglês"); o aviso continua.
   test("o README manda reiniciar o servidor de desenvolvimento depois de atualizar", () => {
-    expect(readFileSync("README.md", "utf8")).toMatch(/reinicie o servidor de desenvolvimento/i);
+    expect(readFileSync("README.md", "utf8")).toMatch(/restart the development server/i);
   });
 });
 

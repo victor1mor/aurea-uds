@@ -1,7 +1,7 @@
 <page url="https://aureauds.dev/getting-started.html">
 # Introduction
 
-An open-source design system with one look for the web and for React Native, made to be read by people with low vision.
+An open-source design system with one look for the web and for React Native, with contrast measured in every theme and brand.
 
 Aurea is a design system with two outputs: the **web** (React components and plain CSS) and **mobile** (React Native components). The look is the same on both sides.
 
@@ -205,9 +205,9 @@ Aurea is a design system for React on the web and React Native. It follows ten p
 
 ## Core principles
 
-### 1. Low vision first
+### 1. Accessible by measure, not by promise
 
-Aurea is designed for people who see poorly, and that choice shapes the rest of the system. Focus is always visible. Touch targets are at least 44px. Contrast is measured in the browser, not estimated.
+Every component is checked for contrast, focus and keyboard use, and that choice shapes the rest of the system. Focus is always visible. Touch targets are at least 44px. Contrast is measured in the browser, not estimated.
 
 Where the identity and legibility pull in different directions, the trade-off is written down, with its numbers. See [Accessibility](./docs-accessibility.html).
 
@@ -1510,7 +1510,7 @@ export function FadeIn({children}: {children: React.ReactNode}) {
 
 - Target state attributes in [Styling](./docs-styling.html).
 - See every token on the [Tokens](./tokens.html) page.
-- Read how Aurea serves low vision in [Accessibility](./docs-accessibility.html).
+- Read how Aurea handles accessibility in [Accessibility](./docs-accessibility.html).
 </page>
 
 <page url="https://aureauds.dev/docs-composition.html">
@@ -2017,9 +2017,9 @@ On React Native, the right-to-left layout is switched on by the app, through Rea
 <page url="https://aureauds.dev/docs-accessibility.html">
 # Accessibility
 
-What Aurea does for people with low vision, keyboard and screen-reader users, and how each part is checked.
+What Aurea does for contrast, keyboard and screen-reader users, and how each part is checked.
 
-Low vision is the first audience Aurea designs for. This page lists what the components do on their own, what the test suite checks, and the places where Aurea knowingly falls short.
+Aurea measures its accessibility instead of promising it. This page lists what the components do on their own, what the test suite checks, and the places where Aurea knowingly falls short.
 
 ## At a glance
 
@@ -2243,7 +2243,7 @@ Ask it, for example, to:
 
 - Installation and setup, for the web and for React Native.
 - The rules the look depends on: tokens only, no lines, the yellow that does not change, Phosphor icon names.
-- The accessibility the app must keep, so the result stays readable for people with low vision.
+- The accessibility the app must keep, so the result keeps its contrast, visible focus and keyboard support.
 - Where to read each component: the [LLMs.txt](./docs-llms-txt.html) files.
 
 ## Structure
@@ -15595,7 +15595,7 @@ import {Section, Badge, Button} from "@aurea-uds/react";
   align="center"
   eyebrow={<Badge tone="primary" emphasis="flat">Version 2.0 is out</Badge>}
   title="One design system. Web and native."
-  description="The same look on both sides, made for people who see little."
+  description="The same look on both sides, with contrast you can measure."
   actions={<>
     <Button variant="primary" href="/start">Get started</Button>
     <Button variant="outline" href="/components">View components</Button>

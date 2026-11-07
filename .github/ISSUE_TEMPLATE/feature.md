@@ -1,12 +1,12 @@
 ---
-name: Sugestão de feature
-about: Uma prop, um componente ou uma mudança que falta
+name: Feature request
+about: A prop, a component or a change that is missing
 ---
 
-**Onde:** web, nativo ou os dois?
+**Where:** web, native or both?
 
-**O que você precisa fazer e não consegue hoje:**
+**What you need to do and cannot do today:**
 
-**Como resolve hoje** (o remendo que está usando):
+**How you work around it today:**
 
-**Como outro design system resolve** (link, se souber):
+**How another design system solves it** (a link, if you know one):

@@ -8,10 +8,10 @@ import {ferramentas} from "./_getting-started/comum.mjs";
 const APARENCIAS = ["solid", "outline", "ghost", "link", "nav", "soft"];
 const TONS = ["neutral", "brand", "danger", "success", "warning", "info"];
 // O mapa: o nome curto de cada regra e se um teste a cobre (o desenho).
-const MAPA = [["Low vision first", true], ["Tokens are the single source", true], ["A shape you can recognise", true], ["No lines", true],
+const MAPA = [["Accessible by measure", true], ["Tokens are the single source", true], ["A shape you can recognise", true], ["No lines", true],
   ["The yellow does not change", false], ["Meaning before appearance", false], ["Behaviour from a proven engine", false],
   ["One API across web and native", false], ["Grow by variation", false]];
-const NO_INDICE = ["1 · Low vision first", "2 · Tokens", "3 · A shape", "4 · No lines", "5 · The yellow", "6 · Meaning first",
+const NO_INDICE = ["1 · Measured access", "2 · Tokens", "3 · A shape", "4 · No lines", "5 · The yellow", "6 · Meaning first",
   "7 · Engine and skin", "8 · One API", "9 · Grow by variation"];
 
 export default function designPrinciples(site, doc) {

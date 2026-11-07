@@ -1,34 +1,32 @@
-# Como contribuir com a Aurea
+# Contributing to Aurea
 
-A Aurea é mantida pelo Victor, e é ele quem decide. Contribuição é bem-vinda, com uma ressalva:
-**a identidade visual não está em discussão** (a seção 5 do [`CLAUDE.md`](CLAUDE.md) diz o que ela
-é). Pedido para trocar o amarelo, os raios, a letra ou a densidade vai ser fechado.
+Aurea is maintained by Victor, who makes the final call. Contributions are welcome, with one caveat:
+**the visual identity is not up for discussion** (the "The look" section of the [README](README.md) says
+what it is). Requests to change the yellow, the radii, the type or the densities will be closed.
 
-O projeto é escrito em **português**: issues, pull requests, comentários e documentos.
+Please write issues and pull requests in **English**.
 
-## Antes de começar
+## Before you start
 
-- **Bug ou ideia:** abra uma issue antes de escrever código. Diga o que você tentou, o que
-  esperava e o que aconteceu, e se é na **web** ou no **nativo** — as duas bibliotecas são
-  diferentes.
-- **Componente novo:** leia o [`docs/BUILDING.md`](docs/BUILDING.md) primeiro. Componente não
-  começa sem ele.
-- **Decisão já tomada** mora em [`decisions/`](decisions/README.md) e não se reabre sem evidência
-  nova.
+- **Bug or idea:** open an issue before writing code. Say what you tried, what you expected and what
+  happened, and whether it is on the **web** or **native** — the two libraries are different.
+- **New component:** read [`docs/BUILDING.md`](docs/BUILDING.md) first. No component starts without it.
+- **Decisions already made** live in [`decisions/`](decisions/README.md) and are not reopened without new
+  evidence.
 
-## Preparar a máquina
+## Set up your machine
 
-- Node 24, pnpm 12 e Python 3. O `pnpm` de outra versão troca sozinho para a do projeto
-  (campo `packageManager` do `package.json`).
+- Node 24, pnpm 12 and Python 3. A different `pnpm` switches itself to the project's version (the
+  `packageManager` field of `package.json`).
 
 ```bash
 pnpm install
 pnpm build
 ```
 
-## Verificar antes de abrir o pull request
+## Check before opening a pull request
 
-Rode, um por linha:
+Run them one per line:
 
 ```bash
 python scripts/validate.py
@@ -37,24 +35,24 @@ npx vitest run
 node scripts/check-pack.mjs
 ```
 
-O `validate.py` confere, entre outras coisas, que nenhum nome privado do mantenedor entrou no
-código. A lista desses nomes **não é pública**: sem ela o validador reprova, avisando. Para rodar
-sem a lista na sua máquina, declare `AUREA_SEM_LISTA=1`. No pull request vindo de um fork, o CI
-também roda sem a lista; a conferência com ela fica com o mantenedor.
+Among other things, `validate.py` checks that none of the maintainer's private names entered the code.
+That list **is not public**: without it the validator fails and tells you so. To run without the list on
+your machine, set `AUREA_SEM_LISTA=1`. On a pull request from a fork, CI also runs without the list; the
+check with it stays with the maintainer.
 
-## As regras que um pull request precisa cumprir
+## Rules a pull request must follow
 
-- **Todo número de geometria sai de um token.** Pixel cru no CSS reprova no CI.
-- **Conserto vem com o teste que falha no defeito antigo**, no mesmo commit. Teste que passa com o
-  defeito dentro não prova nada.
-- **Mudou a API de um componente? Mude a ficha** em `packages/contracts/registry/`. O validador
-  confere uma contra a outra.
-- **Mudou a aparência? Mostre antes e depois**, nos dois temas.
-- **Nada de marca registrada de terceiro** (logos de empresas) dentro da biblioteca.
-- Código copiado de outro projeto só entra se a licença permitir (Apache-2.0 aceita MIT, BSD e
-  Apache; **não** aceita AGPL nem licença não-comercial), com crédito no
+- **Every geometry number comes from a token.** A raw pixel value in the CSS fails CI.
+- **A fix comes with a test that fails on the old defect**, in the same commit. A test that passes with
+  the defect inside proves nothing.
+- **Changed a component's API? Change its record** in `packages/contracts/registry/`. The validator checks
+  one against the other.
+- **Changed the look? Show before and after**, in both themes.
+- **No third-party trademarks** (company logos) inside the library.
+- Code copied from another project only comes in if the licence allows it (Apache-2.0 accepts MIT, BSD and
+  Apache; it does **not** accept AGPL or non-commercial licences), credited in
   [`docs/REFERENCES.md`](docs/REFERENCES.md).
 
-## Licença
+## Licence
 
-Ao contribuir, você concorda que a sua contribuição sai sob a [Apache 2.0](LICENSE).
+By contributing, you agree that your contribution is released under [Apache 2.0](LICENSE).

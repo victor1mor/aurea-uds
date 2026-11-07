@@ -9,9 +9,9 @@ Aurea is a design system for React on the web and React Native. It follows ten p
 
 ## Core principles
 
-### 1. Low vision first
+### 1. Accessible by measure, not by promise
 
-Aurea is designed for people who see poorly, and that choice shapes the rest of the system. Focus is always visible. Touch targets are at least 44px. Contrast is measured in the browser, not estimated.
+Every component is checked for contrast, focus and keyboard use, and that choice shapes the rest of the system. Focus is always visible. Touch targets are at least 44px. Contrast is measured in the browser, not estimated.
 
 Where the identity and legibility pull in different directions, the trade-off is written down, with its numbers. See [Accessibility](./docs-accessibility.html).
 

@@ -57,7 +57,7 @@ export default [
   align="center"
   eyebrow={<Badge tone="primary" emphasis="flat">Version 2.0 is out</Badge>}
   title="One design system. Web and native."
-  description="The same look on both sides, made for people who see little."
+  description="The same look on both sides, with contrast you can measure."
   actions={<>
     <Button variant="primary" href="/start">Get started</Button>
     <Button variant="outline" href="/components">View components</Button>
@@ -68,7 +68,7 @@ export default [
     render: () => h("div", {style: {width: "100%"}}, h(A.Section, {variant: "hero", align: "center", spacing: "sm",
       eyebrow: h(A.Badge, {tone: "primary", emphasis: "flat"}, "Version 2.0 is out"),
       title: "One design system. Web and native.",
-      description: "The same look on both sides, made for people who see little.",
+      description: "The same look on both sides, with contrast you can measure.",
       actions: [h(A.Button, {key: "a", variant: "primary", href: "#"}, "Get started"),
         h(A.Button, {key: "b", variant: "outline", href: "#"}, "View components")]},
       h(A.Link, {href: "#"}, "Open source on GitHub"))),

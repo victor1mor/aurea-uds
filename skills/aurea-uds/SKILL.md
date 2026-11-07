@@ -1,12 +1,12 @@
 ---
 name: aurea-uds
-description: Build interfaces with Aurea UDS, the design system with one look for the web (React and plain CSS) and React Native, made for people with low vision. Use when a project depends on @aurea-uds/react, @aurea-uds/core or @aurea-uds/native, or when the user asks for Aurea components, tokens, themes or styling.
+description: Build interfaces with Aurea UDS, the design system with one look for the web (React and plain CSS) and React Native, with contrast measured in every theme. Use when a project depends on @aurea-uds/react, @aurea-uds/core or @aurea-uds/native, or when the user asks for Aurea components, tokens, themes or styling.
 license: Apache-2.0
 ---
 
 # Aurea UDS
 
-Aurea is a design system with two outputs: the web (`@aurea-uds/react` and the plain CSS of `@aurea-uds/core`) and React Native (`@aurea-uds/native`). The look is the same on both sides, and it is made for people with low vision.
+Aurea is a design system with two outputs: the web (`@aurea-uds/react` and the plain CSS of `@aurea-uds/core`) and React Native (`@aurea-uds/native`). The look is the same on both sides, and its contrast is measured in every theme and brand.
 
 ## Read before you write code
 
