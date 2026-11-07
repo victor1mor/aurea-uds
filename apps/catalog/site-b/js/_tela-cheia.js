@@ -3,8 +3,10 @@
    clique põe a página no arranjo largo (`g1-largo` + `data-pagina-larga` no conteúdo, o mesmo das receitas: sem o índice
    da direita e sem o teto de largura) e traz a caixa de volta à vista; o botão vira "Normal width" e desfaz. Um botão só
    vale pela página inteira: todos trocam juntos. O botão mora no invólucro (`.demo`), fora do painel — a parte viva tira
-   do painel tudo o que era desenho pronto quando acende. As molduras (`.demo-frame`) ficam de fora. Script comum, sem
-   `import`: entra no fim do `assets/catalog.js`. */
+   do painel tudo o que era desenho pronto quando acende. Script comum, sem `import`: entra no fim do `assets/catalog.js`.
+   AS MOLDURAS TAMBÉM (06/11/2026, ADR-0093): elas ficavam de fora, e 87 exemplos de 25 páginas (a Sidebar, o BottomNav, o
+   AppShell, as peças de cor) saíam sem o botão — o Victor achou na Sidebar. A moldura cresce com a página como qualquer
+   caixa. */
 (function () {
   var raiz = function () { return document.querySelector(".site-shell > .content > *"); };
   // O sprite da página só leva os ícones que o HTML de alguma página usa: sem o símbolo, o botão sai só com o texto.
@@ -35,7 +37,6 @@
     // A página que já nasce larga (as receitas, as listas) não precisa do botão.
     if (!r || r.hasAttribute("data-pagina-larga") || r.classList.contains("g1-largo")) return;
     Array.prototype.forEach.call(document.querySelectorAll('.demo > .demo-panel[data-panel="preview"]'), function (painel) {
-      if (painel.querySelector(".demo-frame")) return;
       var botao = document.createElement("button");
       botao.type = "button";
       botao.className = "btn btn-tertiary btn-sm tela-cheia-abrir";

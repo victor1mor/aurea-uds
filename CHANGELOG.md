@@ -298,6 +298,13 @@ já tinha desenho aprovado ou decisão tomada; a logo e as decisões D1 a D8 da 
 
 - Os pontos de quebra do site em `em`, como os do core: com a fonte do navegador a 200% numa tela de 1280, a página do
   componente vira uma coluna (o título numa linha, o topo baixo), e não três colunas espremidas.
+- **As molduras** ([ADR-0093](decisions/0093-a-moldura-cresce-com-o-conteudo.md)), o que o Victor achou na `Sidebar` e a
+  varredura do site achou em 25 páginas (o Victor viu a proposta rodando no site publicado: *"Pode"*):
+  - **Todo exemplo em moldura tem o "Full width"** — 87 caixas não tinham (a `Sidebar`, o `BottomNav`, o `AppShell`, o
+    `Slider`, as peças de cor, o `DatePicker` e 15 padrões).
+  - **A moldura cresce até o conteúdo caber**, nunca abaixo da altura de antes. Ela cortava 24: o `AppShell` (366 numa de
+    270), o `BottomNav` (405), a abertura de página (668), a lista da `Sidebar` que rolava por dentro ("Shells" escondido).
+    Fica na altura de antes só a moldura que mostra a rolagem (a `Sidebar` com `scrollbar="visible"`).
 
 ### Registro
 
@@ -305,7 +312,8 @@ já tinha desenho aprovado ou decisão tomada; a logo e as decisões D1 a D8 da 
   a nota dela.
 
 Quem cobra: `tests/visual/texto-200.spec.ts` (a fonte padrão do Chromium em 32), `tests/visual/alto-contraste-escolhido.spec.ts`
-(as sete, nas páginas do site) e `tests/unit/header-onclick.test.tsx` — todos provados contra o código de antes.
+(as sete, nas páginas do site), `tests/unit/header-onclick.test.tsx` e `tests/visual/site-full-width.spec.ts` (as 25
+páginas com moldura) — todos provados contra o código de antes.
 
 ---
 

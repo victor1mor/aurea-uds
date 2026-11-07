@@ -338,6 +338,8 @@ export default {
       code: `<Sidebar scrollbar="visible" label="Components" current="button" items={items} />`,
       embed: true,
       layoutProprio: true,
+      // a moldura que mostra a rolagem fica na altura de sempre (ADR-0093): crescida, a lista caberia e a barra sumiria
+      alturaFixa: true,
       render: () => moldura({label: "Components", scrollbar: "visible", current: "button", items: MUITOS}),
     },
     // O BLOCO 2 (0.44.0) — o que faltava das quinze laterais aprovadas pelo Victor em 21/10/2026, cada coisa num exemplo vivo.
