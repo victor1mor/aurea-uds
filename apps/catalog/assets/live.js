@@ -1358,14 +1358,14 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
   align="center"
   eyebrow={<Badge tone="primary" emphasis="flat">Version 2.0 is out</Badge>}
   title="One design system. Web and native."
-  description="The same look on both sides, made for people who see little."
+  description="The same look on both sides, with contrast you can measure."
   actions={<>
     <Button variant="primary" href="/start">Get started</Button>
     <Button variant="outline" href="/components">View components</Button>
   </>}
 >
   <Link href="/github">Open source on GitHub</Link>
-</Section>`,render:()=>(0,f.createElement)(`div`,{style:{width:`100%`}},(0,f.createElement)(id,{variant:`hero`,align:`center`,spacing:`sm`,eyebrow:(0,f.createElement)(vd,{tone:`primary`,emphasis:`flat`},`Version 2.0 is out`),title:`One design system. Web and native.`,description:`The same look on both sides, made for people who see little.`,actions:[(0,f.createElement)(Z,{key:`a`,variant:`primary`,href:`#`},`Get started`),(0,f.createElement)(Z,{key:`b`,variant:`outline`,href:`#`},`View components`)]},(0,f.createElement)(Vd,{href:`#`},`Open source on GitHub`)))},{variant:`Hero`,embed:!0,tituloProprio:!0,name:`The page opening with an e-mail field`,description:`actions takes anything: here, the e-mail field with its button, inside a form. The field keeps its name for the screen reader (aria-label), because the placeholder is not a label.`,uses:[`Section`,`InputGroup`,`Input`,`Button`],code:`<Section
+</Section>`,render:()=>(0,f.createElement)(`div`,{style:{width:`100%`}},(0,f.createElement)(id,{variant:`hero`,align:`center`,spacing:`sm`,eyebrow:(0,f.createElement)(vd,{tone:`primary`,emphasis:`flat`},`Version 2.0 is out`),title:`One design system. Web and native.`,description:`The same look on both sides, with contrast you can measure.`,actions:[(0,f.createElement)(Z,{key:`a`,variant:`primary`,href:`#`},`Get started`),(0,f.createElement)(Z,{key:`b`,variant:`outline`,href:`#`},`View components`)]},(0,f.createElement)(Vd,{href:`#`},`Open source on GitHub`)))},{variant:`Hero`,embed:!0,tituloProprio:!0,name:`The page opening with an e-mail field`,description:`actions takes anything: here, the e-mail field with its button, inside a form. The field keeps its name for the screen reader (aria-label), because the placeholder is not a label.`,uses:[`Section`,`InputGroup`,`Input`,`Button`],code:`<Section
   variant="hero"
   title="Get the monthly notes"
   description="One e-mail a month with what changed. No spam."

@@ -36,7 +36,7 @@ Ask it, for example, to:
 
 - Installation and setup, for the web and for React Native.
 - The rules the look depends on: tokens only, no lines, the yellow that does not change, Phosphor icon names.
-- The accessibility the app must keep, so the result stays readable for people with low vision.
+- The accessibility the app must keep, so the result keeps its contrast, visible focus and keyboard support.
 - Where to read each component: the [LLMs.txt](./docs-llms-txt.html) files.
 
 ## Structure

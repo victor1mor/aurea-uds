@@ -1,6 +1,6 @@
 # Aurea UDS
 
-Aurea is a design system with two outputs: the web (`@aurea-uds/react` and the plain CSS of `@aurea-uds/core`) and React Native (`@aurea-uds/native`). The look is the same on both sides, and it is made for people with low vision.
+Aurea is a design system with two outputs: the web (`@aurea-uds/react` and the plain CSS of `@aurea-uds/core`) and React Native (`@aurea-uds/native`). The look is the same on both sides, and its contrast is measured in every theme and brand.
 
 ## Read before you write code
 

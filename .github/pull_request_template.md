@@ -1,12 +1,12 @@
-## O que muda
+## What changes
 
-## Por quê
+## Why
 
-## Como foi verificado
+## How it was checked
 
 - [ ] `python scripts/validate.py`
 - [ ] `pnpm build`
 - [ ] `npx vitest run`
 - [ ] `node scripts/check-pack.mjs`
-- [ ] teste novo que falha no código antigo
-- [ ] mudou aparência: foto de antes e depois, nos dois temas
+- [ ] a new test that fails on the old code
+- [ ] changed the look: before and after screenshots, in both themes

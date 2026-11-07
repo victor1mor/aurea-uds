@@ -1,6 +1,6 @@
 ---
 title: Introduction
-description: An open-source design system with one look for the web and for React Native, made to be read by people with low vision.
+description: An open-source design system with one look for the web and for React Native, with contrast measured in every theme and brand.
 icon: book-open
 sources: pkg:react, pkg:core, pkg:fonts, pkg:icons, pkg:tokens, pkg:contracts, pkg:native
 ---

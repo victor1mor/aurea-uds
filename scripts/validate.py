@@ -2285,18 +2285,17 @@ def project_state():
 
 
 def render_readme_block(s):
-    """Bloco de estado do README. Em português desde 24/09/2026 (decisão do Victor: o repositório
-    público é todo em português)."""
+    """Bloco de estado do README. ~~Em português desde 24/09/2026 (o repositório público era todo em português)~~ →
+    em INGLÊS desde 07/11/2026 (o Victor: "tudo deve ser em inglês" — o README é a porta de quem vem de fora)."""
     p = s["paginas"]
-    return (f"\n{s['paginas_total']} páginas geradas — {p['component']} de componente, "
-            f"{p['pattern']} de padrão, {p['block']} de bloco, {p['recipe']} de receita, "
-            f"{p['doc']} de documentação e "
-            f"{p['area']} índices de área — a partir de {s['fichas']} fichas. "
-            f"Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, "
-            f"procedência e anterior/próximo. {s['conteudo_rico']} componentes têm conteúdo "
-            f"escrito à mão; os outros {s['starters']} trazem um starter — o preview real e "
-            f"o código, ainda sem exemplos extras. {s['props']} componentes publicam a tabela de "
-            f"props.\n")
+    return (f"\n{s['paginas_total']} pages generated — {p['component']} component, "
+            f"{p['pattern']} pattern, {p['block']} block, {p['recipe']} recipe, "
+            f"{p['doc']} documentation and "
+            f"{p['area']} area index pages — from {s['fichas']} component records. "
+            f"Every page has the same core: breadcrumb, preview, the code that produces it, installation, "
+            f"provenance and previous/next. {s['conteudo_rico']} components have hand-written content; "
+            f"the other {s['starters']} have a starter — the real preview and the code, without extra "
+            f"examples yet. {s['props']} components publish the props table.\n")
 
 
 def _frase_m8(s):

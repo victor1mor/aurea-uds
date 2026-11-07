@@ -1,14 +1,14 @@
 ---
 name: Bug
-about: Algo não funciona como a documentação diz
+about: Something does not work the way the documentation says
 ---
 
-**Onde:** web (`@aurea-uds/react` / `core`) ou nativo (`@aurea-uds/native`)?
+**Where:** web (`@aurea-uds/react` / `core`) or native (`@aurea-uds/native`)?
 
-**Versão:**
+**Version:**
 
-**O que você fez** (o menor exemplo possível):
+**What you did** (the smallest possible example):
 
-**O que esperava:**
+**What you expected:**
 
-**O que aconteceu** (foto, se for aparência — nos dois temas, se puder):
+**What happened** (a screenshot, if it is about the look — in both themes, if you can):

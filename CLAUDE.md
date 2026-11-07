@@ -230,6 +230,14 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
 1. **O repositório está aberto desde 24/09/2026**, com um commit só. O histórico antigo e o diário
    ficaram no privado (`aurea-uds-privado`), que não recebe mais envios. Termos técnicos
    consagrados ficam em inglês (mobile, bundler, pull request, issue) — decisão do Victor, 24/09.
+   - **TUDO O QUE É PÚBLICO É EM INGLÊS** (ordem do Victor, 07/11/2026: *"tudo deve ser em inglês"*): o README, o
+     `CONTRIBUTING.md`, o `SECURITY.md`, os modelos de issue e de pedido, a descrição do repositório, o site, as notas de
+     versão e os READMEs dos pacotes (estes no lote seguinte ao de 07/11). Os documentos de trabalho (este arquivo, o
+     `CHANGELOG.md`, as ADRs, os commits) continuam em português até ele dizer o contrário.
+   - **A Aurea não se anuncia como "feita para baixa visão"** (o Victor, 07/11/2026: *"é mentira, isso era da fonte
+     antiga"*): a promessa era da Atkinson. O que se diz é o que se prova — o contraste medido, o foco visível, o toque
+     de 44, os modos de alto contraste e de texto grande. Descrever um recurso para quem enxerga pouco continua certo;
+     dizer que a Aurea inteira é para baixa visão, não.
 2. **A sessão do app adota as peças novas** e mede no aparelho.
 3. **Lote 3 — "pode" dado em 24/09/2026:** M-01 (`render` em todos) · M-02 (`classNames` por
    parte) · B-02 (`Text`/`Heading`) · A-04 (nome de ícone checado pelo TypeScript) · B-09 (foco
@@ -896,6 +904,11 @@ continua só com ele (o npm pede o segundo fator).
    CHANGELOG. Só o que muda para quem usa; nada do processo, de pessoa ou de app. Versão que sai dentro de outra vira
    `## Includes vX.Y.Z` na nota de quem a publicou. ⚠ Sem a nota, o `build-catalog` para: a trava cobra toda versão com
    data no CHANGELOG.
+   - **E a release no GitHub** (com o "pode seguir" do Victor, 07/11/2026): `gh release create vX.Y.Z --target <o commit
+     COMPLETO da junção de onde ela foi publicada, tirado do git, nunca de memória> --title vX.Y.Z --notes-file <a nota,
+     sem o cabeçalho, com o link da página dela no site>`, a nova marcada como `--latest`. Um comando por release — a
+     permissão `Bash(gh release create:*)` só reconhece o comando que começa assim. Criar release não publica no npm (o
+     `release.yml` só roda à mão, com PUBLICAR). As 37 de antes foram criadas em 07/11/2026.
 
 **Duas regras do Victor, de 23/09/2026:** o `main` fica **sempre** atualizado (lote aprovado vai
 para a branch **e** para o `main`), e **só está aprovado depois que ele VÊ**.
@@ -1256,7 +1269,15 @@ sessão não chega à outra; este arquivo chega. O que já estava nas seções a
   referência principal peça a peça, com as variações, e adotar o jeito dela → a `1.0` só quando a
   sessão disser que está pronta, com aprovação visual dele, e com mais duas marcas além de `aurea` e
   `lory` (cumprido na `0.47.0`: as 11 da paleta da 1.0) → antes dela, uma auditoria rígida e independente de tudo, feita por quem não escreveu o código
-  (um agente sem o contexto da conversa, ou outra sessão aberta pelo Victor), consertada antes de sair.
+  ~~(um agente sem o contexto da conversa, ou outra sessão aberta pelo Victor)~~ → **pela Codex** (ordem do Victor,
+  07/11/2026: *"quando voce disser que 1.0 esta pronta ai o codex entra e inicia a auditoria"*; outra sessão do Claude
+  tem os mesmos pontos cegos), consertada antes de sair. O jeito: a Codex audita sem presumir que funciona; cada achado
+  vira um teste que REPROVA; a sessão conserta; a Codex confere — só ela marca um achado como validado. **A sessão não
+  julga achado da Codex:** discordância só com prova (teste ou imagem); sem prova, vai ao Victor com imagem. Os
+  relatórios dela ficam FORA do repositório (`C:\Problemas aurea\auditoria-codex-1.0\`: o validador lê toda pasta do
+  repositório, e ele é público).
+- **O placar do "pronto"** (07/11/2026): cada vez que a sessão disser "pronto" e o Victor ou a CI achar defeito, uma
+  linha no documento de achados. E a cada versão, uma lista curta do que ele abre, onde clica e o que deve ver.
 - **Sem versão paga por enquanto** (08/10/2026): não propor preço, plano pago ou venda sem pedido dele.
   Pedido de quem é de fora é bem-vindo e entra na fila normal, sem prazo prometido; texto público sobre
   suporte, leve e acolhedor.

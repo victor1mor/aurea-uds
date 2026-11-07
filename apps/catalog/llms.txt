@@ -1,11 +1,11 @@
 # Aurea UDS
 
-> A design system with one look for the web (React and plain CSS) and for React Native, made to be read by people with low vision.
+> A design system with one look for the web (React and plain CSS) and for React Native, with contrast measured in every theme and brand.
 
 Every page below is Markdown. The whole documentation in one file: https://aureauds.dev/llms-full.txt. Notes for AI coding agents: https://aureauds.dev/aurea-agents.md.
 
 ## Getting Started
-- [Introduction](https://aureauds.dev/getting-started.md): An open-source design system with one look for the web and for React Native, made to be read by people with low vision.
+- [Introduction](https://aureauds.dev/getting-started.md): An open-source design system with one look for the web and for React Native, with contrast measured in every theme and brand.
 - [Quick Start](https://aureauds.dev/docs-quick-start.md): Install the packages, load the fonts before the core, and wrap the app in the provider.
 - [Design Principles](https://aureauds.dev/docs-design-principles.md): The ten rules behind every Aurea component, and how each one is checked.
 - [Frameworks](https://aureauds.dev/docs-frameworks.md): Use Aurea with Next.js, Vite, plain HTML or React Native.
@@ -20,7 +20,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Density](https://aureauds.dev/docs-density.md): Three sizes for the same interface, compact, comfortable and spacious, switched with one attribute.
 - [Icons](https://aureauds.dev/docs-icons.md): The Phosphor icon set, how to serve its sprite, the filled form for the selected item, and how to add your own drawing.
 - [RTL](https://aureauds.dev/docs-rtl.md): Mirror Aurea for right-to-left languages with two settings, and know what stays in place on purpose.
-- [Accessibility](https://aureauds.dev/docs-accessibility.md): What Aurea does for people with low vision, keyboard and screen-reader users, and how each part is checked.
+- [Accessibility](https://aureauds.dev/docs-accessibility.md): What Aurea does for contrast, keyboard and screen-reader users, and how each part is checked.
 - [LLMs.txt](https://aureauds.dev/docs-llms-txt.md): Files that let AI coding assistants read the Aurea documentation.
 - [Agent Skills](https://aureauds.dev/docs-agent-skills.md): Give your AI coding assistant the rules for building interfaces with Aurea.
 - [AGENTS.md](https://aureauds.dev/docs-agents-md.md): Short Aurea rules to put in your project's AGENTS.md, for AI coding agents.

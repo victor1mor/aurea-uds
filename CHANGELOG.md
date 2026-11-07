@@ -17,6 +17,21 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### A porta em inglês e a promessa que se prova (07/11/2026)
+
+- **Tudo o que é público passa ao inglês** (o Victor: *"tudo deve ser em inglês"*): o README (sem o processo interno —
+  o validador, os números de ADR —, com o link do site e as notas de versão), o `CONTRIBUTING.md`, o `SECURITY.md`, os
+  dois modelos de issue, o de pedido de junção e o bloco de estado do README, que o `validate.py` gera. A descrição e os
+  tópicos do repositório também (fora do git). Os READMEs dos sete pacotes ficam para o lote seguinte (1.440 linhas).
+- **A Aurea não se anuncia mais como "feita para baixa visão"** (o Victor: *"é mentira, isso era da fonte antiga"* — a
+  promessa era da Atkinson): a abertura do site, a Introduction, o primeiro princípio ("Accessible by measure, not by
+  promise"), a página de acessibilidade, o `llms.txt`, a skill, duas páginas da Getting Started e o exemplo da `Section`
+  dizem o que se prova — o contraste medido em todo tema e marca. As frases que descrevem um recurso para quem enxerga
+  pouco (o texto grande do mapa) e as que admitem o que a fonte nova perdeu ficam.
+- **No `CLAUDE.md`:** tudo o que é público em inglês; a release no GitHub a cada publicação (as 37 de antes criadas em
+  07/11); a auditoria da 1.0 pela Codex, com os relatórios fora do repositório; e o placar do "pronto".
+- Não muda nenhum pacote publicado.
+
 ### O site B: a All Components e a lateral de Components no padrão da Docs (01/11/2026)
 
 - **A página All Components no desenho B** (aprovada pelo Victor na bancada da página inteira, *"Pode"*, 01/11/2026): o palco

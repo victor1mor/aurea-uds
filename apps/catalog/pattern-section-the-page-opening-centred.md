@@ -14,7 +14,7 @@ import {Section, Badge, Button} from "@aurea-uds/react";
   align="center"
   eyebrow={<Badge tone="primary" emphasis="flat">Version 2.0 is out</Badge>}
   title="One design system. Web and native."
-  description="The same look on both sides, made for people who see little."
+  description="The same look on both sides, with contrast you can measure."
   actions={<>
     <Button variant="primary" href="/start">Get started</Button>
     <Button variant="outline" href="/components">View components</Button>

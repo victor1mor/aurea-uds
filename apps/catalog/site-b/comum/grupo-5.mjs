@@ -35,7 +35,7 @@ export function indiceLlms(site) {
   ];
   return [
     "# Aurea UDS",
-    "> A design system with one look for the web (React and plain CSS) and for React Native, made to be read by people with low vision.",
+    "> A design system with one look for the web (React and plain CSS) and for React Native, with contrast measured in every theme and brand.",
     `Every page below is Markdown. The whole documentation in one file: ${SITE}/llms-full.txt. Notes for AI coding agents: ${SITE}/aurea-agents.md.`,
     ...grupos.map(([grupo, lista]) => [`## ${grupo}`, ...lista.map(x =>
       `- [${x.nome}](${SITE}/${x.arquivo.replace(/\.html$/, ".md")})${x.resumo ? `: ${x.resumo.replace(/\s+/g, " ")}` : ""}`)].join("\n")),

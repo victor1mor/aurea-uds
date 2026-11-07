@@ -112,4 +112,4 @@ export function FadeIn({children}: {children: React.ReactNode}) {
 
 - Target state attributes in [Styling](./docs-styling.html).
 - See every token on the [Tokens](./tokens.html) page.
-- Read how Aurea serves low vision in [Accessibility](./docs-accessibility.html).
+- Read how Aurea handles accessibility in [Accessibility](./docs-accessibility.html).
