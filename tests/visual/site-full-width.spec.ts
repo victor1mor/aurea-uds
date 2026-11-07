@@ -48,12 +48,6 @@ const PAGINAS_COM_MOLDURA = readdirSync(join(process.cwd(), "apps/catalog"))
   .filter((f) => f.endsWith(".html") && readFileSync(join(process.cwd(), "apps/catalog", f), "utf8").includes('class="demo-frame"'))
   .sort();
 
-// O corte que NÃO é da moldura, com a medida. Cada um é pergunta ao Victor, com imagem; sai daqui quando for consertado.
-const CORTE_DO_EXEMPLO: Record<string, string> = {
-  "Sidebar — The current item, five ways preview": "cada lateral corta o terceiro item (124 em 94): o exemplo tira a margem "
-    + "(margin 0) e a lateral flutuante continua descontando os 32 dela da altura (max-height calc(100% - 32px))",
-};
-
 test("toda caixa com moldura tem o Full width, e a moldura mostra o conteúdo inteiro", async ({page}) => {
   test.setTimeout(10 * 60_000);
   expect(PAGINAS_COM_MOLDURA.length, "as páginas com moldura").toBeGreaterThanOrEqual(25);
@@ -88,7 +82,7 @@ test("toda caixa com moldura tem o Full width, e a moldura mostra o conteúdo in
       if (!m.botao) falhas.push(`${pag} #${m.i} (${m.titulo}): sem o Full width`);
       if (m.foraDaCaixa > 1) falhas.push(`${pag} #${m.i} (${m.titulo}): a moldura passa ${m.foraDaCaixa} da caixa`);
       if (m.fixa) continue;
-      if (m.corta > 1 && !CORTE_DO_EXEMPLO[m.titulo]) falhas.push(`${pag} #${m.i} (${m.titulo}): corta ${m.corta}`);
+      if (m.corta > 1) falhas.push(`${pag} #${m.i} (${m.titulo}): corta ${m.corta}`);
     }
   }
   expect(falhas).toEqual([]);

@@ -30,8 +30,9 @@
 
 - O `AppShell` só mostra a lateral a partir de 1024 de largura; numa tela de 1280, a moldura no "Full width" tem 823, e ele
   continua como gaveta.
-- O exemplo "The current item, five ways" da `Sidebar` corta o terceiro item de cada lateral: o exemplo tira a margem e a
-  lateral flutuante continua descontando os 32 dela da altura. É do exemplo, não da moldura.
+- ~~O exemplo "The current item, five ways" da `Sidebar` corta o terceiro item de cada lateral: o exemplo tira a margem e a
+  lateral flutuante continua descontando os 32 dela da altura. É do exemplo, não da moldura.~~ → Consertado no exemplo
+  (`maxHeight: "none"`), com o "Pode" do Victor depois de ver o antes e a proposta (06/11/2026). A peça não mudou.
 
 ## Quem cobra
 

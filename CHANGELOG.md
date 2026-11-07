@@ -305,6 +305,8 @@ já tinha desenho aprovado ou decisão tomada; a logo e as decisões D1 a D8 da 
   - **A moldura cresce até o conteúdo caber**, nunca abaixo da altura de antes. Ela cortava 24: o `AppShell` (366 numa de
     270), o `BottomNav` (405), a abertura de página (668), a lista da `Sidebar` que rolava por dentro ("Shells" escondido).
     Fica na altura de antes só a moldura que mostra a rolagem (a `Sidebar` com `scrollbar="visible"`).
+  - O exemplo "The current item, five ways" da `Sidebar` mostra os três itens de cada lateral (cortava o terceiro: o
+    exemplo tirava a margem e a lateral continuava descontando os 32 dela da altura). Só o exemplo; a peça não mudou.
 
 ### Registro
 
