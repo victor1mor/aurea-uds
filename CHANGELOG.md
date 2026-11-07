@@ -323,7 +323,8 @@ já tinha desenho aprovado ou decisão tomada; a logo e as decisões D1 a D8 da 
   quebra de tela é em `em` — no CSS do core, na camada responsiva gerada, no `matchMedia` do `AppShell` e das props
   responsivas. Com a fonte padrão do navegador aumentada (quem tem baixa visão faz isso em vez do zoom), o app se arruma
   como no zoom: com a fonte em dobro, a tela de 1280 se comporta como a de 640. Com a fonte normal, nada muda. O
-  `@container` continua em px (mede a caixa, não a tela).
+  `@container` continua em px (mede a caixa, não a tela). O `aurea.js` (a gaveta sem React) também: em px, com a fonte
+  aumentada, ele fechava a gaveta enquanto o CSS ainda a mostrava.
 - **No alto contraste do sistema, mais sete escolhidos se veem** (a forma "B", a mesma da 0.60.0): o botão ligado
   (`Toggle`, `ToggleGroup`, `Button pressed`), a etiqueta escolhida do `TagGroup`, o item escolhido da `ListBox`, o dia
   escolhido do `Calendar` e do `DatePicker`, a linha escolhida da `Table`/`DataGrid`; e o ponto do `Carousel`, que é fundo
@@ -335,6 +336,15 @@ já tinha desenho aprovado ou decisão tomada; a logo e as decisões D1 a D8 da 
 
 - Os pontos de quebra do site em `em`, como os do core: com a fonte do navegador a 200% numa tela de 1280, a página do
   componente vira uma coluna (o título numa linha, o topo baixo), e não três colunas espremidas.
+- **As molduras** ([ADR-0093](decisions/0093-a-moldura-cresce-com-o-conteudo.md)), o que o Victor achou na `Sidebar` e a
+  varredura do site achou em 25 páginas (o Victor viu a proposta rodando no site publicado: *"Pode"*):
+  - **Todo exemplo em moldura tem o "Full width"** — 87 caixas não tinham (a `Sidebar`, o `BottomNav`, o `AppShell`, o
+    `Slider`, as peças de cor, o `DatePicker` e 15 padrões).
+  - **A moldura cresce até o conteúdo caber**, nunca abaixo da altura de antes. Ela cortava 24: o `AppShell` (366 numa de
+    270), o `BottomNav` (405), a abertura de página (668), a lista da `Sidebar` que rolava por dentro ("Shells" escondido).
+    Fica na altura de antes só a moldura que mostra a rolagem (a `Sidebar` com `scrollbar="visible"`).
+  - O exemplo "The current item, five ways" da `Sidebar` mostra os três itens de cada lateral (cortava o terceiro: o
+    exemplo tirava a margem e a lateral continuava descontando os 32 dela da altura). Só o exemplo; a peça não mudou.
 
 ### Registro
 
@@ -342,7 +352,8 @@ já tinha desenho aprovado ou decisão tomada; a logo e as decisões D1 a D8 da 
   a nota dela.
 
 Quem cobra: `tests/visual/texto-200.spec.ts` (a fonte padrão do Chromium em 32), `tests/visual/alto-contraste-escolhido.spec.ts`
-(as sete, nas páginas do site) e `tests/unit/header-onclick.test.tsx` — todos provados contra o código de antes.
+(as sete, nas páginas do site), `tests/unit/header-onclick.test.tsx` e `tests/visual/site-full-width.spec.ts` (as 25
+páginas com moldura) — todos provados contra o código de antes.
 
 ---
 

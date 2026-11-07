@@ -338,6 +338,8 @@ export default {
       code: `<Sidebar scrollbar="visible" label="Components" current="button" items={items} />`,
       embed: true,
       layoutProprio: true,
+      // a moldura que mostra a rolagem fica na altura de sempre (ADR-0093): crescida, a lista caberia e a barra sumiria
+      alturaFixa: true,
       render: () => moldura({label: "Components", scrollbar: "visible", current: "button", items: MUITOS}),
     },
     // O BLOCO 2 (0.44.0) — o que faltava das quinze laterais aprovadas pelo Victor em 21/10/2026, cada coisa num exemplo vivo.
@@ -356,7 +358,9 @@ export default {
       render: () => h("div", {style: {display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(15rem, 1fr))", gap: "var(--space-4)",
         padding: "var(--space-4)", alignContent: "start", minHeight: "100vh"}},
         ...INDICADORES.map(([valor, rotulo]) => h(SidebarVivo, {key: valor, indicator: valor, label: rotulo, "aria-label": rotulo, current: "button", items: ITENS,
-          style: {position: "static", height: "auto", margin: 0}})),
+          // maxHeight: a lateral flutuante desconta os 32 da margem dela da altura; sem a margem, o desconto cortava o terceiro
+          // item de cada uma (124 em 94 — a varredura de 06/11/2026; o Victor viu o antes e a proposta: "Pode")
+          style: {position: "static", height: "auto", maxHeight: "none", margin: 0}})),
         h("main", null)),
     },
     // MNT-36 (0.50.0): a lateral de contraste — a forma A da bancada das 13 marcas.

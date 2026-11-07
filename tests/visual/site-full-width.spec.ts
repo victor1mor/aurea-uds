@@ -1,4 +1,6 @@
 import {test, expect} from "@playwright/test";
+import {readdirSync, readFileSync} from "node:fs";
+import {join} from "node:path";
 
 // O "FULL WIDTH" FAZ A PEÇA CRESCER (06/11/2026, o desenho do FigCraft aprovado pelo Victor). O botão alargava a CAIXA e a
 // peça ficava presa no limite que o exemplo dá a ela (30rem, 480): "só aumenta a caixa e nada acontece". Agora o limite
@@ -35,4 +37,73 @@ test("a busca do topo, só com a lupa, é um círculo de 44 com a lupa no centro
   });
   expect([m.w, m.h]).toEqual([m.alvo, m.alvo]);
   expect(m.esq, "a lupa no centro").toBeCloseTo(m.dir, 0);
+});
+
+// AS MOLDURAS (06/11/2026, ADR-0093) — o Victor achou na Sidebar exemplos sem o "Full width", e a varredura do site achou 87
+// em 25 páginas: o botão pulava toda caixa com moldura. E a moldura tinha a altura da caixa: o AppShell (366 numa de 270),
+// o BottomNav (405), a abertura de página (668) e a lista da Sidebar eram cortados. Agora toda caixa com moldura tem o botão,
+// e toda moldura cresce até o conteúdo caber — menos a `data-altura="fixa"`, a que mostra a rolagem.
+// Provado contra o defeito: contra o site de antes, as 87 caixas reprovam no botão, e 24 molduras no corte.
+const PAGINAS_COM_MOLDURA = readdirSync(join(process.cwd(), "apps/catalog"))
+  .filter((f) => f.endsWith(".html") && readFileSync(join(process.cwd(), "apps/catalog", f), "utf8").includes('class="demo-frame"'))
+  .sort();
+
+test("toda caixa com moldura tem o Full width, e a moldura mostra o conteúdo inteiro", async ({page}) => {
+  test.setTimeout(10 * 60_000);
+  expect(PAGINAS_COM_MOLDURA.length, "as páginas com moldura").toBeGreaterThanOrEqual(25);
+  await page.setViewportSize({width: 1280, height: 663});
+  const falhas: string[] = [];
+  for (const pag of PAGINAS_COM_MOLDURA) {
+    await page.goto(`/apps/catalog/${pag}`);
+    // os exemplos dobrados (a página da Sidebar põe cada um num Accordion) abrem: fechada, a moldura não tem tamanho, e
+    // cresce quando a pessoa abre — é ali que ela se mede
+    await page.evaluate(() => {
+      document.querySelectorAll("details").forEach((d) => { d.open = true; });
+      document.querySelectorAll("iframe[loading=lazy]").forEach((f) => f.setAttribute("loading", "eager"));
+    });
+    // espera cada moldura carregar o documento dela (e não o about:blank de antes) e a parte viva acender
+    await expect.poll(() => page.evaluate(() => [...document.querySelectorAll<HTMLIFrameElement>("iframe.demo-frame")]
+      .filter((f) => !f.contentWindow?.location.pathname.includes("/embeds/") || f.contentDocument?.readyState !== "complete"
+        || !f.contentDocument.getElementById("root")?.dataset.ligada).length), {timeout: 30_000}).toBe(0);
+    await page.waitForTimeout(1000);
+    const r = await page.evaluate(() => [...document.querySelectorAll<HTMLIFrameElement>("iframe.demo-frame")].map((f, i) => {
+      const caixa = f.closest(".demo")!;
+      const doc = f.contentDocument!, de = doc.documentElement;
+      let sobra = 0;
+      for (const e of doc.body.querySelectorAll("*")) {
+        const o = doc.defaultView!.getComputedStyle(e).overflowY;
+        if ((o === "auto" || o === "scroll") && e.clientHeight > 0) sobra = Math.max(sobra, e.scrollHeight - e.clientHeight);
+      }
+      const fr = f.getBoundingClientRect(), cx = caixa.getBoundingClientRect();
+      return {i, titulo: f.title, fixa: f.dataset.altura === "fixa", botao: !!caixa.querySelector(":scope > .tela-cheia-abrir"),
+        corta: Math.max(de.scrollHeight - de.clientHeight, sobra), foraDaCaixa: Math.round(fr.bottom - cx.bottom)};
+    }));
+    for (const m of r) {
+      if (!m.botao) falhas.push(`${pag} #${m.i} (${m.titulo}): sem o Full width`);
+      if (m.foraDaCaixa > 1) falhas.push(`${pag} #${m.i} (${m.titulo}): a moldura passa ${m.foraDaCaixa} da caixa`);
+      if (m.fixa) continue;
+      if (m.corta > 1) falhas.push(`${pag} #${m.i} (${m.titulo}): corta ${m.corta}`);
+    }
+  }
+  expect(falhas).toEqual([]);
+});
+
+test("a moldura que mostra a rolagem fica na altura de sempre", async ({page}) => {
+  await page.setViewportSize({width: 1280, height: 663});
+  await page.goto("/apps/catalog/sidebar.html");
+  const f = page.locator('iframe.demo-frame[data-altura="fixa"]');
+  await expect(f).toHaveCount(1);
+  await page.evaluate(() => document.querySelectorAll("details").forEach((d) => { d.open = true; }));
+  await f.scrollIntoViewIfNeeded();
+  await expect.poll(() => f.evaluate((e: HTMLIFrameElement) => e.contentDocument?.getElementById("root")?.dataset.ligada ?? ""))
+    .toBe("sim");
+  await page.waitForTimeout(1000);
+  const m = await f.evaluate((e: HTMLIFrameElement) => {
+    const lista = [...e.contentDocument!.querySelectorAll("*")].find((x) => {
+      const o = getComputedStyle(x).overflowY; return (o === "auto" || o === "scroll") && x.scrollHeight > x.clientHeight + 1;
+    });
+    return {estilo: e.style.blockSize, rola: !!lista};
+  });
+  expect(m.estilo, "a altura não foi trocada").toBe("");
+  expect(m.rola, "a lista continua rolando, com a barra").toBe(true);
 });

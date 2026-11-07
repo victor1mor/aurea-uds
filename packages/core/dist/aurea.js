@@ -395,10 +395,11 @@
   });
   // 2. Subir para o desktop fecha. O top layer é estado do DOM, e nenhuma media query tira um
   // elemento de lá: sem isto a gaveta ficava flutuando, sem véu, e o botão que a fecharia sumia.
-  // 1024 é o `--breakpoint-lg`, o mesmo corte do `@media (max-width:1023px)` acima; o
-  // `consumidores-lote1.test` reprova se os dois divergirem.
+  // 64em é o `--breakpoint-lg` (1024 ÷ 16), o mesmo corte do `@media (max-width:63.9375em)` acima — em `em`, como
+  // os pontos de quebra do CSS (ADR-0092): em px, com a fonte do navegador aumentada, o CSS ainda mostrava a gaveta e
+  // isto já a fechava. O `consumidores-lote1.test` reprova se os dois divergirem.
   if (typeof window.matchMedia === "function") {
-    var desktop = window.matchMedia("(min-width: 1024px)");
+    var desktop = window.matchMedia("(min-width: 64em)");
     var aoSubir = function (e) {
       if (!e.matches) return;
       var abertas = document.querySelectorAll(".sidebar[popover]");
