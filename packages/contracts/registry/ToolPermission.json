@@ -31,7 +31,7 @@
   ],
   "a11y": {
     "role": "region",
-    "apg": "radiogroup — the three-way choice is a SegmentedControl, which is Base UI's radio group (ADR-0016)",
+    "apg": "radiogroup — the three-way choice is a SegmentedControl, which is Base UI's radio group",
     "keyboard": [
       "ArrowLeft",
       "ArrowRight",
@@ -41,7 +41,7 @@
       "ArrowDown",
       "Space"
     ],
-    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: ArrowLeft, ArrowRight, ArrowUp, ArrowDown and Space. ArrowUp, ArrowDown and Space were delivered and NOT declared before this measurement. They are not this component's own work: the three-way choice is a SegmentedControl, which is the engine's radio group since ADR-0016, and the ficha was declaring a subset of what that pattern ships. Declared and not confirmed in this snapshot: Home and End. Absence of an observable change does not prove absence of effect: a generic DOM snapshot can prove a key does something, never that it does not."
+    "keyboardNote": "Measured in a browser on 29/08/2026 (apps/keyboard-probe + tests/visual/teclado-motor.spec.ts). This ficha comes from the lineage that did not have check 30, so it declared keys with no measurement behind them — the merge of the two lineages on 29/08/2026 is what surfaced it. Confirmed: ArrowLeft, ArrowRight, ArrowUp, ArrowDown and Space. ArrowUp, ArrowDown and Space were delivered and NOT declared before this measurement. They are not this component's own work: the three-way choice is a SegmentedControl, which is the engine's radio group, and the ficha was declaring a subset of what that pattern ships. Declared and not confirmed in this snapshot: Home and End. Absence of an observable change does not prove absence of effect: a generic DOM snapshot can prove a key does something, never that it does not."
   },
   "related": {
     "components": [
@@ -64,7 +64,7 @@
       "name": "onChange",
       "type": "(id: string, permission: PermissionLevel) => void",
       "default": "—",
-      "description": "Fires when a permission changes. The three-way choice is a SegmentedControl, so arrows move AND select, with Home and End — writing three toggle buttons here would redo by hand the pattern ADR-0016 rejected."
+      "description": "Fires when a permission changes. The three-way choice is a SegmentedControl, so arrows move AND select, with Home and End — writing three toggle buttons here would redo by hand a pattern that was rejected."
     },
     {
       "name": "label",

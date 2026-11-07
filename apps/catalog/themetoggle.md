@@ -39,7 +39,7 @@ The control sizes, from xs to xl; on a touch screen every size floors at 44.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `mode` | `"light-dark" \| "light-dark-system"` | "light-dark" | light-dark is the button that flips the theme. light-dark-system is the reference's three-way switch — light, dark and system (follow the computer, and change with it): a radio group of three icon options, the chosen one filled. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | "md" | The IconButton size. The button is round, like every icon-only button (ADR-0052). |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | "md" | The IconButton size. The button is round, like every icon-only button. |
 | `disabled` | `boolean` | false | Blocks the switch. |
 | `className` | `string` | — | Added to the button. |
 | `pressed` | `boolean` | — | Inherited from IconButton, where it is deprecated. The toggle's state is the document theme, not this prop. |

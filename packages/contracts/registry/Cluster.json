@@ -45,7 +45,7 @@
       "name": "gap",
       "type": "\"tight\" | \"normal\" | \"loose\"",
       "default": "\"normal\"",
-      "description": "Three steps and no others (ADR-0051): tight is --space-2, normal is --space-3, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters."
+      "description": "Three steps and no others: tight is --space-2, normal is --space-3, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters."
     },
     {
       "name": "align",

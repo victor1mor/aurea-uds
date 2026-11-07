@@ -1,4 +1,9 @@
-# Aurea
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="apps/catalog/assets/logo/aurea-readme-escuro.svg">
+    <img src="apps/catalog/assets/logo/aurea-readme-claro.svg" alt="Aurea" width="360">
+  </picture>
+</h1>
 
 **Aurea Universal Design System** — um design system com duas saídas: a **web** (React e CSS) e o
 **mobile** (React Native). A aparência é uma só, e ela não muda de um lado para o outro.
@@ -12,7 +17,7 @@
 - a letra é a Inter no texto, a Sora nos títulos e a IBM Plex Mono no código (ADR-0077);
 - ícones do Phosphor, com a forma cheia no item escolhido;
 - três densidades: compacta, confortável e espaçosa;
-- nenhum gradiente. Todo valor de cor, raio, letra e espaço sai de um token.
+- todo valor de cor, raio, letra e espaço sai de um token.
 
 ## Instalar
 
@@ -205,7 +210,7 @@ e conferido — editado à mão, a validação reprova. Os números completos es
 [STATE.md](STATE.md).
 
 <!-- state:begin -->
-611 páginas geradas — 228 de componente, 234 de padrão, 15 de bloco, 23 de receita, 100 de documentação e 11 índices de área — a partir de 138 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 105 trazem um starter — o preview real e o código, ainda sem exemplos extras. 150 componentes publicam a tabela de props.
+612 páginas geradas — 228 de componente, 234 de padrão, 15 de bloco, 23 de receita, 101 de documentação e 11 índices de área — a partir de 138 fichas. Toda página traz o mesmo miolo: breadcrumb, preview, o código que a produz, instalação, procedência e anterior/próximo. 44 componentes têm conteúdo escrito à mão; os outros 105 trazem um starter — o preview real e o código, ainda sem exemplos extras. 150 componentes publicam a tabela de props.
 <!-- state:end -->
 
 ## Como o repositório se organiza

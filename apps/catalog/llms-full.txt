@@ -2065,9 +2065,11 @@ Aurea has a few documented gaps against WCAG and one documented loss for readers
 
 **3. White and yellow marks on the yellow.** In Aurea Gold, the marks inside a chosen control (the switch thumb, the checkbox mark, the radio dot) are white on the yellow: 1.91:1. Fields show their focus in the yellow, 1.75:1 on the page in the light theme; with the system's "increase contrast" on, it turns graphite. And `currentStyle="brand-white"` on the bottom bar draws white on the yellow, 1.91:1 — it is a style you choose, never the default.
 
+**4. The Aurea Ember primary button in the light theme.** Its label is white on the brand's orange (`#f76500`): 3.08:1, below the 4.5:1 that WCAG asks of text. Aurea Ember keeps the colours of the system it was made for, where the button is drawn this way; the brand's own dark text would measure 5.35:1 and black 6.82:1, and neither is used. The other brands are not affected.
+
 Accent text in the light theme passes: since v0.45.0 the yellow is never text there. Accent text and links are the text colour.
 
-If your product must meet WCAG AA in full, account for the field boundaries.
+If your product must meet WCAG AA in full, account for the field boundaries — and, with Aurea Ember, for its primary button.
 
 ## Focus
 
@@ -2139,7 +2141,7 @@ See [Animation](./docs-animation.html).
 
 ## Forced colours
 
-When the system forces its own colours (`forced-colors: active`), the focus ring uses the system text colour. Icons drawn as masks would vanish, so they repaint in the system colour of the text next to them. Colour swatches keep their colour, because the colour is their content. A dedicated test checks each of these.
+When the system forces its own colours (`forced-colors: active`), the focus ring uses the system text colour. The selected item — a segment, a tab, a pressed button, a tag, a list item, a calendar day, a table row — takes the system highlight colour, so it never looks like the others; the carousel dots and the badge dot use the system text colour. Icons drawn as masks would vanish, so they repaint in the system colour of the text next to them. Colour swatches keep their colour, because the colour is their content. A dedicated test checks each of these.
 
 When the system asks for more contrast (`prefers-contrast: more`), fields get an outline that measures at least 3:1, the marks inside a chosen control (the switch thumb, the checkbox mark, the radio dot) turn to the ink, the focus of a field turns graphite in the light theme, and a pressed button in the neutral style gets an outline. Outside that preference, none of this is drawn. The Aurea Ember brand keeps its fields and marks as they are.
 
@@ -2147,7 +2149,7 @@ Your app can also turn high contrast on itself, without waiting for the system: 
 
 ## Text size and reflow
 
-A sweep sets the root text size to 200% on every page of this site and fails any page that then scrolls sideways. A second sweep checks that no page scrolls sideways at any width.
+A sweep sets the root text size to 200% on every page of this site and fails any page that then scrolls sideways. Breakpoints are in `em`, so they follow the browser's default font size: with the font doubled, a 1280px screen gets the layout of a 640px one, the same layout zoom gives. A second sweep checks that no page scrolls sideways at any width.
 
 For large text across the app, use `<AppShell textSize="lg">`, or `data-text="lg"` on any container. Every text step grows by 2px (14px body text becomes 16px), and the medium control grows to the 44px touch target. It works in every brand.
 
@@ -2396,7 +2398,7 @@ orientation="horizontal" stands the items side by side, each a card; a closed on
 | `items` | `Array<{id: string; title: ReactNode; content: ReactNode}>` | — | The sections. Built on native <details>/<summary>, so opening, closing, keyboard and find-in-page come from the browser and the component ships no JavaScript at all. Several can be open at once: exclusivity would need the `name` attribute, and hiding what someone just opened is rarely what they wanted. |
 | `variant` | `default \| surface` | default | surface puts the items in a card, with the line at 94% and the neutral hover. |
 | `multiple` | `boolean` | false | Lets several items stay open. Without it, opening one closes the other, as in the reference. |
-| `defaultValue` | `string[]` | — | The ids of the items that start open. |
+| `defaultValue` | `string[]` | — | The ids of the items that start open. Without it, the vertical accordion starts all closed; the horizontal one opens its first enabled item, so there is always one in view. |
 | `indicator` | `chevron \| plus` | chevron | How opening is drawn: the arrow at the end, or a plus in a circle that turns 45° into a yellow × when the item opens (the FAQ of this site). |
 | `size` | `md \| lg` | md | lg is the 60-tall row with body-size (16) text, 22 from the edge, for questions that stand alone. |
 | `orientation` | `"vertical" \| "horizontal"` | "vertical" | horizontal is the accordion on its side: the items stand side by side, 12 apart, each a card (radius 22); a closed one is 104 wide and the open one takes the rest of the row. One open at a time, and the open one does not close on click. The height is the parent's. Under a 47.5rem container it becomes the upright accordion. |
@@ -3187,7 +3189,7 @@ A finish the app chooses: the tone at 30% around a badge that is not solid, insi
 | `emphasis` | `soft \| outline \| solid \| flat` | soft | How loud the tone is. `soft` is the tinted pill you already know; `outline` is contour only; `solid` fills with the accent and is what a notification counter wants. All 36 combinations of variant × emphasis × theme were measured for contrast — the lowest is 5.6:1, and the skin spec keeps it that way. flat is the soft tone without the line around it, as the reference's chip. |
 | `size` | `xs \| sm \| md \| lg` | md | `md` is the historical size and did not move, so nothing that already uses Badge changed. `xs` (16px, borderless) is the counter that rides on an icon — it is what BottomNav asks for; `sm` sits between them; `lg` is for a standalone label. Every size is its OWN class, never a contextual override: `geometry.spec` holds `.badge` to one height per page, and a rule that shrank it by context reproved — correctly. |
 | `dot` | `boolean` | false | A status dot before the text, inheriting the current colour. With `anchor` and nothing to show, the dot IS the badge — the plain 8px mark that means "something new". |
-| `leading / trailing` | `ReactNode` | — | A glyph before or after the text. They take a NODE, not an icon name, and that is a boundary decision, not laziness: Icon reads the sprite through a hook, so importing it here would drag this module to the client and undo the 118.5 KB that ADR-0026 saved. |
+| `leading / trailing` | `ReactNode` | — | A glyph before or after the text. They take a NODE, not an icon name, and that is a boundary decision, not laziness: Icon reads the sprite through a hook, so importing it here would drag this module to the client and undo the 118.5 KB that keeping it on the server saved. |
 | `image / imageAlt` | `string` | — | A round picture at the start — an avatar or a flag. Empty alt when it is decorative, which is the usual case beside a name. |
 | `count / max / showZero` | `number / number / boolean` | — / 99 / false | Numeric content. Over `max` it reads `99+`. Zero hides itself unless `showZero`, because an empty inbox does not deserve a mark. `formatBadgeCount(count, max)` is exported so the accessible name can say the same string the eye sees. |
 | `fit` | `"auto" \| "content"` | "auto" | `content` keeps the badge as wide as its text even inside a column. The default follows the container, and that was measured: `.stack` declares no `align-items`, so a badge inside it stretches (300 px in a 300 px column, 55 px loose in a block). Implemented as `inline-size: fit-content`, not `align-self`, so a badge in a row keeps its vertical centring. Ignored with `anchor`. The native Badge takes the same prop. |
@@ -3196,7 +3198,7 @@ A finish the app chooses: the tone at 30% around a badge that is not solid, insi
 | `invisible` | `boolean` | false | Hides the overlay without moving the child. Use it when the count is loading rather than absent. |
 | `children` | `ReactNode` | — | The label — or, with `anchor`, the element being decorated. Short by construction: it is a pill, and a badge that wraps to a second line is a sentence in the wrong component. |
 | `badgeContent` | `ReactNode` | — | What the overlay shows when it is not a number. Named after a reference library's prop and not `content`, which collides with the HTML attribute of that name. |
-| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a badge that is not solid, its tone at 30%, inside the edge — it never changes the size. It is a line — the named exception to "no line", only when chosen. Writes data-ring; the same attribute on a container (or <html>) covers the badges inside, and ring={false} takes one out. On solid it draws nothing. Web and native. |
+| `ring` | `boolean` | — | A finish the app chooses: around a badge that is not solid, its tone at 30%, inside the edge — it never changes the size. It is a line — the named exception to "no line", only when chosen. Writes data-ring; the same attribute on a container (or <html>) covers the badges inside, and ring={false} takes one out. On solid it draws nothing. Web and native. |
 </page>
 
 <page url="https://aureauds.dev/banner.html">
@@ -3503,10 +3505,10 @@ Every icon and label in ink; the current item marked by bar-ink, bar-ring, bar-p
 | `items` | `SidebarItem[]` | — | The navigation, as data — the SAME type Sidebar takes, on purpose: one list feeds the sidebar on desktop and the bar on the phone, and two lists of one menu drift apart. Each item is {id, label, href?, icon?, badge?, onClick?}. A nested `items` is ignored here: a bottom bar is flat. `badge` hangs off the icon's top corner and is sized against it (16px on a 24px icon, the ratio measured in shipping apps); pass an EMPTY badge (`badge: ""`) to get the plain dot that means "something new". An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. |
 | `current` | `string` | — | The id of the item you are on. It gets aria-current="page", which is also what the skin paints — one source for both, so they cannot drift apart. |
 | `variant` | `"floating" \| "edge"` | "floating" | Where the BAR sits: floating as a loose pill, or edge against the screen with a hairline above it. It says nothing about how the current item is marked — that is `indicator`, and keeping the two apart is the point. The older names (flat, surface, pill, dock) are still accepted and map onto the pair; they are deprecated, not removed. |
-| `indicator` | `"none" \| "subtle" \| "pill" \| "circle" \| "circle-raised" \| "circle-bold" \| "circle-outline" \| "capsule" \| "expand"` | "none" | The SHAPE that marks the current item. The meaning never changes with the shape: current is always the brand gold. `none` marks by colour alone; `subtle` and `pill` wrap icon and label in a tinted container and differ only in radius; `circle`, `circle-raised` and `circle-outline` wrap only the icon, by fill, by elevation or by a ring; `circle-bold` is a solid disc around icon and label, the only one that flips the whole foreground; `capsule` is a 56 × 28 capsule behind the icon (the active indicator of the design reference, kept at the bar's height), behind the icon; `expand` draws only icons and grows the current item into a gold capsule with its label — the others keep theirs for the screen reader. Every other indicator keeps every label visible. No measure depends on which item is current, so the bar never moves (ADR-0055). |
+| `indicator` | `"none" \| "subtle" \| "pill" \| "circle" \| "circle-raised" \| "circle-bold" \| "circle-outline" \| "capsule" \| "expand"` | "none" | The SHAPE that marks the current item. The meaning never changes with the shape: current is always the brand gold. `none` marks by colour alone; `subtle` and `pill` wrap icon and label in a tinted container and differ only in radius; `circle`, `circle-raised` and `circle-outline` wrap only the icon, by fill, by elevation or by a ring; `circle-bold` is a solid disc around icon and label, the only one that flips the whole foreground; `capsule` is a 56 × 28 capsule behind the icon (the active indicator of the design reference, kept at the bar's height), behind the icon; `expand` draws only icons and grows the current item into a gold capsule with its label — the others keep theirs for the screen reader. Every other indicator keeps every label visible. No measure depends on which item is current, so the bar never moves. |
 | `width` | `"full" \| "content"` | "full" | How wide the floating pill is. `full` spans the screen minus the margin, as it always has; `content` sizes the pill to its items and centres it. Items then measure their own content instead of sharing the width equally, with the item's own touch target (--control-h-lg) as the minimum. Ignored on `edge`, which sits against the screen edge and stays full width. |
 | `label` | `string` | "Main" | Accessible name of the <nav>. Two navigation landmarks with the same name fail axe, and a page with a bottom bar usually has a Topbar or Sidebar too — name it. |
-| `currentStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "plain" \| "brand-white" \| "white-ring" \| "brand-gradient" \| "bar-ink" \| "bar-ring" \| "bar-plain" \| "bar-light"` | "current" | The COLOUR of the current item (ADR-0084) — indicator picks the shape, currentStyle the colour. current (the default), neutral (grey), contrast (graphite), brand (solid yellow), ring (a yellow ring, no fill), plain (only the filled icon and a semibold label); brand-white (yellow with white — it FAILS WCAG: white on the yellow measures 1.91:1, chosen knowing it), white-ring (white with a yellow ring, ink inside) and brand-gradient (a yellow gradient — the one gradient in a navigation component; on React Native without gradients, solid yellow); and the whole bar in yellow, with every icon and label in ink: bar-ink, bar-ring, bar-plain and bar-light. The colour goes where the shape paints: the item in pill, subtle and expand; the icon frame in circle, circle-outline, circle-raised and capsule; the disc in circle-bold. The none indicator has no fill and does not change. Floating and edge bars alike. Written as data-current-style; the same attribute on a container sets it for every bar inside. Web and React Native. |
+| `currentStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "plain" \| "brand-white" \| "white-ring" \| "brand-gradient" \| "bar-ink" \| "bar-ring" \| "bar-plain" \| "bar-light"` | "current" | The COLOUR of the current item — indicator picks the shape, currentStyle the colour. current (the default), neutral (grey), contrast (graphite), brand (solid yellow), ring (a yellow ring, no fill), plain (only the filled icon and a semibold label); brand-white (yellow with white — it FAILS WCAG: white on the yellow measures 1.91:1, chosen knowing it), white-ring (white with a yellow ring, ink inside) and brand-gradient (a yellow gradient — the one gradient in a navigation component; on React Native without gradients, solid yellow); and the whole bar in yellow, with every icon and label in ink: bar-ink, bar-ring, bar-plain and bar-light. The colour goes where the shape paints: the item in pill, subtle and expand; the icon frame in circle, circle-outline, circle-raised and capsule; the disc in circle-bold. The none indicator has no fill and does not change. Floating and edge bars alike. Written as data-current-style; the same attribute on a container sets it for every bar inside. Web and React Native. |
 </page>
 
 <page url="https://aureauds.dev/breadcrumb.html">
@@ -3739,7 +3741,7 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 | `href` | `string` | — | Renders an <a> with the same skin. A button that navigates is a link. |
 | `loading` | `boolean` | false | Shows the spinner, sets aria-busy and blocks interaction. The label stays. |
 | `disabled` | `boolean` | false | Native disabled: the control leaves the tab order entirely. With href it becomes aria-disabled, since a link has no disabled state. USE IT WHEN THERE IS NOTHING TO EXPLAIN — measured on 2026-08-13, a disabled button cannot be focused, so a Tooltip hung on it is never read by anyone navigating with a keyboard, and wrapping it in a span (what other libraries document) fixes the pointer and not the keyboard, because the span comes in at tabIndex -1. |
-| `aria-disabled` | `boolean` | — | Inert but REACHABLE: the control keeps its place in the tab order and announces itself as disabled, and this component blocks activation — the attribute is semantics only, so leaving it to the browser would announce "disabled" on a button that still acts. Use it when there IS a why to tell, and put the why in a Tooltip, which now reaches. There is no permission component in Aurea and there will not be one: hiding an action is {can ? … : …} in your own code, and hiding a button is not security — see ADR-0023. |
+| `aria-disabled` | `boolean` | — | Inert but REACHABLE: the control keeps its place in the tab order and announces itself as disabled, and this component blocks activation — the attribute is semantics only, so leaving it to the browser would announce "disabled" on a button that still acts. Use it when there IS a why to tell, and put the why in a Tooltip, which now reaches. There is no permission component in Aurea and there will not be one: hiding an action is {can ? … : …} in your own code, and hiding a button is not security. |
 | `leadingIcon` | `AureaIcon` | — | Glyph before the label — a name from the allowlist, or the app’s own drawing (a component that returns its <svg>), as Icon and IconButton take. |
 | `trailingIcon` | `AureaIcon` | — | Glyph after the label — a name, or the app’s own drawing, as leadingIcon. |
 | `type` | `button \| submit \| reset` | button | Deliberately not submit: a Cancel inside a form must not fire the main action. |
@@ -3753,8 +3755,8 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 | `download` | `boolean \| string` | — | Link attribute, only with `href`. |
 | `render` | `ReactElement` | — | The element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href="/reports" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link. |
 | `share` | `{ url?: string; title?: string; text?: string }` | — | The button shares. It asks the browser whether it can share this link (navigator.canShare) — detecting the capability, not guessing the device. If it can (phones; Chrome, Edge and Safari on desktop), the device's share sheet opens, and cancelling is not an error. If it cannot, it copies the link and shows "Link copied" anchored to the button, at the button's size. If the copy fails, it says so and shows the link selected. The notice speaks to the screen reader. Without url, it is the page's address. Needs the AureaProvider (or aurea.js on the page) to give the notice; it emits [data-aurea-share], which aurea.js also reads. Only on a <button> (ignored with href or render). On native, the same name opens the system share sheet. |
-| `glow` | `boolean` | — | A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native. |
-| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to "no line", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing. |
+| `glow` | `boolean` | — | A finish the app chooses: under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native. |
+| `ring` | `boolean` | — | A finish the app chooses: around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to "no line", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing. |
 </page>
 
 <page url="https://aureauds.dev/buttongroup.html">
@@ -4012,7 +4014,7 @@ fill="brand" paints the whole card in the brand colour, with the ink on top — 
 | `padding` | `"normal" \| "none"` | "normal" | none removes the inner padding so media bleeds to the edge; the 22 radius stays and clips the media. |
 | `orientation` | `"vertical" \| "horizontal"` | "vertical" | `horizontal` is the list mode: Card.Media on the left at thumbnail width (96, --space-24) and the content beside it. |
 | `lift` | `boolean` | false | With `variant="interactive"`, the card RISES on hover: it lifts 4px and takes a medium shadow, instead of changing its fill. Still for people who ask for less motion. Web only; on the other variants it does nothing. |
-| `Card.Media` | `component` | — | The card's media part. Vertical, as first child, it bleeds to the top and side edges; horizontal, it sits on the left inside the padding, with the house's concentric radius (ADR-0033). |
+| `Card.Media` | `component` | — | The card's media part. Vertical, as first child, it bleeds to the top and side edges; horizontal, it sits on the left inside the padding, with the house's concentric radius. |
 | `Card.Header` | `component` | — | The header: the title and the description, together. 12 between the parts. |
 | `Card.Title` | `component` | — | The card's title — an h3, 14/24 medium, as the reference. 12 between the parts. |
 | `Card.Description` | `component` | — | The line under the title, 14/20 muted. 12 between the parts. |
@@ -4312,7 +4314,7 @@ import {Chip} from "@aurea-uds/react";
 | `emphasis` | `soft \| outline \| solid \| flat` | soft | How loud the tone is. `soft` is the tinted pill you already know; `outline` is contour only; `solid` fills with the accent and is what a notification counter wants. All 36 combinations of variant × emphasis × theme were measured for contrast — the lowest is 5.6:1, and the skin spec keeps it that way. flat is the soft tone without the line around it, as the reference's chip. |
 | `size` | `xs \| sm \| md \| lg` | md | `md` is the historical size and did not move, so nothing that already uses Badge changed. `xs` (16px, borderless) is the counter that rides on an icon — it is what BottomNav asks for; `sm` sits between them; `lg` is for a standalone label. Every size is its OWN class, never a contextual override: `geometry.spec` holds `.badge` to one height per page, and a rule that shrank it by context reproved — correctly. |
 | `dot` | `boolean` | false | A status dot before the text, inheriting the current colour. With `anchor` and nothing to show, the dot IS the badge — the plain 8px mark that means "something new". |
-| `leading / trailing` | `ReactNode` | — | A glyph before or after the text. They take a NODE, not an icon name, and that is a boundary decision, not laziness: Icon reads the sprite through a hook, so importing it here would drag this module to the client and undo the 118.5 KB that ADR-0026 saved. |
+| `leading / trailing` | `ReactNode` | — | A glyph before or after the text. They take a NODE, not an icon name, and that is a boundary decision, not laziness: Icon reads the sprite through a hook, so importing it here would drag this module to the client and undo the 118.5 KB that keeping it on the server saved. |
 | `image / imageAlt` | `string` | — | A round picture at the start — an avatar or a flag. Empty alt when it is decorative, which is the usual case beside a name. |
 | `count / max / showZero` | `number / number / boolean` | — / 99 / false | Numeric content. Over `max` it reads `99+`. Zero hides itself unless `showZero`, because an empty inbox does not deserve a mark. `formatBadgeCount(count, max)` is exported so the accessible name can say the same string the eye sees. |
 | `fit` | `"auto" \| "content"` | "auto" | `content` keeps the badge as wide as its text even inside a column. The default follows the container, and that was measured: `.stack` declares no `align-items`, so a badge inside it stretches (300 px in a 300 px column, 55 px loose in a block). Implemented as `inline-size: fit-content`, not `align-self`, so a badge in a row keeps its vertical centring. Ignored with `anchor`. The native Badge takes the same prop. |
@@ -4321,7 +4323,7 @@ import {Chip} from "@aurea-uds/react";
 | `invisible` | `boolean` | false | Hides the overlay without moving the child. Use it when the count is loading rather than absent. |
 | `children` | `ReactNode` | — | The label — or, with `anchor`, the element being decorated. Short by construction: it is a pill, and a badge that wraps to a second line is a sentence in the wrong component. |
 | `badgeContent` | `ReactNode` | — | What the overlay shows when it is not a number. Named after a reference library's prop and not `content`, which collides with the HTML attribute of that name. |
-| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a badge that is not solid, its tone at 30%, inside the edge — it never changes the size. It is a line — the named exception to "no line", only when chosen. Writes data-ring; the same attribute on a container (or <html>) covers the badges inside, and ring={false} takes one out. On solid it draws nothing. Web and native. |
+| `ring` | `boolean` | — | A finish the app chooses: around a badge that is not solid, its tone at 30%, inside the edge — it never changes the size. It is a line — the named exception to "no line", only when chosen. Writes data-ring; the same attribute on a container (or <html>) covers the badges inside, and ring={false} takes one out. On solid it draws nothing. Web and native. |
 </page>
 
 <page url="https://aureauds.dev/closebutton.html">
@@ -4481,7 +4483,7 @@ How items of different heights line up across the row. baseline lines up the tex
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `children` | `ReactNode` | — | Horizontal flow that wraps: centred on the cross axis, --space-3 between items. It is the row of chips, buttons or tags — the one layout that must never cause sideways scrolling, which is why wrapping is not optional. |
-| `gap` | `"tight" \| "normal" \| "loose"` | "normal" | Three steps and no others (ADR-0051): tight is --space-2, normal is --space-3, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters. |
+| `gap` | `"tight" \| "normal" \| "loose"` | "normal" | Three steps and no others: tight is --space-2, normal is --space-3, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters. |
 | `align` | `"start" \| "center" \| "end" \| "baseline"` | "center" | The cross axis (vertical). Same names as the native Cluster. |
 | `justify` | `"start" \| "center" \| "end" \| "between"` | "start" | The main axis. `between` spreads the free space: a name on the left, a button on the right. |
 | `wrap` | `boolean` | true | The row wraps by default. `false` keeps everything on one line. |
@@ -4554,7 +4556,7 @@ start and end follow the writing direction, so the same value mirrors in a right
 | `align` | `"start" \| "center" \| "end" \| "justify"` | — (inherited) | Text alignment. start and end follow the writing direction, so the same value mirrors in RTL. |
 | `truncate` | `boolean` | false | One line, cut with an ellipsis. Turns the element into a block so the cut has a width to measure against. |
 | `children` | `ReactNode` | — | The text. |
-| `numeric` | `boolean` | false | Value figures: on the web, the code font (IBM Plex Mono, ADR-0077) with tabular figures (font-variant-numeric: tabular-nums) — for values and identifiers that line up in a column (price, year, contract number) or change on screen. Off by default: in running text the narrow "1" is right. Native: the same prop sets fontVariant ["tabular-nums"]; the native font change comes with the native typeface files. |
+| `numeric` | `boolean` | false | Value figures: on the web, the code font (IBM Plex Mono) with tabular figures (font-variant-numeric: tabular-nums) — for values and identifiers that line up in a column (price, year, contract number) or change on screen. Off by default: in running text the narrow "1" is right. Native: the same prop sets fontVariant ["tabular-nums"]; the native font change comes with the native typeface files. |
 </page>
 
 <page url="https://aureauds.dev/codeblock.html">
@@ -5075,7 +5077,7 @@ const channels: Record<ColorSpace, ColorChannel[]> = {hsb: ["hue", "saturation",
 | `onValueChange` | `(value: string) => void` | — | Called on every step with #rrggbb. |
 | `onValueCommitted` | `(value: string) => void` | — | Called on release, on every key, when a swatch is chosen and when the hex is confirmed — the moment to save. |
 | `swatches` | `(string \| {color, label?})[]` | — | Ready colours, under the hue track; with variant="swatches", in place of the area. Without a label, each is named by the colour's name in the app's language. |
-| `variant` | `"full" \| "swatches"` | "full" | "swatches": the closed palette (ADR-0069, the "C") — only the swatches and the hex field. |
+| `variant` | `"full" \| "swatches"` | "full" | "swatches": the closed palette (the "C") — only the swatches and the hex field. |
 | `children` | `ReactNode` | area, hue, swatches, hex field | The content of the window, built by you ("with fields", "with sliders"): the colour pieces without a value of their own — ColorArea, Slider with channel, ColorField — share the picker's colour. |
 | `disabled` | `boolean` | false | The trigger does not open. |
 | `name` | `string` | — | Sends the colour with a form, as #rrggbb. |
@@ -5243,7 +5245,7 @@ indicator replaces the check on the chosen colour; it gets the ink that contrast
 | `color` | `string` | — | REQUIRED without options. Any CSS colour: hex (#f0c200), a name, the CSS colour functions (rgb(), hsl(), oklch(), color()…) or var(--primary). Anything else (with ;, braces, quotes, a comment or url()) is not written into the style. |
 | `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | "md" | 16, 24, 32, 36, 40 — the reference library's scale. Round only (Victor's decision); the checkerboard shows only under a transparent colour. |
 | `label` | `string` | color | The name a screen reader announces ("Aurea yellow"); without it, the colour value. With options, the name of the group ("Accent colour"), and REQUIRED. |
-| `options` | `(string \| {color, label?})[]` | — | The picker variation (ADR-0069): the colours to pick from, as a colour string or {color, label?, disabled?}. Turns the swatch into a radio group; a disabled option cannot be chosen. |
+| `options` | `(string \| {color, label?})[]` | — | The picker variation: the colours to pick from, as a colour string or {color, label?, disabled?}. Turns the swatch into a radio group; a disabled option cannot be chosen. |
 | `name` | `string` | — | With options, REQUIRED: the group's name in a form, and what makes the swatches one group (the arrows move between them). |
 | `value` | `string` | — | With options: the chosen colour, controlled. |
 | `defaultValue` | `string` | — | With options: the colour chosen at the start. |
@@ -6074,7 +6076,7 @@ The colour of the circle behind the icon: the state colours, or brand.
 | `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl" \| "full"` | "md" | The width: the reference library's four — xs 320, sm 384, md 448 (the default) and lg 512 —, xl (1024, the --breakpoint-lg token) for a wide detail view, and full: the screen minus the usual margin, keeping the 22 radius. |
 | `dismissible` | `boolean` | true | false keeps the dialog open during an operation: no Escape, no click outside, and the close button is DISABLED rather than hidden, so the header does not move mid-operation. |
 | `icon` | `IconName` | — | An icon in a 40 circle above the title, as in the reference library. Decorative: the title says what the dialog is. |
-| `iconTone` | `"neutral" \| "brand" \| "info" \| "success" \| "warning" \| "danger"` | "neutral" | The circle's colour: the state colours (the *-bg fill and the -400 glyph, ADR-0061), or brand — the light yellow wash with the yellow-as-text glyph. |
+| `iconTone` | `"neutral" \| "brand" \| "info" \| "success" \| "warning" \| "danger"` | "neutral" | The circle's colour: the state colours (the *-bg fill and the -400 glyph), or brand — the light yellow wash with the yellow-as-text glyph. |
 | `placement` | `"auto" \| "center" \| "top" \| "bottom"` | "auto" | Where the dialog sits. auto, the reference library's default: at the BOTTOM on a phone (below 640, where the thumb reaches) and in the middle from 640 up. |
 </page>
 
@@ -6195,7 +6197,7 @@ description puts a line under the label, in the small muted text; trailingIcon s
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `trigger` | `ReactElement` | — | The element that opens the menu. Usually a Button or an IconButton. |
-| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onClick?, disabled?, leadingIcon?, description?, trailingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. description is a line under the label, in the small muted text; trailingIcon sits at the end of the item (for example, arrow-square-out on a link that opens another site). |
+| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onClick?, disabled?, leadingIcon?, description?, trailingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. description is a line under the label, in the small muted text; trailingIcon sits at the end of the item (for example, arrow-square-out on a link that opens another site). On native, a link item opens only https:, mailto: and tel: addresses; any other scheme is ignored. |
 | `side` | `top \| right \| bottom \| left` | bottom | Preferred side; it flips when there is no room. |
 | `align` | `start \| center \| end` | center | How the menu lines up with the trigger along that side. end puts the menu's edge on the trigger's edge, as on a split button. |
 | `label` | `string` | — | Accessible name of the menu itself. Worth setting when a page has more than one — otherwise a screen reader lists several menus with nothing to tell them apart. |
@@ -6594,7 +6596,7 @@ The space between the cells, from the density scale: tight, normal or loose.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `children` | `ReactNode` | — | Responsive columns with no breakpoints: each one is at least --grid-min wide (15rem by default) and they fill the row, with --space-4 between them. |
-| `gap` | `"tight" \| "normal" \| "loose"` | "normal" | Three steps and no others (ADR-0051): tight is --space-2, normal is --space-4, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters. |
+| `gap` | `"tight" \| "normal" \| "loose"` | "normal" | Three steps and no others: tight is --space-2, normal is --space-4, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters. |
 | `min` | `"xs" \| "sm" \| "md" \| "lg" \| string` | "md" | The minimum column width. By name: xs 8rem, sm 12rem, md 15rem (the default) or lg 20rem — each a number the system already uses (the Gallery tile, the health matrix cell, the Grid default, the xs dialog). Or as a CSS length ("10rem", "155px"), the --grid-min the CSS reads. |
 | `columns` | `number` | — | A fixed number of equal columns. With it, `min` stops applying. With 12, Grid.Item's `span` gives the 7-of-12 layout of a website page. |
 | `Grid.Item span` | `Responsive<"1" \| … \| "12">` | — | Grid.Item is a grid child that knows how many columns it takes. Responsive and mobile-first: span={{base: "12", viewport: {md: "7"}}} takes the whole row on a narrow screen and 7 of 12 from md up. By container too ({base, container: {sm: …}}). Without span, one column, like any grid child. |
@@ -6774,7 +6776,7 @@ start and end follow the writing direction, so the same value mirrors in a right
 | `align` | `"start" \| "center" \| "end" \| "justify"` | — (inherited) | Text alignment. start and end follow the writing direction, so the same value mirrors in RTL. |
 | `truncate` | `boolean` | false | One line, cut with an ellipsis. Turns the element into a block so the cut has a width to measure against. |
 | `children` | `ReactNode` | — | The text. |
-| `numeric` | `boolean` | false | Value figures: on the web, the code font (IBM Plex Mono, ADR-0077) with tabular figures (font-variant-numeric: tabular-nums) — for values and identifiers that line up in a column (price, year, contract number) or change on screen. Off by default: in running text the narrow "1" is right. Native: the same prop sets fontVariant ["tabular-nums"]; the native font change comes with the native typeface files. |
+| `numeric` | `boolean` | false | Value figures: on the web, the code font (IBM Plex Mono) with tabular figures (font-variant-numeric: tabular-nums) — for values and identifiers that line up in a column (price, year, contract number) or change on screen. Off by default: in running text the narrow "1" is right. Native: the same prop sets fontVariant ["tabular-nums"]; the native font change comes with the native typeface files. |
 </page>
 
 <page url="https://aureauds.dev/healthmatrix.html">
@@ -6949,7 +6951,7 @@ From the icon scale; the icon follows the text size when no size is given.
 | `name` | `IconName \| AureaIconComponent` | — | The glyph id, resolved against the sprite as #i-<name>. A name with no glyph renders nothing visible and throws nothing — check it against the catalogue. It also takes the app's OWN drawing — a component that returns its <svg> and receives the Aurea class and size, inheriting the colour (currentColor) — for a glyph the set does not have, or the app's logo, with no sprite of its own. A drawing has no fill weight. |
 | `size` | `sm \| md \| lg \| xl` | md | Token scale. It follows the text it sits next to. |
 | `spriteUrl` | `string` | — | LOCAL override of where the glyphs come from. The normal way is to set it once on AureaProvider; this is for the rare page carrying two sprites. |
-| `weight` | `"regular" \| "fill" \| "bold"` | "regular" | fill draws the filled shape of the glyph — the one the selected item uses (ADR-0053). bold draws the thick stroke, only for the glyphs drawn in it (today, x — the CloseButton's); the others stay regular. An app's own glyph stays regular. |
+| `weight` | `"regular" \| "fill" \| "bold"` | "regular" | fill draws the filled shape of the glyph — the one the selected item uses. bold draws the thick stroke, only for the glyphs drawn in it (today, x — the CloseButton's); the others stay regular. An app's own glyph stays regular. |
 </page>
 
 <page url="https://aureauds.dev/iconbutton.html">
@@ -7108,7 +7110,7 @@ The Button's finishes, chosen by the app: glow under the primary one, ring aroun
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `label` | `string` | — | REQUIRED. Becomes aria-label: an icon with no text has no accessible name without it. |
-| `icon` | `AureaIcon` | — | Glyph, from the contract's allowlist — or the app's own drawing (a component that returns its <svg>), as Icon and the native IconButton take. |
+| `icon` | `AureaIcon` | — | Glyph, from the contract's allowlist — or the app's own drawing (a component that returns its <svg>), as Icon takes. Same name on native, where `name` is also accepted (the older name). |
 | `variant` | `ButtonVariant \| danger-soft` | ghost | Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default). |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | ghost | Inherited from Button. How much weight the box carries; the default here is ghost. |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | Inherited from Button. What the colour means; every combination exists. |
@@ -7127,8 +7129,8 @@ The Button's finishes, chosen by the app: glow under the primary one, ring aroun
 | `pressed` | `boolean` | — | Deprecated, removed in 1.0: paints and announces aria-pressed while YOU keep the state. Use Toggle, which keeps the state and demands an accessible name when it is icon-only. |
 | `share` | `{ url?: string; title?: string; text?: string }` | — | The button shares. It asks the browser whether it can share this link (navigator.canShare) — detecting the capability, not guessing the device. If it can (phones; Chrome, Edge and Safari on desktop), the device's share sheet opens, and cancelling is not an error. If it cannot, it copies the link and shows "Link copied" anchored to the button, at the button's size. If the copy fails, it says so and shows the link selected. The notice speaks to the screen reader. Without url, it is the page's address. Needs the AureaProvider (or aurea.js on the page) to give the notice; it emits [data-aurea-share], which aurea.js also reads. Only on a <button> (ignored with href or render). On native, the same name opens the system share sheet. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller — the Button's quiet. |
-| `glow` | `boolean` | — | A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native. |
-| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to "no line", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing. |
+| `glow` | `boolean` | — | A finish the app chooses: under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native. |
+| `ring` | `boolean` | — | A finish the app chooses: around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to "no line", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing. |
 </page>
 
 <page url="https://aureauds.dev/image.html">
@@ -7667,11 +7669,11 @@ import {MediaEmbed} from "@aurea-uds/react";
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `src` | `string` | — | The provider's EMBED address, e.g. https://www.youtube.com/embed/<id>. Any other <iframe> attribute is accepted and forwarded, and wins over the defaults. |
+| `src` | `string` | — | The provider's EMBED address, e.g. https://www.youtube.com/embed/<id>. Any other <iframe> attribute is accepted and forwarded, and wins over the defaults. Only https: addresses are embedded; with any other scheme the frame stays empty. |
 | `title` | `string` | — | Required. The accessible name of the frame — an unnamed iframe fails axe, so the type refuses to compile without it. |
 | `poster` | `string` | — | Still image for the facade. With it, nothing from the provider loads until the play button is pressed; without it, the frame loads lazily right away. |
 | `ratio` | `string` | 16/9 | Box proportion in CSS syntax. Reserved before anything loads, so the page does not jump. |
-| `href` | `string` | — | The video on its own site. Shown as a link under the frame — the way out when the owner blocks embedding, which the page cannot detect. |
+| `href` | `string` | — | The video on its own site. Shown as a link under the frame — the way out when the owner blocks embedding, which the page cannot detect. Only https: addresses are shown. |
 | `autoplay` | `boolean` | true | With a poster, start playing after the click by adding autoplay=1 to the address (YouTube and Vimeo read the same key). The person already asked to play. |
 </page>
 
@@ -8403,7 +8405,7 @@ start and end follow the writing direction, so the same value mirrors in a right
 | `align` | `"start" \| "center" \| "end" \| "justify"` | — (inherited) | Text alignment. start and end follow the writing direction, so the same value mirrors in RTL. |
 | `truncate` | `boolean` | false | One line, cut with an ellipsis. Turns the element into a block so the cut has a width to measure against. |
 | `children` | `ReactNode` | — | The text. |
-| `numeric` | `boolean` | false | Value figures: on the web, the code font (IBM Plex Mono, ADR-0077) with tabular figures (font-variant-numeric: tabular-nums) — for values and identifiers that line up in a column (price, year, contract number) or change on screen. Off by default: in running text the narrow "1" is right. Native: the same prop sets fontVariant ["tabular-nums"]; the native font change comes with the native typeface files. |
+| `numeric` | `boolean` | false | Value figures: on the web, the code font (IBM Plex Mono) with tabular figures (font-variant-numeric: tabular-nums) — for values and identifiers that line up in a column (price, year, contract number) or change on screen. Off by default: in running text the narrow "1" is right. Native: the same prop sets fontVariant ["tabular-nums"]; the native font change comes with the native typeface files. |
 </page>
 
 <page url="https://aureauds.dev/passwordfield.html">
@@ -8560,7 +8562,7 @@ The track is 4, 8 or 12 thick — the reference library's. md is the default.
 | `value` | `number` | — | Percentage, 0 to 100. Clamped once and used for both the fill and aria-valuenow, so what is drawn and what is announced cannot drift apart. Without a value the bar is indeterminate: a piece two fifths wide runs across the track — the reference library's numbers, 1.5 s — instead of a 0% that reads as stalled. With reduced motion it does not run: the whole bar, dimmed, never a still piece that would read as 40% done. |
 | `label` | `string` | — | Accessible name of the bar. Not drawn. Without it the screen reader announces a bare number with no subject. |
 | `detail` | `ReactNode` | — | Supporting text above the track, on the end side — the reference library's ProgressBar.Output: speed, time left, bytes. Small, muted, tabular figures. As text it also becomes aria-valuetext; anything else (a link) stays where it is for the screen reader to reach. |
-| `tone` | `brand \| neutral \| success \| warning \| danger \| info` | brand | What the fill colour means — the same closed list as Button's tone. Paused is neutral; failed is danger. Every tone keeps 3:1 against the track in both themes, except brand in the light theme (the brand gold is a fill, ADR-0054). |
+| `tone` | `brand \| neutral \| success \| warning \| danger \| info` | brand | What the fill colour means — the same closed list as Button's tone. Paused is neutral; failed is danger. Every tone keeps 3:1 against the track in both themes, except brand in the light theme (the brand gold is a fill). |
 | `showLabel` | `boolean` | false | shows the label above the bar, at the start (the reference library's progress bar). Without it, label only names the bar for screen readers. |
 | `showValue` | `boolean` | false | shows the value ("60%") above the bar, at the end, when there is no detail. |
 | `size` | `"sm" \| "md" \| "lg"` | "md" | The track: 4, 8 or 12 thick — the reference library's. |
@@ -9227,7 +9229,7 @@ selectedStyle (ADR-0084): current — the raised capsule with the yellow line, t
 | `label` | `string` | — | Accessible name of the set. |
 | `fullWidth` | `boolean` | false | Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control scrolls, as without the prop. The name the reference library gives this prop on its toggle-button group; the same prop on native. |
 | `size` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl"` | md | sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web \| Native switch and the area switch of this site. Web only. 2xl: 48 segments (--space-12), 20 icons, 16 letters. |
-| `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot" \| "emphasis"` | "current" | The colour of the selected segment (ADR-0084): current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump) or emphasis (the raised capsule with the emphasis letter — yellow in the dark theme, the text colour in the light one — and no line). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |
+| `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot" \| "emphasis"` | "current" | The colour of the selected segment: current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump) or emphasis (the raised capsule with the emphasis letter — yellow in the dark theme, the text colour in the light one — and no line). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |
 | `items[].icon` | `IconName` | — | An icon before the label (16, 8 from it); the selected item switches to the filled form by itself. |
 | `wrap` | `boolean` | false | The track breaks onto more lines when the options do not fit, and takes the card radius (22). |
 | `orientation` | `"horizontal" \| "vertical"` | "horizontal" | vertical stands the control up: each segment the full width, the track with the card radius (22). |
@@ -9680,7 +9682,7 @@ The string "separator" between items splits the list with a gap — no line. ava
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `SidebarEntry[]` | — | The navigation, as data. One shape covers grouping and nesting: an item with `items` and no href is a group heading; with an href it is a parent that also has a sublist. Each item is {id, label, href?, icon?, badge?, onClick?, items?}. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. An item also takes avatar ({src?, fallback?}, a photo or a team logo in place of the icon — it stays on the rail), action (a small IconButton such as "⋯" or "+", rendered NEXT TO the link, never inside it; hidden on the rail, as in the reference) and, on a group heading, collapsible and defaultOpen (the heading becomes a disclosure button with aria-expanded). The string "separator" between items splits the list in two with a gap — no line (ADR-0072). On the rail, sublists are hidden, as the reference does: a sub-item without an icon used to become an empty button there. |
+| `items` | `SidebarEntry[]` | — | The navigation, as data. One shape covers grouping and nesting: an item with `items` and no href is a group heading; with an href it is a parent that also has a sublist. Each item is {id, label, href?, icon?, badge?, onClick?, items?}. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. An item also takes avatar ({src?, fallback?}, a photo or a team logo in place of the icon — it stays on the rail), action (a small IconButton such as "⋯" or "+", rendered NEXT TO the link, never inside it; hidden on the rail, as in the reference) and, on a group heading, collapsible and defaultOpen (the heading becomes a disclosure button with aria-expanded). The string "separator" between items splits the list in two with a gap — no line. On the rail, sublists are hidden, as the reference does: a sub-item without an icon used to become an empty button there. |
 | `variant` | `"floating" \| "flush" \| "plain"` | floating | floating is the default and it is what this design system looks like: the panel detaches from the edges, takes the card radius and a border all the way around. flush is the ONE exception this system makes to that rule, and it is opt-in: the sidebar sits against the edges, takes the full height and is separated from the content by a single rule instead of a gap. That is what four shipping admin panels do — the reference library's own dashboard among the ones measured. Aurea's own pages stay floating; flush is there for the applications that want it. plain is the sidebar with NO box — no fill, no line, no shadow — in the floating one's place and height: the items sit loose on the page, like a documentation page's "On this page" column. The 1px border stays, transparent, so switching variants moves nothing. |
 | `current` | `string` | — | The id of the item you are on. It gets aria-current="page", which is also what the skin paints — one source for both, so they cannot drift apart. |
 | `collapsed` | `boolean` | false | Icon rail. Labels stay in the DOM as screen-reader-only text, and the panel narrows to --sidebar-rail. In AppShell, a floating rail keeps its outer margins in the grid track; flush uses the token as the raw track width. Controlled by you: the sidebar never decides on its own when to collapse. |
@@ -9903,7 +9905,7 @@ const [colour, setColour] = useState("rgb(4, 133, 247)");
 | `thumbLabels` | `string[]` | — | With two values, each thumb's name, in order ("Minimum", "Maximum"). |
 | `disabled` | `boolean` | false | Disables the slider. |
 | `name` | `string` | — | For the form: the engine renders the hidden input with the raw value. |
-| `channel` | `ColorChannel` | — | The colour track (ADR-0069), a variation of this Slider: hue, saturation, brightness, lightness, red, green, blue or alpha. The value becomes the COLOUR (hex), as in the reference, so several tracks share one colour; the track is painted with the channel, the thumb shows the colour, alpha has the checkerboard, and the screen reader hears the channel and the colour's name. |
+| `channel` | `ColorChannel` | — | The colour track, a variation of this Slider: hue, saturation, brightness, lightness, red, green, blue or alpha. The value becomes the COLOUR (hex), as in the reference, so several tracks share one colour; the track is painted with the channel, the thumb shows the colour, alpha has the checkerboard, and the screen reader hears the channel and the colour's name. |
 | `colorSpace` | `"hsb" \| "hsl" \| "rgb"` | "hsb" | With channel: the space of hue and saturation. The other channels already say theirs (red, green and blue are rgb), so one colorSpace serves every track of a picker; with hue or saturation, rgb reads as hsb. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin. |
 | `id` | `string` | — | The id of the slider root. |
@@ -10052,8 +10054,8 @@ Where each item sits across the column. stretch, the default, makes every item a
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `children` | `ReactNode` | — | Vertical flow: a column with --space-4 between items. The gap has three steps and no others (ADR-0051) — a layout primitive that takes any spacing is how a system stops having spacing. |
-| `gap` | `"tight" \| "normal" \| "loose"` | "normal" | Three steps and no others (ADR-0051): tight is --space-2, normal is --space-4, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters. |
+| `children` | `ReactNode` | — | Vertical flow: a column with --space-4 between items. The gap has three steps and no others — a layout primitive that takes any spacing is how a system stops having spacing. |
+| `gap` | `"tight" \| "normal" \| "loose"` | "normal" | Three steps and no others: tight is --space-2, normal is --space-4, loose is --space-6. The old rule still holds against ANY spacing; these two extra steps exist for the two measured cases — a note under its value, and a grid of filters. |
 | `align` | `"start" \| "center" \| "end" \| "stretch"` | "stretch" | The cross axis. The default stretches children to the column width, as always; `start` keeps each child at its own width. |
 | `className` | `string` | — | For alignment or width that this one job needs. Every other div attribute passes through. |
 </page>
@@ -10671,7 +10673,7 @@ start and end follow the writing direction, so the same value mirrors in a right
 | `align` | `"start" \| "center" \| "end" \| "justify"` | — (inherited) | Text alignment. start and end follow the writing direction, so the same value mirrors in RTL. |
 | `truncate` | `boolean` | false | One line, cut with an ellipsis. Turns the element into a block so the cut has a width to measure against. |
 | `children` | `ReactNode` | — | The text. |
-| `numeric` | `boolean` | false | Value figures: on the web, the code font (IBM Plex Mono, ADR-0077) with tabular figures (font-variant-numeric: tabular-nums) — for values and identifiers that line up in a column (price, year, contract number) or change on screen. Off by default: in running text the narrow "1" is right. Native: the same prop sets fontVariant ["tabular-nums"]; the native font change comes with the native typeface files. |
+| `numeric` | `boolean` | false | Value figures: on the web, the code font (IBM Plex Mono) with tabular figures (font-variant-numeric: tabular-nums) — for values and identifiers that line up in a column (price, year, contract number) or change on screen. Off by default: in running text the narrow "1" is right. Native: the same prop sets fontVariant ["tabular-nums"]; the native font change comes with the native typeface files. |
 </page>
 
 <page url="https://aureauds.dev/textarea.html">
@@ -10802,7 +10804,7 @@ The control sizes, from xs to xl; on a touch screen every size floors at 44.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `mode` | `"light-dark" \| "light-dark-system"` | "light-dark" | light-dark is the button that flips the theme. light-dark-system is the reference's three-way switch — light, dark and system (follow the computer, and change with it): a radio group of three icon options, the chosen one filled. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | "md" | The IconButton size. The button is round, like every icon-only button (ADR-0052). |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | "md" | The IconButton size. The button is round, like every icon-only button. |
 | `disabled` | `boolean` | false | Blocks the switch. |
 | `className` | `string` | — | Added to the button. |
 | `pressed` | `boolean` | — | Inherited from IconButton, where it is deprecated. The toggle's state is the document theme, not this prop. |
@@ -10832,7 +10834,7 @@ import {Timeline} from "@aurea-uds/react";
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `items` | `Array<{title: ReactNode; description?: ReactNode; time?: ReactNode}>` | — | The events, rendered as an <ol> because the order IS the information. `time` is a node, so an absolute date and a relative one are equally welcome. |
-| `variant` | `"default" \| "ring" \| "latest" \| "time" \| "contrast"` | "default" | The style (ADR-0084), all on the fixed rail that runs under the dots and stops at the last one: default (the solid yellow dot), ring (a hollow dot with a yellow ring), latest (muted dots, only the last one yellow with a halo), time (the time in a column on the left, right-aligned; the rail moves with the dot) or contrast (dots in the text colour). Written as data-timeline-style. Web and React Native; on React Native an item with an icon keeps its frame in every style. |
+| `variant` | `"default" \| "ring" \| "latest" \| "time" \| "contrast"` | "default" | The style, all on the fixed rail that runs under the dots and stops at the last one: default (the solid yellow dot), ring (a hollow dot with a yellow ring), latest (muted dots, only the last one yellow with a halo), time (the time in a column on the left, right-aligned; the rail moves with the dot) or contrast (dots in the text colour). Written as data-timeline-style. Web and React Native; on React Native an item with an icon keeps its frame in every style. |
 </page>
 
 <page url="https://aureauds.dev/toggle.html">
@@ -10929,7 +10931,7 @@ area makes the toggle an area around a block — a thumbnail, an icon with its n
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `value` | `string` | — | What identifies this toggle inside a ToggleGroup — without it the group cannot tell which button changed. Standalone, it makes no difference. |
 | `variant` | `default \| ghost` | default | default has the neutral fill; ghost has none. Pressed uses Aurea's selected language on both. |
-| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state: brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. |
 | `area` | `boolean \| "pill"` | — | The toggle as an AREA around a block (a page thumbnail, an icon with its name): 4 padding, the card's concentric radius, the content as it is. With variant="ghost", no fill: the yellow at 18% on hover, 42% when on. With the default variant, --fill-2 (--fill-3 on hover) and, when on, the solid yellow with the primary button's letter. pill keeps it as wide as its content, as a capsule. |
 </page>
 
@@ -11014,7 +11016,7 @@ The size reaches every toggle in the group.
 | `size` | `sm \| md \| lg` | — | The size of every toggle inside; a toggle may set its own. |
 | `fullWidth` | `boolean` | false | Fills the parent's width, and the toggles share it equally. |
 | `detached` | `boolean` | false | Loose toggles with a 4 gap, instead of joined in one capsule. |
-| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. For every toggle inside; each may set its own. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state: brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. For every toggle inside; each may set its own. |
 </page>
 
 <page url="https://aureauds.dev/toolbar.html">
@@ -11129,7 +11131,7 @@ tone="brand" is the yellow bar of a bulk selection: the count at one end, the ac
 | `label` | `string` | Toolbar | Accessible name of the toolbar. Two toolbars on a page must not share one. |
 | `children` | `ReactNode` | — | ToolbarButton, ToolbarGroup and ToolbarSeparator. |
 | `className` | `string` | — | Extra classes on the surface. |
-| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. For every pressed ToolbarButton inside; each may set its own. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state: brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. For every pressed ToolbarButton inside; each may set its own. |
 | `tone` | `"default" \| "brand"` | "default" | brand is the yellow selection bar ("3 selected", Clear, Remove): the brand yellow, 52 tall, the text in the ink at 600, the ends apart, and the buttons inside white with the ink. |
 </page>
 
@@ -11283,9 +11285,9 @@ pressedStyle (ADR-0084), when the button is pressed: brand — the default — n
 | `download` | `boolean \| string` | — | Link attribute, only with `href`. |
 | `render` | `ReactElement` | — | Inherited from Button: the element that renders the button — the router's link, for example — receiving the Aurea skin and the content. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller — the Button's quiet. |
-| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state (ADR-0084): brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. |
-| `glow` | `boolean` | — | A finish the app chooses (ADR-0086): under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web only: ToolbarButton is planned on native. |
-| `ring` | `boolean` | — | A finish the app chooses (ADR-0086): around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to "no line", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing. |
+| `pressedStyle` | `"brand" \| "neutral" \| "contrast"` | "brand" | The colour of the ON state: brand — the yellow of the primary button, the default — neutral (grey) or contrast (graphite, inverted). Written as data-pressed-style; the same attribute on a container, or on <html>, sets it for every pressed button inside, and a button's own value wins. With the system's "increase contrast", neutral gets a 3:1 outline. |
+| `glow` | `boolean` | — | A finish the app chooses: under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web only: ToolbarButton is planned on native. |
+| `ring` | `boolean` | — | A finish the app chooses: around a soft-filled button (soft and outline appearances), its tone at 30%, inside the edge. It is a line — the named exception to "no line", only when chosen. Writes data-ring, with the same container rule as glow. On native, the outline appearance (the tone at 16%). On any other button it draws nothing. |
 </page>
 
 <page url="https://aureauds.dev/toolbargroup.html">
@@ -11416,7 +11418,7 @@ import {ToolPermission} from "@aurea-uds/react";
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `tools` | `ToolPermissionEntry[]` | — | One row per tool. `scope` sits NEXT TO the name, never hidden: "read" and "read /etc" are different permissions, and granting the second thinking it is the first is the defect this component exists to prevent. |
-| `onChange` | `(id: string, permission: PermissionLevel) => void` | — | Fires when a permission changes. The three-way choice is a SegmentedControl, so arrows move AND select, with Home and End — writing three toggle buttons here would redo by hand the pattern ADR-0016 rejected. |
+| `onChange` | `(id: string, permission: PermissionLevel) => void` | — | Fires when a permission changes. The three-way choice is a SegmentedControl, so arrows move AND select, with Home and End — writing three toggle buttons here would redo by hand a pattern that was rejected. |
 | `label` | `string` | "Tool permissions" | Accessible name of the region. |
 | `className` | `string` | — | On the region. |
 </page>
@@ -18646,6 +18648,45 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
 ```
 </page>
 
+<page url="https://aureauds.dev/release-v0-62-0.html">
+# v0.62.0
+
+The new Aurea logo, an icon prop on the native IconButton, a horizontal Accordion that opens its first item, and https-only embeds.
+
+## ⚠ May break compilation
+
+- **Native `IconButtonProps` is now a union type** (the icon by `name` or by `icon`). If you wrote `interface X extends IconButtonProps`, write `type X = IconButtonProps & {…}` instead. Using the component does not change.
+
+## Added
+
+- **`icon` on the native `IconButton`**, the same name as on the web. `name` still works.
+
+## Changed
+
+- **A horizontal `Accordion` opens its first enabled item** when no `defaultValue` is given. The vertical one still starts closed.
+- **`MediaEmbed` only renders `https:` addresses** for `src` and `href`. The native `DropdownMenu` only opens `https:`, `mailto:` and `tel:` links.
+- Component docs no longer cite internal decision records.
+
+## Site
+
+- The new logo in the header and as the tab icon.
+- The accessibility page documents the Aurea Ember primary button in the light theme (white on orange, 3.08:1), kept to match the system the Ember palette comes from.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.62.0 @aurea-uds/core@0.62.0 @aurea-uds/fonts@0.62.0 @aurea-uds/icons@0.62.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.62.0
+```
+</page>
+
 <page url="https://aureauds.dev/release-v0-61-0.html">
 # v0.61.0
 
@@ -18656,6 +18697,15 @@ Breakpoints follow the browser font size, more selected items in Windows high co
 - **Breakpoints follow the font size.** Every screen breakpoint is now in `em`, in the CSS and in the JavaScript that asks about the screen (`AppShell`, responsive props and the drawer script `aurea.js`). People who enlarge the browser's default font — instead of zooming — get the same layout zoom gives them: with the font doubled, a 1280px screen behaves like a 640px one. At the default font size nothing changes. Container queries stay in px.
 - **Windows high contrast:** the pressed button (`Toggle`, `ToggleGroup`, `Button pressed`), the selected tag in `TagGroup`, the selected `ListBox` item, the selected day in `Calendar` and `DatePicker`, and the selected `Table`/`DataGrid` row use the system highlight colour, like the segment and the tab in v0.60.0. The `Carousel` dots no longer disappear: they use the system text colour, and the current one the highlight. Web only.
 - **`Header`** calls the item's `onClick`, like `Sidebar` does with the same item type.
+
+## Includes v0.60.0
+
+- **Windows high contrast** — the selected segment of `SegmentedControl` and the selected tab of `Tabs` use the system highlight colour; the `Badge` status dot no longer disappears.
+- **Right-to-left pages** — `CodeBlock` keeps the code left-to-right, with the line numbers before it.
+
+## Includes v0.59.1
+
+- The `CodeEditor` focus ring follows `--focus-width`, like every other component.
 
 ## Update
 

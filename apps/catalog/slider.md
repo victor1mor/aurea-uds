@@ -162,7 +162,7 @@ const [colour, setColour] = useState("rgb(4, 133, 247)");
 | `thumbLabels` | `string[]` | — | With two values, each thumb's name, in order ("Minimum", "Maximum"). |
 | `disabled` | `boolean` | false | Disables the slider. |
 | `name` | `string` | — | For the form: the engine renders the hidden input with the raw value. |
-| `channel` | `ColorChannel` | — | The colour track (ADR-0069), a variation of this Slider: hue, saturation, brightness, lightness, red, green, blue or alpha. The value becomes the COLOUR (hex), as in the reference, so several tracks share one colour; the track is painted with the channel, the thumb shows the colour, alpha has the checkerboard, and the screen reader hears the channel and the colour's name. |
+| `channel` | `ColorChannel` | — | The colour track, a variation of this Slider: hue, saturation, brightness, lightness, red, green, blue or alpha. The value becomes the COLOUR (hex), as in the reference, so several tracks share one colour; the track is painted with the channel, the thumb shows the colour, alpha has the checkerboard, and the screen reader hears the channel and the colour's name. |
 | `colorSpace` | `"hsb" \| "hsl" \| "rgb"` | "hsb" | With channel: the space of hue and saturation. The other channels already say theirs (red, green and blue are rgb), so one colorSpace serves every track of a picker; with hue or saturation, rgb reads as hsb. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin. |
 | `id` | `string` | — | The id of the slider root. |

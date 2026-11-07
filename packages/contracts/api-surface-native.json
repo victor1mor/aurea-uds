@@ -42,6 +42,11 @@
         "xl"
       ]
     },
+    "IconButtonProps": {
+      "module": "actions",
+      "raw": "IconButtonBase & ({ name: AureaIcon; icon?: undefined; } | { icon: AureaIcon; name?: undefined; })",
+      "union": null
+    },
     "AureaFile": {
       "module": "arquivo",
       "raw": "{ uri: string; name: string; size?: number; mimeType?: string; }",
@@ -2552,15 +2557,21 @@
               "values": null
             },
             {
-              "name": "name",
-              "optional": false,
-              "type": "AureaIcon",
-              "values": null
-            },
-            {
               "name": "label",
               "optional": false,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": false,
+              "type": "AureaIcon | undefined",
+              "values": null
+            },
+            {
+              "name": "icon",
+              "optional": false,
+              "type": "undefined | AureaIcon",
               "values": null
             }
           ]

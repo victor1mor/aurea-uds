@@ -64,7 +64,7 @@ fill="brand" paints the whole card in the brand colour, with the ink on top — 
 | `padding` | `"normal" \| "none"` | "normal" | none removes the inner padding so media bleeds to the edge; the 22 radius stays and clips the media. |
 | `orientation` | `"vertical" \| "horizontal"` | "vertical" | `horizontal` is the list mode: Card.Media on the left at thumbnail width (96, --space-24) and the content beside it. |
 | `lift` | `boolean` | false | With `variant="interactive"`, the card RISES on hover: it lifts 4px and takes a medium shadow, instead of changing its fill. Still for people who ask for less motion. Web only; on the other variants it does nothing. |
-| `Card.Media` | `component` | — | The card's media part. Vertical, as first child, it bleeds to the top and side edges; horizontal, it sits on the left inside the padding, with the house's concentric radius (ADR-0033). |
+| `Card.Media` | `component` | — | The card's media part. Vertical, as first child, it bleeds to the top and side edges; horizontal, it sits on the left inside the padding, with the house's concentric radius. |
 | `Card.Header` | `component` | — | The header: the title and the description, together. 12 between the parts. |
 | `Card.Title` | `component` | — | The card's title — an h3, 14/24 medium, as the reference. 12 between the parts. |
 | `Card.Description` | `component` | — | The line under the title, 14/20 muted. 12 between the parts. |

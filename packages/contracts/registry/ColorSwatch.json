@@ -43,7 +43,7 @@
   ],
   "a11y": {
     "role": "img",
-    "apg": "Alone, an image (role=img) named by label or the colour value. With options (the picker variation, ADR-0069), a radio group: one native radio button per colour, named by the option's label or the code; the browser gives single choice and the arrow keys.",
+    "apg": "Alone, an image (role=img) named by label or the colour value. With options (the picker variation), a radio group: one native radio button per colour, named by the option's label or the code; the browser gives single choice and the arrow keys.",
     "keyboard": [
       "ArrowLeft",
       "ArrowRight",
@@ -91,7 +91,7 @@
       "name": "options",
       "type": "(string | {color, label?})[]",
       "default": "—",
-      "description": "The picker variation (ADR-0069): the colours to pick from, as a colour string or {color, label?, disabled?}. Turns the swatch into a radio group; a disabled option cannot be chosen."
+      "description": "The picker variation: the colours to pick from, as a colour string or {color, label?, disabled?}. Turns the swatch into a radio group; a disabled option cannot be chosen."
     },
     {
       "name": "name",

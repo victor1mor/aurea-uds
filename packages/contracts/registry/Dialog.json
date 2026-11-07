@@ -106,7 +106,7 @@
       "name": "iconTone",
       "type": "\"neutral\" | \"brand\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
       "default": "\"neutral\"",
-      "description": "The circle's colour: the state colours (the *-bg fill and the -400 glyph, ADR-0061), or brand — the light yellow wash with the yellow-as-text glyph."
+      "description": "The circle's colour: the state colours (the *-bg fill and the -400 glyph), or brand — the light yellow wash with the yellow-as-text glyph."
     },
     {
       "name": "placement",

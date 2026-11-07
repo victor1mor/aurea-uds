@@ -377,6 +377,19 @@ describe("DropdownMenu · o painel e o item da referência", () => {
     expect(__chamadasDeSistema).toContain("openURL:https://exemplo.dev/ajuda");
     expect(modal().visible).toBe(false);
   });
+
+  // A D5 da auditoria externa (decisão do Victor, 06/11/2026): só `https:`, `mailto:` e `tel:`. Provado contra o defeito:
+  // com o `menu.tsx` de antes, o `sms:` abria.
+  it("o link só abre https:, mailto: e tel: — o resto é ignorado", async () => {
+    montar(umMenu([{kind: "link", label: "Ligar", href: "tel:+5511999999999"}, {kind: "link", label: "Mensagem", href: "sms:+5511999999999"}]));
+    await abrir();
+    await tocar(linha("Mensagem"));
+    expect(__chamadasDeSistema.some((c) => c.startsWith("openURL:sms:"))).toBe(false);
+    montar(umMenu([{kind: "link", label: "Ligar", href: "tel:+5511999999999"}]));
+    await abrir();
+    await tocar(linha("Ligar"));
+    expect(__chamadasDeSistema).toContain("openURL:tel:+5511999999999");
+  });
 });
 
 describe("DropdownMenu · o que alterna e a escolha única", () => {

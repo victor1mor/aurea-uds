@@ -82,7 +82,7 @@
       "name": "defaultValue",
       "type": "string[]",
       "default": "—",
-      "description": "The ids of the items that start open."
+      "description": "The ids of the items that start open. Without it, the vertical accordion starts all closed; the horizontal one opens its first enabled item, so there is always one in view."
     },
     {
       "name": "indicator",

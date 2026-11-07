@@ -39,8 +39,13 @@ export function Accordion({items,variant="default",multiple=false,defaultValue,i
   defaultValue?:string[];className?:string}){
   const grupo=React.useId();
   const deLado=orientation==="horizontal";
+  // DE LADO, SEMPRE HÁ UM À VISTA também na abertura (06/11/2026, a D4 da auditoria externa — decisão do Victor, "Abrir o
+  // primeiro"): sem `defaultValue`, o horizontal nascia com tudo fechado, só as tiras em pé e nenhuma área de conteúdo. Agora
+  // nasce com o primeiro item que não está desligado. A referência não tem o horizontal; o de pé continua como o dela,
+  // fechado.
+  const abertos=defaultValue??(deLado?[items.find(i=>!i.disabled)?.id].filter(Boolean) as string[]:undefined);
   const lista=<div className={cx("accordion",variant==="surface"&&"accordion-surface",indicator==="plus"&&"accordion-plus",size==="lg"&&"accordion-lg",deLado&&"accordion-horizontal",!deLado&&className)}>{items.map(i=>
-    <details key={i.id} className="accordion-item" name={multiple&&!deLado?undefined:grupo} open={defaultValue?.includes(i.id)||undefined}>
+    <details key={i.id} className="accordion-item" name={multiple&&!deLado?undefined:grupo} open={abertos?.includes(i.id)||undefined}>
       <summary aria-disabled={i.disabled||undefined} tabIndex={i.disabled?-1:undefined}
         onClick={i.disabled?(e:React.MouseEvent)=>e.preventDefault()
           :deLado?(e:React.MouseEvent<HTMLElement>)=>{if((e.currentTarget.parentElement as HTMLDetailsElement).open)e.preventDefault()}:undefined}>

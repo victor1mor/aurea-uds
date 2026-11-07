@@ -7329,9 +7329,9 @@ a.related-card:hover { border-color:transparent; }
 
 /* O topo: 14 entre a marca, as áreas e as ações; os botões com o toque de 44 (--target-min). */
 .site-shell > .topbar-pill > .topbar-inner { gap:calc(var(--space-3) + var(--space-05)); padding-inline:var(--space-5) calc(var(--space-2) + var(--space-05)); }
-.site-shell .site-brand { gap:calc(var(--space-2) + var(--space-05)); }
-.site-shell .site-brand > svg { inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
-.site-shell .site-brand strong { font-family:var(--font-heading); font-size:var(--text-xl); font-weight:var(--weight-bold); line-height:normal; }
+.site-shell .site-brand { gap:var(--space-1); } /* a estrela perto do nome (o Victor, 07/11/2026, olhando três vãos: "2, mais perto"; 8 da ponta da estrela ao A, com a margem do desenho) */
+.site-shell .site-brand > :is(svg,.site-logo) { inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
+.site-shell .site-brand strong { font-family:var(--font-heading); font-size:var(--text-xl); font-weight:var(--weight-extrabold); line-height:normal; } /* Sora ExtraBold, o nome da logo (06/11/2026) */
 .site-shell .site-areas .segmented { gap:var(--space-05); padding:var(--space-1); border:0; background:var(--fill-1); }
 .site-shell .site-areas .segmented a { padding-inline:calc(var(--space-3) + var(--space-05) / 2); font-size:var(--text-sm); }
 .site-shell .site-areas .segmented a.active { font-weight:var(--weight-semibold); color:var(--primary-emphasis); }

@@ -51,9 +51,11 @@ Aurea has a few documented gaps against WCAG and one documented loss for readers
 
 **3. White and yellow marks on the yellow.** In Aurea Gold, the marks inside a chosen control (the switch thumb, the checkbox mark, the radio dot) are white on the yellow: 1.91:1. Fields show their focus in the yellow, 1.75:1 on the page in the light theme; with the system's "increase contrast" on, it turns graphite. And `currentStyle="brand-white"` on the bottom bar draws white on the yellow, 1.91:1 — it is a style you choose, never the default.
 
+**4. The Aurea Ember primary button in the light theme.** Its label is white on the brand's orange (`#f76500`): 3.08:1, below the 4.5:1 that WCAG asks of text. Aurea Ember keeps the colours of the system it was made for, where the button is drawn this way; the brand's own dark text would measure 5.35:1 and black 6.82:1, and neither is used. The other brands are not affected.
+
 Accent text in the light theme passes: since v0.45.0 the yellow is never text there. Accent text and links are the text colour.
 
-If your product must meet WCAG AA in full, account for the field boundaries.
+If your product must meet WCAG AA in full, account for the field boundaries — and, with Aurea Ember, for its primary button.
 
 ## Focus
 
@@ -125,7 +127,7 @@ See [Animation](./docs-animation.html).
 
 ## Forced colours
 
-When the system forces its own colours (`forced-colors: active`), the focus ring uses the system text colour. Icons drawn as masks would vanish, so they repaint in the system colour of the text next to them. Colour swatches keep their colour, because the colour is their content. A dedicated test checks each of these.
+When the system forces its own colours (`forced-colors: active`), the focus ring uses the system text colour. The selected item — a segment, a tab, a pressed button, a tag, a list item, a calendar day, a table row — takes the system highlight colour, so it never looks like the others; the carousel dots and the badge dot use the system text colour. Icons drawn as masks would vanish, so they repaint in the system colour of the text next to them. Colour swatches keep their colour, because the colour is their content. A dedicated test checks each of these.
 
 When the system asks for more contrast (`prefers-contrast: more`), fields get an outline that measures at least 3:1, the marks inside a chosen control (the switch thumb, the checkbox mark, the radio dot) turn to the ink, the focus of a field turns graphite in the light theme, and a pressed button in the neutral style gets an outline. Outside that preference, none of this is drawn. The Aurea Ember brand keeps its fields and marks as they are.
 
@@ -133,7 +135,7 @@ Your app can also turn high contrast on itself, without waiting for the system: 
 
 ## Text size and reflow
 
-A sweep sets the root text size to 200% on every page of this site and fails any page that then scrolls sideways. A second sweep checks that no page scrolls sideways at any width.
+A sweep sets the root text size to 200% on every page of this site and fails any page that then scrolls sideways. Breakpoints are in `em`, so they follow the browser's default font size: with the font doubled, a 1280px screen gets the layout of a 640px one, the same layout zoom gives. A second sweep checks that no page scrolls sideways at any width.
 
 For large text across the app, use `<AppShell textSize="lg">`, or `data-text="lg"` on any container. Every text step grows by 2px (14px body text becomes 16px), and the medium control grows to the 44px touch target. It works in every brand.
 

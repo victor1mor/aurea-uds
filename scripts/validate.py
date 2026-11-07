@@ -1355,6 +1355,16 @@ for c in CONSTRUIDOS:
             f"{', '.join(vazios)}. Componente novo publica contrato completo — o achado M8 foram "
             f"os 43 que não publicaram.")
 
+# ── 22b. a ficha pública não cita decisão interna ─────────────────────────────────────────
+# A D6 da auditoria externa (decisão do Victor, 06/11/2026: "Tirar do texto público"): 45 menções a "ADR-…" em 31 fichas,
+# e a ficha é o texto que o site e os assistentes de IA mostram a quem usa. A ficha diz o que a peça FAZ; o porquê fica no
+# repositório (`decisions/`). Medido no texto inteiro do JSON.
+_adr22b = sorted(fp.stem for fp in (root / "packages/contracts/registry").glob("*.json")
+                 if re.search(r"(?<![A-Za-z])ADR-\d", fp.read_text(encoding="utf-8")))
+if _adr22b:
+    errors.append(f"fichas: {len(_adr22b)} citam ADR no texto público — a ficha diz o que a peça faz; o porquê fica em "
+                  f"decisions/: {', '.join(_adr22b)}")
+
 # ── 30. estado universal DECLARADO é estado universal ACEITO ───────────────────
 # PLANO-1.0 Parte J, item J3. Sem isto os sete nomes viram prosa: uma ficha diz "stale" e o
 # componente não tem por onde recebê-lo, ou pior — recebe com significado próprio, que é o

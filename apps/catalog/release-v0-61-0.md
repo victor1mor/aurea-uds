@@ -8,6 +8,15 @@ Breakpoints follow the browser font size, more selected items in Windows high co
 - **Windows high contrast:** the pressed button (`Toggle`, `ToggleGroup`, `Button pressed`), the selected tag in `TagGroup`, the selected `ListBox` item, the selected day in `Calendar` and `DatePicker`, and the selected `Table`/`DataGrid` row use the system highlight colour, like the segment and the tab in v0.60.0. The `Carousel` dots no longer disappear: they use the system text colour, and the current one the highlight. Web only.
 - **`Header`** calls the item's `onClick`, like `Sidebar` does with the same item type.
 
+## Includes v0.60.0
+
+- **Windows high contrast** — the selected segment of `SegmentedControl` and the selected tab of `Tabs` use the system highlight colour; the `Badge` status dot no longer disappears.
+- **Right-to-left pages** — `CodeBlock` keeps the code left-to-right, with the line numbers before it.
+
+## Includes v0.59.1
+
+- The `CodeEditor` focus ring follows `--focus-width`, like every other component.
+
 ## Update
 
 On the web:

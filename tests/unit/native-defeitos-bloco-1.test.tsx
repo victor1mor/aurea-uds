@@ -98,10 +98,13 @@ describe("2 · o DatePicker no modo hora escreve a hora e pede um horário", () 
 describe("3 e 4 · o IconButton e o ThemeToggle não prometem `leading` nem `trailing`", () => {
   it("o tipo tira as duas props (o ThemeToggle herda o tipo do IconButton)", () => {
     const fonte = readFileSync("packages/native/src/actions.tsx", "utf8");
-    const tipo = /export interface IconButtonProps extends Omit<ButtonProps, ([^>]*)>/.exec(fonte)?.[1] ?? "";
+    // Desde a D2 (0.62.0) o tipo público é uma união (o ícone por `name` OU por `icon`) feita sobre o `IconButtonBase`, e
+    // é a base que tira as duas props; o ThemeToggle herda da base.
+    const tipo = /export interface IconButtonBase extends Omit<ButtonProps, ([^>]*)>/.exec(fonte)?.[1] ?? "";
     expect(tipo).toContain('"leading"');
     expect(tipo).toContain('"trailing"');
-    expect(fonte).toMatch(/export interface ThemeToggleProps extends Omit<IconButtonProps,/);
+    expect(fonte).toMatch(/export type IconButtonProps = IconButtonBase &/);
+    expect(fonte).toMatch(/export interface ThemeToggleProps extends Omit<IconButtonBase,/);
   });
 
   it("mandadas sem o tipo (JavaScript), elas não descem ao Pressable", () => {

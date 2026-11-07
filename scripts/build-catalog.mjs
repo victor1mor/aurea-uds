@@ -1796,10 +1796,15 @@ const menuNativo = () => [item("All Components", "native.html"),
 const MENUS = {native: menuNativo, start: menuDocs, releases: menuReleases, components: menuComponentes, hooks: menuHooks, tokens: menuTokens,
   patterns: menuPatterns, blocks: menuBlocks, recipes: menuRecipes};
 
-const D = "M510 80 A420 420 0 0 1 920 490 C770 475 645 405 585 315 C535 240 510 150 510 80 Z";
-// A LOGO da Aurea, as quatro pétalas amarelas (ordem do Victor, 13/10/2026: "não a perca").
-const mark = h("svg", {width: 26, height: 26, viewBox: "0 0 1000 1000", "aria-hidden": "true", style: {flex: "none"}},
-  [0, 90, 180, 270].map(r => h("path", {key: r, d: D, fill: "var(--primary)", transform: `rotate(${r} 500 500)`})));
+// A LOGO da Aurea (06/11/2026, as decisões do Victor depois de ver o FigCraft): a estrela 2E (21/10/2026) no topo, a
+// COMPLETA, com a boca e as bochechas (o Victor, 07/11/2026, olhando as três no topo: "B, com boca" — era a pequena de 32,
+// sem boca), no lugar das quatro pétalas — que ficam guardadas em `assets/logo/antiga-quatro-petalas.svg` (o
+// Victor, 13/10/2026: "não a perca"). Os arquivos saem de `scripts/gerar-logo.py`. A estrela tem as cores DELA (é a
+// identidade), e não a da marca escolhida no site. O nome do lado é o texto do link, em Sora ExtraBold (o CSS do topo).
+const LOGO_TOPO = readFileSync(join(outDir, "assets/logo/estrela-2e.svg"), "utf8")
+  .replace(/ role="img"| aria-label="[^"]*"/g, "").replace("<svg ", '<svg width="100%" height="100%" ');
+const mark = h("span", {className: "site-logo", "aria-hidden": "true", style: {display: "inline-flex", flex: "none"},
+  dangerouslySetInnerHTML: {__html: LOGO_TOPO}});
 
 // O BOTÃO "THEME" (o Victor, 14/10/2026: "crie um botão tema como da [referência]"): a escolha de tema da referência — o
 // botão pequeno com o balde de tinta e "Theme", que abre a janelinha com as amostras redondas e o nome embaixo. Na
@@ -2449,9 +2454,9 @@ a.related-card:hover { border-color:transparent; }
 
 /* O topo: 14 entre a marca, as áreas e as ações; os botões com o toque de 44 (--target-min). */
 .site-shell > .topbar-pill > .topbar-inner { gap:calc(var(--space-3) + var(--space-05)); padding-inline:var(--space-5) calc(var(--space-2) + var(--space-05)); }
-.site-shell .site-brand { gap:calc(var(--space-2) + var(--space-05)); }
-.site-shell .site-brand > svg { inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
-.site-shell .site-brand strong { font-family:var(--font-heading); font-size:var(--text-xl); font-weight:var(--weight-bold); line-height:normal; }
+.site-shell .site-brand { gap:var(--space-1); } /* a estrela perto do nome (o Victor, 07/11/2026, olhando três vãos: "2, mais perto"; 8 da ponta da estrela ao A, com a margem do desenho) */
+.site-shell .site-brand > :is(svg,.site-logo) { inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
+.site-shell .site-brand strong { font-family:var(--font-heading); font-size:var(--text-xl); font-weight:var(--weight-extrabold); line-height:normal; } /* Sora ExtraBold, o nome da logo (06/11/2026) */
 .site-shell .site-areas .segmented { gap:var(--space-05); padding:var(--space-1); border:0; background:var(--fill-1); }
 .site-shell .site-areas .segmented a { padding-inline:calc(var(--space-3) + var(--space-05) / 2); font-size:var(--text-sm); }
 .site-shell .site-areas .segmented a.active { font-weight:var(--weight-semibold); color:var(--primary-emphasis); }
@@ -2983,6 +2988,7 @@ function pageHtml(title, activeHref, inner, section = "components") {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title} — Aurea UDS</title>
+<link rel="icon" type="image/svg+xml" href="./assets/logo/estrela-2e-pequena-ate-24.svg">
 <link rel="stylesheet" href="./assets/catalog.css">${comNativo ? '\n<link rel="stylesheet" href="./assets/native.css">' : ""}
 ${TEMA_SALVO}</head>
 <body>${SPRITE_SLOT}${corpo}<script src="./assets/catalog.js"></script>

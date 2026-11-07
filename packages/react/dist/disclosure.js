@@ -17,7 +17,12 @@ import { Icon } from "./system.js";
 export function Accordion({ items, variant = "default", multiple = false, defaultValue, indicator = "chevron", size = "md", orientation = "vertical", className }) {
     const grupo = React.useId();
     const deLado = orientation === "horizontal";
-    const lista = _jsx("div", { className: cx("accordion", variant === "surface" && "accordion-surface", indicator === "plus" && "accordion-plus", size === "lg" && "accordion-lg", deLado && "accordion-horizontal", !deLado && className), children: items.map(i => _jsxs("details", { className: "accordion-item", name: multiple && !deLado ? undefined : grupo, open: defaultValue?.includes(i.id) || undefined, children: [_jsxs("summary", { "aria-disabled": i.disabled || undefined, tabIndex: i.disabled ? -1 : undefined, onClick: i.disabled ? (e) => e.preventDefault()
+    // DE LADO, SEMPRE HÁ UM À VISTA também na abertura (06/11/2026, a D4 da auditoria externa — decisão do Victor, "Abrir o
+    // primeiro"): sem `defaultValue`, o horizontal nascia com tudo fechado, só as tiras em pé e nenhuma área de conteúdo. Agora
+    // nasce com o primeiro item que não está desligado. A referência não tem o horizontal; o de pé continua como o dela,
+    // fechado.
+    const abertos = defaultValue ?? (deLado ? [items.find(i => !i.disabled)?.id].filter(Boolean) : undefined);
+    const lista = _jsx("div", { className: cx("accordion", variant === "surface" && "accordion-surface", indicator === "plus" && "accordion-plus", size === "lg" && "accordion-lg", deLado && "accordion-horizontal", !deLado && className), children: items.map(i => _jsxs("details", { className: "accordion-item", name: multiple && !deLado ? undefined : grupo, open: abertos?.includes(i.id) || undefined, children: [_jsxs("summary", { "aria-disabled": i.disabled || undefined, tabIndex: i.disabled ? -1 : undefined, onClick: i.disabled ? (e) => e.preventDefault()
                         : deLado ? (e) => { if (e.currentTarget.parentElement.open)
                             e.preventDefault(); } : undefined, children: [_jsx("span", { className: "accordion-title", children: i.title }), _jsx("span", { className: "accordion-chevron", "aria-hidden": "true" })] }), _jsx("div", { className: "accordion-content", children: i.content })] }, i.id)) });
     return deLado ? _jsx("div", { className: cx("accordion-horizontal-frame", className), children: lista }) : lista;

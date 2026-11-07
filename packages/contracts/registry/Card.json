@@ -119,7 +119,7 @@
       "name": "Card.Media",
       "type": "component",
       "default": "—",
-      "description": "The card's media part. Vertical, as first child, it bleeds to the top and side edges; horizontal, it sits on the left inside the padding, with the house's concentric radius (ADR-0033)."
+      "description": "The card's media part. Vertical, as first child, it bleeds to the top and side edges; horizontal, it sits on the left inside the padding, with the house's concentric radius."
     },
     {
       "name": "Card.Header",

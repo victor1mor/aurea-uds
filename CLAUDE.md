@@ -216,6 +216,9 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.57.0` | As tabelas com linha (`dividers` na `Table` e na `DataGrid`), o cabeçalho preso à página (`DataGrid stickyHeader="page"`), o degradê permitido ([ADR-0091](decisions/0091-o-degrade-e-permitido.md)) e cinco consertos do site — pedido #117. **Não saiu sozinha**: foi publicada dentro da `0.59.0` |
 | `0.58.0` | O movimento (o escolhido desliza, os menus entram, o arrasto anda — web e nativo), `DataGrid fit`, as tabelas do site em `DataGrid` e as 23 receitas como telas de produto — pedido #118. **Não saiu sozinha**: foi publicada dentro da `0.59.0` |
 | `0.59.0` | A auditoria externa, os consertos de código: o `KPI` com barras, o `Toast` do nativo para o VoiceOver, o `ToastHost` e o `BottomNav` sem `SafeAreaProvider`, os hooks do `CodeBlock` e do `Banner`, o portal do `Menubar`, as fichas e as licenças — pedido #119. **Publicada em 06/11/2026** (por volta das 13:52, Brasília, medido no npm), pelo terminal do Victor. Leva a `0.57.0` e a `0.58.0` junto |
+| `0.59.1` | A auditoria externa, as travas e o processo: os cabeçalhos de segurança do site, nenhum aceite de alerta sobrando e as travas 4b, 12, 19, 21b, 31, 31b e 44 — pedido #120. **Não saiu sozinha**: foi publicada dentro da `0.61.0` |
+| `0.60.0` | A auditoria externa, o que muda aparência: o escolhido que se vê no alto contraste (a forma "B"), o código da esquerda para a direita numa página da direita para a esquerda, o "Full width" que faz a peça crescer, a lupa do topo e os exemplos que deixam trocar — pedido #120. **Não saiu sozinha**: foi publicada dentro da `0.61.0` |
+| `0.61.0` | As pendências antes da 1.0: os pontos de quebra em `em` ([ADR-0092](decisions/0092-os-pontos-de-quebra-seguem-a-fonte.md)), as outras sete peças do alto contraste, o `onClick` do item do `Header` e as molduras do site que crescem com o conteúdo ([ADR-0093](decisions/0093-a-moldura-cresce-com-o-conteudo.md)) — pedido #121. **Publicada em 07/11/2026** (entre 08:45 e 08:49, Brasília, medido no npm), pelo terminal do Victor. Leva a `0.60.0` e a `0.59.1` junto |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -830,6 +833,19 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    (3 s por página); (3) o teste que conta o rádio marcado passava com o defeito (o jsdom não desmarca rádio de mesmo nome) —
    a prova passou a ser a causa (os nomes dos grupos). **Publicada em 06/11/2026** (por volta das 13:52, Brasília, medido no
    npm), pelo terminal do Victor, da junção do pedido #119. O registro entrou no lote seguinte (as pendências antes da 1.0).
+
+57. **`0.59.1`, `0.60.0` e `0.61.0`, feitas em 06/11/2026 e publicadas juntas em 07/11/2026** — o resto da auditoria externa
+   (as travas e o processo; e o que muda aparência, desenhado no FigCraft e aprovado: *"Pode, o alto contraste aprovo a B"*,
+   pedido #120) e as pendências antes da 1.0 (*"vamos fazer logo todas agora, para não atrapalhar a 1.0"*, pedido #121): os
+   pontos de quebra em `em`, as outras sete peças do alto contraste, o `onClick` do `Header` e as molduras do site.
+   ⚠ **As lições:** (1) a altura de uma moldura se mede pela PÁGINA, não pelo documento dela — fora da tela ou dentro de um
+   `details` fechado, o documento da moldura tem altura 0; (2) o teste que espera a moldura carregar confere o endereço
+   (`/embeds/`) além do `readyState` — o `about:blank` de antes da carga também diz "complete"; (3) a varredura do WebKit da CI
+   acusou uma vez o contraste de um botão da página Dark Mode que não se reproduziu em 12 rodadas daqui, e passou rodada de
+   novo — a causa não é sabida; (4) uma cópia de trabalho fora da pasta principal não tem as duas listas locais, e o
+   validador reprova: elas se copiam sem abrir e se apagam no fim. **Publicada em 07/11/2026** (entre 08:45 e 08:49,
+   Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #121. O registro entrou no lote seguinte (a logo,
+   0.62.0).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

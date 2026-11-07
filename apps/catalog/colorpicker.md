@@ -94,7 +94,7 @@ const channels: Record<ColorSpace, ColorChannel[]> = {hsb: ["hue", "saturation",
 | `onValueChange` | `(value: string) => void` | — | Called on every step with #rrggbb. |
 | `onValueCommitted` | `(value: string) => void` | — | Called on release, on every key, when a swatch is chosen and when the hex is confirmed — the moment to save. |
 | `swatches` | `(string \| {color, label?})[]` | — | Ready colours, under the hue track; with variant="swatches", in place of the area. Without a label, each is named by the colour's name in the app's language. |
-| `variant` | `"full" \| "swatches"` | "full" | "swatches": the closed palette (ADR-0069, the "C") — only the swatches and the hex field. |
+| `variant` | `"full" \| "swatches"` | "full" | "swatches": the closed palette (the "C") — only the swatches and the hex field. |
 | `children` | `ReactNode` | area, hue, swatches, hex field | The content of the window, built by you ("with fields", "with sliders"): the colour pieces without a value of their own — ColorArea, Slider with channel, ColorField — share the picker's colour. |
 | `disabled` | `boolean` | false | The trigger does not open. |
 | `name` | `string` | — | Sends the colour with a form, as #rrggbb. |

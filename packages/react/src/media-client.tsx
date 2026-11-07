@@ -148,6 +148,10 @@ export interface MediaEmbedProps extends Omit<React.IframeHTMLAttributes<HTMLIFr
   /** Na fachada, tocar ao clicar. Padrão `true`. */
   autoplay?:boolean;
 }
+// SÓ `https:` (06/11/2026, a D5 da auditoria externa — decisão do Victor): a moldura aceitava qualquer endereço, sem
+// `sandbox` — não rouba nada da página (medido: o `data:` roda isolado), mas pode mostrar conteúdo falso. Sem `https:`, a
+// moldura fica vazia e o link de origem não aparece.
+const soHttps=(u:string|undefined)=>!!u&&/^https:\/\//i.test(u.trim());
 function comAutoplay(src:string):string{try{const u=new URL(src);u.searchParams.set("autoplay","1");return u.toString()}catch{return src+(src.includes("?")?"&":"?")+"autoplay=1"}}
 export function MediaEmbed({src,title,poster,ratio="16/9",href,autoplay=true,className,style,...rest}:MediaEmbedProps){
   const s=useAureaStrings();
@@ -158,14 +162,14 @@ export function MediaEmbed({src,title,poster,ratio="16/9",href,autoplay=true,cla
   const endereco=clicou&&autoplay?comAutoplay(src):src;
   return <div className={cx("media-embed",className)} style={style}>
     <div className="media-embed-frame" style={{aspectRatio:ratio}}>
-      {ativo
+      {!soHttps(src)?null:ativo
         ?<iframe ref={frameRef} src={endereco} title={title} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowFullScreen {...rest}/>
         :<button type="button" className="media-embed-facade" aria-label={`${s.mediaPlay}: ${title}`} onClick={()=>{setAtivo(true);setClicou(true)}}>
           <img src={poster} alt="" loading="lazy" decoding="async"/>
           <span className="media-embed-play" aria-hidden="true"><Icon name="play-circle" weight="fill"/></span>
         </button>}
     </div>
-    {href&&<a className="media-embed-link" href={href} target="_blank" rel="noopener"><Icon name="arrow-square-out"/>{s.mediaEmbedOpen}</a>}
+    {soHttps(href)&&<a className="media-embed-link" href={href} target="_blank" rel="noopener"><Icon name="arrow-square-out"/>{s.mediaEmbedOpen}</a>}
   </div>;
 }
 
