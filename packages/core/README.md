@@ -1,38 +1,37 @@
 # @aurea-uds/core
 
-A folha de estilo da **Aurea UDS**, mais o pouco de comportamento em JavaScript puro que não
-precisa de React.
+The **Aurea UDS** stylesheet, plus the little behaviour in plain JavaScript that does not need React.
 
 ```bash
 pnpm add @aurea-uds/core @aurea-uds/fonts
 ```
 
 ```js
-import "@aurea-uds/fonts/css";  // antes do core: ele não embute fonte nenhuma
+import "@aurea-uds/fonts/css";  // before the core: it bundles no font
 import "@aurea-uds/core/css";
-import "@aurea-uds/core/js";    // opcional — abas, abrir e fechar e afins, sem React
+import "@aurea-uds/core/js";    // optional — tabs, open and close, and the like, without React
 ```
 
-O JavaScript não faz nada sem DOM, então é seguro importá-lo durante a renderização no servidor.
+The JavaScript does nothing without a DOM, so it is safe to import during server rendering.
 
-## O que tem aqui
+## What is here
 
-Toda regra de que o sistema precisa, e nada além. Enfeite de documentação e maquete de produto já
-moraram aqui; saíram, e um check os mantém fora — uma classe desta folha tem de ser uma que
-algum componente de fato produz.
+Every rule the system needs, and nothing else. Documentation decoration and product mock-ups used to
+live here; they were moved out, and a check keeps them out — a class in this stylesheet must be one that
+some component actually produces.
 
-Os valores vêm do `@aurea-uds/tokens`. Um pixel cru de espaço, raio, tamanho de letra, peso ou
-altura de linha reprova no CI, e não numa revisão.
+The values come from `@aurea-uds/tokens`. A raw pixel of spacing, radius, font size, weight or line
+height fails in CI, not in a review.
 
-## Tema e densidade
+## Theme and density
 
 ```html
 <html data-theme="dark" data-density="comfortable">
 ```
 
-`data-theme` é `dark` ou `light`; `data-density` é `compact`, `comfortable` ou `spacious`. Os dois
-são lidos do elemento raiz, e um controle de um dado tamanho mede o mesmo em toda combinação.
+`data-theme` is `dark` or `light`; `data-density` is `compact`, `comfortable` or `spacious`. Both are
+read from the root element, and a control of a given size measures the same in every combination.
 
-## Licença
+## License
 
 Apache-2.0.

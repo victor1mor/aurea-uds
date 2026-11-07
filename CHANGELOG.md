@@ -289,7 +289,35 @@ como deveria funcionar"*.
 
 ---
 
+## [0.62.1] — 2026-11-07
+
+**Os READMEs dos sete pacotes em inglês** (07/11/2026), o passo que faltava do *"tudo deve ser em inglês"*: o texto que
+aparece na página de cada pacote no npm. Nenhum código muda — só o README de cada pacote, e a versão.
+
+### Mudou
+
+- **O README de cada pacote está em inglês**: `@aurea-uds/tokens`, `@aurea-uds/core`, `@aurea-uds/icons`, `@aurea-uds/fonts`,
+  `@aurea-uds/react`, `@aurea-uds/contracts` e `@aurea-uds/native`. Saiu o que só dizia respeito ao processo interno (os
+  números de ADR, os códigos dos achados, o validador); a regra que cada trecho descrevia ficou. Os links para arquivos do
+  repositório passam a ser endereços completos do GitHub, que funcionam também na página do npm.
+
+### O site
+
+- A nota desta versão (`v0-62-1.md`) conta também o que o pedido #123 levou ao site e ao repositório — a porta em inglês e a
+  promessa que se prova —, descrito no [Unreleased].
+
+### O registro da 0.62.0 (07/11/2026)
+
+- **A 0.62.0 publicada entre 19:45 e 19:46 de 07/11/2026** (Brasília, medido no npm), da junção do pedido #123
+  (`a2195a85`; a 0.62.0 veio do pedido #122): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase
+  nova, nem na web nem no nativo. O CHANGELOG ([0.62.0] publicada) e o CLAUDE.md (a linha na tabela e o item 58).
+
+---
+
 ## [0.62.0] — 2026-11-06
+
+✅ **Publicada em 07/11/2026, entre 19:45 e 19:46 (Brasília, medido no npm; o `tokens` às 19:45 e o `contracts` às 19:46),
+pelo terminal do Victor, da junção do pedido #123** (`a2195a85`; a 0.62.0 veio do pedido #122, e o #123 não mexeu em pacote).
 
 **A logo e as decisões da auditoria externa** (06/11/2026). A logo e a D1 desenhadas no FigCraft e decididas pelo Victor
 olhando: o nome *"B · Sora ExtraBold"*, nos quatro lugares; e as respostas às decisões D1 a D8.

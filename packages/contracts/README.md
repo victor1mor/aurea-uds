@@ -1,6 +1,6 @@
 # @aurea-uds/contracts
 
-O contrato do projeto **Aurea UDS**, em JSON legível por máquina.
+The contract of the **Aurea UDS** project, as machine-readable JSON.
 
 ```bash
 pnpm add @aurea-uds/contracts
@@ -10,33 +10,31 @@ pnpm add @aurea-uds/contracts
 import contract from "@aurea-uds/contracts/contract" with {type: "json"};
 ```
 
-Ele diz o que o design system promete — identidade, o vocabulário do catálogo, as listas de
-valores contra as quais as fichas dos componentes são conferidas — numa forma que uma ferramenta
-lê, em vez de um parágrafo que uma pessoa tem de interpretar.
+It states what the design system promises — identity, the catalog vocabulary, the lists of values that
+each component's record is checked against — in a form a tool can read, instead of a paragraph a person
+has to interpret.
 
-## A superfície da API
+## The API surface
 
 ```js
 import surface from "@aurea-uds/contracts/api-surface" with {type: "json"};
 ```
 
-Todo componente que o `@aurea-uds/react` exporta, com as props e — quando o tipo é uma união de
-textos fixos — os valores que cada prop aceita. Ela é **derivada**, não escrita: o build lê as
-declarações que o compilador do TypeScript gera, então herança, `Omit`, `Pick` e apelidos em
-cadeia são resolvidos pelo compilador, e não por palpite. Editá-la à mão é justamente o defeito
-que ela existe para evitar.
+Every component `@aurea-uds/react` exports, with its props and — when the type is a union of fixed
+strings — the values each prop accepts. It is **derived**, not written: the build reads the declarations
+the TypeScript compiler emits, so inheritance, `Omit`, `Pick` and chained aliases are resolved by the
+compiler, not by guesswork. Editing it by hand is exactly the defect it exists to prevent.
 
-É ela que deixa uma ferramenta responder "que variantes este componente aceita?" sem ler o nosso
-código nem confiar na nossa prosa — e é contra ela que o validador confere as fichas de cada
-componente, para as duas não divergirem.
+It lets a tool answer "which variants does this component accept?" without reading our code or trusting
+our prose — and it is what each component's record is checked against, so the two never drift apart.
 
-## O que não está aqui
+## What is not here
 
-As fichas de cada componente moram no repositório, não neste pacote. Elas geram o catálogo e
-deixam o validador conferir a biblioteca contra ela mesma; nada fora do build as usa. Se você
-precisar delas, abra uma issue pedindo, e elas ganham uma entrada. A superfície da API acima é a
-parte dessa resposta de que uma ferramenta precisa, e é por isso que ela vai no pacote.
+The component records live in the repository, not in this package. They generate the catalog and let the
+library be checked against itself; nothing outside the build uses them. If you need them, open an issue
+asking for it, and they get an entry point. The API surface above is the part of that answer a tool
+needs, which is why it ships in the package.
 
-## Licença
+## License
 
 Apache-2.0.
