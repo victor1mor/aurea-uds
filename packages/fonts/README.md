@@ -1,37 +1,37 @@
 # @aurea-uds/fonts
 
-As fontes da **Aurea UDS**, com as regras `@font-face` que ela espera (ADR-0077, desde a `0.39.0`):
+The fonts of **Aurea UDS**, with the `@font-face` rules it expects (since `0.39.0`):
 
-- **Inter** para o texto e os controles;
-- **Sora** para os títulos;
-- **IBM Plex Mono** para código e valores (o `numeric` e o número do `KPI`).
+- **Inter** for text and controls;
+- **Sora** for headings;
+- **IBM Plex Mono** for code and values (`numeric` and the `KPI` number).
 
-Até a `0.38.0` a web usava a Atkinson Hyperlegible (ADR-0053); até a `0.12.4`, a IBM Plex.
+Up to `0.38.0` the web used Atkinson Hyperlegible; up to `0.12.4`, IBM Plex.
 
 ```bash
 pnpm add @aurea-uds/fonts
 ```
 
 ```js
-import "@aurea-uds/fonts/css";  // ANTES do @aurea-uds/core/css
+import "@aurea-uds/fonts/css";  // BEFORE @aurea-uds/core/css
 ```
 
-A ordem importa: o core só declara `--font-ui`, `--font-heading`, `--font-editorial` e `--font-code`,
-e é este pacote que faz esses nomes apontarem para arquivos de verdade. Importe o core primeiro e o
-first paint cai numa fonte do sistema.
+Order matters: the core only declares `--font-ui`, `--font-heading`, `--font-editorial` and `--font-code`,
+and this package is what points those names to real files. Import the core first and the first paint
+falls back to a system font.
 
-O título usa a Sora sozinho: o core aplica `--font-heading` a todo `h1` a `h6`, por uma regra de força
-zero. Quem fixa outra fonte no próprio título ganha dela; a fonte que o título só herda do pai
-(`body{font-family:…}`) perde.
+Headings get Sora on their own: the core applies `--font-heading` to every `h1` to `h6` through a
+zero-specificity rule. A font you set on the heading itself wins over it; a font the heading only
+inherits from its parent (`body{font-family:…}`) loses.
 
-⚠ `--font-editorial` não tem fonte própria desde a ADR-0053: ele aponta para a fonte do texto (hoje a
-Inter). Continua existindo só para não quebrar quem o usa; sai na `1.0`.
+⚠ `--font-editorial` has no font of its own: it points to the text font (Inter today). It still exists
+only so that code using it does not break; it is removed in `1.0`.
 
-## No React Native
+## In React Native
 
-O React Native não lê `woff2`, e no Android não lê fonte variável: o nativo recebe as mesmas três famílias em
-`.ttf` estático, um arquivo por peso (`@aurea-uds/fonts/native`). Carregue o `AUREA_FONTS` e passe o
-`FONT_FAMILIES` ao `AureaProvider`:
+React Native does not read `woff2`, and on Android it does not read variable fonts: native gets the same
+three families as static `.ttf`, one file per weight (`@aurea-uds/fonts/native`). Load `AUREA_FONTS` and
+pass `FONT_FAMILIES` to `AureaProvider`:
 
 ```tsx
 import {AureaProvider} from "@aurea-uds/native";
@@ -40,54 +40,54 @@ import {useFonts} from "expo-font";
 
 const [pronto] = useFonts(AUREA_FONTS);
 // ...
-<AureaProvider fontFamilies={FONT_FAMILIES}>{/* o app */}</AureaProvider>
+<AureaProvider fontFamilies={FONT_FAMILIES}>{/* your app */}</AureaProvider>
 ```
 
-No aparelho, cada peso é uma família própria, com o nome PostScript do arquivo (ADR-0039): `Inter-SemiBold`,
-`Sora-Bold`, `IBMPlexMono-Medm`. O `FONT_FAMILIES` faz o papel e o peso pedidos apontarem para eles; sem ele, o
-aparelho cai na fonte do sistema. São 14 arquivos, **completos** (todos os alfabetos que cada fonte desenha):
-3,17 MB no app (decisão do Victor, 22/10/2026, ADR-0077).
+On the device, each weight is a family of its own, named after the file's PostScript name:
+`Inter-SemiBold`, `Sora-Bold`, `IBMPlexMono-Medm`. `FONT_FAMILIES` points the requested role and weight to
+them; without it, the device falls back to the system font. There are 14 files, **complete** (every
+script each font draws): 3.17 MB in the app.
 
-## De onde vêm os arquivos
+## Where the files come from
 
-| arquivo | origem | como |
+| file | source | how |
 |---|---|---|
-| `inter-variable-normal.woff2`, `inter-variable-italic.woff2` | Inter 4.1 do autor (`rsms/inter`, `Inter-4.1.zip`, pasta `web/`) | cortadas para o recorte latino por `cortar-fontes.py`; continuam variáveis (peso 100–900 e tamanho óptico 14–32) |
-| `sora-variable-normal.woff2` | `google/fonts`, `ofl/sora/Sora[wght].ttf`, commit `a926665019d3` | cortada do mesmo jeito; variável (peso 100–800) |
-| `ibm-plex-mono-400-normal.woff2`, `-500-`, `-600-` | `@ibm/plex-mono` 2.5.0, `fonts/split/woff2/IBMPlexMono-{Regular,Medium,SemiBold}-Latin1.woff2` | **sem mudança nenhuma** (a licença reserva o nome "Plex") — só o nome do arquivo |
+| `inter-variable-normal.woff2`, `inter-variable-italic.woff2` | Inter 4.1 from the author (`rsms/inter`, `Inter-4.1.zip`, folder `web/`) | subset to the Latin range by `cortar-fontes.py`; still variable (weight 100–900 and optical size 14–32) |
+| `sora-variable-normal.woff2` | `google/fonts`, `ofl/sora/Sora[wght].ttf`, commit `a926665019d3` | subset the same way; variable (weight 100–800) |
+| `ibm-plex-mono-400-normal.woff2`, `-500-`, `-600-` | `@ibm/plex-mono` 2.5.0, `fonts/split/woff2/IBMPlexMono-{Regular,Medium,SemiBold}-Latin1.woff2` | **no change at all** (the license reserves the name "Plex") — only the file name |
 
-O corte guarda os caracteres que a web servia antes (o recorte `latin`, 218) e todos os recursos de
-desenho, como os números de largura igual (`tnum`). A Inter fica com 217 deles (a original não tem a
-barra de divisão `∕`) e a Sora com 217 (não tem o espaço fino); o recorte `Latin1` da IBM Plex Mono
-cobre 214. Para refazer e conferir:
+The subset keeps the characters the web served before (the `latin` subset, 218) and every design
+feature, such as equal-width figures (`tnum`). Inter keeps 217 of them (the original has no division
+slash `∕`) and Sora 217 (it has no thin space); the `Latin1` subset of IBM Plex Mono covers 214. To
+rebuild and check:
 
 ```bash
 python packages/fonts/cortar-fontes.py <InterVariable.woff2> <InterVariable-Italic.woff2> <Sora[wght].ttf>
 ```
 
-O script imprime o resumo (sha256) de cada arquivo. Os da IBM se conferem contra o pacote dela:
+The script prints the digest (sha256) of each file. The IBM files are checked against IBM's package:
 
-| arquivo | sha256 (começo) |
+| file | sha256 (start) |
 |---|---|
 | `ibm-plex-mono-400-normal.woff2` | `e8993d946649b9d0` |
 | `ibm-plex-mono-500-normal.woff2` | `41201b658a328b9d` |
 | `ibm-plex-mono-600-normal.woff2` | `b7acd05041ab65f3` |
 
-Os `.ttf` do nativo (`files-native/`):
+The native `.ttf` files (`files-native/`):
 
-| arquivo | origem | como |
+| file | source | how |
 |---|---|---|
-| `inter-{400,500,600,700,800}-normal.ttf`, `inter-400-italic.ttf` | Inter 4.1 do autor (`Inter-4.1.zip`, pasta `extras/ttf/`) | **sem mudança**, só o nome do arquivo |
-| `sora-{400,500,600,700,800}-normal.ttf` | a mesma `Sora[wght].ttf` da web | fixada num peso por arquivo, com o nome de cada peso |
-| `ibm-plex-mono-{400,500,600}-normal.ttf` | `@ibm/plex-mono` 2.5.0, `fonts/complete/ttf/IBMPlexMono-{Regular,Medium,SemiBold}.ttf` | **sem mudança** (o nome reservado "Plex") |
+| `inter-{400,500,600,700,800}-normal.ttf`, `inter-400-italic.ttf` | Inter 4.1 from the author (`Inter-4.1.zip`, folder `extras/ttf/`) | **no change**, only the file name |
+| `sora-{400,500,600,700,800}-normal.ttf` | the same `Sora[wght].ttf` as the web | pinned to one weight per file, with each weight's name |
+| `ibm-plex-mono-{400,500,600}-normal.ttf` | `@ibm/plex-mono` 2.5.0, `fonts/complete/ttf/IBMPlexMono-{Regular,Medium,SemiBold}.ttf` | **no change** (the reserved name "Plex") |
 
 ```bash
 python packages/fonts/fontes-nativas.py <Inter-4.1.zip> <ibm-plex-mono.zip> <Sora[wght].ttf>
 ```
 
-O script sai igual a cada rodada e imprime o resumo de cada arquivo:
+The script gives the same output on every run and prints the digest of each file:
 
-| arquivo | sha256 (começo) |
+| file | sha256 (start) |
 |---|---|
 | `inter-400-normal.ttf` | `40d692fce188e447` |
 | `inter-400-italic.ttf` | `bbc051dd204b5019` |
@@ -104,16 +104,16 @@ O script sai igual a cada rodada e imprime o resumo de cada arquivo:
 | `ibm-plex-mono-500-normal.ttf` | `98fbd727aae340b2` |
 | `ibm-plex-mono-600-normal.ttf` | `f04d7c488ddf7d1f` |
 
-Até a `0.40.0` o nativo era a Atkinson Hyperlegible; nenhum arquivo dela fica no pacote.
+Up to `0.40.0` native used Atkinson Hyperlegible; none of its files remain in the package.
 
-## Por que um pacote só dele
+## Why a package of its own
 
-Ele saiu do core para que quem já serve a fonte — de um CDN próprio, ou hospedada com outros
-recortes — possa dispensá-lo sem copiar e alterar a folha de estilo.
+It was split out of the core so that anyone who already serves the font — from their own CDN, or hosted
+with other subsets — can skip it without copying and editing the stylesheet.
 
-## Licença
+## License
 
-As três famílias estão sob a **SIL Open Font License 1.1**, e o texto da licença vai junto com o
-pacote, com o copyright de cada uma. A IBM Plex Mono tem o **nome reservado "Plex"**: arquivo
-modificado não pode levar esse nome — por isso os dela vão sem mudança. A OFL não é a Apache-2.0:
-leia-a antes de redistribuir os arquivos de fonte.
+The three families are under the **SIL Open Font License 1.1**, and the license text ships with the
+package, with the copyright of each one. IBM Plex Mono has the **reserved font name "Plex"**: a modified
+file cannot carry that name — that is why its files ship unchanged. The OFL is not Apache-2.0: read it
+before redistributing the font files.

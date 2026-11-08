@@ -1,81 +1,52 @@
 # @aurea-uds/native
 
-O alvo **React Native** da Aurea UDS.
+The **React Native** target of Aurea UDS.
 
-Pacote **irmão** do `@aurea-uds/react`, não um wrapper dele: componentes próprios sobre
-`View`/`Text`/`Pressable`, consumindo `@aurea-uds/tokens`. Só os tokens atravessam — decisão de
-18/07/2026, registrada no `ROADMAP.md` Fase 7.
+A **sibling** package of `@aurea-uds/react`, not a wrapper around it: its own components on top of
+`View`/`Text`/`Pressable`, consuming `@aurea-uds/tokens`. Only the tokens are shared between the two.
 
-> **Estado: 51 componentes.** O **Lote 7** entrou em 11/09/2026 e é o primeiro que **não sai do
-> plano** — ele saiu do APP. O consumidor mediu três lacunas na primeira tela que a pessoa toca, e
-> elas viraram cinco componentes: **`Combobox`, `SearchField`, `NumberField`, `Image` e
-> `Gallery`**, mais a prop `formatOnBlur` no `Input`. **Zero dependência nova.**
-> Ver a seção **Buscar, número e mídia** abaixo, e o `NATIVE.md` §8.
+> ⚠ **The `Combobox` differs from the web one on purpose**: it accepts REMOTE search with single selection,
+> which does not exist on the web.
+> ⚠ **`Combobox`, `SearchField`, `NumberField`, `Image` and `Gallery` have not run on a device yet** — only
+> in tests.
 >
-> ⚠ **O `Combobox` DIVERGE da web de propósito** — ele aceita busca REMOTA em seleção única, que
-> lá não existe ([ADR-0043](../../decisions/0043-o-combobox-nativo-diverge-da-web-e-a-presenca-da-prop-e-a-chave.md)).
-> ⚠ **Os cinco do Lote 7 ainda não rodaram em aparelho** — só em teste.
+> ⚠ **`Chart` is the only component in this package whose GEOMETRY is ours.** On the web it is 79 lines
+> of skin over `recharts`; here there is no engine, so scale, axis and path are code in this
+> repository. **No new dependency.** See the **Chart** section below.
 >
-> **O PLANO fechou no Lote 6**, em 09/09/2026 (`Timeline`, `DataList`, `Table`), e o **`Chart`** —
-> a única peça que tinha ficado de fora — entrou no mesmo dia pela
-> [ADR-0041](../../decisions/0041-o-motor-de-grafico-do-nativo-e-nosso-sobre-react-native-svg.md).
+> ⚠ **The native `Table` is NOT a table**: each row becomes a card, and each cell carries the column
+> name with it. **The API is different** — `columns` + `rows`, because there is no `<thead>` to write.
+> See the **Data** section below, which has the full measurement.
 >
-> ⚠ **O `Chart` é o único componente deste pacote cuja GEOMETRIA é nossa.** Na web ele é 79 linhas
-> de pele sobre o `recharts`; aqui não há motor, então escala, eixo e caminho são código do
-> repositório. **Zero dependência nova.** Ver a seção **Gráfico** abaixo.
+> ⚠ **One accessibility finding applies to the whole package:** React Native
+> **accepts** `role="dialog"` and `role="alertdialog"` — it compiles, passes `tsc`, goes through Fabric —
+> and **maps them on neither platform.** See the **Confirm and notify** section below.
 >
-> ⚠ **A `Table` do nativo NÃO é uma tabela**: cada linha vira um cartão e cada célula leva o nome
-> da coluna junto. **A API é outra** — `columns` + `rows`, porque não há `<thead>` para escrever.
-> Ver a seção **Dados** abaixo, que tem a medição inteira.
+> **`DatePicker` and `PhotoInput`** need extra dependencies. They **are not exported from the main entry
+> point**: they live in `@aurea-uds/native/system` — see the **Date and camera** section below.
 >
-> **Lote 5 COMPLETO.** Os overlays entraram em 08/09/2026:
-> `Dialog`, `ConfirmDialog`, `Drawer`, `BottomSheet` e o par `ToastHost`/`useToast`.
+> ⚠ **Aurea does not provide routing:** `expo-router`/`react-navigation` is the app's choice; this package
+> provides the skin. Pull-to-refresh is `onRefresh`/`refreshing` on the `Screen`.
 >
-> ⚠ **O achado do lote é de ACESSIBILIDADE, e ele vale para todo o pacote:** o React Native
-> **aceita** `role="dialog"` e `role="alertdialog"` — compila, passa o `tsc`, atravessa o Fabric —
-> e **não os mapeia em nenhuma das duas plataformas.** Ver a seção **Confirmar e avisar** abaixo.
->
-> **Lote 4 COMPLETO.** Os formulários entraram em 08/09/2026:
-> `Field`, `Label`, `Input`, `Textarea`, `Select`, `Switch`, `Checkbox`, `Radio`,
-> `SegmentedControl`, `Form`, `KeyboardAvoiding`. Os dois últimos — **`DatePicker` e
-> `PhotoInput`** — exigiram dependência nova, pararam o lote e voltaram para o Victor
-> (`BUILDING.md` §3); ele autorizou os dois. Eles **não saem pelo barril**: moram em
-> `@aurea-uds/native/system` — ver a seção **Data e câmera** abaixo.
->
-> **Lote 3 COMPLETO — a moldura.** A moldura entrou em 08/09/2026:
-> `BottomNav`, `Topbar`, `NavList`, `Stepper` — e o **puxar-para-atualizar**, que virou
-> `onRefresh`/`refreshing` no `Screen`. ⚠ **A Aurea não entrega roteamento:**
-> `expo-router`/`react-navigation` é escolha do app; daqui sai a pele.
->
-> **Lote 2 COMPLETO — o painel de leitura.** O painel de leitura entrou em 08/09/2026: `KPI`,
-> `Progress`, `Status`, `Badge`, `Alert`, `Skeleton`, `Spinner`, `EmptyState`, `DataState` e
-> `Avatar`. Com ele vieram duas coisas que valem saber antes de usar: a tabela de **frases**
-> (`<AureaProvider strings>`) e o hook **`useReduceMotion`** — ver as seções abaixo.
->
-> **Lote 1 COMPLETO — os dez.** O chão (Lote 0) foi provado num Android em 03/09/2026 —
-> as quatro perguntas do `NATIVE.md` §7 passaram — e sobre ele entraram `Text`, `Screen`, `Stack`,
-> `Cluster`, `Grid`, `Card`, `Icon`, `Button` e `IconButton`.
->
-> O `Screen` chegou por último e sozinho: ele foi o único que precisou de dependência nova, então
-> parou o lote e voltou para o Victor (`BUILDING.md` §3). Ele autorizou o peer —
-> [ADR-0040](../../decisions/0040-o-screen-adota-o-safe-area-context-como-peer.md).
+> Two things worth knowing before use: the **strings** table (`<AureaProvider strings>`) and the
+> **`useReduceMotion`** hook — see the sections below.
 
-## Instalação
+## Installation
 
 ```sh
 pnpm add @aurea-uds/native react-native-svg react-native-safe-area-context
 ```
 
-Quatro **peers obrigatórios**: `react` (≥19), `react-native` (≥0.76, pela Nova Arquitetura),
-`react-native-svg` (≥15, pelos ícones) e `react-native-safe-area-context` (≥5, pelo `Screen`).
-Para o texto sair nas fontes da Aurea (Inter, Sora nos títulos e IBM Plex Mono no código — ADR-0077), some
+Four **required peers**: `react` (≥19), `react-native` (≥0.76, for the New Architecture),
+`react-native-svg` (≥15, for the icons) and `react-native-safe-area-context` (≥5, for `Screen`).
+For text to render in the Aurea fonts (Inter, Sora for headings and IBM Plex Mono for code), add
 `@aurea-uds/fonts`.
 
-O último costuma **já estar instalado**: `react-navigation` e `expo-router` o arrastam. Declará-lo
-como peer não adiciona peso ao app — só diz o que já ia estar lá.
+The last one is usually **already installed**: `react-navigation` and `expo-router` pull it in. Declaring
+it as a peer adds no weight to the app — it only states what was going to be there anyway.
 
-E **três peers OPCIONAIS**, marcados como tal em `peerDependenciesMeta` — quem não usa data,
-câmera nem arquivo não instala nada e não vê aviso. Instale só o da peça que usar:
+And **three OPTIONAL peers**, marked as such in `peerDependenciesMeta` — if you do not use date,
+camera or file, you install nothing and see no warning. Install only the one for the component you use:
 
 ```sh
 pnpm add @react-native-community/datetimepicker expo-image-picker
@@ -84,17 +55,16 @@ pnpm add expo-document-picker
 
 | | | |
 |---|---|---|
-| `@react-native-community/datetimepicker` | ≥8 | MIT · só para o `DatePicker` |
-| `expo-image-picker` | ≥16 | MIT · só para o `PhotoInput` |
-| `expo-document-picker` | ≥12 | MIT · só para o `FileInput`, que sai por `@aurea-uds/native/system/file` |
+| `@react-native-community/datetimepicker` | ≥8 | MIT · only for `DatePicker` |
+| `expo-image-picker` | ≥16 | MIT · only for `PhotoInput` |
+| `expo-document-picker` | ≥12 | MIT · only for `FileInput`, which comes from `@aurea-uds/native/system/file` |
 
-## Tema × densidade
+## Theme × density
 
-Dois eixos, como na web: tema (`dark`/`light`) × densidade
-(`compact`/`comfortable`/`spacious`). No React Native **não há cascata**, então alguém tem de
-resolver os dois num valor — é o que o provider faz, e é a razão de ele existir
-([ADR-0037](../../decisions/0037-stylesheet-puro-no-nativo-e-o-provider-e-nosso.md): o motor é o
-`StyleSheet` puro e a camada de tema é nossa).
+Two axes, as on the web: theme (`dark`/`light`) × density
+(`compact`/`comfortable`/`spacious`). In React Native **there is no cascade**, so something has to
+resolve both into one value — that is what the provider does, and why it exists (the engine is plain
+`StyleSheet` and the theme layer is ours).
 
 ```tsx
 import {AureaProvider, Button, Card, Cluster, Screen, Stack, Text} from "@aurea-uds/native";
@@ -116,10 +86,10 @@ function Cartao() {
     <Card variant="raised">
       <Stack>
         <Text size="lg" weight={600}>Aurea</Text>
-        <Text tone="muted">O `Card` já traz raio, superfície e sombra do tema.</Text>
+        <Text tone="muted">The `Card` already brings the theme's radius, surface and shadow.</Text>
         <Cluster>
-          <Button tone="brand" leadingIcon="plus">Novo</Button>
-          <Button appearance="outline">Cancelar</Button>
+          <Button tone="brand" leadingIcon="plus">New</Button>
+          <Button appearance="outline">Cancel</Button>
         </Cluster>
       </Stack>
     </Card>
@@ -127,10 +97,10 @@ function Cartao() {
 }
 ```
 
-### Escrevendo estilo próprio
+### Writing your own styles
 
-Use `criarFolha`, não `StyleSheet.create` direto — ela memoiza por par (tema, densidade), então
-vinte instâncias do mesmo componente produzem **uma** folha, não vinte:
+Use `criarFolha`, not `StyleSheet.create` directly — it memoizes per (theme, density) pair, so
+twenty instances of the same component produce **one** stylesheet, not twenty:
 
 ```tsx
 import {criarFolha, useAureaTokens} from "@aurea-uds/native";
@@ -145,82 +115,84 @@ function Meu() {
 }
 ```
 
-Isso não é preciosismo: o smoke test no Android mediu **182 ms** de troca de tema com o app
-recriando a folha a cada render de propósito, para medir o pior caso.
+This is not fussiness: the Android smoke test measured **182 ms** for a theme switch with the app
+recreating the stylesheet on every render on purpose, to measure the worst case.
 
-### A casca de uma tela
+### The shell of a screen
 
 ```tsx
 <Screen scroll>
-  <Text size="xl" weight={600}>Painel</Text>
+  <Text size="xl" weight={600}>Dashboard</Text>
   <Card>…</Card>
 </Screen>
 ```
 
-Preenche, pinta com o fundo do tema e afasta do entalhe e da barra de gestos. **As quatro bordas
-por padrão** — em paisagem o entalhe fica de lado, e uma tela só com `top` quebra ao girar.
+It fills the screen, paints the theme background and keeps clear of the notch and the gesture bar. **All
+four edges by default** — in landscape the notch is on the side, and a screen with only `top` breaks on
+rotation.
 
-`padded={false}` para lista de borda a borda. `scroll` embrulha num `ScrollView` e **muda onde o
-respiro cai**: ele vai para o `contentContainerStyle`, porque padding no próprio `ScrollView`
-recorta a área rolável.
+`padded={false}` for an edge-to-edge list. `scroll` wraps it in a `ScrollView` and **changes where the
+padding goes**: it moves to `contentContainerStyle`, because padding on the `ScrollView` itself
+clips the scrollable area.
 
-Não precisa de `SafeAreaProvider` acima: o `SafeAreaView` da biblioteca é view nativa e lê o inset
-sozinha. Quem exige o provider são os **hooks** — e quem usa `react-navigation` já o tem.
+No `SafeAreaProvider` is needed above it: the library's `SafeAreaView` is a native view and reads the
+inset on its own. The **hooks** are what require the provider — and if you use `react-navigation` you
+already have it.
 
-### Alvo de toque
+### Touch target
 
-Três das cinco alturas de controle (26, 30, 36 dp) são menores que `--target-min` (44). O `Button`
-resolve isso **sem mexer no desenho**: o `Pressable` tem `minHeight: 44` e a caixa pintada mantém
-a altura do token.
+Three of the five control heights (26, 30, 36 dp) are smaller than `--target-min` (44). The `Button`
+solves this **without changing the drawing**: the `Pressable` has `minHeight: 44` and the painted box keeps
+the token's height.
 
-Não é `hitSlop` de propósito — ele **não é lido pelo TalkBack**, e deixaria o alvo pequeno
-justamente para quem usa leitor de tela.
+It is not `hitSlop`, on purpose — `hitSlop` **is not read by TalkBack**, and would leave the target small
+exactly for people who use a screen reader.
 
-`useAureaTheme()` devolve `{theme, density, setTheme, setDensity, toggleTheme}` — a mesma forma do
-hook homônimo de `@aurea-uds/react`. `useAureaTokens()` devolve os valores já resolvidos, e **não
-tem par na web** porque lá o CSS os resolve no uso.
+`useAureaTheme()` returns `{theme, density, setTheme, setDensity, toggleTheme}` — the same shape as the
+hook of the same name in `@aurea-uds/react`. `useAureaTokens()` returns the resolved values, and **has
+no web counterpart** because there the CSS resolves them where they are used.
 
-Sem `<AureaProvider>` acima, os dois hooks **levantam**. É decisão: um padrão silencioso
-desenharia o app inteiro no tema errado sem nada acusar.
+Without an `<AureaProvider>` above, both hooks **throw**. This is deliberate: a silent default
+would draw the whole app in the wrong theme without anything reporting it.
 
-## Os formulários
+## Forms
 
 ```tsx
 <Form>
-  <Field label="Quilometragem" hint="Só números" error={erros.km}>
+  <Field label="Mileage" hint="Numbers only" error={erros.km}>
     <Input keyboardType="numeric" value={km} onChangeText={setKm} />
   </Field>
-  <Field label="Combustível">
-    <Select items={[{value: "g", label: "Gasolina"}, {value: "e", label: "Etanol"}]}
+  <Field label="Fuel">
+    <Select items={[{value: "g", label: "Gasoline"}, {value: "e", label: "Ethanol"}]}
             value={comb} onChange={setComb} />
   </Field>
-  <Switch label="Lembrar deste veículo" checked={lembrar} onChange={setLembrar} />
+  <Switch label="Remember this vehicle" checked={lembrar} onChange={setLembrar} />
 </Form>
 ```
 
-⚠ **O `Field` é o que dá NOME ao controle**, e isso é a diferença mais importante em relação à
-web. Lá o `<label for>` aponta para um `id`; **no React Native não há `id` nem `htmlFor`** — o
-nome é uma string no próprio controle. O `Field` empurra `label`, `hint` e o estado de inválido
-por contexto, e é por isso que um `Input` solto, fora de um `Field`, **não tem nome** para quem
-usa leitor de tela.
+⚠ **The `Field` is what gives the control its NAME**, and this is the most important difference from
+the web. There, `<label for>` points to an `id`; **in React Native there is no `id` and no `htmlFor`** — the
+name is a string on the control itself. The `Field` passes `label`, `hint` and the invalid state down
+through context, which is why an `Input` on its own, outside a `Field`, **has no name** for people
+who use a screen reader.
 
-⚠ **`error` não é só texto vermelho:** ele marca o controle como inválido e vira a dica que o
-leitor anuncia.
+⚠ **`error` is not just red text:** it marks the control as invalid and becomes the hint the
+screen reader announces.
 
-⚠ **`keyboardType="numeric"`** é o que faz digitar `12,4` custar dois toques em vez de oito.
+⚠ **`keyboardType="numeric"`** is what makes typing `12,4` cost two taps instead of eight.
 
-### O que é diferente da web, e por quê
+### What is different from the web, and why
 
 | | |
 |---|---|
-| `Switch` | **não é o do React Native** — aquele traz o interruptor de cada sistema. Medidas do CSS |
-| `Select` | não existe `<select>` no RN: é `Modal` + folha que sobe. O papel é `button`, não `combobox` — `combobox` promete um campo em que se digita |
-| `Form` | é só o respiro. Não há `<form>`, `submit` nem validação de plataforma; o erro de cada campo vai no `Field` |
-| `Field` | sem `orientation="horizontal"` — numa tela de 360dp a grade de `12rem` deixa o controle com menos de metade da largura |
-| `Radio` | sem `name` — o agrupamento é do estado do app, não do DOM |
-| `:hover` | não há ponteiro. O foco continua, e é a única pista de qual campo o teclado alimenta |
+| `Switch` | **is not React Native's** — that one brings each system's own switch. Measurements from the CSS |
+| `Select` | there is no `<select>` in RN: it is a `Modal` + a sheet that slides up. The role is `button`, not `combobox` — `combobox` promises a field you type in |
+| `Form` | is only the spacing. There is no `<form>`, no `submit` and no platform validation; each field's error goes on its `Field` |
+| `Field` | no `orientation="horizontal"` — on a 360dp screen the `12rem` grid leaves the control with less than half the width |
+| `Radio` | no `name` — grouping belongs to the app state, not to the DOM |
+| `:hover` | there is no pointer. Focus remains, and it is the only cue to which field the keyboard is filling |
 
-### Teclado
+### Keyboard
 
 ```tsx
 <KeyboardAvoiding offset={alturaDaTopbar}>
@@ -228,522 +200,515 @@ leitor anuncia.
 </KeyboardAvoiding>
 ```
 
-O `behavior` muda com a plataforma — `padding` no iOS, `height` no Android — e a Aurea escolhe
-por você. Um só nos dois lados deixa metade dos aparelhos com o botão de salvar sob o teclado.
+The `behavior` changes with the platform — `padding` on iOS, `height` on Android — and Aurea picks it
+for you. A single one on both sides leaves half the devices with the save button under the keyboard.
 
-## Buscar, número e mídia
+## Search, numbers and media
 
-O **Lote 7** (11/09/2026). Três lacunas que o app mediu, e não o plano — `NATIVE.md` §8.
+### `Combobox` — type to find an item
 
-### `Combobox` — digitar para achar um item
-
-⚠ **Não confunda com o `Select`.** A escolha entre os dois é de TAMANHO DE LISTA, e a linha é
-dura: o `Select` monta todos os itens num `ScrollView` — serve para unidades, estados e tipos.
-**Um catálogo de milhares de linhas ali trava.** O `Combobox` usa `FlatList` e aceita busca remota.
+⚠ **Do not confuse it with `Select`.** The choice between the two is about LIST SIZE, and the line is
+firm: `Select` mounts every item in a `ScrollView` — it is for units, states and types.
+**A catalog of thousands of rows freezes there.** `Combobox` uses `FlatList` and accepts remote search.
 
 ```tsx
 import {Combobox, Field} from "@aurea-uds/native";
 
-// ① catálogo REMOTO — a Aurea não filtra, o app busca
+// ① REMOTE catalog — Aurea does not filter, the app searches
 <Field label="Item">
   <Combobox
-    items={resultados}          // a lista JÁ BUSCADA
-    value={escolhido}           // o ITEM inteiro, não o id
+    items={resultados}          // the list ALREADY FETCHED
+    value={escolhido}           // the WHOLE item, not the id
     onValueChange={setEscolhido}
-    onSearchChange={buscar}     // ← a presença desta prop DESLIGA o filtro da Aurea
+    onSearchChange={buscar}     // ← the presence of this prop TURNS OFF Aurea's filter
     loading={buscando}
     onEndReached={proximaPagina}
   />
 </Field>
 
-// ② lista NA MÃO — a Aurea filtra, ignorando acento e caixa
+// ② LOCAL list — Aurea filters, ignoring accents and case
 <Combobox items={unidades} value={unidade} onValueChange={setUnidade} />
 ```
 
-**A regra em uma linha: `onSearchChange` presente = a Aurea não filtra.** É presença de prop, não
-configuração — e ela existe porque filtrar de novo o que o servidor devolveu esconde resultado.
+**The rule in one line: `onSearchChange` present = Aurea does not filter.** It is the presence of a prop,
+not a setting — and it exists because filtering again what the server returned hides results.
 
 | | |
 |---|---|
-| espera antes de chamar `onSearchChange` | **250 ms**. `searchDelay={0}` desliga |
-| onde se digita | **dentro da folha**, não no gatilho — o teclado ocupa metade da tela |
-| `value` | o **item inteiro**: numa busca remota a lista some debaixo da escolha |
-| ícones a registrar | `caret-down`, `search`, `close` |
+| wait before calling `onSearchChange` | **250 ms**. `searchDelay={0}` turns it off |
+| where you type | **inside the sheet**, not in the trigger — the keyboard takes half the screen |
+| `value` | the **whole item**: in a remote search the list disappears under the selection |
+| icons to register | `caret-down`, `search`, `close` |
 
-### `SearchField` — filtrar o que já está na tela
+### `SearchField` — filter what is already on screen
 
-Outro papel: o `Combobox` **escolhe** de um catálogo e devolve a escolha; este **filtra** e
-devolve texto.
+A different role: `Combobox` **picks** from a catalog and returns the choice; this one **filters** and
+returns text.
 
 ```tsx
-<SearchField placeholder="Filtrar" onSearchChange={setFiltro} />
+<SearchField placeholder="Filter" onSearchChange={setFiltro} />
 ```
 
-### `NumberField` — moeda, medida e contador
+### `NumberField` — currency, measurement and counter
 
 ```tsx
-<Field label="Valor">
+<Field label="Amount">
   <NumberField value={valor} onValueChange={setValor}
                format={{style: "currency", currency: "BRL"}} locale="pt-BR" />
 </Field>
 
-<Field label="Litros">
+<Field label="Liters">
   <NumberField value={litros} onValueChange={setLitros}
                format={{maximumFractionDigits: 1}} locale="pt-BR" min={0} />
 </Field>
 
-<Field label="Quantidade">
+<Field label="Quantity">
   <NumberField value={qtd} onValueChange={setQtd} min={0} step={1} />
 </Field>
 ```
 
-⚠ **O que sai por `onValueChange` é `number`, sempre** — `1234.5`, nunca `"R$ 1.234,50"`.
+⚠ **What comes out of `onValueChange` is always a `number`** — `1234.5`, never `"R$ 1.234,50"`.
 
-⚠ **Formata no BLUR, e só no blur** ([ADR-0024](../../decisions/0024-mascara-de-campo-e-o-momento-nao-o-formato.md)
-e [ADR-0042](../../decisions/0042-o-intl-e-o-formatador-do-nativo-e-a-volta-e-nossa.md)). Enquanto
-o campo tem foco, ele mostra exatamente o que foi digitado. Máscara ao vivo é o defeito que
-outro design system publicou com reprovação WCAG registrada e que uma das bibliotecas de referência abandonou.
+⚠ **It formats on BLUR, and only on blur.** While the field has focus, it shows exactly what was typed.
+Live masking is a known defect: it has shipped elsewhere with a recorded WCAG failure, and libraries that
+tried it abandoned it.
 
-⚠ **`notation: "compact"` é recusado** — quebrado no motor JS do RN nos dois sistemas. Sai aviso em
-`__DEV__` e a opção é ignorada; o resto do formato sobrevive.
+⚠ **`notation: "compact"` is rejected** — it is broken in RN's JS engine on both systems. A warning is
+logged in `__DEV__` and the option is ignored; the rest of the format survives.
 
-Os três auxiliares são públicos, porque o app tem o mesmo problema fora do campo:
+The three helpers are public, because the app has the same problem outside the field:
 
 ```tsx
 import {formatarNumero, lerNumero, separadoresDoLocale} from "@aurea-uds/native";
 
 formatarNumero(1234.5, "pt-BR", {style: "currency", currency: "BRL"});  // "R$ 1.234,50"
 lerNumero("R$ 1.234,50", "pt-BR");                                      // 1234.5
-lerNumero("", "pt-BR");                                                 // null  ← não é 0
+lerNumero("", "pt-BR");                                                 // null  ← not 0
 ```
 
-Para **texto** (placa, documento, telefone) o momento é o mesmo e o formato é seu:
+For **text** (licence plate, ID document, phone number) the moment is the same and the format is yours:
 
 ```tsx
 <Input value={placa} onChangeText={setPlaca} formatOnBlur={(v) => v.toUpperCase()} />
 ```
 
-⚠ `formatOnBlur` exige o campo **controlado** — o valor formatado sai por `onChangeText`.
+⚠ `formatOnBlur` requires a **controlled** field — the formatted value comes out through `onChangeText`.
 
-### `Image` e `Gallery` — mostrar foto
+### `Image` and `Gallery` — showing photos
 
-⚠ **`Image` NÃO é o `Image` do React Native com outra pele.** Ele faz as duas coisas que o
-primitivo cru não faz: **reserva a caixa** antes dos bytes (sem isso o layout salta) e **cai para
-um substituto** quando eles não vêm (sem isso uma URL quebrada deixa buraco).
+⚠ **`Image` is NOT React Native's `Image` with another skin.** It does the two things the raw
+primitive does not: it **reserves the box** before the bytes arrive (without that the layout jumps) and it
+**falls back to a placeholder** when they do not arrive (without that a broken URL leaves a hole).
 
 ```tsx
-<Image source={foto.uri} alt="Frente do item" ratio="4/3" />
+<Image source={foto.uri} alt="Front of the item" ratio="4/3" />
 
 <Gallery items={fotos} zoom selected={atual} onSelect={setAtual} />
 ```
 
 | | |
 |---|---|
-| `ratio` | aceita `4/3`, `"4/3"`, `"16:9"` ou o número. A web usa string; o RN quer número |
-| `alt` | **obrigatório**. Decorativa de verdade se escreve `alt=""`, explícito |
-| ampliar | é o **`Dialog`** que já existe, não uma superfície nova |
-| legenda | com legenda, o nome vai para o LADRILHO e a imagem sai da árvore de acessibilidade |
-| ícone a registrar | `image` (o substituto) |
+| `ratio` | accepts `4/3`, `"4/3"`, `"16:9"` or the number. The web uses a string; RN wants a number |
+| `alt` | **required**. A truly decorative image is written `alt=""`, explicitly |
+| zoom | it is the existing **`Dialog`**, not a new surface |
+| caption | with a caption, the name goes to the TILE and the image leaves the accessibility tree |
+| icon to register | `image` (the placeholder) |
 
-Quem já usa `expo-image` por cache de disco troca o elemento sem perder a pele:
+If you already use `expo-image` for its disk cache, swap the element without losing the skin:
 
 ```tsx
 <Image render={<ExpoImage contentFit="cover" transition={150} />} source={u} alt="…" />
 ```
 
-⚠ `fit` **não** é traduzido para o elemento passado — `resizeMode` é do `Image` do RN e o
-`expo-image` chama a mesma coisa de `contentFit`. Quem passa o elemento escreve a prop dele.
+⚠ `fit` is **not** translated for the element you pass — `resizeMode` belongs to RN's `Image`, and
+`expo-image` calls the same thing `contentFit`. If you pass the element, write its own prop.
 
-## Data e câmera
+## Date and camera
 
-Estes dois **não saem do barril** — são o único ponto do pacote com importação própria:
+These two **are not exported from the main entry point** — they are the only part of the package with its
+own import path:
 
 ```tsx
 import {DatePicker, PhotoInput} from "@aurea-uds/native/system";
 ```
 
-⚠ **E o caminho profundo é a forma documentada, pelo mesmo motivo dos ícones**
-([ADR-0038](../../decisions/0038-um-componente-por-icone-sobre-react-native-svg.md)): um módulo
-que ninguém importa **não entra no grafo do Metro**. Se eles saíssem por `@aurea-uds/native`, todo
-app que importasse um `Button` arrastaria o seletor de data e a câmera para o bundle — e falharia
-na resolução se os peers opcionais não estivessem instalados. Preguiça por construção, não por
-poda.
+⚠ **And the deep path is the documented form, for the same reason as the icons:** a module
+nobody imports **does not enter the Metro graph**. If they came from `@aurea-uds/native`, every
+app that imported a `Button` would drag the date picker and the camera into the bundle — and would fail
+to resolve if the optional peers were not installed. Lazy by construction, not by
+tree-shaking.
 
 ```tsx
-<Field label="Data do lançamento">
+<Field label="Entry date">
   <DatePicker value={data} onChange={setData} maximumDate={new Date()} />
 </Field>
 
-<Field label="Comprovante">
+<Field label="Receipt">
   <PhotoInput value={fotos} onChange={setFotos} max={3} />
 </Field>
 ```
 
-### `DatePicker` — a nossa pele, o calendário deles
+### `DatePicker` — our skin, their calendar
 
-A Aurea desenha o **gatilho** (mesma altura, mesma borda e o mesmo raio do `Input`); o que abre é
-o **diálogo do sistema**. Data é um controle que o Android e o iOS fazem melhor e que a pessoa já
-sabe usar — reimplementá-lo daria um calendário com a nossa cor e o comportamento errado em nove
-casos de borda (fuso, calendário não gregoriano, entrada por teclado, TalkBack).
+Aurea draws the **trigger** (same height, same border and same radius as `Input`); what opens is
+the **system dialog**. Date is a control that Android and iOS do better and that people already
+know how to use — reimplementing it would give a calendar in our colour with the wrong behaviour in nine
+edge cases (time zone, non-Gregorian calendar, keyboard input, TalkBack).
 
-⚠ **As duas plataformas têm APIs diferentes, e é isso que o componente esconde:**
+⚠ **The two platforms have different APIs, and that is what the component hides:**
 
 | | |
 |---|---|
-| Android | `DateTimePickerAndroid.open({…})` — **imperativo**, o diálogo é do sistema |
-| iOS | `<RNDateTimePicker>` — **declarativo**, vira um nó na árvore |
+| Android | `DateTimePickerAndroid.open({…})` — **imperative**, the dialog belongs to the system |
+| iOS | `<RNDateTimePicker>` — **declarative**, it becomes a node in the tree |
 
-Um app que não soubesse disso escreveria o caminho do Android e veria **nada acontecer** no
+An app that did not know this would write the Android path and see **nothing happen** on the
 iPhone.
 
-⚠ **Cancelar não escreve data.** No Android o evento volta com `type: "dismissed"`, e só
-`type === "set"` chama o `onChange`. É o caso de borda mais fácil de errar, e há um teste cujo
-único trabalho é reprová-lo.
+⚠ **Cancelling does not write a date.** On Android the event comes back with `type: "dismissed"`, and only
+`type === "set"` calls `onChange`. It is the easiest edge case to get wrong, and there is a test whose
+only job is to fail on it.
 
-### `PhotoInput` — as decisões de fluxo, declaradas
+### `PhotoInput` — the flow decisions, stated
 
-⚠ **Câmera não é componente, é fluxo** — permissão, intent, prévia, e o que fazer quando a pessoa
-nega. Cada pergunta ficou com um padrão, e **cada padrão tem uma saída**:
+⚠ **The camera is not a component, it is a flow** — permission, intent, preview, and what to do when the
+person denies. Each question got a default, and **each default has a way out**:
 
-| a pergunta | o que ficou | como mudar |
+| the question | the default | how to change it |
 |---|---|---|
-| o que mostrar **sem** permissão? | o gatilho aparece normal; tocar é que pergunta | — |
-| e se a pessoa **negar**? | pergunta de novo na próxima vez, enquanto o sistema deixar | `onPermissionDenied` |
-| e se negar **de vez** (`canAskAgain: false`)? | um `Alert` de aviso + botão para as configurações | `offerSettings={false}` |
-| câmera ou galeria? | **câmera** | `source="library"` |
-| como remover? | um X com fundo, **todo fora** da foto, no canto de cima à direita (R-22) | `removeIcon` |
-| quantas cabem? | **uma** | `max` |
-| como **olhar** a foto? | tocar na miniatura abre a foto grande, no mesmo zoom da `Gallery` (R-22) | — |
+| what to show **without** permission? | the trigger appears as usual; tapping it is what asks | — |
+| what if the person **denies**? | it asks again next time, as long as the system allows | `onPermissionDenied` |
+| what if they deny **for good** (`canAskAgain: false`)? | a warning `Alert` + a button to the settings | `offerSettings={false}` |
+| camera or library? | **camera** | `source="library"` |
+| how to remove? | an X with a background, **fully outside** the photo, at the top right corner | `removeIcon` |
+| how many fit? | **one** | `max` |
+| how to **view** the photo? | tapping the thumbnail opens the large photo, with the same zoom as `Gallery` | — |
 
-**Desde a `0.15.0` (R-22)**, a miniatura é quadrada de 64 (o `Avatar` `lg` da referência), do
-tamanho do botão de pôr foto. O leitor de tela ouve *"Foto 2 de 3"* e *"Abre a foto"*; o X,
-*"Remover foto 2"*. Com o campo inativo, a foto ainda abre e o X não remove.
+**Since `0.15.0`**, the thumbnail is a 64 square, the size of the add-photo button. The screen reader
+hears *"Photo 2 of 3"* and *"Opens the photo"*; the X, *"Remove photo 2"*. With the field disabled, the
+photo still opens and the X does not remove.
 
-⚠ **O gatilho some ao atingir o limite**, em vez de ficar aceso e não fazer nada — botão que
-existe e não responde é o defeito, não a proteção.
+⚠ **The trigger disappears when the limit is reached**, instead of staying enabled and doing nothing — a
+button that exists and does not respond is the defect, not the protection.
 
-⚠ **`source="library"` NÃO pede a permissão de câmera.** São permissões diferentes, e pedir a
-errada é um diálogo assustador que o app não precisava mostrar.
+⚠ **`source="library"` does NOT request the camera permission.** They are different permissions, and asking
+for the wrong one is a scary dialog the app did not need to show.
 
-As frases (`cameraDenied`, `openSettings`, `photoRemove`, `datePlaceholder`) saem da tabela de
-**Frases** — ver a seção abaixo.
+The strings (`cameraDenied`, `openSettings`, `photoRemove`, `datePlaceholder`) come from the
+**Strings** table — see the section below.
 
-### `FileInput` — escolher arquivo (R-21, `0.15.0`)
+### `FileInput` — choosing a file (since `0.15.0`)
 
-Ele mora num caminho **só dele**, e não no `/system`:
+It lives on a path **of its own**, not in `/system`:
 
 ```tsx
 import {FileInput} from "@aurea-uds/native/system/file";
 
-<Field label="Documento">
+<Field label="Document">
   <FileInput value={arquivos} onChange={setArquivos} accept="application/pdf"
              maxSize={10 * 1024 * 1024} />
 </Field>
 ```
 
-⚠ **O caminho próprio é o que faz "opcional" ser verdade.** Se ele morasse no `/system`, todo app
-que usa o `DatePicker` teria de instalar o `expo-document-picker`, ou a montagem falharia. Só quem
-importa `/system/file` precisa dele.
+⚠ **The separate path is what makes "optional" true.** If it lived in `/system`, every app
+that uses `DatePicker` would have to install `expo-document-picker`, or the build would fail. Only those
+who import `/system/file` need it.
 
-| a pergunta | o que ficou | como mudar |
+| the question | the default | how to change it |
 |---|---|---|
-| o que volta? | `{uri, name, size, mimeType}` — o endereço local, **não o conteúdo** | — |
-| a pessoa **cancelou**? | nada muda | — |
-| passou do **tamanho**? | recusado, com *"Arquivo maior que o limite: nome"* em vermelho embaixo | `maxSize` |
-| **tipo** errado? | o seletor filtra; a peça confere de novo e recusa | `accept` |
-| o tamanho **não veio**? | aceito: não há o que medir, e o servidor confere | — |
-| **quantos** cabem? | um; no limite o gatilho some, como no `PhotoInput` | `max` |
-| **nome comprido**? | corta no meio (`relat…2026.pdf`): a extensão continua à vista | — |
+| what comes back? | `{uri, name, size, mimeType}` — the local address, **not the content** | — |
+| the person **cancelled**? | nothing changes | — |
+| over the **size** limit? | rejected, with *"File larger than the limit: name"* in red below | `maxSize` |
+| wrong **type**? | the picker filters; the component checks again and rejects | `accept` |
+| the size **did not come**? | accepted: there is nothing to measure, and the server checks | — |
+| **how many** fit? | one; at the limit the trigger disappears, as in `PhotoInput` | `max` |
+| **long name**? | cut in the middle (`relat…2026.pdf`): the extension stays visible | — |
 
-Para o leitor de tela: o gatilho é um botão com o nome do `Field` e o texto *"Escolher arquivo"*;
-cada arquivo lê *"nome, tamanho"*; o X lê *"Remover nome"*; a recusa é anunciada.
+For the screen reader: the trigger is a button with the `Field` name and the text *"Choose file"*;
+each file reads *"name, size"*; the X reads *"Remove name"*; the rejection is announced.
 
-As frases `fileChoose`, `fileRemove`, `fileTooLarge` e `fileWrongType` saem da tabela de **Frases**;
-as três últimas são as mesmas da web.
+The strings `fileChoose`, `fileRemove`, `fileTooLarge` and `fileWrongType` come from the **Strings** table;
+the last three are the same as on the web.
 
-## Gráfico
+## Chart
 
 ```tsx
 import {Chart} from "@aurea-uds/native";
 
 <Chart
-  label="Custo por mês"
-  labels={["jan", "fev", "mar", "abr"]}
-  series={[{name: "Custo", data: [210, 198, 240, 187]}]}
+  label="Cost per month"
+  labels={["jan", "feb", "mar", "apr"]}
+  series={[{name: "Cost", data: [210, 198, 240, 187]}]}
   mark="area"
   formatValue={(v) => `R$ ${v}`} />
 ```
 
-### ⚠ Ele é o único cuja geometria é nossa
+### ⚠ It is the only one whose geometry is ours
 
-Na web o `Chart` **não desenha**: a ficha diz *"Aurea does not wrap the chart types: the engine
-draws, this component holds"*, e o arquivo tem 79 linhas de pele sobre o `recharts`. **Aqui não há
-motor.** Escala, régua, caminho e eixo são código deste repositório.
+On the web, `Chart` **does not draw**: its documentation says *"Aurea does not wrap the chart types: the
+engine draws, this component holds"*, and the file is 79 lines of skin over `recharts`. **Here there is no
+engine.** Scale, ruler, path and axis are code in this repository.
 
-As quatro bibliotecas de gráfico do React Native foram medidas no registro e recusadas — a razão
-de cada uma está na [ADR-0041](../../decisions/0041-o-motor-de-grafico-do-nativo-e-nosso-sobre-react-native-svg.md).
-A que mais importa: `react-native-chart-kit` não traz peer novo nenhum, e mesmo assim não serve,
-porque é `data` entra / gráfico sai. O `recharts` é **marca composta** — adotá-la inverteria a
-relação em que a Aurea segura e o motor desenha com as props dela.
+The React Native chart libraries available on the registry were evaluated and rejected. The main reason:
+a library where data goes in and a finished chart comes out does not fit, even when it brings no new peer.
+`recharts`, on the web, works with composed marks — adopting a data-in, chart-out library would invert the
+relation in which Aurea holds and the engine draws with Aurea's props.
 
-**Zero dependência nova:** `react-native-svg` já é peer desde os ícones.
+**No new dependency:** `react-native-svg` has been a peer since the icons.
 
-### O escopo, declarado
+### The scope, stated
 
-| entra | fica de fora |
+| in | out |
 |---|---|
-| `line`, `area`, `bar` (e misturar as três) | pizza/rosca · **dois eixos Y** (é o erro nº 1 de gráfico) · empilhado · animação · zoom |
+| `line`, `area`, `bar` (and mixing the three) | pie/donut · **two Y axes** (the number one chart mistake) · stacked · animation · zoom |
 
-### ⚠ A legenda NÃO desliga com duas ou mais séries
+### ⚠ The legend does NOT turn off with two or more series
 
-Não é conselho — é medição. A paleta `--chart-1..5` é **o mesmo azul do claro ao escuro**: uma
-rampa de magnitude, não um conjunto de identidade. Rodado o validador:
+This is not advice — it is measurement. The `--chart-1..5` palette is **the same blue from light to dark**:
+a magnitude ramp, not an identity set. Measured:
 
 ```
-os cinco, pares vizinhos   ΔE 5.9 (visão normal)  ·  5.2 (daltonismo)   FALHA
---chart-2 + --chart-4      ΔE 13.7                ·  10.6               passa no daltonismo
+all five, neighbouring pairs   ΔE 5.9 (normal vision)  ·  5.2 (colour blindness)   FAIL
+--chart-2 + --chart-4          ΔE 13.7                 ·  10.6                     passes for colour blindness
 ```
 
-Por isso a ordem padrão de cores **pula um degrau** e começa pelo par medido. E por isso a legenda
-é obrigatória: num telefone a marca é mais fina que na web, e a cor sozinha não separa as séries
-desta rampa.
+That is why the default colour order **skips a step** and starts with the measured pair. And that is why the
+legend is required: on a phone the mark is thinner than on the web, and colour alone does not separate the
+series of this ramp.
 
-### ⚠ Não há tooltip — o toque seleciona
+### ⚠ There is no tooltip — touch selects
 
-A ficha da web diz que o tooltip *"segue o ponteiro e não é focável"*. **As duas metades caem no
-toque.** No lugar: cada rótulo é um alvo, e o nome dele carrega os valores —
-`"jan, Custo: 210, Meta: 200"`.
+The web documentation says the tooltip *"follows the pointer and is not focusable"*. **Both halves fail
+on touch.** Instead: each label is a target, and its name carries the values —
+`"jan, Cost: 210, Target: 200"`.
 
-### ⚠ A lista de valores é a camada de acessibilidade, e vem LIGADA
+### ⚠ The list of values is the accessibility layer, and it is ON
 
-A web delega a acessibilidade ao teclado do `recharts` (*"navegação por seta entre os pontos,
-ligada por padrão"*). **Não há motor e não há setas.** O que substitui é `showValues`: ao
-selecionar um ponto, os valores saem em texto. Desligue só se já resolveu o mesmo problema por
-outro caminho.
+The web delegates accessibility to the `recharts` keyboard support (*"arrow navigation between the points,
+on by default"*). **There is no engine and there are no arrows.** What replaces it is `showValues`: when a
+point is selected, the values come out as text. Turn it off only if you have already solved the same problem
+another way.
 
-### O que mais é diferente
+### What else is different
 
 | | |
 |---|---|
-| `role="group"` | **não mapeia** — cai em `else -> null` no Android, como `dialog` (Lote 5) e `table` (Lote 6). Aqui é `accessible` + `accessibilityLabel`, que é o que agrupa de verdade |
-| altura | a web recusa uma prop de propósito (*"a caixa mede pelo CSS"*). **Aqui não há CSS**, então `height` existe — com o mesmo padrão de lá, 220 |
-| buraco na série | `null` **PULA**: não vira zero e não liga os vizinhos por cima. Ligar inventaria um dado que não existe |
-| a base da barra | o zero entra na régua sempre que os dados são positivos. **Barra que não nasce no zero mente sobre a proporção** |
+| `role="group"` | **does not map** — it falls into `else -> null` on Android, like `dialog` and `table`. Here it is `accessible` + `accessibilityLabel`, which is what really groups |
+| height | the web refuses a prop on purpose (*"the box is sized by the CSS"*). **Here there is no CSS**, so `height` exists — with the same default as there, 220 |
+| gap in a series | `null` **SKIPS**: it does not become zero and does not join the neighbours across. Joining would invent data that does not exist |
+| the base of the bar | zero is included in the ruler whenever the data is positive. **A bar that does not start at zero lies about proportion** |
 
-⚠ **A régua do eixo Y divide o intervalo em partes iguais e não procura números redondos** — um
-eixo de 0 a 97 sai `0 · 24,25 · 48,5 · …`, não `0 · 25 · 50 · …`. Está registrado na ADR-0041
-**como melhoria, não como defeito**: o que existe é correto, só não é bonito.
+⚠ **The Y-axis ruler divides the range into equal parts and does not look for round numbers** — an
+axis from 0 to 97 comes out `0 · 24.25 · 48.5 · …`, not `0 · 25 · 50 · …`. This is a known
+**improvement to make, not a defect**: what exists is correct, just not pretty.
 
-## Dados
+## Data
 
 ```tsx
 import {DataList, Table, Timeline} from "@aurea-uds/native";
 ```
 
-### ⚠ A `Table` não é uma tabela aqui — e isso não é um recuo
+### ⚠ `Table` is not a table here — and that is not a step back
 
-Duas medições decidem o desenho, e elas apontam para o mesmo lugar:
+Two measurements decide the design, and they point to the same place:
 
 | | |
 |---|---|
-| **o papel não mapeia** | `accessibilityRole` não tem `table`; o `role` tem, e cai em `else -> null` no Android e sem trait no iOS — a mesma armadilha que o Lote 5 mediu no `dialog`. **Uma grade de verdade não se anunciaria como tabela em plataforma nenhuma** |
-| **a grade não cabe** | `.table` tem `min-width: 720px` (aurea.css:1183). Num telefone de 360dp isso é rolagem horizontal de 2× — e a própria ficha da web só a aceita porque a região é focável pelo teclado. **No toque não há teclado**: sobra o arrastar, que a web já considerava a metade insuficiente |
+| **the role does not map** | `accessibilityRole` has no `table`; `role` has it, and it falls into `else -> null` on Android and has no trait on iOS — the same trap as `dialog` (see **Confirm and notify**). **A real grid would announce itself as a table on no platform** |
+| **the grid does not fit** | `.table` has `min-width: 720px` in `aurea.css`. On a 360dp phone that is 2× horizontal scrolling — and the web documentation itself only accepts it because the region is keyboard-focusable. **On touch there is no keyboard**: what is left is dragging, which the web already considered the insufficient half |
 
 ```
-manter a grade  ->  perde a leitura   E  não ganha a semântica
-virar lista     ->  ganha a leitura   E  ganha `accessibilityRole="list"`, que MAPEIA
+keep the grid   ->  loses readability   AND  gains no semantics
+become a list   ->  gains readability   AND  gains `accessibilityRole="list"`, which MAPS
 ```
 
-**Só a lista tem as duas.**
+**Only the list has both.**
 
-⚠ **O modo GRADE não foi construído**, de propósito: ele só faria sentido em tablet, e não há
-tablet medido. No nativo vale **demanda antes de cobertura** (o inverso da ADR-0015, que vale para
-a web) — meia-grade entregue seria pior que grade nenhuma. Ele volta como prop quando existir uma
-tela de tablet medida.
+⚠ **The GRID mode was not built**, on purpose: it would only make sense on a tablet, and no
+tablet has been measured. On native, **demand comes before coverage** (the opposite of the rule for the
+web) — a half-grid would be worse than no grid. It will come back as a prop when there is a measured
+tablet screen.
 
 ### `Table`
 
 ```tsx
 <Table
-  caption="Lançamentos"
+  caption="Entries"
   columns={[
-    {key: "data", header: "Data", primary: true},
-    {key: "km", header: "Quilometragem"},
-    {key: "custo", header: "Custo", cell: (l) => moeda(l.custo)},
+    {key: "data", header: "Date", primary: true},
+    {key: "km", header: "Mileage"},
+    {key: "custo", header: "Cost", cell: (l) => moeda(l.custo)},
   ]}
   rows={lancamentos}
   keyExtractor={(l) => l.id}
   onRowPress={abrir} />
 ```
 
-⚠ **A API é OUTRA que a da web, e tinha de ser.** Lá você escreve `<thead>`/`<tbody>` como
-`children`. Aqui não existem elementos de tabela para escrever, então a peça recebe **dados**.
-Não é a mesma prop com outro nome — é uma superfície diferente, dita aqui em vez de descoberta no
-erro de tipo.
+⚠ **The API is DIFFERENT from the web one, and it had to be.** There you write `<thead>`/`<tbody>` as
+`children`. Here there are no table elements to write, so the component takes **data**.
+It is not the same prop with another name — it is a different surface, stated here instead of discovered
+through a type error.
 
-⚠ **O cabeçalho não some: ele se muda.** Cada `header` passa a nomear a sua célula dentro do
-cartão. É o que impede o defeito clássico da tabela virada em lista — quatro números soltos, um
-embaixo do outro, sem dizer o que cada um é.
+⚠ **The header does not disappear: it moves.** Each `header` names its own cell inside the
+card. That is what prevents the classic defect of a table turned into a list — four loose numbers, one
+below the other, without saying what each one is.
 
-⚠ **`primary` marca a coluna que identifica a linha** (numa lista de lançamentos, a data). Ela
-vira o título do cartão e **não repete o próprio nome**.
+⚠ **`primary` marks the column that identifies the row** (in a list of entries, the date). It
+becomes the card title and **does not repeat its own name**.
 
-⚠ **A linha só vira alvo com `onRowPress`.** Uma linha tocável sem ação seria anunciada como
-botão e não faria nada.
+⚠ **A row only becomes a target with `onRowPress`.** A tappable row with no action would be announced as a
+button and do nothing.
 
-### `Timeline` e `DataList`
+### `Timeline` and `DataList`
 
 ```tsx
-<Timeline items={[{title: "Criado", description: "pelo app", time: "08/09 14:20"}]} />
+<Timeline items={[{title: "Created", description: "by the app", time: "08/09 14:20"}]} />
 
-// R-18 (0.15.0): ícone em moldura, cor por tom, valor à direita e o que houve entre dois itens.
+// Since 0.15.0: icon in a frame, colour by tone, value on the right and what happened between two items.
 <Timeline items={[
-  {title: "Pedido enviado", description: "28/09", icon: "truck", tone: "success",
-   trailing: "R$ 216,00", between: "6 dias depois"},
-  {title: "Pagamento", description: "22/09", icon: "storefront", tone: "primary",
+  {title: "Order shipped", description: "28/09", icon: "truck", tone: "success",
+   trailing: "R$ 216,00", between: "6 days later"},
+  {title: "Payment", description: "22/09", icon: "storefront", tone: "primary",
    trailing: "R$ 460,00"},
 ]} />
 
-<DataList items={[{term: "Quilometragem", value: "12,4 km/l"}]} />
+<DataList items={[{term: "Mileage", value: "12,4 km/l"}]} />
 ```
 
-⚠ **No `DataList`, cada par é UM nó acessível** com o nome `"termo: valor"`. Na web o `<dl>`
-garante o par de graça; aqui não há `<dl>` nem papel de lista de definição, então a ligação tem de
-ser dita. Sem isso, quem varre com o dedo ouve "Quilometragem", dá um passo, ouve "12,4 km/l" — e
-num painel de oito pares perde qual valor era de qual termo.
+⚠ **In `DataList`, each pair is ONE accessible node** named `"term: value"`. On the web, `<dl>`
+guarantees the pair for free; here there is no `<dl>` and no definition-list role, so the link has to be
+stated. Without it, someone swiping with a finger hears "Mileage", takes a step, hears "12,4 km/l" — and
+on a panel of eight pairs loses which value belonged to which term.
 
-⚠ **Ele empilha abaixo de 640dp, no mesmo ponto da web.** O comentário do CSS registra o defeito
-que a regra evita: a 320px a coluna do valor resolvia em **0px** e jogava o texto para fora da
-página. `layout="inline"` / `"stacked"` força, contra a largura.
+⚠ **It stacks below 640dp, at the same breakpoint as the web.** A comment in the CSS records the defect
+the rule avoids: at 320px the value column resolved to **0px** and pushed the text off the
+page. `layout="inline"` / `"stacked"` forces one, regardless of width.
 
-⚠ **Basta um item com `icon` para a coluna inteira ter a largura da moldura** (40): os itens sem
-ícone ficam com o ponto, no centro dela, e a linha passa pelo centro das molduras. O `between` não
-aparece depois do último item, porque não há próximo.
+⚠ **One item with `icon` is enough for the whole column to take the frame's width** (40): items without
+an icon keep the dot, centred in it, and the line goes through the centre of the frames. `between` does not
+appear after the last item, because there is no next one.
 
-⚠ **No `Timeline` a contagem e a posição NÃO são anunciadas**, e é escolha. Na web ele é um
-`<ol>`, e a ficha diz que o leitor anuncia "1 de 40" de graça; aqui esse "de graça" não existe e
-teria de ser escrito item a item. Pendurar isso em cada evento de um histórico é ruído a cada
-parada do leitor — e a ordem cronológica já está no `time`, que é a informação de verdade. **Quem
-precisa de posição precisa é da data.**
+⚠ **In `Timeline`, count and position are NOT announced**, and that is a choice. On the web it is an
+`<ol>`, and its documentation says the screen reader announces "1 of 40" for free; here that "for free" does
+not exist and would have to be written item by item. Attaching it to every event of a history is noise at
+every stop of the reader — and the chronological order is already in `time`, which is the real information.
+**Whoever needs position actually needs the date.**
 
-### Lista longa: `virtualized`
+### Long list: `virtualized`
 
 ```tsx
-<Screen>                                {/* SEM `scroll` */}
+<Screen>                                {/* NO `scroll` */}
   <Table … rows={mil} virtualized />
 </Screen>
 ```
 
-`virtualized` troca o `map` por um `FlatList`, que só monta o que está na tela. É a resposta à
-pendência que a [ADR-0038](../../decisions/0038-um-componente-por-icone-sobre-react-native-svg.md)
-deixou aberta em 31/08/2026 — *"o desempenho em lista longa volta a importar quando existir tela
-de lista"*. **Esta é a tela de lista.**
+`virtualized` replaces the `map` with a `FlatList`, which only mounts what is on screen.
 
-⚠ **Com `virtualized`, o componente É o rolador — não o ponha dentro de `<Screen scroll>`.** Dois
-roladores no mesmo eixo é erro conhecido do RN: o de fora dá altura infinita ao de dentro, a
-virtualização desliga, e o console avisa *"VirtualizedLists should never be nested inside plain
+⚠ **With `virtualized`, the component IS the scroller — do not put it inside `<Screen scroll>`.** Two
+scrollers on the same axis is a known RN error: the outer one gives the inner one infinite height, the
+virtualization turns off, and the console warns *"VirtualizedLists should never be nested inside plain
 ScrollViews"*.
 
-⚠ **E o trilho do `Timeline` não é desenhado no modo virtualizado** — honestidade, não defeito.
-Ele é uma linha do topo ao pé da lista INTEIRA, e no `FlatList` a lista inteira não existe: só a
-janela. Desenhá-lo daria um trilho que começa e termina no lugar errado conforme se rola. Os
-pontos continuam.
+⚠ **And the `Timeline` rail is not drawn in virtualized mode** — honesty, not a defect.
+It is a line from the top to the bottom of the WHOLE list, and in a `FlatList` the whole list does not exist:
+only the window. Drawing it would give a rail that starts and ends in the wrong place as you scroll. The
+dots remain.
 
-## Confirmar e avisar
+## Confirm and notify
 
 ```tsx
 import {BottomSheet, ConfirmDialog, Dialog, Drawer, ToastHost, useToast} from "@aurea-uds/native";
 ```
 
-### ⚠ Primeiro, o que NÃO funciona — e passa em tudo
+### ⚠ First, what does NOT work — and passes everything
 
-O React Native aceita `role="dialog"` e `role="alertdialog"`. Eles estão no tipo, compilam, e
-atravessam o C++ do Fabric. **E não fazem nada no aparelho.** Medido em 08/09/2026, nas duas
-pontas, no fonte do `react-native@0.87.1`:
+React Native accepts `role="dialog"` and `role="alertdialog"`. They are in the type, they compile, and
+they go through Fabric's C++. **And they do nothing on the device.** Measured on both platforms, in the
+`react-native@0.87.1` source:
 
-| plataforma | onde morre |
+| platform | where it dies |
 |---|---|
-| Android | `ReactAccessibilityDelegate.kt:515`, `fromRole()` cai em `else -> null` — com o comentário do próprio RN: *"No mapping from ARIA role to AccessibilityRole"* |
-| iOS | a lista de traits (`accessibilityPropsConversions.h:24-104`) **não tem** `dialog` nem `alertdialog`; a string de `role` só desempata `checkbox` e `radio` |
+| Android | `ReactAccessibilityDelegate.kt:515`, `fromRole()` falls into `else -> null` — with RN's own comment: *"No mapping from ARIA role to AccessibilityRole"* |
+| iOS | the trait list (`accessibilityPropsConversions.h:24-104`) **has neither** `dialog` nor `alertdialog`; the `role` string only disambiguates `checkbox` and `radio` |
 
-**Isto é pior do que o papel não existir.** Um componente que os usasse passaria na revisão de
-código, passaria no `tsc`, passaria em qualquer teste que perguntasse "a prop está lá?" — e seria
-inútil para quem usa leitor de tela. Há um teste neste repositório cujo único trabalho é reprovar
-essas duas palavras.
+**This is worse than the role not existing.** A component that used them would pass code review, pass
+`tsc`, pass any test that asked "is the prop there?" — and be useless to people who use a screen reader.
+There is a test in this repository whose only job is to reject those two words.
 
-**O que a Aurea faz em vez disso:**
+**What Aurea does instead:**
 
-| a web | aqui |
+| the web | here |
 |---|---|
-| `role="dialog"` + foco preso | o **`Modal`** do RN. Ele é uma **janela do sistema**, e tanto o TalkBack quanto o VoiceOver já se limitam à janela de cima — o confinamento vem do sistema operacional, não de um laço de `Tab` em JavaScript |
-| `Escape` fecha | **`onRequestClose`** — o botão VOLTAR do Android. O RN documenta a prop como obrigatória; sem ela a caixa fica **presa** |
-| `aria-labelledby` | o título é um `Text` com `accessibilityRole="header"` — o único papel desta família que o Android mapeia |
-| `aria-describedby` | não existe. A frase é lida por **estar na ordem**, e é por isso que ela vem antes dos botões na árvore |
-| `backdrop-filter: blur(5px)` | **não atravessa.** Não há filtro de fundo no RN, e o que existe (`expo-blur`) é dependência nova. O `--overlay` já é preto a 74% e separa sozinho |
+| `role="dialog"` + trapped focus | RN's **`Modal`**. It is a **system window**, and both TalkBack and VoiceOver already limit themselves to the top window — the confinement comes from the operating system, not from a `Tab` loop in JavaScript |
+| `Escape` closes | **`onRequestClose`** — the Android BACK button. RN documents the prop as required; without it the box gets **stuck** |
+| `aria-labelledby` | the title is a `Text` with `accessibilityRole="header"` — the only role in this family that Android maps |
+| `aria-describedby` | does not exist. The sentence is read because it is **in order**, which is why it comes before the buttons in the tree |
+| `backdrop-filter: blur(5px)` | **does not carry over.** There is no backdrop filter in RN, and what exists (`expo-blur`) is a new dependency. `--overlay` is already black at 74% and separates on its own |
 
-### `Dialog` e `ConfirmDialog`
+### `Dialog` and `ConfirmDialog`
 
 ```tsx
-<Dialog open={aberto} title="Editar lançamento" onClose={fechar}
-        footer={<><Button appearance="outline" onPress={fechar}>Cancelar</Button>
-                  <Button onPress={salvar}>Salvar</Button></>}>
-  <Field label="Quilometragem"><Input value={km} onChangeText={setKm} /></Field>
+<Dialog open={aberto} title="Edit entry" onClose={fechar}
+        footer={<><Button appearance="outline" onPress={fechar}>Cancel</Button>
+                  <Button onPress={salvar}>Save</Button></>}>
+  <Field label="Mileage"><Input value={km} onChangeText={setKm} /></Field>
 </Dialog>
 
 <ConfirmDialog open={perguntando} destructive
-               title="Apagar este lançamento?"
-               description="Ele sai do histórico e do custo/km. Isto não volta."
-               confirmLabel="Apagar" onConfirm={apagar} onCancel={desistir} />
+               title="Delete this entry?"
+               description="It leaves the history and the cost per km. This cannot be undone."
+               confirmLabel="Delete" onConfirm={apagar} onCancel={desistir} />
 ```
 
-⚠ **O `ConfirmDialog` NÃO é um `Dialog` com dois botões.** A diferença é de comportamento e ela
-atravessou inteira da web: **tocar fora não fecha.** Um toque fora virando "cancelei" é o acidente
-que o componente existe para impedir.
+⚠ **`ConfirmDialog` is NOT a `Dialog` with two buttons.** The difference is behaviour, and it
+carried over whole from the web: **tapping outside does not close it.** A tap outside turning into "I
+cancelled" is the accident the component exists to prevent.
 
-⚠ **O que não atravessou, e é honesto dizer:** na web o foco nasce no botão seguro, porque quem
-abre um "isto apaga" e aperta Enter por reflexo tem de cancelar. **No toque não há esse reflexo** —
-não há foco de teclado nem Enter. Mover o foco do *leitor de tela* para o Cancelar traduziria o
-mecanismo e perderia a intenção: pularia justamente a frase que diz o que se perde. Então o foco
-não é movido, e o que sobra é o que vale aqui: o fundo não fecha, e a **ordem** é cancelar →
-confirmar.
+⚠ **What did not carry over, and it is fair to say so:** on the web, focus starts on the safe button,
+because someone who opens a "this deletes" and presses Enter by reflex has to cancel. **On touch there is no
+such reflex** — there is no keyboard focus and no Enter. Moving the *screen reader* focus to Cancel would
+translate the mechanism and lose the intent: it would skip exactly the sentence that says what is lost. So
+focus is not moved, and what remains is what matters here: the backdrop does not close it, and the **order**
+is cancel → confirm.
 
-⚠ **`description` é obrigatória**, e diz o que se perde e se volta.
+⚠ **`description` is required**, and says what is lost and whether it comes back.
 
 ### `Drawer`
 
 ```tsx
-<Drawer open={aberto} title="Filtros" side="right" onClose={fechar}>…</Drawer>
+<Drawer open={aberto} title="Filters" side="right" onClose={fechar}>…</Drawer>
 ```
 
-⚠ **O lado é FÍSICO, não lógico.** A razão vem da ficha da web e vale igual: um painel preso à
-direção da escrita mudaria de lado ao trocar o idioma, e um painel de navegação não deve andar.
+⚠ **The side is PHYSICAL, not logical.** The reason comes from the web documentation and applies the
+same: a panel tied to the writing direction would switch sides when the language changes, and a navigation
+panel should not move.
 
-⚠ **A animação é nossa, e a do `Modal` fica desligada** — o `animationType="slide"` do RN sobe de
-**baixo**, sempre. Deixá-lo ligado faria o painel lateral entrar pelo chão.
+⚠ **The animation is ours, and the `Modal` one is turned off** — RN's `animationType="slide"` comes up from
+the **bottom**, always. Leaving it on would make the side panel enter through the floor.
 
-### `BottomSheet` — o único sem ficha na web
+### `BottomSheet` — the only one without a web counterpart
 
 ```tsx
-<BottomSheet open={aberto} title="Novo lançamento" onClose={fechar}>…</BottomSheet>
+<BottomSheet open={aberto} title="New entry" onClose={fechar}>…</BottomSheet>
 ```
 
-⚠ **Ele responde ao mesmo problema que a caixa centralizada, e responde diferente porque a mão é
-diferente:** num telefone segurado numa mão só, o alto da tela é o lugar mais difícil de alcançar.
-A caixa centralizada põe as escolhas exatamente lá; a folha põe onde o polegar está.
+⚠ **It answers the same problem as the centred dialog, and answers differently because the hand is
+different:** on a phone held in one hand, the top of the screen is the hardest place to reach.
+The centred dialog puts the choices exactly there; the sheet puts them where the thumb is.
 
-⚠ **O arrastar é `PanResponder`, que é do próprio React Native — não é dependência nova.** Foi
-escolha deliberada contra `@gorhom/bottom-sheet`, que arrastaria **duas** peças novas
-(`gesture-handler` + `reanimated`) para um gesto de um eixo.
+⚠ **Dragging is `PanResponder`, which is part of React Native itself — not a new dependency.** This was
+a deliberate choice over a bottom-sheet library that would bring **two** new pieces
+(`gesture-handler` + `reanimated`) for a one-axis gesture.
 
-**O que a escolha compra e o que custa, dito em vez de escondido:** compra zero dependência e um
-componente que roda no Expo Go. Custa o gesto rodar na ponte de JS, não na thread de UI — numa
-lista longa dentro da folha, arrastar pode engasgar. Se isso aparecer em aparelho, a troca é uma
-ADR, não um remendo.
+**What the choice buys and what it costs, stated instead of hidden:** it buys zero dependencies and a
+component that runs in Expo Go. It costs the gesture running on the JS bridge, not on the UI thread — with a
+long list inside the sheet, dragging may stutter. If that shows up on a device, the switch will be a
+deliberate decision, not a patch.
 
-⚠ **Soltar no meio do caminho VOLTA**, não fecha: só passa quem arrastou mais de um terço da
-altura, ou deu um lance rápido. Fechar cedo demais transforma um toque trêmulo em perda de dado.
+⚠ **Releasing halfway SNAPS BACK**, it does not close: it only goes through if you dragged more than a third
+of the height, or flicked quickly. Closing too early turns a shaky tap into lost data.
 
-### `useToast` — e por que o hospedeiro é explícito
+### `useToast` — and why the host is explicit
 
 ```tsx
 <AureaProvider>
@@ -752,38 +717,38 @@ altura, ou deu um lance rápido. Fechar cedo demais transforma um toque trêmulo
   </ToastHost>
 </AureaProvider>
 
-// em qualquer lugar dentro:
+// anywhere inside:
 const {add} = useToast();
-add({title: "Lançamento salvo", type: "success"});
+add({title: "Entry saved", type: "success"});
 ```
 
-⚠ **Não há portal no React Native.** Na web o `AureaProvider` pendura a pilha no fim do `<body>` e
-o app não precisa saber. Aqui um componente só desenha onde está na árvore.
+⚠ **There is no portal in React Native.** On the web, `AureaProvider` hangs the stack at the end of `<body>`
+and the app does not need to know. Here a component only draws where it is in the tree.
 
-⚠ **A saída óbvia seria o `AureaProvider` desenhar a pilha, e ela está errada.** Medido: hoje ele
-devolve **só contextos**, nenhum `View`. Pôr um `View` lá mudaria o layout de **todo app que já
-usa a Aurea**, em silêncio — um contêiner novo entre a raiz e o primeiro filho é exatamente o que
-quebra um `flex: 1` e aparece como *"por que minha tela encolheu?"* três dias depois.
+⚠ **The obvious way out would be for `AureaProvider` to draw the stack, and it is wrong.** Measured: today it
+returns **only contexts**, no `View`. Putting a `View` there would change the layout of **every app that
+already uses Aurea**, silently — a new container between the root and the first child is exactly what
+breaks a `flex: 1` and shows up as *"why did my screen shrink?"* three days later.
 
-Então o hospedeiro é próprio e está à vista. Quem não chama `useToast` não põe o `ToastHost`, não
-paga o `View`, e nada muda.
+So the host is its own component and in plain sight. If you do not call `useToast`, you do not add
+`ToastHost`, you do not pay for the `View`, and nothing changes.
 
-⚠ **`useToast()` sem hospedeiro LEVANTA**, com a frase que diz o que fazer. Devolver um `add()`
-mudo seria o defeito mais caro possível: o aviso de "salvo" que nunca aparece não quebra nada, não
-levanta, e some no meio de um fluxo que parecia certo.
+⚠ **`useToast()` without a host THROWS**, with a message that says what to do. Returning a silent `add()`
+would be the most expensive defect possible: the "saved" notice that never appears breaks nothing, does not
+throw, and vanishes in the middle of a flow that looked right.
 
-⚠ **`duration: 0` nunca fecha sozinho, e é o que um aviso com `action` tem de usar.** Um botão
-"Desfazer" que foge da mão em cinco segundos é um botão que não existe para quem lê devagar, para
-quem usa leitor de tela, ou para quem só olhou para o lado.
+⚠ **`duration: 0` never closes on its own, and it is what a toast with `action` must use.** An
+"Undo" button that slips away in five seconds is a button that does not exist for someone who reads slowly,
+for someone who uses a screen reader, or for someone who just looked away.
 
-⚠ **`offset` existe por causa da `BottomNav`:** sem ele o aviso nasce em cima da barra e tapa
-justamente o que a pessoa ia tocar. O respiro da barra de gestos é `Math.max`, **não soma** — a
-mesma conta do Lote 3.
+⚠ **`offset` exists because of `BottomNav`:** without it the toast appears on top of the bar and covers
+exactly what the person was about to tap. The gesture bar spacing is `Math.max`, **not a sum** — the
+same calculation as `BottomNav`.
 
-⚠ **Tempo não é movimento:** com «remover animações» ligado o aviso não desliza, mas o relógio
-continua. Quem pediu menos movimento não pediu que o aviso ficasse para sempre.
+⚠ **Time is not motion:** with «remove animations» on, the toast does not slide, but the clock
+keeps running. Someone who asked for less motion did not ask for the toast to stay forever.
 
-## A moldura
+## The frame
 
 ```tsx
 <Screen padded={false} scroll onRefresh={buscar} refreshing={carregando}>
@@ -793,33 +758,33 @@ continua. Quem pediu menos movimento não pediu que o aviso ficasse para sempre.
 <BottomNav
   current={aba}
   items={[
-    {id: "painel", label: "Painel", icon: "squares-four", onPress: () => ir("painel")},
-    {id: "avisos", label: "Avisos", icon: "bell", badge: 8, onPress: () => ir("avisos")},
+    {id: "painel", label: "Dashboard", icon: "squares-four", onPress: () => ir("painel")},
+    {id: "avisos", label: "Alerts", icon: "bell", badge: 8, onPress: () => ir("avisos")},
   ]} />
 ```
 
-⚠ **A Aurea não entrega roteamento.** Estes componentes recebem `items` e `current` e avisam por
-`onPress`. Quem troca de tela é o app.
+⚠ **Aurea does not provide routing.** These components take `items` and `current` and report through
+`onPress`. The app is what changes screens.
 
-⚠ **O `BottomNav` não é `Tabs`, e não é distração de nomenclatura:** uma aba troca um painel
-*desta* tela; a barra troca de tela. Por isso os itens são `link` e não `tab` — dar `tablist` a um
-menu faz o leitor de tela prometer setas que não levam a lugar nenhum.
+⚠ **`BottomNav` is not `Tabs`, and this is not a naming detail:** a tab switches a panel of
+*this* screen; the bar switches screens. That is why the items are `link` and not `tab` — giving `tablist`
+to a menu makes the screen reader promise arrow keys that lead nowhere.
 
-⚠ **Ele respeita a barra de gestos sozinho**, pelo máximo entre o respiro do tema e o inset do
-sistema.
+⚠ **It respects the gesture bar on its own**, using the larger of the theme spacing and the system
+inset.
 
-⚠ **O `Topbar` não gruda sozinho** — `position: sticky` não existe no RN. A barra fica parada
-porque a tela a põe **fora** do `ScrollView`, como no exemplo acima.
+⚠ **`Topbar` does not stick on its own** — `position: sticky` does not exist in RN. The bar stays put
+because the screen places it **outside** the `ScrollView`, as in the example above.
 
-### Puxar para atualizar
+### Pull to refresh
 
-`onRefresh` + `refreshing` no `Screen`, e só com `scroll` — não há o que puxar numa tela que não
-rola. `refreshing` é do app: o componente não adivinha quando a busca terminou.
+`onRefresh` + `refreshing` on the `Screen`, and only with `scroll` — there is nothing to pull on a screen that
+does not scroll. `refreshing` belongs to the app: the component does not guess when the fetch has finished.
 
-## Frases
+## Strings
 
-`Alert`, `Status`, `EmptyState` e `DataState` falam sozinhos: os sete estados universais, o vazio,
-o erro, o rótulo do `Spinner`. O padrão é **inglês**, como na web.
+`Alert`, `Status`, `EmptyState` and `DataState` speak on their own: the seven universal states, the empty
+state, the error, the `Spinner` label. The default is **English**, as on the web.
 
 ```tsx
 import {AureaProvider, ptBR} from "@aurea-uds/native";
@@ -827,68 +792,66 @@ import {AureaProvider, ptBR} from "@aurea-uds/native";
 <AureaProvider strings={ptBR}>…</AureaProvider>
 ```
 
-A tabela tem **quatro chaves**, contra as mais de 200 do `@aurea-uds/react` — ela é do tamanho do
-que o alvo nativo desenha, e cada chave nova nasce com um componente que a usa. `useAureaStrings()`
-lê o que estiver valendo.
+The table has **far fewer keys** than the one in `@aurea-uds/react` — it is the size of what the
+native target draws, and each new key is born with a component that uses it. `useAureaStrings()`
+reads whatever is in effect.
 
-## Movimento
+## Motion
 
 ```tsx
-const reduzir = useReduceMotion();   // true · false · null (ainda não se sabe)
+const reduzir = useReduceMotion();   // true · false · null (not known yet)
 ```
 
-⚠ **Na web isso é de graça e aqui não é.** O `aurea.css` tem uma regra global de
-`prefers-reduced-motion` que zera toda animação; **o React Native não tem cascata**, então quem
-anima pergunta. O `Spinner` e o `Skeleton` já perguntam — este hook é para o seu código fazer o
-mesmo.
+⚠ **On the web this comes for free, and here it does not.** `aurea.css` has a global
+`prefers-reduced-motion` rule that zeroes every animation; **React Native has no cascade**, so whoever
+animates has to ask. `Spinner` and `Skeleton` already ask — this hook is for your code to do the
+same.
 
-O `null` é a resposta honesta enquanto o sistema não respondeu: a leitura é assíncrona, e começar
-em `false` tocaria um quadro de animação na cara de quem pediu que não tocasse. Quem anima escreve
+`null` is the honest answer while the system has not answered: the read is asynchronous, and starting
+at `false` would play an animation frame in the face of someone who asked for none. If you animate, write
 `if (reduzir !== false) return;`.
 
-## O painel de leitura
+## The reading panel
 
 ```tsx
 <DataState state={carregando ? "loading" : erro ? "error" : vazio ? "empty" : undefined}>
   {() => (
     <Stack>
-      <KPI label="Custo por km" value="R$ 1,20" trend="+3% no mês" />
-      <Progress value={score} label="Saúde" />
-      <Status variant="online">Sincronizado</Status>
+      <KPI label="Cost per km" value="R$ 1,20" trend="+3% this month" />
+      <Progress value={score} label="Health" />
+      <Status variant="online">Synced</Status>
     </Stack>
   )}
 </DataState>
 ```
 
-⚠ **Os sete estados universais ACOMPANHAM o conteúdo**, não o substituem: `stale`, `partial` e
-`offline` dizem que o dado está aí e tem ressalva. Só `loading`, `error` e `empty` tomam o lugar.
+⚠ **The seven universal states ACCOMPANY the content**, they do not replace it: `stale`, `partial` and
+`offline` say the data is there with a caveat. Only `loading`, `error` and `empty` take its place.
 
-⚠ **`children` como FUNÇÃO** existe para o conteúdo caro não ser construído atrás de um esqueleto.
+⚠ **`children` as a FUNCTION** exists so expensive content is not built behind a skeleton.
 
-⚠ **O `Alert` precisa dos glifos de variante no registro** (`info`,
-`check-circle`, `warning`, `x-circle`). Este pacote não os importa por
-você — seria trazer ícone ao grafo do bundler pelas suas costas (ADR-0038, cláusula 4).
+⚠ **`Alert` needs the variant glyphs in the registry** (`info`,
+`check-circle`, `warning`, `x-circle`). This package does not import them for
+you — that would bring icons into the bundler graph behind your back.
 
-### O selo ancorado, e o rótulo que ele exige
+### The anchored badge, and the label it requires
 
 ```tsx
 <Badge count={8} anchor="top-end">
-  <IconButton name="bell" label="Avisos, 8 não lidos" onPress={abrir} />
+  <IconButton name="bell" label="Alerts, 8 unread" onPress={abrir} />
 </Badge>
 ```
 
-⚠ **Ancorado, o número some da árvore de acessibilidade** — quem carrega a informação é o rótulo
-de quem foi decorado. Sem isso o leitor de tela anuncia *"sino, 8"* e ninguém sabe o que é o 8.
+⚠ **When anchored, the number leaves the accessibility tree** — the information is carried by the label
+of what was decorated. Without it the screen reader announces *"bell, 8"* and nobody knows what the 8 is.
 
-## Ícones
+## Icons
 
-Um componente por ícone e por peso, gerado do SVG do `@phosphor-icons/core` sobre
-`react-native-svg` ([ADR-0038](../../decisions/0038-um-componente-por-icone-sobre-react-native-svg.md),
-[ADR-0053](../../decisions/0053-a-fonte-e-a-atkinson-e-os-icones-sao-o-phosphor.md)). Cada ícone tem
-duas formas: a regular (`icons/house`) e a cheia (`icons/house-fill`), que é a do item escolhido e
-a dos avisos.
+One component per icon and per weight, generated from the `@phosphor-icons/core` SVG on top of
+`react-native-svg`. Each icon has two shapes: the regular one (`icons/house`) and the filled one
+(`icons/house-fill`), which is used for the selected item and for notices.
 
-**A forma documentada é o caminho profundo:**
+**The documented form is the deep path:**
 
 ```tsx
 import Plus from "@aurea-uds/native/icons/plus";
@@ -897,28 +860,27 @@ import CaretDown from "@aurea-uds/native/icons/caret-down";
 <Plus size={size.iconMd} color={color.foreground} />
 ```
 
-Importar 40 ícones carrega 40. **O barril (`@aurea-uds/native/icons`) existe, mas não é a forma
-documentada:** ele traz todos os ícones ao grafo do bundler a menos que o tree-shaking do Metro
-— experimental, três flags, só em produção — esteja ligado. O caminho profundo não depende de
-poda nenhuma: módulo que não é importado não entra no grafo.
+Importing 40 icons loads 40. **The barrel (`@aurea-uds/native/icons`) exists, but it is not the documented
+form:** it brings every icon into the bundler graph unless Metro's tree-shaking
+— experimental, three flags, production only — is on. The deep path does not depend on any
+tree-shaking: a module that is not imported does not enter the graph.
 
-`color` **não herda**: `currentColor` não existe no React Native, e o desenho do Phosphor pinta com
-`currentColor`. O padrão é preto explícito — passe a cor do tema.
+`color` **is not inherited**: `currentColor` does not exist in React Native, and the Phosphor drawing paints
+with `currentColor`. The default is explicit black — pass the theme colour.
 
-**A forma cheia entra no registro com o sufixo `-fill`**, como o arquivo:
-`criarRegistroDeIcones({house: House, "house-fill": HouseFill})`. Os componentes pedem a cheia no
-item escolhido (`BottomNav`), nos avisos (`Alert`, `Toast`) e no `ThemeToggle`; se ela não estiver
-no registro, sai a regular.
+**The filled shape goes into the registry with the `-fill` suffix**, like the file:
+`criarRegistroDeIcones({house: House, "house-fill": HouseFill})`. Components ask for the filled one on the
+selected item (`BottomNav`), on notices (`Alert`, `Toast`) and on `ThemeToggle`; if it is not in the
+registry, the regular one is used.
 
-**Vindo do Carbon:** os nomes mudaram todos. A tabela `@aurea-uds/icons/carbon-para-phosphor.json`
-traz os nomes antigos com os novos.
+**Coming from the icons used until `0.12.4`:** every name changed. The table
+`@aurea-uds/icons/carbon-para-phosphor.json` maps the old names to the new ones.
 
-Os nomes são **os mesmos do sprite da web**, e um gate cobra isso (check 38): o que `<Icon name>`
-desenha lá, `icons/<nome>` desenha aqui.
+The names are **the same as in the web sprite**: what `<Icon name>` draws there, `icons/<name>` draws here.
 
-**Um glifo próprio** (o logotipo do app) sai de `criarGlifo`, sem o app importar o
-`react-native-svg`: retângulos, círculos e caminhos, preenchidos ou a traço. A tinta usa os nomes
-do SVG, e `"currentColor"` é a cor do `Icon`:
+**A custom glyph** (the app logo) comes from `criarGlifo`, without the app importing
+`react-native-svg`: rectangles, circles and paths, filled or stroked. The paint uses the SVG names,
+and `"currentColor"` is the `Icon` colour:
 
 ```tsx
 const Logo = criarGlifo({fill: "none", stroke: "currentColor", strokeWidth: 2,
@@ -926,9 +888,9 @@ const Logo = criarGlifo({fill: "none", stroke: "currentColor", strokeWidth: 2,
 const ICONES = criarRegistroDeIcones({...OS_DO_APP, logo: Logo});
 ```
 
-**O nome é checado pelo TypeScript** (desde a A-04): `<Icon name="chevron-down">`, com um traço
-só, não compila, e a chave do registro também é conferida. Um glifo próprio entra declarando o
-nome **uma vez**:
+**The name is checked by TypeScript**: `<Icon name="chevron-down">`, with a single hyphen, does not
+compile, and the registry key is checked too. A custom glyph is added by declaring its name
+**once**:
 
 ```tsx
 declare module "@aurea-uds/native" {
@@ -936,24 +898,23 @@ declare module "@aurea-uds/native" {
 }
 ```
 
-## O que este pacote não faz
+## What this package does not do
 
-- **Não promete paridade** com a web. O React Native não tem `<p>`, cascata de tipografia,
-  `<input type=file>` nem hover — a lista do nativo é **outra**, não a mesma com menos itens.
-- **Não entrega roteamento.** `expo-router`/`react-navigation` é escolha do app.
-- **Não força framework.** Expo não é peer: o pacote é biblioteca.
+- **It does not promise parity** with the web. React Native has no `<p>`, no type cascade,
+  no `<input type=file>` and no hover — the native list is **its own**, not the same one with fewer items.
+- **It does not provide routing.** `expo-router`/`react-navigation` is the app's choice.
+- **It does not force a framework.** Expo is not a peer: the package is a library.
 
-## Cor: um limite da plataforma, declarado
+## Colour: a platform limit, stated
 
-As cores saem em **hex**, e não por escolha nossa. O interpretador de cor do React Native
-**recusa** `oklch()`, `lab()`, `color(display-p3 …)` e até `color(srgb …)` — medido nas versões
-0.81.5 e 0.87.0, e é JavaScript compartilhado entre iOS e Android. Passar gamute largo a um
-`style` faz a cor ser **descartada em silêncio**.
+Colours come out in **hex**, and not by our choice. React Native's colour parser
+**rejects** `oklch()`, `lab()`, `color(display-p3 …)` and even `color(srgb …)` — measured on versions
+0.81.5 and 0.87.0, and it is JavaScript shared between iOS and Android. Passing a wide gamut to a
+`style` makes the colour **silently discarded**.
 
-Consequência: em tela de gamute largo o amarelo da marca perde **ΔEok 0,0225**, que cai em cima do
-limiar do perceptível. Não é evitável hoje — é teto de plataforma, e está registrado na
-[ADR-0027](../../decisions/0027-a-cor-no-alvo-nativo.md).
+Consequence: on a wide-gamut screen the brand yellow loses **ΔEok 0.0225**, which sits right on the
+threshold of what is perceptible. It cannot be avoided today — it is a platform ceiling.
 
-## Licença
+## License
 
-Apache-2.0. Os glifos são do `@phosphor-icons/core` (Phosphor Icons, MIT) — ver `NOTICE`.
+Apache-2.0. The glyphs are from `@phosphor-icons/core` (Phosphor Icons, MIT) — see `NOTICE`.

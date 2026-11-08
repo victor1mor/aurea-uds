@@ -457,6 +457,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.62.1](https://aureauds.dev/release-v0-62-1.md): Every package README is now in English.
 - [v0.62.0](https://aureauds.dev/release-v0-62-0.md): The new Aurea logo, an icon prop on the native IconButton, a horizontal Accordion that opens its first item, and https-only embeds.
 - [v0.61.0](https://aureauds.dev/release-v0-61-0.md): Breakpoints follow the browser font size, more selected items in Windows high contrast, and Header passes item clicks.
 - [v0.60.0](https://aureauds.dev/release-v0-60-0.md): Selected segments and tabs stay visible in Windows high contrast; code stays left-to-right on right-to-left pages.

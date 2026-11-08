@@ -1,120 +1,105 @@
-# Fundamentos da Aurea — o que os tokens governam, e o que não governam
+# Aurea foundations — what the tokens govern, and what they do not
 
-A resposta oficial para "qual eixo manda neste valor". Escrito na Fase 6 do plano da auditoria,
-porque a auditoria achou os fundamentos documentados em lugar nenhum: densidade e tema prometiam
-coisas que nenhum documento definia, e um quarto dos tokens não tinha quem os usasse (achados M2,
-M17, M18).
+The official answer to "which axis controls this value".
 
-As contagens moram no [`STATE.md`](../../STATE.md), gerado e conferido. Este arquivo guarda as
-regras.
+The counts live in [`STATE.md`](https://github.com/victor1mor/aurea-uds/blob/main/STATE.md), generated and
+checked. This file holds the rules.
 
 ---
 
-## Os eixos
+## The axes
 
-| Eixo | Tokens | Unidade | Observações |
+| Axis | Tokens | Unit | Notes |
 |---|---|---|---|
-| Cor | `--<semântico>`, `--<família>-<degrau>` | oklch / hex | o semântico vem primeiro; um degrau da rampa serve para montar um semântico, não para usar direto |
-| Espaço | `--space-0` … `--space-24` | rem | escala com saltos de propósito — nem todo inteiro existe |
-| Tamanho de letra | `--text-xs` … `--text-5xl` | rem | |
-| Família de letra | `--font-ui`, `--font-heading`, `--font-editorial`, `--font-code` | — | Inter / Sora (todo h1 a h6) / Inter (apelido, sai na 1.0) / IBM Plex Mono — ADR-0077 |
-| Peso de letra | `--weight-regular` … `--weight-bold` | número | criado na Fase 6; o eixo não existia |
-| Altura de linha | `--leading-none` … `--leading-relaxed` | número | `--leading-none` existe para componentes cuja ALTURA é contrato |
-| Espaçamento entre letras | `--tracking-tight` … `--tracking-widest` | em | criado na Fase 6 |
-| Raio | `--radius-sm` … `--radius-card`, `--radius-control` | px | `--radius-card` (22px) e `--radius-control` (999px) são identidade — conferidos |
-| Borda | `--border-width` | px | |
-| Sombra | `--shadow-md`, `--shadow-lg` | sombra | os degraus `xs`/`sm` saíram na Fase 6: os dois eram `none` e ninguém usava |
-| Camada | `--z-sticky` … `--z-toast` | número | para empilhar OVERLAYS. `z-index: 1/2/3` local, dentro de um componente, não é este eixo |
-| Movimento | `--duration-*`, `--ease-*` | duração / curva | |
-| Tamanho de ícone | `--icon-sm` … `--icon-xl` | rem | criado na Fase 6; em rem para o glifo acompanhar a letra |
-| Área de toque | `--target-min` | rem | 44px com raiz de 16px — WCAG 2.5.5/2.5.8 |
-| Ponto de quebra | `--breakpoint-sm` … `--breakpoint-2xl` | px | `@media` não lê `var()`, então o CSS repete o número e o check 4b do `validate.py` guarda a escala |
-| Densidade | ver abaixo | rem | |
+| Colour | `--<semantic>`, `--<family>-<step>` | oklch / hex | the semantic token comes first; a ramp step is for building a semantic token, not for direct use |
+| Space | `--space-0` … `--space-24` | rem | the scale skips values on purpose — not every integer exists |
+| Type size | `--text-xs` … `--text-7xl` | rem | |
+| Type family | `--font-ui`, `--font-heading`, `--font-editorial`, `--font-code` | — | Inter / Sora (every h1 to h6) / Inter (alias, removed in 1.0) / IBM Plex Mono |
+| Type weight | `--weight-regular` … `--weight-extrabold` | number | |
+| Line height | `--leading-none` … `--leading-relaxed` | number | `--leading-none` exists for components whose HEIGHT is part of the contract |
+| Letter spacing | `--tracking-tight` … `--tracking-widest` | em | |
+| Radius | `--radius-xs` … `--radius-card`, `--radius-sheet`, `--radius-control` | px | `--radius-card` (22px), `--radius-sheet` (32px, the sheet that rises from the bottom) and `--radius-control` (999px) are identity — checked |
+| Border | `--border-width` | px | |
+| Shadow | `--shadow-sm`, `--shadow-md`, `--shadow-lg` | shadow | |
+| Layer | `--z-sticky` … `--z-toast` | number | for stacking OVERLAYS. A local `z-index: 1/2/3` inside a component is not this axis |
+| Motion | `--duration-*`, `--ease-*` | duration / curve | |
+| Icon size | `--icon-sm` … `--icon-xl` | rem | in rem so the glyph follows the text |
+| Touch target | `--target-min` | rem | 44px with a 16px root — WCAG 2.5.5/2.5.8 |
+| Breakpoint | `--breakpoint-2xs` … `--breakpoint-2xl` | px | `@media` cannot read `var()`, so the CSS repeats each breakpoint in `em` (it follows the browser's font size) and a build check guards the scale |
+| Density | see below | rem | |
 
-**Valor novo em qualquer um destes eixos sai de um token.** Os valores crus do core são contados
-por eixo pelo check 12 do `validate.py`, contra o `scripts/raw-px-baseline.json`: a conta pode
-cair, nunca subir.
+**A new value on any of these axes comes from a token.** The raw values in the core are counted per
+axis against a baseline: the count may go down, never up.
 
 ---
 
-## O contrato da densidade — o que de fato muda
+## The density contract — what actually changes
 
-`data-density="compact | comfortable | spacious"` muda **oito** tokens, e só eles:
+`data-density="compact | comfortable | spacious"` changes **eleven** tokens, and only those:
 
 `--control-h-xs`, `--control-h-sm`, `--control-h-md`, `--control-h-lg`, `--control-h-xl`,
-`--row-h`, `--card-pad`, `--section-gap`.
+`--touch-control-h-sm`, `--touch-control-h-md`, `--touch-control-h-lg` (the control heights of the native
+touch target), `--row-h`, `--card-pad`, `--section-gap`.
 
-Ou seja: a densidade muda **a altura dos controles, a altura da linha de tabela, o respiro do
-cartão e o vão entre seções**.
+In other words: density changes **control height, table row height, card padding and the gap between
+sections**.
 
-Ela **não** muda, de propósito: tamanho de letra, a escala geral de espaço, os vãos de layout,
-raios, tamanhos de ícone nem alturas de linha. Densidade é sobre quão juntos os controles ficam, e
-não uma segunda escala de letras.
+It does **not** change, on purpose: type size, the general space scale, layout gaps, radii, icon sizes
+or line heights. Density is about how close together the controls sit, not a second type scale.
 
-Isso não estava escrito até a Fase 6, e a promessa "três densidades" soava como se mandasse em
-tudo. Todo controle tem de tirar a altura de `--control-h-*` — três famílias não tiravam, e por
-isso uma aba media 8px a menos que o campo ao lado em `spacious` (achado A1). O
-`tests/visual/geometry.spec.ts` cobra isso hoje.
+Every control must take its height from `--control-h-*`. `tests/visual/geometry.spec.ts` checks this.
 
 ---
 
-## O contrato do tema — e uma assimetria, de propósito
+## The theme contract — and an asymmetry, on purpose
 
-`data-theme="dark | light"`. O escuro é a base; o claro sobrescreve.
+`data-theme="dark | light"`. Dark is the base; light overrides it.
 
-Os dois temas **não** são simétricos, e esta é a exceção: o claro sobrescreve seis cores que o
-escuro deixa no valor base — `danger-400`, `info-400`, `success-400`, `warning-400`, `oracle-300`,
-`oracle-400`.
+The two themes are **not** fully symmetric, and this is the exception: light overrides three colours that
+dark leaves at the base value — `warning-500`, `oracle-300` and `oracle-400`. Nothing is undefined in dark:
+those tokens inherit the base value, so no value is missing.
 
-Motivo: sobre uma superfície clara essas quatro famílias semânticas precisam de um tom mais fundo
-para chegar a 4,5:1, enquanto no escuro o valor base já chega. Nada fica indefinido no escuro — ele
-herda da base, então não há valor faltando. O que faltava era este parágrafo.
-
-A identidade não muda entre temas: o amarelo principal é `oklch(0.795 0.184 86.047)` nos dois, e o
-check 3 do `validate.py` reprova pelo valor canônico, não só pelo nome do token.
+The identity does not change between themes: the main yellow is `oklch(0.795 0.184 86.047)` in both, and
+the build fails on the canonical value, not only on the token name.
 
 ---
 
-## Unidades: rem para tudo que deve acompanhar a letra
+## Units: rem for everything that should follow the text
 
-Letra, espaço, tamanho de ícone, altura de controle, largura da lateral e altura da barra do topo
-são **rem**, para que quem dobra a letra do navegador ganhe controles maiores em vez de texto
-cortado (WCAG 1.4.4, achado M12). A conversão de px foi exata (px÷16), então nada se moveu no
-tamanho de raiz padrão — os 52 baselines de screenshot provam.
+Type, space, icon size, control height, sidebar width and top bar height are **rem**, so that someone who
+enlarges the browser's text gets bigger controls instead of clipped text (WCAG 1.4.4). The conversion
+from px was exact (px÷16), so nothing moved at the default root size.
 
-Os raios ficam em **px**: um canto é forma física, não texto, e escalá-lo com a letra faz a cápsula
-deixar de ser cápsula.
+Radii stay in **px**: a corner is a physical shape, not text, and scaling it with the text makes the
+capsule stop being a capsule.
 
 ---
 
-## Tokens sem quem os use
+## Tokens nobody uses
 
-63 de 174 nomes distintos não são citados pelo core. Isso não é desperdício automático:
+Not every token is referenced by the core. That is not automatically waste:
 
-| Grupo | Por que existe |
+| Group | Why it exists |
 |---|---|
-| `--breakpoint-*` (5) | `@media` não lê `var()`. O CSS repete o número e o check 4b guarda a escala contra eles |
-| `--oracle-*` (11) | usados só por `apps/docs/docs.css`. `oracle` é vocabulário do app de origem, não do sistema (achado M9) — saem junto com aquela página |
-| `--chart-*` (4) | reservados para gráficos, que ainda não existiam como componentes |
-| degraus de rampa (6) | degraus intermediários das famílias semânticas, mantidos para um consumidor montar uma variante |
-| o resto | usados só pelo `docs.css` — 14 no total |
+| `--breakpoint-*` | `@media` cannot read `var()`. The CSS repeats the number and a build check guards the scale against them |
+| `--oracle-*` | used only by `apps/docs/docs.css`. `oracle` is vocabulary of the app it came from, not of the system — they go away together with that page |
+| ramp steps | intermediate steps of the semantic families, kept so a consumer can build a variant |
 
-**A regra daqui em diante:** um token nasce de um uso, não de uma escala que parece completa. A Fase
-6 tirou 26 que não tinham uso em lugar nenhum (`--aether-*`, `--ember-*`, duas sombras `none`, dois
-raios repetidos) e criou 15 que eram necessários na hora.
+**The rule:** a token is born from a use, not from a scale that looks complete. Tokens that had no use
+anywhere were removed, and the ones that were needed were created.
 
-Repetidos são referências, não cópias: `--radius-full` é `{radius-control}`, então os dois nomes não
-podem divergir. Dois tokens com o mesmo número escrito à mão divergem no dia em que um é ajustado.
+Repeats are references, not copies: `--radius-full` is `{radius-control}`, so the two names cannot
+diverge. Two tokens with the same number written by hand diverge the day one of them is adjusted.
 
 ---
 
-## Cascata
+## Cascade
 
-O `packages/core/dist/aurea.css` embrulha os tokens **e** o CSS dos componentes em `@layer aurea`. O
-CSS do próprio consumidor, escrito sem camada, ganha da biblioteca qualquer que seja a
-especificidade do seletor — sem `!important`, sem caça à especificidade.
+`packages/core/dist/aurea.css` wraps the tokens **and** the component CSS in `@layer aurea`. The
+consumer's own CSS, written without a layer, wins over the library whatever the selector's specificity —
+no `!important`, no specificity hunting.
 
-Os tokens ficam dentro da camada, junto com o core, e não fora. Uma **declaração** de propriedade
-customizada disputa a cascata como qualquer outra: com os tokens fora, a sobrescrita de `:root` que
-o core declara dentro de uma media query perdia para o valor base, e a lateral pulava 48px. Um app
-que redefine um token no próprio `:root` sem camada continua ganhando dos dois.
+The tokens sit inside the layer, together with the core, not outside it. A custom property
+**declaration** competes in the cascade like any other: with the tokens outside, the `:root` override
+that the core declares inside a media query lost to the base value, and the sidebar jumped 48px. An app
+that redefines a token in its own unlayered `:root` still wins over both.

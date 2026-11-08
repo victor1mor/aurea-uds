@@ -1,48 +1,46 @@
 # @aurea-uds/icons
 
-O sprite de ícones de onde a **Aurea UDS** desenha. Os glifos são os
-[Phosphor Icons](https://phosphoricons.com), nos pesos **Regular** e **Fill**; este pacote só os
-junta num único sprite SVG. Até a `0.12.4` eram os Carbon Icons da IBM (ADR-0053).
+The icon sprite **Aurea UDS** draws from. The glyphs are [Phosphor Icons](https://phosphoricons.com), in the
+**Regular** and **Fill** weights; this package only puts them together in a single SVG sprite. Up to
+`0.12.4` they were IBM's Carbon Icons.
 
 ```bash
 pnpm add @aurea-uds/icons
 ```
 
-Copie `dist/aurea-icons.svg` para onde o seu app serve arquivos estáticos e diga ao provider onde
-ele está:
+Copy `dist/aurea-icons.svg` to where your app serves static files and tell the provider where it is:
 
 ```jsx
 <AureaProvider spriteUrl="/aurea-icons.svg">
 ```
 
-Marcação fora do React aponta direto para o símbolo:
+Markup outside React points straight to the symbol:
 
 ```html
 <svg class="icon" aria-hidden="true"><use href="/aurea-icons.svg#i-magnifying-glass"></use></svg>
 ```
 
-O id do símbolo é `i-` seguido do nome do Phosphor exatamente como o Phosphor escreve:
-`caret-down` vira `#i-caret-down`. A forma cheia tem o sufixo `-fill`: `#i-caret-down-fill`. No
-React, é `<Icon name="caret-down" weight="fill" />`; a Aurea usa a cheia no item escolhido (aba
-ativa, item atual do menu) e nos avisos.
+The symbol id is `i-` followed by the Phosphor name exactly as Phosphor writes it: `caret-down` becomes
+`#i-caret-down`. The filled shape has the `-fill` suffix: `#i-caret-down-fill`. In React, it is
+`<Icon name="caret-down" weight="fill" />`; Aurea uses the filled shape on the selected item (the active
+tab, the current menu item) and in alerts.
 
-Os logotipos de marca do Phosphor (`apple-logo` e os outros 78 com `-logo` no nome) **não
-entram**: marca registrada de terceiro não cabe numa biblioteca Apache-2.0.
+Phosphor's brand logos (`apple-logo` and the other 78 with `-logo` in the name) **are not included**: a
+third party's trademark does not belong in an Apache-2.0 library.
 
-## Vindo do Carbon
+## Coming from Carbon
 
-Os nomes mudaram todos. A tabela `carbon-para-phosphor.json` traz os 260 nomes do Carbon que a
-Aurea e os apps conhecidos usavam, com o nome do Phosphor que os substitui:
+Every name changed. The `carbon-para-phosphor.json` table maps the 260 Carbon names that Aurea and the
+known apps used to the Phosphor name that replaces each one:
 
 ```js
 import tabela from "@aurea-uds/icons/carbon-para-phosphor.json" with {type: "json"};
 tabela["chevron--down"]; // "caret-down"
 ```
 
-Os ícones `*--filled` do Carbon viram o mesmo nome em `weight="fill"`.
+Carbon's `*--filled` icons become the same name with `weight="fill"`.
 
-## Licença
+## License
 
-Apache-2.0 para este pacote. Os glifos são Phosphor Icons, sob a licença MIT — o aviso de
-copyright e de permissão que ela exige vai no [`NOTICE`](./NOTICE), que faz parte dos arquivos
-publicados.
+Apache-2.0 for this package. The glyphs are Phosphor Icons, under the MIT license — the copyright and
+permission notice it requires is in [`NOTICE`](./NOTICE), which is part of the published files.

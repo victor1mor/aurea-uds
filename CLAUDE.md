@@ -219,6 +219,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.59.1` | A auditoria externa, as travas e o processo: os cabeçalhos de segurança do site, nenhum aceite de alerta sobrando e as travas 4b, 12, 19, 21b, 31, 31b e 44 — pedido #120. **Não saiu sozinha**: foi publicada dentro da `0.61.0` |
 | `0.60.0` | A auditoria externa, o que muda aparência: o escolhido que se vê no alto contraste (a forma "B"), o código da esquerda para a direita numa página da direita para a esquerda, o "Full width" que faz a peça crescer, a lupa do topo e os exemplos que deixam trocar — pedido #120. **Não saiu sozinha**: foi publicada dentro da `0.61.0` |
 | `0.61.0` | As pendências antes da 1.0: os pontos de quebra em `em` ([ADR-0092](decisions/0092-os-pontos-de-quebra-seguem-a-fonte.md)), as outras sete peças do alto contraste, o `onClick` do item do `Header` e as molduras do site que crescem com o conteúdo ([ADR-0093](decisions/0093-a-moldura-cresce-com-o-conteudo.md)) — pedido #121. **Publicada em 07/11/2026** (entre 08:45 e 08:49, Brasília, medido no npm), pelo terminal do Victor. Leva a `0.60.0` e a `0.59.1` junto |
+| `0.62.0` | A logo nova (a estrela completa perto do nome em Sora ExtraBold) e as decisões da auditoria externa: `icon` no `IconButton` do nativo, o `Accordion` de lado que abre o primeiro item, o `MediaEmbed` só com `https:` e as fichas sem número de ADR — pedido #122. **Publicada em 07/11/2026** (entre 19:45 e 19:46, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #123 |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -854,6 +855,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    validador reprova: elas se copiam sem abrir e se apagam no fim. **Publicada em 07/11/2026** (entre 08:45 e 08:49,
    Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #121. O registro entrou no lote seguinte (a logo,
    0.62.0).
+
+58. **`0.62.0`, a logo e as decisões da auditoria, feita de 06 a 07/11/2026** — a logo desenhada no FigCraft e escolhida
+   olhando (*"B · Sora ExtraBold"*; no topo, *"B, com boca"* e *"2, mais perto"*) e as respostas às decisões D1 a D8 da
+   auditoria externa (pedido #122). Junto, no pedido #123, a porta do repositório em inglês e a promessa trocada: a Aurea
+   não se anuncia mais como "feita para baixa visão" (*"é mentira, isso era da fonte antiga"*) — diz o que se prova, o
+   contraste medido em todo tema e marca. ⚠ **As lições:** (1) o lote rodou só os testes de unidade dele, e a CI achou um
+   teste antigo do nativo que lia a forma de antes do `IconButtonProps` — a suíte de unidade INTEIRA roda antes do envio;
+   (2) a trava dos exemplos (`node scripts/exemplos-compilam.mjs`) roda só na CI, e reprovou um nome que sobrou no README —
+   ela vai na conferência sempre que um trecho de código muda, inclusive no README; (3) um banco de teste com
+   `about:blank` deixou de mostrar o `MediaEmbed` depois da regra do `https:`, e a suíte do Chromium achou. **Publicada em
+   07/11/2026** (entre 19:45 e 19:46, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #123. O
+   registro entrou no lote seguinte (os READMEs dos pacotes em inglês).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

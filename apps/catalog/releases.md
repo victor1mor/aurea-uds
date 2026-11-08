@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.62.1
+
+November 7, 2026
+
+Every package README is now in English.
+
+[Read full release notes →](https://aureauds.dev/release-v0-62-1.md)
+
 ## v0.62.0
 
 November 6, 2026
