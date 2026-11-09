@@ -19,6 +19,8 @@ import {Link} from "@aurea-uds/react";
 
 - external sets target="_blank" with rel="noopener noreferrer" and draws the arrow.
 
+- A screen reader hears "(opens in a new tab)" after the text of an external link; externalLabel sets the words.
+
 - disabled renders without href and with aria-disabled.
 
 - It wraps inside a paragraph, which a page zoomed to 200% needs.
@@ -39,7 +41,8 @@ The arrow says it leaves the site; the disabled one does not go anywhere.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `href` | `string` | — | Where it goes. |
-| `external` | `boolean` | false | Opens in a new tab (target="_blank", rel="noopener noreferrer") and shows the reference library's arrow, drawn by CSS mask. |
+| `external` | `boolean` | false | Opens in a new tab (target="_blank", rel="noopener noreferrer") and shows the reference library's arrow, drawn by CSS mask. A screen reader hears that it opens in a new tab, in visually hidden text. |
+| `externalLabel` | `string` | "(opens in a new tab)" | What a screen reader hears after the text of an external link. Pass it in the app's language. |
 | `disabled` | `boolean` | false | Does not navigate: rendered without href and with aria-disabled. |
 | `children` | `ReactNode` | — | The link text. |
 | `className` | `string` | — | Added to the <a>. |

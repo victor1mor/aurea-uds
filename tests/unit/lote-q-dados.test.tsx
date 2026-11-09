@@ -20,7 +20,8 @@ describe("Link", () => {
   });
   test("`external` abre noutra aba, com o `rel` seguro e a seta decorativa", () => {
     wrap(<Link href="https://exemplo.com" external>Docs</Link>);
-    const a = screen.getByRole("link", {name: "Docs"});
+    // Desde a 0.63.0 (S-13), o nome leva o aviso de nova aba — `lote-067-fase1.test.tsx`.
+    const a = screen.getByRole("link", {name: /^Docs ?\(opens in a new tab\)$/});
     expect(a).toHaveAttribute("target", "_blank");
     expect(a).toHaveAttribute("rel", "noopener noreferrer");
     expect(a.querySelector(".link-external")).toHaveAttribute("aria-hidden", "true");

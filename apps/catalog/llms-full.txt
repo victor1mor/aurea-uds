@@ -2855,7 +2855,7 @@ toastPlacement picks one of six places for the messages of useToast(). bottom, t
 | `density` | `AureaDensity` | — | Controlled density. Same convention as theme. |
 | `defaultDensity` | `AureaDensity` | — | Seeds the density without controlling it. |
 | `onDensityChange` | `(density: AureaDensity) => void` | — | Fires with the new density. |
-| `toastPlacement` | `"top" \| "top-start" \| "top-end" \| "bottom" \| "bottom-start" \| "bottom-end"` | "bottom" | Where the toasts of useToast() appear. bottom (the middle of the bottom edge) is the reference library's default. 460 wide from 640 up; the screen minus 16 on each side on a phone. |
+| `toastPlacement` | `"top" \| "top-start" \| "top-end" \| "bottom" \| "bottom-start" \| "bottom-end"` | "bottom" | Where the toasts of useToast() appear. bottom (the middle of the bottom edge) is the reference library's default. 460 wide from 640 up; the screen minus 16 on each side on a phone. A provider inside another one has no toast region of its own: its toasts go to the outer provider's stack, at the outer placement. |
 </page>
 
 <page url="https://aureauds.dev/automationcard.html">
@@ -3558,7 +3558,7 @@ import {Button} from "@aurea-uds/react";
 <Button variant="danger">Delete</Button>
 ```
 
-- Variants over two axes — appearance (solid, outline, ghost, link) and tone (neutral, brand, destructive) — plus secondary, the neutral fill with the brand-coloured label.
+- Variants over two axes — appearance (solid, outline, ghost, link) and tone (neutral, brand, destructive) — plus secondary, the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one).
 
 - Five sizes (xs / sm / md / lg / xl) from density tokens; the pill shape is invariant.
 
@@ -3734,7 +3734,7 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `variant` | `primary \| secondary \| tertiary \| outline \| ghost \| primary-outline \| primary-ghost \| danger \| danger-outline \| danger-ghost \| link \| link-primary \| link-danger \| nav \| danger-soft` | tertiary | A shortcut for the (appearance, tone) pair; the two-axis API is appearance + tone. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default). |
+| `variant` | `primary \| secondary \| tertiary \| outline \| ghost \| primary-outline \| primary-ghost \| danger \| danger-outline \| danger-ghost \| link \| link-primary \| link-danger \| nav \| danger-soft` | tertiary | A shortcut for the (appearance, tone) pair; the two-axis API is appearance + tone. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label (the default). |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | solid | How much weight the box carries. nav is an appearance of its own (a navigation item), not a tone. soft is the tone's light background with the tone's text (the reference's danger-soft). |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | What the colour means. Every tone works with every appearance, filled included — each has its own colour and text pair per theme. |
 | `size` | `xs \| sm \| md \| lg \| xl` | md | Height comes from the density tokens; the pill radius never changes. |
@@ -4962,7 +4962,7 @@ const [colour, setColour] = useState("rgba(240, 194, 0, 0.8)");
 | `onValueChange` | `(value: string) => void` | — | Called when the code is applied (Enter or leaving the field) and on every key in a channel, with the hex — or "" when it is cleared. |
 | `onValueCommitted` | `(value: string) => void` | — | Called with onValueChange — the moment to save. |
 | `channel` | `ColorChannel` | — | One channel, as a number, in place of the code: hue, saturation, brightness, lightness, red, green, blue or alpha. |
-| `colorSpace` | `"hsb" \| "hsl" \| "rgb"` | "hsb" | With channel: the space of hue and saturation. |
+| `colorSpace` | `"hsb" \| "hsl" \| "rgb"` | "hsb" | With channel: the space of hue and saturation, hsb or hsl. "rgb" has no hue or saturation, so those channels fall back to hsb; red, green and blue are in rgb whatever this says. Without channel it does nothing: the code field reads hex, rgb(), hsl() and hsb(). |
 | `swatch` | `boolean` | true for the code, false for a channel | The swatch in front. |
 | `size` | `Responsive<sm \| md \| lg>` | md | The field height, the same scale as Input. |
 | `variant` | `"primary" \| "secondary"` | "primary" | secondary is the neutral background, for a field inside a card — the same as Input. |
@@ -7111,7 +7111,7 @@ The Button's finishes, chosen by the app: glow under the primary one, ring aroun
 |---|---|---|---|
 | `label` | `string` | — | REQUIRED. Becomes aria-label: an icon with no text has no accessible name without it. |
 | `icon` | `AureaIcon` | — | Glyph, from the contract's allowlist — or the app's own drawing (a component that returns its <svg>), as Icon takes. Same name on native, where `name` is also accepted (the older name). |
-| `variant` | `ButtonVariant \| danger-soft` | ghost | Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default). |
+| `variant` | `ButtonVariant \| danger-soft` | ghost | Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label (the default). |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | ghost | Inherited from Button. How much weight the box carries; the default here is ghost. |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | Inherited from Button. What the colour means; every combination exists. |
 | `size` | `xs \| sm \| md \| lg \| xl` | md | Square target: the width follows the same density token as the height. |
@@ -7515,6 +7515,8 @@ import {Link} from "@aurea-uds/react";
 
 - external sets target="_blank" with rel="noopener noreferrer" and draws the arrow.
 
+- A screen reader hears "(opens in a new tab)" after the text of an external link; externalLabel sets the words.
+
 - disabled renders without href and with aria-disabled.
 
 - It wraps inside a paragraph, which a page zoomed to 200% needs.
@@ -7535,7 +7537,8 @@ The arrow says it leaves the site; the disabled one does not go anywhere.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `href` | `string` | — | Where it goes. |
-| `external` | `boolean` | false | Opens in a new tab (target="_blank", rel="noopener noreferrer") and shows the reference library's arrow, drawn by CSS mask. |
+| `external` | `boolean` | false | Opens in a new tab (target="_blank", rel="noopener noreferrer") and shows the reference library's arrow, drawn by CSS mask. A screen reader hears that it opens in a new tab, in visually hidden text. |
+| `externalLabel` | `string` | "(opens in a new tab)" | What a screen reader hears after the text of an external link. Pass it in the app's language. |
 | `disabled` | `boolean` | false | Does not navigate: rendered without href and with aria-disabled. |
 | `children` | `ReactNode` | — | The link text. |
 | `className` | `string` | — | Added to the <a>. |
@@ -9233,6 +9236,7 @@ selectedStyle (ADR-0084): current — the raised capsule with the yellow line, t
 | `items[].icon` | `IconName` | — | An icon before the label (16, 8 from it); the selected item switches to the filled form by itself. |
 | `wrap` | `boolean` | false | The track breaks onto more lines when the options do not fit, and takes the card radius (22). |
 | `orientation` | `"horizontal" \| "vertical"` | "horizontal" | vertical stands the control up: each segment the full width, the track with the card radius (22). |
+| `className` | `string` | — | Web only. Added to the track (the radio group, or the <nav> when every item has href). |
 </page>
 
 <page url="https://aureauds.dev/select.html">
@@ -11267,7 +11271,7 @@ pressedStyle (ADR-0084), when the button is pressed: brand — the default — n
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `variant` | `ButtonVariant \| danger-soft` | ghost | Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default). |
+| `variant` | `ButtonVariant \| danger-soft` | ghost | Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label (the default). |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | ghost | Inherited from Button. How much weight the box carries; the default here is ghost. |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | Inherited from Button. What the colour means; every combination exists. |
 | `pressed` | `boolean` | — | Toggle inside the toolbar (bold, italic). aria-pressed, not a variant. |
@@ -18645,6 +18649,43 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-63-0.html">
+# v0.63.0
+
+External links tell screen readers they open in a new tab; one toast region with nested providers; className on SegmentedControl.
+
+Nothing changes on screen.
+
+## Added
+
+- **`Link` `externalLabel`**: the words a screen reader hears after the text of an `external` link. The default is "(opens in a new tab)"; pass it in your app's language.
+- **`SegmentedControl` `className`**: added to the track, both in the choice group and in the navigation (when every item has `href`). Before, it was dropped. Web only.
+
+## Fixed
+
+- **`Link external`**: a screen reader now hears that the link opens in a new tab. The arrow is still for sighted users only.
+- **`AureaProvider` inside another `AureaProvider`**: the page has one toast region, not two with the same name. Toasts added inside the inner provider show in the outer one's stack, at the outer placement.
+
+## Documentation
+
+- `Button`, `IconButton` and `ToolbarButton`: `secondary` has the emphasis label — the brand colour in the dark theme, the text colour in the light one.
+- `ColorField`: what `colorSpace` does, and that `"rgb"` falls back to hsb for hue and saturation.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.63.0 @aurea-uds/core@0.63.0 @aurea-uds/fonts@0.63.0 @aurea-uds/icons@0.63.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.63.0
 ```
 </page>
 

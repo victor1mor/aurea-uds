@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.63.0
+
+November 9, 2026
+
+External links tell screen readers they open in a new tab; one toast region with nested providers; className on SegmentedControl.
+
+[Read full release notes →](https://aureauds.dev/release-v0-63-0.md)
+
 ## v0.62.1
 
 November 7, 2026

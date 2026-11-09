@@ -1,0 +1,34 @@
+# v0.63.0
+
+External links tell screen readers they open in a new tab; one toast region with nested providers; className on SegmentedControl.
+
+Nothing changes on screen.
+
+## Added
+
+- **`Link` `externalLabel`**: the words a screen reader hears after the text of an `external` link. The default is "(opens in a new tab)"; pass it in your app's language.
+- **`SegmentedControl` `className`**: added to the track, both in the choice group and in the navigation (when every item has `href`). Before, it was dropped. Web only.
+
+## Fixed
+
+- **`Link external`**: a screen reader now hears that the link opens in a new tab. The arrow is still for sighted users only.
+- **`AureaProvider` inside another `AureaProvider`**: the page has one toast region, not two with the same name. Toasts added inside the inner provider show in the outer one's stack, at the outer placement.
+
+## Documentation
+
+- `Button`, `IconButton` and `ToolbarButton`: `secondary` has the emphasis label — the brand colour in the dark theme, the text colour in the light one.
+- `ColorField`: what `colorSpace` does, and that `"rgb"` falls back to hsb for hue and saturation.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.63.0 @aurea-uds/core@0.63.0 @aurea-uds/fonts@0.63.0 @aurea-uds/icons@0.63.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.63.0
+```

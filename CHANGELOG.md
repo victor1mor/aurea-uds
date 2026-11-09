@@ -17,13 +17,6 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-### O registro da 0.62.1 (09/11/2026)
-
-- **A 0.62.1 publicada em 08/11/2026, entre 09:08 e 09:16** (Brasília, medido no npm), da junção do pedido #124
-  (`d91c27df`): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo.
-  O CHANGELOG ([0.62.1] publicada) e o CLAUDE.md (a linha na tabela e o item 59).
-- Não muda nenhum pacote publicado.
-
 ### A porta em inglês e a promessa que se prova (07/11/2026)
 
 - **Tudo o que é público passa ao inglês** (o Victor: *"tudo deve ser em inglês"*): o README (sem o processo interno —
@@ -292,6 +285,44 @@ como deveria funcionar"*.
 - **A trava (check 45 do `validate.py`)**: o site só importa a Aurea, o próprio repositório e as
   dependências que o `@aurea-uds/react` declara; e nenhuma página puxa script, folha, imagem ou
   moldura de outro endereço. O `montar-site.mjs` confere a segunda metade de novo na publicação.
+- Não muda nenhum pacote publicado.
+
+---
+
+## [0.63.0] — 2026-11-09
+
+**A Fase 1 do caminho até a 1.0, o primeiro lote** (09/11/2026, *"Pode montar"*): os defeitos que não mudam a aparência da
+tela comum, cada um conferido no código antes (a conferência inteira da Fase 1 está no documento de achados).
+
+### Corrigido
+
+- **`Link external` diz ao leitor de tela que abre noutra aba** (S-13): depois da seta, um texto escondido, "(opens in a
+  new tab)". A seta continua só para quem vê, e nada muda na tela. A prop nova `externalLabel` troca a frase — a peça não
+  lê o `AureaStrings` (ela não usa hook), como o `directionLabel` do `KPI`.
+- **Um `AureaProvider` dentro de outro não monta uma segunda região de avisos** (2-C a): eram duas regiões
+  "Notifications" na página. O provedor de dentro usa a de fora: o `useToast()` dele mostra o aviso na pilha de fora (o
+  `toastPlacement` do de dentro não vale). Só na web: no nativo, os avisos vivem no `ToastHost`, que o provedor não monta.
+- **`SegmentedControl` aceita `className`** (era descartado), no grupo de escolha e na navegação. Só na web: o do nativo
+  tem `style`.
+
+### Documentação
+
+- As fichas de `Button`, `IconButton` e `ToolbarButton` diziam que o `secondary` tem a letra na cor da marca; desde a
+  0.45.0 é o destaque — a cor da marca no escuro, a do texto no claro.
+- A ficha do `ColorField` diz o que o `colorSpace` faz: com `channel`, escolhe entre hsb e hsl; "rgb" não tem matiz nem
+  saturação e cai em hsb; sem `channel`, nada.
+- A ficha do `AureaProvider` diz que o provedor de dentro não tem região de avisos própria.
+- O `docs/REFERENCES.md` lista as dependências opcionais que faltavam: React Flow, elkjs, react-flow-smart-edge,
+  modern-screenshot, TanStack Table, CodeMirror e Lezer, e qr — cada uma com a licença lida no `package.json` dela.
+
+Quem cobra: `tests/unit/lote-067-fase1.test.tsx` (provado contra o código de antes: 6 dos 8 reprovam; os 2 que passam são
+os de controle) e `tests/visual/link-external-nome.spec.ts` (o nome do link nos três navegadores, e que a medida não muda).
+
+### O registro da 0.62.1 (09/11/2026)
+
+- **A 0.62.1 publicada em 08/11/2026, entre 09:08 e 09:16** (Brasília, medido no npm), da junção do pedido #124
+  (`d91c27df`): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo.
+  O CHANGELOG ([0.62.1] publicada) e o CLAUDE.md (a linha na tabela e o item 59).
 - Não muda nenhum pacote publicado.
 
 ---

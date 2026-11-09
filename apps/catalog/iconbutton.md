@@ -154,7 +154,7 @@ The Button's finishes, chosen by the app: glow under the primary one, ring aroun
 |---|---|---|---|
 | `label` | `string` | — | REQUIRED. Becomes aria-label: an icon with no text has no accessible name without it. |
 | `icon` | `AureaIcon` | — | Glyph, from the contract's allowlist — or the app's own drawing (a component that returns its <svg>), as Icon takes. Same name on native, where `name` is also accepted (the older name). |
-| `variant` | `ButtonVariant \| danger-soft` | ghost | Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default). |
+| `variant` | `ButtonVariant \| danger-soft` | ghost | Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label (the default). |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | ghost | Inherited from Button. How much weight the box carries; the default here is ghost. |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | Inherited from Button. What the colour means; every combination exists. |
 | `size` | `xs \| sm \| md \| lg \| xl` | md | Square target: the width follows the same density token as the height. |

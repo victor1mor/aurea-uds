@@ -732,13 +732,13 @@ export function OTPField({ length, value, defaultValue, onValueChange, mask, dis
 }
 // O SITE B (aprovado pela bancada em 01/11/2026, os itens 3 e 8): `items[].icon` (o escolhido troca sozinho para a forma
 // cheia), `size="2xl"` (segmento de 48), `wrap` (quebra linha, o trilho com canto 22) e `orientation="vertical"` (em pé).
-export function SegmentedControl({ items, value, onChange, label, fullWidth, size = "md", selectedStyle, wrap, orientation = "horizontal" }) {
+export function SegmentedControl({ items, value, onChange, label, fullWidth, size = "md", selectedStyle, wrap, orientation = "horizontal", className }) {
     const s = useAureaStrings();
     // S-04 (05/11/2026): o escolhido DESLIZA de um segmento ao outro, em vez de pular (`useDeslize`, no `internal`). Só na
     // escolha: com `href` a troca é de página, e a página nova já nasce com o escolhido no lugar.
     const fila = React.useRef(null);
     useDeslize(fila, ".active", value);
-    const classe = cx("segmented", fullWidth && "segmented-full", size === "sm" && "segmented-sm", size === "lg" && "segmented-lg", size === "xl" && "segmented-xl", size === "2xl" && "segmented-2xl", wrap && orientation !== "vertical" && "segmented-wrap", orientation === "vertical" && "segmented-vertical");
+    const classe = cx("segmented", fullWidth && "segmented-full", size === "sm" && "segmented-sm", size === "lg" && "segmented-lg", size === "xl" && "segmented-xl", size === "2xl" && "segmented-2xl", wrap && orientation !== "vertical" && "segmented-wrap", orientation === "vertical" && "segmented-vertical", className);
     const miolo = (i) => i.icon ? _jsxs(_Fragment, { children: [_jsx(Icon, { name: i.icon, weight: i.value === value ? "fill" : "regular" }), i.label] }) : i.label;
     if (items.length > 0 && items.every(i => i.href != null))
         return _jsx("nav", { className: classe, "data-segment-style": selectedStyle, "aria-label": label ?? s.optionsLabel, children: items.map(i => _jsx("a", { href: i.href, className: i.value === value ? "active" : undefined, "aria-current": i.value === value ? "page" : undefined, children: miolo(i) }, i.value)) });

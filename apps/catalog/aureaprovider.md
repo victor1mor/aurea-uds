@@ -81,4 +81,4 @@ toastPlacement picks one of six places for the messages of useToast(). bottom, t
 | `density` | `AureaDensity` | — | Controlled density. Same convention as theme. |
 | `defaultDensity` | `AureaDensity` | — | Seeds the density without controlling it. |
 | `onDensityChange` | `(density: AureaDensity) => void` | — | Fires with the new density. |
-| `toastPlacement` | `"top" \| "top-start" \| "top-end" \| "bottom" \| "bottom-start" \| "bottom-end"` | "bottom" | Where the toasts of useToast() appear. bottom (the middle of the bottom edge) is the reference library's default. 460 wide from 640 up; the screen minus 16 on each side on a phone. |
+| `toastPlacement` | `"top" \| "top-start" \| "top-end" \| "bottom" \| "bottom-start" \| "bottom-end"` | "bottom" | Where the toasts of useToast() appear. bottom (the middle of the bottom edge) is the reference library's default. 460 wide from 640 up; the screen minus 16 on each side on a phone. A provider inside another one has no toast region of its own: its toasts go to the outer provider's stack, at the outer placement. |

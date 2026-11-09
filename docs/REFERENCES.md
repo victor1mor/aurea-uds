@@ -11,6 +11,13 @@ repositório** (decisão do Victor, 07/10/2026). Elas ficam com o Victor, fora d
 | [Base UI](https://base-ui.com) | motor de comportamento das peças da web (sem aparência) | MIT | [ADR-0004](../decisions/0004-motor-headless-base-ui.md) |
 | [Recharts](https://recharts.org) | motor de gráfico (dependência opcional) | MIT | — |
 | [react-day-picker](https://daypicker.dev) | motor de calendário (dependência opcional) | MIT | — |
+| [React Flow](https://reactflow.dev) (`@xyflow/react`) | motor do mapa de rede, o `DependencyGraph` (dependência opcional) | MIT | — |
+| [elkjs](https://github.com/kieler/elkjs) | a arrumação em camadas do mapa (dependência opcional, ADR-0064) | EPL-2.0 OR GPL-3.0-or-later | — |
+| [react-flow-smart-edge](https://github.com/tisoap/react-flow-smart-edge) (`@tisoap/react-flow-smart-edge`) | o desvio das linhas do mapa (dependência opcional, ADR-0065) | MIT | — |
+| [modern-screenshot](https://github.com/qq15725/modern-screenshot) | exportar o mapa em PNG e SVG (dependência opcional, ADR-0064) | MIT | — |
+| [TanStack Table](https://tanstack.com/table) (`@tanstack/react-table`) | motor da `DataGrid` (dependência opcional) | MIT | — |
+| [CodeMirror](https://github.com/codemirror) (`codemirror`, `@codemirror/*`) e [Lezer](https://github.com/lezer-parser) (`@lezer/*`) | o `CodeEditor` e as cores do código (dependências opcionais) | MIT | — |
+| [qr](https://github.com/paulmillr/qr) | o desenho do `QRCode` (dependência opcional) | MIT OR Apache-2.0 | — |
 | [Phosphor Icons](https://phosphoricons.com) | os glifos, Regular e Fill (desde 01/10/2026, ADR-0053) | MIT | `packages/icons/NOTICE` · `packages/native/NOTICE` |
 | [Inter](https://github.com/rsms/inter) | a fonte do texto (desde 22/10/2026, ADR-0077), da versão 4.1 do autor, cortada para o latino | OFL-1.1 | `packages/fonts/LICENSE` |
 | [Sora](https://github.com/sora-xor/sora-font) | a fonte dos títulos (desde 22/10/2026, ADR-0077), do `google/fonts`, cortada para o latino | OFL-1.1 | `packages/fonts/LICENSE` |

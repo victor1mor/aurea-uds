@@ -311,8 +311,9 @@ export function InputGroupAddon({ side = "start", layout = "inline", className, 
 // escreve o `padding-top: 56.25%` de 2015, ou esquece o `min-width: 0` que impede a caixa de
 // estourar dentro de um grid.
 export function AspectRatio({ ratio = 1, className, style, ...props }) { return _jsx("div", { className: cx("aspect-ratio", className), style: { aspectRatio: ratio, ...style }, ...props }); }
-export function Link({ external, disabled, href, target, rel, className, children, ...props }) {
-    return _jsxs("a", { className: cx("link", className), href: disabled ? undefined : href, "aria-disabled": disabled || undefined, target: external ? target ?? "_blank" : target, rel: external ? rel ?? "noopener noreferrer" : rel, ...props, children: [children, external && _jsx("span", { className: "link-external", "aria-hidden": "true" })] });
+const AVISO_DE_NOVA_ABA = "(opens in a new tab)";
+export function Link({ external, externalLabel, disabled, href, target, rel, className, children, ...props }) {
+    return _jsxs("a", { className: cx("link", className), href: disabled ? undefined : href, "aria-disabled": disabled || undefined, target: external ? target ?? "_blank" : target, rel: external ? rel ?? "noopener noreferrer" : rel, ...props, children: [children, external && _jsx("span", { className: "link-external", "aria-hidden": "true" }), external && _jsx("span", { className: "sr-only", children: " " + (externalLabel ?? AVISO_DE_NOVA_ABA) })] });
 }
 // Transparente quando o texto diz alfa abaixo de 1 (hex de 4 ou 8 dígitos, `rgba()`, `hsla()`…). Cor de token ou
 // `oklch()` a marcação não lê: fica sem xadrez.

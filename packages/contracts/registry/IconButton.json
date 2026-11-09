@@ -137,7 +137,7 @@
       "name": "variant",
       "type": "ButtonVariant | danger-soft",
       "default": "ghost",
-      "description": "Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default)."
+      "description": "Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label (the default)."
     },
     {
       "name": "appearance",

@@ -118,3 +118,4 @@ selectedStyle (ADR-0084): current — the raised capsule with the yellow line, t
 | `items[].icon` | `IconName` | — | An icon before the label (16, 8 from it); the selected item switches to the filled form by itself. |
 | `wrap` | `boolean` | false | The track breaks onto more lines when the options do not fit, and takes the card radius (22). |
 | `orientation` | `"horizontal" \| "vertical"` | "horizontal" | vertical stands the control up: each segment the full width, the track with the card radius (22). |
+| `className` | `string` | — | Web only. Added to the track (the radio group, or the <nav> when every item has href). |

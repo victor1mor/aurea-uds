@@ -903,16 +903,23 @@ export function AspectRatio({ratio=1,className,style,...props}:HTMLAttributes<HT
 // abre noutra aba (`target="_blank"` com `rel="noopener noreferrer"`) e põe a seta da referência — o
 // `arrow-up-right` do Phosphor desenhado por MÁSCARA no CSS, porque este arquivo não importa o `Icon`
 // (ele usa hook). `disabled` não navega: o link sai SEM `href`, com `aria-disabled`.
+// S-13 (0.63.0): a seta é só para quem vê. Quem ouve recebe o aviso em texto escondido — "(opens in a new
+// tab)" — e o app troca a frase por `externalLabel`, como o `directionLabel` do `KPI`: este arquivo não lê o
+// `AureaStrings` (é hook). O espaço vai DENTRO do texto escondido, para não abrir vão entre a palavra e a seta.
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement>,RefAttributes<HTMLAnchorElement>{
   /** Abre noutra aba e mostra a seta. */
   external?:boolean;
+  /** O aviso que o leitor de tela ouve num link `external`. Padrão: "(opens in a new tab)". */
+  externalLabel?:string;
   /** Não navega: sai sem `href` e com `aria-disabled`. */
   disabled?:boolean;
 }
-export function Link({external,disabled,href,target,rel,className,children,...props}:LinkProps){
+const AVISO_DE_NOVA_ABA="(opens in a new tab)";
+export function Link({external,externalLabel,disabled,href,target,rel,className,children,...props}:LinkProps){
   return <a className={cx("link",className)} href={disabled?undefined:href} aria-disabled={disabled||undefined}
     target={external?target??"_blank":target} rel={external?rel??"noopener noreferrer":rel} {...props}>
     {children}{external&&<span className="link-external" aria-hidden="true"/>}
+    {external&&<span className="sr-only">{" "+(externalLabel??AVISO_DE_NOVA_ABA)}</span>}
   </a>;
 }
 

@@ -177,6 +177,9 @@ const ESCALA_MINIMA=0.1;
 // do texto comum, e é ele que entra. Mais os 2 × 4px do fundo do rótulo (padrão do motor) e uma
 // folga de 16px de cada lado para a linha aparecer antes e depois dele. Nunca encolhe abaixo de
 // `VAO_X`: grafo sem rótulo sai idêntico ao de antes.
+// ⚠ A MEDIDA É DA FONTE DE ANTES (anotado em 09/11/2026): a IBM Plex Sans saiu na 0.13.0, e a fonte do texto é a
+// Inter desde a 0.39.0 (ADR-0077). O 0,6 não foi medido de novo com ela — trocar o número muda o arranjo do mapa,
+// e isso é mudança de aparência, com imagem antes.
 const FONTE_DO_ROTULO=13,GLIFO_DO_ROTULO=0.6,FUNDO_X=8,FOLGA_X=32;
 const vaoEntreColunas=(edges:GraphEdgeItem[])=>Math.max(VAO_X,...edges.map(e=>
   e.label?Math.ceil(e.label.length*FONTE_DO_ROTULO*GLIFO_DO_ROTULO)+FUNDO_X+FOLGA_X:0));
