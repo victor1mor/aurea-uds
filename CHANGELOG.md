@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.62.1 (09/11/2026)
+
+- **A 0.62.1 publicada em 08/11/2026, entre 09:08 e 09:16** (Brasília, medido no npm), da junção do pedido #124
+  (`d91c27df`): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo.
+  O CHANGELOG ([0.62.1] publicada) e o CLAUDE.md (a linha na tabela e o item 59).
+- Não muda nenhum pacote publicado.
+
 ### A porta em inglês e a promessa que se prova (07/11/2026)
 
 - **Tudo o que é público passa ao inglês** (o Victor: *"tudo deve ser em inglês"*): o README (sem o processo interno —
@@ -290,6 +297,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.62.1] — 2026-11-07
+
+✅ **Publicada em 08/11/2026, entre 09:08 e 09:16 (Brasília, medido no npm: cinco pacotes entre 09:08 e 09:09, o `fonts` às
+09:11 e o `native` às 09:16), pelo terminal do Victor, da junção do pedido #124** (`d91c27df`).
 
 **Os READMEs dos sete pacotes em inglês** (07/11/2026), o passo que faltava do *"tudo deve ser em inglês"*: o texto que
 aparece na página de cada pacote no npm. Nenhum código muda — só o README de cada pacote, e a versão.
