@@ -220,6 +220,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.60.0` | A auditoria externa, o que muda aparência: o escolhido que se vê no alto contraste (a forma "B"), o código da esquerda para a direita numa página da direita para a esquerda, o "Full width" que faz a peça crescer, a lupa do topo e os exemplos que deixam trocar — pedido #120. **Não saiu sozinha**: foi publicada dentro da `0.61.0` |
 | `0.61.0` | As pendências antes da 1.0: os pontos de quebra em `em` ([ADR-0092](decisions/0092-os-pontos-de-quebra-seguem-a-fonte.md)), as outras sete peças do alto contraste, o `onClick` do item do `Header` e as molduras do site que crescem com o conteúdo ([ADR-0093](decisions/0093-a-moldura-cresce-com-o-conteudo.md)) — pedido #121. **Publicada em 07/11/2026** (entre 08:45 e 08:49, Brasília, medido no npm), pelo terminal do Victor. Leva a `0.60.0` e a `0.59.1` junto |
 | `0.62.0` | A logo nova (a estrela completa perto do nome em Sora ExtraBold) e as decisões da auditoria externa: `icon` no `IconButton` do nativo, o `Accordion` de lado que abre o primeiro item, o `MediaEmbed` só com `https:` e as fichas sem número de ADR — pedido #122. **Publicada em 07/11/2026** (entre 19:45 e 19:46, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #123 |
+| `0.62.1` | Os READMEs dos sete pacotes em inglês (o texto da página de cada um no npm), sem o processo interno e com os links completos do GitHub; nenhum código muda — pedido #124. **Publicada em 08/11/2026** (entre 09:08 e 09:16, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -867,6 +868,16 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    `about:blank` deixou de mostrar o `MediaEmbed` depois da regra do `https:`, e a suíte do Chromium achou. **Publicada em
    07/11/2026** (entre 19:45 e 19:46, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #123. O
    registro entrou no lote seguinte (os READMEs dos pacotes em inglês).
+
+59. **`0.62.1`, os READMEs dos pacotes em inglês, feita em 07/11/2026** — o passo que faltava do *"tudo deve ser em
+   inglês"*: o README de cada um dos sete pacotes (o texto da página dele no npm) em inglês, sem o processo interno (os
+   números de ADR, os códigos dos achados, o validador), com os links do repositório como endereços completos do GitHub;
+   nenhum código muda (pedido #124). ⚠ **A lição:** o README de um pacote envelhece sem ninguém ver — o de tokens ainda
+   descrevia a Aurea de antes (a escala de letras até `7xl`, o peso `extrabold`, a sombra `sm`, o raio da folha, os onze
+   tokens da densidade, os três que só o claro muda, os pontos de quebra em `em`), e o do nativo prometia "quatro chaves"
+   onde são 42 (contra 237 da web); cada afirmação com número se mediu antes de traduzir. **Publicada em 08/11/2026**
+   (entre 09:08 e 09:16, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #124. O registro entrou no
+   lote seguinte (o 066, só de registro, sem versão).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
