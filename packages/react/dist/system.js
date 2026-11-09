@@ -60,7 +60,12 @@ export function AureaProvider({ children, strings, direction = "ltr", spriteUrl 
     // GAR-14: os avisos presos a um botão vivem num gerenciador do MÓDULO (ver `avisosAncorados`), então
     // só o provedor de FORA monta o hospedeiro deles — com dois, cada aviso apareceria duas vezes.
     const deFora = !React.useContext(DentroDoProviderContext);
-    return _jsx(DentroDoProviderContext.Provider, { value: true, children: _jsx(StringsContext.Provider, { value: value, children: _jsx(SpriteContext.Provider, { value: spriteUrl, children: _jsx(PortalContext.Provider, { value: portalContainer, children: _jsx(ThemeContext.Provider, { value: tema, children: _jsx(DensityContext.Provider, { value: dens, children: _jsx(DirectionProvider, { direction: direction, children: _jsx(BaseToast.Provider, { timeout: TEMPO_DO_AVISO, children: _jsxs(BaseTooltip.Provider, { children: [children, _jsx(AureaToastViewport, { placement: toastPlacement }), deFora && _jsx(BaseToast.Provider, { toastManager: avisosAncorados, children: _jsx(AvisosAncorados, {}) })] }) }) }) }) }) }) }) }) });
+    // 2-C (a), 0.63.0: a REGIÃO DE AVISOS também é só do provedor de fora. Com um provedor dentro de outro, cada um montava
+    // a sua — duas regiões "Notifications" na página (o `landmark-unique` do axe). O de dentro não abre gerenciador nem
+    // região: o `useToast()` dele cai no gerenciador de fora, e o aviso aparece na pilha de fora (o `toastPlacement` do de
+    // dentro não vale).
+    const miolo = _jsxs(BaseTooltip.Provider, { children: [children, deFora && _jsx(AureaToastViewport, { placement: toastPlacement }), deFora && _jsx(BaseToast.Provider, { toastManager: avisosAncorados, children: _jsx(AvisosAncorados, {}) })] });
+    return _jsx(DentroDoProviderContext.Provider, { value: true, children: _jsx(StringsContext.Provider, { value: value, children: _jsx(SpriteContext.Provider, { value: spriteUrl, children: _jsx(PortalContext.Provider, { value: portalContainer, children: _jsx(ThemeContext.Provider, { value: tema, children: _jsx(DensityContext.Provider, { value: dens, children: _jsx(DirectionProvider, { direction: direction, children: deFora ? _jsx(BaseToast.Provider, { timeout: TEMPO_DO_AVISO, children: miolo }) : miolo }) }) }) }) }) }) });
 }
 // O esquema do sistema, para a preferência `"system"`. Sem `matchMedia` (servidor, jsdom), claro.
 const ESQUEMA_ESCURO = "(prefers-color-scheme: dark)";

@@ -122,6 +122,12 @@
       "type": "\"horizontal\" | \"vertical\"",
       "default": "\"horizontal\"",
       "description": "vertical stands the control up: each segment the full width, the track with the card radius (22)."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "default": "—",
+      "description": "Web only. Added to the track (the radio group, or the <nav> when every item has href)."
     }
   ],
   "axes": {

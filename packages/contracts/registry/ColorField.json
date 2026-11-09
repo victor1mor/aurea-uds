@@ -113,7 +113,7 @@
       "name": "colorSpace",
       "type": "\"hsb\" | \"hsl\" | \"rgb\"",
       "default": "\"hsb\"",
-      "description": "With channel: the space of hue and saturation."
+      "description": "With channel: the space of hue and saturation, hsb or hsl. \"rgb\" has no hue or saturation, so those channels fall back to hsb; red, green and blue are in rgb whatever this says. Without channel it does nothing: the code field reads hex, rgb(), hsl() and hsb()."
     },
     {
       "name": "swatch",

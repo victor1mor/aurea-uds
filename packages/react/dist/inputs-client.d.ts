@@ -316,7 +316,7 @@ export declare function OTPField({ length, value, defaultValue, onValueChange, m
     variant?: "primary" | "secondary";
 }): React.JSX.Element;
 export type SegmentedControlSelectedStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "dot" | "emphasis";
-export declare function SegmentedControl({ items, value, onChange, label, fullWidth, size, selectedStyle, wrap, orientation }: {
+export declare function SegmentedControl({ items, value, onChange, label, fullWidth, size, selectedStyle, wrap, orientation, className }: {
     items: Array<{
         value: string;
         label: ReactNode;
@@ -331,6 +331,7 @@ export declare function SegmentedControl({ items, value, onChange, label, fullWi
     selectedStyle?: SegmentedControlSelectedStyle;
     wrap?: boolean;
     orientation?: "horizontal" | "vertical";
+    className?: string;
 }): React.JSX.Element;
 export interface ComboboxOption {
     value: string;

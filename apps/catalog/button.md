@@ -17,7 +17,7 @@ import {Button} from "@aurea-uds/react";
 <Button variant="danger">Delete</Button>
 ```
 
-- Variants over two axes — appearance (solid, outline, ghost, link) and tone (neutral, brand, destructive) — plus secondary, the neutral fill with the brand-coloured label.
+- Variants over two axes — appearance (solid, outline, ghost, link) and tone (neutral, brand, destructive) — plus secondary, the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one).
 
 - Five sizes (xs / sm / md / lg / xl) from density tokens; the pill shape is invariant.
 
@@ -193,7 +193,7 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `variant` | `primary \| secondary \| tertiary \| outline \| ghost \| primary-outline \| primary-ghost \| danger \| danger-outline \| danger-ghost \| link \| link-primary \| link-danger \| nav \| danger-soft` | tertiary | A shortcut for the (appearance, tone) pair; the two-axis API is appearance + tone. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default). |
+| `variant` | `primary \| secondary \| tertiary \| outline \| ghost \| primary-outline \| primary-ghost \| danger \| danger-outline \| danger-ghost \| link \| link-primary \| link-danger \| nav \| danger-soft` | tertiary | A shortcut for the (appearance, tone) pair; the two-axis API is appearance + tone. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label (the default). |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | solid | How much weight the box carries. nav is an appearance of its own (a navigation item), not a tone. soft is the tone's light background with the tone's text (the reference's danger-soft). |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | What the colour means. Every tone works with every appearance, filled included — each has its own colour and text pair per theme. |
 | `size` | `xs \| sm \| md \| lg \| xl` | md | Height comes from the density tokens; the pill radius never changes. |

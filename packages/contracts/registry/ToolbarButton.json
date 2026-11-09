@@ -119,7 +119,7 @@
       "name": "variant",
       "type": "ButtonVariant | danger-soft",
       "default": "ghost",
-      "description": "Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the brand-coloured label; `tertiary` the neutral fill with the plain label (the default)."
+      "description": "Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label (the default)."
     },
     {
       "name": "appearance",

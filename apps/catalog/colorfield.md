@@ -179,7 +179,7 @@ const [colour, setColour] = useState("rgba(240, 194, 0, 0.8)");
 | `onValueChange` | `(value: string) => void` | — | Called when the code is applied (Enter or leaving the field) and on every key in a channel, with the hex — or "" when it is cleared. |
 | `onValueCommitted` | `(value: string) => void` | — | Called with onValueChange — the moment to save. |
 | `channel` | `ColorChannel` | — | One channel, as a number, in place of the code: hue, saturation, brightness, lightness, red, green, blue or alpha. |
-| `colorSpace` | `"hsb" \| "hsl" \| "rgb"` | "hsb" | With channel: the space of hue and saturation. |
+| `colorSpace` | `"hsb" \| "hsl" \| "rgb"` | "hsb" | With channel: the space of hue and saturation, hsb or hsl. "rgb" has no hue or saturation, so those channels fall back to hsb; red, green and blue are in rgb whatever this says. Without channel it does nothing: the code field reads hex, rgb(), hsl() and hsb(). |
 | `swatch` | `boolean` | true for the code, false for a channel | The swatch in front. |
 | `size` | `Responsive<sm \| md \| lg>` | md | The field height, the same scale as Input. |
 | `variant` | `"primary" \| "secondary"` | "primary" | secondary is the neutral background, for a field inside a card — the same as Input. |

@@ -58,7 +58,13 @@
       "name": "external",
       "type": "boolean",
       "default": "false",
-      "description": "Opens in a new tab (target=\"_blank\", rel=\"noopener noreferrer\") and shows the reference library's arrow, drawn by CSS mask."
+      "description": "Opens in a new tab (target=\"_blank\", rel=\"noopener noreferrer\") and shows the reference library's arrow, drawn by CSS mask. A screen reader hears that it opens in a new tab, in visually hidden text."
+    },
+    {
+      "name": "externalLabel",
+      "type": "string",
+      "default": "\"(opens in a new tab)\"",
+      "description": "What a screen reader hears after the text of an external link. Pass it in the app's language."
     },
     {
       "name": "disabled",

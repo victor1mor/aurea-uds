@@ -14,6 +14,7 @@ export default {
     "A real <a href> — the browser opens it in a new tab, copies it, and a search engine follows it.",
     "The underline appears on hover and while pressed, 4 below the text.",
     "external sets target=\"_blank\" with rel=\"noopener noreferrer\" and draws the arrow.",
+    "A screen reader hears \"(opens in a new tab)\" after the text of an external link; externalLabel sets the words.",
     "disabled renders without href and with aria-disabled.",
     "It wraps inside a paragraph, which a page zoomed to 200% needs.",
   ],

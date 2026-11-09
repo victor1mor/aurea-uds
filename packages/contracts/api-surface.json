@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 11,
     "aliasesLiterais": 119,
-    "propsDistintas": 408
+    "propsDistintas": 409
   },
   "aliases": {
     "ButtonVariant": {
@@ -7298,6 +7298,12 @@
                 "horizontal",
                 "vertical"
               ]
+            },
+            {
+              "name": "className",
+              "optional": true,
+              "type": "string",
+              "values": null
             }
           ]
         },
@@ -9029,6 +9035,12 @@
               "name": "external",
               "optional": true,
               "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "externalLabel",
+              "optional": true,
+              "type": "string",
               "values": null
             },
             {

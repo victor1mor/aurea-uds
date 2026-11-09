@@ -60,7 +60,12 @@ export function AureaProvider({children,strings,direction="ltr",spriteUrl=defaul
   // GAR-14: os avisos presos a um botão vivem num gerenciador do MÓDULO (ver `avisosAncorados`), então
   // só o provedor de FORA monta o hospedeiro deles — com dois, cada aviso apareceria duas vezes.
   const deFora=!React.useContext(DentroDoProviderContext);
-  return <DentroDoProviderContext.Provider value={true}><StringsContext.Provider value={value}><SpriteContext.Provider value={spriteUrl}><PortalContext.Provider value={portalContainer}><ThemeContext.Provider value={tema}><DensityContext.Provider value={dens}><DirectionProvider direction={direction}><BaseToast.Provider timeout={TEMPO_DO_AVISO}><BaseTooltip.Provider>{children}<AureaToastViewport placement={toastPlacement}/>{deFora&&<BaseToast.Provider toastManager={avisosAncorados}><AvisosAncorados/></BaseToast.Provider>}</BaseTooltip.Provider></BaseToast.Provider></DirectionProvider></DensityContext.Provider></ThemeContext.Provider></PortalContext.Provider></SpriteContext.Provider></StringsContext.Provider></DentroDoProviderContext.Provider>;
+  // 2-C (a), 0.63.0: a REGIÃO DE AVISOS também é só do provedor de fora. Com um provedor dentro de outro, cada um montava
+  // a sua — duas regiões "Notifications" na página (o `landmark-unique` do axe). O de dentro não abre gerenciador nem
+  // região: o `useToast()` dele cai no gerenciador de fora, e o aviso aparece na pilha de fora (o `toastPlacement` do de
+  // dentro não vale).
+  const miolo=<BaseTooltip.Provider>{children}{deFora&&<AureaToastViewport placement={toastPlacement}/>}{deFora&&<BaseToast.Provider toastManager={avisosAncorados}><AvisosAncorados/></BaseToast.Provider>}</BaseTooltip.Provider>;
+  return <DentroDoProviderContext.Provider value={true}><StringsContext.Provider value={value}><SpriteContext.Provider value={spriteUrl}><PortalContext.Provider value={portalContainer}><ThemeContext.Provider value={tema}><DensityContext.Provider value={dens}><DirectionProvider direction={direction}>{deFora?<BaseToast.Provider timeout={TEMPO_DO_AVISO}>{miolo}</BaseToast.Provider>:miolo}</DirectionProvider></DensityContext.Provider></ThemeContext.Provider></PortalContext.Provider></SpriteContext.Provider></StringsContext.Provider></DentroDoProviderContext.Provider>;
 }
 
 // O esquema do sistema, para a preferência `"system"`. Sem `matchMedia` (servidor, jsdom), claro.

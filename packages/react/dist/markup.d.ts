@@ -465,10 +465,12 @@ export declare function AspectRatio({ ratio, className, style, ...props }: HTMLA
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement>, RefAttributes<HTMLAnchorElement> {
     /** Abre noutra aba e mostra a seta. */
     external?: boolean;
+    /** O aviso que o leitor de tela ouve num link `external`. Padrão: "(opens in a new tab)". */
+    externalLabel?: string;
     /** Não navega: sai sem `href` e com `aria-disabled`. */
     disabled?: boolean;
 }
-export declare function Link({ external, disabled, href, target, rel, className, children, ...props }: LinkProps): React.JSX.Element;
+export declare function Link({ external, externalLabel, disabled, href, target, rel, className, children, ...props }: LinkProps): React.JSX.Element;
 export type ColorSwatchSize = "xs" | "sm" | "md" | "lg" | "xl";
 export interface ColorSwatchProps extends HTMLAttributes<HTMLSpanElement>, RefAttributes<HTMLSpanElement> {
     /** Qualquer cor do CSS: `#f0c200`, `oklch(…)`, `var(--primary)`. */

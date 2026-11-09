@@ -157,7 +157,7 @@
       "name": "toastPlacement",
       "type": "\"top\" | \"top-start\" | \"top-end\" | \"bottom\" | \"bottom-start\" | \"bottom-end\"",
       "default": "\"bottom\"",
-      "description": "Where the toasts of useToast() appear. bottom (the middle of the bottom edge) is the reference library's default. 460 wide from 640 up; the screen minus 16 on each side on a phone."
+      "description": "Where the toasts of useToast() appear. bottom (the middle of the bottom edge) is the reference library's default. 460 wide from 640 up; the screen minus 16 on each side on a phone. A provider inside another one has no toast region of its own: its toasts go to the outer provider's stack, at the outer placement."
     }
   ]
 }

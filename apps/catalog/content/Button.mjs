@@ -25,7 +25,7 @@ export default {
   install: 'import {Button} from "@aurea-uds/react";',
 
   features: [
-    "Variants over two axes — appearance (solid, outline, ghost, link) and tone (neutral, brand, destructive) — plus secondary, the neutral fill with the brand-coloured label.",
+    "Variants over two axes — appearance (solid, outline, ghost, link) and tone (neutral, brand, destructive) — plus secondary, the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one).",
     "Five sizes (xs / sm / md / lg / xl) from density tokens; the pill shape is invariant.",
     "type=\"button\" by default: a Cancel button inside a <form> never fires submit by accident.",
     "Loading shows a spinner and sets aria-busy; the label stays for context.",
