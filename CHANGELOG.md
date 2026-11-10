@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.63.0 (09/11/2026)
+
+- **A 0.63.0 publicada em 09/11/2026, entre 19:30 e 19:36** (Brasília, medido no npm), da junção do pedido #126
+  (`26063e24`): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo.
+  O CHANGELOG ([0.63.0] publicada) e o CLAUDE.md (a linha na tabela, o item 60 e a regra nova de juntar, na seção 4).
+- Não muda nenhum pacote publicado.
+
 ### A porta em inglês e a promessa que se prova (07/11/2026)
 
 - **Tudo o que é público passa ao inglês** (o Victor: *"tudo deve ser em inglês"*): o README (sem o processo interno —
@@ -290,6 +297,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.63.0] — 2026-11-09
+
+✅ **Publicada em 09/11/2026, entre 19:30 e 19:36 (Brasília, medido no npm: seis pacotes entre 19:30 e 19:31 e o `native`
+às 19:36), pelo terminal do Victor, da junção do pedido #126** (`26063e24`).
 
 **A Fase 1 do caminho até a 1.0, o primeiro lote** (09/11/2026, *"Pode montar"*): os defeitos que não mudam a aparência da
 tela comum, cada um conferido no código antes (a conferência inteira da Fase 1 está no documento de achados).

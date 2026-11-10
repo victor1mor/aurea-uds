@@ -221,6 +221,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.61.0` | As pendências antes da 1.0: os pontos de quebra em `em` ([ADR-0092](decisions/0092-os-pontos-de-quebra-seguem-a-fonte.md)), as outras sete peças do alto contraste, o `onClick` do item do `Header` e as molduras do site que crescem com o conteúdo ([ADR-0093](decisions/0093-a-moldura-cresce-com-o-conteudo.md)) — pedido #121. **Publicada em 07/11/2026** (entre 08:45 e 08:49, Brasília, medido no npm), pelo terminal do Victor. Leva a `0.60.0` e a `0.59.1` junto |
 | `0.62.0` | A logo nova (a estrela completa perto do nome em Sora ExtraBold) e as decisões da auditoria externa: `icon` no `IconButton` do nativo, o `Accordion` de lado que abre o primeiro item, o `MediaEmbed` só com `https:` e as fichas sem número de ADR — pedido #122. **Publicada em 07/11/2026** (entre 19:45 e 19:46, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #123 |
 | `0.62.1` | Os READMEs dos sete pacotes em inglês (o texto da página de cada um no npm), sem o processo interno e com os links completos do GitHub; nenhum código muda — pedido #124. **Publicada em 08/11/2026** (entre 09:08 e 09:16, Brasília, medido no npm), pelo terminal do Victor |
+| `0.63.0` | O primeiro lote da Fase 1, sem mudança de aparência: o `Link external` diz ao leitor de tela que abre noutra aba (`externalLabel`), uma região de avisos só com provedores aninhados, o `SegmentedControl` com `className` e as fichas que mentiam — pedido #126. **Publicada em 09/11/2026** (entre 19:30 e 19:36, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -879,6 +880,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    (entre 09:08 e 09:16, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #124. O registro entrou no
    lote seguinte (o 066, só de registro, sem versão).
 
+60. **`0.63.0`, o primeiro lote da Fase 1, feita em 09/11/2026** (*"Pode montar"*) — os consertos do caminho até a 1.0
+   que não mudam a tela: o `Link external` com o aviso "(opens in a new tab)" em texto escondido e a prop `externalLabel`
+   (S-13); o `AureaProvider` de dentro sem a sua região de avisos; o `SegmentedControl` com `className`; e as fichas que
+   mentiam (o texto do `Button`, do `IconButton` e do `ToolbarButton`, o `colorSpace` do `ColorField`, os motores no
+   `REFERENCES.md`). O papel da `Table` e do `KPI` do nativo ficou fora: na web o `react-native-web` não dá papel e
+   ignora o nome, e o papel certo pede medida com leitor de tela. ⚠ **As lições:** (1) o jsdom não lê o CSS e cola o
+   texto escondido sem espaço ("Docs(opens…") — o nome acessível se prova no NAVEGADOR, nos três; (2) das 24 fotos que a
+   CI regera, só as que mudam nos PIXELS entram (`linux-cmp.py`): as outras diferem só na codificação. **Publicada em
+   09/11/2026** (entre 19:30 e 19:36, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #126 —
+   juntada pela junção automática, a primeira com a autorização de juntar de 09/11. O registro entrou no lote seguinte
+   (o 068, só de registro, sem versão).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -921,8 +934,8 @@ continua só com ele (o npm pede o segundo fator).
    verde não é aprovação.
 6. Levantar a versão nos **nove** arquivos (`package.json` da raiz, os sete pacotes e
    `packages/contracts/aurea.contract.json`), com a seção no `CHANGELOG.md`.
-7. **Pedir o "pode"**, empurrar a branch e abrir o pedido de junção para o `main`. Quem junta e
-   publica é o Victor.
+7. **Pedir o "pode"**, empurrar a branch e abrir o pedido de junção para o `main`. ~~Quem junta e
+   publica é o Victor.~~ → A sessão liga o Auto-fix e a junção automática (seção 4); quem publica é o Victor.
 8. Depois que ele publicar, anotar aqui e no `CHANGELOG.md` — e escrever a **nota de versão em inglês**,
    `apps/catalog/content/releases/vX-Y-Z.md` (a área Releases do site, decisão do Victor de 19/10/2026), com a data do
    CHANGELOG. Só o que muda para quem usa; nada do processo, de pessoa ou de app. Versão que sai dentro de outra vira
@@ -980,6 +993,11 @@ no git.
     Victor, 05/11/2026, 21:00 (*"aceito"*, à proposta "só em pedido cujo conteúdo você já aprovou olhando"). Junção
     do merge comum (`merge`), como as de antes. ⚠ Juntar no `main` PUBLICA O SITE: pedido com qualquer coisa que
     ele ainda não viu continua perguntando. **Publicar no npm continua só dele.**
+    → **A SESSÃO JUNTA, de agora em diante** (ordem do Victor, 09/11/2026, por volta das 16:20, Brasília: *"você pode
+    juntar tambem eu autorizo de agora em diante"*): no pedido que ela abrir, liga a junção automática (`merge`) logo
+    depois do Auto-fix, e o GitHub junta quando a CI fica verde. ⚠ Juntar continua PUBLICANDO O SITE — por isso a
+    aparência é aprovada pelo Victor, olhando, ANTES do pedido (seção 3); a autorização de juntar não troca isso.
+    **Publicar no npm continua só dele.**
   - **O Auto-fix (consertar a CI que reprovou) liga sempre**, em todo pedido que a sessão abrir, sem perguntar
     (o Victor, 05/11/2026: *"você sempre pode Liga o Auto-fix para consertar a CI se ela reprovar! qualquer que
     seja"*).
@@ -1318,8 +1336,8 @@ sessão não chega à outra; este arquivo chega. O que já estava nas seções a
   `git status -sb` igual ao `origin/main` e `dist/` montado. Trabalho de lote vai numa branch ou numa
   cópia (worktree).
 - **Com o Victor ausente** (06/10/2026): decidir pelo padrão recomendado e seguir (commit, envio de
-  branch, pedido de junção, conserto da CI), anotando cada decisão. Continuam dele: juntar, publicar
-  no npm e aprovar aparência. Trava que bloquear: pular, anotar e seguir.
+  branch, pedido de junção, conserto da CI), anotando cada decisão. Continuam dele: ~~juntar,~~ publicar
+  no npm e aprovar aparência (juntar passou à sessão em 09/11/2026, seção 4). Trava que bloquear: pular, anotar e seguir.
 - **Não arquivar conversas:** os arquivamentos automáticos da conta estão desligados por ordem dele
   (ao fechar o pedido e por inatividade). Nunca religar; ao ligar junção automática num pedido,
   conferir que o arquivamento ao fechar está desligado.
