@@ -457,6 +457,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.64.0](https://aureauds.dev/release-v0-64-0.md): Checkbox draws the indeterminate state — the "select all" of a table with some rows selected — and takes an indeterminate prop.
 - [v0.63.0](https://aureauds.dev/release-v0-63-0.md): External links tell screen readers they open in a new tab; one toast region with nested providers; className on SegmentedControl.
 - [v0.62.1](https://aureauds.dev/release-v0-62-1.md): Every package README is now in English.
 - [v0.62.0](https://aureauds.dev/release-v0-62-0.md): The new Aurea logo, an icon prop on the native IconButton, a horizontal Accordion that opens its first item, and https-only embeds.

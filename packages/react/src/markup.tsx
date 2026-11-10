@@ -797,9 +797,24 @@ export const Textarea=forwardRef<HTMLTextAreaElement,TextareaProps>(function Tex
 // `variant="pill"` (o site B, o "Mark as done" — aprovado pela bancada em 01/11/2026, o item 4): a cápsula em volta, o alvo
 // inteiro, de 44 (`--target-min`, a caixa 24) ou, com `size` sm/md, de 36 (`--control-h-md`, a caixa 20). `tone="success"`
 // pinta a marcada de "feito" (a cápsula no verde a 18%, a letra e a caixa no verde). Sem `pill`, a caixa de sempre.
-export function Checkbox({label,labelHidden,description,size,variant="default",tone,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;size?:Responsive<FieldSize>;variant?:"default"|"pill";tone?:"success"}){
-if(variant==="pill")return <label className={cx("checkbox","checkbox-pill",(size==="sm"||size==="md")&&"checkbox-pill-md",className)} data-tone={tone}><input type="checkbox" {...props}/><span className="control-mark"/><span className={labelHidden?"sr-only":undefined}>{label}</span></label>;
-return <label className={cx("checkbox",labelHidden&&"checkbox-bare",className)}><input type="checkbox" {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/><span className={labelHidden?"sr-only":undefined}><strong>{label}</strong>{description&&<><br/><span className="muted">{description}</span></>}</span></label>}
+// D-00 (0.64.0): o MEIO-MARCADO não é atributo de HTML — é a propriedade `indeterminate` do campo, que só existe no
+// navegador (é ela que faz o leitor de tela dizer "misto"). Um ref de função a liga sem hook — esta marcação continua
+// pura — e repassa o elemento ao `ref` do app. Sem a prop, o `ref` do app passa como veio. É o que a `DataGrid` já fazia
+// no "selecionar todos"; a referência chama a prop do mesmo nome.
+function refDoMeio(indeterminate:boolean|undefined,ref:React.Ref<HTMLInputElement>|undefined):React.Ref<HTMLInputElement>|undefined{
+  if(indeterminate==null)return ref;
+  return (el:HTMLInputElement|null)=>{
+    if(el)el.indeterminate=indeterminate;
+    if(typeof ref==="function")ref(el);else if(ref)(ref as React.RefObject<HTMLInputElement|null>).current=el;
+  };
+}
+export function Checkbox({label,labelHidden,description,size,variant="default",tone,indeterminate,ref,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;size?:Responsive<FieldSize>;variant?:"default"|"pill";tone?:"success";
+  /** O meio-marcado: o "selecionar todos" com só parte escolhida. Desenha o tracinho e o leitor de tela diz "misto".
+   *  O app controla: o clique marca ou desmarca o campo, e o app decide se ele continua meio-marcado. */
+  indeterminate?:boolean}){
+const campoRef=refDoMeio(indeterminate,ref);
+if(variant==="pill")return <label className={cx("checkbox","checkbox-pill",(size==="sm"||size==="md")&&"checkbox-pill-md",className)} data-tone={tone}><input type="checkbox" ref={campoRef} {...props}/><span className="control-mark"/><span className={labelHidden?"sr-only":undefined}>{label}</span></label>;
+return <label className={cx("checkbox",labelHidden&&"checkbox-bare",className)}><input type="checkbox" ref={campoRef} {...props}/><span className={cx("control-mark",peleDoEixo("control-mark",size))}/><span className={labelHidden?"sr-only":undefined}><strong>{label}</strong>{description&&<><br/><span className="muted">{description}</span></>}</span></label>}
 // `description` no `Radio` e no `Switch` (15/10/2026, a referência tem nos dois): a linha apagada embaixo do nome, do
 // mesmo jeito do `Checkbox`. Sem ela, a marcação é a de sempre.
 const comDescricao=(label:ReactNode,description:ReactNode)=>description?<span><strong>{label}</strong><br/><span className="muted">{description}</span></span>:label;

@@ -19,7 +19,7 @@ import {Checkbox} from "@aurea-uds/react";
 
 - labelHidden keeps the name for the screen reader and takes it off screen — for a selection column.
 
-- indeterminate is supported by the native input for a partially selected group.
+- indeterminate draws a dash for a group with some selected, and a screen reader hears "mixed".
 
 - Checkbox waits for submit; Switch applies now. Pick by the moment of effect, not by the look.
 
@@ -41,6 +41,20 @@ A table selection column: the per-row name stays for the reader, off screen, so 
 
 ```tsx
 <Checkbox label="Select Analyst" labelHidden />
+```
+
+### Indeterminate
+
+Some, not all: the box shows a dash and a screen reader hears "mixed". The app decides — a click checks or clears it, and the app says whether it stays indeterminate.
+
+```tsx
+const rows = ["Ingest", "Embed", "Index"];
+const [selected, setSelected] = useState(["Ingest"]);
+const all = selected.length === rows.length;
+
+<Checkbox label="Select all" checked={all}
+  indeterminate={selected.length > 0 && !all}
+  onChange={() => setSelected(all ? [] : rows)} />
 ```
 
 ### Disabled
@@ -79,7 +93,8 @@ variant="pill" puts a capsule around the box and the label — the whole capsule
 | `label` | `ReactNode` | — | REQUIRED, and inside the <label>: the whole row is the target, not just the 16px box. |
 | `labelHidden` | `boolean` | false | Keeps the label in the DOM but out of sight — for a table selection column. |
 | `description` | `ReactNode` | — | Second line under the label, for the consequence of ticking it. |
-| `checked / defaultChecked` | `boolean` | — | Controlled or uncontrolled. For a third state use indeterminate on the input. |
+| `checked / defaultChecked` | `boolean` | — | Controlled or uncontrolled. For the third state, the one between, use indeterminate. |
+| `indeterminate` | `boolean` | false | Some, not all — the "select all" of a list with part of it selected. The box shows a dash in the checked colour, and a screen reader hears "mixed" (the input's indeterminate property, set by the component). The app controls it: a click checks or clears the box, and the app says whether it stays indeterminate. Web only. |
 | `size` | `Responsive<FieldSize>` | md | The system's size step. It is not the HTML size attribute, which does not exist on a checkbox anyway. |
 | `variant` | `"default" \| "pill"` | "default" | pill puts a capsule around the box and the label (the --fill-2 fill, weight 600): the whole capsule is the target, 44 tall (--target-min, box 24), or 36 with size="sm" or "md" (--control-h-md, box 20). The focus ring goes around the capsule. |
 | `tone` | `"success"` | — | With variant="pill", a checked capsule turns to done: the capsule green at 18%, the label and the box in --success-400. |

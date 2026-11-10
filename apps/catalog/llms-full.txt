@@ -4166,7 +4166,7 @@ import {Checkbox} from "@aurea-uds/react";
 
 - labelHidden keeps the name for the screen reader and takes it off screen — for a selection column.
 
-- indeterminate is supported by the native input for a partially selected group.
+- indeterminate draws a dash for a group with some selected, and a screen reader hears "mixed".
 
 - Checkbox waits for submit; Switch applies now. Pick by the moment of effect, not by the look.
 
@@ -4188,6 +4188,20 @@ A table selection column: the per-row name stays for the reader, off screen, so 
 
 ```tsx
 <Checkbox label="Select Analyst" labelHidden />
+```
+
+### Indeterminate
+
+Some, not all: the box shows a dash and a screen reader hears "mixed". The app decides — a click checks or clears it, and the app says whether it stays indeterminate.
+
+```tsx
+const rows = ["Ingest", "Embed", "Index"];
+const [selected, setSelected] = useState(["Ingest"]);
+const all = selected.length === rows.length;
+
+<Checkbox label="Select all" checked={all}
+  indeterminate={selected.length > 0 && !all}
+  onChange={() => setSelected(all ? [] : rows)} />
 ```
 
 ### Disabled
@@ -4226,7 +4240,8 @@ variant="pill" puts a capsule around the box and the label — the whole capsule
 | `label` | `ReactNode` | — | REQUIRED, and inside the <label>: the whole row is the target, not just the 16px box. |
 | `labelHidden` | `boolean` | false | Keeps the label in the DOM but out of sight — for a table selection column. |
 | `description` | `ReactNode` | — | Second line under the label, for the consequence of ticking it. |
-| `checked / defaultChecked` | `boolean` | — | Controlled or uncontrolled. For a third state use indeterminate on the input. |
+| `checked / defaultChecked` | `boolean` | — | Controlled or uncontrolled. For the third state, the one between, use indeterminate. |
+| `indeterminate` | `boolean` | false | Some, not all — the "select all" of a list with part of it selected. The box shows a dash in the checked colour, and a screen reader hears "mixed" (the input's indeterminate property, set by the component). The app controls it: a click checks or clears the box, and the app says whether it stays indeterminate. Web only. |
 | `size` | `Responsive<FieldSize>` | md | The system's size step. It is not the HTML size attribute, which does not exist on a checkbox anyway. |
 | `variant` | `"default" \| "pill"` | "default" | pill puts a capsule around the box and the label (the --fill-2 fill, weight 600): the whole capsule is the target, 44 tall (--target-min, box 24), or 36 with size="sm" or "md" (--control-h-md, box 20). The focus ring goes around the capsule. |
 | `tone` | `"success"` | — | With variant="pill", a checked capsule turns to done: the capsule green at 18%, the label and the box in --success-400. |
@@ -5696,7 +5711,7 @@ stickyHeader="page" keeps the header under whatever stays fixed at the top of th
 | `data` | `T[]` | — | The rows. Sorted, filtered and paged in memory by default; pass the `manual*` flags when the server already did that work and `data` is a single page. |
 | `columns` | `Array<ColumnDef<T, any>>` | — | TanStack Table column definitions, re-exported from this subpath so you do not add the dependency yourself. |
 | `getRowId` | `(row: T, index: number) => string` | — | Pass it whenever `selectable` is on. Without a stable id TanStack keys selection by INDEX, so replacing or reordering `data` makes a checkbox follow the position and tick a different record. The grid covers the safe half on its own — it clears the selection when `data` changes — but only an id makes selection survive the change. |
-| `selectable` | `boolean` | false | Adds the checkbox column, header included. |
+| `selectable` | `boolean` | false | Adds the checkbox column, header included. The header box selects every row; with some rows selected it shows the indeterminate dash. |
 | `onSelectionChange` | `(rows: T[]) => void` | — | Receives the ORIGINAL rows, taken before filtering and paging — so a selection does not vanish because you typed in the filter. Under `manualPagination` it can only hand you rows from the page in memory; use `onRowSelectionChange` there, which gives ids. |
 | `sorting` | `SortingState` | — | Controlled sort. Passing it hands the decision to you: the grid stops moving on its own and only reports through `onSortingChange`, so you can validate, confirm or wait for a request before letting it change. |
 | `onSortingChange` | `(sorting: SortingState) => void` | — | Fires on every header click, controlled or not. Alone it does not make the grid controlled — `sorting` does. |
@@ -9230,7 +9245,7 @@ selectedStyle (ADR-0084): current — the raised capsule with the yellow line, t
 | `value` | `string` | — | The selected value. Controlled by design — one of many always has an owner. |
 | `onChange` | `(v: string) => void` | — | Fires with the new value. Not needed when the items are links (href). |
 | `label` | `string` | — | Accessible name of the set. |
-| `fullWidth` | `boolean` | false | Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control scrolls, as without the prop. The name the reference library gives this prop on its toggle-button group; the same prop on native. |
+| `fullWidth` | `boolean` | false | Fills the row: each segment grows from its own label and never shrinks below it, so no label wraps. When the options do not fit, the control runs past its container, as without the prop; wrap breaks it onto more lines. The name the reference library gives this prop on its toggle-button group; the same prop on native. |
 | `size` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl"` | md | sm (34) is the low capsule of the reference's documentation switch: 24 tabs, 14 text. md (40) is the default. lg (44) and xl (48) are the tall capsules — the Web \| Native switch and the area switch of this site. Web only. 2xl: 48 segments (--space-12), 20 icons, 16 letters. |
 | `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot" \| "emphasis"` | "current" | The colour of the selected segment: current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump) or emphasis (the raised capsule with the emphasis letter — yellow in the dark theme, the text colour in the light one — and no line). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |
 | `items[].icon` | `IconName` | — | An icon before the label (16, 8 from it); the selected item switches to the filled form by itself. |
@@ -18649,6 +18664,40 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-64-0.html">
+# v0.64.0
+
+Checkbox draws the indeterminate state — the "select all" of a table with some rows selected — and takes an indeterminate prop.
+
+## Added
+
+- **`Checkbox` `indeterminate`**: some, not all — the "select all" of a list with part of it selected. The box shows a dash and a screen reader hears "mixed". Your app controls it: a click checks or clears the box, and your app says whether it stays indeterminate. It also works with `variant="pill"`. Web only.
+
+## Fixed
+
+- **The indeterminate state is drawn.** Before, it looked exactly like an unchecked box, so the "select all" of a `DataGrid` with some rows selected looked empty. Now it has the checked fill, with a dash where the check mark goes. The dash is drawn the same way as the check mark, at the same thickness, so the row does not move when the state changes. It also shows in Windows high contrast (forced colours).
+
+## Documentation
+
+- `SegmentedControl`: when the options do not fit, the control runs past its container. It does not scroll, as the docs used to say. Use `wrap` to break it onto more lines.
+- `DataGrid`: the header box shows the indeterminate dash when some rows are selected.
+- `Checkbox`: a new "Indeterminate" example, with a working "Select all".
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.64.0 @aurea-uds/core@0.64.0 @aurea-uds/fonts@0.64.0 @aurea-uds/icons@0.64.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.64.0
 ```
 </page>
 

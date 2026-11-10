@@ -7,7 +7,7 @@
     "componentes": 145,
     "hooks": 11,
     "aliasesLiterais": 119,
-    "propsDistintas": 409
+    "propsDistintas": 410
   },
   "aliases": {
     "ButtonVariant": {
@@ -8238,6 +8238,12 @@
               "values": [
                 "success"
               ]
+            },
+            {
+              "name": "indeterminate",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         },

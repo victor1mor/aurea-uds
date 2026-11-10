@@ -110,7 +110,7 @@
       "name": "selectable",
       "type": "boolean",
       "default": "false",
-      "description": "Adds the checkbox column, header included."
+      "description": "Adds the checkbox column, header included. The header box selects every row; with some rows selected it shows the indeterminate dash."
     },
     {
       "name": "onSelectionChange",
