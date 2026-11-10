@@ -420,13 +420,16 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
     variant?: FieldVariant;
 }
 export declare const Textarea: React.ForwardRefExoticComponent<Omit<TextareaProps, "ref"> & RefAttributes<HTMLTextAreaElement>>;
-export declare function Checkbox({ label, labelHidden, description, size, variant, tone, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
+export declare function Checkbox({ label, labelHidden, description, size, variant, tone, indeterminate, ref, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
     label: ReactNode;
     labelHidden?: boolean;
     description?: ReactNode;
     size?: Responsive<FieldSize>;
     variant?: "default" | "pill";
     tone?: "success";
+    /** O meio-marcado: o "selecionar todos" com só parte escolhida. Desenha o tracinho e o leitor de tela diz "misto".
+     *  O app controla: o clique marca ou desmarca o campo, e o app decide se ele continua meio-marcado. */
+    indeterminate?: boolean;
 }): React.JSX.Element;
 export declare function Radio({ label, labelHidden, description, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
     label: ReactNode;

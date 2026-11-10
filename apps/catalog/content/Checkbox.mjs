@@ -1,4 +1,4 @@
-import {createElement as h} from "react";
+import {createElement as h, useState} from "react";
 import {Checkbox} from "../../../packages/react/dist/index.js";
 
 // `maxWidth`, e não `width` (21/10/2026): a caixa encolhe até a peça e o painel a centraliza, como na referência. Com
@@ -6,6 +6,19 @@ import {Checkbox} from "../../../packages/react/dist/index.js";
 const stack = {display: "grid", gap: "var(--space-3)", maxWidth: "min(460px, 100%)"};
 // Os três tamanhos, cada um com o nome próprio: o código e o desenho saem desta lista.
 const TAMANHOS = [["sm", "Compact rows"], ["md", "Comfortable rows"], ["lg", "Spacious rows"]];
+
+// D-00 (0.64.0): o "selecionar todos" que funciona — meio-marcado quando só parte está escolhida.
+const LINHAS = ["Ingest", "Embed", "Index"];
+function SelecionarTodos() {
+  const [marcadas, setMarcadas] = useState(["Ingest"]);
+  const todas = marcadas.length === LINHAS.length;
+  return h("div", {style: stack},
+    h(Checkbox, {label: "Select all", checked: todas, indeterminate: marcadas.length > 0 && !todas,
+      onChange: () => setMarcadas(todas ? [] : LINHAS)}),
+    ...LINHAS.map((l) => h("div", {key: l, style: {paddingInlineStart: "var(--space-6)"}},
+      h(Checkbox, {label: l, checked: marcadas.includes(l),
+        onChange: () => setMarcadas((m) => (m.includes(l) ? m.filter((x) => x !== l) : [...m, l]))}))));
+}
 
 export default {
   description:
@@ -19,7 +32,7 @@ export default {
     "The label is part of the target: clicking the words toggles it, which matters on a phone.",
     "description adds a second line for the consequence, without inflating the label.",
     "labelHidden keeps the name for the screen reader and takes it off screen — for a selection column.",
-    "indeterminate is supported by the native input for a partially selected group.",
+    "indeterminate draws a dash for a group with some selected, and a screen reader hears \"mixed\".",
     "Checkbox waits for submit; Switch applies now. Pick by the moment of effect, not by the look.",
   ],
 
@@ -55,6 +68,19 @@ export default {
         h(Checkbox, {label: "Select row one", labelHidden: true, defaultChecked: true}),
         h(Checkbox, {label: "Select row two", labelHidden: true}),
         h(Checkbox, {label: "Select row three", labelHidden: true})),
+    },
+    {
+      title: "Indeterminate",
+      description: "Some, not all: the box shows a dash and a screen reader hears \"mixed\". The app decides — a click " +
+        "checks or clears it, and the app says whether it stays indeterminate.",
+      code: `const rows = ["Ingest", "Embed", "Index"];
+const [selected, setSelected] = useState(["Ingest"]);
+const all = selected.length === rows.length;
+
+<Checkbox label="Select all" checked={all}
+  indeterminate={selected.length > 0 && !all}
+  onChange={() => setSelected(all ? [] : rows)} />`,
+      render: () => h(SelecionarTodos),
     },
     {
       title: "Disabled",

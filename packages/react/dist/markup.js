@@ -255,10 +255,27 @@ export const Textarea = forwardRef(function Textarea({ className, size, variant,
 // `variant="pill"` (o site B, o "Mark as done" — aprovado pela bancada em 01/11/2026, o item 4): a cápsula em volta, o alvo
 // inteiro, de 44 (`--target-min`, a caixa 24) ou, com `size` sm/md, de 36 (`--control-h-md`, a caixa 20). `tone="success"`
 // pinta a marcada de "feito" (a cápsula no verde a 18%, a letra e a caixa no verde). Sem `pill`, a caixa de sempre.
-export function Checkbox({ label, labelHidden, description, size, variant = "default", tone, className, ...props }) {
+// D-00 (0.64.0): o MEIO-MARCADO não é atributo de HTML — é a propriedade `indeterminate` do campo, que só existe no
+// navegador (é ela que faz o leitor de tela dizer "misto"). Um ref de função a liga sem hook — esta marcação continua
+// pura — e repassa o elemento ao `ref` do app. Sem a prop, o `ref` do app passa como veio. É o que a `DataGrid` já fazia
+// no "selecionar todos"; a referência chama a prop do mesmo nome.
+function refDoMeio(indeterminate, ref) {
+    if (indeterminate == null)
+        return ref;
+    return (el) => {
+        if (el)
+            el.indeterminate = indeterminate;
+        if (typeof ref === "function")
+            ref(el);
+        else if (ref)
+            ref.current = el;
+    };
+}
+export function Checkbox({ label, labelHidden, description, size, variant = "default", tone, indeterminate, ref, className, ...props }) {
+    const campoRef = refDoMeio(indeterminate, ref);
     if (variant === "pill")
-        return _jsxs("label", { className: cx("checkbox", "checkbox-pill", (size === "sm" || size === "md") && "checkbox-pill-md", className), "data-tone": tone, children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: "control-mark" }), _jsx("span", { className: labelHidden ? "sr-only" : undefined, children: label })] });
-    return _jsxs("label", { className: cx("checkbox", labelHidden && "checkbox-bare", className), children: [_jsx("input", { type: "checkbox", ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), _jsxs("span", { className: labelHidden ? "sr-only" : undefined, children: [_jsx("strong", { children: label }), description && _jsxs(_Fragment, { children: [_jsx("br", {}), _jsx("span", { className: "muted", children: description })] })] })] });
+        return _jsxs("label", { className: cx("checkbox", "checkbox-pill", (size === "sm" || size === "md") && "checkbox-pill-md", className), "data-tone": tone, children: [_jsx("input", { type: "checkbox", ref: campoRef, ...props }), _jsx("span", { className: "control-mark" }), _jsx("span", { className: labelHidden ? "sr-only" : undefined, children: label })] });
+    return _jsxs("label", { className: cx("checkbox", labelHidden && "checkbox-bare", className), children: [_jsx("input", { type: "checkbox", ref: campoRef, ...props }), _jsx("span", { className: cx("control-mark", peleDoEixo("control-mark", size)) }), _jsxs("span", { className: labelHidden ? "sr-only" : undefined, children: [_jsx("strong", { children: label }), description && _jsxs(_Fragment, { children: [_jsx("br", {}), _jsx("span", { className: "muted", children: description })] })] })] });
 }
 // `description` no `Radio` e no `Switch` (15/10/2026, a referência tem nos dois): a linha apagada embaixo do nome, do
 // mesmo jeito do `Checkbox`. Sem ela, a marcação é a de sempre.

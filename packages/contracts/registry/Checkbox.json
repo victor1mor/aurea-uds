@@ -24,6 +24,7 @@
   "states": [
     "default",
     "checked",
+    "indeterminate",
     "focus",
     "disabled",
     "invalid"
@@ -87,7 +88,13 @@
       "name": "checked / defaultChecked",
       "type": "boolean",
       "default": "—",
-      "description": "Controlled or uncontrolled. For a third state use indeterminate on the input."
+      "description": "Controlled or uncontrolled. For the third state, the one between, use indeterminate."
+    },
+    {
+      "name": "indeterminate",
+      "type": "boolean",
+      "default": "false",
+      "description": "Some, not all — the \"select all\" of a list with part of it selected. The box shows a dash in the checked colour, and a screen reader hears \"mixed\" (the input's indeterminate property, set by the component). The app controls it: a click checks or clears the box, and the app says whether it stays indeterminate. Web only."
     },
     {
       "name": "size",

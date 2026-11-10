@@ -17,13 +17,6 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-### O registro da 0.63.0 (09/11/2026)
-
-- **A 0.63.0 publicada em 09/11/2026, entre 19:30 e 19:36** (Brasília, medido no npm), da junção do pedido #126
-  (`26063e24`): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo.
-  O CHANGELOG ([0.63.0] publicada) e o CLAUDE.md (a linha na tabela, o item 60 e a regra nova de juntar, na seção 4).
-- Não muda nenhum pacote publicado.
-
 ### A porta em inglês e a promessa que se prova (07/11/2026)
 
 - **Tudo o que é público passa ao inglês** (o Victor: *"tudo deve ser em inglês"*): o README (sem o processo interno —
@@ -292,6 +285,52 @@ como deveria funcionar"*.
 - **A trava (check 45 do `validate.py`)**: o site só importa a Aurea, o próprio repositório e as
   dependências que o `@aurea-uds/react` declara; e nenhuma página puxa script, folha, imagem ou
   moldura de outro endereço. O `montar-site.mjs` confere a segunda metade de novo na publicação.
+- Não muda nenhum pacote publicado.
+
+---
+
+## [0.64.0] — 2026-11-10
+
+**O meio-marcado do `Checkbox`** (D-00, a Fase 1 do caminho até a 1.0). O "selecionar todos" da `DataGrid` com só parte
+das linhas escolhida aparecia VAZIO, igual a "nada escolhido" — o leitor de tela já ouvia "misto", mas quem enxerga não
+via. O desenho é o do Victor (a parte 3, Checkbox nº 1) com a medida da referência: a forma "B" da bancada, aprovada
+olhando (*"Sim, B e as três"*, 10/11/2026).
+
+### Novo
+
+- **`Checkbox indeterminate`**: o meio-marcado no `Checkbox` solto, como a prop da referência. A peça liga a propriedade
+  `indeterminate` do campo (é ela que faz o leitor de tela dizer "misto"), sem hook — a marcação continua pura — e
+  repassa o `ref` do app. O app controla: o clique marca ou desmarca, e o app diz se continua meio-marcado. Vale também
+  na cápsula (`variant="pill"`). Só na web: a referência do celular não tem o estado, e o nativo fica para depois (decisão
+  do Victor).
+
+### Corrigido
+
+- **O meio-marcado se desenha**: o fundo é o do marcado (`--control-selected`) e, no lugar do visto, um tracinho
+  desenhado DO MESMO JEITO do visto — a máscara de 16, traço 2, pontas redondas, de 4 a 12 (o comprimento da referência).
+  A caixa não muda de tamanho: um tracinho em caixa própria (a forma "A" da bancada) mudava a linha de base, e a linha
+  pulava 2 ao trocar de estado. Vale onde o meio-marcado já existia — o "selecionar todos" da `DataGrid` — e no modo de
+  cores forçadas do Windows (o tracinho na cor do texto, como o visto). A Ember recebe (o Victor: a mesma cor do
+  marcado, que ela já tem).
+
+### Documentação
+
+- **`SegmentedControl`**: a ficha do `fullWidth` dizia que o controle ROLA quando as opções não cabem — e ele não rola
+  (o `.segmented` não tem regra de `overflow`; medido em 10/11/2026, o trilho de 291 num lugar de 200). Agora diz que
+  ele passa do lugar, e que o `wrap` o quebra em mais linhas. Nada muda na tela.
+- **`DataGrid`**: a ficha volta a dizer que o "selecionar todos" mostra o tracinho com parte das linhas escolhida (a
+  0.37.0 tinha tirado a promessa, porque o desenho faltava).
+- **`Checkbox`**: o estado `indeterminate` na ficha, e o exemplo "Indeterminate" no site, com o "selecionar todos" que
+  funciona.
+
+Quem cobra: `tests/unit/meio-marcado.test.tsx` e `tests/visual/meio-marcado.spec.ts` (o fundo do marcado, o tracinho, a
+linha que não pula e o "selecionar todos"), provados contra o código de antes.
+
+### O registro da 0.63.0 (09/11/2026)
+
+- **A 0.63.0 publicada em 09/11/2026, entre 19:30 e 19:36** (Brasília, medido no npm), da junção do pedido #126
+  (`26063e24`): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo.
+  O CHANGELOG ([0.63.0] publicada) e o CLAUDE.md (a linha na tabela, o item 60 e a regra nova de juntar, na seção 4).
 - Não muda nenhum pacote publicado.
 
 ---

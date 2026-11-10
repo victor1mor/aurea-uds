@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.64.0
+
+November 10, 2026
+
+Checkbox draws the indeterminate state — the "select all" of a table with some rows selected — and takes an indeterminate prop.
+
+[Read full release notes →](https://aureauds.dev/release-v0-64-0.md)
+
 ## v0.63.0
 
 November 9, 2026

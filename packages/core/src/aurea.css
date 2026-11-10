@@ -1921,14 +1921,21 @@ img,svg { display:block; }
 .control-mark-sm { --step-h:var(--control-h-sm); }
 .control-mark-lg { --step-h:var(--control-h-lg); }
 .checkbox .control-mark { border-radius:var(--radius-xs); } .radio .control-mark { border-radius:50%; }
-.checkbox input:checked + .control-mark { background:var(--control-selected); border-color:transparent; color:var(--control-selected-foreground); }
+.checkbox input:is(:checked,:indeterminate) + .control-mark { background:var(--control-selected); border-color:transparent; color:var(--control-selected-foreground); }
 .checkbox input:focus-visible + .control-mark,.radio input:focus-visible + .control-mark,.switch input:focus-visible + .switch-track { outline:var(--focus-width) solid var(--focus-strong); outline-offset:0; border-color:transparent; }
 /* Cheia com a cor do foco (marcada, ligada), a peça volta ao VÃO (ADR-0059): colado, o anel sumiria
    no recheio, como no botão amarelo. A borda dela já é da cor do recheio, então continua uma linha
    só — é o que a referência principal faz no checkbox e no switch. Inválida, a borda é vermelha e o
    anel volta a colar (vermelho, pela regra do inválido). */
-.checkbox input:focus-visible:checked:not([aria-invalid="true"],:user-invalid) + .control-mark,.switch input:focus-visible:checked:not([aria-invalid="true"],:user-invalid) + .switch-track { outline-offset:var(--focus-offset); }
+.checkbox input:focus-visible:is(:checked,:indeterminate):not([aria-invalid="true"],:user-invalid) + .control-mark,.switch input:focus-visible:checked:not([aria-invalid="true"],:user-invalid) + .switch-track { outline-offset:var(--focus-offset); }
 .checkbox input:checked + .control-mark:after { content:""; inline-size:100%; block-size:100%; background:currentColor; -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat; }
+/* D-00 (0.64.0): o MEIO-MARCADO — o "selecionar todos" com só parte escolhida. O fundo é o do marcado, e no lugar do
+   visto um tracinho desenhado DO MESMO JEITO (máscara de 16, traço 2, pontas redondas): a espessura é a do visto, e a
+   caixa não muda de tamanho — um tracinho em caixa própria mudava a linha de base e a linha pulava 2 ao trocar de
+   estado (medido na bancada de 10/11/2026). O comprimento, de 4 a 12, é o da referência (o traço de 3 a 21 num quadro de
+   24, no ícone de 12 dentro da caixa de 16). Vem DEPOIS do visto: o campo pode estar marcado e meio-marcado ao mesmo
+   tempo, e o navegador mostra o meio-marcado. Aprovado pelo Victor olhando (a "B", 10/11/2026). */
+.checkbox input:indeterminate + .control-mark:after { content:""; inline-size:100%; block-size:100%; background:currentColor; -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8h8' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8h8' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat; }
 /* A opção marcada fica CHEIA, com o ponto no meio, como a da referência (o ponto dela tem 8 numa
    marca de 16: a metade). Era vazia, com o ponto amarelo. */
 .radio input:checked + .control-mark { background:var(--control-selected); border-color:transparent; }
@@ -1953,7 +1960,7 @@ img,svg { display:block; }
 .checkbox-pill:has(input:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 .checkbox.checkbox-pill input:focus-visible + .control-mark,.checkbox.checkbox-pill input:focus-visible:checked + .control-mark { outline:none; }
 .checkbox-pill[data-tone="success"]:has(input:checked) { background:color-mix(in oklab,var(--success-400) 18%,transparent); color:var(--success-400); }
-.checkbox-pill[data-tone="success"] input:checked + .control-mark { background:var(--success-400); color:var(--background); }
+.checkbox-pill[data-tone="success"] input:is(:checked,:indeterminate) + .control-mark { background:var(--success-400); color:var(--background); }
 .switch { display:inline-flex; align-items:center; gap:var(--space-3); font-size:var(--text-sm); font-weight:var(--weight-medium); cursor:pointer; } .switch input { position:absolute; opacity:0; }
 /* O TRILHO DO SWITCH (0.32.0): o da referência, 40 × 20 (sm 32 × 16, lg 48 × 24) — a largura é o
    dobro da altura. Era 42 × 24. A altura é a de controle MENOS 16: dá exatamente os três dela
@@ -4739,7 +4746,7 @@ button.graph-node-body { cursor:pointer; }
   .color-swatch-option:has(:focus-visible) { outline-color:CanvasText; }
   /* Sem linha (ADR-0072, 16/10/2026): a rodinha do `Spinner` e o visto do `Checkbox` deixaram de ser linha (que o alto
      contraste pinta) e viraram desenho por máscara — fundo, que a troca apaga. Saem da troca, na cor do texto. */
-  .spinner,.checkbox input:checked + .control-mark::after { forced-color-adjust:none; background:CanvasText; }
+  .spinner,.checkbox input:is(:checked,:indeterminate) + .control-mark::after { forced-color-adjust:none; background:CanvasText; }
   /* O "+" das perguntas (`Accordion indicator="plus"`, o site B — 31/10/2026): o glifo é o `::before` por máscara, e a
      bolinha em volta é fundo. A bolinha sai (aberta ou fechada: o amarelo da aberta, fora da troca, ficaria sob o glifo na
      cor do texto), e o glifo pinta na cor do texto. */
