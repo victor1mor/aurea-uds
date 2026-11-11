@@ -17,13 +17,6 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
-### O registro da 0.64.0 (10/11/2026)
-
-- **A 0.64.0 publicada em 10/11/2026, entre 18:43 e 18:48** (Brasília, medido no npm), da junção do pedido #128
-  (`98b11603`): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo.
-  O CHANGELOG ([0.64.0] publicada) e o CLAUDE.md (a linha na tabela e o item 61).
-- Não muda nenhum pacote publicado.
-
 ### A porta em inglês e a promessa que se prova (07/11/2026)
 
 - **Tudo o que é público passa ao inglês** (o Victor: *"tudo deve ser em inglês"*): o README (sem o processo interno —
@@ -292,6 +285,45 @@ como deveria funcionar"*.
 - **A trava (check 45 do `validate.py`)**: o site só importa a Aurea, o próprio repositório e as
   dependências que o `@aurea-uds/react` declara; e nenhuma página puxa script, folha, imagem ou
   moldura de outro endereço. O `montar-site.mjs` confere a segunda metade de novo na publicação.
+- Não muda nenhum pacote publicado.
+
+---
+
+## [0.65.0] — 2026-11-11
+
+**O `DatePicker` da web fica vermelho no erro e prende o foco** (a Fase 1 do caminho até a 1.0). As duas mudanças foram
+aprovadas pelo Victor olhando a bancada em 14/10/2026 (*"aprovaod"* e *"ok pode seguir"*) e não tinham sido construídas.
+
+### Novo
+
+- **`DatePicker` `aria-invalid`** (web): o gatilho fica vermelho como os outros campos, e o leitor de tela ouve
+  "inválido". Dentro de um `Field` com `error`, chega sozinho — o `Field` já mandava o `aria-invalid` ao controle, e o
+  `DatePicker` jogava fora: a mensagem aparecia e a caixa ficava cinza. O nativo não muda (pergunta à parte ao Victor).
+
+### Corrigido
+
+- **O calendário prende o foco**: o Tab e o Shift+Tab dão a volta DENTRO da janela aberta, e ela não fecha sozinha —
+  como a janela de cor (`ColorPicker`) e a referência. Antes, o primeiro Tab saía do dia, voltava ao gatilho e a janela
+  fechava. O Esc continua fechando e devolvendo o foco ao gatilho. ⚠ **O que custou:** o `modal="trap-focus"` sozinho
+  não faz nada — o motor (`@base-ui/react` 1.6.0) só prende o foco com um `Popover.Close` DENTRO da janela
+  (`modal !== false && hasClosePart`, no `PopoverPopup`; a documentação do `modal` diz o mesmo). Ele entra invisível e
+  fora do Tab, como o da janela de cor.
+
+### Documentação
+
+- **`DatePicker`**: a ficha declara o estado `invalid`, a prop `aria-invalid` e o Tab que fica dentro do calendário; o
+  `invalido.spec.ts` passa a medi-lo (na página da moldura, onde mora o exemplo), e ele sai da lista dos campos sem
+  inválido.
+
+Quem cobra: `tests/unit/datepicker-invalido.test.tsx` (o `Field` com erro deixa o gatilho inválido; no código de antes,
+3 de 4 reprovam) e `tests/visual/datepicker-foco-preso.spec.ts` (o Tab e o Shift+Tab ficam dentro, nos três navegadores;
+no código de antes, reprova no primeiro Tab).
+
+### O registro da 0.64.0 (10/11/2026)
+
+- **A 0.64.0 publicada em 10/11/2026, entre 18:43 e 18:48** (Brasília, medido no npm), da junção do pedido #128
+  (`98b11603`): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo.
+  O CHANGELOG ([0.64.0] publicada) e o CLAUDE.md (a linha na tabela e o item 61).
 - Não muda nenhum pacote publicado.
 
 ---

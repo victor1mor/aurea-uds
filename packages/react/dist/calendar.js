@@ -69,7 +69,7 @@ const dataIso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2
 // hidratação 418 no catálogo. Sem `locale`, inglês, como o motor (a regra da casa do `agents.tsx`: padrão fixo).
 const formatoPadrao = (d, locale) => d.toLocaleDateString(locale?.code ?? "en-US", { day: "numeric", month: "short", year: "numeric" });
 export function DatePicker(props) {
-    const { minimumDate, maximumDate, disabled, size, locale, format, placeholder, icon = "calendar", name, id, className, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby } = props;
+    const { minimumDate, maximumDate, disabled, size, locale, format, placeholder, icon = "calendar", name, id, className, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby, "aria-invalid": ariaInvalid } = props;
     const s = useAureaStrings();
     const portal = usePortalContainer();
     const [aberta, setAberta] = React.useState(false);
@@ -126,15 +126,18 @@ export function DatePicker(props) {
                 props.onChange?.(d);
                 setAberta(false);
             } });
-    return _jsxs(BasePopover.Root, { open: aberta, onOpenChange: (o) => {
+    // O foco PRESO na janela (0.65.0): o Tab dá a volta dentro do calendário, e a janela não fecha sozinha — como a
+    // janela de cor (`ColorPicker`) e a referência. Medido em 14/10/2026: sem isso, 6 Tabs fechavam a janela e levavam o
+    // foco a um link da página. Aprovado pelo Victor olhando a bancada (*"ok pode seguir"*).
+    return _jsxs(BasePopover.Root, { modal: "trap-focus", open: aberta, onOpenChange: (o) => {
             // O `<label for>` que nomeia o gatilho (o do `Field` tem `id`), pela ligação do próprio navegador.
             if (o) {
                 cliques.current = 0;
                 setIdDoRotulo(gatilho.current?.labels?.[0]?.id || undefined);
             }
             setAberta(o);
-        }, children: [_jsxs(BasePopover.Trigger, { ref: gatilho, disabled: disabled, id: id, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby, className: cx("select", "select-trigger", "date-picker-trigger", peleDoEixo("select", size), className), children: [_jsx("span", { className: "select-value", "data-placeholder": vazio ? "" : undefined, lang: vazio ? undefined : locale?.code, children: texto ?? placeholder ?? (props.range ? s.dateRangePlaceholder : s.datePlaceholder) }), icon !== false && _jsx(Icon, { name: icon })] }), name && _jsx("input", { type: "hidden", name: name, value: campo ?? "" }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { className: "positioner", side: "bottom", align: "start", sideOffset: 6, children: _jsx(BasePopover.Popup, { className: "popover date-picker-popover", "aria-labelledby": ariaLabelledby ?? idDoRotulo, "aria-label": (ariaLabelledby ?? idDoRotulo) ? undefined
-                            : ariaLabel ?? (props.range ? s.dateRangePlaceholder : s.datePlaceholder), children: calendario }) }) })] });
+        }, children: [_jsxs(BasePopover.Trigger, { ref: gatilho, disabled: disabled, id: id, "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby, "aria-invalid": ariaInvalid === true || ariaInvalid === "true" ? true : undefined, className: cx("select", "select-trigger", "date-picker-trigger", peleDoEixo("select", size), className), children: [_jsx("span", { className: "select-value", "data-placeholder": vazio ? "" : undefined, lang: vazio ? undefined : locale?.code, children: texto ?? placeholder ?? (props.range ? s.dateRangePlaceholder : s.datePlaceholder) }), icon !== false && _jsx(Icon, { name: icon })] }), name && _jsx("input", { type: "hidden", name: name, value: campo ?? "" }), _jsx(BasePopover.Portal, { container: portal, children: _jsx(BasePopover.Positioner, { className: "positioner", side: "bottom", align: "start", sideOffset: 6, children: _jsxs(BasePopover.Popup, { className: "popover date-picker-popover", "aria-labelledby": ariaLabelledby ?? idDoRotulo, "aria-label": (ariaLabelledby ?? idDoRotulo) ? undefined
+                            : ariaLabel ?? (props.range ? s.dateRangePlaceholder : s.datePlaceholder), children: [calendario, _jsx(BasePopover.Close, { className: "sr-only", tabIndex: -1, children: s.close })] }) }) })] });
 }
 // O `Field` nomeia o gatilho com `<label for>`: o `id` que ele injeta vai para o botão (ver `internal.tsx`).
 controlesRotulaveis.add(DatePicker);

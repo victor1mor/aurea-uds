@@ -4348,6 +4348,12 @@
               "values": null
             },
             {
+              "name": "\"aria-invalid\"",
+              "optional": true,
+              "type": "boolean | \"true\" | \"false\"",
+              "values": null
+            },
+            {
               "name": "range",
               "optional": false,
               "type": "false | true",
