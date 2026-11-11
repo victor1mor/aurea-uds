@@ -222,6 +222,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.62.0` | A logo nova (a estrela completa perto do nome em Sora ExtraBold) e as decisões da auditoria externa: `icon` no `IconButton` do nativo, o `Accordion` de lado que abre o primeiro item, o `MediaEmbed` só com `https:` e as fichas sem número de ADR — pedido #122. **Publicada em 07/11/2026** (entre 19:45 e 19:46, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #123 |
 | `0.62.1` | Os READMEs dos sete pacotes em inglês (o texto da página de cada um no npm), sem o processo interno e com os links completos do GitHub; nenhum código muda — pedido #124. **Publicada em 08/11/2026** (entre 09:08 e 09:16, Brasília, medido no npm), pelo terminal do Victor |
 | `0.63.0` | O primeiro lote da Fase 1, sem mudança de aparência: o `Link external` diz ao leitor de tela que abre noutra aba (`externalLabel`), uma região de avisos só com provedores aninhados, o `SegmentedControl` com `className` e as fichas que mentiam — pedido #126. **Publicada em 09/11/2026** (entre 19:30 e 19:36, Brasília, medido no npm), pelo terminal do Victor |
+| `0.64.0` | O meio-marcado do `Checkbox` (D-00): o "selecionar todos" da `DataGrid` com parte das linhas escolhida mostra o tracinho (a forma "B", desenhada como o visto), e o `Checkbox` solto ganha `indeterminate` (só web); a ficha do `SegmentedControl` deixa de dizer que ele rola — pedido #128. **Publicada em 10/11/2026** (entre 18:43 e 18:48, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -891,6 +892,19 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    09/11/2026** (entre 19:30 e 19:36, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #126 —
    juntada pela junção automática, a primeira com a autorização de juntar de 09/11. O registro entrou no lote seguinte
    (o 068, só de registro, sem versão).
+
+61. **`0.64.0`, o meio-marcado do `Checkbox`, feita em 10/11/2026** (D-00, *"Sim, B e as três"*) — o "selecionar todos"
+   da `DataGrid` com parte das linhas escolhida aparecia vazio: a `DataGrid` já ligava o `indeterminate` do campo, e o CSS
+   não desenhava. Agora o fundo é o do marcado e o tracinho é desenhado do mesmo jeito do visto (a forma "B" da bancada,
+   com o comprimento da referência); o `Checkbox` solto ganha `indeterminate` (só web — a referência do celular não tem
+   o estado); a Ember recebe. Junto, a ficha do `SegmentedControl` (ele não rola quando não cabe) e as duas contradições
+   do mapa de rede que faltavam, medidas e fechadas sem mudança. ⚠ **As lições:** (1) o desenho "A" (o do Victor, como
+   estava) fazia a linha pular 2 ao trocar de estado — um tracinho em caixa própria muda a linha de base; medido na
+   bancada antes de mostrar, e mostrado lado a lado, sem trocar o desenho dele; (2) o exemplo do site mora num
+   `<details>` fechado e só acende perto da tela — o teste abre, rola e só então espera a parte viva; (3) a junção
+   automática não avisa a sessão: depois de ligar, conferir o pedido quando a CI deve terminar, para preparar a pasta
+   da publicação. **Publicada em 10/11/2026** (entre 18:43 e 18:48, Brasília, medido no npm), pelo terminal do Victor, da
+   junção do pedido #128. O registro entrou no lote seguinte (o 070, só de registro, sem versão).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
