@@ -28,6 +28,9 @@ export interface DatePickerBase {
     "aria-label"?: string;
     "aria-labelledby"?: string;
     "aria-describedby"?: string;
+    /** O inválido (0.65.0): o gatilho fica vermelho como os outros campos e o leitor de tela ouve "inválido". Dentro de
+     *  um `Field` com `error`, chega sozinho — o `Field` já o mandava, e o `DatePicker` jogava fora. */
+    "aria-invalid"?: boolean | "true" | "false";
 }
 export type DatePickerProps = DatePickerBase & ({
     range?: false;

@@ -85,4 +85,5 @@ The field height, on the same scale as Select and Input. md is the default.
 | `aria-label` | `string` | — | Names the trigger when there is no visible label, and the calendar window too. With a Field, prefer the Field's label. |
 | `aria-labelledby` | `string` | — | Names the trigger and the calendar window by another element's id. |
 | `aria-describedby` | `string` | — | Goes to the trigger. It is spelled out because this component unpacks a fixed list of props and drops anything else. |
+| `aria-invalid` | `boolean \| "true" \| "false"` | — | The trigger turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own. Web only. |
 | `className` | `string` | — | Merged onto the trigger, after the Aurea skin. |

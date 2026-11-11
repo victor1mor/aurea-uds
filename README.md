@@ -205,7 +205,7 @@ python -m http.server 8123
 The numbers below are generated from the repository; the full figures are in [STATE.md](STATE.md).
 
 <!-- state:begin -->
-615 pages generated — 228 component, 234 pattern, 15 block, 23 recipe, 104 documentation and 11 area index pages — from 138 component records. Every page has the same core: breadcrumb, preview, the code that produces it, installation, provenance and previous/next. 44 components have hand-written content; the other 105 have a starter — the real preview and the code, without extra examples yet. 150 components publish the props table.
+616 pages generated — 228 component, 234 pattern, 15 block, 23 recipe, 105 documentation and 11 area index pages — from 138 component records. Every page has the same core: breadcrumb, preview, the code that produces it, installation, provenance and previous/next. 44 components have hand-written content; the other 105 have a starter — the real preview and the code, without extra examples yet. 150 components publish the props table.
 <!-- state:end -->
 
 ## Repository layout

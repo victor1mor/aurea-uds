@@ -105,6 +105,9 @@ export interface DatePickerBase {
   "aria-label"?: string;
   "aria-labelledby"?: string;
   "aria-describedby"?: string;
+  /** O inválido (0.65.0): o gatilho fica vermelho como os outros campos e o leitor de tela ouve "inválido". Dentro de
+   *  um `Field` com `error`, chega sozinho — o `Field` já o mandava, e o `DatePicker` jogava fora. */
+  "aria-invalid"?: boolean | "true" | "false";
 }
 export type DatePickerProps = DatePickerBase & (
   {range?: false; value?: Date; defaultValue?: Date; onChange?: (d: Date) => void} |
@@ -120,7 +123,8 @@ const formatoPadrao = (d: Date, locale?: DayPickerLocale) =>
 
 export function DatePicker(props: DatePickerProps) {
   const {minimumDate, maximumDate, disabled, size, locale, format, placeholder, icon = "calendar", name, id, className,
-    "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby} = props;
+    "aria-label": ariaLabel, "aria-labelledby": ariaLabelledby, "aria-describedby": ariaDescribedby,
+    "aria-invalid": ariaInvalid} = props;
   const s = useAureaStrings();
   const portal = usePortalContainer();
   const [aberta, setAberta] = React.useState(false);
@@ -170,13 +174,16 @@ export function DatePicker(props: DatePickerProps) {
         setAberta(false);
       }} />;
 
-  return <BasePopover.Root open={aberta} onOpenChange={(o) => {
+  // O foco PRESO na janela (0.65.0): o Tab dá a volta dentro do calendário, e a janela não fecha sozinha — como a
+  // janela de cor (`ColorPicker`) e a referência. Medido em 14/10/2026: sem isso, 6 Tabs fechavam a janela e levavam o
+  // foco a um link da página. Aprovado pelo Victor olhando a bancada (*"ok pode seguir"*).
+  return <BasePopover.Root modal="trap-focus" open={aberta} onOpenChange={(o) => {
       // O `<label for>` que nomeia o gatilho (o do `Field` tem `id`), pela ligação do próprio navegador.
       if (o) { cliques.current = 0; setIdDoRotulo(gatilho.current?.labels?.[0]?.id || undefined); }
       setAberta(o);
     }}>
     <BasePopover.Trigger ref={gatilho} disabled={disabled} id={id} aria-label={ariaLabel} aria-labelledby={ariaLabelledby}
-      aria-describedby={ariaDescribedby}
+      aria-describedby={ariaDescribedby} aria-invalid={ariaInvalid === true || ariaInvalid === "true" ? true : undefined}
       className={cx("select", "select-trigger", "date-picker-trigger", peleDoEixo("select", size), className)}>
       {/* `lang` com o `locale`, como o motor faz na raiz do calendário: o leitor de tela pronuncia a data na
           língua dela, e não na da página (WCAG 3.1.2, a língua das partes). */}
@@ -196,6 +203,11 @@ export function DatePicker(props: DatePickerProps) {
           aria-label={(ariaLabelledby ?? idDoRotulo) ? undefined
             : ariaLabel ?? (props.range ? s.dateRangePlaceholder : s.datePlaceholder)}>
           {calendario}
+          {/* O motor só prende o foco com um `Popover.Close` DENTRO da janela (`@base-ui/react` 1.6.0, `PopoverPopup`:
+              `modal !== false && hasClosePart`; a documentação do `modal` diz o mesmo) — sem ele, o `trap-focus` não
+              fazia nada (medido em 11/11/2026: o Tab saía do dia, voltava ao gatilho e a janela fechava). Invisível e
+              fora do Tab, como o da janela de cor: quem usa teclado tem o Esc; o leitor de tela por toque tem a saída. */}
+          <BasePopover.Close className="sr-only" tabIndex={-1}>{s.close}</BasePopover.Close>
         </BasePopover.Popup>
       </BasePopover.Positioner>
     </BasePopover.Portal>

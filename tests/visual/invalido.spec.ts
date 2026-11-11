@@ -246,6 +246,8 @@ const ALVO: Record<string, string> = {
   RadioGroup: ".radio-group .radio input",
   // 0.32.0 (ADR-0069): o `ColorField` é um `InputGroup` com a amostra na frente; quem pinta é o grupo.
   ColorField: ".input-group:has(.color-swatch) > .input",
+  // 0.65.0: o `DatePicker` da web pinta o inválido (aprovado pelo Victor em 14/10/2026) — o gatilho é um `.select`.
+  DatePicker: ".date-picker-trigger",
 };
 
 // TRÊS COMPONENTES NÃO TÊM DEMONSTRAÇÃO NA PÁGINA DELES: o catálogo escreve "Interactive — see
@@ -262,6 +264,8 @@ const PAGINA: Record<string, string> = {
   Combobox: "pattern-combobox-picking-one-out-of-many",
   MultiCombobox: "pattern-multicombobox-labelling-something-with-several-tags",
   FileInput: "pattern-fileinput-dropping-files-with-a-limit",
+  // 0.65.0: os exemplos do `DatePicker` moram em MOLDURAS (a prévia viva); a página da moldura tem o gatilho.
+  DatePicker: "embeds/datepicker",
 };
 
 // Componente de campo que legitimamente NÃO tem `invalid`, com o motivo — mesma disciplina do
@@ -296,10 +300,6 @@ const FICHA_SEM_INVALIDO: Record<string, string> = {
   // Entrou no escopo com a ADR-0070 (14/10/2026): era "Identity" e foi para "Colors", o grupo dela na referência.
   ColorSwatch: "sozinha é uma imagem da cor; com `options` é uma paleta FECHADA, que só oferece as cores dadas — " +
     "como o `ListBox`, não há valor digitado a validar",
-  // O `DatePicker` da web (0.32.0, ADR-0068), achado pela mesma suíte. A referência tem o estado (pergunta guardada
-  // para o Victor: acrescentar é mudança de API).
-  DatePicker: "o gatilho não recebe texto: o calendário só oferece datas dentro de `minimumDate`/`maximumDate`, " +
-    "como o `Calendar` — o valor escolhido é sempre uma data que existe e que cabe",
 };
 
 // O escopo é a categoria `Inputs` do registry, e é fechado de propósito: `invalid` é estado de
