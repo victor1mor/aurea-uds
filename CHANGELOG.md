@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.64.0 (10/11/2026)
+
+- **A 0.64.0 publicada em 10/11/2026, entre 18:43 e 18:48** (Brasília, medido no npm), da junção do pedido #128
+  (`98b11603`): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo.
+  O CHANGELOG ([0.64.0] publicada) e o CLAUDE.md (a linha na tabela e o item 61).
+- Não muda nenhum pacote publicado.
+
 ### A porta em inglês e a promessa que se prova (07/11/2026)
 
 - **Tudo o que é público passa ao inglês** (o Victor: *"tudo deve ser em inglês"*): o README (sem o processo interno —
@@ -290,6 +297,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.64.0] — 2026-11-10
+
+✅ **Publicada em 10/11/2026, entre 18:43 e 18:48 (Brasília, medido no npm: seis pacotes entre 18:43 e 18:45 e o `native`
+às 18:48), pelo terminal do Victor, da junção do pedido #128** (`98b11603`).
 
 **O meio-marcado do `Checkbox`** (D-00, a Fase 1 do caminho até a 1.0). O "selecionar todos" da `DataGrid` com só parte
 das linhas escolhida aparecia VAZIO, igual a "nada escolhido" — o leitor de tela já ouvia "misto", mas quem enxerga não
