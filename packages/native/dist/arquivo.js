@@ -33,7 +33,7 @@ import * as React from "react";
 import { Pressable, View } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import { IconButton } from "./actions.js";
-import { canto, criarFolha, estadoAcessivel, preenchimento } from "./estilos.js";
+import { canto, criarFolha, estadoAcessivel, preenchimento, contornoDeErro } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { alturaDoTamanho, respiroDoTamanho, useCampo } from "./inputs.js";
 import { Text } from "./text.js";
@@ -46,7 +46,7 @@ const folha = criarFolha((t) => ({
         width: "100%", minWidth: 0, borderWidth: t.size.borderWidth, borderColor: "transparent",
         ...canto(t.size.radiusControl), backgroundColor: preenchimento(t, 2),
     },
-    invalido: { borderColor: "transparent", backgroundColor: t.color.dangerBg },
+    invalido: contornoDeErro(t),
     desabilitado: { opacity: t.size.opacityDisabled },
     nomeETamanho: { flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: t.size.space2 },
     nome: { flexShrink: 1 },

@@ -436,7 +436,9 @@ describe("OTPField · a casa da vez, a máscara e o leitor de tela", () => {
     expect(campo().accessibilityLabel).toBe("Código do SMS");
     expect(campo().accessibilityHint).toBe("Código errado");
     expect(campo()["aria-invalid"]).toBe(true);
-    expect(plano(casas(4)[0]).backgroundColor).toBe(t.color.dangerBg);
+    // ADR-0094 (0.66.0): o erro é o da referência — o fundo não muda, a borda fica vermelha (a cor da frase de erro).
+    expect(plano(casas(4)[0]).borderColor).toBe(t.color.danger400 ?? t.color.destructive);
+    expect(plano(casas(4)[0]).backgroundColor).not.toBe(t.color.dangerBg);
   });
 
   it("desligado: não edita e esmaece", () => {

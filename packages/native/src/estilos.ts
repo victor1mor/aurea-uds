@@ -105,6 +105,14 @@ export const fundoDeCampo = (t: AureaTokens, _naSuperficie: boolean, maisContras
 });
 
 /**
+ * O CAMPO COM ERRO (ADR-0094, 11/11/2026 — o Victor: "B como a referencia e Ember entra"): o fundo do campo NÃO muda; a
+ * borda que já existe (transparente) fica vermelha, o `danger400` da frase de erro. É a única cor de borda de erro do
+ * nativo, e a exceção nomeada ao "sem linha" (`sem-linha.test.tsx`). Quem chama põe depois do `fundoDeCampo` e do foco:
+ * com o campo focado, a borda continua vermelha, como o anel vermelho da web.
+ */
+export const contornoDeErro = (t: AureaTokens): ViewStyle => ({borderColor: t.color.danger400 ?? t.color.destructive});
+
+/**
  * A cor do FOCO do campo (no nativo, o foco é a borda): o amarelo da marca, nos dois temas — uma linha só, como na web
  * (ADR-0083, 26/10/2026). Com "aumentar contraste" no sistema, volta ao `focusStrong` (o grafite no claro).
  */

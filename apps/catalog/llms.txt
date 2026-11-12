@@ -457,6 +457,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.66.0](https://aureauds.dev/release-v0-66-0.md): Fields with an error keep their fill and get a thin red border and a red label.
 - [v0.65.0](https://aureauds.dev/release-v0-65-0.md): DatePicker turns red on error and keeps the focus inside the open calendar.
 - [v0.64.0](https://aureauds.dev/release-v0-64-0.md): Checkbox draws the indeterminate state — the "select all" of a table with some rows selected — and takes an indeterminate prop.
 - [v0.63.0](https://aureauds.dev/release-v0-63-0.md): External links tell screen readers they open in a new tab; one toast region with nested providers; className on SegmentedControl.

@@ -88,11 +88,15 @@ describe("RadioGroup · as medidas da referência", () => {
     expect(g.gap).toBe(t.size.space3);
     expect(g.flexDirection).toBe("column");
   });
-  it("com erro, a marca ganha o fundo de perigo (sem linha, ADR-0072)", () => {
+  // ADR-0094 (0.66.0): era o fundo de perigo (sem linha, ADR-0072); agora o desenho da referência — o contorno vermelho,
+  // e a marca escolhida guarda o amarelo.
+  it("com erro, a marca ganha o contorno vermelho e o fundo não muda", () => {
     render(<Envolve><Entrega invalid /></Envolve>);
     const perigo = t.color.danger400 ?? t.color.destructive;
-    for (const e of marcas().slice(-3)) expect(e.backgroundColor).toBe(t.color.dangerBg);
-    void perigo;
+    for (const e of marcas().slice(-3)) {
+      expect(e.borderColor).toBe(perigo);
+      expect(e.backgroundColor).not.toBe(t.color.dangerBg);
+    }
   });
 });
 

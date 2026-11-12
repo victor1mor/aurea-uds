@@ -106,6 +106,16 @@ const LINHA_PERMITIDA_CSS: {seletor: string; prop: string; valor?: string; media
 // só existe quando o app escolhe o estilo. A exceção vale SÓ na regra cujo seletor nomeia um deles, e só no anel
 // (`box-shadow` ou a variável de anel) — borda continua reprovando.
 // E o FIO dos acabamentos (ADR-0086, 28/10/2026): `data-ring="true"`, que o app escolhe no selo e no botão de fundo suave.
+// O CONTORNO DO ERRO (ADR-0094, 11/11/2026 — o Victor olhando as 21 formas: "B como a referencia e Ember entra"): o campo
+// inválido é o da referência, a borda que já existe na cor da frase de erro. Vale SÓ em regra cujo seletor fala do estado
+// inválido (`[aria-invalid="true"]` ou `:user-invalid`), e SÓ com o `--danger-400`: na borda, ou por dentro (`inset`) no
+// cartão de escolha, que não tem borda. A mesma cor em outra regra, ou outra cor nessa regra, reprova.
+const SELETOR_DE_ERRO = /\[aria-invalid="true"\]|:user-invalid/;
+const CONTORNO_DE_ERRO: Record<string, string> = {
+  "border-color": "var(--danger-400)",
+  "box-shadow": "inset 0 0 0 var(--border-width) var(--danger-400)",
+};
+
 const ESTILO_DE_ARO = /\[data-(?:segment-style="ring"|current-style="(?:ring|white-ring|bar-ring)"|timeline-style="ring"|ring="true")\]/;
 
 /** O seletor da regra em que a declaração está (o texto entre a última `}` ou `{` e a `{` dela). */
@@ -140,6 +150,7 @@ export function linhasNoCss(css: string, origem: string): string[] {
       && (p.media === undefined || p.media === mediaDe(limpo, m.index!)))) continue;
     const anel = prop.toLowerCase() === "box-shadow" || prop.startsWith("--");
     if (anel && ESTILO_DE_ARO.test(sel)) continue;
+    if (CONTORNO_DE_ERRO[prop.toLowerCase()] === valor.trim() && SELETOR_DE_ERRO.test(sel)) continue;
     const ruim = anel ? anelFino(valor) : bordaVisivel(prop, valor);
     if (ruim) achadas.push(`${origem}:${linha} — ${prop}: ${valor.trim().slice(0, 80)}`);
   }
@@ -178,6 +189,8 @@ export function linhasNoNativo(fonte: string, origem: string): string[] {
     // com o `inputStrong`, e só dentro da condição `maisContraste` do `fundoDeCampo`.
     const linhaInteira = limpo.slice(limpo.lastIndexOf("\n", m.index!) + 1, limpo.indexOf("\n", m.index!));
     if (origem === "estilos.ts" && valor === "t.color.inputStrong" && /maisContraste \? \{borderColor: t\.color\.inputStrong\}/.test(linhaInteira)) continue;
+    // O contorno do ERRO (ADR-0094): só nasce no `contornoDeErro` do `estilos.ts`, na cor da frase de erro.
+    if (origem === "estilos.ts" && valor === "t.color.danger400 ?? t.color.destructive" && /^export const contornoDeErro = /.test(linhaInteira)) continue;
     // A única linha que fica no nativo: o cartão de contorno (a mesma da web, o texto a 10%).
     const linhaDoFonte = limpo.slice(limpo.lastIndexOf("\n", m.index!) + 1, limpo.indexOf("\n", m.index!));
     if (origem === "layout.tsx" && /^\s*card_outline:/.test(linhaDoFonte) && /comOpacidade\(t\.color\.foreground, 0\.1\)/.test(linhaDoFonte)) continue;
@@ -265,6 +278,13 @@ describe("sem linha — nenhuma peça da Aurea desenha borda (ADR-0072)", () => 
     expect(linhasNoNativo("  {borderColor: t.color.inputStrong},", "estilos.ts")).toHaveLength(1);
     expect(linhasNoNativo("  ...(maisContraste ? {borderColor: t.color.inputStrong} : null),", "inputs.tsx")).toHaveLength(1);
     expect(linhasNoNativo("focado && {borderColor: focoDoCampo(t, maisContraste)},", "x")).toEqual([]);
+    // ADR-0094: o contorno do erro passa só em regra de erro, e só na cor dele.
+    expect(linhasNoCss('.input[aria-invalid="true"] { border-color:var(--danger-400); }', "x")).toEqual([]);
+    expect(linhasNoCss(".input:user-invalid { border-color:var(--danger-400); }", "x")).toEqual([]);
+    expect(linhasNoCss('.radio:has(input[aria-invalid="true"]) { box-shadow:inset 0 0 0 var(--border-width) var(--danger-400); }', "x")).toEqual([]);
+    expect(linhasNoCss(".input { border-color:var(--danger-400); }", "x")).toHaveLength(1);
+    expect(linhasNoCss('.input[aria-invalid="true"] { border-color:var(--primary); }', "x")).toHaveLength(1);
+    expect(linhasNoNativo("{borderColor: t.color.danger400 ?? t.color.destructive}", "inputs.tsx")).toHaveLength(1);
     // A exceção vale SÓ para o seletor sozinho: o mesmo valor em outra regra, ou outra propriedade nele, reprova.
     expect(linhasNoCss(".card-outline { border-color:color-mix(in oklab,var(--foreground) 10%,transparent); }", "x")).toEqual([]);
     expect(linhasNoCss(".card-outline:hover { border-color:var(--primary); }", "x")).toHaveLength(1);

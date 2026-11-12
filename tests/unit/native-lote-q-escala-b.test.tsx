@@ -115,11 +115,13 @@ describe("Field: o rótulo em peso médio", () => {
 const marca = () => views().find((e) => e.borderWidth === t.size.borderWidth && e.width === e.height
   && typeof e.width === "number" && e.width > 0)!;
 describe("Checkbox e Radio: a marca de 24 e o vão de 12", () => {
-  it("Checkbox: caixa 24 × 24 (era 18), canto 6 do `radiusXs` (era 5), 12 até o texto (era 9)", () => {
+  // 0.66.0: o canto passou a 8 (`radiusSm`), o da caixa do celular da referência — o 6 numa caixa de 24 a deixava quadrada.
+  it("Checkbox: caixa 24 × 24 (era 18), canto 8 do `radiusSm` (era 6 até a 0.65.0), 12 até o texto (era 9)", () => {
     montar(<Checkbox label="Aceito" checked />);
     const m = marca();
     expect([m.width, m.height]).toEqual([24, 24]);
-    expect(m.borderRadius).toBe(t.size.radiusXs);
+    expect(m.borderRadius).toBe(t.size.radiusSm);
+    expect(m.borderRadius).toBe(8);
     expect(plano(__instancias("Pressable").at(-1)!.style).gap).toBe(t.size.space3);
   });
   it("Radio: círculo 24 (era 18), ponto 10 (era 8), 12 até o texto (era 9)", () => {

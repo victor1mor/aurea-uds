@@ -44,7 +44,9 @@ describe("Field — a ligação que a web faz e o RN não tem", () => {
     render(<Envolve><Field label="Litros" error="Só números"><Input /></Field></Envolve>);
     expect(props("TextInput")["aria-invalid"]).toBe(true);
     expect(props("TextInput").accessibilityHint).toBe("Só números");
-    expect(estilo("TextInput").backgroundColor).toBe(tokens.color.dangerBg);
+    // ADR-0094 (0.66.0): o erro é o da referência — o fundo não muda, a borda fica vermelha (a cor da frase de erro).
+    expect(estilo("TextInput").borderColor).toBe(tokens.color.danger400 ?? tokens.color.destructive);
+    expect(estilo("TextInput").backgroundColor).not.toBe(tokens.color.dangerBg);
   });
 
   // DEFEITO: mostrar dica E erro ao mesmo tempo. A informação que importa naquele momento é uma.
@@ -188,8 +190,8 @@ describe("Checkbox e Radio — o mesmo desenho, duas semânticas", () => {
   it("a caixa é quadrada de canto suave; o rádio é redondo", () => {
     render(<Envolve><Checkbox label="A" /></Envolve>);
     const raios = __instancias("View").map((p) => StyleSheet.flatten(p.style).borderRadius);
-    // 0.32.0: o canto é o `radiusXs` (6), o do `.checkbox .control-mark` da web; era 5 cru.
-    expect(raios).toContain(tokens.size.radiusXs);
+    // 0.66.0: o canto é o `radiusSm` (8), o da caixa do celular da referência (era o `radiusXs`, 6, da 0.32.0 à 0.65.0).
+    expect(raios).toContain(tokens.size.radiusSm);
     render(<Envolve><Radio label="B" /></Envolve>);
     const depois = __instancias("View").map((p) => StyleSheet.flatten(p.style).borderRadius);
     expect(depois).toContain(tokens.size.radiusFull);

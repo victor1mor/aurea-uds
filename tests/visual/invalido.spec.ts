@@ -65,6 +65,10 @@ const SEM_INVALIDO: Record<string, string> = {
   "theme-switch-input": "é a chave de tema — claro, escuro ou sistema —, que sempre tem uma escolhida, como o " +
     "`SegmentedControl`: não há valor inválido a mostrar",
   // 0.54.0 (o site B): os botões de opção invisíveis das barras do `KPI` (`bars`).
+  // 0.66.0 (ADR-0094): a chave segue a referência, que não tem inválido nela — o erro é a frase embaixo e o
+  // `aria-invalid` para o leitor de tela. Medida pelo papel (`role="switch"`): o `<input>` dela é um checkbox sem classe.
+  switch: "a referência não desenha erro na chave (ADR-0094): o erro dela é a frase embaixo e o `aria-invalid` para o " +
+    "leitor de tela",
   "kpi-bar-input": "escolhe qual barra do gráfico mostra a leitura — sempre há uma escolhida, e não é campo de " +
     "formulário: não há valor inválido a mostrar",
 };
@@ -124,7 +128,8 @@ function medir({ignorar, sel}: {ignorar: Record<string, string>; sel: string | n
     if (r.width === 0 && r.height === 0 && cs.opacity !== "0") continue;
 
     const classes = (c.className || "").trim().split(/\s+/).filter(Boolean);
-    if (classes.some((k) => k in ignorar) || (c.getAttribute("type") ?? "") in ignorar) continue;
+    if (classes.some((k) => k in ignorar) || (c.getAttribute("type") ?? "") in ignorar ||
+      (c.getAttribute("role") ?? "") in ignorar) continue;
 
     // QUEM DESENHA pode não ser quem carrega o atributo, e são TRÊS parentescos diferentes:
     //
@@ -232,7 +237,7 @@ test("todo controle de formulário se mostra inválido, em toda página do catá
 // anterior. Uma página de catálogo demonstra o componente NO MEIO de outros; só um seletor
 // nomeado separa "o controle deste componente" de "um controle que aparece nesta página".
 const ALVO: Record<string, string> = {
-  Checkbox: ".checkbox input", Radio: ".radio input", Switch: ".switch input",
+  Checkbox: ".checkbox input", Radio: ".radio input",
   Input: ".input", Textarea: ".textarea", Select: ".select",
   InputGroup: ".input-group > .input, .input-group > .select, .input-group > .textarea",
   NumberField: ".number-field-input", OTPField: ".otp-slot",
@@ -271,6 +276,9 @@ const PAGINA: Record<string, string> = {
 // Componente de campo que legitimamente NÃO tem `invalid`, com o motivo — mesma disciplina do
 // `SEM_INVALIDO` e do `TECLADO_SEM_MEDICAO`: ausência declarada não é ausência silenciosa.
 const FICHA_SEM_INVALIDO: Record<string, string> = {
+  // 0.66.0 (ADR-0094): o inválido é o da referência, e ela não tem inválido na chave.
+  Switch: "a referência não desenha erro na chave: o erro dela é a frase embaixo do `Field` e o `aria-invalid` " +
+    "para o leitor de tela (ADR-0094)",
   Label: "é o rótulo, não o controle — quem fica inválido é o campo que ele nomeia",
   InputGroupAddon: "é o adorno (ícone, texto, botão) dentro do grupo; a moldura que pinta é a " +
     "do `InputGroup`",

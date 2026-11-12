@@ -334,7 +334,19 @@ test.describe("catálogo · varredura de todas as páginas", () => {
               const visivel = bw > 0 && s.borderTopStyle !== "none" && bc[3] > 40
                 && dif(bc, fundo(h)) > 12 && dif(bc, fundo(h.parentElement)) > 12;
               if (!visivel) continue;
-              medidas.push(h.tagName.toLowerCase() + "." + [...h.classList].slice(0, 2).join("."));
+              // O CONTORNO DO ERRO (ADR-0094): o campo com erro mostra a borda no `--danger-400`, e o foco dele é desse
+              // vermelho, encostado nela. Essa borda não conta como linha; a regra das duas linhas, abaixo, continua valendo.
+              const INV = '[aria-invalid="true"],:user-invalid';
+              const emErro = h.matches(".input,.textarea,.select") && h.matches(INV)
+                || h.matches(".checkbox .control-mark,.radio .control-mark") && !!h.previousElementSibling?.matches(INV)
+                || h.matches(".input-group,.number-field-group") && [...h.children].some(c => c.matches(INV))
+                || h.matches(".combobox-multi,.dropzone") && !!h.querySelector(INV);
+              const sonda = document.createElement("i");
+              sonda.style.color = "var(--danger-400)";
+              (h.parentElement ?? document.body).appendChild(sonda);
+              const vermelho = getComputedStyle(sonda).color;
+              sonda.remove();
+              if (!(emErro && s.borderTopColor === vermelho)) medidas.push(h.tagName.toLowerCase() + "." + [...h.classList].slice(0, 2).join("."));
               const off = parseFloat(s.outlineOffset) || 0;
               const coberta = off <= -bw && off + ow >= 0;
               const faixa = off === 0 && dif(bc, rgba(s.outlineColor)) <= 12;
@@ -398,6 +410,28 @@ test.describe("catálogo · varredura de todas as páginas", () => {
             return achou;
           };
           const nome = (e: Element) => e.tagName.toLowerCase() + [...e.classList].slice(0, 3).map(c => "." + c).join("");
+          const INV = '[aria-invalid="true"],:user-invalid';
+          const emErro = (e: Element) => e.matches(".input,.textarea,.select") && e.matches(INV)
+            || e.matches(".checkbox .control-mark,.radio .control-mark") && !!e.previousElementSibling?.matches(INV)
+            || e.matches(".input-group,.number-field-group") && [...e.children].some(c => c.matches(INV))
+            || e.matches(".combobox-multi,.dropzone,.radio-group-cards > .radio") && !!e.querySelector(INV);
+          const corDoErro = (e: Element) => {
+            const i = document.createElement("i");
+            i.style.color = "var(--danger-400)";
+            (e.parentElement ?? document.body).appendChild(i);
+            const c = getComputedStyle(i).color;
+            i.remove();
+            return c;
+          };
+          // As páginas do nativo: a frase de erro do `Field` em volta (até 8 níveis acima), fora da própria peça, no vermelho.
+          const nativa = /\/native-[^/]*\.html$/.test(location.pathname);
+          const frasesDeErro = (e: Element, vermelho: string) => {
+            let x = e.parentElement;
+            for (let k = 0; x && k < 8; k++, x = x.parentElement)
+              for (const t of x.querySelectorAll("div,span"))
+                if (t.childElementCount === 0 && !e.contains(t) && (t.textContent ?? "").trim() && getComputedStyle(t).color === vermelho) return true;
+            return false;
+          };
           const out: string[] = [];
           let n = 0;
           for (const e of document.body.querySelectorAll("*")) {
@@ -417,7 +451,22 @@ test.describe("catálogo · varredura de todas as páginas", () => {
             // A LINHA ENTRE AS FILEIRAS (MNT-38): a borda de BAIXO da célula do corpo, só numa tabela que escolheu `dividers`.
             const entreFileiras = !!e.closest(".table.table-dividers tbody, .datagrid-dividers .table-wrap tbody") && /^(td|th)$/i.test(e.tagName);
             const conta = (x: string) => !(deAro && x.startsWith("anel")) && !(entreFileiras && x.startsWith("borda bottom"));
-            for (const x of linhas(getComputedStyle(e))) if (conta(x)) out.push(`${nome(e)}: ${x}`);
+            // O CONTORNO DO ERRO (ADR-0094, 11/11/2026): o campo com erro tem a borda (no cartão de escolha, o anel por
+            // dentro) no `--danger-400`, a cor da frase de erro. Só a peça EM ERRO, pelos mesmos seletores do `aurea.css`,
+            // só no próprio elemento (nada de `::before`/`::after`) e só nessa cor, medida ali mesmo.
+            // Na web, a peça em erro dentro do exemplo RECOLHIDO (`<details>` fechado) não é desenhada, e a transição da
+            // borda não anda: na troca para o claro, ela ficava no vermelho do escuro (medido: aberto o exemplo, o
+            // vermelho é o do claro). A transição se termina antes de ler. No nativo (o `react-native-web`) só o `Input`
+            // diz `aria-invalid`: lá, a borda passa se o campo em volta mostra a frase de erro no MESMO vermelho.
+            let achadas = linhas(getComputedStyle(e)).filter(conta);
+            if (achadas.length && (emErro(e) || nativa)) {
+              const vermelho = corDoErro(e);
+              if (emErro(e)) {
+                e.getAnimations().forEach(a => a.cancel());
+                achadas = linhas(getComputedStyle(e)).filter(conta).filter(x => !x.includes(vermelho));
+              } else if (e.closest('[data-aurea-invalid="true"]') || frasesDeErro(e, vermelho)) achadas = achadas.filter(x => !x.includes(vermelho));
+            }
+            for (const x of achadas) out.push(`${nome(e)}: ${x}`);
             for (const ps of ["::before", "::after"]) {
               const s = getComputedStyle(e, ps);
               if (s.content === "none" || s.content === "normal") continue;
