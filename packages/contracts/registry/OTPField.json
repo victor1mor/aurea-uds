@@ -107,6 +107,12 @@
       "description": "Standard form states, forwarded to every box."
     },
     {
+      "name": "aria-invalid",
+      "type": "boolean | \"true\" | \"false\"",
+      "default": "—",
+      "description": "Every box turns red like the other fields, and a screen reader hears \"invalid\" on each one. Inside a Field with error it arrives on its own. Web only."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",

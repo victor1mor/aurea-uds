@@ -27,7 +27,7 @@ export declare function matchesAccept(file: {
     type: string;
 }, accept?: string): boolean;
 export declare function formatSize(bytes: number): string;
-export declare function FileInput({ accept, maxSize, multiple, onFilesChange, upload, label, hint, id, className, initialQueue, onQueueChange, preview, checksum }: {
+export declare function FileInput({ accept, maxSize, multiple, onFilesChange, upload, label, hint, id, className, initialQueue, onQueueChange, preview, checksum, "aria-invalid": invalido }: {
     accept?: string;
     maxSize?: number;
     multiple?: boolean;
@@ -41,5 +41,8 @@ export declare function FileInput({ accept, maxSize, multiple, onFilesChange, up
     onQueueChange?: (queue: FileQueueItem[]) => void;
     preview?: boolean;
     checksum?: boolean;
+    /** O inválido (0.67.0): a área de soltar fica vermelha como os outros campos e o leitor de tela ouve "inválido". Dentro
+     *  de um `Field` com `error`, chega sozinho. Arquivo recusado continua deixando a área vermelha, com ou sem ele. */
+    "aria-invalid"?: boolean | "true" | "false";
 }): React.JSX.Element;
 export {};

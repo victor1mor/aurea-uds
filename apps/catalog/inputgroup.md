@@ -20,3 +20,4 @@ import {InputGroup} from "@aurea-uds/react";
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `width` | `string` | — | Takes the group out of 100%: "20rem" for a measure, "auto" for the content size. With it the group also stops growing in a row. |
+| `aria-invalid` | `boolean \| "true" \| "false"` | — | Goes to the field in the middle (not to the box): the group turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own; a field that says its own aria-invalid keeps it. Web only. |

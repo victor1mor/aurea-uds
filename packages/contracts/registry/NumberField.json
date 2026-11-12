@@ -122,6 +122,12 @@
       "description": "Opt-in drag handle: pulling it changes the value, which beats forty clicks on + over a wide range. Purely additive — the two buttons, the arrow keys and Home/End are untouched, and the handle itself is aria-hidden because dragging is a pointer gesture with no keyboard equivalent to promise. The axis is a class, not a data attribute: the engine does not publish direction."
     },
     {
+      "name": "aria-invalid",
+      "type": "boolean | \"true\" | \"false\"",
+      "default": "—",
+      "description": "The group turns red like the other fields, and a screen reader hears \"invalid\". Inside a Field with error it arrives on its own. Goes to the text field in the middle. Web only."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",

@@ -60,6 +60,16 @@ Without multiple, a new pick replaces the previous file instead of stacking.
 <FileInput label="Avatar" accept="image/png,image/jpeg" maxSize={512000} />
 ```
 
+### With an error
+
+Inside a Field with error, the drop area turns red like every other field and a screen reader hears "invalid". Outside a Field, pass aria-invalid. A refused file still turns it red on its own.
+
+```tsx
+<Field label="Proof of address" error="Attach a document">
+  <FileInput accept=".pdf" />
+</Field>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -75,5 +85,6 @@ Without multiple, a new pick replaces the previous file instead of stacking.
 | `onQueueChange` | `(queue: FileQueueItem[]) => void` | — | Fires on every change to the queue, in serialisable form. Where you persist it — local storage, a server, nowhere — is yours, the same boundary the grid draws for its URL state. |
 | `preview` | `boolean` | false | Shows a thumbnail for image files, in the same slot the document icon occupies — the row does not change height because of it. Only images: generating an object URL for a 40 MB PDF shows nothing. The URL is revoked whenever the item LEAVES the queue — removed, replaced in single mode, or replaced by a name conflict — and any survivor is revoked on unmount. The browser holds the bytes until someone says otherwise, and until 2026-08-12 only the remove path revoked (AUD-0009). |
 | `checksum` | `boolean` | false | Computes SHA-256 of each file with the Web Crypto API — no dependency — shows the first eight digits and puts the whole value in the queue. Opt-in and not the default for two measured reasons: `crypto.subtle` only exists in a secure context (https or localhost), and the digest needs the WHOLE file in memory, because Web Crypto has no streaming hash. If your `upload` resolves with `{checksum}`, the two are compared and a mismatch fails the item: bytes that differ are not a detail. |
+| `aria-invalid` | `boolean \| "true" \| "false"` | — | The drop area turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own. A refused file turns it red with or without it. Web only. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `id` | `string` | — | Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one. |

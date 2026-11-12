@@ -305,11 +305,15 @@ function ladoDoAdorno(no) {
 // A-08 (24/09/2026): `width` tira o grupo dos 100% — `"20rem"` para uma medida, `"auto"` para o
 // tamanho do conteúdo. Sem ela, 100% como sempre. Com ela, o grupo também deixa de crescer numa
 // fila (`flex:none`): o `flex:1` que as barras dão a ele desfaria a medida pedida.
-export function InputGroup({ className, children, width, style, ...props }) {
+// 0.67.0 (ADR-0094): `aria-invalid` não fica na caixa — vai para o campo do meio (o que não é adorno), que é quem o leitor
+// de tela ouve e quem a regra do inválido lê (`.input-group:has(>[aria-invalid="true"])`). O `Field` com `error` o manda
+// sozinho. O campo que já diz o seu `aria-invalid` vence.
+export function InputGroup({ className, children, width, style, "aria-invalid": invalido, ...props }) {
     const filhos = React.Children.toArray(children);
     const inicio = filhos.filter(f => ladoDoAdorno(f) === "start");
     const fim = filhos.filter(f => ladoDoAdorno(f) === "end");
-    const meio = filhos.filter(f => ladoDoAdorno(f) === null);
+    const meio = filhos.filter(f => ladoDoAdorno(f) === null).map(f => invalido !== undefined && React.isValidElement(f) && typeof f.type !== "symbol" && f.props["aria-invalid"] === undefined
+        ? React.cloneElement(f, { "aria-invalid": invalido }) : f);
     return _jsx("div", { className: cx("input-group", className), style: width != null ? { inlineSize: width, flex: "none", ...style } : style, ...props, children: [...inicio, ...meio, ...fim] });
 }
 // `layout` é responsivo, e a triagem que o autorizou está no `G-AXIS-07`: com o adorno em linha,

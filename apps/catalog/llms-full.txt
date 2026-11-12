@@ -6460,6 +6460,16 @@ Without multiple, a new pick replaces the previous file instead of stacking.
 <FileInput label="Avatar" accept="image/png,image/jpeg" maxSize={512000} />
 ```
 
+### With an error
+
+Inside a Field with error, the drop area turns red like every other field and a screen reader hears "invalid". Outside a Field, pass aria-invalid. A refused file still turns it red on its own.
+
+```tsx
+<Field label="Proof of address" error="Attach a document">
+  <FileInput accept=".pdf" />
+</Field>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -6475,6 +6485,7 @@ Without multiple, a new pick replaces the previous file instead of stacking.
 | `onQueueChange` | `(queue: FileQueueItem[]) => void` | — | Fires on every change to the queue, in serialisable form. Where you persist it — local storage, a server, nowhere — is yours, the same boundary the grid draws for its URL state. |
 | `preview` | `boolean` | false | Shows a thumbnail for image files, in the same slot the document icon occupies — the row does not change height because of it. Only images: generating an object URL for a 40 MB PDF shows nothing. The URL is revoked whenever the item LEAVES the queue — removed, replaced in single mode, or replaced by a name conflict — and any survivor is revoked on unmount. The browser holds the bytes until someone says otherwise, and until 2026-08-12 only the remove path revoked (AUD-0009). |
 | `checksum` | `boolean` | false | Computes SHA-256 of each file with the Web Crypto API — no dependency — shows the first eight digits and puts the whole value in the queue. Opt-in and not the default for two measured reasons: `crypto.subtle` only exists in a secure context (https or localhost), and the digest needs the WHOLE file in memory, because Web Crypto has no streaming hash. If your `upload` resolves with `{checksum}`, the two are compared and a mismatch fails the item: bytes that differ are not a detail. |
+| `aria-invalid` | `boolean \| "true" \| "false"` | — | The drop area turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own. A refused file turns it red with or without it. Web only. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `id` | `string` | — | Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one. |
 </page>
@@ -7309,6 +7320,7 @@ import {InputGroup} from "@aurea-uds/react";
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `width` | `string` | — | Takes the group out of 100%: "20rem" for a measure, "auto" for the content size. With it the group also stops growing in a row. |
+| `aria-invalid` | `boolean \| "true" \| "false"` | — | Goes to the field in the middle (not to the box): the group turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own; a field that says its own aria-invalid keeps it. Web only. |
 </page>
 
 <page url="https://aureauds.dev/inputgroupaddon.html">
@@ -8232,6 +8244,7 @@ scrubbable adds a handle you pull to change the value; scrubDirection says which
 | `label` | `string` | none | Accessible name of the field. Use with `Field` when there is a visible label. |
 | `disabled / readOnly / required` | `boolean` | false | Standard form states, forwarded to the input and to both buttons. |
 | `scrubbable / scrubDirection` | `boolean / 'horizontal' \| 'vertical'` | false / horizontal | Opt-in drag handle: pulling it changes the value, which beats forty clicks on + over a wide range. Purely additive — the two buttons, the arrow keys and Home/End are untouched, and the handle itself is aria-hidden because dragging is a pointer gesture with no keyboard equivalent to promise. The axis is a class, not a data attribute: the engine does not publish direction. |
+| `aria-invalid` | `boolean \| "true" \| "false"` | — | The group turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own. Goes to the text field in the middle. Web only. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `id` | `string` | — | Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one. |
 </page>
@@ -8275,6 +8288,7 @@ primary is the field on the page; secondary is the one inside a card or a dialog
 | `variant` | `"primary" \| "secondary"` | "primary" | secondary gives the boxes the neutral background of the secondary Input, for a field inside a card. |
 | `label` | `string` | — | Accessible name of the group — what the code is for. |
 | `disabled / required` | `boolean` | false | Standard form states, forwarded to every box. |
+| `aria-invalid` | `boolean \| "true" \| "false"` | — | Every box turns red like the other fields, and a screen reader hears "invalid" on each one. Inside a Field with error it arrives on its own. Web only. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `id` | `string` | — | Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one. |
 </page>
@@ -14841,6 +14855,27 @@ import {InputGroup, InputGroupAddon, Textarea} from "@aurea-uds/react";
 ```
 </page>
 
+<page url="https://aureauds.dev/pattern-inputgroup-an-address-the-form-refused.html">
+# An address the form refused
+
+Inside a Field with `error`, the whole group turns red — the border in the color of the message — and the field in the middle tells a screen reader it is invalid. Outside a Field, pass `aria-invalid` to the group; a field that says its own `aria-invalid` keeps it.
+
+## Usage
+
+```tsx
+import {InputGroup, InputGroupAddon, Input, Field} from "@aurea-uds/react";
+```
+
+```tsx
+<Field label="Website" error="Enter a full address">
+  <InputGroup>
+    <InputGroupAddon>https://</InputGroupAddon>
+    <Input aria-label="Website" defaultValue="example" />
+  </InputGroup>
+</Field>
+```
+</page>
+
 <page url="https://aureauds.dev/pattern-kpi-a-number-with-its-comparison.html">
 # A number with its comparison
 
@@ -15361,6 +15396,24 @@ import {NumberField} from "@aurea-uds/react";
 ```
 </page>
 
+<page url="https://aureauds.dev/pattern-numberfield-a-quantity-the-form-refused.html">
+# A quantity the form refused
+
+Inside a Field with `error`, the field turns red like every other field — the border in the color of the message, and the label too — and a screen reader hears "invalid". Outside a Field, pass `aria-invalid`. The fill stays the same.
+
+## Usage
+
+```tsx
+import {NumberField, Field} from "@aurea-uds/react";
+```
+
+```tsx
+<Field label="Seats" error="Pick at least one seat">
+  <NumberField label="Seats" defaultValue={0} min={0} />
+</Field>
+```
+</page>
+
 <page url="https://aureauds.dev/pattern-otpfield-the-six-digits-from-the-email.html">
 # The six digits from the email
 
@@ -15374,6 +15427,24 @@ import {OTPField} from "@aurea-uds/react";
 
 ```tsx
 <OTPField label="Verification code" length={6} onValueChange={check} />
+```
+</page>
+
+<page url="https://aureauds.dev/pattern-otpfield-a-code-that-did-not-match.html">
+# A code that did not match
+
+Inside a Field with `error`, every box turns red — the border in the color of the message — and a screen reader hears "invalid" on each one. Outside a Field, pass `aria-invalid`.
+
+## Usage
+
+```tsx
+import {OTPField, Field} from "@aurea-uds/react";
+```
+
+```tsx
+<Field label="Verification code" error="That code did not match">
+  <OTPField length={6} defaultValue="123" />
+</Field>
 ```
 </page>
 
@@ -18665,6 +18736,35 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-67-0.html">
+# v0.67.0
+
+NumberField, OTPField, InputGroup and FileInput take aria-invalid, and a Field with an error now reaches them.
+
+## Added
+
+- **`aria-invalid` on `NumberField`, `OTPField`, `InputGroup` and `FileInput`.** Inside a `Field` with `error` it arrives on its own. Before, the error message showed below and the field stayed as if it were valid, and a screen reader did not hear "invalid". Each one now looks like the other fields with an error: the fill stays the same, the border turns red in the color of the message, and the label of the `Field` turns red.
+- **`NumberField`**: the mark goes to the text field in the middle, and the whole group turns red.
+- **`OTPField`**: every box turns red.
+- **`InputGroup`**: the mark goes to the field in the middle, not to the box. A field that sets its own `aria-invalid` keeps it.
+- **`FileInput`**: the drop area turns red. A refused file still turns it red with or without the mark.
+- Web only: on native these four already took the error from the surrounding `Field`.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.67.0 @aurea-uds/core@0.67.0 @aurea-uds/fonts@0.67.0 @aurea-uds/icons@0.67.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.67.0
 ```
 </page>
 

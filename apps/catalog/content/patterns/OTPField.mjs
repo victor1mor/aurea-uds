@@ -13,4 +13,15 @@ export default [
     code: `<OTPField label="Verification code" length={6} onValueChange={check} />`,
     render: () => h(A.OTPField, {label: "Verification code", length: 6}),
   },
+  {
+    variant: "Invalid",
+    name: "A code that did not match",
+    description: "Inside a Field with `error`, every box turns red — the border in the color of the message — and a screen reader hears \"invalid\" on each one. Outside a Field, pass `aria-invalid`.",
+    uses: ["OTPField", "Field"],
+    code: `<Field label="Verification code" error="That code did not match">
+  <OTPField length={6} defaultValue="123" />
+</Field>`,
+    render: () => h(A.Field, {label: "Verification code", error: "That code did not match"},
+      h(A.OTPField, {length: 6, defaultValue: "123"})),
+  },
 ];

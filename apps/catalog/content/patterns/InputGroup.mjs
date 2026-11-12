@@ -88,4 +88,19 @@ export default [
         defaultValue: "A design system is the agreement, not the components."}),
       h(A.InputGroupAddon, {side: "end", layout: "block"}, "54 / 280"))),
   },
+  {
+    variant: "Invalid",
+    name: "An address the form refused",
+    description: "Inside a Field with `error`, the whole group turns red — the border in the color of the message — and the field in the middle tells a screen reader it is invalid. Outside a Field, pass `aria-invalid` to the group; a field that says its own `aria-invalid` keeps it.",
+    uses: ["InputGroup", "InputGroupAddon", "Input", "Field"],
+    code: `<Field label="Website" error="Enter a full address">
+  <InputGroup>
+    <InputGroupAddon>https://</InputGroupAddon>
+    <Input aria-label="Website" defaultValue="example" />
+  </InputGroup>
+</Field>`,
+    render: () => h("div", {style: {width: "min(420px,100%)"}},
+      h(A.Field, {label: "Website", error: "Enter a full address"},
+        h(A.InputGroup, null, h(A.InputGroupAddon, null, "https://"), h(A.Input, {"aria-label": "Website", defaultValue: "example"})))),
+  },
 ];

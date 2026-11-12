@@ -22,6 +22,10 @@ export { cx, fundirRender, defaultStrings, ptBR, defaultSpriteUrl, universalStat
 // entregam o `id` ao nó focal. O `Field` os nomeia com `<label for>`, como os da lista dele; eles se
 // registram aqui ao carregar, porque importar cada um no `Field` puxaria o motor deles para todo app.
 export const controlesRotulaveis = new WeakSet();
+// Os controles que NÃO recebem o `<label for>` do `Field` (têm o próprio rótulo, como o `FileInput`) mas recebem o ERRO
+// dele (0.67.0, ADR-0094): o `Field` com `error` lhes manda só o `aria-invalid`. Moram fora do arquivo do `Field` e se
+// registram aqui ao carregar, pela mesma razão da lista de cima.
+export const controlesQueRecebemOErro = new WeakSet();
 export const StringsContext = createContext(defaultStrings);
 export const useAureaStrings = () => useContext(StringsContext);
 export const SpriteContext = createContext(defaultSpriteUrl);

@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.67.0
+
+November 12, 2026
+
+NumberField, OTPField, InputGroup and FileInput take aria-invalid, and a Field with an error now reaches them.
+
+[Read full release notes →](https://aureauds.dev/release-v0-67-0.md)
+
 ## v0.66.0
 
 November 11, 2026

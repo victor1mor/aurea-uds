@@ -5714,6 +5714,12 @@
               "optional": true,
               "type": "boolean",
               "values": null
+            },
+            {
+              "name": "\"aria-invalid\"",
+              "optional": true,
+              "type": "boolean | \"true\" | \"false\"",
+              "values": null
             }
           ]
         }
@@ -6992,6 +6998,12 @@
                 "horizontal",
                 "vertical"
               ]
+            },
+            {
+              "name": "\"aria-invalid\"",
+              "optional": true,
+              "type": "boolean | \"true\" | \"false\"",
+              "values": null
             }
           ]
         },
@@ -7074,6 +7086,12 @@
                 "primary",
                 "secondary"
               ]
+            },
+            {
+              "name": "\"aria-invalid\"",
+              "optional": true,
+              "type": "boolean | \"true\" | \"false\"",
+              "values": null
             }
           ]
         },

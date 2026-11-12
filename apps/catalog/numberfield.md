@@ -45,5 +45,6 @@ scrubbable adds a handle you pull to change the value; scrubDirection says which
 | `label` | `string` | none | Accessible name of the field. Use with `Field` when there is a visible label. |
 | `disabled / readOnly / required` | `boolean` | false | Standard form states, forwarded to the input and to both buttons. |
 | `scrubbable / scrubDirection` | `boolean / 'horizontal' \| 'vertical'` | false / horizontal | Opt-in drag handle: pulling it changes the value, which beats forty clicks on + over a wide range. Purely additive — the two buttons, the arrow keys and Home/End are untouched, and the handle itself is aria-hidden because dragging is a pointer gesture with no keyboard equivalent to promise. The axis is a class, not a data attribute: the engine does not publish direction. |
+| `aria-invalid` | `boolean \| "true" \| "false"` | — | The group turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own. Goes to the text field in the middle. Web only. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `id` | `string` | — | Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one. |
