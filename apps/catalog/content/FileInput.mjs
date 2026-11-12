@@ -1,5 +1,5 @@
 import {createElement as h} from "react";
-import {FileInput} from "../../../packages/react/dist/index.js";
+import {Field, FileInput} from "../../../packages/react/dist/index.js";
 
 const stack = {display: "grid", gap: "var(--space-4)", width: "min(480px, 100%)"};
 // Fila RESTAURADA: é o único estado de transferência que uma página estática pode mostrar sem
@@ -81,6 +81,17 @@ export default {
       render: () => h("div", {style: stack},
         h(FileInput, {label: "Avatar", hint: "PNG or JPEG, up to 500 KB",
           accept: "image/png,image/jpeg", maxSize: 512000})),
+    },
+    {
+      title: "With an error",
+      description: "Inside a Field with error, the drop area turns red like every other field and a screen reader hears \"invalid\". Outside a Field, pass aria-invalid. A refused file still turns it red on its own.",
+      code: [
+        '<Field label="Proof of address" error="Attach a document">',
+        '  <FileInput accept=".pdf" />',
+        "</Field>",
+      ].join("\n"),
+      render: () => h("div", {style: stack},
+        h(Field, {label: "Proof of address", error: "Attach a document"}, h(FileInput, {accept: ".pdf"}))),
     },
   ],
 };

@@ -4,7 +4,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React from "react";
-import { cx, useAureaStrings } from "./internal.js";
+import { cx, useAureaStrings, controlesQueRecebemOErro } from "./internal.js";
 import { Icon } from "./system.js";
 import { Button, IconButton } from "./actions.js";
 // matchesAccept espelha o algoritmo do atributo accept do HTML: extensão (.json),
@@ -70,7 +70,7 @@ export function formatSize(bytes) {
     }
     return `${n < 10 ? n.toFixed(1) : Math.round(n)} ${units[i]}`;
 }
-export function FileInput({ accept, maxSize, multiple, onFilesChange, upload, label, hint, id, className, initialQueue, onQueueChange, preview, checksum }) {
+export function FileInput({ accept, maxSize, multiple, onFilesChange, upload, label, hint, id, className, initialQueue, onQueueChange, preview, checksum, "aria-invalid": invalido }) {
     const s = useAureaStrings();
     const autoId = React.useId();
     const inputId = id ?? autoId;
@@ -276,7 +276,7 @@ export function FileInput({ accept, maxSize, multiple, onFilesChange, upload, la
     const recibo = files.filter(f => f.status === "done" || f.status === "error" || f.status === "canceled");
     const reciboTexto = recibo.map(r => [r.name, r.status, r.finishedAt ?? ""].join(TAB)).join(NL);
     return _jsxs("div", { className: cx("field", className), children: [label && _jsx("label", { className: "label", htmlFor: inputId, children: label }), _jsxs("label", { className: "dropzone", "data-dragging": dragging || undefined, onDragOver: e => { e.preventDefault(); setDragging(true); }, onDragLeave: e => { if (!e.currentTarget.contains(e.relatedTarget))
-                    setDragging(false); }, onDrop: e => { e.preventDefault(); setDragging(false); add(e.dataTransfer.files); }, children: [_jsx("input", { id: inputId, type: "file", className: "sr-only", accept: accept, multiple: multiple, "aria-invalid": rejected.length > 0 || undefined, "aria-describedby": rejected.length > 0 ? rejected.map((_, n) => `${inputId}-rejeitado-${n}`).join(" ") : undefined, onChange: e => { add(e.target.files); e.target.value = ""; } }), _jsx(Icon, { name: "cloud-arrow-up", size: "xl", className: "dropzone-icon" }), _jsx("strong", { children: s.fileDropPrompt }), hint && _jsx("span", { className: "dropzone-hint", children: hint })] }), upload && (enviando || pausados) && _jsx("div", { className: "file-queue-actions", children: enviando ? _jsx(Button, { variant: "secondary", size: "sm", leadingIcon: "pause", onClick: pausarTudo, children: s.uploadPause })
+                    setDragging(false); }, onDrop: e => { e.preventDefault(); setDragging(false); add(e.dataTransfer.files); }, children: [_jsx("input", { id: inputId, type: "file", className: "sr-only", accept: accept, multiple: multiple, "aria-invalid": rejected.length > 0 ? true : invalido, "aria-describedby": rejected.length > 0 ? rejected.map((_, n) => `${inputId}-rejeitado-${n}`).join(" ") : undefined, onChange: e => { add(e.target.files); e.target.value = ""; } }), _jsx(Icon, { name: "cloud-arrow-up", size: "xl", className: "dropzone-icon" }), _jsx("strong", { children: s.fileDropPrompt }), hint && _jsx("span", { className: "dropzone-hint", children: hint })] }), upload && (enviando || pausados) && _jsx("div", { className: "file-queue-actions", children: enviando ? _jsx(Button, { variant: "secondary", size: "sm", leadingIcon: "pause", onClick: pausarTudo, children: s.uploadPause })
                     : _jsx(Button, { variant: "secondary", size: "sm", leadingIcon: "play", onClick: retomarTudo, children: s.uploadResume }) }), files.length > 0 && _jsx("ul", { className: "file-list", children: files.map(({ id, file, name, bytes, status, progress = 0, restored, checksum: soma, preview: previa, erro }) => {
                     // A barra reusa .progress + .file-progress (largura fixa em classe); só o
                     // preenchimento (width %) fica inline, por ser data-driven. Erro reusa
@@ -292,3 +292,6 @@ export function FileInput({ accept, maxSize, multiple, onFilesChange, upload, la
                                     void copia.then(() => { setAnnounce(""); setTimeout(() => setAnnounce(s.copied), 100); }, () => { });
                                 }, children: s.uploadReceiptCopy })] }), _jsx("ul", { children: recibo.map(r => _jsxs("li", { children: [r.name, " \u00B7 ", r.status === "done" ? s.uploadComplete : r.status === "canceled" ? s.uploadCanceled : s.uploadError, r.finishedAt ? ` · ${r.finishedAt}` : ""] }, r.id)) })] }), rejected.map((r, n) => _jsxs("span", { id: `${inputId}-rejeitado-${n}`, className: "field-error", children: [r.reason, ": ", r.file.name] }, n)), _jsx("span", { className: "sr-only", role: "status", "aria-live": "polite", children: announce })] });
 }
+// O `Field` com `error` manda o `aria-invalid` ao `FileInput` (0.67.0): ele tem o próprio rótulo, então não recebe o
+// `<label for>`, só o erro.
+controlesQueRecebemOErro.add(FileInput);

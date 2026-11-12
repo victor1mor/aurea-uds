@@ -15,7 +15,7 @@ import { Slider as BaseSlider } from "@base-ui/react/slider";
 import { RadioGroup as BaseRadioGroup } from "@base-ui/react/radio-group";
 import { Radio as BaseRadio } from "@base-ui/react/radio";
 import { useDirection } from "@base-ui/react/direction-provider";
-import { cx, useAureaStrings, usePortalContainer, useReorder, useDeslize, controlesRotulaveis } from "./internal.js";
+import { cx, useAureaStrings, usePortalContainer, useReorder, useDeslize, controlesRotulaveis, controlesQueRecebemOErro } from "./internal.js";
 import { COLOR_CHANNELS, areaBackground, channelRange, colorName, corToHex, formatChannel, getChannel, hsbToRgb, parseColor, pureHue, setChannel, spaceOf, trackBackground } from "./color.js";
 import { Popover as BasePopover } from "@base-ui/react/popover";
 // Os seis controles abaixo saíram deste arquivo no item O1 e moram no `markup.tsx`, sem a
@@ -336,7 +336,12 @@ export function Field({ label, hint, description, error, children, className, id
     if (required && unico?.props.required === undefined)
         injecao.required = true;
     const asterisco = required ? _jsx("span", { className: "label-required", "aria-hidden": "true", children: "*" }) : null;
-    const controle = rotulavel ? React.cloneElement(unico, injecao) : children;
+    // 0.67.0 (ADR-0094): o `NumberField`, o `OTPField` e o `FileInput` têm o próprio rótulo, e o `InputGroup` é uma caixa —
+    // nenhum deles recebe o `<label for>`, e até aqui também não recebiam o ERRO: a frase aparecia embaixo e a peça ficava
+    // como se estivesse certa (medido em 11/11/2026). Eles recebem só o `aria-invalid`; o rótulo continua o de antes.
+    const recebeOErro = !rotulavel && !!unico && invalidoFinal !== undefined &&
+        ([NumberField, OTPField, InputGroup].includes(unico.type) || (typeof unico.type === "function" && controlesQueRecebemOErro.has(unico.type)));
+    const controle = rotulavel ? React.cloneElement(unico, injecao) : recebeOErro ? React.cloneElement(unico, { "aria-invalid": invalidoFinal }) : children;
     // a descrição mora no nó FOCAL quando existe um; sem filho único, no grupo — que é o que sobra
     // para anunciar. Nos dois lugares seria anunciar duas vezes.
     // Com `name`, o filho passa a ser o CONTROLE do motor: é isso que faz o `aria-invalid` e o
@@ -405,9 +410,9 @@ export function SearchField({ icon = "magnifying-glass", className, size, width,
 // plataforma; a Aurea não escreve formatador de dinheiro, e nem deveria.
 // `name` entra junto porque é ele que faz o motor renderizar o input escondido com o valor CRU —
 // é a trava do item ("o valor mascarado continua no DOM") entregue pelo motor, e o teste a cobra.
-export function NumberField({ value, defaultValue, onValueChange, min, max, step, disabled, readOnly, required, label, id, name, format, locale, className, scrubbable, scrubDirection }) {
+export function NumberField({ value, defaultValue, onValueChange, min, max, step, disabled, readOnly, required, label, id, name, format, locale, className, scrubbable, scrubDirection, "aria-invalid": invalido }) {
     const s = useAureaStrings();
-    return _jsx(BaseNumberField.Root, { id: id, name: name, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), min: min, max: max, step: step, format: format, locale: locale, disabled: disabled, readOnly: readOnly, required: required, className: cx("number-field", className), children: _jsxs(BaseNumberField.Group, { className: "number-field-group", children: [scrubbable && _jsxs(BaseNumberField.ScrubArea, { className: cx("number-field-scrub", scrubDirection === "vertical" && "number-field-scrub-vertical"), direction: scrubDirection, "aria-hidden": "true", children: [_jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }), _jsx(BaseNumberField.ScrubAreaCursor, { className: "number-field-scrub-cursor", children: _jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }) })] }), _jsx(BaseNumberField.Decrement, { className: "number-field-button number-field-decrement", "aria-label": s.decrement, children: _jsx(Icon, { name: "minus" }) }), _jsx(BaseNumberField.Input, { className: "input number-field-input", "aria-label": label }), _jsx(BaseNumberField.Increment, { className: "number-field-button number-field-increment", "aria-label": s.increment, children: _jsx(Icon, { name: "plus" }) })] }) });
+    return _jsx(BaseNumberField.Root, { id: id, name: name, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), min: min, max: max, step: step, format: format, locale: locale, disabled: disabled, readOnly: readOnly, required: required, className: cx("number-field", className), children: _jsxs(BaseNumberField.Group, { className: "number-field-group", children: [scrubbable && _jsxs(BaseNumberField.ScrubArea, { className: cx("number-field-scrub", scrubDirection === "vertical" && "number-field-scrub-vertical"), direction: scrubDirection, "aria-hidden": "true", children: [_jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }), _jsx(BaseNumberField.ScrubAreaCursor, { className: "number-field-scrub-cursor", children: _jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }) })] }), _jsx(BaseNumberField.Decrement, { className: "number-field-button number-field-decrement", "aria-label": s.decrement, children: _jsx(Icon, { name: "minus" }) }), _jsx(BaseNumberField.Input, { className: "input number-field-input", "aria-label": label, "aria-invalid": invalido }), _jsx(BaseNumberField.Increment, { className: "number-field-button number-field-increment", "aria-label": s.increment, children: _jsx(Icon, { name: "plus" }) })] }) });
 }
 export function CheckboxGroup({ label, description, error, value, defaultValue, onValueChange, name, disabled, required, children, className, ...props }) {
     const auto = React.useId();
@@ -726,9 +731,9 @@ export function ColorPicker({ label, value, defaultValue, onValueChange, onValue
 // 15/10/2026 (o Victor: "A, B, C, pode"), como o campo de código da referência: `groupSize` põe o TRACINHO a cada N
 // caixas (o 3 + 3 da vitrine dela; o `Separator` do motor, de 6 × 2), e `variant="secondary"` dá às caixas o fundo
 // neutro do `Input` secundário. Sem os dois, a marcação é a de antes.
-export function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className, groupSize, variant }) {
+export function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className, groupSize, variant, "aria-invalid": invalido }) {
     const s = useAureaStrings();
-    return _jsx(BaseOTPField.Root, { id: id, length: length, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), mask: mask, disabled: disabled, required: required, role: "group", "aria-label": label, className: cx("otp-field", className), children: Array.from({ length }, (_, i) => _jsxs(React.Fragment, { children: [_jsx(BaseOTPField.Input, { render: _jsx("input", { "aria-label": `${s.otpDigit} ${i + 1}` }), className: cx("input otp-slot", variant === "secondary" && "input-secondary") }), groupSize && groupSize > 0 && (i + 1) % groupSize === 0 && i < length - 1 ? _jsx(BaseOTPField.Separator, { className: "otp-separator" }) : null] }, i)) });
+    return _jsx(BaseOTPField.Root, { id: id, length: length, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), mask: mask, disabled: disabled, required: required, role: "group", "aria-label": label, className: cx("otp-field", className), children: Array.from({ length }, (_, i) => _jsxs(React.Fragment, { children: [_jsx(BaseOTPField.Input, { render: _jsx("input", { "aria-label": `${s.otpDigit} ${i + 1}`, "aria-invalid": invalido }), className: cx("input otp-slot", variant === "secondary" && "input-secondary") }), groupSize && groupSize > 0 && (i + 1) % groupSize === 0 && i < length - 1 ? _jsx(BaseOTPField.Separator, { className: "otp-separator" }) : null] }, i)) });
 }
 // O SITE B (aprovado pela bancada em 01/11/2026, os itens 3 e 8): `items[].icon` (o escolhido troca sozinho para a forma
 // cheia), `size="2xl"` (segmento de 48), `wrap` (quebra linha, o trilho com canto 22) e `orientation="vertical"` (em pé).

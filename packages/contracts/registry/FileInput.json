@@ -131,6 +131,12 @@
       "description": "Computes SHA-256 of each file with the Web Crypto API — no dependency — shows the first eight digits and puts the whole value in the queue. Opt-in and not the default for two measured reasons: `crypto.subtle` only exists in a secure context (https or localhost), and the digest needs the WHOLE file in memory, because Web Crypto has no streaming hash. If your `upload` resolves with `{checksum}`, the two are compared and a mismatch fails the item: bytes that differ are not a detail."
     },
     {
+      "name": "aria-invalid",
+      "type": "boolean | \"true\" | \"false\"",
+      "default": "—",
+      "description": "The drop area turns red like the other fields, and a screen reader hears \"invalid\". Inside a Field with error it arrives on its own. A refused file turns it red with or without it. Web only."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",

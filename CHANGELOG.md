@@ -296,6 +296,36 @@ como deveria funcionar"*.
 
 ---
 
+## [0.67.0] — 2026-11-12
+
+**O erro do `Field` chega às quatro peças que faltavam** (o que a [ADR-0094](decisions/0094-o-invalido-e-o-da-referencia.md)
+deixou de fora). O app escrevia `<Field error="…"><NumberField/></Field>` e a frase aparecia embaixo, mas a peça ficava
+como se estivesse certa: sem a borda vermelha e sem o "inválido" para o leitor de tela. E passado direto, o `aria-invalid`
+era jogado fora. O Victor viu as quatro lado a lado — hoje e a proposta, nos dois temas — e disse *"Pode"*. Só na web: no
+nativo as quatro já recebiam o erro do `Field`.
+
+### Acrescentou
+
+- **`aria-invalid` no `NumberField`, no `OTPField`, no `InputGroup` e no `FileInput`**, e o `Field` com `error` o manda
+  sozinho a eles. Cada um fica como os outros campos com erro (a 0.66.0): o fundo não muda, a borda fica no `--danger-400`
+  e o rótulo do `Field` fica vermelho. No `NumberField`, a marca vai para o campo do meio e o grupo fica vermelho; no
+  `OTPField`, para cada casa (como na referência); no `InputGroup`, para o campo do meio, e não para a caixa — o campo que
+  diz o seu `aria-invalid` vence; no `FileInput`, para a entrada de arquivo, e o arquivo recusado continua deixando a área
+  vermelha com ou sem ela. O rótulo continua o de antes: o `Field` não pendura `<label for>` nessas peças (elas têm o
+  próprio rótulo, ou são caixa). Nenhuma regra de cor nova: o CSS da 0.66.0 já pintava as quatro quando o controle tinha
+  a marca. A Ember recebe igual.
+
+### O site
+
+- Um exemplo "com erro" em cada uma das quatro: *A quantity the form refused*, *A code that did not match*, *An address
+  the form refused* e *With an error* (no `FileInput`).
+
+Quem cobra: `tests/unit/invalido-quatro.test.tsx` (contra o código de antes, 9 de 14 reprovam) e
+`tests/visual/invalido-quatro.spec.ts` (no navegador, nos dois temas: a borda e o rótulo no vermelho do erro, o fundo igual
+ao do campo sem erro).
+
+---
+
 ## [0.66.0] — 2026-11-11
 
 ✅ **Publicada em 12/11/2026, entre 07:57 e 08:08 (Brasília, medido no npm: seis pacotes entre 07:57 e 08:00 e o `native`

@@ -14,7 +14,7 @@ import {Slider as BaseSlider} from "@base-ui/react/slider";
 import {RadioGroup as BaseRadioGroup} from "@base-ui/react/radio-group";
 import {Radio as BaseRadio} from "@base-ui/react/radio";
 import {useDirection} from "@base-ui/react/direction-provider";
-import {cx, useAureaStrings, usePortalContainer, useReorder, useDeslize, controlesRotulaveis} from "./internal.js";
+import {cx, useAureaStrings, usePortalContainer, useReorder, useDeslize, controlesRotulaveis, controlesQueRecebemOErro} from "./internal.js";
 import {COLOR_CHANNELS, areaBackground, channelRange, colorName, corToHex, formatChannel, getChannel, hsbToRgb, parseColor, pureHue, setChannel, spaceOf, trackBackground, type ColorChannel, type ColorSpace, type Cor} from "./color.js";
 import {Popover as BasePopover} from "@base-ui/react/popover";
 // Os seis controles abaixo saíram deste arquivo no item O1 e moram no `markup.tsx`, sem a
@@ -353,7 +353,12 @@ export function Field({label,hint,description,error,children,className,id,name,o
   // o `required` do controle é o que anuncia; o do filho, se ele já disse, vence
   if(required&&unico?.props.required===undefined)injecao.required=true;
   const asterisco=required?<span className="label-required" aria-hidden="true">*</span>:null;
-  const controle=rotulavel?React.cloneElement(unico!,injecao):children;
+  // 0.67.0 (ADR-0094): o `NumberField`, o `OTPField` e o `FileInput` têm o próprio rótulo, e o `InputGroup` é uma caixa —
+  // nenhum deles recebe o `<label for>`, e até aqui também não recebiam o ERRO: a frase aparecia embaixo e a peça ficava
+  // como se estivesse certa (medido em 11/11/2026). Eles recebem só o `aria-invalid`; o rótulo continua o de antes.
+  const recebeOErro=!rotulavel&&!!unico&&invalidoFinal!==undefined&&
+    (([NumberField,OTPField,InputGroup] as unknown[]).includes(unico.type)||(typeof unico.type==="function"&&controlesQueRecebemOErro.has(unico.type)));
+  const controle=rotulavel?React.cloneElement(unico!,injecao):recebeOErro?React.cloneElement(unico!,{"aria-invalid":invalidoFinal}):children;
   // a descrição mora no nó FOCAL quando existe um; sem filho único, no grupo — que é o que sobra
   // para anunciar. Nos dois lugares seria anunciar duas vezes.
   // Com `name`, o filho passa a ser o CONTROLE do motor: é isso que faz o `aria-invalid` e o
@@ -479,7 +484,10 @@ export function SearchField({icon="magnifying-glass",className,size,width,...pro
 // plataforma; a Aurea não escreve formatador de dinheiro, e nem deveria.
 // `name` entra junto porque é ele que faz o motor renderizar o input escondido com o valor CRU —
 // é a trava do item ("o valor mascarado continua no DOM") entregue pelo motor, e o teste a cobra.
-export function NumberField({value,defaultValue,onValueChange,min,max,step,disabled,readOnly,required,label,id,name,format,locale,className,scrubbable,scrubDirection}:{value?:number|null;defaultValue?:number;onValueChange?:(v:number|null)=>void;min?:number;max?:number;step?:number;disabled?:boolean;readOnly?:boolean;required?:boolean;label?:string;id?:string;name?:string;format?:Intl.NumberFormatOptions;locale?:string;className?:string;scrubbable?:boolean;scrubDirection?:"horizontal"|"vertical"}){
+export function NumberField({value,defaultValue,onValueChange,min,max,step,disabled,readOnly,required,label,id,name,format,locale,className,scrubbable,scrubDirection,"aria-invalid":invalido}:{value?:number|null;defaultValue?:number;onValueChange?:(v:number|null)=>void;min?:number;max?:number;step?:number;disabled?:boolean;readOnly?:boolean;required?:boolean;label?:string;id?:string;name?:string;format?:Intl.NumberFormatOptions;locale?:string;className?:string;scrubbable?:boolean;scrubDirection?:"horizontal"|"vertical";
+  /** O inválido (0.67.0): o grupo fica vermelho como os outros campos e o leitor de tela ouve "inválido". Dentro de um
+   *  `Field` com `error`, chega sozinho. Vai para o campo de texto do meio. */
+  "aria-invalid"?:boolean|"true"|"false"}){
 const s=useAureaStrings();
 return <BaseNumberField.Root id={id} name={name} value={value} defaultValue={defaultValue} onValueChange={soOValor(onValueChange)} min={min} max={max} step={step} format={format} locale={locale} disabled={disabled} readOnly={readOnly} required={required} className={cx("number-field",className)}>
 <BaseNumberField.Group className="number-field-group">
@@ -503,7 +511,7 @@ return <BaseNumberField.Root id={id} name={name} value={value} defaultValue={def
 </BaseNumberField.ScrubArea>}
 {/* 0.32.0: os botões DENTRO do grupo, como o da referência (ver o `.number-field-group`) */}
 <BaseNumberField.Decrement className="number-field-button number-field-decrement" aria-label={s.decrement}><Icon name="minus"/></BaseNumberField.Decrement>
-<BaseNumberField.Input className="input number-field-input" aria-label={label}/>
+<BaseNumberField.Input className="input number-field-input" aria-label={label} aria-invalid={invalido}/>
 <BaseNumberField.Increment className="number-field-button number-field-increment" aria-label={s.increment}><Icon name="plus"/></BaseNumberField.Increment>
 </BaseNumberField.Group></BaseNumberField.Root>}
 
@@ -1068,11 +1076,14 @@ export function ColorPicker({label,value,defaultValue,onValueChange,onValueCommi
 // 15/10/2026 (o Victor: "A, B, C, pode"), como o campo de código da referência: `groupSize` põe o TRACINHO a cada N
 // caixas (o 3 + 3 da vitrine dela; o `Separator` do motor, de 6 × 2), e `variant="secondary"` dá às caixas o fundo
 // neutro do `Input` secundário. Sem os dois, a marcação é a de antes.
-export function OTPField({length,value,defaultValue,onValueChange,mask,disabled,required,label,id,className,groupSize,variant}:{length:number;value?:string;defaultValue?:string;onValueChange?:(v:string)=>void;mask?:boolean;disabled?:boolean;required?:boolean;label?:string;id?:string;className?:string;
+export function OTPField({length,value,defaultValue,onValueChange,mask,disabled,required,label,id,className,groupSize,variant,"aria-invalid":invalido}:{length:number;value?:string;defaultValue?:string;onValueChange?:(v:string)=>void;mask?:boolean;disabled?:boolean;required?:boolean;label?:string;id?:string;className?:string;
   /** O tracinho entre os grupos: a cada `groupSize` caixas (3 num código de 6). */
   groupSize?:number;
   /** `secondary`: o fundo neutro do `Input` secundário, para o campo dentro de um cartão. */
-  variant?:"primary"|"secondary"}){
+  variant?:"primary"|"secondary";
+  /** O inválido (0.67.0): cada casa fica vermelha, como na referência, e o leitor de tela ouve "inválido" em cada uma.
+   *  Dentro de um `Field` com `error`, chega sozinho. */
+  "aria-invalid"?:boolean|"true"|"false"}){
 const s=useAureaStrings();
 return <BaseOTPField.Root id={id} length={length} value={value} defaultValue={defaultValue} onValueChange={soOValor(onValueChange)} mask={mask} disabled={disabled} required={required} role="group" aria-label={label} className={cx("otp-field",className)}>
 {/* Duas coisas medidas no Base UI 1.6.0, e as duas custaram uma volta:
@@ -1081,7 +1092,7 @@ return <BaseOTPField.Root id={id} length={length} value={value} defaultValue={de
        sem rótulo na raiz. Medido: o axe acusou `label` justamente nele. Pelo `render` o
        atributo sobrevive, e todos os outros que o motor injeta (autocomplete=one-time-code,
        pattern, enterKeyHint, tabindex) continuam intactos — conferido no markup emitido. */}
-{Array.from({length},(_,i)=><React.Fragment key={i}><BaseOTPField.Input render={<input aria-label={`${s.otpDigit} ${i+1}`}/>} className={cx("input otp-slot",variant==="secondary"&&"input-secondary")}/>
+{Array.from({length},(_,i)=><React.Fragment key={i}><BaseOTPField.Input render={<input aria-label={`${s.otpDigit} ${i+1}`} aria-invalid={invalido}/>} className={cx("input otp-slot",variant==="secondary"&&"input-secondary")}/>
   {groupSize&&groupSize>0&&(i+1)%groupSize===0&&i<length-1?<BaseOTPField.Separator className="otp-separator"/>:null}</React.Fragment>)}
 </BaseOTPField.Root>}
 // SegmentedControl — achado M20, fechado na Parte C do PLANO-1.0 em 07/08/2026.

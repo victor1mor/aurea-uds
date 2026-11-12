@@ -3,7 +3,7 @@
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, {type ReactNode} from "react";
-import {cx, useAureaStrings} from "./internal.js";
+import {cx, useAureaStrings, controlesQueRecebemOErro} from "./internal.js";
 import {Icon} from "./system.js";
 import {Button, IconButton} from "./actions.js";
 
@@ -98,7 +98,10 @@ export function formatSize(bytes:number):string{
   while(n>=1024&&i<units.length-1){n/=1024;i++}
   return `${n<10?n.toFixed(1):Math.round(n)} ${units[i]}`;
 }
-export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hint,id,className,initialQueue,onQueueChange,preview,checksum}:{accept?:string;maxSize?:number;multiple?:boolean;onFilesChange?:(files:File[])=>void;upload?:UploadFn;label?:ReactNode;hint?:ReactNode;id?:string;className?:string;initialQueue?:FileQueueItem[];onQueueChange?:(queue:FileQueueItem[])=>void;preview?:boolean;checksum?:boolean}){
+export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hint,id,className,initialQueue,onQueueChange,preview,checksum,"aria-invalid":invalido}:{accept?:string;maxSize?:number;multiple?:boolean;onFilesChange?:(files:File[])=>void;upload?:UploadFn;label?:ReactNode;hint?:ReactNode;id?:string;className?:string;initialQueue?:FileQueueItem[];onQueueChange?:(queue:FileQueueItem[])=>void;preview?:boolean;checksum?:boolean;
+  /** O inválido (0.67.0): a área de soltar fica vermelha como os outros campos e o leitor de tela ouve "inválido". Dentro
+   *  de um `Field` com `error`, chega sozinho. Arquivo recusado continua deixando a área vermelha, com ou sem ele. */
+  "aria-invalid"?:boolean|"true"|"false"}){
   const s=useAureaStrings();
   const autoId=React.useId();
   const inputId=id??autoId;
@@ -271,7 +274,7 @@ export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hi
           é inválido; `aria-describedby` liga o motivo, que é o mesmo idioma do `Field` — ali o
           erro também descreve em vez de virar parte do nome. */}
       <input id={inputId} type="file" className="sr-only" accept={accept} multiple={multiple}
-        aria-invalid={rejected.length>0||undefined}
+        aria-invalid={rejected.length>0?true:invalido}
         aria-describedby={rejected.length>0?rejected.map((_,n)=>`${inputId}-rejeitado-${n}`).join(" "):undefined}
         onChange={e=>{add(e.target.files);e.target.value=""}}/>
       <Icon name="cloud-arrow-up" size="xl" className="dropzone-icon"/>
@@ -347,3 +350,6 @@ export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hi
     <span className="sr-only" role="status" aria-live="polite">{announce}</span>
   </div>;
 }
+// O `Field` com `error` manda o `aria-invalid` ao `FileInput` (0.67.0): ele tem o próprio rótulo, então não recebe o
+// `<label for>`, só o erro.
+controlesQueRecebemOErro.add(FileInput);
