@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.66.0 (12/11/2026)
+
+- **A 0.66.0 publicada em 12/11/2026, entre 07:57 e 08:08** (Brasília, medido no npm), da junção do pedido #131
+  (`bfb67b24`): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo.
+  O CHANGELOG ([0.66.0] publicada), o CLAUDE.md (a linha na tabela e o item 63) e a release `v0.66.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### A porta em inglês e a promessa que se prova (07/11/2026)
 
 - **Tudo o que é público passa ao inglês** (o Victor: *"tudo deve ser em inglês"*): o README (sem o processo interno —
@@ -290,6 +297,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.66.0] — 2026-11-11
+
+✅ **Publicada em 12/11/2026, entre 07:57 e 08:08 (Brasília, medido no npm: seis pacotes entre 07:57 e 08:00 e o `native`
+às 08:08), pelo terminal do Victor, da junção do pedido #131** (`bfb67b24`).
 
 **O campo com erro é o da referência** ([ADR-0094](decisions/0094-o-invalido-e-o-da-referencia.md)). O Victor viu as 21
 formas de campo com erro lado a lado — como estavam (o fundo vermelho claro) e como a referência faz, com a cara da Aurea —,
