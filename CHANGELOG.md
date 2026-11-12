@@ -289,7 +289,66 @@ como deveria funcionar"*.
 
 ---
 
+## [0.66.0] — 2026-11-11
+
+**O campo com erro é o da referência** ([ADR-0094](decisions/0094-o-invalido-e-o-da-referencia.md)). O Victor viu as 21
+formas de campo com erro lado a lado — como estavam (o fundo vermelho claro) e como a referência faz, com a cara da Aurea —,
+nos dois temas, e escolheu: *"B como a referencia e Ember entra"*. Web e nativo.
+
+### Mudou
+
+- **O fundo do campo com erro não muda mais**: é o mesmo do campo sem erro. A borda que já existe (transparente) fica na cor
+  da frase de erro (`--danger-400`; no nativo, `danger400`). Nenhuma medida muda. Vale para todo campo: `Input`,
+  `Textarea`, `Select`, `Combobox`, `MultiCombobox`, `SearchField`, `PasswordField`, `NumberField`, `ColorField`,
+  `OTPField`, `InputGroup`, `DatePicker`, `FileInput`, `Checkbox`, `Radio` e os grupos.
+- **No foco, o vermelho fica**: na web o anel é vermelho e cola na borda; no nativo a borda engrossa para a do foco, na cor
+  do erro.
+- **O rótulo do campo e do grupo fica vermelho**, na cor da frase de erro. O nome de cada opção continua na cor do texto (no
+  nativo, o nome da opção do `RadioGroup` deixa de ficar vermelho, como na web).
+- **A caixa de marcar com erro**: vazia, o contorno; marcada, vermelha cheia com o visto branco. O rádio marcado guarda o
+  amarelo, com o contorno. A área de soltar arquivo fica com a linha cheia no erro; o cartão de escolha, com o contorno por
+  dentro.
+- **A chave (`Switch`) não muda com erro**, como na referência: o erro dela é a frase embaixo e o `aria-invalid` para o
+  leitor de tela. A ficha deixa de declarar `invalid`.
+- **No nativo, a caixa e o rádio soltos recebem o erro do `Field`** (antes não recebiam nada).
+- **No alto contraste** (`data-contrast="high"`), o campo com erro continua vermelho.
+- **A Ember recebe.**
+
+### Corrigido
+
+- **A caixa do `Checkbox` do nativo com o canto de 8** (`radiusSm`), o da caixa do celular da referência (24 com canto de
+  8). Era o canto de 6 da web desde a 0.32.0: lá a caixa tem 16, e o mesmo 6 numa caixa de 24 a deixava quadrada. O
+  Victor achou comparando com a web (*"o web ta correto nativo não"*) e escolheu olhando as três lado a lado (*"Canto de
+  8, como a referência"*). O tamanho (24) não muda. Quem cobra: `native-lote-q-escala-b.test.tsx` e `native-lote4.test.tsx`
+  (com o canto de 6, os dois reprovam).
+
+### Documentação
+
+- **A ADR-0094** e a quarta linha nomeada da ADR-0072: o contorno do erro, cobrado pelo `sem-linha.test.tsx` nos dois lados
+  (só em regra de erro, só na cor dele).
+
+Quem cobra: `tests/visual/invalido-referencia.spec.ts` (no navegador, nos dois temas e na Ember; contra o CSS de antes,
+reprova no fundo) e `tests/unit/native-invalido-referencia.test.tsx` (contra o código de antes, 3 de 4 reprovam). As
+duas varreduras do catálogo (`catalog-sweep.spec.ts`: a das linhas e a do foco) e a pele (`skin.spec.ts`) aprenderam a
+exceção: a borda vermelha passa só na peça em erro, pelos seletores do `aurea.css`, e só no `--danger-400` medido ali; nas
+páginas do nativo (onde só o `Input` diz `aria-invalid`), só se o campo em volta mostra a frase de erro no mesmo vermelho, ou
+se o item do `RadioGroup` leva a marca `data-aurea-invalid` (só no navegador; no aparelho é ignorada, como a do cartão de
+contorno — o `invalid` do grupo não tem frase); e
+a pele compara o erro com o rótulo de um campo SEM erro (com erro, o rótulo é do vermelho da frase). ⚠ **A lição:** no
+exemplo recolhido do site (`<details>` fechado) a peça não é desenhada e a transição da borda não anda — na troca para o
+claro, a varredura lia o vermelho do escuro. Medido: aberto o exemplo, o vermelho é o do claro; a varredura termina a
+transição antes de ler.
+
+### O registro da 0.65.0 (11/11/2026)
+
+- **A 0.65.0 publicada em 11/11/2026, entre 17:08 e 17:14** (Brasília, medido no npm), da junção do pedido #130
+  (`953be30b`): o `released-surface.json` desse commit — nenhum nome novo e nenhuma frase nova, nem na web nem no nativo.
+  O CHANGELOG ([0.65.0] publicada), o CLAUDE.md (a linha na tabela e o item 62) e a release `v0.65.0` no GitHub.
+
 ## [0.65.0] — 2026-11-11
+
+✅ **Publicada em 11/11/2026, entre 17:08 e 17:14 (Brasília, medido no npm: seis pacotes entre 17:08 e 17:11 e o `native`
+às 17:14), pelo terminal do Victor, da junção do pedido #130** (`953be30b`).
 
 **O `DatePicker` da web fica vermelho no erro e prende o foco** (a Fase 1 do caminho até a 1.0). As duas mudanças foram
 aprovadas pelo Victor olhando a bancada em 14/10/2026 (*"aprovaod"* e *"ok pode seguir"*) e não tinham sido construídas.

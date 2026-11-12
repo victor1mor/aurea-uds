@@ -22,8 +22,7 @@
     "default",
     "checked",
     "focus",
-    "disabled",
-    "invalid"
+    "disabled"
   ],
   "tokens": [
     "--border",

@@ -49,7 +49,7 @@ import {Platform, TextInput, View, type StyleProp, type ViewStyle} from "react-n
 import {IconButton} from "./actions.js";
 // Só o TIPO (some na compilação): a lista gerada do A-04, a mesma que o `Icon` confere.
 import type {AureaIcon} from "./icon.js";
-import {canto, criarFolha, estadoAcessivel, fundoDeCampo, bordaDeFoco, semAnelDaWeb} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, fundoDeCampo, bordaDeFoco, semAnelDaWeb, contornoDeErro} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
 import {useMaisContraste} from "./contraste.js";
 import {useCampo, type AureaFieldSize} from "./inputs.js";
@@ -109,7 +109,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   },
   campoLargo: {width: undefined, flex: 1, minWidth: t.size.space16},
   campoDisplay: {width: t.size.space24},
-  invalido: {borderColor: "transparent", backgroundColor: t.color.dangerBg},
+  invalido: contornoDeErro(t),
   desabilitado: {opacity: t.size.opacityDisabled},
 }));
 
@@ -494,6 +494,7 @@ export function NumberField({
           // depois. Um campo inválido que está sendo corrigido tem de mostrar que está ativo —
           // invertendo, a pessoa digita sem pista nenhuma de onde o teclado está batendo.
           focado && bordaDeFoco(t, maisContraste),
+          focado && campo?.invalido && s.invalido,  // ADR-0094: focado, o erro continua vermelho (como o anel vermelho da web).
           // 🔴 E DENTRO DO CARTÃO DA MARCA A TINTA VENCE OS DOIS — `usePeleSobreAMarca` tem os
           // números: sobre o amarelo o inválido mede 1,86 e o foco do tema escuro mede 1,00.
           // O foco continua existindo, por espessura.

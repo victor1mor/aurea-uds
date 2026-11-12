@@ -485,17 +485,23 @@ describe("NumberField — o foco, achado pela REFERÊNCIA", () => {
   });
 
   // DEFEITO DE ORDEM, e ele é sutil: um campo inválido que está sendo CORRIGIDO precisa mostrar
-  // que está ativo. Se o inválido vencer o foco, a pessoa digita sem pista nenhuma.
-  it("com foco, o foco vence o inválido — porque é o inválido que está sendo corrigido", async () => {
+  // que está ativo. Se o inválido apagar o foco, a pessoa digita sem pista nenhuma.
+  // ADR-0094 (0.66.0): o erro passou a ser a borda vermelha (era o fundo de perigo). Focado, o campo com erro guarda a
+  // pista do foco — a borda engrossa para a do foco — na cor do erro, como o anel vermelho da web e o campo focado da
+  // referência atual ("focus:border-danger").
+  it("com foco, o campo com erro mostra o foco — a borda grossa do foco, na cor do erro", async () => {
     render(
       <Envolve>
         <Field label="Litros" error="Só números"><NumberField value={1} testID="nf" /></Field>
       </Envolve>);
-    expect(StyleSheet.flatten(porID("TextInput", "nf-campo").style).backgroundColor)
-      .toBe(tokens.color.dangerBg);
+    const perigo = tokens.color.danger400 ?? tokens.color.destructive;
+    const antes = StyleSheet.flatten(porID("TextInput", "nf-campo").style);
+    expect(antes.borderColor).toBe(perigo);
+    expect(antes.backgroundColor).not.toBe(tokens.color.dangerBg);
     await act(async () => { (porID("TextInput", "nf-campo").onFocus as () => void)(); });
-    expect(StyleSheet.flatten(porID("TextInput", "nf-campo").style).borderColor)
-      .toBe(tokens.color.focusStrong);
+    const focado = StyleSheet.flatten(porID("TextInput", "nf-campo").style);
+    expect(focado.borderColor).toBe(perigo);
+    expect(focado.borderWidth, "o foco continua se vendo: a borda engrossa").toBeGreaterThan(antes.borderWidth ?? tokens.size.borderWidth);
   });
 
   // A TRAVA DE CONSISTÊNCIA, e ela é a que impede o defeito de voltar em OUTRO campo: os três

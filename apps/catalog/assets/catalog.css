@@ -5737,7 +5737,7 @@ button.tag-main { cursor:pointer; }
    varrendo as 328 páginas:
 
      o próprio controle   `.input` `.textarea` `.select`   ele tem a borda
-     o IRMÃO              `.control-mark` `.switch-track`  o <input> é `opacity:0`; quem desenha é o irmão
+     o IRMÃO              `.control-mark`                  o <input> é `opacity:0`; quem desenha é o irmão
      o ANCESTRAL          `.input-group` `.combobox-multi` `.dropzone`
                                                           o filho abre mão da moldura (`border:0`),
                                                           então pintar o filho não pinta nada
@@ -5774,27 +5774,33 @@ button.tag-main { cursor:pointer; }
 .radio input[aria-invalid="true"] + .control-mark,
 .checkbox input:user-invalid + .control-mark,
 .radio input:user-invalid + .control-mark,
-.switch input[aria-invalid="true"] + .switch-track,
-.switch input:user-invalid + .switch-track,
 .input-group:has(>[aria-invalid="true"]),
 .input-group:has(>:user-invalid),
+.number-field-group:has(>[aria-invalid="true"]),
+.number-field-group:has(>:user-invalid),
 .combobox-multi:has([aria-invalid="true"]),
 .combobox-multi:has(:user-invalid),
 .dropzone:has([aria-invalid="true"]),
 .dropzone:has(:user-invalid),
 .checkbox-pill[data-tone] input[aria-invalid="true"] + .control-mark,
-.checkbox-pill[data-tone] input:user-invalid + .control-mark,
+.checkbox-pill[data-tone] input:user-invalid + .control-mark { border-color:var(--danger-400); border-style:solid; --focus-strong:var(--danger-400); }
+/* O cartão de escolha (`RadioGroup variant="card"`) não tem borda: o contorno vai por dentro, sem mudar a medida. */
 .radio-group-cards > .radio:has(input[aria-invalid="true"]),
-.radio-group-cards > .radio:has(input:user-invalid) { border-color:transparent; background-color:var(--danger-bg); --focus-strong:var(--danger-400); }
-/* ↑ A 0.54.0 (02/11/2026, a trava `invalido.spec.ts`): a cápsula com tom (`Checkbox variant="pill" tone`) tem a regra da
-   marcada com a mesma força desta — aqui, depois, o inválido vence; e o cartão de escolha (`RadioGroup variant="card"`)
-   pinta o CARTÃO inteiro, porque com `indicatorPlacement="none"` a marca que pintava está escondida. */
-/* ↑ Sem linha (16/10/2026, o Victor: "quero tudo sem borda sem exceções"): o inválido era a borda vermelha; sem
-   borda, ele é o FUNDO de perigo (`--danger-bg`), o mesmo dos avisos. A frase de erro do `Field` continua embaixo.
-   `--focus-strong` (ADR-0059, 08/10/2026): o anel de foco agora COLA na borda e a pinta — com o
-   amarelo, o campo inválido perdia o vermelho justo enquanto a pessoa corrige. No inválido o anel é
-   da cor do perigo, como o campo inválido da referência principal. Cor por contexto se faz assim,
-   redefinindo `--focus-strong` (check 44). */
+.radio-group-cards > .radio:has(input:user-invalid) { box-shadow:inset 0 0 0 var(--border-width) var(--danger-400); --focus-strong:var(--danger-400); }
+/* A caixa MARCADA inválida fica vermelha cheia, com o visto branco (o desenho da referência). */
+.checkbox input:is([aria-invalid="true"],:user-invalid):is(:checked,:indeterminate) + .control-mark { border-color:transparent; background-color:var(--destructive); color:var(--destructive-foreground); }
+/* O rótulo do campo e do grupo fica vermelho, como na referência (a frase de erro continua embaixo). Com a CHAVE dentro,
+   não: ela não tem inválido, e o rótulo dela também não muda (o desenho B aprovado). */
+:is(.field,.checkbox-group,.radio-group):not(:has(.switch)):has([aria-invalid="true"],:user-invalid) > .label { color:var(--danger-400); }
+/* ↑ 0.66.0 (11/11/2026, o Victor olhando as 21 formas lado a lado, "B como a referencia e Ember entra" — ADR-0094): o
+   inválido é o da referência principal. O FUNDO do campo NÃO muda (era o fundo de perigo, `--danger-bg`, desde a ADR-0072);
+   a borda que já existe (transparente, 1) fica vermelha — o `--danger-400`, o mesmo da frase de erro —, e é a exceção
+   nomeada ao "sem linha" (`sem-linha.test.tsx`). No foco, o anel cola na borda e é vermelho: `--focus-strong` (ADR-0059,
+   check 44). A área de soltar arquivo, que tem a borda tracejada, fica com a linha CHEIA no erro. A caixa marcada fica
+   vermelha cheia; o rádio só ganha o contorno. A CHAVE (`Switch`) saiu da lista: a referência não tem inválido nela —
+   o erro dela é a frase embaixo e o `aria-invalid` para o leitor de tela. O `NumberField` entrou (a moldura é o grupo).
+   A 0.54.0 (02/11/2026): a cápsula com tom (`Checkbox variant="pill" tone`) tem a regra da marcada com a mesma força
+   desta — aqui, depois, o inválido vence. A Ember recebe (o Victor: "Ember entra"). */
 
 
 /* TreeView (Fase 4) — árvore headless própria (Base UI 1.6 não tem tree).
@@ -6831,6 +6837,11 @@ button.graph-node-body { cursor:pointer; }
   --control-thumb:var(--brand-yellow-ink); --control-selected-foreground:var(--brand-yellow-ink); --control-selected-dot:var(--brand-yellow-ink); }
 [data-contrast="high"] :is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary) { border-color:var(--input-strong); }
 [data-contrast="high"] .input-group > :is(.input,.select,.textarea) { border:0; }
+/* O inválido (ADR-0094) continua vermelho no alto contraste: o contorno de 3:1 acima vem depois e pesa o mesmo, e
+   apagava o vermelho do campo com erro. */
+[data-contrast="high"] :is(.input,.textarea,.select):is([aria-invalid="true"],:user-invalid),
+[data-contrast="high"] :is(.input-group,.number-field-group):has(>[aria-invalid="true"],>:user-invalid),
+[data-contrast="high"] .combobox-multi:has([aria-invalid="true"],:user-invalid) { border-color:var(--danger-400); }
 [data-contrast="high"] .card { border-color:var(--input-strong); }
 [data-contrast="high"] :is(a,.link) { text-decoration-line:underline; text-decoration-color:currentColor; text-decoration-thickness:var(--border-width); text-underline-offset:0.2em; }
 [data-contrast="high"] .btn { box-shadow:inset 0 0 0 var(--border-width) var(--input-strong); }

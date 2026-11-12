@@ -15,7 +15,7 @@ import {
   type AccessibilityActionEvent, type GestureResponderEvent, type LayoutChangeEvent,
   type PanResponderGestureState, type StyleProp, type TextStyle, type ViewStyle,
 } from "react-native";
-import {canto, criarFolha, estadoAcessivel, fundoDeCampo, focoDoCampo, marcaDoControle} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, fundoDeCampo, focoDoCampo, marcaDoControle, contornoDeErro} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
 import {useMaisContraste} from "./contraste.js";
 import {Icon, type AureaIcon, type AureaIconRegistry} from "./icon.js";
@@ -70,7 +70,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   // A casa ativa: a borda da cor do foco (`focoDoCampo`, na hora de pintar: o amarelo, ou o grafite com "aumentar
   // contraste" — ADR-0083), com a espessura do anel (o contorno de 2 da referência).
   casaAtiva: {borderWidth: t.size.focusWidth},
-  casaInvalida: {borderColor: "transparent", backgroundColor: t.color.dangerBg},
+  casaInvalida: contornoDeErro(t),
   // O dígito da referência: 18 em seminegrito, na linha de 28 do `text-lg`.
   digito: {fontSize: t.size.textLg, lineHeight: t.size.textLg * t.size.textLgLeading,
            fontFamily: t.font.ui[600], color: t.color.foreground},

@@ -271,6 +271,8 @@ const CORPO = renderToStaticMarkup(P(h("div", null,
     // ── Formulários ────────────────────────────────────────────────────────────────────
     h(A.Field, {key: "fd", label: "Name", hint: "As it appears on the document", error: "Required"},
       h(A.Input, {})),
+    // O campo sem erro: o rótulo NORMAL, contra o qual o erro se distingue (com erro, o rótulo é vermelho — ADR-0094).
+    h(A.Field, {key: "fdok", label: "Surname", className: "skin-field-ok"}, h(A.Input, {})),
     h(A.Textarea, {key: "ta", defaultValue: "linha"}),
     h(A.Checkbox, {key: "ck", label: "I agree", defaultChecked: true}),
     h(A.Radio, {key: "rd", label: "One", name: "skin-g"}),
@@ -1463,7 +1465,7 @@ for (const theme of ["dark", "light"] as const) {
             // Formulários: o `.field` empilha; hint e erro NÃO podem medir igual ao rótulo.
             field: {display: est(".field").display, gap: parseFloat(est(".field").rowGap),
                     hintCor: est(".hint").color, erroCor: est(".field-error").color,
-                    rotuloCor: est(".field .label").color},
+                    rotuloCor: est(".skin-field-ok > .label").color, rotuloErroCor: est(".field .label").color},
             textarea: {alt: caixa(".textarea").height, minAlt: est(".textarea").minHeight,
                        raio: parseFloat(est(".textarea").borderTopLeftRadius),
                        resize: est(".textarea").resize},
@@ -2664,7 +2666,9 @@ for (const theme of ["dark", "light"] as const) {
     // 28. Formulários: hint, erro e rótulo não podem medir a mesma cor — foi o achado A12.
     expect(e.field.hintCor, "hint e erro descrevem coisas diferentes e não podem parecer iguais")
       .not.toBe(e.field.erroCor);
-    expect(e.field.erroCor, "o erro se distingue do rótulo").not.toBe(e.field.rotuloCor);
+    expect(e.field.erroCor, "o erro se distingue do rótulo de um campo sem erro").not.toBe(e.field.rotuloCor);
+    expect(e.field.rotuloErroCor, "com erro, o rótulo é da cor da frase de erro, como na referência (ADR-0094)")
+      .toBe(e.field.erroCor);
     expect(e.field.gap, "o Field empilha com respiro").toBeGreaterThan(0);
     expect(e.textarea.resize, "o Textarea cresce só na vertical — na horizontal quebraria o layout")
       .toBe("vertical");

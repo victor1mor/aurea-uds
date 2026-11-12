@@ -49,7 +49,7 @@ import {
   type ViewProps, type ViewStyle,
 } from "react-native";
 import Svg, {Path} from "react-native-svg";
-import {canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, bordaDeFoco, semAnelDaWeb, marcaDoControle, aroDoEstilo, peleDoSegmento, marcaDoEstilo} from "./estilos.js";
+import {canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, bordaDeFoco, semAnelDaWeb, marcaDoControle, aroDoEstilo, peleDoSegmento, marcaDoEstilo, contornoDeErro} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
 import {useMaisContraste} from "./contraste.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
@@ -96,7 +96,7 @@ const folha = criarFolha((t: AureaTokens) => ({
   // 0.32.0: a caixa alta da referência — 128 de altura (era 104) e 8 em cima e embaixo (era 12).
   areaDeTexto: {minHeight: t.size.space24 + t.size.space8, paddingVertical: t.size.space2,
                 ...canto(t.size.radiusLg)},
-  invalido: {borderColor: "transparent", backgroundColor: t.color.dangerBg},
+  invalido: contornoDeErro(t),
   desabilitado: {opacity: t.size.opacityDisabled},
 
   // O GRUPO é a mesma caixa do campo virada em LINHA, e os números são os mesmos: mesma borda,
@@ -290,7 +290,10 @@ export function Field({
   return (
     <CampoCtx.Provider value={ctx}>
       <View style={[s.campo, style]} {...rest}>
-        {label != null && <Label>{label}</Label>}
+        {/* ADR-0094: com erro, o rótulo do campo fica vermelho (o `danger400` da frase de erro), como na web. */}
+        {/* Com a CHAVE dentro, não: ela não tem inválido, e o rótulo dela também não muda (o desenho B aprovado). */}
+        {label != null && <Label>{invalido && typeof label === "string" && !(React.isValidElement(children) && children.type === Switch)
+          ? <Text size="sm" weight={500} tone="danger">{label}</Text> : label}</Label>}
         {children}
         {hint != null && !invalido && (typeof hint === "string"
           ? <Text size="xs" tone="muted">{hint}</Text> : hint)}
@@ -506,6 +509,7 @@ export function Input({
         // mais aqui: no telefone é a única pista de qual campo o teclado está alimentando.
         // Com 2 de espessura, como o anel da web (0.55.0); o recheio desconta o pixel a mais — `bordaDeFoco`.
         !grupo && focado && bordaDeFoco(t, maisContraste, respiroDoTamanho(t, tam)),
+        !grupo && focado && campo?.invalido && s.invalido,  // ADR-0094: focado, o erro continua vermelho (como o anel vermelho da web).
         // 🔴 DENTRO DO CARTÃO DA MARCA A TINTA VENCE TUDO — inclusive inválido e foco, e isso é
         // medição, não preferência (os números estão no `usePeleSobreAMarca`): sobre o amarelo a
         // borda de inválido mede **1,86** e o `focusStrong` do tema ESCURO mede **1,00**, porque
@@ -630,6 +634,7 @@ export function InputGroup({size, disabled, children, style, testID, ...rest}: I
         // O foco vem do campo lá dentro, por contexto: no React Native não existe `:focus-within`,
         // e sem isto a única pista de qual campo o teclado alimenta sumiria ao entrar num grupo.
         focado && bordaDeFoco(t, maisContraste, respiroDoTamanho(t, tam)),
+        focado && campo?.invalido && s.invalido,  // ADR-0094: focado, o erro continua vermelho (como o anel vermelho da web).
         // Sobre a marca a tinta vence inválido e foco — ver `usePeleSobreAMarca`.
         peleDaMarca,
         peleDaMarca && focado && {borderWidth: t.size.borderWidth * 2},
@@ -755,6 +760,9 @@ function ControleMarcado({
   const campo = useCampo();
   const tam = size ?? campo?.size ?? "md";
   const inativo = disabled ?? campo?.disabled;
+  // ADR-0094: o erro do `Field` chega à caixa e ao rádio. Vazios, o contorno vermelho; a caixa MARCADA fica vermelha cheia
+  // com o visto branco, e o rádio marcado guarda o amarelo com o contorno — o desenho da referência.
+  const erro = !!campo?.invalido;
   // Mesma conta do `Switch`, pela mesma razão: sem texto, a coluna vazia com `flex: 1` tomaria a
   // largura que sobra dentro de uma fileira e apagaria o que estivesse ao lado.
   const temTexto = label != null || description != null;
@@ -788,11 +796,15 @@ function ControleMarcado({
       style={[s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style]}>
       <View style={[
         s.marcaBase, noTopo,
-        // 0.32.0: o canto da caixa é o `radiusXs` (6), o mesmo do `.checkbox .control-mark` da
-        // web; era 5 cru.
+        // 0.66.0: o canto da caixa é o `radiusSm` (8) — o da caixa do CELULAR da referência (24 com `radius-lg`, 8). Era
+        // o `radiusXs` (6) desde a 0.32.0, copiado da web: lá a caixa tem 16, e o mesmo 6 numa caixa de 24 a deixava
+        // quadrada (o Victor, comparando com a web: "o web ta correto nativo não"; escolheu olhando: "Canto de 8, como a
+        // referência").
         {width: lado, height: lado,
-         ...canto(papel === "radio" ? t.size.radiusFull : t.size.radiusXs)},
+         ...canto(papel === "radio" ? t.size.radiusFull : t.size.radiusSm)},
         checked && {backgroundColor: t.color.controlSelected, borderColor: "transparent"},
+        erro && (checked && papel === "checkbox"
+          ? {backgroundColor: t.color.destructive, borderColor: "transparent"} : contornoDeErro(t)),
       ]}>
         {checked && (papel === "radio"
           // O ponto do rádio é branco, sobre a marca já pintada (decisão do Victor, 17/10/2026).
@@ -803,7 +815,7 @@ function ControleMarcado({
           // um glifo, o mesmo da web (a máscara do `.checkbox` no `aurea.css`), sobre o `react-native-svg`
           // que o pacote já usa — sem depender do registro de ícones do app.
           : <Svg width="100%" height="100%" viewBox="0 0 16 16">
-              <Path d="M3.5 8.5l3 3 6-7" fill="none" stroke={marcaDoControle(t, t.color.controlSelectedForeground, maisContraste)}
+              <Path d="M3.5 8.5l3 3 6-7" fill="none" stroke={erro ? t.color.destructiveForeground : marcaDoControle(t, t.color.controlSelectedForeground, maisContraste)}
                     strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
             </Svg>)}
       </View>
@@ -955,7 +967,6 @@ function ItemDoGrupoDeRadio({
   const escolhido = grupo?.value === value;
   const inativo = disabled ?? grupo?.disabled;
   const erro = invalid ?? grupo?.invalid;
-  const perigo = t.color.danger400 ?? t.color.destructive;
   const marca = t.size.space6;
   const ponto = t.size.space2 + t.size.space05;
   const noInicio = (indicatorPlacement ?? grupo?.indicatorPlacement ?? "end") === "start";
@@ -963,7 +974,7 @@ function ItemDoGrupoDeRadio({
   const texto = (label != null || description != null || children != null) && (
     <View key="texto" style={{flex: 1, minWidth: 0}}>
       {typeof label === "string"
-        ? <Text size="base" weight={500} tone={erro ? "danger" : "default"}>{label}</Text> : label}
+        ? <Text size="base" weight={500}>{label}</Text> : label}
       {/* 🔴 Era `size="sm"`, que no telefone é **16** (o mapa da ADR-0050 sobe um degrau) — e o
           comentário do topo sempre disse `text-sm`, o 14 da descrição da referência. Medido
           na vitrine de 01/10/2026: rótulo e descrição saíam do mesmo tamanho. `xs` é o 14, o
@@ -978,19 +989,19 @@ function ItemDoGrupoDeRadio({
     <View key="marca" style={[
       s.marcaBase,
       {width: marca, height: marca, ...canto(t.size.radiusFull)},
-      erro && {borderColor: "transparent", backgroundColor: t.color.dangerBg},
-      escolhido && {backgroundColor: erro ? perigo : t.color.controlSelected,
-                    borderColor: "transparent"},
+      escolhido && {backgroundColor: t.color.controlSelected, borderColor: "transparent"},
+      erro && contornoDeErro(t),
     ]}>
       {escolhido && <View style={{width: ponto, height: ponto, ...canto(t.size.radiusFull),
                                   backgroundColor: marcaDoControle(t, t.color.controlSelectedDot, maisContraste)}} />}
     </View>
   );
   // O ícone é decorativo: o rótulo já diz o que a opção é, e o `Icon` sem `label` sai da árvore
-  // de acessibilidade. A cor acompanha a do rótulo, inclusive no erro.
+  // de acessibilidade. ADR-0094: no erro, o nome e o ícone da OPÇÃO ficam na cor do texto (como na web); quem fica
+  // vermelho é o contorno da marca e o rótulo do campo.
   const glifo = icon != null && (
     <Icon key="icone" name={icon} size="lg" weight={escolhido ? "fill" : "regular"}
-          color={erro ? perigo : t.color.foreground} />
+          color={t.color.foreground} />
   );
   return (
     <Pressable
@@ -1009,9 +1020,13 @@ function ItemDoGrupoDeRadio({
         // pagou no Android — caixa que ganha a pintura depois de montada perde o raio.
         cartao && s.itemCartao,
         cartao && escolhido && s.itemCartaoEscolhido,
-        cartao && erro && {borderColor: "transparent", backgroundColor: t.color.dangerBg},
+        cartao && erro && contornoDeErro(t),
         inativo && s.desabilitado, style,
       ]}
+      // ADR-0094: o erro do grupo não chega ao navegador por `aria-invalid` (o papel `radio` não o tem), e o `invalid` do
+      // grupo não precisa de frase. A marca `data-aurea-invalid` (só no `react-native-web`; no aparelho é ignorada, como a
+      // do cartão de contorno) é o que a varredura do site lê para aceitar o contorno vermelho.
+      {...marcaDoEstilo("aureaInvalid", erro ? "true" : undefined)}
       {...rest}>
       {/* A ordem é a da referência: o lado da marca sai da ordem dos filhos. Com a marca no início,
           o vão de 12 continua entre ela e o texto, e o texto ocupa o resto da linha. O ícone

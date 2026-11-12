@@ -34,7 +34,7 @@ import {Linking, Platform, Pressable, View, type StyleProp, type ViewStyle} from
 import RNDateTimePicker, {DateTimePickerAndroid} from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import {IconButton} from "./actions.js";
-import {canto, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo} from "./estilos.js";
+import {canto, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo, contornoDeErro} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
 import {useMaisContraste} from "./contraste.js";
 import {Alert} from "./feedback.js";
@@ -51,7 +51,7 @@ const folha = criarFolha((t: AureaTokens) => ({
     width: "100%", borderWidth: t.size.borderWidth, borderColor: "transparent",
     ...canto(t.size.radiusControl),
   },
-  invalido: {borderColor: "transparent", backgroundColor: t.color.dangerBg},
+  invalido: contornoDeErro(t),
   // No navegador o texto e o ícone vão numa caixa escondida do leitor de tela (E16): a mesma
   // fileira do gatilho, ocupando a largura dele.
   mioloWeb: {flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between"},

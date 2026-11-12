@@ -100,7 +100,9 @@ describe("InputGroup — a caixa passa a ser dele", () => {
     </Envolve>);
     const s = StyleSheet.flatten(porID("View", "g").style);
     expect(s.height).toBe(tokens.size.touchControlHSm);  // 0.32.0: a escala de toque
-    expect(s.backgroundColor).toBe(tokens.color.dangerBg);
+    // ADR-0094 (0.66.0): o erro é o da referência — o fundo não muda, a borda fica vermelha (a cor da frase de erro).
+    expect(s.borderColor).toBe(tokens.color.danger400 ?? tokens.color.destructive);
+    expect(s.backgroundColor).not.toBe(tokens.color.dangerBg);
   });
 
   it("o nome do Field continua chegando no campo dentro do grupo", () => {

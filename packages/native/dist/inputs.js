@@ -45,7 +45,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, KeyboardAvoidingView as KeyboardAvoidingViewRN, Modal, Platform, Pressable, ScrollView, TextInput, View, } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, bordaDeFoco, semAnelDaWeb, marcaDoControle, aroDoEstilo, peleDoSegmento, marcaDoEstilo } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, bordaDeFoco, semAnelDaWeb, marcaDoControle, aroDoEstilo, peleDoSegmento, marcaDoEstilo, contornoDeErro } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
 import { useMaisContraste } from "./contraste.js";
 import { FilaRolante } from "./rolagem.js";
@@ -83,7 +83,7 @@ const folha = criarFolha((t) => ({
     // 0.32.0: a caixa alta da referência — 128 de altura (era 104) e 8 em cima e embaixo (era 12).
     areaDeTexto: { minHeight: t.size.space24 + t.size.space8, paddingVertical: t.size.space2,
         ...canto(t.size.radiusLg) },
-    invalido: { borderColor: "transparent", backgroundColor: t.color.dangerBg },
+    invalido: contornoDeErro(t),
     desabilitado: { opacity: t.size.opacityDisabled },
     // O GRUPO é a mesma caixa do campo virada em LINHA, e os números são os mesmos: mesma borda,
     // mesmo raio de controle, mesmo fundo. A altura e o respiro horizontal entram por tamanho, como
@@ -207,7 +207,8 @@ export function Field({ label, hint, error, disabled, size = "md", children, sty
         hint: invalido && typeof error === "string" ? error : typeof hint === "string" ? hint : undefined,
         invalido, disabled, size,
     }), [label, hint, error, invalido, disabled, size]);
-    return (_jsx(CampoCtx.Provider, { value: ctx, children: _jsxs(View, { style: [s.campo, style], ...rest, children: [label != null && _jsx(Label, { children: label }), children, hint != null && !invalido && (typeof hint === "string"
+    return (_jsx(CampoCtx.Provider, { value: ctx, children: _jsxs(View, { style: [s.campo, style], ...rest, children: [label != null && _jsx(Label, { children: invalido && typeof label === "string" && !(React.isValidElement(children) && children.type === Switch)
+                        ? _jsx(Text, { size: "sm", weight: 500, tone: "danger", children: label }) : label }), children, hint != null && !invalido && (typeof hint === "string"
                     ? _jsx(Text, { size: "xs", tone: "muted", children: hint }) : hint), invalido && (typeof error === "string"
                     ? _jsx(Text, { size: "xs", tone: "danger", children: error }) : error)] }) }));
 }
@@ -297,6 +298,7 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
             // mais aqui: no telefone é a única pista de qual campo o teclado está alimentando.
             // Com 2 de espessura, como o anel da web (0.55.0); o recheio desconta o pixel a mais — `bordaDeFoco`.
             !grupo && focado && bordaDeFoco(t, maisContraste, respiroDoTamanho(t, tam)),
+            !grupo && focado && campo?.invalido && s.invalido, // ADR-0094: focado, o erro continua vermelho (como o anel vermelho da web).
             // 🔴 DENTRO DO CARTÃO DA MARCA A TINTA VENCE TUDO — inclusive inválido e foco, e isso é
             // medição, não preferência (os números estão no `usePeleSobreAMarca`): sobre o amarelo a
             // borda de inválido mede **1,86** e o `focusStrong` do tema ESCURO mede **1,00**, porque
@@ -361,6 +363,7 @@ export function InputGroup({ size, disabled, children, style, testID, ...rest })
             // O foco vem do campo lá dentro, por contexto: no React Native não existe `:focus-within`,
             // e sem isto a única pista de qual campo o teclado alimenta sumiria ao entrar num grupo.
             focado && bordaDeFoco(t, maisContraste, respiroDoTamanho(t, tam)),
+            focado && campo?.invalido && s.invalido, // ADR-0094: focado, o erro continua vermelho (como o anel vermelho da web).
             // Sobre a marca a tinta vence inválido e foco — ver `usePeleSobreAMarca`.
             peleDaMarca,
             peleDaMarca && focado && { borderWidth: t.size.borderWidth * 2 },
@@ -394,6 +397,9 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
     const campo = useCampo();
     const tam = size ?? campo?.size ?? "md";
     const inativo = disabled ?? campo?.disabled;
+    // ADR-0094: o erro do `Field` chega à caixa e ao rádio. Vazios, o contorno vermelho; a caixa MARCADA fica vermelha cheia
+    // com o visto branco, e o rádio marcado guarda o amarelo com o contorno — o desenho da referência.
+    const erro = !!campo?.invalido;
     // Mesma conta do `Switch`, pela mesma razão: sem texto, a coluna vazia com `flex: 1` tomaria a
     // largura que sobra dentro de uma fileira e apagaria o que estivesse ao lado.
     const temTexto = label != null || description != null;
@@ -417,11 +423,15 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
         // (ver "O ALVO DE TOQUE", no `actions.tsx`); a referência aceita isso, e a Aurea segue a referência aqui.
         hitSlop: FOLGA_DO_TOQUE(t), style: [s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style], children: [_jsx(View, { style: [
                     s.marcaBase, noTopo,
-                    // 0.32.0: o canto da caixa é o `radiusXs` (6), o mesmo do `.checkbox .control-mark` da
-                    // web; era 5 cru.
+                    // 0.66.0: o canto da caixa é o `radiusSm` (8) — o da caixa do CELULAR da referência (24 com `radius-lg`, 8). Era
+                    // o `radiusXs` (6) desde a 0.32.0, copiado da web: lá a caixa tem 16, e o mesmo 6 numa caixa de 24 a deixava
+                    // quadrada (o Victor, comparando com a web: "o web ta correto nativo não"; escolheu olhando: "Canto de 8, como a
+                    // referência").
                     { width: lado, height: lado,
-                        ...canto(papel === "radio" ? t.size.radiusFull : t.size.radiusXs) },
+                        ...canto(papel === "radio" ? t.size.radiusFull : t.size.radiusSm) },
                     checked && { backgroundColor: t.color.controlSelected, borderColor: "transparent" },
+                    erro && (checked && papel === "checkbox"
+                        ? { backgroundColor: t.color.destructive, borderColor: "transparent" } : contornoDeErro(t)),
                 ], children: checked && (papel === "radio"
                     // O ponto do rádio é branco, sobre a marca já pintada (decisão do Victor, 17/10/2026).
                     // 0.32.0: 10, o ponto da referência e o do `RadioGroup` (`space2 + space05`); era 8.
@@ -430,7 +440,7 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
                     // O visto. Era desenhado com DUAS BORDAS de um retângulo girado; sem linha (16/10/2026), ele é
                     // um glifo, o mesmo da web (a máscara do `.checkbox` no `aurea.css`), sobre o `react-native-svg`
                     // que o pacote já usa — sem depender do registro de ícones do app.
-                    : _jsx(Svg, { width: "100%", height: "100%", viewBox: "0 0 16 16", children: _jsx(Path, { d: "M3.5 8.5l3 3 6-7", fill: "none", stroke: marcaDoControle(t, t.color.controlSelectedForeground, maisContraste), strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" }) })) }), temTexto && (_jsxs(View, { style: { flex: 1 }, children: [typeof label === "string" ? _jsx(Text, { size: "sm", children: label }) : label, description != null && (typeof description === "string"
+                    : _jsx(Svg, { width: "100%", height: "100%", viewBox: "0 0 16 16", children: _jsx(Path, { d: "M3.5 8.5l3 3 6-7", fill: "none", stroke: erro ? t.color.destructiveForeground : marcaDoControle(t, t.color.controlSelectedForeground, maisContraste), strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" }) })) }), temTexto && (_jsxs(View, { style: { flex: 1 }, children: [typeof label === "string" ? _jsx(Text, { size: "sm", children: label }) : label, description != null && (typeof description === "string"
                         ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description)] }))] }));
 }
 /** A caixa que marca. `accessibilityRole="checkbox"` + `state.checked`. */
@@ -458,25 +468,24 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
     const escolhido = grupo?.value === value;
     const inativo = disabled ?? grupo?.disabled;
     const erro = invalid ?? grupo?.invalid;
-    const perigo = t.color.danger400 ?? t.color.destructive;
     const marca = t.size.space6;
     const ponto = t.size.space2 + t.size.space05;
     const noInicio = (indicatorPlacement ?? grupo?.indicatorPlacement ?? "end") === "start";
     const cartao = grupo?.variant === "card";
     const texto = (label != null || description != null || children != null) && (_jsxs(View, { style: { flex: 1, minWidth: 0 }, children: [typeof label === "string"
-                ? _jsx(Text, { size: "base", weight: 500, tone: erro ? "danger" : "default", children: label }) : label, description != null && (typeof description === "string"
+                ? _jsx(Text, { size: "base", weight: 500, children: label }) : label, description != null && (typeof description === "string"
                 ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description), children != null && _jsx(View, { style: { marginTop: t.size.space3 }, children: children })] }, "texto"));
     const marcaDesenhada = (_jsx(View, { style: [
             s.marcaBase,
             { width: marca, height: marca, ...canto(t.size.radiusFull) },
-            erro && { borderColor: "transparent", backgroundColor: t.color.dangerBg },
-            escolhido && { backgroundColor: erro ? perigo : t.color.controlSelected,
-                borderColor: "transparent" },
+            escolhido && { backgroundColor: t.color.controlSelected, borderColor: "transparent" },
+            erro && contornoDeErro(t),
         ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, ...canto(t.size.radiusFull),
                 backgroundColor: marcaDoControle(t, t.color.controlSelectedDot, maisContraste) } }) }, "marca"));
     // O ícone é decorativo: o rótulo já diz o que a opção é, e o `Icon` sem `label` sai da árvore
-    // de acessibilidade. A cor acompanha a do rótulo, inclusive no erro.
-    const glifo = icon != null && (_jsx(Icon, { name: icon, size: "lg", weight: escolhido ? "fill" : "regular", color: erro ? perigo : t.color.foreground }, "icone"));
+    // de acessibilidade. ADR-0094: no erro, o nome e o ícone da OPÇÃO ficam na cor do texto (como na web); quem fica
+    // vermelho é o contorno da marca e o rótulo do campo.
+    const glifo = icon != null && (_jsx(Icon, { name: icon, size: "lg", weight: escolhido ? "fill" : "regular", color: t.color.foreground }, "icone"));
     return (_jsx(Pressable, { onPress: inativo || escolhido ? undefined : () => grupo?.onValueChange?.(value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: escolhido, disabled: !!inativo }), accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : undefined), accessibilityHint: typeof description === "string" ? description : undefined, style: [
             { flexDirection: "row", alignItems: "center", justifyContent: "space-between",
                 gap: t.size.space3, minHeight: t.size.targetMin },
@@ -486,9 +495,9 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
             // pagou no Android — caixa que ganha a pintura depois de montada perde o raio.
             cartao && s.itemCartao,
             cartao && escolhido && s.itemCartaoEscolhido,
-            cartao && erro && { borderColor: "transparent", backgroundColor: t.color.dangerBg },
+            cartao && erro && contornoDeErro(t),
             inativo && s.desabilitado, style,
-        ], ...rest, children: noInicio ? [marcaDesenhada, glifo, texto] : [glifo, texto, marcaDesenhada] }));
+        ], ...marcaDoEstilo("aureaInvalid", erro ? "true" : undefined), ...rest, children: noInicio ? [marcaDesenhada, glifo, texto] : [glifo, texto, marcaDesenhada] }));
 }
 /**
  * Um conjunto de opções em que só uma fica escolhida — o `RadioGroup` da referência.

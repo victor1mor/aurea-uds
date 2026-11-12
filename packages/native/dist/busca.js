@@ -69,7 +69,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, Easing, FlatList, Modal, PanResponder, Platform, Pressable, TextInput, View, } from "react-native";
 import { IconButton } from "./actions.js";
-import { canto, cantosDeCima, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo, bordaDeFoco, semAnelDaWeb } from "./estilos.js";
+import { canto, cantosDeCima, criarFolha, estadoAcessivel, preenchimento, fundoDeCampo, bordaDeFoco, semAnelDaWeb, contornoDeErro } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
 import { useMaisContraste } from "./contraste.js";
 import { Spinner } from "./feedback.js";
@@ -106,7 +106,7 @@ const folha = criarFolha((t) => ({
         ...canto(t.size.radiusControl),
         flexDirection: "row", alignItems: "center",
     },
-    invalido: { borderColor: "transparent", backgroundColor: t.color.dangerBg },
+    invalido: contornoDeErro(t),
     desabilitado: { opacity: t.size.opacityDisabled },
     // As ações do gatilho — limpar e a seta. O `.combobox-actions` da web (`aurea.css:1673`) é
     // absoluto sobre o campo; aqui é um irmão na linha, porque não há campo por baixo.
@@ -430,6 +430,7 @@ export function SearchField({ value, onChangeText, onSearchChange, searchDelay =
             // O foco é a única pista de campo ativo que sobra no telefone — mesma decisão do `Input`
             // do Lote 4, e ela vale igual aqui.
             focado && bordaDeFoco(t, maisContraste, respiroDoTamanho(t, tam)),
+            focado && campo?.invalido && s.invalido, // ADR-0094: focado, o erro continua vermelho (como o anel vermelho da web).
             // Sobre a marca a tinta vence inválido e foco; o foco vira ESPESSURA — `usePeleSobreAMarca`.
             peleDaMarca,
             peleDaMarca && focado && { borderWidth: t.size.borderWidth * 2 },

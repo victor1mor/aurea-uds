@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.66.0
+
+November 11, 2026
+
+Fields with an error keep their fill and get a thin red border and a red label.
+
+[Read full release notes →](https://aureauds.dev/release-v0-66-0.md)
+
 ## v0.65.0
 
 November 11, 2026
