@@ -336,12 +336,25 @@ export function Field({ label, hint, description, error, children, className, id
     if (required && unico?.props.required === undefined)
         injecao.required = true;
     const asterisco = required ? _jsx("span", { className: "label-required", "aria-hidden": "true", children: "*" }) : null;
-    // 0.67.0 (ADR-0094): o `NumberField`, o `OTPField` e o `FileInput` têm o próprio rótulo, e o `InputGroup` é uma caixa —
-    // nenhum deles recebe o `<label for>`, e até aqui também não recebiam o ERRO: a frase aparecia embaixo e a peça ficava
-    // como se estivesse certa (medido em 11/11/2026). Eles recebem só o `aria-invalid`; o rótulo continua o de antes.
-    const recebeOErro = !rotulavel && !!unico && invalidoFinal !== undefined &&
+    // O `NumberField`, o `OTPField` e o `FileInput` têm o próprio rótulo, e o `InputGroup` é uma caixa — nenhum deles recebe o
+    // `<label for>`. Até a 0.66.0 também não recebiam o ERRO (a 0.67.0 deu o `aria-invalid`); e até a 0.67.0 o campo onde se
+    // digita não tinha nem o NOME nem a frase de erro: o `Field` virava grupo e punha o rótulo e a frase no grupo (medido em
+    // 13/11/2026 na árvore de acessibilidade do Chromium — o `NumberField` e o `InputGroup` sem nome, os quatro sem a frase).
+    // Agora o `Field` os LIGA ao campo, como a referência, onde o rótulo nomeia o campo sozinho: `aria-labelledby` para o
+    // rótulo (quando a peça não tem nome próprio), `aria-describedby` para a dica e a frase, e o `aria-invalid`. Cada peça
+    // repassa ao nó focal; o `OTPField` e o `FileInput` SOMAM o rótulo ao nome que já tinham ("Digit 1", o texto da área).
+    const ligavel = !rotulavel && !!unico &&
         ([NumberField, OTPField, InputGroup].includes(unico.type) || (typeof unico.type === "function" && controlesQueRecebemOErro.has(unico.type)));
-    const controle = rotulavel ? React.cloneElement(unico, injecao) : recebeOErro ? React.cloneElement(unico, { "aria-invalid": invalidoFinal }) : children;
+    const nomeProprioLigavel = ligavel && (unico.props.label !== undefined || [unico.props["aria-label"], unico.props["aria-labelledby"]].some(v => typeof v === "string" && v.trim().length > 0));
+    const nomeLigado = ligavel && !nomeProprioLigavel;
+    const ligacao = {};
+    if (nomeLigado)
+        ligacao["aria-labelledby"] = idRotulo;
+    if (descritoFinal)
+        ligacao["aria-describedby"] = descritoFinal;
+    if (invalidoFinal !== undefined)
+        ligacao["aria-invalid"] = invalidoFinal;
+    const controle = rotulavel ? React.cloneElement(unico, injecao) : ligavel ? React.cloneElement(unico, ligacao) : children;
     // a descrição mora no nó FOCAL quando existe um; sem filho único, no grupo — que é o que sobra
     // para anunciar. Nos dois lugares seria anunciar duas vezes.
     // Com `name`, o filho passa a ser o CONTROLE do motor: é isso que faz o `aria-invalid` e o
@@ -350,7 +363,7 @@ export function Field({ label, hint, description, error, children, className, id
     // árvore de acessibilidade enquanto a frase de erro aparece na tela. Pior que não mostrar.
     const controleFinal = name ? _jsx(BaseField.Control, { render: controle }) : controle;
     const estilo = labelWidth ? { ...style, "--field-label-width": labelWidth === "auto" ? "max-content" : labelWidth } : style;
-    const corpo = _jsxs("div", { className: cx("field", peleDoEixo("field", orientation, "vertical", "field"), className), ...(nomeAqui ? {} : { role: "group", "aria-labelledby": idRotulo, ...(rotulavel ? {} : { "aria-describedby": descrito }) }), style: estilo, ...props, children: [_jsxs("span", { className: "label", children: [nomeAqui ? _jsxs("label", { htmlFor: idControle, id: idRotulo, children: [label, asterisco] }) : _jsxs("span", { id: idRotulo, children: [label, asterisco] }), hint && _jsx("span", { className: "hint", id: idHint, children: hint })] }), controleFinal, description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), error && _jsx("span", { className: "field-error", id: idErro, children: error }), name && _jsx(BaseField.Error, { className: "field-error" })] });
+    const corpo = _jsxs("div", { className: cx("field", peleDoEixo("field", orientation, "vertical", "field"), className), ...(nomeAqui || nomeLigado ? {} : { role: "group", "aria-labelledby": idRotulo, ...(rotulavel || ligavel ? {} : { "aria-describedby": descrito }) }), style: estilo, ...props, children: [_jsxs("span", { className: "label", children: [nomeAqui ? _jsxs("label", { htmlFor: idControle, id: idRotulo, children: [label, asterisco] }) : _jsxs("span", { id: idRotulo, children: [label, asterisco] }), hint && _jsx("span", { className: "hint", id: idHint, children: hint })] }), controleFinal, description && _jsx("span", { className: "field-description", id: idDescricao, children: description }), error && _jsx("span", { className: "field-error", id: idErro, children: error }), name && _jsx(BaseField.Error, { className: "field-error" })] });
     // `Field.Root` do motor entra SÓ quando há `name`: é ele que liga o campo à chave de `errors`
     // do formulário. Ele não desenha nada — é contexto — então a pele não muda.
     return name ? _jsx(BaseField.Root, { name: name, invalid: error ? true : undefined, render: corpo }) : corpo;
@@ -410,9 +423,9 @@ export function SearchField({ icon = "magnifying-glass", className, size, width,
 // plataforma; a Aurea não escreve formatador de dinheiro, e nem deveria.
 // `name` entra junto porque é ele que faz o motor renderizar o input escondido com o valor CRU —
 // é a trava do item ("o valor mascarado continua no DOM") entregue pelo motor, e o teste a cobra.
-export function NumberField({ value, defaultValue, onValueChange, min, max, step, disabled, readOnly, required, label, id, name, format, locale, className, scrubbable, scrubDirection, "aria-invalid": invalido }) {
+export function NumberField({ value, defaultValue, onValueChange, min, max, step, disabled, readOnly, required, label, id, name, format, locale, className, scrubbable, scrubDirection, "aria-invalid": invalido, "aria-labelledby": rotuladoPor, "aria-describedby": descritoPor }) {
     const s = useAureaStrings();
-    return _jsx(BaseNumberField.Root, { id: id, name: name, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), min: min, max: max, step: step, format: format, locale: locale, disabled: disabled, readOnly: readOnly, required: required, className: cx("number-field", className), children: _jsxs(BaseNumberField.Group, { className: "number-field-group", children: [scrubbable && _jsxs(BaseNumberField.ScrubArea, { className: cx("number-field-scrub", scrubDirection === "vertical" && "number-field-scrub-vertical"), direction: scrubDirection, "aria-hidden": "true", children: [_jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }), _jsx(BaseNumberField.ScrubAreaCursor, { className: "number-field-scrub-cursor", children: _jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }) })] }), _jsx(BaseNumberField.Decrement, { className: "number-field-button number-field-decrement", "aria-label": s.decrement, children: _jsx(Icon, { name: "minus" }) }), _jsx(BaseNumberField.Input, { className: "input number-field-input", "aria-label": label, "aria-invalid": invalido }), _jsx(BaseNumberField.Increment, { className: "number-field-button number-field-increment", "aria-label": s.increment, children: _jsx(Icon, { name: "plus" }) })] }) });
+    return _jsx(BaseNumberField.Root, { id: id, name: name, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), min: min, max: max, step: step, format: format, locale: locale, disabled: disabled, readOnly: readOnly, required: required, className: cx("number-field", className), children: _jsxs(BaseNumberField.Group, { className: "number-field-group", children: [scrubbable && _jsxs(BaseNumberField.ScrubArea, { className: cx("number-field-scrub", scrubDirection === "vertical" && "number-field-scrub-vertical"), direction: scrubDirection, "aria-hidden": "true", children: [_jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }), _jsx(BaseNumberField.ScrubAreaCursor, { className: "number-field-scrub-cursor", children: _jsx(Icon, { name: "dots-six-vertical", "aria-hidden": true }) })] }), _jsx(BaseNumberField.Decrement, { className: "number-field-button number-field-decrement", "aria-label": s.decrement, children: _jsx(Icon, { name: "minus" }) }), _jsx(BaseNumberField.Input, { className: "input number-field-input", "aria-label": label, "aria-labelledby": rotuladoPor, "aria-describedby": descritoPor, "aria-invalid": invalido }), _jsx(BaseNumberField.Increment, { className: "number-field-button number-field-increment", "aria-label": s.increment, children: _jsx(Icon, { name: "plus" }) })] }) });
 }
 export function CheckboxGroup({ label, description, error, value, defaultValue, onValueChange, name, disabled, required, children, className, ...props }) {
     const auto = React.useId();
@@ -731,9 +744,12 @@ export function ColorPicker({ label, value, defaultValue, onValueChange, onValue
 // 15/10/2026 (o Victor: "A, B, C, pode"), como o campo de código da referência: `groupSize` põe o TRACINHO a cada N
 // caixas (o 3 + 3 da vitrine dela; o `Separator` do motor, de 6 × 2), e `variant="secondary"` dá às caixas o fundo
 // neutro do `Input` secundário. Sem os dois, a marcação é a de antes.
-export function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className, groupSize, variant, "aria-invalid": invalido }) {
+export function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className, groupSize, variant, "aria-invalid": invalido, "aria-labelledby": rotuladoPor, "aria-describedby": descritoPor }) {
     const s = useAureaStrings();
-    return _jsx(BaseOTPField.Root, { id: id, length: length, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), mask: mask, disabled: disabled, required: required, role: "group", "aria-label": label, className: cx("otp-field", className), children: Array.from({ length }, (_, i) => _jsxs(React.Fragment, { children: [_jsx(BaseOTPField.Input, { render: _jsx("input", { "aria-label": `${s.otpDigit} ${i + 1}`, "aria-invalid": invalido }), className: cx("input otp-slot", variant === "secondary" && "input-secondary") }), groupSize && groupSize > 0 && (i + 1) % groupSize === 0 && i < length - 1 ? _jsx(BaseOTPField.Separator, { className: "otp-separator" }) : null] }, i)) });
+    // o id de cada casa: a ligação soma o rótulo de fora ao "Digit n" da própria casa (o `aria-labelledby` lê o `aria-label`
+    // de quem ele aponta, e o campo pode apontar para si mesmo)
+    const idCasa = React.useId();
+    return _jsx(BaseOTPField.Root, { id: id, length: length, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), mask: mask, disabled: disabled, required: required, role: "group", "aria-label": label, className: cx("otp-field", className), children: Array.from({ length }, (_, i) => _jsxs(React.Fragment, { children: [_jsx(BaseOTPField.Input, { render: _jsx("input", { id: `${idCasa}-${i}`, "aria-label": `${s.otpDigit} ${i + 1}`, "aria-labelledby": rotuladoPor ? `${rotuladoPor} ${idCasa}-${i}` : undefined, "aria-describedby": descritoPor, "aria-invalid": invalido }), className: cx("input otp-slot", variant === "secondary" && "input-secondary") }), groupSize && groupSize > 0 && (i + 1) % groupSize === 0 && i < length - 1 ? _jsx(BaseOTPField.Separator, { className: "otp-separator" }) : null] }, i)) });
 }
 // O SITE B (aprovado pela bancada em 01/11/2026, os itens 3 e 8): `items[].icon` (o escolhido troca sozinho para a forma
 // cheia), `size="2xl"` (segmento de 48), `wrap` (quebra linha, o trilho com canto 22) e `orientation="vertical"` (em pé).

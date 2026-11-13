@@ -43,7 +43,7 @@ export interface SearchFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
     width?: string;
 }
 export declare function SearchField({ icon, className, size, width, ...props }: SearchFieldProps): React.JSX.Element;
-export declare function NumberField({ value, defaultValue, onValueChange, min, max, step, disabled, readOnly, required, label, id, name, format, locale, className, scrubbable, scrubDirection, "aria-invalid": invalido }: {
+export declare function NumberField({ value, defaultValue, onValueChange, min, max, step, disabled, readOnly, required, label, id, name, format, locale, className, scrubbable, scrubDirection, "aria-invalid": invalido, "aria-labelledby": rotuladoPor, "aria-describedby": descritoPor }: {
     value?: number | null;
     defaultValue?: number;
     onValueChange?: (v: number | null) => void;
@@ -64,6 +64,9 @@ export declare function NumberField({ value, defaultValue, onValueChange, min, m
     /** O inválido (0.67.0): o grupo fica vermelho como os outros campos e o leitor de tela ouve "inválido". Dentro de um
      *  `Field` com `error`, chega sozinho. Vai para o campo de texto do meio. */
     "aria-invalid"?: boolean | "true" | "false";
+    /** A ligação ao rótulo e à frase de fora (0.68.0): dentro de um `Field`, chega sozinha. Vai para o campo de texto do meio. */
+    "aria-labelledby"?: string;
+    "aria-describedby"?: string;
 }): React.JSX.Element;
 export interface CheckboxGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange">, RefAttributes<HTMLDivElement> {
     label: ReactNode;
@@ -302,7 +305,7 @@ export interface ColorPickerProps {
     className?: string;
 }
 export declare function ColorPicker({ label, value, defaultValue, onValueChange, onValueCommitted, swatches, variant, children, disabled, name, id, className }: ColorPickerProps): React.JSX.Element;
-export declare function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className, groupSize, variant, "aria-invalid": invalido }: {
+export declare function OTPField({ length, value, defaultValue, onValueChange, mask, disabled, required, label, id, className, groupSize, variant, "aria-invalid": invalido, "aria-labelledby": rotuladoPor, "aria-describedby": descritoPor }: {
     length: number;
     value?: string;
     defaultValue?: string;
@@ -320,6 +323,9 @@ export declare function OTPField({ length, value, defaultValue, onValueChange, m
     /** O inválido (0.67.0): cada casa fica vermelha, como na referência, e o leitor de tela ouve "inválido" em cada uma.
      *  Dentro de um `Field` com `error`, chega sozinho. */
     "aria-invalid"?: boolean | "true" | "false";
+    /** A ligação ao rótulo e à frase de fora (0.68.0): dentro de um `Field`, chega sozinha. Cada casa SOMA o rótulo ao próprio nome ("Verification code Digit 1"). */
+    "aria-labelledby"?: string;
+    "aria-describedby"?: string;
 }): React.JSX.Element;
 export type SegmentedControlSelectedStyle = "current" | "neutral" | "contrast" | "brand" | "ring" | "dot" | "emphasis";
 export declare function SegmentedControl({ items, value, onChange, label, fullWidth, size, selectedStyle, wrap, orientation, className }: {

@@ -96,11 +96,11 @@ export default [
     code: `<Field label="Website" error="Enter a full address">
   <InputGroup>
     <InputGroupAddon>https://</InputGroupAddon>
-    <Input aria-label="Website" defaultValue="example" />
+    <Input defaultValue="example" />
   </InputGroup>
 </Field>`,
     render: () => h("div", {style: {width: "min(420px,100%)"}},
       h(A.Field, {label: "Website", error: "Enter a full address"},
-        h(A.InputGroup, null, h(A.InputGroupAddon, null, "https://"), h(A.Input, {"aria-label": "Website", defaultValue: "example"})))),
+        h(A.InputGroup, null, h(A.InputGroupAddon, null, "https://"), h(A.Input, {defaultValue: "example"})))),
   },
 ];

@@ -137,6 +137,18 @@
       "description": "The drop area turns red like the other fields, and a screen reader hears \"invalid\". Inside a Field with error it arrives on its own. A refused file turns it red with or without it. Web only."
     },
     {
+      "name": "aria-labelledby",
+      "type": "string",
+      "default": "—",
+      "description": "The label it points to comes before the text of the drop area (\"Proof of address Drag files here or click to select\"). Inside a Field it arrives on its own, pointing at the Field label. Web only."
+    },
+    {
+      "name": "aria-describedby",
+      "type": "string",
+      "default": "—",
+      "description": "Goes to the file input, together with the reason of a refused file. Inside a Field it arrives on its own, pointing at the hint and the error message. Web only."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",

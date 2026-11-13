@@ -460,6 +460,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.68.0](https://aureauds.dev/release-v0-68-0.md): A Field now names the field inside NumberField, OTPField, InputGroup and FileInput, and reads its error message.
 - [v0.67.0](https://aureauds.dev/release-v0-67-0.md): NumberField, OTPField, InputGroup and FileInput take aria-invalid, and a Field with an error now reaches them.
 - [v0.66.0](https://aureauds.dev/release-v0-66-0.md): Fields with an error keep their fill and get a thin red border and a red label.
 - [v0.65.0](https://aureauds.dev/release-v0-65-0.md): DatePicker turns red on error and keeps the focus inside the open calendar.

@@ -43,9 +43,11 @@ describe("o erro do Field chega às quatro peças (0.67.0)", () => {
     expect(raiz.querySelector(".input-group > .input")!.getAttribute("aria-invalid")).toBe("false");
   });
 
-  it("o rótulo continua o de antes: o Field não pendura <label for> nessas peças", () => {
+  it("o Field não pendura <label for> nessas peças", () => {
     const raiz = montar(<Field label="Quantidade" error="Obrigatório"><NumberField defaultValue={0} /></Field>);
     expect(raiz.querySelector("label[for]")).toBeNull();
-    expect(raiz.querySelector(".field")!.getAttribute("role")).toBe("group");
+    // Até a 0.67.0 o `Field` ficava grupo aqui, e o campo ficava sem nome. Desde a 0.68.0 ele LIGA o rótulo ao campo
+    // (`aria-labelledby`) e deixa de ser grupo — quem cobra é o `nome-no-field.test.tsx`.
+    expect(raiz.querySelector(".field")!.getAttribute("role")).toBeNull();
   });
 });

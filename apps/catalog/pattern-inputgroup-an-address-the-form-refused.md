@@ -12,7 +12,7 @@ import {InputGroup, InputGroupAddon, Input, Field} from "@aurea-uds/react";
 <Field label="Website" error="Enter a full address">
   <InputGroup>
     <InputGroupAddon>https://</InputGroupAddon>
-    <Input aria-label="Website" defaultValue="example" />
+    <Input defaultValue="example" />
   </InputGroup>
 </Field>
 ```

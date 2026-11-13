@@ -5720,6 +5720,18 @@
               "optional": true,
               "type": "boolean | \"true\" | \"false\"",
               "values": null
+            },
+            {
+              "name": "\"aria-labelledby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-describedby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
             }
           ]
         }
@@ -7004,6 +7016,18 @@
               "optional": true,
               "type": "boolean | \"true\" | \"false\"",
               "values": null
+            },
+            {
+              "name": "\"aria-labelledby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-describedby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
             }
           ]
         },
@@ -7091,6 +7115,18 @@
               "name": "\"aria-invalid\"",
               "optional": true,
               "type": "boolean | \"true\" | \"false\"",
+              "values": null
+            },
+            {
+              "name": "\"aria-labelledby\"",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "\"aria-describedby\"",
+              "optional": true,
+              "type": "string",
               "values": null
             }
           ]

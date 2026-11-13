@@ -1,0 +1,29 @@
+# v0.68.0
+
+A Field now names the field inside NumberField, OTPField, InputGroup and FileInput, and reads its error message.
+
+## Added
+
+- **`aria-labelledby` and `aria-describedby` on `NumberField`, `OTPField`, `InputGroup` and `FileInput`.** Inside a `Field` they arrive on their own: the field is named by the label of the `Field`, and a screen reader reads the hint and the error message after it. Nothing changes on screen.
+- **`NumberField`** and **`InputGroup`**: the name is the label ("Seats"). Before, the field inside a `Field` had no name. In `InputGroup` it goes to the field in the middle; a field that sets its own name keeps it.
+- **`OTPField`**: every box adds the label before its own name ("Verification code Digit 1").
+- **`FileInput`**: the label comes before the text of the drop area ("Proof of address Drag files here or click to select").
+
+## Changed
+
+- **A `Field` around one of these four is no longer a group** when it names the field itself: the label and the error message move from the group to the field, so a screen reader does not read them twice. If the piece already has its own name (`label`, `aria-label` or `aria-labelledby`), the `Field` stays a group, as before, and the error message goes to the field.
+- Web only: on native these four already took the label and the error message from the surrounding `Field`.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.68.0 @aurea-uds/core@0.68.0 @aurea-uds/fonts@0.68.0 @aurea-uds/icons@0.68.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.68.0
+```

@@ -455,7 +455,7 @@ export declare function Label({ htmlFor, className, children, ...props }: HTMLAt
 }): React.JSX.Element;
 export type AddonSide = "start" | "end";
 export type AddonLayout = "inline" | "block";
-export declare function InputGroup({ className, children, width, style, "aria-invalid": invalido, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
+export declare function InputGroup({ className, children, width, style, "aria-invalid": invalido, "aria-labelledby": rotuladoPor, "aria-describedby": descritoPor, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     width?: string;
 }): React.JSX.Element;
 export declare function InputGroupAddon({ side, layout, className, children, ...props }: HTMLAttributes<HTMLSpanElement> & RefAttributes<HTMLSpanElement> & {

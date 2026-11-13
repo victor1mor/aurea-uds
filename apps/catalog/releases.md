@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.68.0
+
+November 13, 2026
+
+A Field now names the field inside NumberField, OTPField, InputGroup and FileInput, and reads its error message.
+
+[Read full release notes →](https://aureauds.dev/release-v0-68-0.md)
+
 ## v0.67.0
 
 November 12, 2026

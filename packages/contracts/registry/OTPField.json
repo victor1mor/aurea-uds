@@ -113,6 +113,18 @@
       "description": "Every box turns red like the other fields, and a screen reader hears \"invalid\" on each one. Inside a Field with error it arrives on its own. Web only."
     },
     {
+      "name": "aria-labelledby",
+      "type": "string",
+      "default": "—",
+      "description": "Every box adds the label it points to before its own name (\"Verification code Digit 1\"). Inside a Field it arrives on its own, pointing at the Field label. Web only."
+    },
+    {
+      "name": "aria-describedby",
+      "type": "string",
+      "default": "—",
+      "description": "Goes to every box. Inside a Field it arrives on its own, pointing at the hint and the error message. Web only."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",

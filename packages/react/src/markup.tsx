@@ -890,12 +890,19 @@ function ladoDoAdorno(no:ReactNode):"start"|"end"|null{
 // 0.67.0 (ADR-0094): `aria-invalid` não fica na caixa — vai para o campo do meio (o que não é adorno), que é quem o leitor
 // de tela ouve e quem a regra do inválido lê (`.input-group:has(>[aria-invalid="true"])`). O `Field` com `error` o manda
 // sozinho. O campo que já diz o seu `aria-invalid` vence.
-export function InputGroup({className,children,width,style,"aria-invalid":invalido,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{width?:string}){
+export function InputGroup({className,children,width,style,"aria-invalid":invalido,"aria-labelledby":rotuladoPor,"aria-describedby":descritoPor,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{width?:string}){
 const filhos=React.Children.toArray(children);
 const inicio=filhos.filter(f=>ladoDoAdorno(f)==="start");
 const fim=filhos.filter(f=>ladoDoAdorno(f)==="end");
-const meio=filhos.filter(f=>ladoDoAdorno(f)===null).map(f=>invalido!==undefined&&React.isValidElement<{"aria-invalid"?:unknown}>(f)&&typeof f.type!=="symbol"&&f.props["aria-invalid"]===undefined
-  ?React.cloneElement(f,{"aria-invalid":invalido}):f);
+// O inválido (0.67.0) e a ligação ao rótulo e à frase do `Field` (0.68.0) vão para o campo do MEIO, e não para a caixa:
+// é ele que recebe o foco. O que o campo já diz de si vence — o `aria-invalid` e o nome dele; a frase SOMA à dele.
+const meio=filhos.filter(f=>ladoDoAdorno(f)===null).map(f=>{
+  if(!React.isValidElement<Record<string,unknown>>(f)||typeof f.type==="symbol")return f;
+  const p=f.props, extra:Record<string,unknown>={};
+  if(invalido!==undefined&&p["aria-invalid"]===undefined)extra["aria-invalid"]=invalido;
+  if(rotuladoPor&&p["aria-label"]===undefined&&p["aria-labelledby"]===undefined)extra["aria-labelledby"]=rotuladoPor;
+  if(descritoPor)extra["aria-describedby"]=[p["aria-describedby"],descritoPor].filter(Boolean).join(" ");
+  return Object.keys(extra).length?React.cloneElement(f,extra):f;});
 return <div className={cx("input-group",className)} style={width!=null?{inlineSize:width,flex:"none",...style}:style} {...props}>{[...inicio,...meio,...fim]}</div>}
 
 // `layout` é responsivo, e a triagem que o autorizou está no `G-AXIS-07`: com o adorno em linha,

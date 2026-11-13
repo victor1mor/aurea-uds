@@ -128,6 +128,18 @@
       "description": "The group turns red like the other fields, and a screen reader hears \"invalid\". Inside a Field with error it arrives on its own. Goes to the text field in the middle. Web only."
     },
     {
+      "name": "aria-labelledby",
+      "type": "string",
+      "default": "—",
+      "description": "Goes to the text field in the middle. Inside a Field it arrives on its own, pointing at the Field label, so the field is named by it. Web only."
+    },
+    {
+      "name": "aria-describedby",
+      "type": "string",
+      "default": "—",
+      "description": "Goes to the text field in the middle. Inside a Field it arrives on its own, pointing at the hint and the error message. Web only."
+    },
+    {
       "name": "className",
       "type": "string",
       "default": "—",

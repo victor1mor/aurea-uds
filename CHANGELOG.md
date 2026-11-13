@@ -303,6 +303,39 @@ como deveria funcionar"*.
 
 ---
 
+## [0.68.0] — 2026-11-13
+
+**O `Field` dá o nome e a frase de erro ao campo das quatro peças** (o que a 0.67.0 deixou: o erro já pintava, mas o campo
+onde se digita não tinha nome). Medido em 13/11/2026 na árvore de acessibilidade do Chromium, com o foco no campo: o
+`NumberField` e o `InputGroup` dentro de um `Field` ficavam sem nome; o `OTPField` dizia só "Digit 1" e o `FileInput` só o
+texto da área; e nenhum dos quatro lia a frase de erro — o `Field` virava grupo e punha o rótulo e a frase no grupo. Na
+referência, o rótulo nomeia o campo sozinho. O Victor viu o que o leitor de tela diz hoje e com a proposta, peça por peça, e
+disse *"Pode"*. Nada muda na tela. Só na web: no nativo as quatro já recebiam o rótulo e a frase do `Field`.
+
+### Acrescentou
+
+- **`aria-labelledby` e `aria-describedby` no `NumberField`, no `OTPField`, no `InputGroup` e no `FileInput`**, e o `Field`
+  os manda sozinho: o campo passa a se chamar pelo rótulo do `Field` e lê, depois, a dica e a frase de erro. No
+  `NumberField` e no `InputGroup`, o nome é o rótulo ("Seats"); no `OTPField`, o rótulo SOMA ao nome de cada casa
+  ("Verification code Digit 1"); no `FileInput`, ao texto da área ("Proof of address Drag files here or click to select").
+  No `InputGroup` vai para o campo do meio, e o nome que o campo já diz vence; a frase soma à que ele já tem.
+
+### Mudou
+
+- **O `Field` com uma dessas quatro peças deixa de ser grupo** quando ele mesmo dá o nome: o rótulo e a frase passam do
+  grupo para o campo (nos dois lugares, o leitor de tela anunciaria duas vezes). Com a peça já nomeada pelo app (`label`,
+  `aria-label` ou `aria-labelledby`), o `Field` continua grupo, como antes, e a frase vai para o campo.
+
+### O site
+
+- Os exemplos com erro do `NumberField` e do `InputGroup` voltam à forma simples — sem repetir o nome na peça —, e a
+  varredura do axe passa neles.
+
+Quem cobra: `tests/unit/nome-no-field.test.tsx` (contra o código de antes, reprova) e `tests/visual/nome-no-field.spec.ts`
+(no navegador, o nome e a descrição que o leitor de tela recebe, nos três navegadores).
+
+---
+
 ## [0.67.0] — 2026-11-12
 
 ✅ **Publicada em 12/11/2026, entre 15:08 e 15:21 (Brasília, medido no npm: seis pacotes entre 15:08 e 15:10 e o `native`

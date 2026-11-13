@@ -37,5 +37,7 @@ primary is the field on the page; secondary is the one inside a card or a dialog
 | `label` | `string` | — | Accessible name of the group — what the code is for. |
 | `disabled / required` | `boolean` | false | Standard form states, forwarded to every box. |
 | `aria-invalid` | `boolean \| "true" \| "false"` | — | Every box turns red like the other fields, and a screen reader hears "invalid" on each one. Inside a Field with error it arrives on its own. Web only. |
+| `aria-labelledby` | `string` | — | Every box adds the label it points to before its own name ("Verification code Digit 1"). Inside a Field it arrives on its own, pointing at the Field label. Web only. |
+| `aria-describedby` | `string` | — | Goes to every box. Inside a Field it arrives on its own, pointing at the hint and the error message. Web only. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `id` | `string` | — | Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one. |

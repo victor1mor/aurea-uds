@@ -98,10 +98,13 @@ export function formatSize(bytes:number):string{
   while(n>=1024&&i<units.length-1){n/=1024;i++}
   return `${n<10?n.toFixed(1):Math.round(n)} ${units[i]}`;
 }
-export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hint,id,className,initialQueue,onQueueChange,preview,checksum,"aria-invalid":invalido}:{accept?:string;maxSize?:number;multiple?:boolean;onFilesChange?:(files:File[])=>void;upload?:UploadFn;label?:ReactNode;hint?:ReactNode;id?:string;className?:string;initialQueue?:FileQueueItem[];onQueueChange?:(queue:FileQueueItem[])=>void;preview?:boolean;checksum?:boolean;
+export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hint,id,className,initialQueue,onQueueChange,preview,checksum,"aria-invalid":invalido,"aria-labelledby":rotuladoPor,"aria-describedby":descritoPor}:{accept?:string;maxSize?:number;multiple?:boolean;onFilesChange?:(files:File[])=>void;upload?:UploadFn;label?:ReactNode;hint?:ReactNode;id?:string;className?:string;initialQueue?:FileQueueItem[];onQueueChange?:(queue:FileQueueItem[])=>void;preview?:boolean;checksum?:boolean;
   /** O inválido (0.67.0): a área de soltar fica vermelha como os outros campos e o leitor de tela ouve "inválido". Dentro
    *  de um `Field` com `error`, chega sozinho. Arquivo recusado continua deixando a área vermelha, com ou sem ele. */
-  "aria-invalid"?:boolean|"true"|"false"}){
+  "aria-invalid"?:boolean|"true"|"false";
+  /** A ligação ao rótulo e à frase de fora (0.68.0): dentro de um `Field`, chega sozinha. O rótulo SOMA ao texto da área ("Proof of address Drag files here…"). */
+  "aria-labelledby"?:string;"aria-describedby"?:string;
+}){
   const s=useAureaStrings();
   const autoId=React.useId();
   const inputId=id??autoId;
@@ -275,11 +278,12 @@ export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hi
           erro também descreve em vez de virar parte do nome. */}
       <input id={inputId} type="file" className="sr-only" accept={accept} multiple={multiple}
         aria-invalid={rejected.length>0?true:invalido}
-        aria-describedby={rejected.length>0?rejected.map((_,n)=>`${inputId}-rejeitado-${n}`).join(" "):undefined}
+        aria-labelledby={rotuladoPor?[rotuladoPor,`${inputId}-prompt`,hint?`${inputId}-hint`:""].filter(Boolean).join(" "):undefined}
+        aria-describedby={[descritoPor,...rejected.map((_,n)=>`${inputId}-rejeitado-${n}`)].filter(Boolean).join(" ")||undefined}
         onChange={e=>{add(e.target.files);e.target.value=""}}/>
       <Icon name="cloud-arrow-up" size="xl" className="dropzone-icon"/>
-      <strong>{s.fileDropPrompt}</strong>
-      {hint&&<span className="dropzone-hint">{hint}</span>}
+      <strong id={`${inputId}-prompt`}>{s.fileDropPrompt}</strong>
+      {hint&&<span className="dropzone-hint" id={`${inputId}-hint`}>{hint}</span>}
     </label>
     {upload&&(enviando||pausados)&&<div className="file-queue-actions">
       {enviando?<Button variant="secondary" size="sm" leadingIcon="pause" onClick={pausarTudo}>{s.uploadPause}</Button>
