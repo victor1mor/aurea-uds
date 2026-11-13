@@ -225,6 +225,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.64.0` | O meio-marcado do `Checkbox` (D-00): o "selecionar todos" da `DataGrid` com parte das linhas escolhida mostra o tracinho (a forma "B", desenhada como o visto), e o `Checkbox` solto ganha `indeterminate` (só web); a ficha do `SegmentedControl` deixa de dizer que ele rola — pedido #128. **Publicada em 10/11/2026** (entre 18:43 e 18:48, Brasília, medido no npm), pelo terminal do Victor |
 | `0.65.0` | O `DatePicker` da web fica vermelho no erro (`aria-invalid`, também pelo `Field`) e o calendário aberto prende o foco (o Tab dá a volta dentro; o `Popover.Close` escondido que o motor exige) — aprovados pelo Victor em 14/10/2026 e construídos no pedido #130. **Publicada em 11/11/2026** (entre 17:08 e 17:14, Brasília, medido no npm), pelo terminal do Victor |
 | `0.66.0` | O campo com erro é o da referência, na web e no nativo, com a Ember: o fundo não muda, a borda fica no vermelho da frase de erro, o rótulo do campo fica vermelho, a caixa marcada com erro fica vermelha cheia e a chave não muda ([ADR-0094](decisions/0094-o-invalido-e-o-da-referencia.md)); e a caixa de marcar do nativo com o canto de 8 — pedido #131. **Publicada em 12/11/2026** (entre 07:57 e 08:08, Brasília, medido no npm), pelo terminal do Victor |
+| `0.67.0` | O erro do `Field` chega às quatro peças que faltavam (web): `aria-invalid` no `NumberField`, no `OTPField`, no `InputGroup` e no `FileInput`, que ficam como os outros campos com erro — o fundo igual, a borda e o rótulo no vermelho da frase de erro; e um exemplo com erro de cada uma no site — pedido #133. **Publicada em 12/11/2026** (entre 15:08 e 15:21, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -933,6 +934,17 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    só no navegador; (4) um commit local guardado no meio do lote levava o nome da referência — os commits se juntaram
    num só antes de enviar. **Publicada em 12/11/2026** (entre 07:57 e 08:08, Brasília, medido no npm), pelo terminal do
    Victor, da junção do pedido #131. O registro entrou no lote seguinte (o 073, só de registro, sem versão).
+
+64. **`0.67.0`, o erro do `Field` nas quatro peças que faltavam, feita em 12/11/2026** (*"Sim, mostre antes"*, *"Pode"*) —
+   o que a ADR-0094 deixou de fora: o `NumberField`, o `OTPField`, o `InputGroup` e o `FileInput` da web aceitam
+   `aria-invalid`, e o `Field` com `error` o manda sozinho a eles (o conjunto `controlesQueRecebemOErro`, ao lado do
+   `elementoRotulavel`). Cada um fica como os outros campos com erro da 0.66.0; nenhuma regra de cor nova. No nativo as
+   quatro já recebiam o erro. ⚠ **As lições:** (1) a varredura do axe do fim achou os exemplos novos do `NumberField` e
+   do `InputGroup` sem nome acessível — o `Field` NÃO pendura `<label for>` nessas peças, e a ficha do `NumberField` já
+   mandava passar o `label`; o conserto ficou nos exemplos (a peça não mudou), e a pergunta "o `Field` deveria dar o nome?"
+   ficou para o Victor; (2) os três erros do `exemplos-compilam` nos ícones do nativo eram da montagem rodando ao mesmo
+   tempo — rodado depois dela, zero. **Publicada em 12/11/2026** (entre 15:08 e 15:21, Brasília, medido no npm), pelo
+   terminal do Victor, da junção do pedido #133. O registro entrou no lote seguinte (o 075, só de registro, sem versão).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

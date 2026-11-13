@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.67.0 (12/11/2026)
+
+- **A 0.67.0 publicada em 12/11/2026, entre 15:08 e 15:21** (Brasília, medido no npm), da junção do pedido #133
+  (`977e306a`): o `released-surface.json` desse commit. O CHANGELOG ([0.67.0] publicada), o CLAUDE.md (a linha na tabela
+  e o item 64) e a release `v0.67.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.66.0 (12/11/2026)
 
 - **A 0.66.0 publicada em 12/11/2026, entre 07:57 e 08:08** (Brasília, medido no npm), da junção do pedido #131
@@ -297,6 +304,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.67.0] — 2026-11-12
+
+✅ **Publicada em 12/11/2026, entre 15:08 e 15:21 (Brasília, medido no npm: seis pacotes entre 15:08 e 15:10 e o `native`
+às 15:21), pelo terminal do Victor, da junção do pedido #133** (`977e306a`).
 
 **O erro do `Field` chega às quatro peças que faltavam** (o que a [ADR-0094](decisions/0094-o-invalido-e-o-da-referencia.md)
 deixou de fora). O app escrevia `<Field error="…"><NumberField/></Field>` e a frase aparecia embaixo, mas a peça ficava
