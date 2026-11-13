@@ -10,6 +10,6 @@ import {NumberField, Field} from "@aurea-uds/react";
 
 ```tsx
 <Field label="Seats" error="Pick at least one seat">
-  <NumberField label="Seats" defaultValue={0} min={0} />
+  <NumberField defaultValue={0} min={0} />
 </Field>
 ```

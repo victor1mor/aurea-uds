@@ -6486,6 +6486,8 @@ Inside a Field with error, the drop area turns red like every other field and a 
 | `preview` | `boolean` | false | Shows a thumbnail for image files, in the same slot the document icon occupies — the row does not change height because of it. Only images: generating an object URL for a 40 MB PDF shows nothing. The URL is revoked whenever the item LEAVES the queue — removed, replaced in single mode, or replaced by a name conflict — and any survivor is revoked on unmount. The browser holds the bytes until someone says otherwise, and until 2026-08-12 only the remove path revoked (AUD-0009). |
 | `checksum` | `boolean` | false | Computes SHA-256 of each file with the Web Crypto API — no dependency — shows the first eight digits and puts the whole value in the queue. Opt-in and not the default for two measured reasons: `crypto.subtle` only exists in a secure context (https or localhost), and the digest needs the WHOLE file in memory, because Web Crypto has no streaming hash. If your `upload` resolves with `{checksum}`, the two are compared and a mismatch fails the item: bytes that differ are not a detail. |
 | `aria-invalid` | `boolean \| "true" \| "false"` | — | The drop area turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own. A refused file turns it red with or without it. Web only. |
+| `aria-labelledby` | `string` | — | The label it points to comes before the text of the drop area ("Proof of address Drag files here or click to select"). Inside a Field it arrives on its own, pointing at the Field label. Web only. |
+| `aria-describedby` | `string` | — | Goes to the file input, together with the reason of a refused file. Inside a Field it arrives on its own, pointing at the hint and the error message. Web only. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `id` | `string` | — | Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one. |
 </page>
@@ -7321,6 +7323,8 @@ import {InputGroup} from "@aurea-uds/react";
 |---|---|---|---|
 | `width` | `string` | — | Takes the group out of 100%: "20rem" for a measure, "auto" for the content size. With it the group also stops growing in a row. |
 | `aria-invalid` | `boolean \| "true" \| "false"` | — | Goes to the field in the middle (not to the box): the group turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own; a field that says its own aria-invalid keeps it. Web only. |
+| `aria-labelledby` | `string` | — | Goes to the field in the middle (not to the box). Inside a Field it arrives on its own, pointing at the Field label; a field that sets its own aria-label or aria-labelledby keeps it. Web only. |
+| `aria-describedby` | `string` | — | Goes to the field in the middle (not to the box), added to the one it already has. Inside a Field it arrives on its own, pointing at the hint and the error message. Web only. |
 </page>
 
 <page url="https://aureauds.dev/inputgroupaddon.html">
@@ -8245,6 +8249,8 @@ scrubbable adds a handle you pull to change the value; scrubDirection says which
 | `disabled / readOnly / required` | `boolean` | false | Standard form states, forwarded to the input and to both buttons. |
 | `scrubbable / scrubDirection` | `boolean / 'horizontal' \| 'vertical'` | false / horizontal | Opt-in drag handle: pulling it changes the value, which beats forty clicks on + over a wide range. Purely additive — the two buttons, the arrow keys and Home/End are untouched, and the handle itself is aria-hidden because dragging is a pointer gesture with no keyboard equivalent to promise. The axis is a class, not a data attribute: the engine does not publish direction. |
 | `aria-invalid` | `boolean \| "true" \| "false"` | — | The group turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own. Goes to the text field in the middle. Web only. |
+| `aria-labelledby` | `string` | — | Goes to the text field in the middle. Inside a Field it arrives on its own, pointing at the Field label, so the field is named by it. Web only. |
+| `aria-describedby` | `string` | — | Goes to the text field in the middle. Inside a Field it arrives on its own, pointing at the hint and the error message. Web only. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `id` | `string` | — | Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one. |
 </page>
@@ -8289,6 +8295,8 @@ primary is the field on the page; secondary is the one inside a card or a dialog
 | `label` | `string` | — | Accessible name of the group — what the code is for. |
 | `disabled / required` | `boolean` | false | Standard form states, forwarded to every box. |
 | `aria-invalid` | `boolean \| "true" \| "false"` | — | Every box turns red like the other fields, and a screen reader hears "invalid" on each one. Inside a Field with error it arrives on its own. Web only. |
+| `aria-labelledby` | `string` | — | Every box adds the label it points to before its own name ("Verification code Digit 1"). Inside a Field it arrives on its own, pointing at the Field label. Web only. |
+| `aria-describedby` | `string` | — | Goes to every box. Inside a Field it arrives on its own, pointing at the hint and the error message. Web only. |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 | `id` | `string` | — | Id of the focusable control, which is what a <label htmlFor> has to point at. Generated when you do not pass one. |
 </page>
@@ -14870,7 +14878,7 @@ import {InputGroup, InputGroupAddon, Input, Field} from "@aurea-uds/react";
 <Field label="Website" error="Enter a full address">
   <InputGroup>
     <InputGroupAddon>https://</InputGroupAddon>
-    <Input aria-label="Website" defaultValue="example" />
+    <Input defaultValue="example" />
   </InputGroup>
 </Field>
 ```
@@ -15409,7 +15417,7 @@ import {NumberField, Field} from "@aurea-uds/react";
 
 ```tsx
 <Field label="Seats" error="Pick at least one seat">
-  <NumberField label="Seats" defaultValue={0} min={0} />
+  <NumberField defaultValue={0} min={0} />
 </Field>
 ```
 </page>
@@ -18736,6 +18744,38 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-68-0.html">
+# v0.68.0
+
+A Field now names the field inside NumberField, OTPField, InputGroup and FileInput, and reads its error message.
+
+## Added
+
+- **`aria-labelledby` and `aria-describedby` on `NumberField`, `OTPField`, `InputGroup` and `FileInput`.** Inside a `Field` they arrive on their own: the field is named by the label of the `Field`, and a screen reader reads the hint and the error message after it. Nothing changes on screen.
+- **`NumberField`** and **`InputGroup`**: the name is the label ("Seats"). Before, the field inside a `Field` had no name. In `InputGroup` it goes to the field in the middle; a field that sets its own name keeps it.
+- **`OTPField`**: every box adds the label before its own name ("Verification code Digit 1").
+- **`FileInput`**: the label comes before the text of the drop area ("Proof of address Drag files here or click to select").
+
+## Changed
+
+- **A `Field` around one of these four is no longer a group** when it names the field itself: the label and the error message move from the group to the field, so a screen reader does not read them twice. If the piece already has its own name (`label`, `aria-label` or `aria-labelledby`), the `Field` stays a group, as before, and the error message goes to the field.
+- Web only: on native these four already took the label and the error message from the surrounding `Field`.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.68.0 @aurea-uds/core@0.68.0 @aurea-uds/fonts@0.68.0 @aurea-uds/icons@0.68.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.68.0
 ```
 </page>
 
