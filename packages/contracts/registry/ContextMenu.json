@@ -47,6 +47,7 @@
   "dependencies": {
     "engine": "@base-ui/react",
     "icons": [
+      "caret-left",
       "caret-right",
       "check"
     ]

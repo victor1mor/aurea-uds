@@ -320,6 +320,45 @@ como deveria funcionar"*.
 
 ---
 
+## [0.69.0] — 2026-11-14
+
+**As setas apontam para onde se lê, na escrita da direita para a esquerda** — a Fase 1 do caminho até a 1.0. O
+`Breadcrumb` desenhava a seta sempre para a direita, contra a leitura; a pergunta "quem mais?" achou mais seis na web
+(`Pagination`, `Carousel`, `NavList`, o submenu do `DropdownMenu`, do `ContextMenu` e do `Menubar`, `InterAgentMessage` e
+`DataGrid`) e duas no nativo (`NavList` e o submenu do `DropdownMenu`). A referência gira o separador da trilha e as setas da
+paginação; a do celular espelha a seta da lista e a do submenu, e decide a direção pelo provedor ou pelo aparelho. O Victor
+viu cada uma, hoje ao lado da proposta, e disse *"Pode"*, *"As seis"* e, para o nativo, *"Pode"*. Da esquerda para a
+direita nada muda.
+
+### Acrescentou
+
+- **`direction` no `AureaProvider` do nativo** (`"ltr"` ou `"rtl"`, o mesmo nome e os mesmos valores da web). Sem ele, vale o
+  do aparelho (`I18nManager.isRTL`), como na referência do celular. Mora num contexto próprio: um provedor de dentro sem
+  `direction` herda o de fora.
+
+### Mudou
+
+- **Web:** com `direction="rtl"` no provedor, a seta vira no `Breadcrumb`, na `Pagination` (anterior e próxima), no
+  `Carousel` (anterior e próxima), na `NavList`, no submenu do `DropdownMenu`, do `ContextMenu` e do `Menubar`, na
+  `InterAgentMessage` e no botão de detalhe da `DataGrid`. O ícone sai pela direção do provedor, como no grupo que dobra da
+  `Sidebar` — não por `:dir()`, que o empacotador do app reescreve.
+- **Nativo:** a seta padrão da `NavList` e a do submenu do `DropdownMenu` se espelham (o giro de abrir continua o mesmo). O
+  desenho que o app passa em `chevron` fica como veio, como na referência do celular.
+
+### O site
+
+- A ficha do `AureaProvider` diz como o `direction` funciona nos dois alvos.
+- A página nativa do `AureaProvider` ganha o exemplo "Direction" (aprovado pela imagem, *"Pode"*), e as fichas das sete
+  peças da web listam a seta da esquerda.
+- A página RTL diz quais setas viram, que o nativo tem o `direction` e que as regras com `:dir(rtl)` que sobram são oito
+  (a página dizia seis; as duas da `Table` tinham ficado de fora).
+
+Quem cobra: `tests/unit/setas-rtl.test.tsx` (web, as sete peças: da direita para a esquerda reprova no código de antes; da
+esquerda para a direita é a guarda) e `tests/unit/native-setas-rtl.test.tsx` (nativo: `direction`, o aparelho e o `chevron`
+do app).
+
+---
+
 ## [0.68.0] — 2026-11-13
 
 ✅ **Publicada em 13/11/2026, entre 17:58 e 18:09 (Brasília, medido no npm: seis pacotes entre 17:58 e 18:02 e o `native`

@@ -59,6 +59,7 @@
   "dependencies": {
     "engine": "@base-ui/react/menubar",
     "icons": [
+      "caret-left",
       "caret-right",
       "check"
     ]

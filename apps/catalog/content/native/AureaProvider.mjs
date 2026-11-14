@@ -2,7 +2,7 @@
 // (`nativo/moldura.mjs`); aqui um SEGUNDO, numa caixa, mostra o que cada prop faz. Todo valor das props do tipo em exemplo.
 import {createElement as h, useState} from "react";
 import {
-  AureaProvider, Button, Card, DataState, Text, ptBR, useAureaTheme,
+  AureaProvider, Button, Card, DataState, NavList, Text, ptBR, useAureaTheme,
 } from "../../../../packages/native/dist/index.js";
 import {FONTES_NO_NAVEGADOR} from "../../nativo/moldura.mjs";
 import {cada} from "../_eixos.mjs";
@@ -53,6 +53,7 @@ export default {
     defaultDensity: "The starting density, uncontrolled. comfortable by default.",
     fontFamilies: "The role → weight → family map that puts the text in Inter, the headings in Sora and the code in IBM Plex Mono: FONT_FAMILIES from @aurea-uds/fonts/native. Without it, every weight but Regular and Bold falls to the system font on the device.",
     icons: "The icon registry that Icon and every piece with a glyph read — built with criarRegistroDeIcones from the icons the app uses, never all of them. A provider without icons keeps the one above.",
+    direction: "Which way the text reads: ltr or rtl, the same prop as the web. Without it, the device setting (I18nManager.isRTL). The system already mirrors the layout; the provider mirrors the arrows that point one way — the NavList chevron and the submenu arrow — so they point the way the text reads. A provider inside another without direction keeps the outer one.",
     strings: "The sentences the pieces say on their own (a state's alert, the empty face, the spinner's name). English by default; ptBR ships ready.",
     onThemeChange: "Called when a controlled provider is asked to change theme — the app decides.",
     onDensityChange: "Called when a controlled provider is asked to change density.",
@@ -91,6 +92,18 @@ export default function App() {
   <Card>…</Card>
 </AureaProvider>`,
       peca: v => h(ComOTemaDoApp, {brand: v})}),
+    // A direção (0.69.0): o sistema do aparelho vira a linha; aqui o `dir` da caixa faz esse papel no navegador.
+    cada({titulo: "Direction", descricao: "rtl mirrors the arrows that point one way, so they point the way the text reads — here the NavList chevron. The layout itself is mirrored by the system. Without direction, the device setting.",
+      valores: ["ltr", "rtl"], estilo: grade,
+      codigo: v => `<AureaProvider theme={theme} direction="${v}" fontFamilies={FONT_FAMILIES}>
+  <NavList items={[
+    {id: "account", label: "Account", icon: "user", onPress: () => {}},
+    {id: "team", label: "Team", icon: "users", onPress: () => {}},
+  ]} />
+</AureaProvider>`,
+      peca: v => h("div", {dir: v}, h(ComOTemaDoApp, {direction: v, filho: h(NavList, {items: [
+        {id: "account", label: "Account", icon: "user", onPress: () => {}},
+        {id: "team", label: "Team", icon: "users", onPress: () => {}}]})}))}),
     {
       title: "Starting values",
       description: "Uncontrolled: defaultTheme and defaultDensity only seed the provider, and the buttons inside change it through useAureaTheme().",

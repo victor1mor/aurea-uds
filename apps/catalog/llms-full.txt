@@ -1971,6 +1971,8 @@ The `dir` attribute drives the CSS. Margins, paddings, positions and text alignm
 
 The `direction` prop drives behavior. It goes to Base UI, which uses it for the side a popup opens on and for the meaning of the left and right arrow keys. A few Aurea components also read it: the `TreeView` arrow points the other way, the arrow of the `AppShell` collapse button follows the direction, and the horizontal axis of the color area and the color slider runs from the right.
 
+The arrows that a component draws itself point the way the text reads: the `Breadcrumb` separator, the `Pagination` previous and next arrows, the `Carousel` previous and next buttons, the `NavList` row chevron, the submenu arrow in `DropdownMenu`, `ContextMenu` and `Menubar`, the `InterAgentMessage` arrow and the `DataGrid` detail button.
+
 ## What stays in place
 
 Some things do not mirror, on purpose:
@@ -1978,7 +1980,7 @@ Some things do not mirror, on purpose:
 - **The check mark of `Checkbox`.** It is a drawn mark, not a direction.
 - **The `Spinner`.** It is a drawn glyph too, and keeps its shape.
 - **`Drawer side="left"` and `side="right"`.** The names promise a physical side, so the drawer keeps it.
-- **Icons.** The glyphs are not flipped. Where an arrow means "next" or "back", pass the glyph that points the right way for the direction, for example `caret-left` instead of `caret-right`.
+- **Icons you pass.** The glyphs are not flipped. Where an arrow you pass means "next" or "back", pass the glyph that points the right way for the direction, for example `caret-left` instead of `caret-right`.
 
 ## Your own CSS
 
@@ -2001,11 +2003,13 @@ Write your additions the same way, and they mirror with the rest:
 
 ## Known limit
 
-Six rules in the stylesheet still use the `:dir(rtl)` selector: the corner position of an anchored `Badge`, the arrow of `Select`, and the thumb of `Switch`. Some build tools rewrite `:dir()`, and after the rewrite these rules can stop matching. New rules in the core resolve direction with logical properties instead, and these six are on the list to move.
+Eight rules in the stylesheet still use the `:dir(rtl)` selector: the corner position of an anchored `Badge`, the rounded ends of `Table` rows, the arrow of `Select`, and the thumb of `Switch`. Some build tools rewrite `:dir()`, and after the rewrite these rules can stop matching. New rules in the core resolve direction with logical properties instead, and these eight are on the list to move.
 
 ## React Native
 
-On React Native, the right-to-left layout is switched on by the app, through React Native itself. Aurea has no prop for it. `Heading`, `Paragraph` and `Code` take `align="start"` and `align="end"`, which follow the direction instead of a fixed side.
+On React Native, the right-to-left layout is switched on by the app, through React Native itself. `AureaProvider` takes the same `direction` prop as on the web. Unset, it follows the device setting (`I18nManager.isRTL`). It mirrors the `NavList` row chevron and the submenu arrow of `DropdownMenu`; a custom `chevron` you pass to `NavList` is left as it is.
+
+`Heading`, `Paragraph` and `Code` take `align="start"` and `align="end"`, which follow the direction instead of a fixed side.
 
 ## Next steps
 
@@ -2846,7 +2850,7 @@ toastPlacement picks one of six places for the messages of useToast(). bottom, t
 | `children` | `ReactNode` | — | Your application. Put the provider once, at the root — everything below it reads the context. |
 | `strings` | `Partial<AureaStrings>` | English defaults | Overrides for the built-in accessible names and labels. Merged over the defaults, so you translate only what you need. `ptBR` ships as a ready locale. |
 | `spriteUrl` | `string` | "/aurea-icons.svg" | Where the icon sprite lives. Application configuration, so it belongs here and not on every Icon — an app served from a sub-path used to lose every glyph and had to be fixed component by component. |
-| `direction` | `ltr \| rtl` | ltr | Tells the engine which way the inline axis runs, so popup sides and arrow keys mirror. The CSS mirrors on its own through logical properties — but you still have to put dir="rtl" on your <html>; the provider does not touch the DOM. |
+| `direction` | `ltr \| rtl` | ltr | Tells the engine which way the inline axis runs, so popup sides and arrow keys mirror, and the arrows that point one way (breadcrumb, pagination, carousel, the row and submenu chevrons) point the way the text reads. On the web the CSS mirrors on its own through logical properties — but you still have to put dir="rtl" on your <html>; the provider does not touch the DOM. On native, unset means the device setting (I18nManager.isRTL); the system already mirrors the layout, and the provider mirrors the NavList and submenu chevrons. |
 | `portalContainer` | `HTMLElement \| null` | — | Where every popup mounts: dialog, drawer, tooltip, popover, hover card, both menus, notification panel, combobox list and toasts. Unset, they mount on document.body — which is what lets them stack and position without inheriting overflow or transform from anything. Point it at a node inside one of your landmarks when you need popup content to satisfy the "all content in a landmark" check. |
 | `theme` | `AureaThemePreference` | — | Controlled theme. Pass it to command; the provider then never writes it on its own. "system" follows the computer's light/dark (prefers-color-scheme) and changes with it. |
 | `defaultTheme` | `AureaThemePreference` | — | Seeds the theme without controlling it. With NEITHER of the two, the provider adopts whatever the document already carries on <html> — the data-theme in the markup exists so the page does not flash, and a provider that overwrote it on first paint would bring the flash back. "system" follows the computer's light/dark (prefers-color-scheme) and changes with it. |
@@ -18779,6 +18783,36 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-69-0.html">
+# v0.69.0
+
+Arrows point the way the text reads in right-to-left layouts, on the web and on native.
+
+## Added
+
+- **`direction` on the native `AureaProvider`** — `"ltr"` or `"rtl"`, the same prop the web provider already has. Unset, it follows the device setting (`I18nManager.isRTL`). A nested provider without it keeps the outer one.
+
+## Changed
+
+- **Arrows that point one way now point the way the text reads** when the provider says `direction="rtl"`. Left-to-right layouts do not change.
+- Web: the `Breadcrumb` separator, the `Pagination` previous and next arrows, the `Carousel` previous and next buttons, the `NavList` row chevron, the submenu arrow in `DropdownMenu`, `ContextMenu` and `Menubar`, the `InterAgentMessage` arrow and the `DataGrid` detail button.
+- Native: the `NavList` row chevron and the submenu arrow in `DropdownMenu` are mirrored. A custom `chevron` you pass to `NavList` is left as it is.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.69.0 @aurea-uds/core@0.69.0 @aurea-uds/fonts@0.69.0 @aurea-uds/icons@0.69.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.69.0
 ```
 </page>
 

@@ -70,7 +70,7 @@ export interface BreadcrumbItem{label:ReactNode;href?:string;render?:ReactElemen
 // Na escrita da direita para a esquerda a seta aponta para a esquerda, para onde se lê (como a referência, que gira o
 // separador 180°): o ícone sai pela direção do provedor, como no grupo que dobra da `Sidebar` — e não por `:dir()`,
 // que o empacotador do app reescreve (13/11/2026).
-export function Breadcrumb({items,label}:{items:BreadcrumbItem[];label?:string}){const s=useAureaStrings();const seta=useDirection()==="rtl"?"caret-left":"caret-right";return <nav className="breadcrumb" aria-label={label??s.breadcrumbLabel}>{items.map((i,n)=><React.Fragment key={n}>{n>0&&<Icon name={seta} size="sm"/>} {i.render?fundirRender(i.render,{children:i.label},"a"):i.href?<a href={i.href}>{i.label}</a>:<strong aria-current="page">{i.label}</strong>}</React.Fragment>)}</nav>}
+export function Breadcrumb({items,label}:{items:BreadcrumbItem[];label?:string}){const s=useAureaStrings();const rtl=useDirection()==="rtl";return <nav className="breadcrumb" aria-label={label??s.breadcrumbLabel}>{items.map((i,n)=><React.Fragment key={n}>{n>0&&<Icon name={rtl?"caret-left":"caret-right"} size="sm"/>} {i.render?fundirRender(i.render,{children:i.label},"a"):i.href?<a href={i.href}>{i.label}</a>:<strong aria-current="page">{i.label}</strong>}</React.Fragment>)}</nav>}
 // ── REPORTADO no merge de 28/08/2026 ────────────────────────────────────────────────────────
 // `orientation`, `activateOnFocus` e `loopFocus` estavam na outra linhagem e sumiram quando este
 // arquivo entrou inteiro da `main` — ele não existia lá e por isso não deu conflito nenhum. A

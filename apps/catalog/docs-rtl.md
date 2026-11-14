@@ -38,6 +38,8 @@ The `dir` attribute drives the CSS. Margins, paddings, positions and text alignm
 
 The `direction` prop drives behavior. It goes to Base UI, which uses it for the side a popup opens on and for the meaning of the left and right arrow keys. A few Aurea components also read it: the `TreeView` arrow points the other way, the arrow of the `AppShell` collapse button follows the direction, and the horizontal axis of the color area and the color slider runs from the right.
 
+The arrows that a component draws itself point the way the text reads: the `Breadcrumb` separator, the `Pagination` previous and next arrows, the `Carousel` previous and next buttons, the `NavList` row chevron, the submenu arrow in `DropdownMenu`, `ContextMenu` and `Menubar`, the `InterAgentMessage` arrow and the `DataGrid` detail button.
+
 ## What stays in place
 
 Some things do not mirror, on purpose:
@@ -45,7 +47,7 @@ Some things do not mirror, on purpose:
 - **The check mark of `Checkbox`.** It is a drawn mark, not a direction.
 - **The `Spinner`.** It is a drawn glyph too, and keeps its shape.
 - **`Drawer side="left"` and `side="right"`.** The names promise a physical side, so the drawer keeps it.
-- **Icons.** The glyphs are not flipped. Where an arrow means "next" or "back", pass the glyph that points the right way for the direction, for example `caret-left` instead of `caret-right`.
+- **Icons you pass.** The glyphs are not flipped. Where an arrow you pass means "next" or "back", pass the glyph that points the right way for the direction, for example `caret-left` instead of `caret-right`.
 
 ## Your own CSS
 
@@ -68,11 +70,13 @@ Write your additions the same way, and they mirror with the rest:
 
 ## Known limit
 
-Six rules in the stylesheet still use the `:dir(rtl)` selector: the corner position of an anchored `Badge`, the arrow of `Select`, and the thumb of `Switch`. Some build tools rewrite `:dir()`, and after the rewrite these rules can stop matching. New rules in the core resolve direction with logical properties instead, and these six are on the list to move.
+Eight rules in the stylesheet still use the `:dir(rtl)` selector: the corner position of an anchored `Badge`, the rounded ends of `Table` rows, the arrow of `Select`, and the thumb of `Switch`. Some build tools rewrite `:dir()`, and after the rewrite these rules can stop matching. New rules in the core resolve direction with logical properties instead, and these eight are on the list to move.
 
 ## React Native
 
-On React Native, the right-to-left layout is switched on by the app, through React Native itself. Aurea has no prop for it. `Heading`, `Paragraph` and `Code` take `align="start"` and `align="end"`, which follow the direction instead of a fixed side.
+On React Native, the right-to-left layout is switched on by the app, through React Native itself. `AureaProvider` takes the same `direction` prop as on the web. Unset, it follows the device setting (`I18nManager.isRTL`). It mirrors the `NavList` row chevron and the submenu arrow of `DropdownMenu`; a custom `chevron` you pass to `NavList` is left as it is.
+
+`Heading`, `Paragraph` and `Code` take `align="start"` and `align="end"`, which follow the direction instead of a fixed side.
 
 ## Next steps
 
