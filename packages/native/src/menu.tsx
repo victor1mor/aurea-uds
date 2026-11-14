@@ -33,7 +33,7 @@ import {canto, criarFolha, estadoAcessivel, letraDoToken, type EstadoAcessivel} 
 import {NaSuperficie} from "./superficie.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {Text} from "./text.js";
-import {ForaDaMarca, useTokensDoApp} from "./theme.js";
+import {ForaDaMarca, useDirecaoRtl, useTokensDoApp} from "./theme.js";
 import {useReduceMotion, driverNativo} from "./movimento.js";
 import type {AureaTokens} from "./tokens.js";
 
@@ -691,6 +691,9 @@ function LinhaDeSubmenu({ctx, def, aberto, inativo, alternar, children}: {
 }) {
   const {tf, s} = ctx;
   const reduzir = useReduceMotion();
+  // Na escrita da direita para a esquerda a seta se espelha (aponta para onde se lê) e o giro de abrir continua o mesmo,
+  // como na referência do celular (13/11/2026).
+  const rtl = useDirecaoRtl();
   const giro = React.useRef(new Animated.Value(aberto ? 1 : 0)).current;
   const antes = React.useRef(aberto);
   React.useEffect(() => {
@@ -706,7 +709,7 @@ function LinhaDeSubmenu({ctx, def, aberto, inativo, alternar, children}: {
     return () => laco.stop();
   }, [aberto, reduzir, giro, tf.size.durationFast, tf.easing.easeStandard]);
   const seta = (
-    <Animated.View style={{transform: [{rotate: giro.interpolate({inputRange: [0, 1], outputRange: ["0deg", "90deg"]})}]}}>
+    <Animated.View style={{transform: [{scaleX: rtl ? -1 : 1}, {rotate: giro.interpolate({inputRange: [0, 1], outputRange: ["0deg", "90deg"]})}]}}>
       <Icon name="caret-right" size="sm" color={tf.color.mutedForeground} />
     </Animated.View>
   );

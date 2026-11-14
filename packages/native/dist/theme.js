@@ -1,6 +1,6 @@
 import { Fragment as _Fragment, jsx as _jsx } from "react/jsx-runtime";
 import * as React from "react";
-import { useColorScheme } from "react-native";
+import { I18nManager, useColorScheme } from "react-native";
 import { IconRegistryProvider } from "./icon.js";
 import { comOpacidade } from "./estilos.js";
 import { defaultStrings } from "./strings.js";
@@ -12,7 +12,7 @@ const DENSIDADE_PADRAO = "comfortable";
 // `dark` é o que o catálogo inteiro declara no `<html>`, e o que a identidade da Aurea assume.
 const TEMA_PADRAO = "dark";
 const Contexto = React.createContext(null);
-export function AureaProvider({ children, theme, density, brand, defaultTheme, defaultDensity, fontFamilies, icons, strings, onThemeChange, onDensityChange, }) {
+export function AureaProvider({ children, theme, density, brand, defaultTheme, defaultDensity, fontFamilies, icons, strings, direction, onThemeChange, onDensityChange, }) {
     const doAparelho = useColorScheme();
     const [temaInterno, setTemaInterno] = React.useState(defaultTheme ?? null);
     const [densidadeInterna, setDensidadeInterna] = React.useState(defaultDensity ?? DENSIDADE_PADRAO);
@@ -52,10 +52,24 @@ export function AureaProvider({ children, theme, density, brand, defaultTheme, d
     }), [temaEfetivo, densidadeEfetiva, setTheme, setDensity, fontFamilies, strings, brand]);
     // O registro de ícones fica num contexto PRÓPRIO: ele não muda quando o tema muda, e juntá-lo
     // ao valor do tema faria toda árvore que só desenha ícone re-renderizar na troca de tema.
-    const conteudo = icons
+    const comIcones = icons
         ? _jsx(IconRegistryProvider, { registry: icons, children: children })
         : children;
+    // A direção num contexto PRÓPRIO, como o registro de ícones: as peças que refazem o tema por dentro (o cartão
+    // `contrast`, a faixa fora da marca) não precisam saber dela. Sem `direction`, nada se monta e vale a de fora.
+    const conteudo = direction
+        ? _jsx(DirecaoContext.Provider, { value: direction, children: comIcones })
+        : comIcones;
     return _jsx(Contexto.Provider, { value: valor, children: conteudo });
+}
+const DirecaoContext = React.createContext(null);
+/**
+ * Interno: `true` quando a escrita corre da direita para a esquerda — a do `AureaProvider` mais próximo que disse
+ * `direction` ou, sem nenhum, a do aparelho (`I18nManager.isRTL`), como o `useIsRTL` da referência do celular.
+ */
+export function useDirecaoRtl() {
+    const d = React.useContext(DirecaoContext);
+    return d ? d === "rtl" : I18nManager.isRTL;
 }
 // Fora do provider os dois hooks LEVANTAM, em vez de devolverem um padrão. É decisão, e o
 // motivo é o defeito que o padrão silencioso produz: um app inteiro desenhado no tema errado,

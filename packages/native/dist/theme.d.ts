@@ -69,11 +69,23 @@ export type AureaProviderProps = {
      * o alvo nativo desenha, não das 200 chaves de 124 componentes da web.
      */
     strings?: AureaStrings;
+    /**
+     * Para que lado a escrita corre (13/11/2026) — o mesmo nome e os mesmos valores do `AureaProvider` da web. Ausente, vale
+     * o do aparelho (`I18nManager.isRTL`), como na referência do celular. O sistema já vira a linha inteira na escrita da
+     * direita para a esquerda; o que a Aurea vira por isto são as setas que apontam para um lado (a da `NavList`, a do
+     * submenu), para que apontem para onde se lê. Um provedor dentro de outro sem `direction` herda o de fora.
+     */
+    direction?: "ltr" | "rtl";
     /** Avisado quando o modo CONTROLADO recebe um pedido de troca — é o app que decide. */
     onThemeChange?: (t: AureaThemeName) => void;
     onDensityChange?: (d: AureaDensity) => void;
 };
-export declare function AureaProvider({ children, theme, density, brand, defaultTheme, defaultDensity, fontFamilies, icons, strings, onThemeChange, onDensityChange, }: AureaProviderProps): React.JSX.Element;
+export declare function AureaProvider({ children, theme, density, brand, defaultTheme, defaultDensity, fontFamilies, icons, strings, direction, onThemeChange, onDensityChange, }: AureaProviderProps): React.JSX.Element;
+/**
+ * Interno: `true` quando a escrita corre da direita para a esquerda — a do `AureaProvider` mais próximo que disse
+ * `direction` ou, sem nenhum, a do aparelho (`I18nManager.isRTL`), como o `useIsRTL` da referência do celular.
+ */
+export declare function useDirecaoRtl(): boolean;
 /** Os dois eixos e como trocá-los. Mesma forma do hook homônimo de `@aurea-uds/react`. */
 export declare function useAureaTheme(): AureaThemeControl;
 /** Os tokens já resolvidos para o par (tema, densidade) atual. Não tem par na web: lá o CSS resolve. */

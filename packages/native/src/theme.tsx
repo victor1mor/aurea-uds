@@ -28,7 +28,7 @@
 // no uso. Não é hook duplicado — é o hook que só o alvo sem cascata precisa ter.
 import type {AureaToastManager} from "./toast.js";
 import * as React from "react";
-import {useColorScheme} from "react-native";
+import {I18nManager, useColorScheme} from "react-native";
 import {IconRegistryProvider, type AureaIconRegistry} from "./icon.js";
 import {comOpacidade} from "./estilos.js";
 import {defaultStrings, type AureaStrings} from "./strings.js";
@@ -123,6 +123,13 @@ export type AureaProviderProps = {
    * o alvo nativo desenha, não das 200 chaves de 124 componentes da web.
    */
   strings?: AureaStrings;
+  /**
+   * Para que lado a escrita corre (13/11/2026) — o mesmo nome e os mesmos valores do `AureaProvider` da web. Ausente, vale
+   * o do aparelho (`I18nManager.isRTL`), como na referência do celular. O sistema já vira a linha inteira na escrita da
+   * direita para a esquerda; o que a Aurea vira por isto são as setas que apontam para um lado (a da `NavList`, a do
+   * submenu), para que apontem para onde se lê. Um provedor dentro de outro sem `direction` herda o de fora.
+   */
+  direction?: "ltr" | "rtl";
   /** Avisado quando o modo CONTROLADO recebe um pedido de troca — é o app que decide. */
   onThemeChange?: (t: AureaThemeName) => void;
   onDensityChange?: (d: AureaDensity) => void;
@@ -130,7 +137,7 @@ export type AureaProviderProps = {
 
 export function AureaProvider({
   children, theme, density, brand, defaultTheme, defaultDensity,
-  fontFamilies, icons, strings, onThemeChange, onDensityChange,
+  fontFamilies, icons, strings, direction, onThemeChange, onDensityChange,
 }: AureaProviderProps) {
   const doAparelho = useColorScheme();
   const [temaInterno, setTemaInterno] = React.useState<AureaThemeName | null>(defaultTheme ?? null);
@@ -176,10 +183,26 @@ export function AureaProvider({
 
   // O registro de ícones fica num contexto PRÓPRIO: ele não muda quando o tema muda, e juntá-lo
   // ao valor do tema faria toda árvore que só desenha ícone re-renderizar na troca de tema.
-  const conteudo = icons
+  const comIcones = icons
     ? <IconRegistryProvider registry={icons}>{children}</IconRegistryProvider>
     : children;
+  // A direção num contexto PRÓPRIO, como o registro de ícones: as peças que refazem o tema por dentro (o cartão
+  // `contrast`, a faixa fora da marca) não precisam saber dela. Sem `direction`, nada se monta e vale a de fora.
+  const conteudo = direction
+    ? <DirecaoContext.Provider value={direction}>{comIcones}</DirecaoContext.Provider>
+    : comIcones;
   return <Contexto.Provider value={valor}>{conteudo}</Contexto.Provider>;
+}
+
+const DirecaoContext = React.createContext<"ltr" | "rtl" | null>(null);
+
+/**
+ * Interno: `true` quando a escrita corre da direita para a esquerda — a do `AureaProvider` mais próximo que disse
+ * `direction` ou, sem nenhum, a do aparelho (`I18nManager.isRTL`), como o `useIsRTL` da referência do celular.
+ */
+export function useDirecaoRtl(): boolean {
+  const d = React.useContext(DirecaoContext);
+  return d ? d === "rtl" : I18nManager.isRTL;
 }
 
 // Fora do provider os dois hooks LEVANTAM, em vez de devolverem um padrão. É decisão, e o

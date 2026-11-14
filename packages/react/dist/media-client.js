@@ -6,6 +6,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import React from "react";
 import { useRender } from "@base-ui/react/use-render";
 import { cx, useAureaStrings } from "./internal.js";
+import { useDirection } from "@base-ui/react/direction-provider";
 import { Icon } from "./system.js";
 import { IconButton } from "./actions.js";
 // A galeria AMPLIA num Dialog, e o Dialog já existe (trava do item L2). O import é para `overlays`,
@@ -245,8 +246,11 @@ export function Gallery({ items, label, selected, onSelect, zoom, ratio = "1/1",
 //     o GLIFO da seta não espelha — é uma linha de CSS que ninguém pediu e que nenhum teste
 //     daqui mediria.
 const desloc = (caixa, item, rtl) => rtl ? item.right - caixa.right : item.left - caixa.left;
+// Na escrita da direita para a esquerda a seta aponta para onde se lê: o ícone sai pela direção do provedor, como no
+// `Breadcrumb` e no grupo que dobra da `Sidebar` — e não por `:dir()`, que o empacotador do app reescreve (13/11/2026).
 export function Carousel({ children, label, controls = true, indicators = true, className, ...props }) {
     const s = useAureaStrings();
+    const rtl = useDirection() === "rtl";
     const trilho = React.useRef(null);
     const slides = React.Children.toArray(children);
     // Nasce com `fim:false` e não com `true`: no HTML estático do catálogo — e no primeiro quadro
@@ -293,5 +297,5 @@ export function Carousel({ children, label, controls = true, indicators = true, 
     // Os slides fora da vista NÃO ficam `inert`: aqui todos existem no DOM e na árvore de
     // acessibilidade, como em qualquer lista que rola. Escondê-los seria esconder as fotos 2 a 8 de
     // quem usa leitor de tela para ganhar uma ordem de Tab mais curta.
-    return _jsxs("div", { className: cx("carousel", className), role: "region", "aria-roledescription": "carousel", "aria-label": label ?? s.carouselLabel, ...props, children: [_jsx("div", { ref: trilho, className: "carousel-track", tabIndex: 0, onScroll: medir, children: slides.map((slide, i) => _jsx("div", { className: "carousel-slide", role: "group", "aria-roledescription": "slide", "aria-label": `${s.carouselSlide} ${i + 1} ${s.positionOf} ${slides.length}`, children: slide }, i)) }), (controls || indicators) && _jsxs("div", { className: "carousel-controls", children: [controls && _jsx(IconButton, { icon: "caret-left", label: s.carouselPrev, size: "sm", disabled: pos.inicio, onClick: () => irPara(pos.indice - 1) }), indicators && _jsx("div", { className: "carousel-dots", children: slides.map((_, i) => _jsx("button", { type: "button", className: "carousel-dot", "aria-current": i === pos.indice ? "true" : undefined, "aria-label": `${s.carouselSlide} ${i + 1}`, onClick: () => irPara(i) }, i)) }), controls && _jsx(IconButton, { icon: "caret-right", label: s.carouselNext, size: "sm", disabled: pos.fim, onClick: () => irPara(pos.indice + 1) })] })] });
+    return _jsxs("div", { className: cx("carousel", className), role: "region", "aria-roledescription": "carousel", "aria-label": label ?? s.carouselLabel, ...props, children: [_jsx("div", { ref: trilho, className: "carousel-track", tabIndex: 0, onScroll: medir, children: slides.map((slide, i) => _jsx("div", { className: "carousel-slide", role: "group", "aria-roledescription": "slide", "aria-label": `${s.carouselSlide} ${i + 1} ${s.positionOf} ${slides.length}`, children: slide }, i)) }), (controls || indicators) && _jsxs("div", { className: "carousel-controls", children: [controls && _jsx(IconButton, { icon: rtl ? "caret-right" : "caret-left", label: s.carouselPrev, size: "sm", disabled: pos.inicio, onClick: () => irPara(pos.indice - 1) }), indicators && _jsx("div", { className: "carousel-dots", children: slides.map((_, i) => _jsx("button", { type: "button", className: "carousel-dot", "aria-current": i === pos.indice ? "true" : undefined, "aria-label": `${s.carouselSlide} ${i + 1}`, onClick: () => irPara(i) }, i)) }), controls && _jsx(IconButton, { icon: rtl ? "caret-left" : "caret-right", label: s.carouselNext, size: "sm", disabled: pos.fim, onClick: () => irPara(pos.indice + 1) })] })] });
 }

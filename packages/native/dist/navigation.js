@@ -41,7 +41,7 @@ import { Card } from "./layout.js";
 import { FilaRolante } from "./rolagem.js";
 import { IndicadorQueDesliza, useFilaQueDesliza } from "./deslize.js";
 import { Text } from "./text.js";
-import { useAureaStrings, useAureaTokens } from "./theme.js";
+import { useAureaStrings, useAureaTokens, useDirecaoRtl } from "./theme.js";
 // Sem `SafeAreaProvider` nem medida da abertura: nenhum recuo.
 const SEM_RECUO = { top: 0, right: 0, bottom: 0, left: 0 };
 const folha = criarFolha((t) => ({
@@ -561,6 +561,9 @@ export function Topbar(props) {
  */
 export function NavList({ items, chevron = "caret-right", style, ...rest }) {
     const t = useAureaTokens();
+    // Na escrita da direita para a esquerda a seta PADRÃO se espelha e aponta para onde se lê, como na referência do
+    // celular (que também só espelha a dela: o desenho que o app passa em `chevron` fica como veio) — 13/11/2026.
+    const espelhar = useDirecaoRtl() && chevron === "caret-right";
     const s = folha(t);
     return (_jsx(View, { accessibilityRole: "list", style: [s.lista, style], ...rest, children: items.map((it) => {
             // 🔴 DUAS COISAS QUE O CONSUMIDOR MEDIU EM 17/09/2026, e as duas moram nesta linha.
@@ -587,8 +590,9 @@ export function NavList({ items, chevron = "caret-right", style, ...rest }) {
                         : it.icon && _jsx(Icon, { name: it.icon, size: "md", color: t.color.foreground }), _jsxs(View, { style: s.linhaTexto, children: [typeof it.label === "string"
                                 ? _jsx(Text, { size: "sm", weight: 500, numberOfLines: 1, children: it.label }) : it.label, it.description != null && (typeof it.description === "string"
                                 ? _jsx(Text, { size: "xs", tone: "muted", numberOfLines: 1, children: it.description })
-                                : it.description)] }), it.indicators && it.indicators.length > 0 && (_jsx(View, { style: s.sinais, children: it.indicators.map((x) => (_jsx(View, { accessibilityLabel: x.label, children: _jsx(Icon, { name: x.icon, size: "sm", color: t.color.mutedForeground }) }, x.label))) })), valorEhTexto && _jsx(Text, { size: "sm", tone: "muted", children: it.value }), temAcao && chevron
-                        && _jsx(Icon, { name: chevron, size: "sm", color: t.color.mutedForeground })] }));
+                                : it.description)] }), it.indicators && it.indicators.length > 0 && (_jsx(View, { style: s.sinais, children: it.indicators.map((x) => (_jsx(View, { accessibilityLabel: x.label, children: _jsx(Icon, { name: x.icon, size: "sm", color: t.color.mutedForeground }) }, x.label))) })), valorEhTexto && _jsx(Text, { size: "sm", tone: "muted", children: it.value }), temAcao && chevron && (espelhar
+                        ? _jsx(View, { style: { transform: [{ scaleX: -1 }] }, children: _jsx(Icon, { name: chevron, size: "sm", color: t.color.mutedForeground }) })
+                        : _jsx(Icon, { name: chevron, size: "sm", color: t.color.mutedForeground }))] }));
             return (_jsxs(View, { role: "listitem", style: [s.linha, it.disabled && { opacity: t.size.opacityDisabled }], children: [temAcao ? (_jsx(Pressable, { onPress: it.onPress, disabled: it.disabled, accessibilityRole: "link", ...estadoAcessivel({ disabled: !!it.disabled }), style: s.linhaMiolo, children: miolo })) : (_jsx(View, { accessible: true, ...estadoAcessivel({ disabled: !!it.disabled }), style: s.linhaMiolo, children: miolo })), !valorEhTexto && it.value != null ? it.value : null] }, it.id));
         }) }));
 }

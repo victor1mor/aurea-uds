@@ -36,7 +36,10 @@ export function Stepper({ items, label, variant = "default", startContent, endCo
         return _jsxs("div", { className: cx("stepper-bar", className), children: [startContent != null && _jsx("span", { className: "stepper-bar-label", children: startContent }), lista, endContent != null && _jsx("span", { className: "stepper-bar-count", role: "status", children: endContent })] });
     return lista;
 }
-export function Breadcrumb({ items, label }) { const s = useAureaStrings(); return _jsx("nav", { className: "breadcrumb", "aria-label": label ?? s.breadcrumbLabel, children: items.map((i, n) => _jsxs(React.Fragment, { children: [n > 0 && _jsx(Icon, { name: "caret-right", size: "sm" }), " ", i.render ? fundirRender(i.render, { children: i.label }, "a") : i.href ? _jsx("a", { href: i.href, children: i.label }) : _jsx("strong", { "aria-current": "page", children: i.label })] }, n)) }); }
+// Na escrita da direita para a esquerda a seta aponta para a esquerda, para onde se lê (como a referência, que gira o
+// separador 180°): o ícone sai pela direção do provedor, como no grupo que dobra da `Sidebar` — e não por `:dir()`,
+// que o empacotador do app reescreve (13/11/2026).
+export function Breadcrumb({ items, label }) { const s = useAureaStrings(); const seta = useDirection() === "rtl" ? "caret-left" : "caret-right"; return _jsx("nav", { className: "breadcrumb", "aria-label": label ?? s.breadcrumbLabel, children: items.map((i, n) => _jsxs(React.Fragment, { children: [n > 0 && _jsx(Icon, { name: seta, size: "sm" }), " ", i.render ? fundirRender(i.render, { children: i.label }, "a") : i.href ? _jsx("a", { href: i.href, children: i.label }) : _jsx("strong", { "aria-current": "page", children: i.label })] }, n)) }); }
 export function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus = true, loopFocus, panel = "card", variant = "primary" }) { const s = useAureaStrings(); const ancora = useRef(null); const resolvida = useValorResponsivo(orientation, "horizontal", ancora); const lista = useRef(null); useDeslize(lista, ".tab[data-active]", value); return _jsxs(BaseTabs.Root, { ref: ancora, value: value, onValueChange: v => onChange(String(v)), orientation: resolvida, className: "tabs-root", children: [_jsx(BaseTabs.List, { ref: lista, className: cx("tabs", variant === "secondary" && "tabs-secondary"), "aria-label": label ?? s.tabsLabel, activateOnFocus: activateOnFocus, loopFocus: loopFocus, children: tabs.map(t => _jsx(BaseTabs.Tab, { value: t.id, className: "tab", children: t.label }, t.id)) }), tabs.map(t => _jsx(BaseTabs.Panel, { value: t.id, className: panel === "plain" ? "tabs-panel" : "card card-inset", tabIndex: 0, children: t.content }, t.id))] }); }
 function paginasVisiveis(page, total, siblings) {
     if (total <= 5 + siblings * 2)
@@ -62,8 +65,11 @@ export function Pagination({ page, total, onPageChange, variant = "numbers", sum
                     } } : undefined, children: conteudo });
         return _jsx("button", { type: "button", ...comuns, disabled: fora, onClick: () => onPageChange?.(alvo), children: conteudo });
     };
-    const anterior = item(page - 1, _jsxs(_Fragment, { children: [_jsx(Icon, { name: "caret-left", className: "pagination-nav-icon" }), _jsx("span", { children: s.previous })] }), { nav: "prev" });
-    const proxima = item(page + 1, _jsxs(_Fragment, { children: [_jsx("span", { children: s.next }), _jsx(Icon, { name: "caret-right", className: "pagination-nav-icon" })] }), { nav: "next" });
+    // Na escrita da direita para a esquerda a seta aponta para onde se lê: o ícone sai pela direção do provedor, como no
+    // `Breadcrumb` e no grupo que dobra da `Sidebar` — e não por `:dir()`, que o empacotador do app reescreve (13/11/2026).
+    const rtl = useDirection() === "rtl";
+    const anterior = item(page - 1, _jsxs(_Fragment, { children: [_jsx(Icon, { name: rtl ? "caret-right" : "caret-left", className: "pagination-nav-icon" }), _jsx("span", { children: s.previous })] }), { nav: "prev" });
+    const proxima = item(page + 1, _jsxs(_Fragment, { children: [_jsx("span", { children: s.next }), _jsx(Icon, { name: rtl ? "caret-left" : "caret-right", className: "pagination-nav-icon" })] }), { nav: "next" });
     return _jsxs("nav", { className: cx("pagination", className), "aria-label": label ?? s.paginationLabel, children: [summary != null && _jsx("span", { className: "pagination-summary", children: summary }), _jsxs("ul", { className: "pagination-content", children: [_jsx("li", { children: anterior }), variant === "numbers" && paginasVisiveis(page, total, siblings).map((p, i) => p === "..."
                         ? _jsx("li", { children: _jsx("span", { className: "pagination-ellipsis", "aria-hidden": "true", children: "\u2026" }) }, `e${i}`)
                         : _jsx("li", { children: item(p, p, { atual: p === page, rotulo: `${s.paginationPage} ${p}` }) }, p)), _jsx("li", { children: proxima })] })] });
@@ -495,10 +501,11 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
 // lista de sempre; `current` vale nos dois tamanhos.
 export function NavList({ items, size = "md", currentLabel, className, ...props }) {
     const grande = size === "lg";
+    const rtl = useDirection() === "rtl";
     return _jsx("ul", { className: cx("nav-list", grande && "nav-list-lg", className), ...props, children: items.map(it => {
             const icone = it.icon && (grande ? _jsx("span", { className: "nav-list-tile", "data-tone": it.tone, children: _jsx(Icon, { name: it.icon }) }) : _jsx(Icon, { name: it.icon }));
             const miolo = _jsxs(_Fragment, { children: [it.avatar ? _jsx(Avatar, { src: it.avatar.src, fallback: it.avatar.fallback }) : icone, _jsxs("span", { className: "nav-list-text", children: [_jsx("span", { className: "nav-list-label", children: it.label }), it.description != null && _jsx("span", { className: "nav-list-description", children: it.description })] }), it.indicators && it.indicators.length > 0 && _jsx("span", { className: "nav-list-indicators", children: it.indicators.map(x => _jsxs("span", { children: [_jsx(Icon, { name: x.icon, size: "sm" }), _jsx("span", { className: "sr-only", children: x.label })] }, x.label)) }), it.value != null && _jsx("span", { className: "nav-list-value", children: it.value }), it.current && currentLabel != null ? _jsx(Badge, { variant: "primary", emphasis: "solid", className: "nav-list-here", children: currentLabel })
-                        : (it.href || it.render) && _jsx(Icon, { name: "caret-right", size: "sm", className: "nav-list-chevron" })] });
+                        : (it.href || it.render) && _jsx(Icon, { name: rtl ? "caret-left" : "caret-right", size: "sm", className: "nav-list-chevron" })] });
             const atual = it.current ? "page" : undefined;
             return _jsx("li", { children: it.render && !it.disabled
                     ? fundirRender(it.render, { className: "nav-list-row", onClick: it.onClick, "aria-current": atual, children: miolo }, "a")

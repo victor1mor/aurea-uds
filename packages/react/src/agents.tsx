@@ -18,6 +18,7 @@
 // verbal. Aqui as ações entram como nó, e quem monta o botão sabe o que ele faz.
 import React, {type HTMLAttributes, type OlHTMLAttributes, type ReactNode, type RefAttributes} from "react";
 import {cx, useAureaStrings} from "./internal.js";
+import {useDirection} from "@base-ui/react/direction-provider";
 import {proprio} from "./pure.js";
 import {Icon, type IconName} from "./system.js";
 import {Status, Badge, Progress, Alert} from "./feedback.js";
@@ -536,6 +537,9 @@ export interface AgentMessage{id:string;from:string;to?:string;body:ReactNode;ti
 // travada não é legível para quem não separa as cores. A `kind` entra como palavra, num selo.
 export function InterAgentMessage({messages,label,className,...props}:OlHTMLAttributes<HTMLOListElement>&RefAttributes<HTMLOListElement>&{messages:AgentMessage[];label?:string}){
   const s=useAureaStrings();
+  // Na escrita da direita para a esquerda a seta aponta para onde se lê: o ícone sai pela direção do provedor, como no
+  // `Breadcrumb` e no grupo que dobra da `Sidebar` — e não por `:dir()`, que o empacotador do app reescreve (13/11/2026).
+  const rtl=useDirection()==="rtl";
   return <ol className={cx("agent-messages",className)} aria-label={label??s.agentMessageLabel} {...props}>
     {messages.map(m=>{
       const destino=m.to??s.agentMessageBroadcast;
@@ -546,7 +550,7 @@ export function InterAgentMessage({messages,label,className,...props}:OlHTMLAttr
               direção — que é o dado deste componente — se perderia no espaço entre os dois. */}
           <span className="agent-message-route" role="group" aria-label={`${m.from} ${s.agentMessageTo} ${destino}`}>
             <strong>{m.from}</strong>
-            <Icon name="arrow-right" size="sm" className="agent-message-arrow"/>
+            <Icon name={rtl?"arrow-left":"arrow-right"} size="sm" className="agent-message-arrow"/>
             {m.to?<strong>{m.to}</strong>:<span className="hint">{destino}</span>}
           </span>
           <Badge variant={proprio(RECADO,m.kind??"handoff")}>{proprio(s.agentMessageKind,m.kind??"handoff")}</Badge>

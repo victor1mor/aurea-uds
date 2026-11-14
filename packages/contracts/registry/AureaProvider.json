@@ -103,7 +103,7 @@
       "name": "direction",
       "type": "ltr | rtl",
       "default": "ltr",
-      "description": "Tells the engine which way the inline axis runs, so popup sides and arrow keys mirror. The CSS mirrors on its own through logical properties — but you still have to put dir=\"rtl\" on your <html>; the provider does not touch the DOM."
+      "description": "Tells the engine which way the inline axis runs, so popup sides and arrow keys mirror, and the arrows that point one way (breadcrumb, pagination, carousel, the row and submenu chevrons) point the way the text reads. On the web the CSS mirrors on its own through logical properties — but you still have to put dir=\"rtl\" on your <html>; the provider does not touch the DOM. On native, unset means the device setting (I18nManager.isRTL); the system already mirrors the layout, and the provider mirrors the NavList and submenu chevrons."
     },
     {
       "name": "portalContainer",

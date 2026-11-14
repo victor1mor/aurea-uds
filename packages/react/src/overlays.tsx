@@ -13,6 +13,7 @@ import {Menubar as BaseMenubar} from "@base-ui/react/menubar";
 import {ContextMenu as BaseContextMenu} from "@base-ui/react/context-menu";
 import {PreviewCard as BasePreviewCard} from "@base-ui/react/preview-card";
 import {cx, useAureaStrings, usePortalContainer} from "./internal.js";
+import {useDirection} from "@base-ui/react/direction-provider";
 import {type Responsive} from "./pure.js";
 import {useValorResponsivo} from "./responsivo-runtime.js";
 import {Icon, type IconName} from "./system.js";
@@ -292,6 +293,11 @@ const marca=(children:ReactNode)=><span className="menu-mark" aria-hidden="true"
 // (`aria-labelledby` + `aria-describedby`). Sem isso o leitor de tela lia os dois colados ("View as MarkdownView page as…").
 // `ids` é o `useId` de quem monta o menu, mais a posição do item: estável no servidor e no navegador.
 const nomeDoItem=(x:MenuItemBase,id:string)=>x.description!=null?{"aria-labelledby":`${id}-l`,"aria-describedby":`${id}-d`}:{};
+// A seta do item que abre outro menu. É um componente (e não um `Icon` direto) porque o `renderMenuItems` é uma função
+// comum, que não pode ler a direção do provedor. Na escrita da direita para a esquerda a seta aponta para onde se lê,
+// como no `Breadcrumb` e no grupo que dobra da `Sidebar` — e não por `:dir()`, que o empacotador do app reescreve
+// (13/11/2026).
+function SetaDoSubmenu(){const rtl=useDirection()==="rtl";return <Icon name={rtl?"caret-left":"caret-right"} size="sm" className="menu-seta"/>;}
 function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null,ids=""):ReactNode{return items.map((it,i)=>{
   if(it==="separator")return <BaseMenu.Separator key={i} className="menu-sep"/>;
   const kind=it.kind??"item";
@@ -326,7 +332,7 @@ function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null,ids=""):Reac
       // É o que dá `aria-haspopup`, a seta para a direita e o fechamento em cascata de graça.
       return <BaseMenu.SubmenuRoot key={i}>
         <BaseMenu.SubmenuTrigger className="menu-item" disabled={sm.disabled} {...nomeDoItem(sm,id)}>
-          {dentro(sm)}<Icon name="caret-right" size="sm" className="menu-seta"/>
+          {dentro(sm)}<SetaDoSubmenu/>
         </BaseMenu.SubmenuTrigger>
         <BaseMenu.Portal container={portal}><BaseMenu.Positioner className="positioner" side="inline-end" sideOffset={4}>
           <BaseMenu.Popup className="menu">{renderMenuItems(sm.items,portal,id)}</BaseMenu.Popup>
