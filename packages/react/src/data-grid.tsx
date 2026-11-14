@@ -7,6 +7,7 @@
 import React, {type InputHTMLAttributes, type RefAttributes} from "react";
 import {useReactTable, getCoreRowModel, getSortedRowModel, getFilteredRowModel, getPaginationRowModel, getFacetedRowModel, getFacetedUniqueValues, flexRender, type Column, type ColumnDef, type FilterFn, type SortingState, type RowSelectionState, type ColumnFiltersState, type VisibilityState, type ColumnSizingState, type PaginationState, type Updater} from "@tanstack/react-table";
 import {cx, useAureaStrings, stateSeverity, type UniversalState} from "./internal.js";
+import {useDirection} from "@base-ui/react/direction-provider";
 import {proprio} from "./pure.js";
 import {Icon, type IconName} from "./system.js";
 import {Button, Toolbar, ToolbarButton, ToolbarSeparator} from "./actions.js";
@@ -156,6 +157,9 @@ function usePresoNaPagina(ligado:boolean,grade:React.RefObject<HTMLTableElement|
 }
 export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,onSelectionChange,getRowId,className,sorting:sortingProp,onSortingChange,globalFilter:globalFilterProp,onGlobalFilterChange,page,onPageChange,rowSelection:rowSelectionProp,onRowSelectionChange,manualSorting,manualFiltering,manualPagination,rowCount,filters,columnFilters:columnFiltersProp,onColumnFiltersChange,bulkActions,stickyHeader,dividers,fit,hideableColumns,columnVisibility:columnVisibilityProp,onColumnVisibilityChange,resizableColumns,columnSizing:columnSizingProp,onColumnSizingChange,state,stateMessage,renderDetail,detailRowId:detailRowIdProp,onDetailRowIdChange,onExport}:{data:T[];columns:Array<ColumnDef<T,any>>;label?:string;filterable?:boolean;pageSize?:number;selectable?:boolean;onSelectionChange?:(rows:T[])=>void;getRowId?:(row:T,index:number)=>string;className?:string;sorting?:SortingState;onSortingChange?:(sorting:SortingState)=>void;globalFilter?:string;onGlobalFilterChange?:(filter:string)=>void;page?:number;onPageChange?:(page:number)=>void;rowSelection?:RowSelectionState;onRowSelectionChange?:(selection:RowSelectionState)=>void;manualSorting?:boolean;manualFiltering?:boolean;manualPagination?:boolean;rowCount?:number;filters?:GridFilterSpec[];columnFilters?:ColumnFiltersState;onColumnFiltersChange?:(filters:ColumnFiltersState)=>void;bulkActions?:Array<{id:string;label:string;icon?:IconName;onAction:(rows:T[],clear:()=>void)=>void}>;stickyHeader?:boolean|"page";dividers?:boolean;fit?:boolean;hideableColumns?:boolean;columnVisibility?:VisibilityState;onColumnVisibilityChange?:(v:VisibilityState)=>void;resizableColumns?:boolean;columnSizing?:ColumnSizingState;onColumnSizingChange?:(s:ColumnSizingState)=>void;state?:"loading"|"error"|UniversalState;stateMessage?:string;renderDetail?:(row:T)=>React.ReactNode;detailRowId?:string|null;onDetailRowIdChange?:(id:string|null)=>void;onExport?:(rows:T[],scope:{count:number;filtered:boolean;selected:boolean})=>void}){
   const s=useAureaStrings();
+  // O botão do detalhe aponta para o lado onde o detalhe abre, que na escrita da direita para a esquerda é a esquerda
+  // (a direção do provedor, como o `Breadcrumb` — 13/11/2026).
+  const rtl=useDirection()==="rtl";
   const [sorting,setSorting]=useMaybe<SortingState>(sortingProp,onSortingChange,[]);
   const [globalFilter,setGlobalFilter]=useMaybe<string>(globalFilterProp,onGlobalFilterChange,"");
   const [columnFilters,setColumnFilters]=useMaybe<ColumnFiltersState>(columnFiltersProp,onColumnFiltersChange,[]);
@@ -200,9 +204,9 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
   // alvo exige inventar papel, tabindex e tecla; um <button> já é tudo isso.
   const colunas=React.useMemo<Array<ColumnDef<T,any>>>(()=>renderDetail?[...allColumns,{
     id:"detail",enableSorting:false,enableHiding:false,header:()=>null,
-    cell:({row})=><IconButton icon="caret-right" label={s.dataGridDetails} size="sm" variant="ghost"
+    cell:({row})=><IconButton icon={rtl?"caret-left":"caret-right"} label={s.dataGridDetails} size="sm" variant="ghost"
       aria-expanded={detailRowId===row.id} onClick={()=>setDetailRowId(detailRowId===row.id?null:row.id)}/>,
-  }]:allColumns,[allColumns,renderDetail,detailRowId,s]);
+  }]:allColumns,[allColumns,renderDetail,detailRowId,s,rtl]);
   // A função acima precisa da tabela, e a tabela é o que esta chamada devolve: a referência fecha o
   // círculo. Ela é lida só quando o motor filtra, que é sempre depois da primeira montagem.
   const tabelaRef=React.useRef<ReturnType<typeof useReactTable<T>>|null>(null);

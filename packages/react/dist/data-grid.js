@@ -8,6 +8,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React from "react";
 import { useReactTable, getCoreRowModel, getSortedRowModel, getFilteredRowModel, getPaginationRowModel, getFacetedRowModel, getFacetedUniqueValues, flexRender } from "@tanstack/react-table";
 import { cx, useAureaStrings, stateSeverity } from "./internal.js";
+import { useDirection } from "@base-ui/react/direction-provider";
 import { proprio } from "./pure.js";
 import { Icon } from "./system.js";
 import { Button, Toolbar, ToolbarButton, ToolbarSeparator } from "./actions.js";
@@ -157,6 +158,9 @@ function usePresoNaPagina(ligado, grade, montagem) {
 }
 export function DataGrid({ data, columns, label, filterable, pageSize, selectable, onSelectionChange, getRowId, className, sorting: sortingProp, onSortingChange, globalFilter: globalFilterProp, onGlobalFilterChange, page, onPageChange, rowSelection: rowSelectionProp, onRowSelectionChange, manualSorting, manualFiltering, manualPagination, rowCount, filters, columnFilters: columnFiltersProp, onColumnFiltersChange, bulkActions, stickyHeader, dividers, fit, hideableColumns, columnVisibility: columnVisibilityProp, onColumnVisibilityChange, resizableColumns, columnSizing: columnSizingProp, onColumnSizingChange, state, stateMessage, renderDetail, detailRowId: detailRowIdProp, onDetailRowIdChange, onExport }) {
     const s = useAureaStrings();
+    // O botão do detalhe aponta para o lado onde o detalhe abre, que na escrita da direita para a esquerda é a esquerda
+    // (a direção do provedor, como o `Breadcrumb` — 13/11/2026).
+    const rtl = useDirection() === "rtl";
     const [sorting, setSorting] = useMaybe(sortingProp, onSortingChange, []);
     const [globalFilter, setGlobalFilter] = useMaybe(globalFilterProp, onGlobalFilterChange, "");
     const [columnFilters, setColumnFilters] = useMaybe(columnFiltersProp, onColumnFiltersChange, []);
@@ -208,8 +212,8 @@ export function DataGrid({ data, columns, label, filterable, pageSize, selectabl
     // alvo exige inventar papel, tabindex e tecla; um <button> já é tudo isso.
     const colunas = React.useMemo(() => renderDetail ? [...allColumns, {
             id: "detail", enableSorting: false, enableHiding: false, header: () => null,
-            cell: ({ row }) => _jsx(IconButton, { icon: "caret-right", label: s.dataGridDetails, size: "sm", variant: "ghost", "aria-expanded": detailRowId === row.id, onClick: () => setDetailRowId(detailRowId === row.id ? null : row.id) }),
-        }] : allColumns, [allColumns, renderDetail, detailRowId, s]);
+            cell: ({ row }) => _jsx(IconButton, { icon: rtl ? "caret-left" : "caret-right", label: s.dataGridDetails, size: "sm", variant: "ghost", "aria-expanded": detailRowId === row.id, onClick: () => setDetailRowId(detailRowId === row.id ? null : row.id) }),
+        }] : allColumns, [allColumns, renderDetail, detailRowId, s, rtl]);
     // A função acima precisa da tabela, e a tabela é o que esta chamada devolve: a referência fecha o
     // círculo. Ela é lida só quando o motor filtra, que é sempre depois da primeira montagem.
     const tabelaRef = React.useRef(null);

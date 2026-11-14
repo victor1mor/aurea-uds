@@ -5,6 +5,7 @@
 import React, {type HTMLAttributes, type RefAttributes, type ReactNode} from "react";
 import {useRender} from "@base-ui/react/use-render";
 import {cx, useAureaStrings} from "./internal.js";
+import {useDirection} from "@base-ui/react/direction-provider";
 import {Icon} from "./system.js";
 import {IconButton} from "./actions.js";
 // A galeria AMPLIA num Dialog, e o Dialog já existe (trava do item L2). O import é para `overlays`,
@@ -397,8 +398,11 @@ export function Gallery({items,label,selected,onSelect,zoom,ratio="1/1",selectio
 //     daqui mediria.
 const desloc=(caixa:DOMRect,item:DOMRect,rtl:boolean)=>rtl?item.right-caixa.right:item.left-caixa.left;
 export interface CarouselProps extends Omit<HTMLAttributes<HTMLDivElement>,"children">,RefAttributes<HTMLDivElement>{children?:ReactNode;label?:string;controls?:boolean;indicators?:boolean}
+// Na escrita da direita para a esquerda a seta aponta para onde se lê: o ícone sai pela direção do provedor, como no
+// `Breadcrumb` e no grupo que dobra da `Sidebar` — e não por `:dir()`, que o empacotador do app reescreve (13/11/2026).
 export function Carousel({children,label,controls=true,indicators=true,className,...props}:CarouselProps){
   const s=useAureaStrings();
+  const rtl=useDirection()==="rtl";
   const trilho=React.useRef<HTMLDivElement>(null);
   const slides=React.Children.toArray(children);
   // Nasce com `fim:false` e não com `true`: no HTML estático do catálogo — e no primeiro quadro
@@ -444,11 +448,11 @@ export function Carousel({children,label,controls=true,indicators=true,className
       {slides.map((slide,i)=><div key={i} className="carousel-slide" role="group" aria-roledescription="slide" aria-label={`${s.carouselSlide} ${i+1} ${s.positionOf} ${slides.length}`}>{slide}</div>)}
     </div>
     {(controls||indicators)&&<div className="carousel-controls">
-      {controls&&<IconButton icon="caret-left" label={s.carouselPrev} size="sm" disabled={pos.inicio} onClick={()=>irPara(pos.indice-1)}/>}
+      {controls&&<IconButton icon={rtl?"caret-right":"caret-left"} label={s.carouselPrev} size="sm" disabled={pos.inicio} onClick={()=>irPara(pos.indice-1)}/>}
       {/* O ponto é `<button>` de 24px com o desenho de 8px no `::before`: alvo menor que 24×24 é
           reprovação do WCAG 2.2 AA (2.5.8), e é o tamanho que uma fila de pontos convida a errar. */}
       {indicators&&<div className="carousel-dots">{slides.map((_,i)=><button key={i} type="button" className="carousel-dot" aria-current={i===pos.indice?"true":undefined} aria-label={`${s.carouselSlide} ${i+1}`} onClick={()=>irPara(i)}/>)}</div>}
-      {controls&&<IconButton icon="caret-right" label={s.carouselNext} size="sm" disabled={pos.fim} onClick={()=>irPara(pos.indice+1)}/>}
+      {controls&&<IconButton icon={rtl?"caret-left":"caret-right"} label={s.carouselNext} size="sm" disabled={pos.fim} onClick={()=>irPara(pos.indice+1)}/>}
     </div>}
   </div>;
 }

@@ -5,7 +5,7 @@
   "totals": {
     "modulos": 34,
     "componentes": 91,
-    "hooks": 17,
+    "hooks": 18,
     "aliasesLiterais": 69,
     "propsDistintas": 211
   },
@@ -2263,7 +2263,7 @@
     },
     "AureaProviderProps": {
       "module": "theme",
-      "raw": "{ children: React.ReactNode; theme?: AureaThemeName; density?: AureaDensity; brand?: AureaBrand; defaultTheme?: AureaThemeName; defaultDensity?: AureaDensity; fontFamilies?: AureaFontFamilies; icons?: AureaIconRegistry; strings?: AureaStrings; onThemeChange?: (t: AureaThemeName) => void; onDensityChange?: (d: AureaDensity) => void; }",
+      "raw": "{ children: React.ReactNode; theme?: AureaThemeName; density?: AureaDensity; brand?: AureaBrand; defaultTheme?: AureaThemeName; defaultDensity?: AureaDensity; fontFamilies?: AureaFontFamilies; icons?: AureaIconRegistry; strings?: AureaStrings; direction?: \"ltr\" | \"rtl\"; onThemeChange?: (t: AureaThemeName) => void; onDensityChange?: (d: AureaDensity) => void; }",
       "union": null
     },
     "AureaToastType": {
@@ -7474,6 +7474,15 @@
               "values": null
             },
             {
+              "name": "direction",
+              "optional": true,
+              "type": "\"ltr\" | \"rtl\"",
+              "values": [
+                "ltr",
+                "rtl"
+              ]
+            },
+            {
               "name": "onThemeChange",
               "optional": true,
               "type": "(t: AureaThemeName) => void",
@@ -7524,6 +7533,7 @@
         }
       ],
       "hooks": [
+        "useDirecaoRtl",
         "useAureaTheme",
         "useAureaTokens",
         "useAureaStrings",

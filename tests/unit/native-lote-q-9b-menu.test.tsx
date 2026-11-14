@@ -470,9 +470,12 @@ describe("DropdownMenu · o submenu abre no lugar", () => {
       expect(linha(fora)?.disabled).toBe(true);
       expect(plano(linha(fora)?.style).opacity).toBe(ESCURO.size.opacityDisabled);
     }
-    const giro = __instancias("Animated.View").map((p) => plano(p.style))
-      .findLast((e) => Array.isArray(e.transform) && "rotate" in (e.transform as object[])[0]);
-    expect(((giro?.transform as Array<{rotate: {__interpolado: string[]}}>)[0]).rotate.__interpolado).toEqual(["0deg", "90deg"]);
+    // o giro mora em qualquer posição da lista: desde a 0.69.0 o espelho da direita para a esquerda vem antes dele
+    // (`scaleX` e depois `rotate`, para a seta aberta apontar para baixo nos dois sentidos)
+    const comGiro = (e: Record<string, unknown>) => Array.isArray(e.transform) && (e.transform as object[]).some((t) => "rotate" in t);
+    const giro = __instancias("Animated.View").map((p) => plano(p.style)).findLast(comGiro);
+    const passo = (giro?.transform as Array<{rotate?: {__interpolado: string[]}}>).find((t) => t.rotate)!;
+    expect(passo.rotate!.__interpolado).toEqual(["0deg", "90deg"]);
     expect(__configsDeAnimacao().at(-1)).toMatchObject({toValue: 1, duration: ESCURO.size.durationFast});
     // A superfície do submenu aberto: fundo, linha e canto 16, numa camada atrás das linhas.
     const fundo = __instancias("View").map((p) => plano(p.style))

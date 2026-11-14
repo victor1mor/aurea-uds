@@ -446,6 +446,9 @@ export const KeyboardAvoidingView = criarPrimitivo("KeyboardAvoidingView");
 let plataforma: "ios" | "android" | "web" = "android";
 /** Troca a plataforma que o proximo render vai ler. */
 export function __definirPlataforma(v: "ios" | "android" | "web"): void { plataforma = v; }
+// A direção do aparelho (13/11/2026): da esquerda para a direita, o padrão; o teste que quer o aparelho em RTL troca.
+export const I18nManager = {isRTL: false, allowRTL: () => {}, forceRTL: () => {}};
+
 export const Platform = {
   get OS() { return plataforma; },
   select: <T,>(m: {ios?: T; android?: T; web?: T; default?: T}) =>

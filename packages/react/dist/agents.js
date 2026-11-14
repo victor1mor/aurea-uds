@@ -19,6 +19,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // verbal. Aqui as ações entram como nó, e quem monta o botão sabe o que ele faz.
 import React from "react";
 import { cx, useAureaStrings } from "./internal.js";
+import { useDirection } from "@base-ui/react/direction-provider";
 import { proprio } from "./pure.js";
 import { Icon } from "./system.js";
 import { Status, Badge, Progress, Alert } from "./feedback.js";
@@ -278,9 +279,12 @@ const RECADO = {
 // travada não é legível para quem não separa as cores. A `kind` entra como palavra, num selo.
 export function InterAgentMessage({ messages, label, className, ...props }) {
     const s = useAureaStrings();
+    // Na escrita da direita para a esquerda a seta aponta para onde se lê: o ícone sai pela direção do provedor, como no
+    // `Breadcrumb` e no grupo que dobra da `Sidebar` — e não por `:dir()`, que o empacotador do app reescreve (13/11/2026).
+    const rtl = useDirection() === "rtl";
     return _jsx("ol", { className: cx("agent-messages", className), "aria-label": label ?? s.agentMessageLabel, ...props, children: messages.map(m => {
             const destino = m.to ?? s.agentMessageBroadcast;
-            return _jsxs("li", { className: "agent-message", "data-kind": m.kind ?? "handoff", children: [_jsxs("div", { className: "agent-message-line", children: [_jsxs("span", { className: "agent-message-route", role: "group", "aria-label": `${m.from} ${s.agentMessageTo} ${destino}`, children: [_jsx("strong", { children: m.from }), _jsx(Icon, { name: "arrow-right", size: "sm", className: "agent-message-arrow" }), m.to ? _jsx("strong", { children: m.to }) : _jsx("span", { className: "hint", children: destino })] }), _jsx(Badge, { variant: proprio(RECADO, m.kind ?? "handoff"), children: proprio(s.agentMessageKind, m.kind ?? "handoff") }), m.time && _jsx("time", { className: "agent-message-time", children: m.time })] }), _jsx("p", { className: "agent-message-body", children: m.body }), (m.reason || m.details?.length) && _jsxs("details", { className: "agent-message-why", children: [_jsx("summary", { children: s.agentMessageReason }), m.reason && _jsx("p", { className: "agent-message-reason", children: m.reason }), !!m.details?.length && _jsx(DataList, { items: m.details })] })] }, m.id);
+            return _jsxs("li", { className: "agent-message", "data-kind": m.kind ?? "handoff", children: [_jsxs("div", { className: "agent-message-line", children: [_jsxs("span", { className: "agent-message-route", role: "group", "aria-label": `${m.from} ${s.agentMessageTo} ${destino}`, children: [_jsx("strong", { children: m.from }), _jsx(Icon, { name: rtl ? "arrow-left" : "arrow-right", size: "sm", className: "agent-message-arrow" }), m.to ? _jsx("strong", { children: m.to }) : _jsx("span", { className: "hint", children: destino })] }), _jsx(Badge, { variant: proprio(RECADO, m.kind ?? "handoff"), children: proprio(s.agentMessageKind, m.kind ?? "handoff") }), m.time && _jsx("time", { className: "agent-message-time", children: m.time })] }), _jsx("p", { className: "agent-message-body", children: m.body }), (m.reason || m.details?.length) && _jsxs("details", { className: "agent-message-why", children: [_jsx("summary", { children: s.agentMessageReason }), m.reason && _jsx("p", { className: "agent-message-reason", children: m.reason }), !!m.details?.length && _jsx(DataList, { items: m.details })] })] }, m.id);
         }) });
 }
 // AutomationCard — a regra que roda sozinha: QUANDO isto, ENTÃO aquilo.

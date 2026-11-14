@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.69.0
+
+November 14, 2026
+
+Arrows point the way the text reads in right-to-left layouts, on the web and on native.
+
+[Read full release notes →](https://aureauds.dev/release-v0-69-0.md)
+
 ## v0.68.0
 
 November 13, 2026

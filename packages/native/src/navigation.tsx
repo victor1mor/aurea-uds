@@ -42,7 +42,7 @@ import {Card} from "./layout.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IndicadorQueDesliza, useFilaQueDesliza} from "./deslize.js";
 import {Text} from "./text.js";
-import {useAureaStrings, useAureaTokens} from "./theme.js";
+import {useAureaStrings, useAureaTokens, useDirecaoRtl} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
 
 // Sem `SafeAreaProvider` nem medida da abertura: nenhum recuo.
@@ -761,6 +761,9 @@ export interface NavListProps extends ViewProps {
  */
 export function NavList({items, chevron = "caret-right", style, ...rest}: NavListProps) {
   const t = useAureaTokens();
+  // Na escrita da direita para a esquerda a seta PADRÃO se espelha e aponta para onde se lê, como na referência do
+  // celular (que também só espelha a dela: o desenho que o app passa em `chevron` fica como veio) — 13/11/2026.
+  const espelhar = useDirecaoRtl() && chevron === "caret-right";
   const s = folha(t);
   return (
     // `list` existe no `accessibilityRole` do RN e é o mesmo papel da web. Aqui ele atravessa
@@ -813,8 +816,9 @@ export function NavList({items, chevron = "caret-right", style, ...rest}: NavLis
             )}
             {valorEhTexto && <Text size="sm" tone="muted">{it.value}</Text>}
             {/* ⚠ A seta só aparece com ação. Seta em linha que não abre nada é promessa falsa. */}
-            {temAcao && chevron
-              && <Icon name={chevron} size="sm" color={t.color.mutedForeground} />}
+            {temAcao && chevron && (espelhar
+              ? <View style={{transform: [{scaleX: -1}]}}><Icon name={chevron} size="sm" color={t.color.mutedForeground} /></View>
+              : <Icon name={chevron} size="sm" color={t.color.mutedForeground} />)}
           </>
         );
         return (

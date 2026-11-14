@@ -67,7 +67,10 @@ return lista}
 // traz o destino é o elemento, e o `href` do item fica sem uso. Decisão do Victor: `render` só no
 // `Button`, no `IconButton` e nos itens de navegação — onde o app precisa do roteador.
 export interface BreadcrumbItem{label:ReactNode;href?:string;render?:ReactElement}
-export function Breadcrumb({items,label}:{items:BreadcrumbItem[];label?:string}){const s=useAureaStrings();return <nav className="breadcrumb" aria-label={label??s.breadcrumbLabel}>{items.map((i,n)=><React.Fragment key={n}>{n>0&&<Icon name="caret-right" size="sm"/>} {i.render?fundirRender(i.render,{children:i.label},"a"):i.href?<a href={i.href}>{i.label}</a>:<strong aria-current="page">{i.label}</strong>}</React.Fragment>)}</nav>}
+// Na escrita da direita para a esquerda a seta aponta para a esquerda, para onde se lê (como a referência, que gira o
+// separador 180°): o ícone sai pela direção do provedor, como no grupo que dobra da `Sidebar` — e não por `:dir()`,
+// que o empacotador do app reescreve (13/11/2026).
+export function Breadcrumb({items,label}:{items:BreadcrumbItem[];label?:string}){const s=useAureaStrings();const rtl=useDirection()==="rtl";return <nav className="breadcrumb" aria-label={label??s.breadcrumbLabel}>{items.map((i,n)=><React.Fragment key={n}>{n>0&&<Icon name={rtl?"caret-left":"caret-right"} size="sm"/>} {i.render?fundirRender(i.render,{children:i.label},"a"):i.href?<a href={i.href}>{i.label}</a>:<strong aria-current="page">{i.label}</strong>}</React.Fragment>)}</nav>}
 // ── REPORTADO no merge de 28/08/2026 ────────────────────────────────────────────────────────
 // `orientation`, `activateOnFocus` e `loopFocus` estavam na outra linhagem e sumiram quando este
 // arquivo entrou inteiro da `main` — ele não existia lá e por isso não deu conflito nenhum. A
@@ -135,8 +138,11 @@ export function Pagination({page,total,onPageChange,variant="numbers",summary,hr
       :<a {...comuns} href={href(alvo)} onClick={onPageChange?(e:React.MouseEvent)=>{if(!e.metaKey&&!e.ctrlKey&&!e.shiftKey&&e.button===0){e.preventDefault();onPageChange(alvo)}}:undefined}>{conteudo}</a>;
     return <button type="button" {...comuns} disabled={fora} onClick={()=>onPageChange?.(alvo)}>{conteudo}</button>;
   };
-  const anterior=item(page-1,<><Icon name="caret-left" className="pagination-nav-icon"/><span>{s.previous}</span></>,{nav:"prev"});
-  const proxima=item(page+1,<><span>{s.next}</span><Icon name="caret-right" className="pagination-nav-icon"/></>,{nav:"next"});
+  // Na escrita da direita para a esquerda a seta aponta para onde se lê: o ícone sai pela direção do provedor, como no
+  // `Breadcrumb` e no grupo que dobra da `Sidebar` — e não por `:dir()`, que o empacotador do app reescreve (13/11/2026).
+  const rtl=useDirection()==="rtl";
+  const anterior=item(page-1,<><Icon name={rtl?"caret-right":"caret-left"} className="pagination-nav-icon"/><span>{s.previous}</span></>,{nav:"prev"});
+  const proxima=item(page+1,<><span>{s.next}</span><Icon name={rtl?"caret-left":"caret-right"} className="pagination-nav-icon"/></>,{nav:"next"});
   return <nav className={cx("pagination",className)} aria-label={label??s.paginationLabel}>
     {summary!=null&&<span className="pagination-summary">{summary}</span>}
     <ul className="pagination-content">
@@ -820,6 +826,7 @@ export function NavList({items,size="md",currentLabel,className,...props}:HTMLAt
   /** O texto do selo da linha atual (só aparece com `current` num item). */
   currentLabel?:ReactNode}){
 const grande=size==="lg";
+const rtl=useDirection()==="rtl";
 return <ul className={cx("nav-list",grande&&"nav-list-lg",className)} {...props}>
 {items.map(it=>{
 const icone=it.icon&&(grande?<span className="nav-list-tile" data-tone={it.tone}><Icon name={it.icon}/></span>:<Icon name={it.icon}/>);
@@ -833,7 +840,7 @@ const miolo=<>
   <span key={x.label}><Icon name={x.icon} size="sm"/><span className="sr-only">{x.label}</span></span>)}</span>}
 {it.value!=null&&<span className="nav-list-value">{it.value}</span>}
 {it.current&&currentLabel!=null?<Badge variant="primary" emphasis="solid" className="nav-list-here">{currentLabel}</Badge>
-  :(it.href||it.render)&&<Icon name="caret-right" size="sm" className="nav-list-chevron"/>}
+  :(it.href||it.render)&&<Icon name={rtl?"caret-left":"caret-right"} size="sm" className="nav-list-chevron"/>}
 </>;
 const atual=it.current?"page" as const:undefined;
 return <li key={it.id}>{it.render&&!it.disabled
