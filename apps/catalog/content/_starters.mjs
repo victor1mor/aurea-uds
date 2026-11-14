@@ -2016,6 +2016,22 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
       h(A.InputGroup, null,
         h(A.Input, {placeholder: "you", "aria-label": "Handle"}),
         h(A.InputGroupAddon, {side: "end", layout: "inline"}, "@acme.dev"))),
+    // O erro também na página do componente (13/11/2026): a 0.67.0 o pôs só em Patterns, e o Victor procurou aqui.
+    examples: [
+      {
+        title: "With an error",
+        description: "Inside a Field with error, the whole group turns red and the field in the middle is named by the label and reads the message. Outside a Field, pass aria-invalid.",
+        code: `<Field label="Website" error="Enter a full address">
+  <InputGroup>
+    <InputGroupAddon>https://</InputGroupAddon>
+    <Input defaultValue="example" />
+  </InputGroup>
+</Field>`,
+        render: () => h("div", {style: {width: "min(420px, 100%)"}},
+          h(A.Field, {label: "Website", error: "Enter a full address"},
+            h(A.InputGroup, null, h(A.InputGroupAddon, null, "https://"), h(A.Input, {defaultValue: "example"})))),
+      },
+    ],
   },
 
   InputGroupAddon: {
@@ -2129,6 +2145,15 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
       eixo({titulo: "Drag to change", descricao: "scrubbable adds a handle you pull to change the value; scrubDirection says which way. The buttons and the keys keep working.",
         Comp: A.NumberField, nome: "NumberField", prop: "scrubDirection", valores: ["horizontal", "vertical"],
         base: {scrubbable: true, defaultValue: 50, min: 0, max: 100, label: "Opacity"}, coluna: true}),
+      // O erro também na página do componente (13/11/2026): a 0.67.0 o pôs só em Patterns.
+      {
+        title: "With an error",
+        description: "Inside a Field with error, the field turns red, is named by the label and reads the message. Outside a Field, pass aria-invalid.",
+        code: `<Field label="Seats" error="Pick at least one seat">
+  <NumberField defaultValue={0} min={0} />
+</Field>`,
+        render: () => h(A.Field, {label: "Seats", error: "Pick at least one seat"}, h(A.NumberField, {defaultValue: 0, min: 0})),
+      },
     ],
   },
   // 0.33.0: o segundo com `groupSize`, o tracinho do 3 + 3 da referência.
@@ -2145,6 +2170,16 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
 <OTPField length={6} variant="secondary" label="Code, secondary" />`,
         render: () => h("div", {style: stack}, h(A.OTPField, {length: 6, variant: "primary", label: "Code, primary"}),
           h(A.OTPField, {length: 6, variant: "secondary", label: "Code, secondary"})),
+      },
+      // O erro também na página do componente (13/11/2026): a do nativo tinha, a da web só em Patterns.
+      {
+        title: "With an error",
+        description: "Inside a Field with error, every box turns red, adds the label to its name and reads the message. Outside a Field, pass aria-invalid.",
+        code: `<Field label="Verification code" error="That code did not match">
+  <OTPField length={6} defaultValue="123" />
+</Field>`,
+        render: () => h(A.Field, {label: "Verification code", error: "That code did not match"},
+          h(A.OTPField, {length: 6, defaultValue: "123"})),
       },
     ],
   },
