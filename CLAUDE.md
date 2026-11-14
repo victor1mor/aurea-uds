@@ -1273,6 +1273,26 @@ hoje `Header`).
   Quem fecha um lote passa o olho no cabeçalho dos documentos irmãos.
 - **Antes de aceitar uma demanda como "peça nova", procure na web se ela já existe lá.**
 
+**Movimento: toda animação nova, web ou nativa** (pedido do Victor, 13/11/2026):
+
+- **Tempo e curva só dos tokens.** Web: `--duration-*` e `--ease-*`.
+  Nativo: `useAureaTokens()`. Nunca `200ms`, `ease` ou `ease-in-out`
+  escritos à mão. Qual token usar em cada caso está na tabela de
+  `apps/catalog/content/docs/animation.md`.
+- **Reduzir movimento.** O CSS já é cortado pela regra global.
+  Animação feita em JavaScript consulta
+  `matchMedia("(prefers-reduced-motion: reduce)")`. No nativo,
+  `useReduceMotion()`, esperando a resposta (`null` = ainda não respondeu).
+- **Só `transform`, `opacity` e cor.** Nunca `width`, `height`, `top` ou `left`.
+- **Sai mais rápido do que entra** (o padrão da casa: entra com
+  `base` ou `slow`, sai com `fast`).
+- **Só se move para explicar uma mudança.** Na dúvida, não anima.
+  O que abre pelo teclado aparece na hora, como o tooltip.
+- **Exceção:** os laços (spinner, skeleton, progresso sem fim)
+  mantêm o tempo próprio.
+- A regra vale para animação **nova**. Mudar a animação de um componente
+  que já existe é alterar o componente: só com o "pode".
+
 **Referências de desenho:**
 
 - A pasta `Referencia/` (código de terceiros) fica fora do git. **A pasta ausente não é desculpa**
