@@ -15,10 +15,18 @@ const CASOS = [
     esperado: [1, 2, 3, 4, 5, 6].map((n) => `Verification code Digit ${n}`), erro: "That code did not match"},
   {nome: "FileInput", pagina: "fileinput", campo: ".dropzone input[type=file]",
     esperado: ["Proof of address Drag files here or click to select"], erro: "Attach a document"},
+  // A página do COMPONENTE também mostra o erro (13/11/2026): a 0.67.0 pôs o exemplo da web só em Patterns, e o Victor
+  // procurou na página da peça. Sem o exemplo "With an error" nela, o Field com a frase não existe e o teste reprova.
+  {nome: "NumberField", pagina: "numberfield", campo: ".number-field-group > input",
+    esperado: ["Seats"], erro: "Pick at least one seat"},
+  {nome: "InputGroup", pagina: "inputgroup", campo: ".input-group > .input",
+    esperado: ["Website"], erro: "Enter a full address"},
+  {nome: "OTPField", pagina: "otpfield", campo: ".otp-slot",
+    esperado: [1, 2, 3, 4, 5, 6].map((n) => `Verification code Digit ${n}`), erro: "That code did not match"},
 ];
 
 for (const {nome, pagina, campo, esperado, erro} of CASOS) {
-  test(`${nome} dentro de um Field: o campo se chama pelo rótulo e lê a frase de erro`, async ({page}) => {
+  test(`${nome} dentro de um Field (${pagina}): o campo se chama pelo rótulo e lê a frase de erro`, async ({page}) => {
     await page.goto(`/apps/catalog/${pagina}.html`);
     // o Field com erro desta peça: o que tem a frase esperada
     const field = page.locator(".field", {has: page.locator(":scope > .field-error", {hasText: erro})}).first();
