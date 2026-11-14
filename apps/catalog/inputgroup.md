@@ -15,6 +15,21 @@ import {InputGroup} from "@aurea-uds/react";
 </InputGroup>
 ```
 
+## Examples
+
+### With an error
+
+Inside a Field with error, the whole group turns red and the field in the middle is named by the label and reads the message. Outside a Field, pass aria-invalid.
+
+```tsx
+<Field label="Website" error="Enter a full address">
+  <InputGroup>
+    <InputGroupAddon>https://</InputGroupAddon>
+    <Input defaultValue="example" />
+  </InputGroup>
+</Field>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

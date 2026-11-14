@@ -31,6 +31,16 @@ scrubbable adds a handle you pull to change the value; scrubDirection says which
 <NumberField scrubbable defaultValue={50} min={0} max={100} label="Opacity" scrubDirection="vertical" />
 ```
 
+### With an error
+
+Inside a Field with error, the field turns red, is named by the label and reads the message. Outside a Field, pass aria-invalid.
+
+```tsx
+<Field label="Seats" error="Pick at least one seat">
+  <NumberField defaultValue={0} min={0} />
+</Field>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

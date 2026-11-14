@@ -17,6 +17,23 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O exemplo de erro na página do componente (13/11/2026)
+
+- **O site:** a página do `NumberField`, do `InputGroup` e do `OTPField` da web ganha o exemplo "With an error" — o
+  `Field` com `error` em volta da peça. A 0.67.0 pôs esses exemplos só na área Patterns, e o Victor procurou na página da
+  peça (*"OTPField erro so existe no nativo e não no web?"*): a do nativo tinha, a da web não. O `FileInput` já tinha.
+  Nenhuma peça muda.
+- **Quem cobra:** o `tests/visual/nome-no-field.spec.ts` mede também as três páginas de componente — o campo com o nome
+  do rótulo e a frase de erro; sem o exemplo, o `Field` com a frase não existe na página e o teste reprova.
+- Não muda nenhum pacote publicado.
+
+### O registro da 0.68.0 (13/11/2026)
+
+- **A 0.68.0 publicada em 13/11/2026, entre 17:58 e 18:09** (Brasília, medido no npm), da junção do pedido #135
+  (`f1d92e4b`): o `released-surface.json` desse commit. O CHANGELOG ([0.68.0] publicada), o CLAUDE.md (a linha na tabela
+  e o item 65) e a release `v0.68.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.67.0 (12/11/2026)
 
 - **A 0.67.0 publicada em 12/11/2026, entre 15:08 e 15:21** (Brasília, medido no npm), da junção do pedido #133
@@ -304,6 +321,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.68.0] — 2026-11-13
+
+✅ **Publicada em 13/11/2026, entre 17:58 e 18:09 (Brasília, medido no npm: seis pacotes entre 17:58 e 18:02 e o `native`
+às 18:09), pelo terminal do Victor, da junção do pedido #135** (`f1d92e4b`).
 
 **O `Field` dá o nome e a frase de erro ao campo das quatro peças** (o que a 0.67.0 deixou: o erro já pintava, mas o campo
 onde se digita não tinha nome). Medido em 13/11/2026 na árvore de acessibilidade do Chromium, com o foco no campo: o

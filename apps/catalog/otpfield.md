@@ -24,6 +24,16 @@ primary is the field on the page; secondary is the one inside a card or a dialog
 <OTPField length={6} variant="secondary" label="Code, secondary" />
 ```
 
+### With an error
+
+Inside a Field with error, every box turns red, adds the label to its name and reads the message. Outside a Field, pass aria-invalid.
+
+```tsx
+<Field label="Verification code" error="That code did not match">
+  <OTPField length={6} defaultValue="123" />
+</Field>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

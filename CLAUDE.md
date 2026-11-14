@@ -226,6 +226,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.65.0` | O `DatePicker` da web fica vermelho no erro (`aria-invalid`, também pelo `Field`) e o calendário aberto prende o foco (o Tab dá a volta dentro; o `Popover.Close` escondido que o motor exige) — aprovados pelo Victor em 14/10/2026 e construídos no pedido #130. **Publicada em 11/11/2026** (entre 17:08 e 17:14, Brasília, medido no npm), pelo terminal do Victor |
 | `0.66.0` | O campo com erro é o da referência, na web e no nativo, com a Ember: o fundo não muda, a borda fica no vermelho da frase de erro, o rótulo do campo fica vermelho, a caixa marcada com erro fica vermelha cheia e a chave não muda ([ADR-0094](decisions/0094-o-invalido-e-o-da-referencia.md)); e a caixa de marcar do nativo com o canto de 8 — pedido #131. **Publicada em 12/11/2026** (entre 07:57 e 08:08, Brasília, medido no npm), pelo terminal do Victor |
 | `0.67.0` | O erro do `Field` chega às quatro peças que faltavam (web): `aria-invalid` no `NumberField`, no `OTPField`, no `InputGroup` e no `FileInput`, que ficam como os outros campos com erro — o fundo igual, a borda e o rótulo no vermelho da frase de erro; e um exemplo com erro de cada uma no site — pedido #133. **Publicada em 12/11/2026** (entre 15:08 e 15:21, Brasília, medido no npm), pelo terminal do Victor |
+| `0.68.0` | O `Field` dá o nome e a frase de erro ao campo do `NumberField`, do `OTPField`, do `InputGroup` e do `FileInput` (web): `aria-labelledby`, `aria-describedby` e `aria-invalid`, e o `Field` que nomeia o campo deixa de ser grupo; nada muda na tela — pedido #135. **Publicada em 13/11/2026** (entre 17:58 e 18:09, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -945,6 +946,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    ficou para o Victor; (2) os três erros do `exemplos-compilam` nos ícones do nativo eram da montagem rodando ao mesmo
    tempo — rodado depois dela, zero. **Publicada em 12/11/2026** (entre 15:08 e 15:21, Brasília, medido no npm), pelo
    terminal do Victor, da junção do pedido #133. O registro entrou no lote seguinte (o 075, só de registro, sem versão).
+
+65. **`0.68.0`, o nome e a frase de erro no campo, feita em 13/11/2026** (*"Sim, mostre"*, *"Pode"*) — a pergunta que a
+   0.67.0 deixou: dentro de um `Field`, o campo do `NumberField` e do `InputGroup` ficava sem nome, o do `OTPField` só com
+   "Digit n", o do `FileInput` só com o texto da área, e nenhum lia a frase de erro (o `Field` virava grupo). Agora o
+   `Field` liga o rótulo (`aria-labelledby`, só sem nome próprio), a dica e o erro (`aria-describedby`) e o
+   `aria-invalid` ao campo, e deixa de ser grupo; as quatro aceitam as duas ligações direto. No nativo já era assim.
+   ⚠ **As lições:** (1) o exemplo do site mora num `<details>` fechado, e o que está fechado fica fora da árvore de
+   acessibilidade (nome "") — o teste abre e rola; (2) a medida pelo mesmo endereço leu o cache do navegador e deu nome
+   vazio — endereço único a cada leitura; (3) o exemplo de erro da web da 0.67.0 foi só para a área Patterns, e o Victor
+   o procurou na página da peça (*"OTPField erro so existe no nativo e não no web?"*) — exemplo novo de peça vai também
+   na página dela. **Publicada em 13/11/2026** (entre 17:58 e 18:09, Brasília, medido no npm), pelo terminal do Victor,
+   da junção do pedido #135. O registro entrou no lote seguinte (o 077, com os exemplos de erro nas páginas).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
