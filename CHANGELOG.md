@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.69.0 (14/11/2026)
+
+- **A 0.69.0 publicada em 14/11/2026, entre 13:49 e 13:58** (Brasília, medido no npm), da junção do pedido #138
+  (`148bad61`): o `released-surface.json` desse commit. O CHANGELOG ([0.69.0] publicada), o CLAUDE.md (a linha na tabela
+  e o item 66) e a release `v0.69.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O exemplo de erro na página do componente (13/11/2026)
 
 - **O site:** a página do `NumberField`, do `InputGroup` e do `OTPField` da web ganha o exemplo "With an error" — o
@@ -321,6 +328,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.69.0] — 2026-11-14
+
+✅ **Publicada em 14/11/2026, entre 13:49 e 13:58 (Brasília, medido no npm: seis pacotes entre 13:49 e 13:52 e o `native`
+às 13:58), pelo terminal do Victor, da junção do pedido #138** (`148bad61`).
 
 **As setas apontam para onde se lê, na escrita da direita para a esquerda** — a Fase 1 do caminho até a 1.0. O
 `Breadcrumb` desenhava a seta sempre para a direita, contra a leitura; a pergunta "quem mais?" achou mais seis na web

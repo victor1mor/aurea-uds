@@ -227,6 +227,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.66.0` | O campo com erro é o da referência, na web e no nativo, com a Ember: o fundo não muda, a borda fica no vermelho da frase de erro, o rótulo do campo fica vermelho, a caixa marcada com erro fica vermelha cheia e a chave não muda ([ADR-0094](decisions/0094-o-invalido-e-o-da-referencia.md)); e a caixa de marcar do nativo com o canto de 8 — pedido #131. **Publicada em 12/11/2026** (entre 07:57 e 08:08, Brasília, medido no npm), pelo terminal do Victor |
 | `0.67.0` | O erro do `Field` chega às quatro peças que faltavam (web): `aria-invalid` no `NumberField`, no `OTPField`, no `InputGroup` e no `FileInput`, que ficam como os outros campos com erro — o fundo igual, a borda e o rótulo no vermelho da frase de erro; e um exemplo com erro de cada uma no site — pedido #133. **Publicada em 12/11/2026** (entre 15:08 e 15:21, Brasília, medido no npm), pelo terminal do Victor |
 | `0.68.0` | O `Field` dá o nome e a frase de erro ao campo do `NumberField`, do `OTPField`, do `InputGroup` e do `FileInput` (web): `aria-labelledby`, `aria-describedby` e `aria-invalid`, e o `Field` que nomeia o campo deixa de ser grupo; nada muda na tela — pedido #135. **Publicada em 13/11/2026** (entre 17:58 e 18:09, Brasília, medido no npm), pelo terminal do Victor |
+| `0.69.0` | As setas apontam para onde se lê na escrita da direita para a esquerda: `direction` no `AureaProvider` do nativo, e a seta que vira no `Breadcrumb`, na `Pagination`, no `Carousel`, na `NavList`, nos submenus, na `InterAgentMessage` e na `DataGrid` (web) e na `NavList` e no submenu do `DropdownMenu` (nativo) — pedido #138. **Publicada em 14/11/2026** (entre 13:49 e 13:58, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -958,6 +959,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    o procurou na página da peça (*"OTPField erro so existe no nativo e não no web?"*) — exemplo novo de peça vai também
    na página dela. **Publicada em 13/11/2026** (entre 17:58 e 18:09, Brasília, medido no npm), pelo terminal do Victor,
    da junção do pedido #135. O registro entrou no lote seguinte (o 077, com os exemplos de erro nas páginas).
+
+66. **`0.69.0`, as setas da direita para a esquerda, feita em 13 e 14/11/2026** (*"Pode"*, *"As seis"*, e *"Pode"* para o
+   nativo) — o `Breadcrumb` da Fase 1 desenhava a seta sempre para a direita; a pergunta "quem mais?" achou mais seis peças
+   na web e duas no nativo. Na web, o ícone sai da direção do provedor (não de `:dir()`, que o empacotador do app
+   reescreve); no nativo, o `AureaProvider` ganha `direction`, e sem ele vale o do aparelho (`I18nManager.isRTL`); o
+   `chevron` que o app passa fica como veio. ⚠ **As lições:** (1) o check 46 lê o nome do ícone só como texto escrito no
+   `name` — a seta guardada numa variável passou sem ser vista, e as fichas ficaram sem a seta da esquerda; o nome vai no
+   próprio `name` (`name={rtl?"caret-left":"caret-right"}`); (2) o check 51 achou a página RTL do site dizendo que o nativo
+   não tinha a prop e que as regras `:dir(rtl)` eram seis (eram oito, medido no `aurea.css`); (3) o `exemplos-compilam`
+   lê o catálogo MONTADO — depois de mudar exemplo, `pnpm build:catalog` e `pnpm build:live` antes de rodar.
+   **Publicada em 14/11/2026** (entre 13:49 e 13:58, Brasília, medido no npm), pelo terminal do Victor, da junção do
+   pedido #138. O registro entrou no lote seguinte (o 079, só de registro, sem versão).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
