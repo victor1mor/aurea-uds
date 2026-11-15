@@ -7,7 +7,7 @@
     "componentes": 91,
     "hooks": 19,
     "aliasesLiterais": 69,
-    "propsDistintas": 214
+    "propsDistintas": 215
   },
   "aliases": {
     "AureaButtonAppearance": {
@@ -6820,6 +6820,12 @@
               "name": "style",
               "optional": true,
               "type": "StyleProp<ViewStyle>",
+              "values": null
+            },
+            {
+              "name": "marca",
+              "optional": true,
+              "type": "object",
               "values": null
             },
             {

@@ -5,6 +5,9 @@ export interface FilaRolanteProps {
     children: React.ReactNode;
     /** Estilo do invólucro externo, não do conteúdo. */
     style?: StyleProp<ViewStyle>;
+    /** Uma marca só do navegador (`dataSet`, no `react-native-web`) no invólucro — a do fio das abas `secondary`, que a
+     *  varredura do site reconhece (0.70.0). No aparelho, `dataSet` não existe e é ignorado. */
+    marca?: object;
     testID?: string;
     /**
      * Onde a fila fica quando CABE — E3, 25/09/2026. `start` (o padrão, o de sempre), `center` ou
@@ -27,4 +30,4 @@ export type AureaFilaJustify = "start" | "center" | "end";
  * O componente fica com a informação em vez de adivinhar: `onLayout` dá a largura visível e
  * `onContentSizeChange` dá a do conteúdo. Com as duas, `transbordou` é uma conta, não um palpite.
  */
-export declare function FilaRolante({ children, style, testID, justify, fill }: FilaRolanteProps): React.JSX.Element;
+export declare function FilaRolante({ children, style, testID, justify, fill, marca }: FilaRolanteProps): React.JSX.Element;

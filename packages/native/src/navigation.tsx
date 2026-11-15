@@ -1081,7 +1081,8 @@ export function Tabs({
           não achava a terceira. **Quem nomeou foi o consumidor, pedindo outra coisa** (a fila de
           opções do `SegmentedControl`), e a regra *"quem mais tem esse problema?"* trouxe até
           aqui. A `FilaRolante` é a mesma peça nos dois. */}
-      <FilaRolante justify={justify} style={comFio ? s.filaSecundariaComFio : undefined}>
+      <FilaRolante justify={justify} style={comFio ? s.filaSecundariaComFio : undefined}
+        marca={comFio ? {dataSet: {aureaLine: "tabs"}} : undefined}>
         <View accessibilityRole="tablist" accessibilityLabel={label ?? strings.tabsLabel}
               style={secundaria ? [s.abasSecundarias, comFio && s.abasSecundariasSemBorda] : s.abas}>
           <IndicadorQueDesliza alvo={fila.alvo} aoFicarPronto={fila.aoFicarPronto}

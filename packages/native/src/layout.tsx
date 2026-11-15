@@ -409,8 +409,14 @@ const COR_DO_TRACO = {
 
 // O cartão de contorno é a ÚNICA peça com linha (ADR-0072). No navegador (`react-native-web`), a marca `data-aurea-card`
 // diz isso à varredura "nenhuma peça desenha linha" do site, como a classe `.card-outline` diz na web; no aparelho a prop
-// `dataSet` não existe e é ignorada (bloco 1, 23/10/2026).
-const MARCA_DO_CONTORNO = {dataSet: {aureaCard: "outline"}} as unknown as ViewProps;
+// `dataSet` não existe e é ignorada (bloco 1, 23/10/2026). A marca sai de `marcaDoCartao`, abaixo.
+// As duas linhas do cartão que a 0.70.0 trouxe, aprovadas pelo Victor (14/11/2026), com a marca do navegador que a
+// varredura do site reconhece: o traço do `accent` (um aro na curva do canto) e o contorno do alto contraste.
+const MARCA_DO_TRACO = {dataSet: {aureaAccent: "true"}} as unknown as ViewProps;
+function marcaDoCartao(outline: boolean, alto: boolean): ViewProps | null {
+  if (!outline && !alto) return null;
+  return {dataSet: {...(outline ? {aureaCard: "outline"} : null), ...(alto ? {aureaContrast: "high"} : null)}} as unknown as ViewProps;
+}
 
 function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
   const t = useAureaTokens();
@@ -425,7 +431,7 @@ function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
   const altoContraste = useAltoContraste() ? {borderColor: t.color.inputStrong} : null;
   const traco = accent == null ? null : (
     <View pointerEvents="none" collapsable={false} style={s.tracoCamada}>
-      <View style={[s.traco, {borderColor: t.color[COR_DO_TRACO[accent]]}]}/>
+      <View style={[s.traco, {borderColor: t.color[COR_DO_TRACO[accent]]}]} {...MARCA_DO_TRACO}/>
     </View>
   );
 
@@ -442,7 +448,7 @@ function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
           tocando && REACAO_AO_TOQUE.pressionado, disabled && REACAO_AO_TOQUE.inerte,
           style,
         ]}
-        {...(pele === "outline" ? MARCA_DO_CONTORNO : null)}
+        {...marcaDoCartao(pele === "outline", altoContraste != null)}
         {...resto}>
         {traco}
         {children}
@@ -460,7 +466,7 @@ function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
 
   const pele = (
     <View style={[s.cardBase, s[`card_${variant ?? "base"}`], contorno, altoContraste, traco != null && s.comTraco, style]}
-      {...(variant === "outline" ? MARCA_DO_CONTORNO : null)} {...resto}>
+      {...marcaDoCartao(variant === "outline", altoContraste != null)} {...resto}>
       {corpo}
     </View>
   );

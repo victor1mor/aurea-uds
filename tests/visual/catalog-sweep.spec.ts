@@ -450,7 +450,16 @@ test.describe("catálogo · varredura de todas as páginas", () => {
             const deAro = !!e.closest('[data-segment-style="ring"],[data-current-style="ring"],[data-current-style="white-ring"],[data-current-style="bar-ring"],[data-timeline-style="ring"],[data-ring="true"]');
             // A LINHA ENTRE AS FILEIRAS (MNT-38): a borda de BAIXO da célula do corpo, só numa tabela que escolheu `dividers`.
             const entreFileiras = !!e.closest(".table.table-dividers tbody, .datagrid-dividers .table-wrap tbody") && /^(td|th)$/i.test(e.tagName);
-            const conta = (x: string) => !(deAro && x.startsWith("anel")) && !(entreFileiras && x.startsWith("borda bottom"));
+            // AS LINHAS DA 0.70.0 (aprovadas pelo Victor na bancada, 14/11/2026), cada uma só na peça e no lado dela:
+            // a linha clara embaixo das abas `secondary` (web: `.tabs-secondary`; nativo: a fila com `data-aurea-line`),
+            // o traço do `Card accent` do nativo (um aro na curva do canto, `data-aurea-accent`) e o contorno do alto
+            // contraste do nativo (`data-aurea-contrast="high"`, no cartão e no aro do botão — o provedor não põe nada
+            // no DOM, então a marca fica na própria peça). A linha entre os grupos da `ListBox` é o `::before`, abaixo.
+            const fioDasAbas = e.matches('.tabs.tabs-secondary, [data-aurea-line="tabs"]');
+            const linhaNativa = e.matches('[data-aurea-accent="true"], [data-aurea-contrast="high"]');
+            if (linhaNativa) continue;
+            const conta = (x: string) => !(deAro && x.startsWith("anel")) && !(entreFileiras && x.startsWith("borda bottom"))
+              && !(fioDasAbas && x.startsWith("borda bottom"));
             // O CONTORNO DO ERRO (ADR-0094, 11/11/2026): o campo com erro tem a borda (no cartão de escolha, o anel por
             // dentro) no `--danger-400`, a cor da frase de erro. Só a peça EM ERRO, pelos mesmos seletores do `aurea.css`,
             // só no próprio elemento (nada de `::before`/`::after`) e só nessa cor, medida ali mesmo.
@@ -470,7 +479,10 @@ test.describe("catálogo · varredura de todas as páginas", () => {
             for (const ps of ["::before", "::after"]) {
               const s = getComputedStyle(e, ps);
               if (s.content === "none" || s.content === "normal") continue;
-              for (const x of linhas(s)) if (conta(x)) out.push(`${nome(e)}${ps}: ${x}`);
+              // A linha clara entre os grupos da `ListBox` (0.70.0): a borda de CIMA do `::before` de um grupo que vem
+              // depois de outro (`.list-box-section + .list-box-section`).
+              const entreGrupos = ps === "::before" && e.matches(".list-box-section + .list-box-section");
+              for (const x of linhas(s)) if (conta(x) && !(entreGrupos && x.startsWith("borda top"))) out.push(`${nome(e)}${ps}: ${x}`);
             }
           }
           return {out, n};

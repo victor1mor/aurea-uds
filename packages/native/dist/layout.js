@@ -248,8 +248,15 @@ const COR_DO_TRACO = {
 };
 // O cartão de contorno é a ÚNICA peça com linha (ADR-0072). No navegador (`react-native-web`), a marca `data-aurea-card`
 // diz isso à varredura "nenhuma peça desenha linha" do site, como a classe `.card-outline` diz na web; no aparelho a prop
-// `dataSet` não existe e é ignorada (bloco 1, 23/10/2026).
-const MARCA_DO_CONTORNO = { dataSet: { aureaCard: "outline" } };
+// `dataSet` não existe e é ignorada (bloco 1, 23/10/2026). A marca sai de `marcaDoCartao`, abaixo.
+// As duas linhas do cartão que a 0.70.0 trouxe, aprovadas pelo Victor (14/11/2026), com a marca do navegador que a
+// varredura do site reconhece: o traço do `accent` (um aro na curva do canto) e o contorno do alto contraste.
+const MARCA_DO_TRACO = { dataSet: { aureaAccent: "true" } };
+function marcaDoCartao(outline, alto) {
+    if (!outline && !alto)
+        return null;
+    return { dataSet: { ...(outline ? { aureaCard: "outline" } : null), ...(alto ? { aureaContrast: "high" } : null) } };
+}
 function CorpoDoCartao({ variant, accent, style, ...rest }) {
     const t = useAureaTokens();
     const { theme: temaDoApp } = useAureaTheme();
@@ -259,17 +266,17 @@ function CorpoDoCartao({ variant, accent, style, ...rest }) {
     const contorno = variant === "contrast" && temaDoApp === "dark" ? s.contrasteNoEscuro : null;
     // O ALTO CONTRASTE do app (0-D, ADR-0090, a forma "C"): o contorno de 3:1 no cartão, como a web (`[data-contrast="high"] .card`).
     const altoContraste = useAltoContraste() ? { borderColor: t.color.inputStrong } : null;
-    const traco = accent == null ? null : (_jsx(View, { pointerEvents: "none", collapsable: false, style: s.tracoCamada, children: _jsx(View, { style: [s.traco, { borderColor: t.color[COR_DO_TRACO[accent]] }] }) }));
+    const traco = accent == null ? null : (_jsx(View, { pointerEvents: "none", collapsable: false, style: s.tracoCamada, children: _jsx(View, { style: [s.traco, { borderColor: t.color[COR_DO_TRACO[accent]] }], ...MARCA_DO_TRACO }) }));
     if (onPress != null) {
         const pele = variant ?? "interactive";
         return (_jsxs(Pressable, { onPress: onPress, disabled: disabled, accessibilityRole: "button", ...estadoAcessivel({ disabled: !!disabled }), style: ({ pressed: tocando }) => [
                 s.cardBase, s[`card_${pele}`], contorno, altoContraste, traco != null && s.comTraco,
                 tocando && REACAO_AO_TOQUE.pressionado, disabled && REACAO_AO_TOQUE.inerte,
                 style,
-            ], ...(pele === "outline" ? MARCA_DO_CONTORNO : null), ...resto, children: [traco, children] }));
+            ], ...marcaDoCartao(pele === "outline", altoContraste != null), ...resto, children: [traco, children] }));
     }
     const corpo = (_jsxs(_Fragment, { children: [traco, children, action != null && _jsx(View, { style: s.acaoDaMarca, children: action })] }));
-    const pele = (_jsx(View, { style: [s.cardBase, s[`card_${variant ?? "base"}`], contorno, altoContraste, traco != null && s.comTraco, style], ...(variant === "outline" ? MARCA_DO_CONTORNO : null), ...resto, children: corpo }));
+    const pele = (_jsx(View, { style: [s.cardBase, s[`card_${variant ?? "base"}`], contorno, altoContraste, traco != null && s.comTraco, style], ...marcaDoCartao(variant === "outline", altoContraste != null), ...resto, children: corpo }));
     // 🔴 SOBRE O AMARELO A COR DO TEXTO NÃO É ESCOLHA, É OBRIGAÇÃO — e os números decidiram isto.
     // Medido nos dois temas, texto contra o `primary`:
     //     texto comum ........ 10,34 no claro  ·  **1,83 no escuro**  🔴 ilegível

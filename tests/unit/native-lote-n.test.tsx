@@ -150,6 +150,9 @@ describe("MT-02 · Card accent: o traço no topo", () => {
     expect((s.borderRadius as number) - (s.borderWidth as number)).toBe(R);   // com o canto do cartão
     expect(s.borderCurve).toBe("continuous");
     expect(__instancias("View").some((p) => plano(p.style).height === A)).toBe(false);
+    // a marca do navegador que a varredura do site reconhece (o aro é linha aprovada, 0.70.0)
+    expect(__instancias("View").find((p) => plano(p.style).borderWidth === R && plano(p.style).position === "absolute")?.dataSet)
+      .toEqual({aureaAccent: "true"});
   });
 
   it("o recheio de cima cresce o que o traço come, para o conteúdo ficar onde fica na web", () => {

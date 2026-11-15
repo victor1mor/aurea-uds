@@ -61,6 +61,8 @@ describe("O \"sem linha\" 1a · a linha embaixo da fila das abas secondary, no n
     expect(fileira().borderBottomWidth).toBe(CLARO.size.borderWidth);
     expect(fileira().borderColor).toBe(preenchimento(CLARO, 2));
     expect(fila().borderBottomWidth).toBe(0);
+    // a marca que a varredura do site reconhece (só existe no navegador)
+    expect(__instancias("ScrollView").at(-1)?.dataSet).toEqual({aureaLine: "tabs"});
   });
 
   it("na Ember também (a regra de 14/11/2026)", () => {
@@ -149,11 +151,15 @@ describe("0-D e 0-E · os modos de leitura no AureaProvider do nativo", () => {
   it("no alto contraste, o cartão ganha o contorno de 3:1, o botão o aro por dentro, e o link o sublinhado", () => {
     render(<AureaProvider theme="light" highContrast><Card testID="c"><TextoAurea>x</TextoAurea></Card></AureaProvider>);
     expect(plano(__instancias("View").findLast((p) => p.testID === "c")?.style).borderColor).toBe(CLARO.color.inputStrong);
+    // as marcas do navegador que a varredura do site reconhece: o contorno do cartão e o aro do botão
+    expect(__instancias("View").findLast((p) => p.testID === "c")?.dataSet).toEqual({aureaContrast: "high"});
     render(<AureaProvider theme="light" highContrast><Button testID="b" onPress={() => {}}>Salvar</Button></AureaProvider>);
     // o aro vai na caixa do botão (a mesma do brilho e do fio, ADR-0086)
     const aros = __instancias("View").map((p) => plano(p.style)).filter((s) => JSON.stringify(s.boxShadow ?? []).includes("\"inset\":true"));
     expect(aros.length, "o botão ganha o aro por dentro").toBeGreaterThan(0);
     expect(JSON.stringify(aros.at(-1)!.boxShadow)).toContain(CLARO.color.inputStrong);
+    expect(__instancias("View").findLast((p) => JSON.stringify(plano(p.style).boxShadow ?? []).includes("\"inset\":true"))?.dataSet)
+      .toEqual({aureaContrast: "high"});
     render(<AureaProvider theme="light" highContrast><TextoAurea tone="link">Ver</TextoAurea></AureaProvider>);
     expect(plano(__instancias("Text").findLast((p) => JSON.stringify(p.style ?? "").includes("underline"))?.style).textDecorationLine).toBe("underline");
   });

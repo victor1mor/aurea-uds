@@ -229,8 +229,10 @@ function acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDoTexto
     const acabamento = comBrilho || comFio || anel
         ? { boxShadow: [...(comBrilho ? [brilhoDoBotao(t)] : []), ...(comFio ? [fioDoAcabamento(t, tone, corDoTexto)] : []), ...(anel ? [anel] : [])] }
         : null;
-    const marcaDoAcabamento = glow !== undefined || ring !== undefined
-        ? { dataSet: { ...(glow !== undefined ? { glow: String(glow) } : null), ...(ring !== undefined ? { ring: String(ring) } : null) } }
+    // `aureaContrast`: a marca do aro do alto contraste no navegador, que a varredura do site reconhece (0.70.0).
+    const marcaDoAcabamento = glow !== undefined || ring !== undefined || anel
+        ? { dataSet: { ...(glow !== undefined ? { glow: String(glow) } : null), ...(ring !== undefined ? { ring: String(ring) } : null),
+                ...(anel ? { aureaContrast: "high" } : null) } }
         : {};
     return { acabamento, marcaDoAcabamento };
 }
