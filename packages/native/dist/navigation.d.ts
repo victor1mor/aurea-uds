@@ -216,6 +216,8 @@ export interface AureaStepItem {
 export interface StepperProps extends ViewProps {
     items: AureaStepItem[];
     label?: string;
+    /** `"vertical"`: um passo embaixo do outro, para a coluna estreita (PV-08). O padrão, `"horizontal"`, não muda. */
+    orientation?: "horizontal" | "vertical";
     /** Glifos de `done` e `error`. Registre-os, ou o passo mostra o número. */
     doneIcon?: AureaIcon | false;
     errorIcon?: AureaIcon | false;
@@ -227,7 +229,7 @@ export interface StepperProps extends ViewProps {
  * próximo é `accessibilityState={{selected}}`, que é o que os leitores anunciam. Não é o mesmo
  * vocabulário — é o vocabulário que existe, e dizer isso é melhor que fingir paridade.
  */
-export declare function Stepper({ items, label, doneIcon, errorIcon, style, ...rest }: StepperProps): React.JSX.Element;
+export declare function Stepper({ items, label, orientation, doneIcon, errorIcon, style, ...rest }: StepperProps): React.JSX.Element;
 export interface AureaTabItem {
     id: string;
     label: React.ReactNode;

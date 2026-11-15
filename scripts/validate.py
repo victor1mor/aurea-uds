@@ -4030,8 +4030,8 @@ PROVA_DO_ESTADO49 = {
 # Estado prometido que o código ainda não tem, aceito com motivo e o lote que o constrói. Reprova
 # quando sobra: a dívida paga (a prova apareceu) ou a palavra que saiu da ficha tiram a linha.
 EM_DIVIDA49 = {
-    ("BottomNav", "item-hover"): "o item não responde ao mouse; o item que é link pega a cor de link geral, por acidente. "
-                                 "O desenho do hover é decisão — lote 2, os defeitos reais",
+    # (o hover do `BottomNav` saiu em 14/11/2026: a ficha deixou de prometer o estado — o item que é link não pega mais a
+    # cor de link por acidente, mas um passar do mouse PRÓPRIO da barra nunca foi desenhado; volta à ficha quando for.)
 }
 
 

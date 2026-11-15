@@ -188,11 +188,11 @@ describe("Select: o gatilho e a opção da referência", () => {
       .map((p) => plano(p.style)).slice(-2);
     for (const r of rotulos) expect([r.fontSize, r.fontFamily]).toEqual([16, "Ui500"]);
   });
-  it("só a escolhida leva o indicador: a caixa de 20 com o `check` de 16 no destaque (era nada)", () => {
+  it("só a escolhida leva o indicador: a caixa de 20 com o `check` de 16, cinza (D4, 0.70.0)", () => {
     montar(<Select items={ITENS} value="a" />);
     expect(indicadores()).toHaveLength(1);
     expect(Check).toHaveBeenCalled();
-    expect(Check.mock.calls.at(-1)![0]).toMatchObject({size: t.size.iconSm, color: t.color.primaryEmphasis});
+    expect(Check.mock.calls.at(-1)![0]).toMatchObject({size: t.size.iconSm, color: t.color.mutedForeground}); // D4, 0.70.0: no fim e cinza
   });
 });
 
@@ -216,6 +216,6 @@ describe("Combobox: o gatilho e a folha iguais aos do Select", () => {
     expect(e.minHeight).toBe(t.size.touchControlHMd);
     expect(texto("Alfa").fontFamily).toBe("Ui500");
     expect(indicadores()).toHaveLength(1);
-    expect(Check.mock.calls.at(-1)![0]).toMatchObject({size: t.size.iconSm, color: t.color.primaryEmphasis});
+    expect(Check.mock.calls.at(-1)![0]).toMatchObject({size: t.size.iconSm, color: t.color.mutedForeground}); // D4, 0.70.0: no fim e cinza
   });
 });

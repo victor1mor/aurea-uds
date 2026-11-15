@@ -91,7 +91,8 @@ const folha = criarFolha((t: AureaTokens) => ({
     width: t.size.space2, height: t.size.space2, ...canto(t.size.radiusFull),
     // A cor do ponto é a do TEXTO da linha, como na web (`.menu-ponto` pinta com `currentColor`) — era o destaque, azul
     // no claro e amarelo no escuro (bloco 1, 23/10/2026).
-    backgroundColor: t.color.foreground,
+    // D4 (14/11/2026): cinza, como o visto — o `.menu-ponto` da web pinta com a cor da casa da marca, agora a de apoio.
+    backgroundColor: t.color.mutedForeground,
   },
   // O rótulo de seção: 14 em peso médio e esmaecido (no componente), alinhado ao texto dos itens.
   rotuloDoGrupo: {paddingHorizontal: t.size.space3, paddingTop: t.size.space2, paddingBottom: t.size.space1},
@@ -590,7 +591,7 @@ function renderizar(items: MenuEntry[], prefixo: string, paiSub: string | null, 
         return (
           <Linha key={k} ctx={ctx} papel="checkbox" rotulo={cb.label} icone={cb.leadingIcon}
             estado={{checked: ligado}} inativo={!!cb.disabled || apagado(k, subAberto)}
-            marca={ligado ? <Icon name="check" size="sm" color={ctx.tf.color.foreground} /> : null}
+            marca={ligado ? <Icon name="check" size="sm" color={ctx.tf.color.mutedForeground} /> : null}
             aoTocar={() => {
               // Alterna e FICA aberto — a escolha múltipla da referência e o item da web.
               if (cb.checked === undefined) ctx.marcar(k, !ligado);
@@ -674,13 +675,15 @@ function Linha({ctx, papel, rotulo, icone, marca, estado, inativo = false, destr
       style={({pressed}) => [
         s.item, pressed && (destrutivo ? s.itemTocandoPerigo : s.itemTocando), inativo && s.desabilitado,
       ]}>
-      {marca !== undefined ? <View style={s.indicador}>{marca}</View> : null}
       {icone ? <Icon name={icone} size="md" color={cor} /> : null}
       {typeof rotulo === "string" || typeof rotulo === "number"
         // 16 em peso médio, o título do item da referência.
         ? <Text size="md" weight={500} tone={destrutivo ? "danger" : "default"} style={s.rotulo}>{rotulo}</Text>
         : <View style={s.rotulo}>{rotulo}</View>}
       {final}
+      {/* D4 (aprovado em 19/10/2026 e visto na imagem em 14/11/2026, *"pode"*): a marca do escolhido no FIM da linha, como
+          a da web (`.menu-mark` com `order:2`) e a da referência. A casa continua de largura fixa. */}
+      {marca !== undefined ? <View style={s.indicador}>{marca}</View> : null}
     </Pressable>
   );
 }

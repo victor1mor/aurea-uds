@@ -15,6 +15,7 @@ export default {
     error: "Shown under the control when the value is rejected. Present means invalid: the control knows it by context, and the error becomes the hint the screen reader reads.",
     disabled: "Disables the control inside.",
     size: "The size step the control inside takes, when it does not set its own.",
+    required: "The asterisk after the label, in the error colour, as on the web. It is drawn only: React Native has no required state for the screen reader.",
     children: "The control. Input, Textarea, Select, OTPField, FileInput and the rest read the label, the hint, the error and the size from the Field.",
   },
   examples: [
@@ -53,6 +54,14 @@ export default {
   <OTPField length={6} />
 </Field>`,
       render: () => h("div", {style: largura}, h(Field, {label: "Code sent by SMS", hint: "Six digits."}, h(OTPField, {length: 6}))),
+    },
+    {
+      title: "Required",
+      description: "required adds the asterisk after the label.",
+      code: `<Field label="Email" required>
+  <Input placeholder="ana@example.com" />
+</Field>`,
+      render: () => h("div", {style: largura}, h(Field, {label: "Email", required: true}, h(Input, {placeholder: "ana@example.com"}))),
     },
   ],
 };

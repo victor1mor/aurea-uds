@@ -11,10 +11,11 @@ export interface StepItem {
     href?: string;
 }
 export type StepperVariant = "default" | "path" | "bar";
-export declare function Stepper({ items, label, variant, startContent, endContent, className }: {
+export declare function Stepper({ items, label, variant, orientation, startContent, endContent, className }: {
     items: StepItem[];
     label?: string;
     variant?: StepperVariant;
+    orientation?: "horizontal" | "vertical";
     startContent?: ReactNode;
     endContent?: ReactNode;
     className?: string;

@@ -34,7 +34,7 @@ import { Pressable, View } from "react-native";
 import { SafeAreaInsetsContext, initialWindowMetrics } from "react-native-safe-area-context";
 import { useAnotarBottomNav } from "./barranav.js";
 import { Avatar, Badge } from "./display.js";
-import { canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca, aroDoEstilo, fundoDaPele, marcaDoEstilo, peleDoAtual } from "./estilos.js";
+import { canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca, aroDoEstilo, fundoDaPele, marcaDoEstilo, peleDoAtual, preenchimento } from "./estilos.js";
 import { NaSuperficie } from "./superficie.js";
 import { Icon } from "./icon.js";
 import { Card } from "./layout.js";
@@ -44,6 +44,8 @@ import { Text } from "./text.js";
 import { useAureaStrings, useAureaTokens, useDirecaoRtl } from "./theme.js";
 // Sem `SafeAreaProvider` nem medida da abertura: nenhum recuo.
 const SEM_RECUO = { top: 0, right: 0, bottom: 0, left: 0 };
+// A bolinha do `Stepper`: 32, a mesma do `.step-dot` da web. A linha em pé se mede por ela.
+const BOLINHA = 32;
 const folha = criarFolha((t) => ({
     // ── Topbar ─────────────────────────────────────────────────────────────────────────────────
     // ⚠ Sem `position: sticky` — ele não existe no React Native. Na web o `.topbar` gruda no topo
@@ -284,6 +286,12 @@ const folha = criarFolha((t) => ({
         flexDirection: "row", gap: t.size.space1,
         borderBottomWidth: t.size.borderWidth, borderColor: "transparent",
     },
+    // A LINHA DE PONTA A PONTA embaixo da fila secundária (o Victor, 14/11/2026, *"B, ponta a ponta"*; o "sem linha" não é
+    // 100% — as divisões de dentro ficam): a linha clara (o texto a 10%, a mesma da tabela com `dividers`) vai na fileira
+    // que rola, que tem a largura toda; a borda transparente de dentro sai, para a altura não mudar. Também na Ember (14/11/2026); era
+    // linha da tabela. (14/11/2026: vale também para a Ember.)
+    filaSecundariaComFio: { borderBottomWidth: t.size.borderWidth, borderColor: preenchimento(t, 2) },
+    abasSecundariasSemBorda: { borderBottomWidth: 0 },
     abaSecundaria: {
         alignItems: "center", justifyContent: "center", minHeight: t.size.controlHMd,
         paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
@@ -297,10 +305,22 @@ const folha = criarFolha((t) => ({
     passoItem: { flex: 1 },
     passoDentro: { alignItems: "center" },
     bolinha: {
-        width: 32, height: 32, marginBottom: t.size.space2,
+        width: BOLINHA, height: BOLINHA, marginBottom: t.size.space2,
         alignItems: "center", justifyContent: "center", ...canto(t.size.radiusFull),
         borderWidth: t.size.borderWidth, borderColor: "transparent",
         backgroundColor: misturaOpaca(t.color.foreground, t.color.background, 0.2),
+    },
+    // EM PÉ (`orientation="vertical"`, PV-08, 14/11/2026 — a mesma da web): a bolinha à esquerda, o nome ao lado a `space3`
+    // e centrado nela, o "Opcional" embaixo, `space6` de um passo ao outro, e a linha descendo entre as bolinhas. A linha
+    // tem a espessura e o lugar da linha deitada da web (2 = duas bordas; no meio da bolinha).
+    trilhaEmPe: { flexDirection: "column" },
+    passoEmPe: { flexDirection: "row", alignItems: "flex-start", gap: t.size.space3, paddingBottom: t.size.space6 },
+    passoEmPeUltimo: { paddingBottom: 0 },
+    bolinhaEmPe: { marginBottom: 0 },
+    textoEmPe: { flex: 1, minWidth: 0 },
+    nomeEmPe: { minHeight: BOLINHA, justifyContent: "center" },
+    linhaEmPe: {
+        position: "absolute", top: BOLINHA, bottom: 0, start: BOLINHA / 2 - t.size.borderWidth, width: t.size.borderWidth * 2,
     },
 }));
 /**
@@ -603,32 +623,44 @@ export function NavList({ items, chevron = "caret-right", style, ...rest }) {
  * próximo é `accessibilityState={{selected}}`, que é o que os leitores anunciam. Não é o mesmo
  * vocabulário — é o vocabulário que existe, e dizer isso é melhor que fingir paridade.
  */
-export function Stepper({ items, label, doneIcon = "check", errorIcon = "x-circle", style, ...rest }) {
+export function Stepper({ items, label, orientation = "horizontal", doneIcon = "check", errorIcon = "x-circle", style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();
-    return (_jsx(View, { accessibilityRole: "list", accessibilityLabel: label ?? strings.stepperLabel, style: [s.trilha, style], ...rest, children: items.map((it, n) => {
+    const emPe = orientation === "vertical";
+    return (_jsx(View, { accessibilityRole: "list", accessibilityLabel: label ?? strings.stepperLabel, style: [emPe ? s.trilhaEmPe : s.trilha, style], ...rest, children: items.map((it, n) => {
             const st = it.state ?? "default";
             const cor = st === "error" ? (t.color.danger400 ?? t.color.destructive)
                 // o passo atual na cor do TEXTO, como na web (`.step-active`) — era o destaque, azul no claro (23/10/2026)
                 : st === "active" ? t.color.foreground
                     : t.color.foreground;
-            const miolo = (_jsxs(_Fragment, { children: [_jsx(View, { style: [
-                            s.bolinha,
-                            st === "error" && { borderColor: "transparent", backgroundColor: t.color.dangerBg },
-                            st === "active" && { borderColor: "transparent", backgroundColor: comOpacidade(t.color.primary, 0.14) },
-                        ], children: st === "done" && doneIcon
-                            ? _jsx(Icon, { name: doneIcon, size: "sm", color: cor })
-                            : st === "error" && errorIcon
-                                ? _jsx(Icon, { name: errorIcon, size: "sm", color: cor })
-                                : _jsx(Text, { size: "sm", weight: 600, style: { color: cor }, children: n + 1 }) }), typeof it.label === "string"
-                        ? _jsx(Text, { size: "sm", weight: 600, align: "center", style: { color: cor }, children: it.label })
-                        : it.label, it.optional != null && (typeof it.optional === "string"
-                        ? _jsx(Text, { size: "xs", tone: "muted", align: "center", children: it.optional })
-                        : it.optional)] }));
+            const ultimo = n === items.length - 1;
+            // a linha que desce até o próximo: amarela quando o próximo já foi feito ou é o atual, como a deitada da web
+            const proximo = items[n + 1]?.state;
+            const linha = emPe && !ultimo ? (_jsx(View, { pointerEvents: "none", style: [s.linhaEmPe, {
+                        backgroundColor: proximo === "done" || proximo === "active" ? t.color.primary : t.color.border,
+                    }] })) : null;
+            const alinhar = emPe ? "auto" : "center"; // em pé, o nome segue a direção da escrita
+            const bolinha = (_jsx(View, { style: [
+                    s.bolinha, emPe && s.bolinhaEmPe,
+                    st === "error" && { borderColor: "transparent", backgroundColor: t.color.dangerBg },
+                    st === "active" && { borderColor: "transparent", backgroundColor: comOpacidade(t.color.primary, 0.14) },
+                ], children: st === "done" && doneIcon
+                    ? _jsx(Icon, { name: doneIcon, size: "sm", color: cor })
+                    : st === "error" && errorIcon
+                        ? _jsx(Icon, { name: errorIcon, size: "sm", color: cor })
+                        : _jsx(Text, { size: "sm", weight: 600, style: { color: cor }, children: n + 1 }) }));
+            const nome = typeof it.label === "string"
+                ? _jsx(Text, { size: "sm", weight: 600, align: alinhar, style: { color: cor }, children: it.label })
+                : it.label;
+            const nota = it.optional != null && (typeof it.optional === "string"
+                ? _jsx(Text, { size: "xs", tone: "muted", align: alinhar, children: it.optional })
+                : it.optional);
+            const miolo = emPe ? (_jsxs(_Fragment, { children: [linha, bolinha, _jsxs(View, { style: s.textoEmPe, children: [_jsx(View, { style: s.nomeEmPe, children: nome }), nota] })] })) : (_jsxs(_Fragment, { children: [bolinha, nome, nota] }));
+            const passoEmPe = emPe ? [s.passoEmPe, ultimo && s.passoEmPeUltimo] : null;
             // O item da lista é o passo; o tocável fica DENTRO dele (o papel de item não pode ir no botão). Na web, o passo
             // atual é `aria-current="step"` (bloco 1, 24/10/2026).
-            return it.onPress ? (_jsx(View, { role: "listitem", style: s.passoItem, children: _jsx(Pressable, { onPress: it.onPress, accessibilityRole: "button", ...estadoAcessivel({ selected: st === "active" }, "step"), style: s.passoDentro, children: miolo }) }, n)) : (_jsx(View, { role: "listitem", accessible: true, ...estadoAcessivel({ selected: st === "active" }, "step"), style: s.passo, children: miolo }, n));
+            return it.onPress ? (_jsx(View, { role: "listitem", style: emPe ? null : s.passoItem, children: _jsx(Pressable, { onPress: it.onPress, accessibilityRole: "button", ...estadoAcessivel({ selected: st === "active" }, "step"), style: emPe ? passoEmPe : s.passoDentro, children: miolo }) }, n)) : (_jsx(View, { role: "listitem", accessible: true, ...estadoAcessivel({ selected: st === "active" }, "step"), style: emPe ? passoEmPe : s.passo, children: miolo }, n));
         }) }));
 }
 /**
@@ -670,9 +702,10 @@ export function Tabs({ tabs, value, onChange, label, justify, variant = "primary
     const strings = useAureaStrings();
     const aberta = tabs.find((it) => it.id === value);
     const secundaria = variant === "secondary";
+    const comFio = secundaria;
     // S-04 (05/11/2026): a aba escolhida DESLIZA (`deslize.tsx`) — a cápsula amarela, e na secundária o fio de baixo.
     const fila = useFilaQueDesliza(value);
-    return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { justify: justify, children: _jsxs(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: secundaria ? s.abasSecundarias : s.abas, children: [_jsx(IndicadorQueDesliza, { alvo: fila.alvo, aoFicarPronto: fila.aoFicarPronto, style: secundaria ? undefined : [canto(t.size.radiusControl), s.abaDeTabAtiva], children: secundaria ? _jsx(View, { style: s.fioDaAba }) : null }), tabs.map((it) => {
+    return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { justify: justify, style: comFio ? s.filaSecundariaComFio : undefined, children: _jsxs(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: secundaria ? [s.abasSecundarias, comFio && s.abasSecundariasSemBorda] : s.abas, children: [_jsx(IndicadorQueDesliza, { alvo: fila.alvo, aoFicarPronto: fila.aoFicarPronto, style: secundaria ? undefined : [canto(t.size.radiusControl), s.abaDeTabAtiva], children: secundaria ? _jsx(View, { style: s.fioDaAba }) : null }), tabs.map((it) => {
                             const ativa = it.id === value;
                             return (_jsxs(Pressable, { onLayout: fila.medir(it.id), onPress: it.disabled ? undefined : () => onChange?.(it.id), disabled: it.disabled, accessibilityRole: "tab", ...estadoAcessivel({ selected: ativa, disabled: !!it.disabled }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [
                                     secundaria ? s.abaSecundaria : s.abaDeTab,

@@ -81,4 +81,31 @@ export default [
       {label: "Payment", state: "active"},
       {label: "Review"}]})),
   },
+  {
+    variant: "Orientation",
+    name: "In a row, or one step under the other",
+    description: "`orientation=\"horizontal\"` (the default) puts the steps in a row. `\"vertical\"` is for a side column where a row does not fit: at 150 wide the labels of a horizontal stepper run into each other. The dot stays on the start side, the label sits beside it and wraps if it must, and the line runs down between the dots — yellow up to the current step.",
+    uses: ["Stepper"],
+    code: `<Stepper label="Publish" orientation="horizontal" items={[
+  {label: "Account", state: "done"},
+  {label: "Content", state: "active"},
+  {label: "Review"},
+]} />
+<Stepper label="Publish" orientation="vertical" items={[
+  {label: "Account", state: "done"},
+  {label: "Profile", state: "done"},
+  {label: "Content", state: "active"},
+  {label: "Schedule"},
+  {label: "Review", optional: "Optional"},
+]} />`,
+    render: () => h("div", {style: {...cheio, display: "grid", gap: "var(--space-6)"}},
+      h(A.Stepper, {label: "Publish", orientation: "horizontal", items: [
+        {label: "Account", state: "done"}, {label: "Content", state: "active"}, {label: "Review"}]}),
+      h("div", {style: {inlineSize: "150px"}}, h(A.Stepper, {label: "Publish", orientation: "vertical", items: [
+        {label: "Account", state: "done"},
+        {label: "Profile", state: "done"},
+        {label: "Content", state: "active"},
+        {label: "Schedule"},
+        {label: "Review", optional: "Optional"}]}))),
+  },
 ];

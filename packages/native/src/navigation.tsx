@@ -35,7 +35,7 @@ import {SafeAreaInsetsContext, initialWindowMetrics} from "react-native-safe-are
 
 import {useAnotarBottomNav} from "./barranav.js";
 import {Avatar, Badge} from "./display.js";
-import {canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca, aroDoEstilo, fundoDaPele, marcaDoEstilo, peleDoAtual, type PeleDoAtual} from "./estilos.js";
+import {canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca, aroDoEstilo, fundoDaPele, marcaDoEstilo, peleDoAtual, preenchimento, type PeleDoAtual} from "./estilos.js";
 import {NaSuperficie} from "./superficie.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {Card} from "./layout.js";
@@ -47,6 +47,9 @@ import type {AureaTokens} from "./tokens.js";
 
 // Sem `SafeAreaProvider` nem medida da abertura: nenhum recuo.
 const SEM_RECUO = {top: 0, right: 0, bottom: 0, left: 0} as const;
+
+// A bolinha do `Stepper`: 32, a mesma do `.step-dot` da web. A linha em pé se mede por ela.
+const BOLINHA = 32;
 
 const folha = criarFolha((t: AureaTokens) => ({
   // ── Topbar ─────────────────────────────────────────────────────────────────────────────────
@@ -292,6 +295,12 @@ const folha = criarFolha((t: AureaTokens) => ({
     flexDirection: "row", gap: t.size.space1,
     borderBottomWidth: t.size.borderWidth, borderColor: "transparent",
   },
+  // A LINHA DE PONTA A PONTA embaixo da fila secundária (o Victor, 14/11/2026, *"B, ponta a ponta"*; o "sem linha" não é
+  // 100% — as divisões de dentro ficam): a linha clara (o texto a 10%, a mesma da tabela com `dividers`) vai na fileira
+  // que rola, que tem a largura toda; a borda transparente de dentro sai, para a altura não mudar. Também na Ember (14/11/2026); era
+  // linha da tabela. (14/11/2026: vale também para a Ember.)
+  filaSecundariaComFio: {borderBottomWidth: t.size.borderWidth, borderColor: preenchimento(t, 2)},
+  abasSecundariasSemBorda: {borderBottomWidth: 0},
   abaSecundaria: {
     alignItems: "center", justifyContent: "center", minHeight: t.size.controlHMd,
     paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
@@ -306,10 +315,22 @@ const folha = criarFolha((t: AureaTokens) => ({
   passoItem: {flex: 1},
   passoDentro: {alignItems: "center"},
   bolinha: {
-    width: 32, height: 32, marginBottom: t.size.space2,
+    width: BOLINHA, height: BOLINHA, marginBottom: t.size.space2,
     alignItems: "center", justifyContent: "center", ...canto(t.size.radiusFull),
     borderWidth: t.size.borderWidth, borderColor: "transparent",
     backgroundColor: misturaOpaca(t.color.foreground, t.color.background, 0.2),
+  },
+  // EM PÉ (`orientation="vertical"`, PV-08, 14/11/2026 — a mesma da web): a bolinha à esquerda, o nome ao lado a `space3`
+  // e centrado nela, o "Opcional" embaixo, `space6` de um passo ao outro, e a linha descendo entre as bolinhas. A linha
+  // tem a espessura e o lugar da linha deitada da web (2 = duas bordas; no meio da bolinha).
+  trilhaEmPe: {flexDirection: "column"},
+  passoEmPe: {flexDirection: "row", alignItems: "flex-start", gap: t.size.space3, paddingBottom: t.size.space6},
+  passoEmPeUltimo: {paddingBottom: 0},
+  bolinhaEmPe: {marginBottom: 0},
+  textoEmPe: {flex: 1, minWidth: 0},
+  nomeEmPe: {minHeight: BOLINHA, justifyContent: "center"},
+  linhaEmPe: {
+    position: "absolute", top: BOLINHA, bottom: 0, start: BOLINHA / 2 - t.size.borderWidth, width: t.size.borderWidth * 2,
   },
 }));
 
@@ -866,6 +887,8 @@ export interface AureaStepItem {
 export interface StepperProps extends ViewProps {
   items: AureaStepItem[];
   label?: string;
+  /** `"vertical"`: um passo embaixo do outro, para a coluna estreita (PV-08). O padrão, `"horizontal"`, não muda. */
+  orientation?: "horizontal" | "vertical";
   /** Glifos de `done` e `error`. Registre-os, ou o passo mostra o número. */
   doneIcon?: AureaIcon | false;
   errorIcon?: AureaIcon | false;
@@ -879,24 +902,33 @@ export interface StepperProps extends ViewProps {
  * vocabulário — é o vocabulário que existe, e dizer isso é melhor que fingir paridade.
  */
 export function Stepper({
-  items, label, doneIcon = "check", errorIcon = "x-circle", style, ...rest
+  items, label, orientation = "horizontal", doneIcon = "check", errorIcon = "x-circle", style, ...rest
 }: StepperProps) {
   const t = useAureaTokens();
   const s = folha(t);
   const strings = useAureaStrings();
+  const emPe = orientation === "vertical";
   return (
     <View accessibilityRole="list" accessibilityLabel={label ?? strings.stepperLabel}
-          style={[s.trilha, style]} {...rest}>
+          style={[emPe ? s.trilhaEmPe : s.trilha, style]} {...rest}>
       {items.map((it, n) => {
         const st = it.state ?? "default";
         const cor = st === "error" ? (t.color.danger400 ?? t.color.destructive)
           // o passo atual na cor do TEXTO, como na web (`.step-active`) — era o destaque, azul no claro (23/10/2026)
           : st === "active" ? t.color.foreground
           : t.color.foreground;
-        const miolo = (
-          <>
+        const ultimo = n === items.length - 1;
+        // a linha que desce até o próximo: amarela quando o próximo já foi feito ou é o atual, como a deitada da web
+        const proximo = items[n + 1]?.state;
+        const linha = emPe && !ultimo ? (
+          <View pointerEvents="none" style={[s.linhaEmPe, {
+            backgroundColor: proximo === "done" || proximo === "active" ? t.color.primary : t.color.border,
+          }]}/>
+        ) : null;
+        const alinhar = emPe ? "auto" : "center";  // em pé, o nome segue a direção da escrita
+        const bolinha = (
             <View style={[
-              s.bolinha,
+              s.bolinha, emPe && s.bolinhaEmPe,
               st === "error" && {borderColor: "transparent", backgroundColor: t.color.dangerBg},
               st === "active" && {borderColor: "transparent", backgroundColor: comOpacidade(t.color.primary, 0.14)},
             ]}>
@@ -906,28 +938,44 @@ export function Stepper({
                   ? <Icon name={errorIcon} size="sm" color={cor} />
                   : <Text size="sm" weight={600} style={{color: cor}}>{n + 1}</Text>}
             </View>
-            {typeof it.label === "string"
-              ? <Text size="sm" weight={600} align="center" style={{color: cor}}>{it.label}</Text>
-              : it.label}
-            {it.optional != null && (typeof it.optional === "string"
-              ? <Text size="xs" tone="muted" align="center">{it.optional}</Text>
-              : it.optional)}
+        );
+        const nome = typeof it.label === "string"
+          ? <Text size="sm" weight={600} align={alinhar} style={{color: cor}}>{it.label}</Text>
+          : it.label;
+        const nota = it.optional != null && (typeof it.optional === "string"
+          ? <Text size="xs" tone="muted" align={alinhar}>{it.optional}</Text>
+          : it.optional);
+        const miolo = emPe ? (
+          <>
+            {linha}
+            {bolinha}
+            <View style={s.textoEmPe}>
+              <View style={s.nomeEmPe}>{nome}</View>
+              {nota}
+            </View>
+          </>
+        ) : (
+          <>
+            {bolinha}
+            {nome}
+            {nota}
           </>
         );
+        const passoEmPe = emPe ? [s.passoEmPe, ultimo && s.passoEmPeUltimo] : null;
         // O item da lista é o passo; o tocável fica DENTRO dele (o papel de item não pode ir no botão). Na web, o passo
         // atual é `aria-current="step"` (bloco 1, 24/10/2026).
         return it.onPress ? (
-          <View key={n} role="listitem" style={s.passoItem}>
+          <View key={n} role="listitem" style={emPe ? null : s.passoItem}>
             <Pressable
               onPress={it.onPress}
               accessibilityRole="button"
               {...estadoAcessivel({selected: st === "active"}, "step")}
-              style={s.passoDentro}>
+              style={emPe ? passoEmPe : s.passoDentro}>
               {miolo}
             </Pressable>
           </View>
         ) : (
-          <View key={n} role="listitem" accessible {...estadoAcessivel({selected: st === "active"}, "step")} style={s.passo}>
+          <View key={n} role="listitem" accessible {...estadoAcessivel({selected: st === "active"}, "step")} style={emPe ? passoEmPe : s.passo}>
             {miolo}
           </View>
         );
@@ -1019,6 +1067,7 @@ export function Tabs({
   const strings = useAureaStrings();
   const aberta = tabs.find((it) => it.id === value);
   const secundaria = variant === "secondary";
+  const comFio = secundaria;
   // S-04 (05/11/2026): a aba escolhida DESLIZA (`deslize.tsx`) — a cápsula amarela, e na secundária o fio de baixo.
   const fila = useFilaQueDesliza(value);
 
@@ -1032,9 +1081,9 @@ export function Tabs({
           não achava a terceira. **Quem nomeou foi o consumidor, pedindo outra coisa** (a fila de
           opções do `SegmentedControl`), e a regra *"quem mais tem esse problema?"* trouxe até
           aqui. A `FilaRolante` é a mesma peça nos dois. */}
-      <FilaRolante justify={justify}>
+      <FilaRolante justify={justify} style={comFio ? s.filaSecundariaComFio : undefined}>
         <View accessibilityRole="tablist" accessibilityLabel={label ?? strings.tabsLabel}
-              style={secundaria ? s.abasSecundarias : s.abas}>
+              style={secundaria ? [s.abasSecundarias, comFio && s.abasSecundariasSemBorda] : s.abas}>
           <IndicadorQueDesliza alvo={fila.alvo} aoFicarPronto={fila.aoFicarPronto}
             style={secundaria ? undefined : [canto(t.size.radiusControl), s.abaDeTabAtiva]}>
             {secundaria ? <View style={s.fioDaAba} /> : null}

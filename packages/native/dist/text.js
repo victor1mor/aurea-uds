@@ -22,7 +22,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import * as React from "react";
 import { Text as TextRN } from "react-native";
 import { canto, criarFolha, letraDoAmarelo, letraDoToken } from "./estilos.js";
-import { useAureaTokens, useSobreAMarca } from "./theme.js";
+import { useAltoContraste, useAureaTokens, useSobreAMarca } from "./theme.js";
 // 🔴 A ESCALA TEM CINCO DEGRAUS QUE SE ENXERGAM, E DEZ NOMES — ordem do Victor, 19/09/2026,
 // olhando o app no aparelho: *"o tamanho das fontes: existem variações demais, fica muito
 // estranho"*.
@@ -119,6 +119,9 @@ export function Text({ type, size, weight: pesoPedido, font: fontePedida, tone =
     const t = useAureaTokens();
     const s = folha(t);
     const sobreAMarca = useSobreAMarca();
+    // O alto contraste do app (0-D): o link sublinhado na cor da letra (abaixo).
+    const alto = useAltoContraste();
+    const sublinhadoDoAlto = alto ? { textDecorationLine: "underline" } : null;
     // Sem `type`, os padrões de sempre (`md`, 400, `ui`, `normal`) — nada muda para quem já usa.
     const papel = type ? PAPEL[type] : undefined;
     const weight = pesoPedido ?? papel?.peso ?? 400;
@@ -171,7 +174,7 @@ export function Text({ type, size, weight: pesoPedido, font: fontePedida, tone =
         // Android ele sai na cor da letra, que já é o amarelo.
         const { children, ...resto } = rest;
         if (t.theme === "light") {
-            return (_jsx(TextRN, { style: [s[tone], proprio, style], ...resto, children: _jsx(TextRN, { style: { backgroundColor: t.color.linkMark }, children: children }) }));
+            return (_jsx(TextRN, { style: [s[tone], proprio, sublinhadoDoAlto, style], ...resto, children: _jsx(TextRN, { style: { backgroundColor: t.color.linkMark }, children: children }) }));
         }
         return (_jsx(TextRN, { style: [s[tone], proprio, { textDecorationLine: "underline", textDecorationColor: t.color.linkUnderline }, style], ...resto, children: children }));
     }

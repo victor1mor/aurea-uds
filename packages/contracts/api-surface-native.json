@@ -5,9 +5,9 @@
   "totals": {
     "modulos": 34,
     "componentes": 91,
-    "hooks": 18,
+    "hooks": 19,
     "aliasesLiterais": 69,
-    "propsDistintas": 211
+    "propsDistintas": 214
   },
   "aliases": {
     "AureaButtonAppearance": {
@@ -2152,19 +2152,11 @@
       ]
     },
     "AureaTextSize": {
-      "module": "text",
-      "raw": "\"xs\" | \"sm\" | \"md\" | \"base\" | \"lg\" | \"xl\" | \"2xl\" | \"3xl\" | \"4xl\" | \"5xl\"",
+      "module": "theme",
+      "raw": "\"md\" | \"lg\"",
       "union": [
-        "xs",
-        "sm",
         "md",
-        "base",
-        "lg",
-        "xl",
-        "2xl",
-        "3xl",
-        "4xl",
-        "5xl"
+        "lg"
       ]
     },
     "AureaTextWeight": {
@@ -2263,7 +2255,7 @@
     },
     "AureaProviderProps": {
       "module": "theme",
-      "raw": "{ children: React.ReactNode; theme?: AureaThemeName; density?: AureaDensity; brand?: AureaBrand; defaultTheme?: AureaThemeName; defaultDensity?: AureaDensity; fontFamilies?: AureaFontFamilies; icons?: AureaIconRegistry; strings?: AureaStrings; direction?: \"ltr\" | \"rtl\"; onThemeChange?: (t: AureaThemeName) => void; onDensityChange?: (d: AureaDensity) => void; }",
+      "raw": "{ children: React.ReactNode; theme?: AureaThemeName; density?: AureaDensity; brand?: AureaBrand; defaultTheme?: AureaThemeName; defaultDensity?: AureaDensity; fontFamilies?: AureaFontFamilies; icons?: AureaIconRegistry; strings?: AureaStrings; direction?: \"ltr\" | \"rtl\"; highContrast?: boolean; textSize?: AureaTextSize; onThemeChange?: (t: AureaThemeName) => void; onDensityChange?: (d: AureaDensity) => void; }",
       "union": null
     },
     "AureaToastType": {
@@ -4799,6 +4791,12 @@
               ]
             },
             {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "children",
               "optional": true,
               "type": "React.ReactNode",
@@ -4913,6 +4911,21 @@
             },
             {
               "name": "multiline",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "\"primary\" | \"secondary\"",
+              "values": [
+                "primary",
+                "secondary"
+              ]
+            },
+            {
+              "name": "invalid",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -5567,6 +5580,21 @@
             },
             {
               "name": "multiline",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "variant",
+              "optional": true,
+              "type": "\"primary\" | \"secondary\"",
+              "values": [
+                "primary",
+                "secondary"
+              ]
+            },
+            {
+              "name": "invalid",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -6277,6 +6305,15 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "orientation",
+              "optional": true,
+              "type": "\"horizontal\" | \"vertical\"",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
             },
             {
               "name": "doneIcon",
@@ -7288,16 +7325,8 @@
               "optional": true,
               "type": "AureaTextSize",
               "values": [
-                "xs",
-                "sm",
                 "md",
-                "base",
-                "lg",
-                "xl",
-                "2xl",
-                "3xl",
-                "4xl",
-                "5xl"
+                "lg"
               ]
             },
             {
@@ -7483,6 +7512,21 @@
               ]
             },
             {
+              "name": "highContrast",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "textSize",
+              "optional": true,
+              "type": "AureaTextSize",
+              "values": [
+                "md",
+                "lg"
+              ]
+            },
+            {
               "name": "onThemeChange",
               "optional": true,
               "type": "(t: AureaThemeName) => void",
@@ -7533,6 +7577,7 @@
         }
       ],
       "hooks": [
+        "useAltoContraste",
         "useDirecaoRtl",
         "useAureaTheme",
         "useAureaTokens",

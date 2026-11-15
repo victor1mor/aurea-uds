@@ -83,7 +83,8 @@ const folha = criarFolha((t) => ({
         width: t.size.space2, height: t.size.space2, ...canto(t.size.radiusFull),
         // A cor do ponto é a do TEXTO da linha, como na web (`.menu-ponto` pinta com `currentColor`) — era o destaque, azul
         // no claro e amarelo no escuro (bloco 1, 23/10/2026).
-        backgroundColor: t.color.foreground,
+        // D4 (14/11/2026): cinza, como o visto — o `.menu-ponto` da web pinta com a cor da casa da marca, agora a de apoio.
+        backgroundColor: t.color.mutedForeground,
     },
     // O rótulo de seção: 14 em peso médio e esmaecido (no componente), alinhado ao texto dos itens.
     rotuloDoGrupo: { paddingHorizontal: t.size.space3, paddingTop: t.size.space2, paddingBottom: t.size.space1 },
@@ -381,7 +382,7 @@ function renderizar(items, prefixo, paiSub, ctx) {
             case "checkbox": {
                 const cb = it;
                 const ligado = cb.checked ?? ctx.marcado[k] ?? cb.defaultChecked ?? false;
-                return (_jsx(Linha, { ctx: ctx, papel: "checkbox", rotulo: cb.label, icone: cb.leadingIcon, estado: { checked: ligado }, inativo: !!cb.disabled || apagado(k, subAberto), marca: ligado ? _jsx(Icon, { name: "check", size: "sm", color: ctx.tf.color.foreground }) : null, aoTocar: () => {
+                return (_jsx(Linha, { ctx: ctx, papel: "checkbox", rotulo: cb.label, icone: cb.leadingIcon, estado: { checked: ligado }, inativo: !!cb.disabled || apagado(k, subAberto), marca: ligado ? _jsx(Icon, { name: "check", size: "sm", color: ctx.tf.color.mutedForeground }) : null, aoTocar: () => {
                         // Alterna e FICA aberto — a escolha múltipla da referência e o item da web.
                         if (cb.checked === undefined)
                             ctx.marcar(k, !ligado);
@@ -427,10 +428,10 @@ function Linha({ ctx, papel, rotulo, icone, marca, estado, inativo = false, dest
         accessibilityRole: papel === "checkbox" ? "checkbox" : papel === "radio" ? "radio"
             : papel === "link" ? "link" : "menuitem", ...estadoAcessivel({ ...estado, disabled: inativo }), style: ({ pressed }) => [
             s.item, pressed && (destrutivo ? s.itemTocandoPerigo : s.itemTocando), inativo && s.desabilitado,
-        ], children: [marca !== undefined ? _jsx(View, { style: s.indicador, children: marca }) : null, icone ? _jsx(Icon, { name: icone, size: "md", color: cor }) : null, typeof rotulo === "string" || typeof rotulo === "number"
+        ], children: [icone ? _jsx(Icon, { name: icone, size: "md", color: cor }) : null, typeof rotulo === "string" || typeof rotulo === "number"
                 // 16 em peso médio, o título do item da referência.
                 ? _jsx(Text, { size: "md", weight: 500, tone: destrutivo ? "danger" : "default", style: s.rotulo, children: rotulo })
-                : _jsx(View, { style: s.rotulo, children: rotulo }), final] }));
+                : _jsx(View, { style: s.rotulo, children: rotulo }), final, marca !== undefined ? _jsx(View, { style: s.indicador, children: marca }) : null] }));
 }
 /** O gatilho do submenu: a seta de 16 gira 90° ao abrir, como a da referência. */
 function LinhaDeSubmenu({ ctx, def, aberto, inativo, alternar, children }) {

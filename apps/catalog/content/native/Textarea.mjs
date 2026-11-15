@@ -63,5 +63,14 @@ export default {
         h(Field, {label: "Reason", hint: "At least one sentence.", error: "Tell us why you are cancelling."}, h(Textarea, {rows: 2})),
         h(Field, {label: "Reason (disabled)"}, h(Textarea, {rows: 2, defaultValue: "Moved to another plan.", disabled: true}))),
     },
+    {
+      title: "Variants",
+      description: "primary chooses its fill from the surface it sits on; secondary is the grey field, for a field placed on a card.",
+      code: `<Field label="Notes"><Textarea variant="primary" rows={2} /></Field>
+<Field label="Notes"><Textarea variant="secondary" rows={2} /></Field>`,
+      render: () => h("div", {style: largura},
+        h(Field, {label: "Notes"}, h(Textarea, {variant: "primary", rows: 2})),
+        h(Field, {label: "Notes"}, h(Textarea, {variant: "secondary", rows: 2}))),
+    },
   ],
 };

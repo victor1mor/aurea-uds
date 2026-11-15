@@ -20,7 +20,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { canto, comOpacidade, criarFolha, peleDoCartao, peleDoCartaoEscolhido, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.js";
 import { NaSuperficie } from "./superficie.js";
 import { Text } from "./text.js";
-import { useAureaTheme, useAureaTokens, SobreAMarca, TemaDentro } from "./theme.js";
+import { useAltoContraste, useAureaTheme, useAureaTokens, SobreAMarca, TemaDentro } from "./theme.js";
 const folha = criarFolha((t) => ({
     // A LINHA DO SISTEMA, e os números são os mesmos do `.separator` da web (`aurea.css`): cor de
     // `border` e espessura de UM pixel. ⚠ Um pixel não sai de `--space-*` de propósito — a linha
@@ -63,17 +63,27 @@ const folha = criarFolha((t) => ({
     contrasteNoEscuro: { borderColor: "transparent" },
     // MT-02 (ADR-0063): o traço no topo. Uma borda mais grossa só em cima, com o canto 22, desenha
     // errado no Android (react-native#51926, fechada sem conserto em 24/03/2026: a borda sai do
-    // contorno e deixa vão). Então o traço é uma faixa de `accentWidth` numa camada que se recorta no
-    // canto do cartão, por cima da borda de 1 — o mesmo desenho do `border-top` da web, que afina na
-    // curva. A camada cobre a CAIXA DA BORDA (deslocada de `borderWidth` para fora), e o recheio de
-    // cima cresce o que o traço come, para o conteúdo ficar onde fica na web.
+    // contorno e deixa vão). Então o traço mora numa camada que se recorta no canto do cartão, por cima
+    // da borda de 1. A camada cobre a CAIXA DA BORDA (deslocada de `borderWidth` para fora), e o recheio
+    // de cima cresce o que o traço come, para o conteúdo ficar onde fica na web.
+    // PV-12 (o Victor, 14/11/2026, *"A, nativo igual à web"*): o traço é o ARCO da web — a sombra por dentro
+    // (`box-shadow: inset 0 4px`) desce pela curva do canto e afina até sumir nos lados. Antes, aqui, era
+    // uma faixa reta cortada pela curva. O arco sai de um ARO de borda UNIFORME (o Android desenha certo
+    // a borda de largura igual; o defeito é só a de larguras diferentes): a borda de dentro do aro é o
+    // contorno do próprio cartão deslocado `accentWidth` para baixo (canto de dentro = canto de fora −
+    // largura = `radiusCard`), e a camada recorta o resto. Não depende do fundo do cartão — vale no
+    // `outline`, que é transparente.
     comTraco: { paddingTop: t.size.cardPad + t.size.accentWidth - t.size.borderWidth },
     tracoCamada: {
         position: "absolute", top: -t.size.borderWidth, left: -t.size.borderWidth,
         right: -t.size.borderWidth, bottom: -t.size.borderWidth,
         ...canto(t.size.radiusCard), overflow: "hidden",
     },
-    traco: { height: t.size.accentWidth },
+    traco: {
+        position: "absolute", top: t.size.accentWidth - t.size.radiusCard, left: -t.size.radiusCard,
+        right: -t.size.radiusCard, bottom: -t.size.radiusCard * 2,
+        borderWidth: t.size.radiusCard, ...canto(t.size.radiusCard * 2),
+    },
     // A ação fica embaixo, separada pelo mesmo respiro que o resto da casa usa entre blocos.
     acaoDaMarca: { marginTop: t.size.space3 },
 }));
@@ -247,17 +257,19 @@ function CorpoDoCartao({ variant, accent, style, ...rest }) {
     const { action, children, onPress, disabled, ...resto } = rest;
     // O contorno do `contrast` olha o tema do APP: dentro do cartão os tokens já são os do escuro.
     const contorno = variant === "contrast" && temaDoApp === "dark" ? s.contrasteNoEscuro : null;
-    const traco = accent == null ? null : (_jsx(View, { pointerEvents: "none", collapsable: false, style: s.tracoCamada, children: _jsx(View, { style: [s.traco, { backgroundColor: t.color[COR_DO_TRACO[accent]] }] }) }));
+    // O ALTO CONTRASTE do app (0-D, ADR-0090, a forma "C"): o contorno de 3:1 no cartão, como a web (`[data-contrast="high"] .card`).
+    const altoContraste = useAltoContraste() ? { borderColor: t.color.inputStrong } : null;
+    const traco = accent == null ? null : (_jsx(View, { pointerEvents: "none", collapsable: false, style: s.tracoCamada, children: _jsx(View, { style: [s.traco, { borderColor: t.color[COR_DO_TRACO[accent]] }] }) }));
     if (onPress != null) {
         const pele = variant ?? "interactive";
         return (_jsxs(Pressable, { onPress: onPress, disabled: disabled, accessibilityRole: "button", ...estadoAcessivel({ disabled: !!disabled }), style: ({ pressed: tocando }) => [
-                s.cardBase, s[`card_${pele}`], contorno, traco != null && s.comTraco,
+                s.cardBase, s[`card_${pele}`], contorno, altoContraste, traco != null && s.comTraco,
                 tocando && REACAO_AO_TOQUE.pressionado, disabled && REACAO_AO_TOQUE.inerte,
                 style,
             ], ...(pele === "outline" ? MARCA_DO_CONTORNO : null), ...resto, children: [traco, children] }));
     }
     const corpo = (_jsxs(_Fragment, { children: [traco, children, action != null && _jsx(View, { style: s.acaoDaMarca, children: action })] }));
-    const pele = (_jsx(View, { style: [s.cardBase, s[`card_${variant ?? "base"}`], contorno, traco != null && s.comTraco, style], ...(variant === "outline" ? MARCA_DO_CONTORNO : null), ...resto, children: corpo }));
+    const pele = (_jsx(View, { style: [s.cardBase, s[`card_${variant ?? "base"}`], contorno, altoContraste, traco != null && s.comTraco, style], ...(variant === "outline" ? MARCA_DO_CONTORNO : null), ...resto, children: corpo }));
     // 🔴 SOBRE O AMARELO A COR DO TEXTO NÃO É ESCOLHA, É OBRIGAÇÃO — e os números decidiram isto.
     // Medido nos dois temas, texto contra o `primary`:
     //     texto comum ........ 10,34 no claro  ·  **1,83 no escuro**  🔴 ilegível

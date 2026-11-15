@@ -31,6 +31,12 @@ export interface FieldProps extends ViewProps {
     error?: React.ReactNode;
     disabled?: boolean;
     size?: AureaFieldSize;
+    /**
+     * Obrigatório (14/11/2026, o "Input do nativo (b)" — a web já tinha): o asterisco no rótulo, na cor da frase de erro,
+     * como na web. ⚠ O asterisco é desenho: no aparelho não existe o estado "obrigatório" para o leitor de tela (o
+     * React Native não tem o `aria-required` nem um `accessibilityState` para isso), como na referência do celular.
+     */
+    required?: boolean;
     children?: React.ReactNode;
 }
 /**
@@ -50,7 +56,7 @@ export interface FieldProps extends ViewProps {
  * grade de `12rem`; num telefone de 360dp isso deixa o controle com menos de metade da largura.
  * Volta quando houver alvo de tela larga — tablet é outro lote.
  */
-export declare function Field({ label, hint, error, disabled, size, children, style, ...rest }: FieldProps): React.JSX.Element;
+export declare function Field({ label, hint, error, disabled, size, required, children, style, ...rest }: FieldProps): React.JSX.Element;
 export interface LabelProps extends ViewProps {
     children?: React.ReactNode;
     /** O que vai à direita — contagem de caracteres, "opcional". */
@@ -129,6 +135,17 @@ export interface InputProps extends Omit<TextInputProps, "style" | "editable" | 
     onFocus?: () => void;
     /** Várias linhas. É o que o `Textarea` liga — raramente se põe à mão. */
     multiline?: boolean;
+    /**
+     * O jeito do campo (14/11/2026, o "Input do nativo (a)" — o mesmo nome e os mesmos valores da web): `secondary` é o
+     * campo no cinza do `secondary`, sem a sombra, para pôr sobre um cartão. O padrão, `primary`, não muda (e continua
+     * escolhendo sozinho o fundo pela superfície, ADR-0078).
+     */
+    variant?: "primary" | "secondary";
+    /**
+     * Inválido no próprio campo (14/11/2026, o "Input do nativo (c)"): `false` desmente o `Field` com erro em volta (o
+     * campo que está certo dentro de um grupo com erro); `true` marca sem `Field`. Sem a prop, vale o do `Field`.
+     */
+    invalid?: boolean;
     style?: StyleProp<TextStyle>;
     testID?: string;
 }
@@ -139,7 +156,7 @@ export interface InputProps extends Omit<TextInputProps, "style" | "editable" | 
  * (`aurea.css:686`); **não há ponteiro no telefone**. O foco continua existindo e é o que marca o
  * campo ativo.
  */
-export declare function Input({ value, defaultValue, onChangeText, placeholder, disabled, size, keyboardType, secureTextEntry, autoCapitalize, formatOnBlur, onBlur, onFocus, multiline, style, testID, ...rest }: InputProps): React.JSX.Element;
+export declare function Input({ value, defaultValue, onChangeText, placeholder, disabled, size, keyboardType, secureTextEntry, autoCapitalize, formatOnBlur, onBlur, onFocus, multiline, variant, invalid, style, testID, ...rest }: InputProps): React.JSX.Element;
 export interface TextareaProps extends InputProps {
     /** Linhas visíveis. Vira altura mínima, porque no RN não há `rows`. */
     rows?: number;
@@ -212,7 +229,7 @@ export declare function InputGroupAddon({ children, style, testID, ...rest }: In
  * padrão, e numa senha isso é o erro de digitação mais caro que existe: o campo está escondido,
  * então ninguém vê o que deu errado.
  */
-export interface PasswordFieldProps extends Omit<InputProps, "secureTextEntry" | "multiline" | "keyboardType"> {
+export interface PasswordFieldProps extends Omit<InputProps, "secureTextEntry" | "multiline" | "keyboardType" | "variant" | "invalid"> {
     /** Começa visível. Padrão: escondida. */
     defaultVisible?: boolean;
     /**

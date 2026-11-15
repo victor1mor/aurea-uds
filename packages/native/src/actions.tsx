@@ -21,10 +21,10 @@
 //                 do Lote 3. Aparência sem consumidor é a ADR-0034 ("ter a variante não é usar").
 import * as React from "react";
 import {AccessibilityInfo, Platform, Pressable, Share, View, type GestureResponderEvent, type PressableProps} from "react-native";
-import {brilhoDoBotao, canto, comOpacidade, criarFolha, fioDoAcabamento, misturaOpaca, preenchimento, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
+import {aroDoEstilo, brilhoDoBotao, canto, comOpacidade, criarFolha, fioDoAcabamento, misturaOpaca, preenchimento, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
 import {Icon, type AureaIconRegistry, type AureaIcon, type IconWeight} from "./icon.js";
 import {Text} from "./text.js";
-import {AvisosContext, useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
+import {AvisosContext, useAltoContraste, useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
 import type {AureaStrings} from "./strings.js";
 import type {AureaToastManager} from "./toast.js";
 import type {AureaTokens} from "./tokens.js";
@@ -300,11 +300,15 @@ export function Button(props: ButtonProps) {
 /** Os acabamentos (ADR-0086) do `Button` e do `IconButton`: o brilho só no principal, o fio só no de fundo suave. A marca
  *  no navegador (`dataSet`) é a mesma da web (`data-glow`, `data-ring`), e a varredura do site reconhece o fio. */
 function acabamentoDoBotao(t: AureaTokens, glow: boolean | undefined, ring: boolean | undefined,
-  appearance: AureaButtonAppearance, tone: AureaButtonTone, disabled: boolean | null | undefined, corDoTexto: string) {
+  appearance: AureaButtonAppearance, tone: AureaButtonTone, disabled: boolean | null | undefined, corDoTexto: string,
+  alto = false) {
   const comBrilho = !!glow && appearance === "solid" && tone === "brand" && !disabled;
   const comFio = !!ring && appearance === "outline";
-  const acabamento = comBrilho || comFio
-    ? {boxShadow: [...(comBrilho ? [brilhoDoBotao(t)] : []), ...(comFio ? [fioDoAcabamento(t, tone, corDoTexto)] : [])]}
+  // O ALTO CONTRASTE do app (0-D, ADR-0090, a forma "C"): o contorno do botão POR DENTRO (o aro, nunca borda) — o
+  // `primaryForeground` no principal, o `inputStrong` nos outros, como a web (`[data-contrast="high"] .btn`).
+  const anel = alto ? aroDoEstilo(t, appearance === "solid" && tone === "brand" ? t.color.primaryForeground : t.color.inputStrong, 1) : null;
+  const acabamento = comBrilho || comFio || anel
+    ? {boxShadow: [...(comBrilho ? [brilhoDoBotao(t)] : []), ...(comFio ? [fioDoAcabamento(t, tone, corDoTexto)] : []), ...(anel ? [anel] : [])]}
     : null;
   const marcaDoAcabamento: object = glow !== undefined || ring !== undefined
     ? {dataSet: {...(glow !== undefined ? {glow: String(glow)} : null), ...(ring !== undefined ? {ring: String(ring)} : null)}}
@@ -347,7 +351,8 @@ function CorpoDoBotao({
   }), [medida.altura, medida.recheio, medida.vao, appearance, cor.solido, cor.contorno, corDaBorda, semRecuo, marca, tone, t]);
 
   const corDoTexto = appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre);
-  const {acabamento, marcaDoAcabamento} = acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDoTexto);
+  const alto = useAltoContraste();
+  const {acabamento, marcaDoAcabamento} = acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDoTexto, alto && !semRecuo);
 
   return (
     <Pressable
@@ -454,7 +459,8 @@ function BotaoDeIcone({
   // O círculo tem a altura do botão do mesmo tamanho (o só-ícone da referência: `aspect-ratio: 1`).
   const lado = MEDIDA[size](t.size).altura;
   const corDaLetraDoIcone = corDoIcone && !marca ? corDoIcone : appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre);
-  const {acabamento, marcaDoAcabamento} = acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDaLetraDoIcone);
+  const alto = useAltoContraste();
+  const {acabamento, marcaDoAcabamento} = acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDaLetraDoIcone, alto);
 
   const caixa = React.useMemo(() => ({
     height: lado, width: lado, paddingHorizontal: 0,

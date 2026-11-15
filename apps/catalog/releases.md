@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.70.0
+
+November 14, 2026
+
+A vertical Stepper, reading modes on native, a panel that keeps its corners under the top bar, and a set of measurement fixes.
+
+[Read full release notes →](https://aureauds.dev/release-v0-70-0.md)
+
 ## v0.69.0
 
 November 14, 2026

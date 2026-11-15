@@ -20,7 +20,6 @@
   "sizes": [],
   "states": [
     "default",
-    "item-hover",
     "item-focus",
     "item-current",
     "item-badge"

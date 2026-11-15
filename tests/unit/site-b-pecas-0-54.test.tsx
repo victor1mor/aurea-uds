@@ -349,13 +349,15 @@ describe("CodeBlock previewLayout=\"stacked\"", () => {
   it("sem a prop, a caixa de sempre (as abas); o degradê mora só na regra recolhida", () => {
     const {container} = render(<CodeBlock preview={<span>c</span>}>{longo}</CodeBlock>);
     expect(container.querySelector("[role=tablist]")).not.toBeNull();
-    // O seletor de cada degradê do core: só o brand-gradient (ADR-0084) e a caixa recolhida (ADR-0089).
+    // O seletor de cada degradê do core: o brand-gradient (ADR-0084), a caixa recolhida (ADR-0089) e, desde a 0.70.0, a
+    // faixa do S-12 (o vão e os dois cantos do painel embaixo da barra rente — pintados com degradê, ADR-0091).
     const semComentario = core.replace(/\/\*[\s\S]*?\*\//g, "");
     const seletores = [...semComentario.matchAll(/gradient\(/g)].map(m => {
       const abre = semComentario.lastIndexOf("{", m.index!);
       return semComentario.slice(Math.max(semComentario.lastIndexOf("}", abre), semComentario.lastIndexOf("{", abre - 1)) + 1, abre).trim();
     });
     expect(seletores.some(s => s.startsWith(".demo.demo-stacked[data-collapsed] > .demo-code .code-block-wrap"))).toBe(true);
-    for (const s of seletores) expect(s.includes('data-current-style="brand-gradient"') || s.startsWith(".demo.demo-stacked[data-collapsed]")).toBe(true);
+    const S12 = ":is(.app-shell:has(> .topbar-flush) > .content";
+    for (const s of seletores) expect(s.includes('data-current-style="brand-gradient"') || s.startsWith(".demo.demo-stacked[data-collapsed]") || (s.startsWith(S12) && s.endsWith("::before"))).toBe(true);
   });
 });

@@ -253,6 +253,12 @@ export interface FieldProps extends ViewProps {
   error?: React.ReactNode;
   disabled?: boolean;
   size?: AureaFieldSize;
+  /**
+   * Obrigatório (14/11/2026, o "Input do nativo (b)" — a web já tinha): o asterisco no rótulo, na cor da frase de erro,
+   * como na web. ⚠ O asterisco é desenho: no aparelho não existe o estado "obrigatório" para o leitor de tela (o
+   * React Native não tem o `aria-required` nem um `accessibilityState` para isso), como na referência do celular.
+   */
+  required?: boolean;
   children?: React.ReactNode;
 }
 
@@ -274,7 +280,7 @@ export interface FieldProps extends ViewProps {
  * Volta quando houver alvo de tela larga — tablet é outro lote.
  */
 export function Field({
-  label, hint, error, disabled, size = "md", children, style, ...rest
+  label, hint, error, disabled, size = "md", required, children, style, ...rest
 }: FieldProps) {
   const t = useAureaTokens();
   const s = folha(t);
@@ -292,7 +298,11 @@ export function Field({
       <View style={[s.campo, style]} {...rest}>
         {/* ADR-0094: com erro, o rótulo do campo fica vermelho (o `danger400` da frase de erro), como na web. */}
         {/* Com a CHAVE dentro, não: ela não tem inválido, e o rótulo dela também não muda (o desenho B aprovado). */}
-        {label != null && <Label>{invalido && typeof label === "string" && !(React.isValidElement(children) && children.type === Switch)
+        {label != null && <Label trailing={required ? (
+          // o asterisco da web (`.label-required`): na cor da frase de erro, a `space05` do nome, fora da leitura
+          <Text size="sm" weight={500} tone="danger" style={{marginStart: t.size.space05}}
+                accessibilityElementsHidden importantForAccessibility="no-hide-descendants">*</Text>
+        ) : undefined}>{invalido && typeof label === "string" && !(React.isValidElement(children) && children.type === Switch)
           ? <Text size="sm" weight={500} tone="danger">{label}</Text> : label}</Label>}
         {children}
         {hint != null && !invalido && (typeof hint === "string"
@@ -409,6 +419,17 @@ export interface InputProps extends Omit<TextInputProps,
   onFocus?: () => void;
   /** Várias linhas. É o que o `Textarea` liga — raramente se põe à mão. */
   multiline?: boolean;
+  /**
+   * O jeito do campo (14/11/2026, o "Input do nativo (a)" — o mesmo nome e os mesmos valores da web): `secondary` é o
+   * campo no cinza do `secondary`, sem a sombra, para pôr sobre um cartão. O padrão, `primary`, não muda (e continua
+   * escolhendo sozinho o fundo pela superfície, ADR-0078).
+   */
+  variant?: "primary" | "secondary";
+  /**
+   * Inválido no próprio campo (14/11/2026, o "Input do nativo (c)"): `false` desmente o `Field` com erro em volta (o
+   * campo que está certo dentro de um grupo com erro); `true` marca sem `Field`. Sem a prop, vale o do `Field`.
+   */
+  invalid?: boolean;
   style?: StyleProp<TextStyle>;
   testID?: string;
 }
@@ -422,7 +443,7 @@ export interface InputProps extends Omit<TextInputProps,
  */
 export function Input({
   value, defaultValue, onChangeText, placeholder, disabled, size,
-  keyboardType, secureTextEntry, autoCapitalize, formatOnBlur, onBlur, onFocus, multiline,
+  keyboardType, secureTextEntry, autoCapitalize, formatOnBlur, onBlur, onFocus, multiline, variant, invalid,
   style, testID,
   // ⚠ O `...rest` NÃO é enfeite: sem ele, toda prop do `TextInput` que a lista acima não nomeia
   // era descartada em silêncio — `autoComplete`, `textContentType`, `autoCorrect`,
@@ -439,6 +460,7 @@ export function Input({
   const grupo = useGrupoDeCampo();
   const tam = size ?? grupo?.size ?? campo?.size ?? "md";
   const inativo = disabled ?? grupo?.disabled ?? campo?.disabled;
+  const invalido = invalid ?? campo?.invalido;
   const [focado, setFocado] = React.useState(false);
 
   return (
@@ -476,7 +498,9 @@ export function Input({
       accessibilityLabel={campo?.label}
       accessibilityHint={campo?.hint}
       {...estadoAcessivel({disabled: !!inativo})}
-      aria-invalid={campo?.invalido}
+      aria-invalid={invalido}
+      // A cor do texto escolhido (14/11/2026, o "Input do nativo (d)"): a mesma do `::selection` da web.
+      selectionColor={t.color.selection}
       style={[
         // DENTRO DE UM GRUPO o campo não desenha caixa nenhuma: borda, fundo, altura, respiro,
         // inválido, foco e desabilitado passam a ser do grupo. Manter qualquer um dos dois
@@ -484,6 +508,8 @@ export function Input({
         // > .input` da web zera à mão (`aurea.css:751`).
         grupo ? s.campoNoGrupo : s.caixa,
         !grupo && fundoDeCampo(t, naSuperficie, maisContraste),
+        // `secondary`: o cinza do `.input-secondary` da web, sem a sombra do campo branco.
+        !grupo && variant === "secondary" && {backgroundColor: t.color.secondary, boxShadow: []},
         grupo
           ? {fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400], color: t.color.foreground}
           : {height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam),
@@ -504,12 +530,12 @@ export function Input({
          // deixa o `EditText` no topo. `center` é o que reproduz a web — e o `Textarea` o
          // sobrescreve para `top`, que é o que uma caixa alta faz nos dois lados.
          paddingVertical: 0, textAlignVertical: "center"},
-        !grupo && campo?.invalido && s.invalido,
+        !grupo && invalido && s.invalido,
         // O foco é o único estado que sobra do trio da web (hover/focus/active), e ele importa
         // mais aqui: no telefone é a única pista de qual campo o teclado está alimentando.
         // Com 2 de espessura, como o anel da web (0.55.0); o recheio desconta o pixel a mais — `bordaDeFoco`.
         !grupo && focado && bordaDeFoco(t, maisContraste, respiroDoTamanho(t, tam)),
-        !grupo && focado && campo?.invalido && s.invalido,  // ADR-0094: focado, o erro continua vermelho (como o anel vermelho da web).
+        !grupo && focado && invalido && s.invalido,  // ADR-0094: focado, o erro continua vermelho (como o anel vermelho da web).
         // 🔴 DENTRO DO CARTÃO DA MARCA A TINTA VENCE TUDO — inclusive inválido e foco, e isso é
         // medição, não preferência (os números estão no `usePeleSobreAMarca`): sobre o amarelo a
         // borda de inválido mede **1,86** e o `focusStrong` do tema ESCURO mede **1,00**, porque
@@ -677,7 +703,9 @@ export function InputGroupAddon({children, style, testID, ...rest}: InputGroupAd
  * padrão, e numa senha isso é o erro de digitação mais caro que existe: o campo está escondido,
  * então ninguém vê o que deu errado.
  */
-export interface PasswordFieldProps extends Omit<InputProps, "secureTextEntry" | "multiline" | "keyboardType"> {
+// `variant` e `invalid` (14/11/2026) ficam de fora: o campo da senha mora num `InputGroup`, e dentro do grupo quem desenha
+// o fundo e o erro é o grupo — as duas props não fariam nada aqui.
+export interface PasswordFieldProps extends Omit<InputProps, "secureTextEntry" | "multiline" | "keyboardType" | "variant" | "invalid"> {
   /** Começa visível. Padrão: escondida. */
   defaultVisible?: boolean;
   /**
@@ -1308,7 +1336,8 @@ export function SegmentedControl({
 export const indicadorDaEscolhida = (t: AureaTokens) => (
   <View style={folha(t).indicador}>
     {/* A cor do visto da web (`.combobox-check`): a marca, nos dois temas — o destaque era o azul no claro (23/10/2026). */}
-    <Icon name="check" size="sm" color={t.color.primary} />
+    {/* D4 (aprovado em 19/10/2026 e visto na imagem em 14/11/2026, *"pode"*): cinza, como a marca da web e da referência. */}
+    <Icon name="check" size="sm" color={t.color.mutedForeground} />
   </View>
 );
 
