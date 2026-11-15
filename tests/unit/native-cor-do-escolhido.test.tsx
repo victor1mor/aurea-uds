@@ -38,12 +38,12 @@ describe("as cinco peças que discordavam da web, pelo código", () => {
     expect(fonte("inputs.tsx")).toMatch(/color: ativo \? \(pele\?\.letra \?\? t\.color\.primaryForeground\) : t\.color\.mutedForeground/);
     expect(fonte("inputs.tsx")).toMatch(/segmentoAtivo: \{backgroundColor: t\.color\.primary\}/);
   });
-  it("o visto da opção escolhida (Select, Combobox) é a marca, como o `.combobox-check` da web", () => {
-    expect(fonte("inputs.tsx")).toMatch(/<Icon name="check" size="sm" color=\{t\.color\.primary\} \/>/);
+  it("o visto da opção escolhida (Select, Combobox) é cinza, como o `.combobox-check` da web desde o D4 (0.70.0)", () => {
+    expect(fonte("inputs.tsx")).toMatch(/<Icon name="check" size="sm" color=\{t\.color\.mutedForeground\} \/>/);
   });
-  it("o ponto e o visto do menu são a cor do texto da linha, como o `currentColor` da web", () => {
-    expect(fonte("menu.tsx")).toMatch(/backgroundColor: t\.color\.foreground,/);
-    expect(fonte("menu.tsx")).toMatch(/color=\{ctx\.tf\.color\.foreground\}/);
+  it("o ponto e o visto do menu são cinza, como a `.menu-mark` da web desde o D4 (0.70.0)", () => {
+    expect(fonte("menu.tsx")).toMatch(/backgroundColor: t\.color\.mutedForeground,/);
+    expect(fonte("menu.tsx")).toMatch(/color=\{ctx\.tf\.color\.mutedForeground\}/);
   });
   it("o passo atual do Stepper é a cor do texto, como o `.step-active` da web", () => {
     expect(fonte("navigation.tsx")).toMatch(/st === "active" \? t\.color\.foreground/);

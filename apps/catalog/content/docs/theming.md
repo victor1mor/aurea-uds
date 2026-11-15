@@ -188,6 +188,7 @@ export function App() {
 - `t.color` holds hex strings. React Native does not read OKLCH, so the hex form is the one that works.
 - `brand` on `AureaProvider` picks one of the twelve brands (`"ember"`, `"cobalt"`…). Without it you get Aurea Gold. A card with `variant="contrast"` keeps the brand.
 - `t.size` holds every number in dp: space, radius, type, heights.
+- `highContrast` and `textSize="lg"` on `AureaProvider` are the reading modes, the same as the web `AppShell`'s: with them, `useAureaTokens()` returns the darker supporting text and the larger type steps (every step from `xs` to `2xl` goes up 2).
 - Outside an `AureaProvider`, the hooks throw. There is no cascade to fall back on.
 
 ## Variables reference

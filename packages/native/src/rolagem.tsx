@@ -29,6 +29,9 @@ export interface FilaRolanteProps {
   children: React.ReactNode;
   /** Estilo do invólucro externo, não do conteúdo. */
   style?: StyleProp<ViewStyle>;
+  /** Uma marca só do navegador (`dataSet`, no `react-native-web`) no invólucro — a do fio das abas `secondary`, que a
+   *  varredura do site reconhece (0.70.0). No aparelho, `dataSet` não existe e é ignorado. */
+  marca?: object;
   testID?: string;
   /**
    * Onde a fila fica quando CABE — E3, 25/09/2026. `start` (o padrão, o de sempre), `center` ou
@@ -54,7 +57,7 @@ const JUSTIFICAR = {center: "center", end: "flex-end"} as const;
  * O componente fica com a informação em vez de adivinhar: `onLayout` dá a largura visível e
  * `onContentSizeChange` dá a do conteúdo. Com as duas, `transbordou` é uma conta, não um palpite.
  */
-export function FilaRolante({children, style, testID, justify = "start", fill}: FilaRolanteProps) {
+export function FilaRolante({children, style, testID, justify = "start", fill, marca}: FilaRolanteProps) {
   const [visivel, setVisivel] = React.useState(0);
   const [conteudo, setConteudo] = React.useState(0);
   const transbordou = conteudo > visivel && visivel > 0;
@@ -76,7 +79,8 @@ export function FilaRolante({children, style, testID, justify = "start", fill}: 
       // encostada à esquerda, e um `Cluster justify="center"` em volta não mudava nada.
       contentContainerStyle={fill ? {flexGrow: 1}
         : justify === "start" ? {flexGrow: 0} : {flexGrow: 1, justifyContent: JUSTIFICAR[justify]}}
-      style={style}>
+      style={style}
+      {...marca}>
       {children}
     </ScrollView>
   );

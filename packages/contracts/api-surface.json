@@ -10573,6 +10573,15 @@
               ]
             },
             {
+              "name": "orientation",
+              "optional": true,
+              "type": "\"horizontal\" | \"vertical\"",
+              "values": [
+                "horizontal",
+                "vertical"
+              ]
+            },
+            {
               "name": "startContent",
               "optional": true,
               "type": "ReactNode",

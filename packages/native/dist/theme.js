@@ -2,9 +2,31 @@ import { Fragment as _Fragment, jsx as _jsx } from "react/jsx-runtime";
 import * as React from "react";
 import { I18nManager, useColorScheme } from "react-native";
 import { IconRegistryProvider } from "./icon.js";
-import { comOpacidade } from "./estilos.js";
+import { comOpacidade, misturaOpaca } from "./estilos.js";
 import { defaultStrings } from "./strings.js";
 import { resolverTokens, } from "./tokens.js";
+const SEM_MODOS = { alto: false, texto: "md" };
+/**
+ * Os modos de leitura sobre os tokens (0-D e 0-E no nativo, 14/11/2026 — as formas que o Victor aprovou na web em
+ * 04/11/2026, ADR-0090). O texto grande ("B"): cada degrau da letra sobe 2, do `textXs` ao `text2xl` (a entrelinha
+ * acompanha, porque é razão); a altura dos controles NÃO muda: no nativo o controle médio já tem o alvo de toque (a web
+ * subiu o dela de 36 para 44). O alto contraste ("C"): o texto de apoio a 80% do texto, e as marcas dos controles na
+ * tinta — os mesmos tokens que o `[data-contrast="high"]` da web troca; o resto (o contorno dos campos, do cartão e do
+ * botão, o link sublinhado) as peças desenham lendo `useMaisContraste()`/`useAltoContraste()`.
+ */
+function aplicarModos(t, m) {
+    if (!m.alto && m.texto === "md")
+        return t;
+    const s = t.size;
+    const size = m.texto === "lg" ? { ...s,
+        textXs: s.textXs + 2, textSm: s.textSm + 2, textMd: s.textMd + 2, textBase: s.textBase + 2,
+        textLg: s.textLg + 2, textXl: s.textXl + 2, text2xl: s.text2xl + 2 } : s;
+    const c = t.color;
+    const color = m.alto ? { ...c,
+        mutedForeground: misturaOpaca(c.foreground, c.background, 0.8),
+        controlThumb: c.brandYellowInk, controlSelectedForeground: c.brandYellowInk, controlSelectedDot: c.brandYellowInk } : c;
+    return { ...t, size, color };
+}
 // `comfortable` não é gosto: MEDIDO em 02/09/2026, os 8 tokens de densidade do `comfortable` são
 // idênticos aos do `base` (8/8), e os das outras duas não batem em nenhum. É a densidade que o
 // CSS já assume quando ninguém declara `data-density`.
@@ -12,7 +34,11 @@ const DENSIDADE_PADRAO = "comfortable";
 // `dark` é o que o catálogo inteiro declara no `<html>`, e o que a identidade da Aurea assume.
 const TEMA_PADRAO = "dark";
 const Contexto = React.createContext(null);
-export function AureaProvider({ children, theme, density, brand, defaultTheme, defaultDensity, fontFamilies, icons, strings, direction, onThemeChange, onDensityChange, }) {
+export function AureaProvider({ children, theme, density, brand, defaultTheme, defaultDensity, fontFamilies, icons, strings, direction, highContrast, textSize, onThemeChange, onDensityChange, }) {
+    // Os modos de leitura herdam do provedor de fora quando este não diz (o tema num pedaço continua com eles).
+    const deFora = React.useContext(Contexto)?.modos ?? SEM_MODOS;
+    const alto = highContrast ?? deFora.alto, texto = textSize ?? deFora.texto;
+    const modos = React.useMemo(() => ({ alto, texto }), [alto, texto]);
     const doAparelho = useColorScheme();
     const [temaInterno, setTemaInterno] = React.useState(defaultTheme ?? null);
     const [densidadeInterna, setDensidadeInterna] = React.useState(defaultDensity ?? DENSIDADE_PADRAO);
@@ -41,7 +67,8 @@ export function AureaProvider({ children, theme, density, brand, defaultTheme, d
             // Alternar é sobre o que está NA TELA — a mesma regra que o hook da web escreveu.
             toggleTheme: () => setTheme(temaEfetivo === "dark" ? "light" : "dark"),
         },
-        tokens: resolverTokens(temaEfetivo, densidadeEfetiva, fontFamilies, brand),
+        tokens: aplicarModos(resolverTokens(temaEfetivo, densidadeEfetiva, fontFamilies, brand), modos),
+        modos,
         // As frases NÃO dependem do par (tema, densidade), mas moram no mesmo `useMemo` de propósito:
         // um contexto a mais só se paga quando ele muda em outra hora, e este muda junto — é a mesma
         // conta que o cabeçalho deste arquivo já fez para os dois contextos que viraram um.
@@ -49,7 +76,7 @@ export function AureaProvider({ children, theme, density, brand, defaultTheme, d
         fontes: fontFamilies,
         marca: brand ?? null,
         raiz: null,
-    }), [temaEfetivo, densidadeEfetiva, setTheme, setDensity, fontFamilies, strings, brand]);
+    }), [temaEfetivo, densidadeEfetiva, setTheme, setDensity, fontFamilies, strings, brand, modos]);
     // O registro de ícones fica num contexto PRÓPRIO: ele não muda quando o tema muda, e juntá-lo
     // ao valor do tema faria toda árvore que só desenha ícone re-renderizar na troca de tema.
     const comIcones = icons
@@ -67,6 +94,10 @@ const DirecaoContext = React.createContext(null);
  * Interno: `true` quando a escrita corre da direita para a esquerda — a do `AureaProvider` mais próximo que disse
  * `direction` ou, sem nenhum, a do aparelho (`I18nManager.isRTL`), como o `useIsRTL` da referência do celular.
  */
+/** Interno: `true` com o alto contraste do app ligado (`highContrast` no `AureaProvider`). Fora de provedor, `false`. */
+export function useAltoContraste() {
+    return React.useContext(Contexto)?.modos?.alto ?? false;
+}
 export function useDirecaoRtl() {
     const d = React.useContext(DirecaoContext);
     return d ? d === "rtl" : I18nManager.isRTL;
@@ -171,7 +202,7 @@ export function TemaDentro({ tema, children }) {
     const v = usar("TemaDentro");
     const valor = React.useMemo(() => ({
         ...v,
-        tokens: resolverTokens(tema, v.controle.density, v.fontes, v.marca),
+        tokens: aplicarModos(resolverTokens(tema, v.controle.density, v.fontes, v.marca), v.modos ?? SEM_MODOS),
         raiz: v.raiz ?? v,
     }), [v, tema]);
     if (v.tokens.theme === tema)

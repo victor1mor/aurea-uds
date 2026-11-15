@@ -19,7 +19,7 @@ import {Pressable, StyleSheet, View, type StyleProp, type ViewProps, type ViewSt
 import {canto, comOpacidade, criarFolha, peleDoCartao, peleDoCartaoEscolhido, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
 import {NaSuperficie} from "./superficie.js";
 import {Text} from "./text.js";
-import {useAureaTheme, useAureaTokens, SobreAMarca, TemaDentro} from "./theme.js";
+import {useAltoContraste, useAureaTheme, useAureaTokens, SobreAMarca, TemaDentro} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
 
 const folha = criarFolha((t: AureaTokens) => ({
@@ -64,17 +64,27 @@ const folha = criarFolha((t: AureaTokens) => ({
   contrasteNoEscuro: {borderColor: "transparent"},
   // MT-02 (ADR-0063): o traço no topo. Uma borda mais grossa só em cima, com o canto 22, desenha
   // errado no Android (react-native#51926, fechada sem conserto em 24/03/2026: a borda sai do
-  // contorno e deixa vão). Então o traço é uma faixa de `accentWidth` numa camada que se recorta no
-  // canto do cartão, por cima da borda de 1 — o mesmo desenho do `border-top` da web, que afina na
-  // curva. A camada cobre a CAIXA DA BORDA (deslocada de `borderWidth` para fora), e o recheio de
-  // cima cresce o que o traço come, para o conteúdo ficar onde fica na web.
+  // contorno e deixa vão). Então o traço mora numa camada que se recorta no canto do cartão, por cima
+  // da borda de 1. A camada cobre a CAIXA DA BORDA (deslocada de `borderWidth` para fora), e o recheio
+  // de cima cresce o que o traço come, para o conteúdo ficar onde fica na web.
+  // PV-12 (o Victor, 14/11/2026, *"A, nativo igual à web"*): o traço é o ARCO da web — a sombra por dentro
+  // (`box-shadow: inset 0 4px`) desce pela curva do canto e afina até sumir nos lados. Antes, aqui, era
+  // uma faixa reta cortada pela curva. O arco sai de um ARO de borda UNIFORME (o Android desenha certo
+  // a borda de largura igual; o defeito é só a de larguras diferentes): a borda de dentro do aro é o
+  // contorno do próprio cartão deslocado `accentWidth` para baixo (canto de dentro = canto de fora −
+  // largura = `radiusCard`), e a camada recorta o resto. Não depende do fundo do cartão — vale no
+  // `outline`, que é transparente.
   comTraco: {paddingTop: t.size.cardPad + t.size.accentWidth - t.size.borderWidth},
   tracoCamada: {
     position: "absolute", top: -t.size.borderWidth, left: -t.size.borderWidth,
     right: -t.size.borderWidth, bottom: -t.size.borderWidth,
     ...canto(t.size.radiusCard), overflow: "hidden",
   },
-  traco: {height: t.size.accentWidth},
+  traco: {
+    position: "absolute", top: t.size.accentWidth - t.size.radiusCard, left: -t.size.radiusCard,
+    right: -t.size.radiusCard, bottom: -t.size.radiusCard * 2,
+    borderWidth: t.size.radiusCard, ...canto(t.size.radiusCard * 2),
+  },
   // A ação fica embaixo, separada pelo mesmo respiro que o resto da casa usa entre blocos.
   acaoDaMarca: {marginTop: t.size.space3},
 }));
@@ -399,8 +409,14 @@ const COR_DO_TRACO = {
 
 // O cartão de contorno é a ÚNICA peça com linha (ADR-0072). No navegador (`react-native-web`), a marca `data-aurea-card`
 // diz isso à varredura "nenhuma peça desenha linha" do site, como a classe `.card-outline` diz na web; no aparelho a prop
-// `dataSet` não existe e é ignorada (bloco 1, 23/10/2026).
-const MARCA_DO_CONTORNO = {dataSet: {aureaCard: "outline"}} as unknown as ViewProps;
+// `dataSet` não existe e é ignorada (bloco 1, 23/10/2026). A marca sai de `marcaDoCartao`, abaixo.
+// As duas linhas do cartão que a 0.70.0 trouxe, aprovadas pelo Victor (14/11/2026), com a marca do navegador que a
+// varredura do site reconhece: o traço do `accent` (um aro na curva do canto) e o contorno do alto contraste.
+const MARCA_DO_TRACO = {dataSet: {aureaAccent: "true"}} as unknown as ViewProps;
+function marcaDoCartao(outline: boolean, alto: boolean): ViewProps | null {
+  if (!outline && !alto) return null;
+  return {dataSet: {...(outline ? {aureaCard: "outline"} : null), ...(alto ? {aureaContrast: "high"} : null)}} as unknown as ViewProps;
+}
 
 function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
   const t = useAureaTokens();
@@ -411,9 +427,11 @@ function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
   };
   // O contorno do `contrast` olha o tema do APP: dentro do cartão os tokens já são os do escuro.
   const contorno = variant === "contrast" && temaDoApp === "dark" ? s.contrasteNoEscuro : null;
+  // O ALTO CONTRASTE do app (0-D, ADR-0090, a forma "C"): o contorno de 3:1 no cartão, como a web (`[data-contrast="high"] .card`).
+  const altoContraste = useAltoContraste() ? {borderColor: t.color.inputStrong} : null;
   const traco = accent == null ? null : (
     <View pointerEvents="none" collapsable={false} style={s.tracoCamada}>
-      <View style={[s.traco, {backgroundColor: t.color[COR_DO_TRACO[accent]]}]}/>
+      <View style={[s.traco, {borderColor: t.color[COR_DO_TRACO[accent]]}]} {...MARCA_DO_TRACO}/>
     </View>
   );
 
@@ -426,11 +444,11 @@ function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
         accessibilityRole="button"
         {...estadoAcessivel({disabled: !!disabled})}
         style={({pressed: tocando}) => [
-          s.cardBase, s[`card_${pele}`], contorno, traco != null && s.comTraco,
+          s.cardBase, s[`card_${pele}`], contorno, altoContraste, traco != null && s.comTraco,
           tocando && REACAO_AO_TOQUE.pressionado, disabled && REACAO_AO_TOQUE.inerte,
           style,
         ]}
-        {...(pele === "outline" ? MARCA_DO_CONTORNO : null)}
+        {...marcaDoCartao(pele === "outline", altoContraste != null)}
         {...resto}>
         {traco}
         {children}
@@ -447,8 +465,8 @@ function CorpoDoCartao({variant, accent, style, ...rest}: CardProps) {
   );
 
   const pele = (
-    <View style={[s.cardBase, s[`card_${variant ?? "base"}`], contorno, traco != null && s.comTraco, style]}
-      {...(variant === "outline" ? MARCA_DO_CONTORNO : null)} {...resto}>
+    <View style={[s.cardBase, s[`card_${variant ?? "base"}`], contorno, altoContraste, traco != null && s.comTraco, style]}
+      {...marcaDoCartao(variant === "outline", altoContraste != null)} {...resto}>
       {corpo}
     </View>
   );

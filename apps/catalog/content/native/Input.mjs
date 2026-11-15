@@ -28,6 +28,8 @@ export default {
     formatOnBlur: "Normalises the text when focus leaves — a plate, a document, a phone. Aurea gives the moment, not the format. It needs the field controlled: the formatted text arrives through onChangeText.",
     onBlur: "Called when focus leaves.",
     onFocus: "Called when focus arrives.",
+    variant: "primary (the default) or secondary: the field on the secondary grey, without the shadow, for a field placed on a card. The same name and values as the web.",
+    invalid: "Invalid on the field itself. false clears it inside a Field that has an error (the one field that is right in a group); true marks it without a Field. Without it, the Field decides.",
     multiline: "Several lines. It is what Textarea turns on; rarely set by hand.",
     style: "Added after the Aurea skin: height, padding and font come from the size and the theme.",
     testID: "The id for tests.",
@@ -83,6 +85,24 @@ export default {
       render: () => h("div", {style: largura},
         h(Field, {label: "Email", error: "Enter an email address."}, h(Input, {defaultValue: "ana@"})),
         h(Field, {label: "Account"}, h(Input, {defaultValue: "ana.souza", disabled: true}))),
+    },
+    {
+      title: "Variants",
+      description: "primary chooses its fill from the surface it sits on; secondary is the grey field, for a field placed on a card.",
+      code: `<Field label="Name"><Input variant="primary" placeholder="Ana Souza" /></Field>
+<Field label="Name"><Input variant="secondary" placeholder="Ana Souza" /></Field>`,
+      render: () => h("div", {style: largura},
+        h(Field, {label: "Name"}, h(Input, {variant: "primary", placeholder: "Ana Souza"})),
+        h(Field, {label: "Name"}, h(Input, {variant: "secondary", placeholder: "Ana Souza"}))),
+    },
+    {
+      title: "Invalid on the field",
+      description: "invalid={false} clears the Field's error on this field; invalid marks a field without a Field around it.",
+      code: `<Field label="Email" error="Enter an email address.">
+  <Input defaultValue="ana@example.com" invalid={false} />
+</Field>`,
+      render: () => h("div", {style: largura},
+        h(Field, {label: "Email", error: "Enter an email address."}, h(Input, {defaultValue: "ana@example.com", invalid: false}))),
     },
   ],
 };

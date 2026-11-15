@@ -21,10 +21,12 @@ import { SearchField } from "./inputs.js";
 // mudou foi a ORDEM documentada, que colocava overlays no "resto" sem motivo medido.
 import { Tooltip } from "./overlays.js";
 import { Avatar } from "./identity-client.js";
-export function Stepper({ items, label, variant = "default", startContent, endContent, className }) {
+// `orientation` (PV-08, 14/11/2026): `"vertical"` põe uma etapa embaixo da outra, para a coluna estreita. Só no `default`
+// (o `path` e o `bar` têm o desenho deles); o padrão, `"horizontal"`, não muda.
+export function Stepper({ items, label, variant = "default", orientation = "horizontal", startContent, endContent, className }) {
     const s = useAureaStrings();
     const comPontas = variant === "path";
-    const lista = _jsxs("div", { role: "list", "aria-label": label ?? s.stepperLabel, className: cx("stepper", variant === "default" && className), style: comPontas ? { "--stepper-cols": items.length + (startContent != null ? 1 : 0) + (endContent != null ? 1 : 0) } : undefined, children: [comPontas && startContent != null && _jsx("div", { role: "listitem", className: "step-end step-end-start", children: startContent }), items.map((it, n) => {
+    const lista = _jsxs("div", { role: "list", "aria-label": label ?? s.stepperLabel, className: cx("stepper", variant === "default" && orientation === "vertical" && "stepper-vertical", variant === "default" && className), style: comPontas ? { "--stepper-cols": items.length + (startContent != null ? 1 : 0) + (endContent != null ? 1 : 0) } : undefined, children: [comPontas && startContent != null && _jsx("div", { role: "listitem", className: "step-end step-end-start", children: startContent }), items.map((it, n) => {
                 const st = it.state ?? "default";
                 const marca = st === "done" && variant !== "path" ? _jsx(Icon, { name: "check" }) : st === "error" ? _jsx(Icon, { name: "x-circle" }) : n + 1;
                 const miolo = variant === "bar" ? _jsx("span", { className: "sr-only", children: it.label }) : _jsxs(_Fragment, { children: [_jsx("span", { className: "step-dot", children: marca }), _jsx("strong", { children: it.label }), it.optional && _jsx("small", { className: "step-optional", children: it.optional })] });

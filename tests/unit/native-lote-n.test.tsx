@@ -113,13 +113,14 @@ describe("MT-01 · Card contrast: o tema escuro dentro do cartão", () => {
 
 describe("MT-02 · Card accent: o traço no topo", () => {
   const CHEIA = {brand: "primary", success: "success", info: "info", warning: "warning", danger: "destructive"} as const;
-  const traco = () => __instancias("View").map((p) => plano(p.style)).findLast((s) => s.height === CLARO.size.accentWidth && typeof s.backgroundColor === "string");
+  // PV-12 (14/11/2026): o traço é um ARO de borda uniforme (a cor está na borda), recortado pela camada.
+  const traco = () => __instancias("View").map((p) => plano(p.style)).findLast((s) => s.borderWidth === CLARO.size.radiusCard && typeof s.borderColor === "string");
 
   for (const tema of ["light", "dark"] as const) {
     for (const [tom, papel] of Object.entries(CHEIA)) {
       it(`${tom}, tema ${tema}: a cor CHEIA, a mesma nos dois temas`, () => {
         render(<AureaProvider theme={tema}><Card accent={tom as keyof typeof CHEIA}><Text>Caixa</Text></Card></AureaProvider>);
-        expect(traco()?.backgroundColor).toBe(CLARO.color[papel]);
+        expect(traco()?.borderColor).toBe(CLARO.color[papel]);
         expect(CLARO.color[papel]).toBe(ESCURO.color[papel]);
       });
     }
@@ -136,6 +137,24 @@ describe("MT-02 · Card accent: o traço no topo", () => {
     expect(s.borderCurve).toBe("continuous");
   });
 
+  it("PV-12: o traço é o ARCO da web — a borda de dentro do aro é o contorno do cartão 4 abaixo; nenhuma faixa reta", () => {
+    // Na 0.69.0 o traço era uma faixa reta (`height: accentWidth`) cortada pela curva — o desenho que o Victor trocou
+    // (*"A, nativo igual à web"*). A sombra por dentro da web (`inset 0 4px`) deixa à vista o cartão MENOS o próprio
+    // cartão deslocado 4 para baixo: a borda de dentro do aro tem de ser exatamente esse contorno.
+    render(<AureaProvider theme="light"><Card accent="warning"><Text>Caixa</Text></Card></AureaProvider>);
+    const s = traco()!;
+    const {radiusCard: R, accentWidth: A} = CLARO.size;
+    expect(s.position).toBe("absolute");
+    expect((s.top as number) + (s.borderWidth as number)).toBe(A);            // a borda de dentro começa 4 abaixo do topo
+    expect((s.left as number) + (s.borderWidth as number)).toBe(0);           // e nos lados do cartão
+    expect((s.borderRadius as number) - (s.borderWidth as number)).toBe(R);   // com o canto do cartão
+    expect(s.borderCurve).toBe("continuous");
+    expect(__instancias("View").some((p) => plano(p.style).height === A)).toBe(false);
+    // a marca do navegador que a varredura do site reconhece (o aro é linha aprovada, 0.70.0)
+    expect(__instancias("View").find((p) => plano(p.style).borderWidth === R && plano(p.style).position === "absolute")?.dataSet)
+      .toEqual({aureaAccent: "true"});
+  });
+
   it("o recheio de cima cresce o que o traço come, para o conteúdo ficar onde fica na web", () => {
     render(<AureaProvider theme="light"><Card accent="info" testID="c"><Text>Caixa</Text></Card></AureaProvider>);
     expect(viewCom("c").paddingTop).toBe(CLARO.size.cardPad + CLARO.size.accentWidth - CLARO.size.borderWidth);
@@ -145,9 +164,9 @@ describe("MT-02 · Card accent: o traço no topo", () => {
     render(<AureaProvider theme="dark">
       <Card accent="danger" onPress={() => {}} accessibilityLabel="Perigo"><Text>Alvo</Text></Card>
     </AureaProvider>);
-    expect(traco()?.backgroundColor).toBe(ESCURO.color.destructive);
+    expect(traco()?.borderColor).toBe(ESCURO.color.destructive);
     render(<AureaProvider theme="light"><Card variant="contrast" accent="brand"><Text>Moto</Text></Card></AureaProvider>);
-    expect(traco()?.backgroundColor).toBe(ESCURO.color.primary);
+    expect(traco()?.borderColor).toBe(ESCURO.color.primary);
   });
 
   it("sem accent, nada muda: nenhuma camada, o recheio de sempre", () => {

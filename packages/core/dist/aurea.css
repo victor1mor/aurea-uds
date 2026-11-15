@@ -1115,6 +1115,13 @@
 html { scroll-behavior:smooth; }
 body { margin:0; background:var(--background); color:var(--foreground); font-family:var(--font-ui); font-size:var(--text-sm); line-height:var(--leading-normal); }
 ::selection { background:var(--selection); }
+/* D16, a primeira parte (aprovado em 19/10/2026, o plano D1–D20: *"Aceito todas as recomendações"*): cada tema DECLARA o
+   esquema de cor ao navegador — a barra de rolagem, o calendário e os controles que ele mesmo desenha saem na cor do
+   tema, também num pedaço com tema próprio (o cartão `contrast`, a faixa escura). Nenhum tema declarava. A outra parte
+   do D16 (a página SEM `data-theme` seguir o sistema, clara quando ele não diz nada) mexe em 78 regras e nas 13 marcas:
+   fica para um lote só dela. */
+[data-theme="dark"] { color-scheme:dark; }
+[data-theme="light"] { color-scheme:light; }
 button,input,textarea,select { font:inherit; }
 /* ADR-0077 (22/10/2026): todo título, do h1 ao h6, na fonte de título (a Sora), por uma regra geral de força zero,
    como no sistema que serviu de modelo: quem fixa outra fonte NO PRÓPRIO título ganha dela; a fonte que o título só
@@ -1633,6 +1640,30 @@ img,svg { display:block; }
 /* contentVariant="plain" (B-10): a área de conteúdo sem caixa. Os `Card` da tela passam a ser as
    únicas superfícies. A margem continua: é ela que afasta o conteúdo da lateral e da barra. */
 .content-plain { padding:0; border:0; border-radius:0; background:none; color:inherit; }
+/* S-12 (o Victor, 14/11/2026, *"D, pode"*): com a barra de cima rente (`topbar-flush`, que tem o fundo da PÁGINA), o
+   painel passava por baixo dela ao rolar e era cortado numa linha reta — os cantos de 22 sumiam. Agora uma faixa presa
+   ao topo do painel para logo abaixo da barra e pinta, no fundo da página, o vão (`--s12-vao`) e os dois cantos de fora:
+   o painel sempre aparece com o topo arredondado. A página continua rolando (nada muda em quem rola). Parada, a faixa
+   cai exatamente sobre o vão e sobre os cantos que o próprio painel já desenha — não se vê. Presa ao painel (e não à
+   barra), ela acompanha o painel em todo arranjo, sem saber onde ele começa; para na altura da barra (`--s12-topo`: o
+   `--topbar-height`, que a lateral também usa, ou o da barra pequena). O vão é o de cada arranjo: 16 com a lateral até o topo, 2 com a barra rente do
+   arranjo de sempre (`.app-shell-flush .content`, acima). As margens negativas levam a faixa da borda do painel ao topo
+   do vão e devolvem o espaço que ela ocupa (a conta: −(vão + recheio + borda), altura vão + canto, e o resto embaixo). */
+:is(.app-shell:has(> .topbar-flush) > .content, .app-shell-lateral > .app-shell-column:has(> .topbar-flush) > .content):not(.content-plain, .app-shell-docs *) {
+  --s12-vao:var(--space-4); --s12-topo:var(--topbar-height); }
+.app-shell-flush:has(> .topbar-flush) > .content:not(.content-plain) { --s12-vao:var(--space-05); }
+/* A barra pequena (`.topbar-sm`) muda a altura SÓ nela; a faixa lê a da barra que está ao lado (medido no banco
+   `tabelas.html`: com a barra de 56 e a faixa parando em 64, sobrava uma tira do painel entre as duas). */
+:is(.app-shell:has(> .topbar-flush.topbar-sm) > .content, .app-shell-lateral > .app-shell-column:has(> .topbar-flush.topbar-sm) > .content):not(.content-plain) { --s12-topo:calc(var(--space-12) + var(--space-2)); }
+:is(.app-shell:has(> .topbar-flush) > .content, .app-shell-lateral > .app-shell-column:has(> .topbar-flush) > .content):not(.content-plain, .app-shell-docs *)::before {
+  content:""; display:block; position:sticky; z-index:calc(var(--z-sticky) - 1); inset-block-start:var(--s12-topo);
+  block-size:calc(var(--s12-vao) + var(--radius-card));
+  margin-block:calc(-1 * (var(--s12-vao) + var(--space-6) + var(--border-width))) calc(var(--space-6) + var(--border-width) - var(--radius-card));
+  margin-inline:calc(-1 * (var(--space-6) + var(--border-width))); pointer-events:none;
+  background:
+    linear-gradient(var(--background), var(--background)) 0 0 / 100% var(--s12-vao) no-repeat,
+    radial-gradient(circle at 100% 100%, transparent calc(var(--radius-card) - var(--border-width)), var(--background) var(--radius-card)) 0 var(--s12-vao) / var(--radius-card) var(--radius-card) no-repeat,
+    radial-gradient(circle at 0 100%, transparent calc(var(--radius-card) - var(--border-width)), var(--background) var(--radius-card)) 100% var(--s12-vao) / var(--radius-card) var(--radius-card) no-repeat; }
 /* O topo é presentational — não conhece o conteúdo — então garante o mínimo universal:
    os filhos encolhem em vez de forçar rolagem lateral. O COLAPSO de conteúdo (esconder a
    busca, trocar a nav por menu) é do consumidor, com os utilitários responsivos abaixo. */
@@ -2027,7 +2058,12 @@ img,svg { display:block; }
 .bottom-nav { --bottomnav-ring:calc(var(--icon-lg) + var(--space-1)); --bottomnav-surface:var(--card); position:sticky; bottom:0; z-index:var(--z-sticky); display:flex; gap:var(--space-1); margin:var(--space-4); margin-bottom:calc(var(--space-4) + env(safe-area-inset-bottom)); padding:var(--space-1); border:1px solid transparent; border-radius:var(--radius-control); background:var(--card); color:var(--card-foreground); box-shadow:var(--shadow-md); }
 /* `--control-h-lg` e não `--control-h-md`: alvo de toque. O md dá 36px em comfortable e
    o alvo confortável de dedo é maior — com o recuo, o item renderiza acima de 44px. */
-.bottom-nav-item { flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--space-05); min-height:var(--control-h-lg); padding:var(--space-1); border:0; border-radius:var(--radius-control); background:transparent; color:var(--muted-foreground); font:inherit; font-size:var(--text-xs); text-align:center; text-decoration:none; cursor:pointer; }
+.bottom-nav-item { flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:var(--space-05); min-height:var(--control-h-lg); padding:var(--space-1); border:0; border-radius:var(--radius-control); background:transparent; --bn-item-fg:var(--muted-foreground); color:var(--bn-item-fg); font:inherit; font-size:var(--text-xs); text-align:center; text-decoration:none; cursor:pointer; }
+/* 2-B (o bloco 3, aprovado em 04/11/2026): o item que é LINK pegava, ao passar o mouse, a cor de link geral (`a:hover`),
+   por acidente — o item que é botão não mudava. Agora o link mantém a cor que o item já tem (`--bn-item-fg`, que as
+   regras de cor do item escrevem). O escolhido tem as regras dele. O desenho de um passar do mouse PRÓPRIO da barra não
+   existe e não é inventado aqui: a ficha deixou de prometer o estado até ele ser desenhado. */
+a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .bottom-nav-item .icon { flex:none; opacity:.8; }
 .bottom-nav-label { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 /* O CONTADOR PENDURA NO ÍCONE — canto superior da ponta, encostando na borda dele.
@@ -2666,7 +2702,10 @@ img,svg { display:block; }
 .toolbar-brand .btn { --btn-bg:var(--control-thumb); --btn-fg:var(--primary-foreground); background:var(--btn-bg); color:var(--btn-fg); }
 .toolbar-brand .btn:hover:not(:disabled) { --btn-bg:color-mix(in oklab,var(--control-thumb) 88%,var(--primary-foreground)); }
 .toolbar-group { display:flex; align-items:center; gap:var(--space-1); }
-.toolbar-sep { flex:none; align-self:stretch; inline-size:1px; min-block-size:20px; margin-inline:4px; margin-block:0; background:var(--border); border:0; }
+/* O separador da barra (o Victor, 14/11/2026, *"Pode (Recomendado)"*): era da altura do botão (36), com 4 a mais de cada
+   lado (12 com o vão da barra). Agora é o da referência: metade da altura do botão, no meio, e só o vão da barra (8) de
+   cada lado. A barra em pé (abaixo) não mudou. */
+.toolbar-sep { flex:none; align-self:center; inline-size:1px; block-size:calc(var(--control-h-md) / 2); min-block-size:0; margin-inline:0; margin-block:0; background:var(--border); border:0; }
 /* SEPARADOR — a linha de divisão do sistema, num lugar só.
    Ela já existia duas vezes, resolvida localmente: `.toolbar-sep` (vertical, na barra) e
    `.menu-sep` (horizontal, no menu). O componente `Separator` seria a terceira cópia da mesma
@@ -2755,6 +2794,10 @@ img,svg { display:block; }
 .number-field-button { flex:none; display:inline-flex; align-items:center; justify-content:center; inline-size:var(--space-10); padding:0; border:0; background:transparent; color:var(--foreground); cursor:pointer; transition:background var(--duration-fast); }
 .number-field-button .icon { --step-icon:var(--icon-sm); }
 .number-field-button:hover:not(:disabled) { background:var(--surface-hover); }
+/* 2-B: no somente leitura os +/− não fazem nada — e acendiam ao passar o mouse e ao apertar. Agora ficam parados, sem a
+   mãozinha (a referência também não desenha o somente leitura). */
+:is(.number-field[data-readonly] .number-field-button,.number-field-button[data-readonly]):is(:hover,:active) { background:transparent; }
+:is(.number-field[data-readonly] .number-field-button,.number-field-button[data-readonly]) { cursor:default; }
 .number-field-button:active:not(:disabled) { background:color-mix(in oklab, var(--foreground) 10%, transparent); }
 .number-field-button:disabled { opacity:var(--opacity-disabled); cursor:not-allowed; }
 /* o anel do botão fica DENTRO dele: o grupo corta o que passa da borda */
@@ -2816,6 +2859,11 @@ img,svg { display:block; }
    todos para a linha de baixo. Base zero deixa o campo crescer no que sobra, e quem quebra
    linha passa a ser só o adorno de 100%, que é o que se quer. */
 .input-group>.input,.input-group>.select,.input-group>.textarea { flex:1 1 0; min-inline-size:0; background:transparent; border:0; border-radius:0; }
+/* A BUSCA COM A ALTURA DO CAMPO (o Victor, 14/11/2026, *"Pode, os três"*): o grupo tem a borda transparente de 1 do
+   "sem linha" (a espessura fica), e o campo de dentro, com a altura cheia do campo solto, somava 36 + 2 = 38 — a busca,
+   o `InputGroup` e o `ColorField` saíam 2 mais altos que o `Input` ao lado. A referência mede 36 nos dois. O campo de
+   dentro desconta a borda do grupo, em todo tamanho (pelo `--step-h`). */
+.input-group>.input,.input-group>.select { block-size:calc(var(--step-h,var(--control-h-md)) - 2 * var(--border-width)); }
 .input-group>.input:focus-visible,.input-group>.select:focus-visible,.input-group>.textarea:focus-visible { outline:none; }
 /* Desativado (lote 1, 20/10/2026): no grupo, quem pinta o estado é a moldura, como no inválido — só o texto recuava, e o
    fundo e o ícone ficavam iguais. O campo de dentro não recua de novo (seriam 0,25). Só o CAMPO conta: um botão
@@ -2960,7 +3008,8 @@ img,svg { display:block; }
 .checkbox > span > strong { font-weight:inherit; }
 /* LISTBOX (0.32.0): a da referência — recheio de 4, 4 entre itens; item de 36 no mínimo, 8 dos lados
    e 6 em cima e embaixo, vão 12; fundo neutro sob o mouse e no foco do teclado (com o anel); o visto
-   de 16 no fim do escolhido; perigo na cor de perigo. O canto é o nosso: cápsula. A seção é um título
+   de 16 no fim do escolhido; perigo na cor de perigo. ~~O canto é o nosso: cápsula.~~ O canto é o do item do menu, 18 (o Victor, 14/11/2026, *"B (igual à
+   referência)"*): a cápsula virava 24,5 no item com descrição; agora os dois cantos são o mesmo. A seção é um título
    pequeno e esmaecido em cima dos itens dela. */
 .list-box { position:relative; display:flex; flex-direction:column; gap:var(--space-1); inline-size:100%; padding:var(--space-1); }
 .list-box-section { display:flex; flex-direction:column; gap:var(--space-1); }
@@ -2970,7 +3019,10 @@ img,svg { display:block; }
    (4) em cima e o da seção (4) embaixo. Desenho, não item: o leitor de tela já conta os grupos. É BORDA, e não fundo,
    para continuar no alto contraste do Windows (ele apaga fundo de enfeite). */
 .list-box-section + .list-box-section::before { content:""; border-block-start:var(--border-width) solid transparent; margin-inline:var(--space-2); }
-.list-box-item { position:relative; display:flex; align-items:center; gap:var(--space-3); inline-size:100%; min-block-size:var(--control-h-md); padding:calc(var(--space-1) + var(--space-05)) var(--space-2); border-radius:var(--radius-full); color:var(--foreground); font-size:var(--text-sm); cursor:pointer; transition:background var(--duration-fast),transform var(--duration-fast) var(--ease-standard); }
+/* E a linha VOLTA (o Victor, 14/11/2026, *"Sim, volta"*): a linha clara (o texto a 10%) entre os grupos — na `ListBox` e,
+   por ela, no `Select` e no `Combobox`. Vale também para a Ember (a regra de 14/11/2026). */
+.list-box-section + .list-box-section::before { border-block-start-color:color-mix(in oklab,var(--foreground) 10%,transparent); }
+.list-box-item { position:relative; display:flex; align-items:center; gap:var(--space-3); inline-size:100%; min-block-size:var(--control-h-md); padding:calc(var(--space-1) + var(--space-05)) var(--space-2); border-radius:calc(var(--radius-card) - var(--space-1)); color:var(--foreground); font-size:var(--text-sm); cursor:pointer; transition:background var(--duration-fast),transform var(--duration-fast) var(--ease-standard); }
 /* O atalho do item (15/10/2026), como o da referência: o `Kbd` na ponta da linha. */
 .list-box-item-kbd { flex:none; margin-inline-start:auto; }
 .list-box-item:has(.list-box-item-indicator) { padding-inline-end:var(--space-7); }
@@ -3669,6 +3721,12 @@ img,svg { display:block; }
 .tabs-secondary .tab { border-radius:0; }
 .tabs-secondary .tab.active,.tabs-secondary .tab[data-active] { background:transparent; box-shadow:none; color:var(--foreground); }
 .tabs-secondary .tab[data-active]::after { display:block; }
+/* A LINHA DE PONTA A PONTA (o Victor, 14/11/2026, *"B, ponta a ponta"* — o "sem linha" não é 100%: as divisões de dentro
+   ficam): a fila secundária deitada ocupa a linha inteira (as abas continuam no começo), e o fio de baixo, que já existia
+   transparente, vira a linha clara (o texto a 10%, a mesma da tabela com `dividers`), como a referência. A em pé não
+   mudou. Vale também para a Ember (a regra de 14/11/2026). */
+.tabs-secondary:not([data-orientation="vertical"]) { display:flex; }
+.tabs-secondary:not([data-orientation="vertical"]) { border-block-end-color:color-mix(in oklab,var(--foreground) 10%,transparent); }
 /* O ESCOLHIDO DESLIZA (S-04, 05/11/2026): no `SegmentedControl` e no `Tabs` ele PULAVA, porque o fundo do escolhido é
    pintado no próprio item. A referência tem uma peça separada atrás dos itens, que anda. Aqui o desenho do escolhido NÃO
    muda (as sete cores do segmento, as treze marcas e os dois temas continuam nas regras de sempre): quando a escolha
@@ -3721,6 +3779,21 @@ img,svg { display:block; }
    Cor semântica, não a primária — reprovar não é progredir. */
 .step-error { color:var(--danger-400); } .step-error .step-dot { color:var(--danger-400); border-color:transparent; background:var(--danger-bg); }
 .step-optional { display:block; color:var(--muted-foreground); font-size:var(--text-xs); }
+/* EM PÉ (`orientation="vertical"`, PV-08 — o Victor, 14/11/2026, *"Pode, os dois"*): numa coluna estreita a linha deitada
+   não cabe (150 de largura, o conteúdo pedia 295). Uma etapa embaixo da outra: a bolinha à esquerda (a coluna `auto` toma
+   a medida dela), o nome ao lado a --space-3 e centrado nela, o "Opcional" embaixo do nome, --space-6 de uma etapa à outra,
+   e a linha descendo entre as bolinhas — amarela quando a etapa seguinte já foi feita ou é a atual, como a deitada. A
+   linha tem a espessura e o afastamento da deitada (o `.step:before` abaixo: 2 de espessura, a 15 = o meio da bolinha de
+   32 do `.step-dot`), escritos com os tokens que dão os mesmos números (duas bordas; `--space-4` − uma borda; `--space-8`); só gira. O padrão (`"horizontal"`) não muda. Só no `variant="default"`. */
+.stepper.stepper-vertical { grid-auto-flow:row; grid-auto-columns:auto; }
+.stepper-vertical > .step { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:center; column-gap:var(--space-3); text-align:start; padding-block-end:var(--space-6); }
+.stepper-vertical > .step:last-child { padding-block-end:0; }
+.stepper-vertical > .step:before { content:none; }
+.stepper-vertical > .step .step-dot { margin:0; }
+.stepper-vertical > .step strong { overflow-wrap:anywhere; }
+.stepper-vertical > .step .step-optional { grid-column:2; align-self:start; }
+.stepper-vertical > .step:not(:last-child):after { content:""; position:absolute; inset-inline-start:calc(var(--space-4) - var(--border-width)); inset-block:var(--space-8) 0; inline-size:calc(var(--border-width) * 2); background:var(--border); }
+.stepper-vertical > .step:has(+ :is(.step-done,.step-active,.done,.active)):after { background:var(--primary); }
 /* O CAMINHO QUE ESCOLHE (`Stepper variant="path"`, o site B — o Roadmap, aprovado pela bancada em 01/11/2026, o item 5): a
    mesma lista; a bolinha de 50 (`--control-h-xl`) no cartão, com a `--shadow-sm` e o número na `--font-code`; o rótulo fica
    para o leitor de tela; UM trilho de 8 (`--space-2`, `--fill-2`) de ponta a ponta; a escolhida invertida (fundo na cor do
@@ -4714,7 +4787,13 @@ button.tag-main { cursor:pointer; }
 /* A tabela da prosa NÃO é a tabela de dados: sem `min-width:720px`, sem faixa de cabeçalho em
    caixa alta e sem hover de linha. Uma tabela de três colunas no meio de um artigo não é uma
    grade — forçá-la a 720px é exatamente o defeito que o calendário sofreu. */
-.prose table { width:100%; border-collapse:collapse; font-size:var(--text-sm); }
+/* A TABELA LARGA ROLA DENTRO DELA (o Victor, 14/11/2026, *"Pode, como a proposta"*): antes, uma tabela de 8 colunas
+   empurrava a página no celular (a página ficava com 768 numa tela de 375). A prosa recebe o HTML cru do Markdown — não
+   há caixa em volta para rolar —, então a própria tabela vira a caixa (`display:block`), do tamanho do conteúdo até a
+   largura da coluna, e rola de lado por dentro. É o jeito de mercado para tabela de Markdown; a referência faz a tabela
+   dela rolar dentro de uma caixa própria. O preço, mostrado na imagem aprovada: a tabela estreita não estica mais até a
+   borda (fica do tamanho do texto). */
+.prose table { display:block; inline-size:max-content; max-inline-size:100%; overflow-x:auto; border-collapse:collapse; font-size:var(--text-sm); }
 .prose th,.prose td { padding:var(--space-2) var(--space-3); text-align:start; border-block-end:1px solid transparent; }
 .prose th { color:var(--subtle-foreground); font-weight:var(--weight-semibold); }
 
@@ -5167,6 +5246,14 @@ button.tag-main { cursor:pointer; }
 /* A-01: o texto vai SEMPRE para a segunda coluna, mesmo em HTML escrito à mão sem o invólucro do
    check — é quem monta a lista sem o React que ficaria de novo com o rótulo na coluna de 16px. */
 .combobox-item > :last-child { grid-column:2; }
+/* D4 (aprovado no plano D1–D20 em 19/10/2026 e visto na imagem em 14/11/2026, *"pode"*): a marca do escolhido vai para o
+   FIM da linha e fica cinza, como a da `ListBox` (e a da referência) — no `Select`, no `Combobox` e nos menus (o visto do
+   item de marcar e o ponto do item de rádio). A coluna da marca continua existindo sempre (a A-01): só troca de lado.
+   Vale também para a Ember (a regra de 14/11/2026: a Ember recebe, e o Victor aprova olhando a dela). */
+.combobox-item { grid-template-columns:minmax(0,1fr) var(--icon-sm); }
+.combobox-item > .combobox-check { grid-column:2; grid-row:1; color:var(--muted-foreground); }
+.combobox-item > :last-child { grid-column:1; grid-row:1; }
+.menu-item > .menu-mark { order:2; margin-inline-start:auto; color:var(--muted-foreground); }
 /* MultiCombobox (Fase 4) — chips de multi-seleção + grupos. Espaçamento novo tokenizado. */
 .combobox-multi { display:flex; align-items:center; gap:var(--space-2); width:100%; min-width:0; min-height:var(--control-h-md); padding:var(--space-1) var(--space-2); background:var(--field-bg); border:1px solid transparent; border-radius:var(--radius-control); transition:border-color var(--duration-fast); }
 .combobox-multi:hover { border-color:transparent; }
@@ -6281,7 +6368,7 @@ button.graph-node-body { cursor:pointer; }
    o core pinta `--background`; esta passa por cima. O ponto de selo vazio, que é amarelo, vai para a tinta. */
 :is([data-current-style^="bar-"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style^="bar-"]) {
   --bottomnav-surface:var(--primary); background:var(--primary); color:var(--primary-foreground); border-color:transparent; }
-:is([data-current-style^="bar-"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style^="bar-"]) .bottom-nav-item { color:var(--primary-foreground); }
+:is([data-current-style^="bar-"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style^="bar-"]) .bottom-nav-item { --bn-item-fg:var(--primary-foreground); color:var(--bn-item-fg); }
 :is([data-current-style^="bar-"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style^="bar-"]) .bottom-nav-item .icon { opacity:1; }
 :is([data-current-style^="bar-"] .bottom-nav:not([data-current-style]),.bottom-nav[data-current-style^="bar-"]) .bottom-nav-badge:empty { background:var(--primary-foreground); }
 /* A classe DOBRADA é força, de propósito: a regra do nome na cor do texto (o 2.11, acima) também casa com a barra amarela,

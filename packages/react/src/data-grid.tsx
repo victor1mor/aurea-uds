@@ -125,6 +125,18 @@ function topoParado(caixa:HTMLElement):number{
       if(pos==="fixed"||pos==="sticky"){fundo=Math.max(fundo,a.getBoundingClientRect().bottom);break;}
     }
   }
+  // S-12 (14/11/2026): no painel do `AppShell` com a barra rente, uma faixa presa (o `::before` do `.content`) pinta o vão
+  // logo abaixo da barra. Ela não entra na conta acima (é pseudo e não recebe toque); o cabeçalho para abaixo dela. O vão
+  // sai da margem dela, que é −(vão + recheio + borda) do painel.
+  const painel=fundo>0?caixa.closest<HTMLElement>(".content"):null;
+  if(painel){
+    const faixa=getComputedStyle(painel,"::before");
+    if(faixa.position==="sticky"){
+      const p=getComputedStyle(painel);
+      const vao=-(parseFloat(faixa.marginTop)||0)-(parseFloat(p.paddingTop)||0)-(parseFloat(p.borderTopWidth)||0);
+      if(vao>0)fundo+=vao;
+    }
+  }
   return fundo;
 }
 /** S-10: o cabeçalho da grade anda com a página. Cada `th` do `thead` ganha um `translate` — a caixa continua rolando de

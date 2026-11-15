@@ -1011,6 +1011,7 @@ export function App() {
 - `t.color` holds hex strings. React Native does not read OKLCH, so the hex form is the one that works.
 - `brand` on `AureaProvider` picks one of the twelve brands (`"ember"`, `"cobalt"`…). Without it you get Aurea Gold. A card with `variant="contrast"` keeps the brand.
 - `t.size` holds every number in dp: space, radius, type, heights.
+- `highContrast` and `textSize="lg"` on `AureaProvider` are the reading modes, the same as the web `AppShell`'s: with them, `useAureaTokens()` returns the darker supporting text and the larger type steps (every step from `xs` to `2xl` goes up 2).
 - Outside an `AureaProvider`, the hooks throw. There is no cascade to fall back on.
 
 ## Variables reference
@@ -1030,6 +1031,8 @@ Aurea's themes are CSS. The page reads its colors from the `data-theme` attribut
 ```
 
 The attribute is required. Without it, the color roles are not defined and the page has no colors.
+
+Each theme also declares its `color-scheme` to the browser, so the browser's own scrollbars, date picker and form controls follow it — also in a part of the page with its own `data-theme`.
 
 Put the theme in the markup that the server sends. Then the first paint is already right, with no flash.
 
@@ -2851,6 +2854,8 @@ toastPlacement picks one of six places for the messages of useToast(). bottom, t
 | `strings` | `Partial<AureaStrings>` | English defaults | Overrides for the built-in accessible names and labels. Merged over the defaults, so you translate only what you need. `ptBR` ships as a ready locale. |
 | `spriteUrl` | `string` | "/aurea-icons.svg" | Where the icon sprite lives. Application configuration, so it belongs here and not on every Icon — an app served from a sub-path used to lose every glyph and had to be fixed component by component. |
 | `direction` | `ltr \| rtl` | ltr | Tells the engine which way the inline axis runs, so popup sides and arrow keys mirror, and the arrows that point one way (breadcrumb, pagination, carousel, the row and submenu chevrons) point the way the text reads. On the web the CSS mirrors on its own through logical properties — but you still have to put dir="rtl" on your <html>; the provider does not touch the DOM. On native, unset means the device setting (I18nManager.isRTL); the system already mirrors the layout, and the provider mirrors the NavList and submenu chevrons. |
+| `highContrast` | `boolean` | false | Native only (on the web it is the AppShell's highContrast). The high-contrast reading mode for the whole app: everything the system's increase-contrast setting does, plus darker supporting text, an outline on cards and buttons, and links always underlined. A provider inside another without it keeps the outer one. |
+| `textSize` | `"md" \| "lg"` | "md" | Native only (on the web it is the AppShell's textSize). lg is the large-text reading mode: every type step from xs to 2xl goes up 2. Control heights stay, because the native medium control already has the touch target. A provider inside another without it keeps the outer one. |
 | `portalContainer` | `HTMLElement \| null` | — | Where every popup mounts: dialog, drawer, tooltip, popover, hover card, both menus, notification panel, combobox list and toasts. Unset, they mount on document.body — which is what lets them stack and position without inheriting overflow or transform from anything. Point it at a node inside one of your landmarks when you need popup content to satisfy the "all content in a landmark" check. |
 | `theme` | `AureaThemePreference` | — | Controlled theme. Pass it to command; the provider then never writes it on its own. "system" follows the computer's light/dark (prefers-color-scheme) and changes with it. |
 | `defaultTheme` | `AureaThemePreference` | — | Seeds the theme without controlling it. With NEITHER of the two, the provider adopts whatever the document already carries on <html> — the data-theme in the markup exists so the page does not flash, and a provider that overwrote it on first paint would bring the flash back. "system" follows the computer's light/dark (prefers-color-scheme) and changes with it. |
@@ -6398,7 +6403,7 @@ orientation="horizontal" puts the label to the left of the control — the setti
 | `orientation` | `Responsive<FieldOrientation>` | vertical | Label to the left of the control instead of above it — the settings-form row. It is a GRID and not a flex row on purpose: in a row the error message would become a third column beside the control, and it talks about the VALUE, so it has to fall under the control. |
 | `labelWidth` | `"auto" \| string` | — | Width of the label column when orientation is horizontal. "auto" sizes it to the label; any CSS length fixes it. Without it the column is the --field-label-width token (12rem), which on a 375px phone leaves a Combobox no room for its value. |
 | `description` | `ReactNode` | — | Help text that needs a sentence: it sits under the control and does not share the label's line. `hint` stays a short note beside the label. It is the reference library's Description and the `description` Checkbox already has. Joins aria-describedby in screen order: hint, description, error. |
-| `required` | `boolean` | false | The red asterisk after the label (hidden from screen readers) and required on the control — which is what announces it. |
+| `required` | `boolean` | false | The red asterisk after the label (hidden from screen readers) and required on the control — which is what announces it. On native the asterisk is drawn only: React Native has no required state for the screen reader. |
 </page>
 
 <page url="https://aureauds.dev/fileinput.html">
@@ -7300,7 +7305,8 @@ Disabled is not submitted and is skipped by the keyboard; read-only is submitted
 | `formatOnBlur` | `(value: string) => string` | — | Normalises the value AFTER focus leaves the field — a licence plate, a document number, a phone. It deliberately does not mask while you type: another design system ships its input mask with a recorded WCAG 2.1 AA failure, one of the references dropped masked date fields because the text leaks between sections, and a live mask makes the screen reader announce what was typed while the field shows something else. Aurea supplies the moment; the format stays yours, because plates and documents are country rules. The formatted text becomes the element's own value — nothing is painted over it — and your onChange is called with it, so controlled fields work. |
 | `className` | `string` | — | Extra classes on the field. Every native attribute of the element passes through: name, required, autoComplete, pattern, min/max, and the rest. |
 | `size` | `Responsive<FieldSize>` | md | The system's size step (sm/md/lg), NOT the HTML size attribute — that one is a width in characters and it is deliberately shadowed here, because two meanings for one prop name is worse than losing the native one. |
-| `variant` | `primary \| secondary` | primary | secondary is the neutral fill with no visible border, for a field inside a card. |
+| `variant` | `primary \| secondary` | primary | secondary is the neutral fill with no visible border, for a field inside a card. On native too, with the same values: secondary is the grey field without the shadow. |
+| `invalid` | `boolean` | the Field's | Native only. Invalid on the field itself: false clears the error of the Field around it (the one field that is right in a group), true marks it without a Field. On the web, pass aria-invalid. |
 </page>
 
 <page url="https://aureauds.dev/inputgroup.html">
@@ -10271,6 +10277,7 @@ variant="bar" is progress in parts: each part is the link to its step and turns 
 | `items[].href` | `string` | — | Makes the step a link (in the bar, each part leads to its step). |
 | `label` | `string` | the provider's "Steps" | Accessible name of the whole list. |
 | `variant` | `"default" \| "path" \| "bar"` | "default" | path: a path you choose on — 50 dots (--control-h-xl) on the card with the small shadow, numbers in the code font, one 8 rail (--fill-2) end to end, the chosen step inverted and 56; the labels stay for screen readers; under a 30rem container, four per row and no rail. bar: progress in parts — each step is a 12 part of the bar, 6 apart, the link or button of its step, green when done; the label stays for screen readers. |
+| `orientation` | `"horizontal" \| "vertical"` | "horizontal" | vertical: one step under the other, for a narrow column — the dot on the start side, the label beside it (--space-3), the optional note under the label, --space-6 between steps, and the connecting line running down between the dots (yellow when the next step is done or current). Only with variant="default"; path and bar keep their own layout. The horizontal default does not change. |
 | `startContent / endContent` | `ReactNode` | — | path: the two ends that do not click (the start one in the brand yellow). bar: the name before the bar (600) and the count after it (code font, role=status, announced when it changes). |
 | `className` | `string` | — | Merged onto the outermost element, after the Aurea skin — your class wins on a tie. |
 </page>
@@ -16067,6 +16074,33 @@ import {Stepper} from "@aurea-uds/react";
 ```
 </page>
 
+<page url="https://aureauds.dev/pattern-stepper-in-a-row-or-one-step-under-the-other.html">
+# In a row, or one step under the other
+
+`orientation="horizontal"` (the default) puts the steps in a row. `"vertical"` is for a side column where a row does not fit: at 150 wide the labels of a horizontal stepper run into each other. The dot stays on the start side, the label sits beside it and wraps if it must, and the line runs down between the dots — yellow up to the current step.
+
+## Usage
+
+```tsx
+import {Stepper} from "@aurea-uds/react";
+```
+
+```tsx
+<Stepper label="Publish" orientation="horizontal" items={[
+  {label: "Account", state: "done"},
+  {label: "Content", state: "active"},
+  {label: "Review"},
+]} />
+<Stepper label="Publish" orientation="vertical" items={[
+  {label: "Account", state: "done"},
+  {label: "Profile", state: "done"},
+  {label: "Content", state: "active"},
+  {label: "Schedule"},
+  {label: "Review", optional: "Optional"},
+]} />
+```
+</page>
+
 <page url="https://aureauds.dev/pattern-switch-notification-settings.html">
 # Notification settings
 
@@ -18783,6 +18817,45 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-70-0.html">
+# v0.70.0
+
+A vertical Stepper, reading modes on native, a panel that keeps its corners under the top bar, and a set of measurement fixes.
+
+## Added
+
+- **`orientation` on `Stepper`** — `"horizontal"` (the default) or `"vertical"`, on the web and on native. Vertical puts one step under the other for a narrow column: the dot on the start side, the label beside it, and the line running down between the dots, yellow up to the current step. Only with `variant="default"`.
+- **Reading modes on the native `AureaProvider`** — `highContrast` and `textSize` (`"md"` or `"lg"`), the same modes the web `AppShell` has. High contrast adds darker supporting text, an outline on cards and buttons, and always-underlined links on top of what the system's increase-contrast setting does. Large text raises every type step from `xs` to `2xl` by 2. A nested provider without them keeps the outer ones.
+- **Native `Input` and `Field` closer to the web** — `variant` on `Input` and `Textarea` (`"secondary"`, the grey field), `required` on `Field` (the asterisk after the label), `invalid` on `Input` itself, and the text selection colour.
+
+## Changed
+
+- **`AppShell`**: with the flush top bar, the panel no longer gets cut in a straight line under the bar when the page scrolls; its rounded corners always show. A `DataGrid` with `stickyHeader="page"` now stops below that gap.
+- **Native `Card` with `accent`**: the top stroke follows the curve of the corner and thins out, as on the web.
+- **`Prose`**: a wide table scrolls inside itself instead of widening the page.
+- **`SearchField`, `InputGroup` and `ColorField`** are now the same height as an `Input` next to them, in all three sizes.
+- **`Toolbar`**: the separator is half the button height, centred, with only the toolbar gap around it.
+- **`ListBox`**: the item corner matches the menu item (18), also on two-line items.
+- **`Tabs variant="secondary"`**: a light line under the whole row, which now fills the line (the tabs stay at the start), on the web and on native. **`ListBox`**, and through it `Select` and `Combobox`: a light line between groups.
+- **`Select`, `Combobox` and the menus** (`DropdownMenu`, `ContextMenu`, `Menubar`): the mark of the chosen item moves to the end of the row and turns grey, as in `ListBox`, on the web and on native.
+- **`BottomNav`**: an item that is a link keeps its colour on hover. **`NumberField`**: the read-only +/− buttons no longer light up.
+- Each theme now declares its `color-scheme`, so the browser's own scrollbars and controls follow the theme.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.70.0 @aurea-uds/core@0.70.0 @aurea-uds/fonts@0.70.0 @aurea-uds/icons@0.70.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.70.0
 ```
 </page>
 

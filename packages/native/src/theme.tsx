@@ -30,7 +30,7 @@ import type {AureaToastManager} from "./toast.js";
 import * as React from "react";
 import {I18nManager, useColorScheme} from "react-native";
 import {IconRegistryProvider, type AureaIconRegistry} from "./icon.js";
-import {comOpacidade} from "./estilos.js";
+import {comOpacidade, misturaOpaca} from "./estilos.js";
 import {defaultStrings, type AureaStrings} from "./strings.js";
 import {
   resolverTokens,
@@ -48,9 +48,39 @@ export type AureaThemeControl = {
 // `fontes` e `raiz` existem para o tema num pedaço da tela (`TemaDentro`, ADR-0063): o pedaço
 // precisa refazer os tokens com as MESMAS fontes do app, e o que sai do pedaço (uma folha, um
 // sobreposto) precisa voltar ao valor do app. Na raiz, `raiz` é nulo.
+/** Os modos de leitura (0-D e 0-E, ADR-0090): o alto contraste ("C") e o texto grande ("B"). */
+type Modos = {alto: boolean; texto: AureaTextSize};
+const SEM_MODOS: Modos = {alto: false, texto: "md"};
+
+/** O tamanho do texto do app (ADR-0090): `"lg"` sobe 2 cada degrau da letra, do `xs` ao `2xl`, como a web. */
+export type AureaTextSize = "md" | "lg";
+
+/**
+ * Os modos de leitura sobre os tokens (0-D e 0-E no nativo, 14/11/2026 — as formas que o Victor aprovou na web em
+ * 04/11/2026, ADR-0090). O texto grande ("B"): cada degrau da letra sobe 2, do `textXs` ao `text2xl` (a entrelinha
+ * acompanha, porque é razão); a altura dos controles NÃO muda: no nativo o controle médio já tem o alvo de toque (a web
+ * subiu o dela de 36 para 44). O alto contraste ("C"): o texto de apoio a 80% do texto, e as marcas dos controles na
+ * tinta — os mesmos tokens que o `[data-contrast="high"]` da web troca; o resto (o contorno dos campos, do cartão e do
+ * botão, o link sublinhado) as peças desenham lendo `useMaisContraste()`/`useAltoContraste()`.
+ */
+function aplicarModos(t: AureaTokens, m: Modos): AureaTokens {
+  if (!m.alto && m.texto === "md") return t;
+  const s = t.size;
+  const size = m.texto === "lg" ? {...s,
+    textXs: s.textXs + 2, textSm: s.textSm + 2, textMd: s.textMd + 2, textBase: s.textBase + 2,
+    textLg: s.textLg + 2, textXl: s.textXl + 2, text2xl: s.text2xl + 2} : s;
+  const c = t.color;
+  const color = m.alto ? {...c,
+    mutedForeground: misturaOpaca(c.foreground, c.background, 0.8),
+    controlThumb: c.brandYellowInk, controlSelectedForeground: c.brandYellowInk, controlSelectedDot: c.brandYellowInk} : c;
+  return {...t, size, color};
+}
+
 type Valor = {
   controle: AureaThemeControl; tokens: AureaTokens; strings: AureaStrings;
   fontes?: AureaFontFamilies; raiz: Valor | null;
+  /** Os modos de leitura, para o tema num pedaço (`TemaDentro`) refazer os tokens com eles. */
+  modos?: Modos;
   /** A marca do app, para o tema num pedaço (`TemaDentro`) refazer os tokens com ela. */
   marca?: AureaBrand | null;
 };
@@ -130,6 +160,14 @@ export type AureaProviderProps = {
    * submenu), para que apontem para onde se lê. Um provedor dentro de outro sem `direction` herda o de fora.
    */
   direction?: "ltr" | "rtl";
+  /**
+   * O alto contraste no app inteiro (0-D, 14/11/2026 — o `highContrast` do `AppShell` da web, a forma "C" da ADR-0090):
+   * tudo o que o "aumentar contraste" do sistema faz, e mais o texto de apoio mais escuro, o contorno no cartão e no
+   * botão e o link sublinhado. Ausente, um provedor dentro de outro herda o de fora.
+   */
+  highContrast?: boolean;
+  /** O texto grande no app inteiro (0-E, o `textSize` do `AppShell` da web, a forma "B"). Herda como o `highContrast`. */
+  textSize?: AureaTextSize;
   /** Avisado quando o modo CONTROLADO recebe um pedido de troca — é o app que decide. */
   onThemeChange?: (t: AureaThemeName) => void;
   onDensityChange?: (d: AureaDensity) => void;
@@ -137,8 +175,12 @@ export type AureaProviderProps = {
 
 export function AureaProvider({
   children, theme, density, brand, defaultTheme, defaultDensity,
-  fontFamilies, icons, strings, direction, onThemeChange, onDensityChange,
+  fontFamilies, icons, strings, direction, highContrast, textSize, onThemeChange, onDensityChange,
 }: AureaProviderProps) {
+  // Os modos de leitura herdam do provedor de fora quando este não diz (o tema num pedaço continua com eles).
+  const deFora = React.useContext(Contexto)?.modos ?? SEM_MODOS;
+  const alto = highContrast ?? deFora.alto, texto = textSize ?? deFora.texto;
+  const modos = React.useMemo<Modos>(() => ({alto, texto}), [alto, texto]);
   const doAparelho = useColorScheme();
   const [temaInterno, setTemaInterno] = React.useState<AureaThemeName | null>(defaultTheme ?? null);
   const [densidadeInterna, setDensidadeInterna] = React.useState<AureaDensity>(
@@ -171,7 +213,8 @@ export function AureaProvider({
       // Alternar é sobre o que está NA TELA — a mesma regra que o hook da web escreveu.
       toggleTheme: () => setTheme(temaEfetivo === "dark" ? "light" : "dark"),
     },
-    tokens: resolverTokens(temaEfetivo, densidadeEfetiva, fontFamilies, brand),
+    tokens: aplicarModos(resolverTokens(temaEfetivo, densidadeEfetiva, fontFamilies, brand), modos),
+    modos,
     // As frases NÃO dependem do par (tema, densidade), mas moram no mesmo `useMemo` de propósito:
     // um contexto a mais só se paga quando ele muda em outra hora, e este muda junto — é a mesma
     // conta que o cabeçalho deste arquivo já fez para os dois contextos que viraram um.
@@ -179,7 +222,7 @@ export function AureaProvider({
     fontes: fontFamilies,
     marca: brand ?? null,
     raiz: null,
-  }), [temaEfetivo, densidadeEfetiva, setTheme, setDensity, fontFamilies, strings, brand]);
+  }), [temaEfetivo, densidadeEfetiva, setTheme, setDensity, fontFamilies, strings, brand, modos]);
 
   // O registro de ícones fica num contexto PRÓPRIO: ele não muda quando o tema muda, e juntá-lo
   // ao valor do tema faria toda árvore que só desenha ícone re-renderizar na troca de tema.
@@ -200,6 +243,11 @@ const DirecaoContext = React.createContext<"ltr" | "rtl" | null>(null);
  * Interno: `true` quando a escrita corre da direita para a esquerda — a do `AureaProvider` mais próximo que disse
  * `direction` ou, sem nenhum, a do aparelho (`I18nManager.isRTL`), como o `useIsRTL` da referência do celular.
  */
+/** Interno: `true` com o alto contraste do app ligado (`highContrast` no `AureaProvider`). Fora de provedor, `false`. */
+export function useAltoContraste(): boolean {
+  return React.useContext(Contexto)?.modos?.alto ?? false;
+}
+
 export function useDirecaoRtl(): boolean {
   const d = React.useContext(DirecaoContext);
   return d ? d === "rtl" : I18nManager.isRTL;
@@ -364,7 +412,7 @@ export function TemaDentro({tema, children}: {tema: AureaThemeName; children?: R
   const v = usar("TemaDentro");
   const valor = React.useMemo<Valor>(() => ({
     ...v,
-    tokens: resolverTokens(tema, v.controle.density, v.fontes, v.marca),
+    tokens: aplicarModos(resolverTokens(tema, v.controle.density, v.fontes, v.marca), v.modos ?? SEM_MODOS),
     raiz: v.raiz ?? v,
   }), [v, tema]);
   if (v.tokens.theme === tema) return <>{children}</>;

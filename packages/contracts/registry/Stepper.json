@@ -41,7 +41,8 @@
     "--success-400",
     "--space-2",
     "--space-3",
-    "--card"
+    "--card",
+    "--space-6"
   ],
   "a11y": {
     "role": "list",
@@ -115,6 +116,12 @@
       "description": "path: a path you choose on — 50 dots (--control-h-xl) on the card with the small shadow, numbers in the code font, one 8 rail (--fill-2) end to end, the chosen step inverted and 56; the labels stay for screen readers; under a 30rem container, four per row and no rail. bar: progress in parts — each step is a 12 part of the bar, 6 apart, the link or button of its step, green when done; the label stays for screen readers."
     },
     {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\"",
+      "default": "\"horizontal\"",
+      "description": "vertical: one step under the other, for a narrow column — the dot on the start side, the label beside it (--space-3), the optional note under the label, --space-6 between steps, and the connecting line running down between the dots (yellow when the next step is done or current). Only with variant=\"default\"; path and bar keep their own layout. The horizontal default does not change."
+    },
+    {
       "name": "startContent / endContent",
       "type": "ReactNode",
       "default": "—",
@@ -126,5 +133,11 @@
       "default": "—",
       "description": "Merged onto the outermost element, after the Aurea skin — your class wins on a tie."
     }
-  ]
+  ],
+  "axes": {
+    "orientation": [
+      "horizontal",
+      "vertical"
+    ]
+  }
 }

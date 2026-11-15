@@ -12,6 +12,7 @@
 // O pacote aceita o React Native desde a 0.76: se a função não existir na versão do app, a resposta é "não", sem erro.
 import * as React from "react";
 import {AccessibilityInfo, Platform} from "react-native";
+import {useAltoContraste} from "./theme.js";
 
 type ConsultaDeContraste = {
   isDarkerSystemColorsEnabled?: () => Promise<boolean>;
@@ -53,5 +54,8 @@ export function useMaisContraste(): boolean {
     const inscricao = (AccessibilityInfo.addEventListener as (n: string, f: (v: boolean) => void) => {remove?: () => void})(evento, setMais);
     return () => { vivo = false; inscricao?.remove?.(); };
   }, []);
-  return mais;
+  // O alto contraste do APP (`highContrast` no `AureaProvider`, 0-D, 14/11/2026) faz tudo o que o do sistema faz (a
+  // forma "C" da ADR-0090 começa pelo "aumentar contraste"): o contorno dos campos, as marcas na tinta, o foco no grafite.
+  const doApp = useAltoContraste();
+  return mais || doApp;
 }

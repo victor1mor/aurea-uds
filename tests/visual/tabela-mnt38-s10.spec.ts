@@ -94,7 +94,8 @@ test("S-10 · `stickyHeader=\"page\"`: uma rolagem só, e o cabeçalho embaixo d
   await p.evaluate(() => scrollTo(0, 600));
   await p.waitForFunction(() => document.querySelector<HTMLElement>("thead th")!.style.translate !== "");
   const meio = await cabecalho(p);
-  expect(meio.th, JSON.stringify(meio)).toBe(meio.barra);
+  // S-12 (14/11/2026): abaixo da barra rente, a faixa do vão (16, com a lateral até o topo) — o cabeçalho para embaixo dela.
+  expect(meio.th, JSON.stringify(meio)).toBe(meio.barra + 16);
   // No fim da página, o cabeçalho para acima da última fileira — não a cobre.
   await p.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
   await p.waitForTimeout(100);

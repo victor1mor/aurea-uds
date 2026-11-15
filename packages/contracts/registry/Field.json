@@ -105,7 +105,7 @@
       "name": "required",
       "type": "boolean",
       "default": "false",
-      "description": "The red asterisk after the label (hidden from screen readers) and required on the control — which is what announces it."
+      "description": "The red asterisk after the label (hidden from screen readers) and required on the control — which is what announces it. On native the asterisk is drawn only: React Native has no required state for the screen reader."
     }
   ],
   "axes": {

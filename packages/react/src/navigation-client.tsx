@@ -44,10 +44,12 @@ export interface StepItem{label:ReactNode;state?:StepState;optional?:ReactNode;o
 // barra em partes (o "Your setup" do Quick Start, o D-1). `startContent` e `endContent`: no `path`, as pontas que não
 // clicam ("0.x", "1.0"); no `bar`, o nome antes da barra e a contagem depois. Sem `variant`, o `Stepper` de sempre.
 export type StepperVariant="default"|"path"|"bar";
-export function Stepper({items,label,variant="default",startContent,endContent,className}:{items:StepItem[];label?:string;variant?:StepperVariant;startContent?:ReactNode;endContent?:ReactNode;className?:string}){
+// `orientation` (PV-08, 14/11/2026): `"vertical"` põe uma etapa embaixo da outra, para a coluna estreita. Só no `default`
+// (o `path` e o `bar` têm o desenho deles); o padrão, `"horizontal"`, não muda.
+export function Stepper({items,label,variant="default",orientation="horizontal",startContent,endContent,className}:{items:StepItem[];label?:string;variant?:StepperVariant;orientation?:"horizontal"|"vertical";startContent?:ReactNode;endContent?:ReactNode;className?:string}){
 const s=useAureaStrings();
 const comPontas=variant==="path";
-const lista=<div role="list" aria-label={label??s.stepperLabel} className={cx("stepper",variant==="default"&&className)}
+const lista=<div role="list" aria-label={label??s.stepperLabel} className={cx("stepper",variant==="default"&&orientation==="vertical"&&"stepper-vertical",variant==="default"&&className)}
   style={comPontas?{"--stepper-cols":items.length+(startContent!=null?1:0)+(endContent!=null?1:0)} as React.CSSProperties:undefined}>
 {comPontas&&startContent!=null&&<div role="listitem" className="step-end step-end-start">{startContent}</div>}
 {items.map((it,n)=>{const st=it.state??"default";

@@ -86,6 +86,13 @@ const LINHA_PERMITIDA_CSS: {seletor: string; prop: string; valor?: string; media
   // escolhe, só a cor da borda de baixo que já existe, e só com a linha clara (o texto a 10%). A Ember fica fora.
   {seletor: ':is(.table.table-dividers:not(.table-rows),.datagrid-dividers .table-wrap table) tbody tr:not(:last-child) > :is(td,th):where(:not([data-brand="ember"] *))',
     prop: "border-bottom-color", valor: "color-mix(in oklab,var(--foreground) 10%,transparent)"},
+  // AS DIVISÕES DE DENTRO QUE VOLTARAM (o Victor, 14/11/2026 — o "sem linha" não é 100%): a linha clara embaixo da fila
+  // das abas `secondary`, de ponta a ponta (*"B, ponta a ponta"*), e entre os grupos da lista (*"Sim, volta"*). Cada uma
+  // só no seletor dela, só a cor da borda que já existe, só a linha clara. Valem também para a Ember (14/11/2026).
+  {seletor: '.tabs-secondary:not([data-orientation="vertical"])',
+    prop: "border-block-end-color", valor: "color-mix(in oklab,var(--foreground) 10%,transparent)"},
+  {seletor: '.list-box-section + .list-box-section::before',
+    prop: "border-block-start-color", valor: "color-mix(in oklab,var(--foreground) 10%,transparent)"},
   // O botão ligado CINZA (o `neutral`, ADR-0084) é o mais discreto, e ganha o contorno de 3:1 com "aumentar contraste" —
   // a mesma exceção dos campos, só nessa preferência e só com a cor dela.
   {seletor: ':is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"])',
@@ -191,6 +198,15 @@ export function linhasNoNativo(fonte: string, origem: string): string[] {
     if (origem === "estilos.ts" && valor === "t.color.inputStrong" && /maisContraste \? \{borderColor: t\.color\.inputStrong\}/.test(linhaInteira)) continue;
     // O contorno do ERRO (ADR-0094): só nasce no `contornoDeErro` do `estilos.ts`, na cor da frase de erro.
     if (origem === "estilos.ts" && valor === "t.color.danger400 ?? t.color.destructive" && /^export const contornoDeErro = /.test(linhaInteira)) continue;
+    // O TRAÇO do cartão (`accent`, ADR-0063, exceção nomeada; PV-12, 14/11/2026): o arco é a borda de um aro recortado,
+    // na cor cheia do tom. Só no `layout.tsx`, só com a tabela `COR_DO_TRACO`, e só no estilo `s.traco`.
+    if (origem === "layout.tsx" && valor === "t.color[COR_DO_TRACO[accent]]" && /style=\{\[s\.traco, \{borderColor: /.test(linhaInteira)) continue;
+    // O ALTO CONTRASTE do app (0-D no nativo, ADR-0090, a mesma exceção da web `[data-contrast="high"] .card`): o contorno
+    // de 3:1 do cartão, só no `layout.tsx`, só com o `inputStrong` e só quando o `useAltoContraste()` liga.
+    if (origem === "layout.tsx" && valor === "t.color.inputStrong" && /const altoContraste = useAltoContraste\(\) \? \{borderColor: t\.color\.inputStrong\} : null;/.test(linhaInteira)) continue;
+    // A linha embaixo da fila das abas `secondary` (14/11/2026, *"B, ponta a ponta"*): só no `navigation.tsx`, só a linha
+    // clara (`preenchimento(t, 2)`, o texto a 10%) e só no estilo `filaSecundariaComFio`.
+    if (origem === "navigation.tsx" && valor === "preenchimento(t" && /^\s*filaSecundariaComFio: \{borderBottomWidth: t\.size\.borderWidth, borderColor: /.test(linhaInteira)) continue;
     // A única linha que fica no nativo: o cartão de contorno (a mesma da web, o texto a 10%).
     const linhaDoFonte = limpo.slice(limpo.lastIndexOf("\n", m.index!) + 1, limpo.indexOf("\n", m.index!));
     if (origem === "layout.tsx" && /^\s*card_outline:/.test(linhaDoFonte) && /comOpacidade\(t\.color\.foreground, 0\.1\)/.test(linhaDoFonte)) continue;

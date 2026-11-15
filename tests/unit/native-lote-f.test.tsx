@@ -54,13 +54,12 @@ describe("R-12 · Tabs: o jeito sublinhado da referência, com o fio da casa", (
     expect(plano(tabs()[0]).backgroundColor).toBe(t.color.primary);
     for (const x of tabs()) expect(fiosDentroDe(x)).toHaveLength(0);
   });
-  it("secondary: a fila perde a cápsula, e o fio de baixo é transparente (sem linha, ADR-0072)", () => {
+  it("secondary: a fila perde a cápsula, e o fio de baixo sai dela (desde a 0.70.0 ele mora na fila rolante, claro)", () => {
     render(<Envolve><Tabs tabs={abas} value="geral" variant="secondary" /></Envolve>);
     const e = fila();
     expect(e.backgroundColor).toBeUndefined();
     expect(e.borderRadius).toBeUndefined();
-    expect(e.borderBottomWidth).toBe(t.size.borderWidth);
-    expect(e.borderColor).toBe("transparent");
+    expect(e.borderBottomWidth).toBe(0); // o fio claro de ponta a ponta mora na `FilaRolante` (native-lote-080.test.tsx)
     expect(e.gap).toBe(t.size.space1);
   });
   it("secondary: a aba tem o recheio da referência (12 dos lados, 6 em cima e embaixo) e a altura da cápsula", () => {

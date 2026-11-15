@@ -54,6 +54,8 @@ export default {
     fontFamilies: "The role → weight → family map that puts the text in Inter, the headings in Sora and the code in IBM Plex Mono: FONT_FAMILIES from @aurea-uds/fonts/native. Without it, every weight but Regular and Bold falls to the system font on the device.",
     icons: "The icon registry that Icon and every piece with a glyph read — built with criarRegistroDeIcones from the icons the app uses, never all of them. A provider without icons keeps the one above.",
     direction: "Which way the text reads: ltr or rtl, the same prop as the web. Without it, the device setting (I18nManager.isRTL). The system already mirrors the layout; the provider mirrors the arrows that point one way — the NavList chevron and the submenu arrow — so they point the way the text reads. A provider inside another without direction keeps the outer one.",
+    highContrast: "The high-contrast reading mode for the whole app, the web AppShell's highContrast: everything the system's increase-contrast setting does, plus darker supporting text, an outline on cards and buttons, and links always underlined. A provider inside another without it keeps the outer one.",
+    textSize: "md (the default) or lg. lg is the large-text reading mode, the web AppShell's textSize: every type step from xs to 2xl goes up 2. Control heights stay: on native the medium control already has the touch target. A provider inside another without it keeps the outer one.",
     strings: "The sentences the pieces say on their own (a state's alert, the empty face, the spinner's name). English by default; ptBR ships ready.",
     onThemeChange: "Called when a controlled provider is asked to change theme — the app decides.",
     onDensityChange: "Called when a controlled provider is asked to change density.",
@@ -104,6 +106,21 @@ export default function App() {
       peca: v => h("div", {dir: v}, h(ComOTemaDoApp, {direction: v, filho: h(NavList, {items: [
         {id: "account", label: "Account", icon: "user", onPress: () => {}},
         {id: "team", label: "Team", icon: "users", onPress: () => {}}]})}))}),
+    // Os modos de leitura (0-D e 0-E, a 0.70.0): as formas aprovadas na web (ADR-0090).
+    cada({titulo: "Text size", descricao: "lg is the large-text mode: every type step from xs to 2xl goes up 2, for the whole app.",
+      valores: ["md", "lg"], estilo: grade,
+      codigo: v => `<AureaProvider theme={theme} textSize="${v}" fontFamilies={FONT_FAMILIES}>
+  <Card>…</Card>
+</AureaProvider>`,
+      peca: v => h(ComOTemaDoApp, {textSize: v})}),
+    {
+      title: "High contrast",
+      description: "highContrast is the high-contrast mode for the whole app: darker supporting text, an outline on cards, fields and buttons, and links always underlined.",
+      code: `<AureaProvider theme={theme} highContrast fontFamilies={FONT_FAMILIES}>
+  <Card>…</Card>
+</AureaProvider>`,
+      render: () => h("div", {style: grade}, h(ComOTemaDoApp, {highContrast: false}), h(ComOTemaDoApp, {highContrast: true})),
+    },
     {
       title: "Starting values",
       description: "Uncontrolled: defaultTheme and defaultDensity only seed the provider, and the buttons inside change it through useAureaTheme().",

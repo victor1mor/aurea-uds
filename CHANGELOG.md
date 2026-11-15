@@ -327,6 +327,65 @@ como deveria funcionar"*.
 
 ---
 
+## [0.70.0] — 2026-11-14
+
+**O lote maior** (o Victor, 14/11/2026: *"eu quero mais, lote maior"*): o que ele aprovou olhando nas imagens de 14/11 e
+o que já estava aprovado e faltava construir, na web e no nativo. Cada item reprova no código da 0.69.0 e passa no novo.
+
+### Acrescentou
+
+- **`Stepper` com `orientation`** (`"horizontal"`, o padrão, ou `"vertical"`), na web e no nativo — PV-08, *"Pode, os
+  dois"*. Em pé, uma etapa embaixo da outra, para a coluna estreita (numa de 150, o deitado pedia 295): a bolinha no
+  começo, o nome ao lado, a linha descendo entre as bolinhas, amarela até a etapa atual. Só no `variant="default"`.
+- **No nativo, os modos de leitura no `AureaProvider`** — 0-D e 0-E, as formas que o Victor aprovou na web em 04/11/2026
+  (ADR-0090): `highContrast` (tudo o que o "aumentar contraste" do sistema faz, e mais o texto de apoio a 80% do texto,
+  o contorno no cartão, o aro por dentro no botão e o link sempre sublinhado) e `textSize` (`"md"` ou `"lg"`: cada degrau
+  da letra sobe 2, do `xs` ao `2xl`; a altura dos controles fica, porque no nativo o controle médio já tem o alvo de
+  toque). Um provedor de dentro sem elas herda as de fora.
+- **No nativo, o `Input` e o `Field` como os da web** (aprovados em 12/10/2026): `variant` no `Input` e no `Textarea`
+  (`"secondary"`, o campo cinza), `required` no `Field` (o asterisco na cor do erro — só desenho: o React Native não tem
+  o estado "obrigatório" para o leitor de tela), `invalid` no próprio `Input` (desmente o `Field` com erro, ou marca sem
+  ele) e a cor do texto escolhido (a do `::selection` da web).
+
+### Mudou
+
+- **S-12** (*"D, pode"*): com a barra de cima rente, o painel do `AppShell` passava por baixo dela ao rolar e era cortado
+  numa linha reta. Agora uma faixa presa ao topo do painel para logo abaixo da barra e desenha o vão e os cantos de 22 no
+  fundo da página: o painel sempre aparece arredondado. A página continua rolando. A `DataGrid` com
+  `stickyHeader="page"` para abaixo do vão.
+- **PV-12** (*"A, nativo igual à web"*): o traço do `Card` com `accent` no nativo é o arco da web — desce pela curva do
+  canto e afina —, e não mais uma faixa reta cortada no canto.
+- **A tabela do `Prose`** (*"Pode, como a proposta"*): a tabela larga rola por dentro e não empurra mais a página (no
+  celular, a página ficava com 598 numa tela de 375). A tabela estreita fica do tamanho do conteúdo.
+- **A busca com a altura do campo** (*"Pode, os três"*): o `SearchField`, o `InputGroup` e o `ColorField` têm a altura do
+  `Input` ao lado (eram 2 mais altos, pela borda do grupo), nos três tamanhos.
+- **O separador da `Toolbar`** (*"Pode (Recomendado)"*): metade da altura do botão, no meio, só com o vão da barra.
+- **O canto do item da `ListBox`** (*"B (igual à referência)"*): o do item do menu, 18 (a cápsula virava 24,5 no item de
+  duas linhas).
+- **O "sem linha" não é 100%** (a ordem de 05/11/2026): a linha clara (o texto a 10%) volta embaixo da fila das `Tabs`
+  `secondary`, de ponta a ponta (*"B, ponta a ponta"*; a fila ocupa a linha inteira, as abas continuam no começo), na
+  web e no nativo, e entre os grupos da `ListBox` — e, por ela, do `Select` e do `Combobox` (*"Sim, volta"*). Também na
+  Ember (a regra do Victor de 14/11/2026: a Ember sempre recebe, e ele aprova olhando a dela).
+- **D4** (aprovado no plano de 19/10/2026; visto na imagem em 14/11/2026, *"pode"*): a marca do escolhido vai para o FIM
+  da linha e fica cinza no `Select`, no `Combobox` e nos menus (`DropdownMenu`, `ContextMenu`, `Menubar`), como a da
+  `ListBox` — na web e no nativo, também na Ember. A coluna da marca continua sempre lá: só troca de lado.
+- **2-B**: o item que é link no `BottomNav` não pega mais a cor de link ao passar o mouse; os +/− do `NumberField`
+  somente leitura não acendem mais.
+- **D16, a primeira parte**: cada tema declara o `color-scheme` (a barra de rolagem e os controles do navegador na cor
+  do tema, também num pedaço com tema próprio).
+
+### O site
+
+- Os exemplos novos: o `Stepper` em pé (web e nativo), o `Input` com `variant` e `invalid`, o `Field` com `required` e os
+  modos de leitura na página do `AureaProvider` do nativo.
+
+Quem cobra: `tests/visual/s12-faixa-do-painel.spec.ts`, `tests/visual/lote-080-pecas.spec.ts` e
+`tests/unit/native-lote-080.test.tsx` (cada um provado contra a 0.69.0); `tests/visual/tabela-mnt38-s10.spec.ts` (a
+`DataGrid` presa abaixo do vão), `tests/unit/native-lote-n.test.tsx` (o arco) e `tests/unit/sem-linha.test.tsx` (as
+linhas novas, cada uma só no seletor e na cor dela).
+
+---
+
 ## [0.69.0] — 2026-11-14
 
 ✅ **Publicada em 14/11/2026, entre 13:49 e 13:58 (Brasília, medido no npm: seis pacotes entre 13:49 e 13:52 e o `native`

@@ -13,6 +13,8 @@ Aurea's themes are CSS. The page reads its colors from the `data-theme` attribut
 
 The attribute is required. Without it, the color roles are not defined and the page has no colors.
 
+Each theme also declares its `color-scheme` to the browser, so the browser's own scrollbars, date picker and form controls follow it — also in a part of the page with its own `data-theme`.
+
 Put the theme in the markup that the server sends. Then the first paint is already right, with no flash.
 
 ::: demo theme-toggle

@@ -10,6 +10,8 @@ export type AureaThemeControl = {
     setDensity: (d: AureaDensity) => void;
     toggleTheme: () => void;
 };
+/** O tamanho do texto do app (ADR-0090): `"lg"` sobe 2 cada degrau da letra, do `xs` ao `2xl`, como a web. */
+export type AureaTextSize = "md" | "lg";
 export type AureaProviderProps = {
     children: React.ReactNode;
     /** Controlado: quando presente, manda, e `setTheme` só avisa. */
@@ -76,15 +78,25 @@ export type AureaProviderProps = {
      * submenu), para que apontem para onde se lê. Um provedor dentro de outro sem `direction` herda o de fora.
      */
     direction?: "ltr" | "rtl";
+    /**
+     * O alto contraste no app inteiro (0-D, 14/11/2026 — o `highContrast` do `AppShell` da web, a forma "C" da ADR-0090):
+     * tudo o que o "aumentar contraste" do sistema faz, e mais o texto de apoio mais escuro, o contorno no cartão e no
+     * botão e o link sublinhado. Ausente, um provedor dentro de outro herda o de fora.
+     */
+    highContrast?: boolean;
+    /** O texto grande no app inteiro (0-E, o `textSize` do `AppShell` da web, a forma "B"). Herda como o `highContrast`. */
+    textSize?: AureaTextSize;
     /** Avisado quando o modo CONTROLADO recebe um pedido de troca — é o app que decide. */
     onThemeChange?: (t: AureaThemeName) => void;
     onDensityChange?: (d: AureaDensity) => void;
 };
-export declare function AureaProvider({ children, theme, density, brand, defaultTheme, defaultDensity, fontFamilies, icons, strings, direction, onThemeChange, onDensityChange, }: AureaProviderProps): React.JSX.Element;
+export declare function AureaProvider({ children, theme, density, brand, defaultTheme, defaultDensity, fontFamilies, icons, strings, direction, highContrast, textSize, onThemeChange, onDensityChange, }: AureaProviderProps): React.JSX.Element;
 /**
  * Interno: `true` quando a escrita corre da direita para a esquerda — a do `AureaProvider` mais próximo que disse
  * `direction` ou, sem nenhum, a do aparelho (`I18nManager.isRTL`), como o `useIsRTL` da referência do celular.
  */
+/** Interno: `true` com o alto contraste do app ligado (`highContrast` no `AureaProvider`). Fora de provedor, `false`. */
+export declare function useAltoContraste(): boolean;
 export declare function useDirecaoRtl(): boolean;
 /** Os dois eixos e como trocá-los. Mesma forma do hook homônimo de `@aurea-uds/react`. */
 export declare function useAureaTheme(): AureaThemeControl;

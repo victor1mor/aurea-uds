@@ -380,6 +380,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Stepper · A step that can be skipped](https://aureauds.dev/pattern-stepper-a-step-that-can-be-skipped.md): `optional` says out loud what a greyed-out label only implies. Marking it is what lets a reader decide to move on, instead of hunting for the field they think they missed.
 - [Stepper · A step that failed](https://aureauds.dev/pattern-stepper-a-step-that-failed.md): `state: "error"` keeps the failure in the sequence instead of replacing it with an alert somewhere else. The reader sees which step broke and how far they had got, which is the pair of facts they need to decide whether to fix or restart.
 - [Stepper · Going back to a finished step](https://aureauds.dev/pattern-stepper-going-back-to-a-finished-step.md): `onClick` turns a step into a real button — but only where going back is allowed. Leaving the unreached steps inert is the point: a stepper whose every step is clickable is a tab list wearing the wrong clothes.
+- [Stepper · In a row, or one step under the other](https://aureauds.dev/pattern-stepper-in-a-row-or-one-step-under-the-other.md): `orientation="horizontal"` (the default) puts the steps in a row. `"vertical"` is for a side column where a row does not fit: at 150 wide the labels of a horizontal stepper run into each other. The dot stays on the start side, the label sits beside it and wraps if it must, and the line runs down between the dots — yellow up to the current step.
 - [Switch · Notification settings](https://aureauds.dev/pattern-switch-notification-settings.md): Flip and it is done. No Save button — that is what makes it a Switch and not a Checkbox.
 - [Switch · Feature with state](https://aureauds.dev/pattern-switch-feature-with-state.md): The switch sets it; a Status reports what the system did with it.
 - [Switch · Gated by plan](https://aureauds.dev/pattern-switch-gated-by-plan.md): Visible so the value is known, disabled so it cannot be flipped — with the reason next to it.
@@ -460,6 +461,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.70.0](https://aureauds.dev/release-v0-70-0.md): A vertical Stepper, reading modes on native, a panel that keeps its corners under the top bar, and a set of measurement fixes.
 - [v0.69.0](https://aureauds.dev/release-v0-69-0.md): Arrows point the way the text reads in right-to-left layouts, on the web and on native.
 - [v0.68.0](https://aureauds.dev/release-v0-68-0.md): A Field now names the field inside NumberField, OTPField, InputGroup and FileInput, and reads its error message.
 - [v0.67.0](https://aureauds.dev/release-v0-67-0.md): NumberField, OTPField, InputGroup and FileInput take aria-invalid, and a Field with an error now reaches them.

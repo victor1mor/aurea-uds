@@ -106,6 +106,18 @@
       "description": "Tells the engine which way the inline axis runs, so popup sides and arrow keys mirror, and the arrows that point one way (breadcrumb, pagination, carousel, the row and submenu chevrons) point the way the text reads. On the web the CSS mirrors on its own through logical properties — but you still have to put dir=\"rtl\" on your <html>; the provider does not touch the DOM. On native, unset means the device setting (I18nManager.isRTL); the system already mirrors the layout, and the provider mirrors the NavList and submenu chevrons."
     },
     {
+      "name": "highContrast",
+      "type": "boolean",
+      "default": "false",
+      "description": "Native only (on the web it is the AppShell's highContrast). The high-contrast reading mode for the whole app: everything the system's increase-contrast setting does, plus darker supporting text, an outline on cards and buttons, and links always underlined. A provider inside another without it keeps the outer one."
+    },
+    {
+      "name": "textSize",
+      "type": "\"md\" | \"lg\"",
+      "default": "\"md\"",
+      "description": "Native only (on the web it is the AppShell's textSize). lg is the large-text reading mode: every type step from xs to 2xl goes up 2. Control heights stay, because the native medium control already has the touch target. A provider inside another without it keeps the outer one."
+    },
+    {
       "name": "portalContainer",
       "type": "HTMLElement | null",
       "default": "—",

@@ -21,7 +21,7 @@
 import * as React from "react";
 import {Text as TextRN, type TextProps as TextPropsRN} from "react-native";
 import {canto, criarFolha, letraDoAmarelo, letraDoToken} from "./estilos.js";
-import {useAureaTokens, useSobreAMarca} from "./theme.js";
+import {useAltoContraste, useAureaTokens, useSobreAMarca} from "./theme.js";
 import type {AureaTokens} from "./tokens.js";
 
 /** A escala dos tokens (`--text-xs` … `--text-5xl`). `md` é o corpo, como no `body` da web. */
@@ -177,6 +177,9 @@ export function Text({
   const t = useAureaTokens();
   const s = folha(t);
   const sobreAMarca = useSobreAMarca();
+  // O alto contraste do app (0-D): o link sublinhado na cor da letra (abaixo).
+  const alto = useAltoContraste();
+  const sublinhadoDoAlto = alto ? {textDecorationLine: "underline" as const} : null;
   // Sem `type`, os padrões de sempre (`md`, 400, `ui`, `normal`) — nada muda para quem já usa.
   const papel = type ? PAPEL[type] : undefined;
   const weight = pesoPedido ?? papel?.peso ?? 400;
@@ -232,7 +235,8 @@ export function Text({
     const {children, ...resto} = rest;
     if (t.theme === "light") {
       return (
-        <TextRN style={[s[tone], proprio, style]} {...resto}>
+        // O ALTO CONTRASTE do app (0-D, ADR-0090, a forma "C"): o link SEMPRE sublinhado, na cor da letra, como a web.
+        <TextRN style={[s[tone], proprio, sublinhadoDoAlto, style]} {...resto}>
           <TextRN style={{backgroundColor: t.color.linkMark}}>{children}</TextRN>
         </TextRN>
       );

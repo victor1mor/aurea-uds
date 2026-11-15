@@ -1205,9 +1205,13 @@ no git.
   04/11/2026, a `0.55.0`); e o link no laranja do botão, e o anel do claro no `#ff6600` (herdava o amarelo da Gold; a
   varredura das 13 marcas achou; conferido contra a base do sistema de origem, o Victor: *"Como na origem"*, 04/11/2026,
   a `0.55.0`). ⚠ **O sistema de origem da Ember valida as cores dela** — a base dele (`:root` e `.dark`), não a preferência
-  de aparência da conta, que ele escreve por cima da página. **Tudo que alcança a Ember — ou que fica fora dela — se pergunta ao Victor ANTES** (a mesma ordem,
-  01/11/2026: *"me pergunte antes o que fazer o que não fazer também na ember"*). Quem cobra: `tests/visual/ember-congelada.spec.ts` (contra a
-  0.44.0).
+  de aparência da conta, que ele escreve por cima da página. ~~**Tudo que alcança a Ember — ou que fica fora dela — se pergunta ao Victor ANTES** (a mesma ordem,
+  01/11/2026: *"me pergunte antes o que fazer o que não fazer também na ember"*).~~ → **A EMBER SEMPRE RECEBE O QUE O LOTE
+  FAZ, E O VICTOR APROVA OLHANDO A DELA** (ordem do Victor, 14/11/2026: *"mude essa regra sempre faça da amber tambem porem eu
+  precsio aprovar"*): toda mudança nova vale também para a Ember, sem a exclusão `:not([data-brand="ember"] …)`, e a bancada
+  do lote traz as imagens da Ember ao lado das outras, para ele aprovar. Continua: as CORES dela são as do sistema de origem
+  (o item abaixo), e decisão antiga que a deixou de fora não se reabre sozinha (a linha da tabela, *"Pode, sem a Ember"*,
+  05/11/2026). Quem cobra: `tests/visual/ember-congelada.spec.ts` (contra a 0.44.0).
   - **E é a ÚNICA marca fechada a mudança de cor** (ordem do Victor, 29/10/2026: *"Ember deve sempre ter a cor original
     onde foi criado no Lory pois essa paleta pertence so meu trabalho a a unica que não esta aberta a mudança de cor"*):
     as cores dela são as do sistema onde a `lory` nasceu — o laranja base `#f76500` e os neutros de lá. Ela não segue
@@ -1389,6 +1393,15 @@ sessão não chega à outra; este arquivo chega. O que já estava nas seções a
 - **Tudo se anota no documento de achados** — pedido, decisão, achado, com a prova. O Victor não cola
   texto entre sessões; nunca entregar "texto para colar". No fim da resposta, dizer ONDE ficou escrito.
 - **Decisão dada é só registrar:** anotar e parar. Não emendar "baixo? instalo? guardo onde?".
+- **NADA VAI AO VICTOR COMO PERGUNTA SE ELE JÁ DECIDIU** (o erro de 14/11/2026: quatro sessões de preparo perguntaram de
+  novo o que ele tinha aprovado em 19/10 e decidido em 05/11, porque o plano e o cruzamento de 05/11 envelheceram — *"pq
+  estamos editando itens que ja estavão pronto????????"*). O status de cada item de antes da `1.0` mora num lugar só, o
+  `STATUS-1.0.md`, na pasta do documento de achados (fora do repositório). **Antes de qualquer pergunta** — sua ou de uma
+  sessão que você abrir —, rode `python "C:\Problemas aurea\ferramentas-da-sessao\conferir-status.py" <ID>`: só o que
+  responde "PODE PERGUNTAR" vira pergunta. **No fim de todo lote**, o mesmo roteiro sem argumento (cruza o status com o
+  plano, o documento de achados e o `CHANGELOG.md`, e reprova o item decidido que ainda aparece como pergunta). Status
+  que mudar (decisão, versão publicada) muda no `STATUS-1.0.md` na mesma hora. E o brief de toda sessão de preparo leva
+  essa regra.
 
 **Como a fila anda**
 - ~~**Rodadas maiores** (ordem de 10/10/2026): juntar mais componentes em cada versão.~~ → **Lotes de até 3 horas**

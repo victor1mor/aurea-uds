@@ -196,7 +196,7 @@ export function useGrupoDeCampo() {
  * grade de `12rem`; num telefone de 360dp isso deixa o controle com menos de metade da largura.
  * Volta quando houver alvo de tela larga — tablet é outro lote.
  */
-export function Field({ label, hint, error, disabled, size = "md", children, style, ...rest }) {
+export function Field({ label, hint, error, disabled, size = "md", required, children, style, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const invalido = error != null && error !== false;
@@ -207,7 +207,7 @@ export function Field({ label, hint, error, disabled, size = "md", children, sty
         hint: invalido && typeof error === "string" ? error : typeof hint === "string" ? hint : undefined,
         invalido, disabled, size,
     }), [label, hint, error, invalido, disabled, size]);
-    return (_jsx(CampoCtx.Provider, { value: ctx, children: _jsxs(View, { style: [s.campo, style], ...rest, children: [label != null && _jsx(Label, { children: invalido && typeof label === "string" && !(React.isValidElement(children) && children.type === Switch)
+    return (_jsx(CampoCtx.Provider, { value: ctx, children: _jsxs(View, { style: [s.campo, style], ...rest, children: [label != null && _jsx(Label, { trailing: required ? (_jsx(Text, { size: "sm", weight: 500, tone: "danger", style: { marginStart: t.size.space05 }, accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants", children: "*" })) : undefined, children: invalido && typeof label === "string" && !(React.isValidElement(children) && children.type === Switch)
                         ? _jsx(Text, { size: "sm", weight: 500, tone: "danger", children: label }) : label }), children, hint != null && !invalido && (typeof hint === "string"
                     ? _jsx(Text, { size: "xs", tone: "muted", children: hint }) : hint), invalido && (typeof error === "string"
                     ? _jsx(Text, { size: "xs", tone: "danger", children: error }) : error)] }) }));
@@ -231,7 +231,7 @@ export function Label({ children, trailing, style, ...rest }) {
  * (`aurea.css:686`); **não há ponteiro no telefone**. O foco continua existindo e é o que marca o
  * campo ativo.
  */
-export function Input({ value, defaultValue, onChangeText, placeholder, disabled, size, keyboardType, secureTextEntry, autoCapitalize, formatOnBlur, onBlur, onFocus, multiline, style, testID, 
+export function Input({ value, defaultValue, onChangeText, placeholder, disabled, size, keyboardType, secureTextEntry, autoCapitalize, formatOnBlur, onBlur, onFocus, multiline, variant, invalid, style, testID, 
 // ⚠ O `...rest` NÃO é enfeite: sem ele, toda prop do `TextInput` que a lista acima não nomeia
 // era descartada em silêncio — `autoComplete`, `textContentType`, `autoCorrect`,
 // `returnKeyType`, `onSubmitEditing`, `maxLength`. Defeito publicado na `0.8.2`.
@@ -246,6 +246,7 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
     const grupo = useGrupoDeCampo();
     const tam = size ?? grupo?.size ?? campo?.size ?? "md";
     const inativo = disabled ?? grupo?.disabled ?? campo?.disabled;
+    const invalido = invalid ?? campo?.invalido;
     const [focado, setFocado] = React.useState(false);
     return (_jsx(TextInput
     // O resto vem PRIMEIRO de propósito: o que a Aurea calcula (respiro, cor, nome do `Field`,
@@ -266,13 +267,17 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
         }, 
         // O nome e a dica vêm do `Field` — ver o bloco acima sobre por que a ligação da web não
         // atravessa. Sem isto, o campo é um nó anônimo para o leitor de tela.
-        accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, ...estadoAcessivel({ disabled: !!inativo }), "aria-invalid": campo?.invalido, style: [
+        accessibilityLabel: campo?.label, accessibilityHint: campo?.hint, ...estadoAcessivel({ disabled: !!inativo }), "aria-invalid": invalido, 
+        // A cor do texto escolhido (14/11/2026, o "Input do nativo (d)"): a mesma do `::selection` da web.
+        selectionColor: t.color.selection, style: [
             // DENTRO DE UM GRUPO o campo não desenha caixa nenhuma: borda, fundo, altura, respiro,
             // inválido, foco e desabilitado passam a ser do grupo. Manter qualquer um dos dois
             // desenhando daria borda dentro de borda — que é exatamente o defeito que o `.input-group
             // > .input` da web zera à mão (`aurea.css:751`).
             grupo ? s.campoNoGrupo : s.caixa,
             !grupo && fundoDeCampo(t, naSuperficie, maisContraste),
+            // `secondary`: o cinza do `.input-secondary` da web, sem a sombra do campo branco.
+            !grupo && variant === "secondary" && { backgroundColor: t.color.secondary, boxShadow: [] },
             grupo
                 ? { fontSize: fonteDoTamanho(t, tam), fontFamily: t.font.ui[400], color: t.color.foreground }
                 : { height: alturaDoTamanho(t, tam), paddingHorizontal: respiroDoTamanho(t, tam),
@@ -293,12 +298,12 @@ export function Input({ value, defaultValue, onChangeText, placeholder, disabled
                     // deixa o `EditText` no topo. `center` é o que reproduz a web — e o `Textarea` o
                     // sobrescreve para `top`, que é o que uma caixa alta faz nos dois lados.
                     paddingVertical: 0, textAlignVertical: "center" },
-            !grupo && campo?.invalido && s.invalido,
+            !grupo && invalido && s.invalido,
             // O foco é o único estado que sobra do trio da web (hover/focus/active), e ele importa
             // mais aqui: no telefone é a única pista de qual campo o teclado está alimentando.
             // Com 2 de espessura, como o anel da web (0.55.0); o recheio desconta o pixel a mais — `bordaDeFoco`.
             !grupo && focado && bordaDeFoco(t, maisContraste, respiroDoTamanho(t, tam)),
-            !grupo && focado && campo?.invalido && s.invalido, // ADR-0094: focado, o erro continua vermelho (como o anel vermelho da web).
+            !grupo && focado && invalido && s.invalido, // ADR-0094: focado, o erro continua vermelho (como o anel vermelho da web).
             // 🔴 DENTRO DO CARTÃO DA MARCA A TINTA VENCE TUDO — inclusive inválido e foco, e isso é
             // medição, não preferência (os números estão no `usePeleSobreAMarca`): sobre o amarelo a
             // borda de inválido mede **1,86** e o `focusStrong` do tema ESCURO mede **1,00**, porque
@@ -652,7 +657,7 @@ export function SegmentedControl({ items, value, onChange, label, disabled, just
  * arquivo, não do pacote — e é função, não componente, para não contar como peça nova. ⚠ Pede o
  * `check` no registro de ícones do app; sem ele, o aviso de desenvolvimento do `Icon` diz o import.
  */
-export const indicadorDaEscolhida = (t) => (_jsx(View, { style: folha(t).indicador, children: _jsx(Icon, { name: "check", size: "sm", color: t.color.primary }) }));
+export const indicadorDaEscolhida = (t) => (_jsx(View, { style: folha(t).indicador, children: _jsx(Icon, { name: "check", size: "sm", color: t.color.mutedForeground }) }));
 /**
  * A escolha de um de muitos.
  *

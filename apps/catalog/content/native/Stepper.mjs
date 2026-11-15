@@ -25,6 +25,7 @@ export default {
     label: "Accessible name of the whole list. Without it, the provider's stepperLabel sentence.",
     doneIcon: "The glyph of a done step, check by default. Register it, or pass false to show the number.",
     errorIcon: "The glyph of a step with an error, x-circle by default. Register it, or pass false to show the number.",
+    orientation: "horizontal (default) or vertical. vertical puts one step under the other, for a narrow column: the dot on the start side, the label beside it, and the line running down between the dots.",
   },
   examples: [
     {
@@ -85,6 +86,28 @@ export default {
           {label: "Upload", state: "done"}, {label: "Check", state: "error"}, {label: "Publish", optional: "Optional"}]}),
         h(Stepper, {doneIcon: false, errorIcon: false, items: [
           {label: "Upload", state: "done"}, {label: "Check", state: "error"}, {label: "Publish"}]})),
+    },
+    {
+      title: "Orientation",
+      description: "horizontal (the default) puts the steps in a row; vertical puts one under the other, for a narrow column where a row does not fit. The line between the dots is yellow up to the current step.",
+      code: `<Stepper label="Publish" orientation="horizontal" items={[
+  {label: "Account", state: "done"},
+  {label: "Content", state: "active"},
+  {label: "Review"},
+]} />
+<Stepper label="Publish" orientation="vertical" items={[
+  {label: "Account", state: "done"},
+  {label: "Profile", state: "done"},
+  {label: "Content", state: "active"},
+  {label: "Schedule"},
+  {label: "Review", optional: "Optional"},
+]} />`,
+      render: () => h("div", {style: {...largo, display: "grid", gap: "var(--space-6)"}},
+        h(Stepper, {label: "Publish", orientation: "horizontal", items: [
+          {label: "Account", state: "done"}, {label: "Content", state: "active"}, {label: "Review"}]}),
+        h("div", {style: {width: "150px"}}, h(Stepper, {label: "Publish", orientation: "vertical", items: [
+          {label: "Account", state: "done"}, {label: "Profile", state: "done"}, {label: "Content", state: "active"},
+          {label: "Schedule"}, {label: "Review", optional: "Optional"}]}))),
     },
   ],
 };

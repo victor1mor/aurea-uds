@@ -111,7 +111,13 @@
       "name": "variant",
       "type": "primary | secondary",
       "default": "primary",
-      "description": "secondary is the neutral fill with no visible border, for a field inside a card."
+      "description": "secondary is the neutral fill with no visible border, for a field inside a card. On native too, with the same values: secondary is the grey field without the shadow."
+    },
+    {
+      "name": "invalid",
+      "type": "boolean",
+      "default": "the Field's",
+      "description": "Native only. Invalid on the field itself: false clears the error of the Field around it (the one field that is right in a group), true marks it without a Field. On the web, pass aria-invalid."
     }
   ]
 }
