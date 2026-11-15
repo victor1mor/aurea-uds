@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.70.0 (15/11/2026)
+
+- **A 0.70.0 publicada em 15/11/2026, entre 13:41 e 13:51** (Brasília, medido no npm), da junção do pedido #140
+  (`b9e17cf1`): o `released-surface.json` desse commit. O CHANGELOG ([0.70.0] publicada), o CLAUDE.md (a linha na tabela
+  e o item 67) e a release `v0.70.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.69.0 (14/11/2026)
 
 - **A 0.69.0 publicada em 14/11/2026, entre 13:49 e 13:58** (Brasília, medido no npm), da junção do pedido #138
@@ -328,6 +335,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.70.0] — 2026-11-14
+
+✅ **Publicada em 15/11/2026, entre 13:41 e 13:51 (Brasília, medido no npm: seis pacotes entre 13:41 e 13:42 e o `native`
+às 13:51), pelo terminal do Victor, da junção do pedido #140** (`b9e17cf1`).
 
 **O lote maior** (o Victor, 14/11/2026: *"eu quero mais, lote maior"*): o que ele aprovou olhando nas imagens de 14/11 e
 o que já estava aprovado e faltava construir, na web e no nativo. Cada item reprova no código da 0.69.0 e passa no novo.

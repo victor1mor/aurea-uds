@@ -228,6 +228,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.67.0` | O erro do `Field` chega às quatro peças que faltavam (web): `aria-invalid` no `NumberField`, no `OTPField`, no `InputGroup` e no `FileInput`, que ficam como os outros campos com erro — o fundo igual, a borda e o rótulo no vermelho da frase de erro; e um exemplo com erro de cada uma no site — pedido #133. **Publicada em 12/11/2026** (entre 15:08 e 15:21, Brasília, medido no npm), pelo terminal do Victor |
 | `0.68.0` | O `Field` dá o nome e a frase de erro ao campo do `NumberField`, do `OTPField`, do `InputGroup` e do `FileInput` (web): `aria-labelledby`, `aria-describedby` e `aria-invalid`, e o `Field` que nomeia o campo deixa de ser grupo; nada muda na tela — pedido #135. **Publicada em 13/11/2026** (entre 17:58 e 18:09, Brasília, medido no npm), pelo terminal do Victor |
 | `0.69.0` | As setas apontam para onde se lê na escrita da direita para a esquerda: `direction` no `AureaProvider` do nativo, e a seta que vira no `Breadcrumb`, na `Pagination`, no `Carousel`, na `NavList`, nos submenus, na `InterAgentMessage` e na `DataGrid` (web) e na `NavList` e no submenu do `DropdownMenu` (nativo) — pedido #138. **Publicada em 14/11/2026** (entre 13:49 e 13:58, Brasília, medido no npm), pelo terminal do Victor |
+| `0.70.0` | O lote maior: o `Stepper` em pé (`orientation`, web e nativo), os modos de leitura no `AureaProvider` do nativo (`highContrast`, `textSize`), o `Input` e o `Field` do nativo como os da web, o painel do `AppShell` que não se corta sob a barra rente (S-12), o arco do `Card accent` no nativo, a marca do escolhido no fim da linha (D4), a linha das `Tabs` `secondary` e entre os grupos da `ListBox` e os acertos de medida — pedido #140. **Publicada em 15/11/2026** (entre 13:41 e 13:51, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -971,6 +972,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    lê o catálogo MONTADO — depois de mudar exemplo, `pnpm build:catalog` e `pnpm build:live` antes de rodar.
    **Publicada em 14/11/2026** (entre 13:49 e 13:58, Brasília, medido no npm), pelo terminal do Victor, da junção do
    pedido #138. O registro entrou no lote seguinte (o 079, só de registro, sem versão).
+
+67. **`0.70.0`, o lote maior, feita em 14 e 15/11/2026** (*"eu quero mais, lote maior"*; a bancada, *"pode"*, e a Ember,
+   *"pode, aprovado a ember"*) — o `Stepper` em pé (PV-08), os modos de leitura e o campo da web no nativo (0-D, 0-E),
+   o painel arredondado sob a barra rente (S-12), o arco do traço no nativo (PV-12), a tabela do `Prose` que rola por
+   dentro, a busca na altura do campo, o separador da `Toolbar`, o canto do item da `ListBox`, as duas linhas que voltam
+   (as `Tabs` `secondary` e os grupos da `ListBox`), o D4, o 2-B e o `color-scheme` de cada tema. ⚠ **A regra nova:** a
+   Ember SEMPRE recebe o que o lote faz, e o Victor aprova olhando a dela. ⚠ **As lições:** (1) a varredura "nenhuma peça
+   desenha linha" da CI achou as linhas aprovadas sem nome — no nativo, a linha aprovada leva uma marca só do navegador
+   (`dataSet`, que vira `data-aurea-*` no `react-native-web` e o aparelho ignora) e a varredura a reconhece pela marca;
+   (2) com o Victor dizendo que vai desligar o notebook, nada roda nele depois, nem por aviso da CI. **Publicada em
+   15/11/2026** (entre 13:41 e 13:51, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #140. O
+   registro entrou no lote seguinte (o 081, só de registro, sem versão).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
