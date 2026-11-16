@@ -230,6 +230,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.69.0` | As setas apontam para onde se lê na escrita da direita para a esquerda: `direction` no `AureaProvider` do nativo, e a seta que vira no `Breadcrumb`, na `Pagination`, no `Carousel`, na `NavList`, nos submenus, na `InterAgentMessage` e na `DataGrid` (web) e na `NavList` e no submenu do `DropdownMenu` (nativo) — pedido #138. **Publicada em 14/11/2026** (entre 13:49 e 13:58, Brasília, medido no npm), pelo terminal do Victor |
 | `0.70.0` | O lote maior: o `Stepper` em pé (`orientation`, web e nativo), os modos de leitura no `AureaProvider` do nativo (`highContrast`, `textSize`), o `Input` e o `Field` do nativo como os da web, o painel do `AppShell` que não se corta sob a barra rente (S-12), o arco do `Card accent` no nativo, a marca do escolhido no fim da linha (D4), a linha das `Tabs` `secondary` e entre os grupos da `ListBox` e os acertos de medida — pedido #140. **Publicada em 15/11/2026** (entre 13:41 e 13:51, Brasília, medido no npm), pelo terminal do Victor |
 | `0.71.0` | Os padrões da referência: o `Button` sem tom é o principal (o botão de ligar continua o cinza), o `Alert` sem tom é o neutro (`neutral`), o `Drawer` da web sai de baixo, a `ConfirmDialog` ignora o Esc, e as `Tabs` `secondary` enchem a fila — o D3 e o 2-C b, pedido #142. **Publicada em 16/11/2026** (entre 07:09 e 07:20, Brasília, medido no npm), pelo terminal do Victor |
+| `0.72.0` | O tema do sistema: a página sem `data-theme` segue o claro ou o escuro do computador (`prefers-color-scheme`), e fica no claro quando ele não diz — CSS puro, pelas cópias da montagem; o tema alternado parte do sistema; no nativo, sem o tema do aparelho, o `AureaProvider` fica no claro — o D16, pedido #144. **Publicada em 16/11/2026** (entre 15:35 e 15:47, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -997,6 +998,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    `live.js` antigo e mostrou o defeito já consertado — medir com a página recarregada sem o cache. **Publicada em
    16/11/2026** (entre 07:09 e 07:20, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #142. O
    registro entrou no lote seguinte (o 083, só de registro, sem versão).
+
+69. **`0.72.0`, o tema do sistema, feita em 16/11/2026** (o D16; a bancada, *"Pode"*) — a página sem `data-theme` no `<html>`
+   segue o `prefers-color-scheme` e fica no claro quando o sistema não diz: na montagem, cada regra de tema ganha uma cópia
+   para a raiz sem atributo (`scripts/tema-implicito.mjs`, nos tokens e no core), com o mesmo peso da original; o tema
+   alternado parte do sistema; o nativo sem o tema do aparelho fica no claro. ⚠ **A regra nova:** escolher o item NÃO é
+   aprovar, e item aprovado no plano não dispensa a bancada — a sessão começou a construir antes do "pode" (*"aprovei
+   não"*, *"preciso ver antes"*); monta-se a bancada, para e espera. ⚠ **As lições:** (1) o CSS publicado deixou de ser
+   cópia da fonte — o check 6 do validador refaz a folha montada chamando o mesmo conversor; (2) a moldura (`iframe`) do
+   Chromium não herda o `color-scheme` para o `prefers-color-scheme` — a bancada simulou a pergunta no CSS; (3) no
+   PowerShell, o texto do commit não passa pela entrada (`git commit -F -`) — vai num arquivo. **Publicada em 16/11/2026**
+   (entre 15:35 e 15:47, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #144. O registro entrou no
+   lote seguinte (o 085, só de registro, sem versão).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

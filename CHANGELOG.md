@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.72.0 (16/11/2026)
+
+- **A 0.72.0 publicada em 16/11/2026, entre 15:35 e 15:47** (Brasília, medido no npm), da junção do pedido #144
+  (`f7158de8`): o `released-surface.json` desse commit. O CHANGELOG ([0.72.0] publicada), o CLAUDE.md (a linha na tabela
+  e o item 69) e a release `v0.72.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.71.0 (16/11/2026)
 
 - **A 0.71.0 publicada em 16/11/2026, entre 07:09 e 07:20** (Brasília, medido no npm), da junção do pedido #142
@@ -342,6 +349,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.72.0] — 2026-11-16
+
+✅ **Publicada em 16/11/2026, entre 15:35 e 15:47 (Brasília, medido no npm: seis pacotes entre 15:35 e 15:36 e o `native`
+às 15:47), pelo terminal do Victor, da junção do pedido #144** (`f7158de8`).
 
 **O tema do sistema** — o D16 (*"Aceito todas as recomendações do plano, de D1 a D20"*, 19/10/2026: *"o tema do sistema;
 claro quando ele não diz"*), a parte que faltava depois do `color-scheme` da 0.70.0. Aprovado na bancada, com a página sem
