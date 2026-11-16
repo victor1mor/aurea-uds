@@ -64,11 +64,16 @@ export function ConfirmDialog({ open, title, description, confirmLabel, cancelLa
     const s = useAureaStrings();
     const portal = usePortalContainer();
     const seguro = React.useRef(null);
-    return _jsx(BaseAlertDialog.Root, { open: open, onOpenChange: o => { if (!o)
-            onCancel(); }, children: _jsxs(BaseAlertDialog.Portal, { container: portal, children: [_jsx(BaseAlertDialog.Backdrop, { className: "dialog-backdrop" }), _jsxs(BaseAlertDialog.Popup, { className: "dialog dialog-confirm", initialFocus: seguro, "data-placement": placement, children: [_jsxs("header", { className: "dialog-header", children: [icon && _jsx(IconeDaJanela, { icon: icon, tone: iconTone ?? (destructive ? "danger" : "neutral") }), _jsx(BaseAlertDialog.Title, { render: _jsx("h2", {}), className: "dialog-heading", children: title })] }), _jsx(BaseAlertDialog.Description, { className: "dialog-body", children: description }), _jsxs("footer", { className: "dialog-footer", children: [_jsx(Button, { ref: seguro, variant: "tertiary", onClick: onCancel, children: cancelLabel ?? s.confirmCancel }), _jsx(Button, { variant: destructive ? "danger" : "primary", onClick: onConfirm, children: confirmLabel ?? s.confirmProceed })] })] })] }) });
+    // 0.71.0 (o D3): o Esc NÃO fecha, como na referência (`isKeyboardDismissDisabled`). A decisão sai só pelos dois botões;
+    // o Esc por reflexo não responde por quem usa. `cancel()` diz ao motor que o evento não é dele.
+    return _jsx(BaseAlertDialog.Root, { open: open, onOpenChange: (o, d) => { if (o)
+            return; if (d.reason === "escape-key") {
+            d.cancel();
+            return;
+        } onCancel(); }, children: _jsxs(BaseAlertDialog.Portal, { container: portal, children: [_jsx(BaseAlertDialog.Backdrop, { className: "dialog-backdrop" }), _jsxs(BaseAlertDialog.Popup, { className: "dialog dialog-confirm", initialFocus: seguro, "data-placement": placement, children: [_jsxs("header", { className: "dialog-header", children: [icon && _jsx(IconeDaJanela, { icon: icon, tone: iconTone ?? (destructive ? "danger" : "neutral") }), _jsx(BaseAlertDialog.Title, { render: _jsx("h2", {}), className: "dialog-heading", children: title })] }), _jsx(BaseAlertDialog.Description, { className: "dialog-body", children: description }), _jsxs("footer", { className: "dialog-footer", children: [_jsx(Button, { ref: seguro, variant: "tertiary", onClick: onCancel, children: cancelLabel ?? s.confirmCancel }), _jsx(Button, { variant: destructive ? "danger" : "primary", onClick: onConfirm, children: confirmLabel ?? s.confirmProceed })] })] })] }) });
 }
 const ARRASTO_DO_LADO = { left: "left", right: "right", top: "up", bottom: "down" };
-export function Drawer({ open, title, children, footer, onClose, side = "right" }) {
+export function Drawer({ open, title, children, footer, onClose, side = "bottom" }) {
     const portal = usePortalContainer();
     const alca = _jsx("div", { className: "drawer-handle", "aria-hidden": "true" });
     return _jsx(BaseDrawer.Root, { open: open, onOpenChange: o => { if (!o)

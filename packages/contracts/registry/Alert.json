@@ -10,6 +10,7 @@
     "native": "stable"
   },
   "variants": [
+    "neutral",
     "info",
     "success",
     "warning",
@@ -68,9 +69,9 @@
   "props": [
     {
       "name": "variant",
-      "type": "info | success | warning | danger | accent",
-      "default": "info",
-      "description": "Tone and, with it, the live region: `danger` renders role=\"alert\", which interrupts the screen reader; the others render role=\"status\", which waits for a pause. `accent` is the reference library's accent, in Aurea's link colour. The state colour paints the icon and the title, on the card surface. Colour is never the only signal — what carries the meaning is the text."
+      "type": "neutral | info | success | warning | danger | accent",
+      "default": "neutral",
+      "description": "Tone and, with it, the live region: `danger` renders role=\"alert\", which interrupts the screen reader; the others render role=\"status\", which waits for a pause. `neutral` (the default, as in the reference library) paints the icon and the title in the text colour. `accent` is the reference library's accent, in Aurea's link colour. The state colour paints the icon and the title, on the card surface. Colour is never the only signal — what carries the meaning is the text."
     },
     {
       "name": "title",

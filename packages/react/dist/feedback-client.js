@@ -37,7 +37,7 @@ export function Status({ variant, state, children, className, ...props }) { cons
 // caso é específico. O Banner NÃO ganha o mesmo padrão de propósito: ele não existe na
 // referência e o aviso de largura de página nem sempre quer glifo — a assimetria é decidida,
 // não herdada.
-const ICONE_DA_VARIANTE = { info: "info",
+const ICONE_DA_VARIANTE = { neutral: "info", info: "info",
     success: "check-circle", warning: "warning", danger: "x-circle", accent: "info" };
 // A grade do `.alert` tem TRÊS trilhas (auto 1fr auto): ícone, corpo, ação. Uma versão anterior
 // emitia o título solto na trilha 1 — a do ícone — e o corpo como item anônimo. Medido no
@@ -57,7 +57,7 @@ const ICONE_DA_VARIANTE = { info: "info",
 // para baixo do texto, na mesma coluna (a referência repete o botão; aqui ele só muda de lugar).
 // `appearance="soft"` (o site B, 02/11/2026, a "B" na imagem): o fundo da cor do estado a 14%, sem sombra, e o texto a 16
 // na cor do texto. Sem ele (`"card"`), o cartão de sempre.
-export function Alert({ variant, state, title, icon, onDismiss, action, appearance, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? stateSeverity(state) : "info"); return _jsxs("div", { className: cx("alert", `alert-${v}`, appearance === "soft" && "alert-soft", action != null && "alert-has-action", className), role: v === "danger" ? "alert" : "status", "data-state": state, ...props, children: [_jsx(Icon, { name: icon ?? proprio(ICONE_DA_VARIANTE, v) ?? "info", weight: icon ? undefined : "fill" }), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? proprio(s.universalState, state) : null)] }), action != null && _jsx("div", { className: "alert-action", children: action }), onDismiss ? _jsx(CloseButton, { onClick: onDismiss }) : _jsx("span", {})] }); }
+export function Alert({ variant, state, title, icon, onDismiss, action, appearance, children, className, ...props }) { const s = useAureaStrings(); const v = variant ?? (state ? stateSeverity(state) : "neutral"); return _jsxs("div", { className: cx("alert", `alert-${v}`, appearance === "soft" && "alert-soft", action != null && "alert-has-action", className), role: v === "danger" ? "alert" : "status", "data-state": state, ...props, children: [_jsx(Icon, { name: icon ?? proprio(ICONE_DA_VARIANTE, v) ?? "info", weight: icon ? undefined : "fill" }), _jsxs("div", { children: [title && _jsx("strong", { children: title }), children ?? (state ? proprio(s.universalState, state) : null)] }), action != null && _jsx("div", { className: "alert-action", children: action }), onDismiss ? _jsx(CloseButton, { onClick: onDismiss }) : _jsx("span", {})] }); }
 export function Banner(props) {
     // O hook ANTES do `return` do `consent` (auditoria externa, 05/11/2026): trocar a variante entre renderizações mudava a
     // ordem dos hooks.
@@ -127,7 +127,7 @@ export function DataState({ catchErrors, onCatch, ...props }) {
     const s = useAureaStrings();
     if (!catchErrors)
         return _jsx(CorpoDoDataState, { ...props });
-    return _jsx(BarreiraDeErro, { onCatch: onCatch, falha: tentar => _jsxs("div", { className: cx("data-state", props.className), "data-state": "error", children: [_jsx(Alert, { variant: "danger", children: props.message ?? s.dataCrashed }), _jsx("div", { children: _jsx(Button, { size: "sm", onClick: tentar, children: s.dataRetry }) })] }), children: _jsx(CorpoDoDataState, { ...props }) });
+    return _jsx(BarreiraDeErro, { onCatch: onCatch, falha: tentar => _jsxs("div", { className: cx("data-state", props.className), "data-state": "error", children: [_jsx(Alert, { variant: "danger", children: props.message ?? s.dataCrashed }), _jsx("div", { children: _jsx(Button, { variant: "tertiary", size: "sm", onClick: tentar, children: s.dataRetry }) })] }), children: _jsx(CorpoDoDataState, { ...props }) });
 }
 function CorpoDoDataState({ state, message, skeleton, emptyTitle, emptyIcon, action, children, className, ...props }) {
     const s = useAureaStrings();

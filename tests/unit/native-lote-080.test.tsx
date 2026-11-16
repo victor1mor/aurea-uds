@@ -153,7 +153,7 @@ describe("0-D e 0-E · os modos de leitura no AureaProvider do nativo", () => {
     expect(plano(__instancias("View").findLast((p) => p.testID === "c")?.style).borderColor).toBe(CLARO.color.inputStrong);
     // as marcas do navegador que a varredura do site reconhece: o contorno do cartão e o aro do botão
     expect(__instancias("View").findLast((p) => p.testID === "c")?.dataSet).toEqual({aureaContrast: "high"});
-    render(<AureaProvider theme="light" highContrast><Button testID="b" onPress={() => {}}>Salvar</Button></AureaProvider>);
+    render(<AureaProvider theme="light" highContrast><Button testID="b" tone="neutral" onPress={() => {}}>Salvar</Button></AureaProvider>);
     // o aro vai na caixa do botão (a mesma do brilho e do fio, ADR-0086)
     const aros = __instancias("View").map((p) => plano(p.style)).filter((s) => JSON.stringify(s.boxShadow ?? []).includes("\"inset\":true"));
     expect(aros.length, "o botão ganha o aro por dentro").toBeGreaterThan(0);

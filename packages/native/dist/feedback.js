@@ -279,6 +279,7 @@ export function Progress({ value, label, detail, tone = "brand", style, testID }
 }
 /** Mesmos quatro glifos do `feedback-client.tsx:43`. */
 export const ICONE_DA_VARIANTE = {
+    neutral: "info",
     info: "info",
     success: "check-circle",
     warning: "warning",
@@ -307,18 +308,19 @@ accessibilityLabel, accessibilityHint, ...rest }) {
     const t = useAureaTokens();
     const s = folha(t);
     const strings = useAureaStrings();
-    const v = variant ?? (state ? gravidadeDoEstado(state) : "info");
+    const v = variant ?? (state ? gravidadeDoEstado(state) : "neutral");
     const corDoIcone = v === "success" ? (t.color.success400 ?? t.color.success)
         : v === "warning" ? (t.color.warning400 ?? t.color.warning)
             : v === "danger" ? (t.color.danger400 ?? t.color.destructive)
-                : (t.color.info400 ?? t.color.info);
+                : v === "neutral" ? t.color.foreground
+                    : (t.color.info400 ?? t.color.info);
     return (_jsxs(View
     // Android: a região viva é o que faz o leitor falar sem foco, e ela cobre a moldura
     // inteira de propósito — o que muda é o conteúdo, e o "X" some junto quando o aviso fecha.
     , { 
         // Android: a região viva é o que faz o leitor falar sem foco, e ela cobre a moldura
         // inteira de propósito — o que muda é o conteúdo, e o "X" some junto quando o aviso fecha.
-        accessibilityLiveRegion: v === "danger" ? "assertive" : "polite", style: [s.alerta, style], ...rest, children: [_jsxs(View, { accessible: true, accessibilityLabel: accessibilityLabel, accessibilityHint: accessibilityHint, ...(v === "danger" ? { accessibilityRole: "alert" } : null), style: s.grupoDoAlerta, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], size: "md", color: corDoIcone, weight: icon ? undefined : "fill" }), _jsxs(View, { style: s.corpoDoAlerta, children: [title != null && _jsx(Text, { size: "base", weight: 500, tone: v, children: title }), children != null
+        accessibilityLiveRegion: v === "danger" ? "assertive" : "polite", style: [s.alerta, style], ...rest, children: [_jsxs(View, { accessible: true, accessibilityLabel: accessibilityLabel, accessibilityHint: accessibilityHint, ...(v === "danger" ? { accessibilityRole: "alert" } : null), style: s.grupoDoAlerta, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], size: "md", color: corDoIcone, weight: icon ? undefined : "fill" }), _jsxs(View, { style: s.corpoDoAlerta, children: [title != null && _jsx(Text, { size: "base", weight: 500, tone: v === "neutral" ? undefined : v, children: title }), children != null
                                 ? (typeof children === "string" ? _jsx(Text, { size: "xs", tone: "muted", children: children }) : children)
                                 : state ? _jsx(Text, { size: "xs", tone: "muted", children: strings.universalState[state] }) : null] })] }), onDismiss ? _jsx(CloseButton, { label: strings.close, onPress: onDismiss }) : null] }));
 }
@@ -366,7 +368,7 @@ export function DataState({ catchErrors, onCatch, ...props }) {
     const strings = useAureaStrings();
     if (!catchErrors)
         return _jsx(CorpoDoDataState, { ...props });
-    return (_jsx(BarreiraDeErro, { onCatch: onCatch, falha: (tentar) => (_jsxs(View, { style: [s.regiao, props.style], children: [_jsx(Alert, { variant: "danger", children: props.message ?? strings.dataCrashed }), _jsx(View, { style: { alignSelf: "flex-start" }, children: _jsx(Button, { size: "sm", onPress: tentar, children: strings.dataRetry }) })] })), children: _jsx(CorpoDoDataState, { ...props }) }));
+    return (_jsx(BarreiraDeErro, { onCatch: onCatch, falha: (tentar) => (_jsxs(View, { style: [s.regiao, props.style], children: [_jsx(Alert, { variant: "danger", children: props.message ?? strings.dataCrashed }), _jsx(View, { style: { alignSelf: "flex-start" }, children: _jsx(Button, { tone: "neutral", size: "sm", onPress: tentar, children: strings.dataRetry }) })] })), children: _jsx(CorpoDoDataState, { ...props }) }));
 }
 function CorpoDoDataState({ state, message, skeleton, emptyTitle, emptyIcon, action, children, style, ...rest }) {
     const t = useAureaTokens();

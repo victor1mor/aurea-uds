@@ -341,8 +341,9 @@
     },
     "AureaAlertVariant": {
       "module": "feedback",
-      "raw": "\"info\" | \"success\" | \"warning\" | \"danger\"",
+      "raw": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
       "union": [
+        "neutral",
         "info",
         "success",
         "warning",
@@ -2260,7 +2261,7 @@
     },
     "AureaToastType": {
       "module": "toast",
-      "raw": "AureaAlertVariant",
+      "raw": "Exclude<AureaAlertVariant, \"neutral\">",
       "union": null
     },
     "AureaThemeName": {
@@ -4244,6 +4245,7 @@
               "optional": true,
               "type": "AureaAlertVariant",
               "values": [
+                "neutral",
                 "info",
                 "success",
                 "warning",

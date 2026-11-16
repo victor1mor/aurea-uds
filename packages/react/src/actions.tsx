@@ -20,7 +20,11 @@ import {Icon, useAureaTheme, type IconName, type AureaIcon} from "./system.js";
 // pixel — quem quiser os dois eixos usa `appearance` + `tone`.
 // 0.32.0 (decisão do Victor, 11/10/2026, "A"): os dois de fundo neutro da referência — `secondary`
 // com a letra da marca e `tertiary` com a letra normal. O `tertiary` é o `secondary` de até a 0.31.0 e
-// é o PADRÃO: o `Button` sem `variant` não muda de cara. Muda só quem escreveu `secondary`.
+// era o PADRÃO até a 0.70.0.
+// 0.71.0 (o D3, aprovado pelo Victor em 19/10/2026 — *"Aceito todas as recomendações do plano, de D1 a D20"*): o padrão é
+// o da referência, o `primary`. Vale só quando NADA é pedido (nem `variant`, nem `appearance`, nem `tone`); quem passa um
+// dos eixos continua com o outro no neutro/cheio de antes (o `tertiary`), para `appearance="ghost"` sozinho não virar
+// amarelo.
 export type ButtonVariant="primary"|"secondary"|"tertiary"|"outline"|"ghost"|"primary-outline"|"primary-ghost"|"danger"|"danger-outline"|"danger-ghost"|"link"|"link-primary"|"link-danger"|"nav"|"danger-soft";
 // APARÊNCIA: quanto peso a caixa tem. `nav` é aparência própria (item de navegação, cor
 // esmaecida em repouso), não um tom — por isso mora aqui e não ali.
@@ -64,6 +68,7 @@ const CLASSE_ANTIGA=new Map<string,ButtonVariant>(
  *  que se pede, nunca o que sobra quando a nossa paleta não dá conta. */
 export function buttonSkin(variant?:ButtonVariant,appearance?:ButtonAppearance,tone?:ButtonTone):string{
   // A variação sem eixo pedido é a própria classe — é o caminho do `secondary`, que não tem célula.
+  if(variant===undefined&&appearance===undefined&&tone===undefined)return "btn-primary";
   if(appearance===undefined&&tone===undefined&&!(variant&&SO_EIXOS.has(variant)))return `btn-${variant??"tertiary"}`;
   const [a0,t0]=EIXOS[variant??"tertiary"];
   const a=appearance??a0, t=tone??t0;
@@ -170,7 +175,9 @@ const atalhoAnunciado=(kbd:string|readonly string[]|undefined)=>typeof kbd==="st
   :kbd&&kbd.length>0?kbd.map(k=>NOME_DA_TECLA[k.toLowerCase()]??k).join("+"):undefined;
 export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant:variantPedida,appearance,tone,size:sizePedido,quiet,loading,leadingIcon,trailingIcon,className,children,disabled:disabledPedido,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onClick,onClickCapture,"aria-disabled":ariaDisabled,render,share,glow,ring,...props},ref){
 const grupo=React.useContext(GrupoDeBotoesContext);
-const variant=variantPedida??grupo?.variant;
+// O botão de ligar (`pressed`) sem tom continua o neutro de antes da 0.71.0: o ligado é que é amarelo, e o desligado
+// amarelo também ficaria igual a ele. O `Toggle` da referência também é neutro por padrão.
+const variant=variantPedida??grupo?.variant??(pressed!==undefined&&appearance===undefined&&tone===undefined?"tertiary":undefined);
 const size=sizePedido??grupo?.size??"md";
 const disabled=disabledPedido??grupo?.disabled;
 // G-AXIS-04 — `size` aceita valor simples, responsivo por viewport ou adaptativo por container.

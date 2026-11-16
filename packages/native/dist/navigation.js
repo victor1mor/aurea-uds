@@ -292,7 +292,11 @@ const folha = criarFolha((t) => ({
     // linha da tabela. (14/11/2026: vale também para a Ember.)
     filaSecundariaComFio: { borderBottomWidth: t.size.borderWidth, borderColor: preenchimento(t, 2) },
     abasSecundariasSemBorda: { borderBottomWidth: 0 },
+    // AS ABAS ENCHEM A FILA (2-C b, a 0.71.0, como a web): cada aba cresce e a fila ocupa a linha (`fill` na `FilaRolante`).
+    // A sobra se reparte por igual a partir do rótulo — no Yoga não existe o "mínimo do conteúdo" da web, e a base 0
+    // espremeria o rótulo quando não cabe; com a base do rótulo, quando não cabe, a fila rola, como antes.
     abaSecundaria: {
+        flexGrow: 1,
         alignItems: "center", justifyContent: "center", minHeight: t.size.controlHMd,
         paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
     },
@@ -705,7 +709,7 @@ export function Tabs({ tabs, value, onChange, label, justify, variant = "primary
     const comFio = secundaria;
     // S-04 (05/11/2026): a aba escolhida DESLIZA (`deslize.tsx`) — a cápsula amarela, e na secundária o fio de baixo.
     const fila = useFilaQueDesliza(value);
-    return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { justify: justify, style: comFio ? s.filaSecundariaComFio : undefined, marca: comFio ? { dataSet: { aureaLine: "tabs" } } : undefined, children: _jsxs(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: secundaria ? [s.abasSecundarias, comFio && s.abasSecundariasSemBorda] : s.abas, children: [_jsx(IndicadorQueDesliza, { alvo: fila.alvo, aoFicarPronto: fila.aoFicarPronto, style: secundaria ? undefined : [canto(t.size.radiusControl), s.abaDeTabAtiva], children: secundaria ? _jsx(View, { style: s.fioDaAba }) : null }), tabs.map((it) => {
+    return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { justify: justify, fill: secundaria || undefined, style: comFio ? s.filaSecundariaComFio : undefined, marca: comFio ? { dataSet: { aureaLine: "tabs" } } : undefined, children: _jsxs(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: secundaria ? [s.abasSecundarias, { flexGrow: 1 }, comFio && s.abasSecundariasSemBorda] : s.abas, children: [_jsx(IndicadorQueDesliza, { alvo: fila.alvo, aoFicarPronto: fila.aoFicarPronto, style: secundaria ? undefined : [canto(t.size.radiusControl), s.abaDeTabAtiva], children: secundaria ? _jsx(View, { style: s.fioDaAba }) : null }), tabs.map((it) => {
                             const ativa = it.id === value;
                             return (_jsxs(Pressable, { onLayout: fila.medir(it.id), onPress: it.disabled ? undefined : () => onChange?.(it.id), disabled: it.disabled, accessibilityRole: "tab", ...estadoAcessivel({ selected: ativa, disabled: !!it.disabled }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [
                                     secundaria ? s.abaSecundaria : s.abaDeTab,

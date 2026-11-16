@@ -10,10 +10,15 @@ import {AureaProvider, Button, ButtonGroup, IconButton, Toggle, ToggleGroup, but
 const wrap = (ui: React.ReactNode) => render(<AureaProvider>{ui}</AureaProvider>);
 
 describe("Button · secondary e tertiary (decisão A do Victor)", () => {
-  test("sem `variant`, o botão é o `tertiary` — a cara de sempre", () => {
+  // 0.71.0 (o D3): sem nada pedido, o botão é o `primary`, como na referência (até a 0.70.0, o `tertiary`). Pedindo só
+  // um eixo, o outro continua o de antes.
+  test("sem `variant`, o botão é o `primary`; um eixo só mantém o outro neutro", () => {
     const {getByRole} = wrap(<Button>Ok</Button>);
-    expect(getByRole("button")).toHaveClass("btn", "btn-tertiary");
-    expect(getByRole("button")).not.toHaveClass("btn-secondary");
+    expect(getByRole("button")).toHaveClass("btn", "btn-primary");
+    expect(getByRole("button")).not.toHaveClass("btn-tertiary");
+    expect(buttonSkin()).toBe("btn-primary");
+    expect(buttonSkin(undefined, "ghost")).toBe("btn-ghost");
+    expect(buttonSkin(undefined, undefined, "danger")).toBe("btn-danger");
   });
   test("`secondary` e `tertiary` saem com a classe própria", () => {
     expect(buttonSkin("secondary")).toBe("btn-secondary");
@@ -97,7 +102,7 @@ describe("Button quiet e Badge flat", () => {
     const {getAllByRole} = wrap(<><Button size="sm" quiet>Theme</Button><Button size="sm">Theme</Button></>);
     const [quieto, normal] = getAllByRole("button");
     expect(quieto).toHaveClass("btn", "btn-sm", "btn-quiet");
-    expect(normal.className).toBe("btn btn-tertiary btn-sm");
+    expect(normal.className).toBe("btn btn-primary btn-sm");
   });
   test("`emphasis=\"flat\"` sai como `badge-flat`; o `soft` de sempre continua sem classe", async () => {
     const {Badge} = await import("../../packages/react/src/index");

@@ -3,7 +3,7 @@ import { type StyleProp, type ViewStyle } from "react-native";
 import { type AureaIcon } from "./icon.js";
 import { type AureaAlertVariant } from "./feedback.js";
 /** As mesmas quatro faces do `AureaToastType` da web (`system.tsx:65`). */
-export type AureaToastType = AureaAlertVariant;
+export type AureaToastType = Exclude<AureaAlertVariant, "neutral">;
 export interface AureaToastInput {
     title: React.ReactNode;
     description?: React.ReactNode;
