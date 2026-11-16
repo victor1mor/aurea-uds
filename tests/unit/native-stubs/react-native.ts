@@ -16,7 +16,13 @@
 // e é para isso que existe `apps/native-smoke/`.
 import * as React from "react";
 
-export const useColorScheme = (): "light" | "dark" | null => null;
+// O aparelho do dublê está no ESCURO (D16, 0.72.0). Até a 0.71.0 ele respondia `null` ("não diz"), e o nativo caía no
+// escuro — os testes que medem as cores do tema sem passar `theme` mediam o escuro. Com o D16, "não diz" dá o claro; para
+// esses testes continuarem medindo o mesmo tema, o aparelho do dublê diz "escuro". `__esquemaDoAparelho(null)` simula o
+// aparelho que não diz nada (o teste do D16, `native-tema-do-sistema.test.tsx`).
+let esquemaDoAparelho: "light" | "dark" | null = "dark";
+export const __esquemaDoAparelho = (e: "light" | "dark" | null) => { esquemaDoAparelho = e; };
+export const useColorScheme = (): "light" | "dark" | null => esquemaDoAparelho;
 
 // `StyleSheet.create` devolve o objeto como está — que é o que a Nova Arquitetura faz de verdade
 // desde que os IDs numéricos saíram. O `flatten` existe porque `style` pode ser array aninhado.

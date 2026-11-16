@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.72.0
+
+November 16, 2026
+
+The system theme — a page without data-theme follows the computer's light or dark setting, and is light when it says nothing.
+
+[Read full release notes →](https://aureauds.dev/release-v0-72-0.md)
+
 ## v0.71.0
 
 November 15, 2026

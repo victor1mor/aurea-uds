@@ -21,7 +21,7 @@
     "role": "none",
     "apg": "n-a",
     "keyboard": [],
-    "nota": "Le' o `data-theme`/`data-density` do <html> por `useSyncExternalStore` com MutationObserver, entao acompanha quem mudar o atributo por fora. NAO e' o `useTheme`: aquele le' do provider e serve quem deixa a Aurea guardar a escolha; este serve quem ja' tem o proprio dono do atributo. Os dois convivem desde o merge de 28/08/2026 porque os dois sao publicos — qual usar depende de quem manda no <html>."
+    "nota": "Le' o `data-theme`/`data-density` do <html> por `useSyncExternalStore` com MutationObserver, entao acompanha quem mudar o atributo por fora. NAO e' o `useTheme`: aquele le' do provider e serve quem deixa a Aurea guardar a escolha; este serve quem ja' tem o proprio dono do atributo. Os dois convivem desde o merge de 28/08/2026 porque os dois sao publicos — qual usar depende de quem manda no <html>. Sem `data-theme` no <html>, o `theme` e' o do SISTEMA (`prefers-color-scheme`, o claro quando ele nao diz), que e' o que o CSS pinta; no servidor continua `null`."
   },
   "dependencies": {
     "engine": null,

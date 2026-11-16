@@ -119,7 +119,9 @@ describe("AureaProvider", () => {
   });
 
   // O padrão sai de MEDIÇÃO: `comfortable` é a única densidade cujos 8 tokens batem com o `base`.
-  it("sem props, cai em dark/comfortable", () => {
+  // O tema segue o aparelho, e o do dublê está no escuro (D16, 0.72.0; o aparelho que não diz nada dá o claro, no
+  // `native-tema-do-sistema.test.tsx`).
+  it("sem props, com o aparelho no escuro, cai em dark/comfortable", () => {
     render(<AureaProvider><Sonda /></AureaProvider>);
     expect(screen.getByTestId("eixos")).toHaveTextContent("dark/comfortable");
   });

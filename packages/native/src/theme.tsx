@@ -90,7 +90,8 @@ type Valor = {
 // CSS já assume quando ninguém declara `data-density`.
 const DENSIDADE_PADRAO: AureaDensity = "comfortable";
 // `dark` é o que o catálogo inteiro declara no `<html>`, e o que a identidade da Aurea assume.
-const TEMA_PADRAO: AureaThemeName = "dark";
+// O D16 (0.72.0, como a web): quando o aparelho não diz o tema, o claro. Era o escuro.
+const TEMA_PADRAO: AureaThemeName = "light";
 
 const Contexto = React.createContext<Valor | null>(null);
 

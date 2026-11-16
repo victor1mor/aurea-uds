@@ -8,7 +8,7 @@ Aurea's themes are CSS. The page reads its colors from the `data-theme` attribut
 <html data-theme="dark">
 ```
 
-The attribute is required. Without it, the color roles are not defined and the page has no colors.
+Without the attribute, the page follows the computer's light or dark setting (`prefers-color-scheme`), and is light when the computer says nothing. A part of the page with its own `data-theme` keeps it.
 
 Each theme also declares its `color-scheme` to the browser, so the browser's own scrollbars, date picker and form controls follow it — also in a part of the page with its own `data-theme`.
 
@@ -190,7 +190,7 @@ Avoid fixed colors. A hex value that reads well on one theme is usually wrong on
 The native `AureaProvider` owns the theme. It is required: without it, the components have no colors.
 
 - With no `theme` and no `defaultTheme`, it follows the device's light or dark setting, until `setTheme` is called. From then on, the choice wins.
-- If the device does not report a setting, the theme is dark.
+- If the device does not report a setting, the theme is light, as on the web.
 - `theme` is controlled. `defaultTheme` is the first value. `onThemeChange` reports a change.
 - `useAureaTheme()` from `@aurea-uds/native` returns `theme`, `density`, `setTheme`, `setDensity` and `toggleTheme`. On the device the theme is never `null`.
 - The native theme accepts `"light"` and `"dark"`. There is no `"system"` value: leaving the theme unset is how it follows the device.

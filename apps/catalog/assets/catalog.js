@@ -472,7 +472,9 @@
     setTheme: function (theme) { root.dataset.theme = theme; },
     setDensity: function (density) { root.dataset.density = density; },
     toggleTheme: function () {
-      root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+      // O D16 (0.72.0): sem `data-theme`, a página está no tema do sistema — alternar parte dele.
+      var atual = root.dataset.theme || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      root.dataset.theme = atual === "dark" ? "light" : "dark";
     },
     showToast: showToast,
     copy: copy,

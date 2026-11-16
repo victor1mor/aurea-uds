@@ -578,7 +578,7 @@ Aurea names colors by role, not by hue. A component asks for "the card" or "the 
 
 Every role is a CSS custom property. The values come from the token file (DTCG format) and are written in hex or OKLCH. The same roles exist in React Native, with camelCase names.
 
-The page always has a theme: `data-theme="light"` or `data-theme="dark"` on `<html>`. Without it, the color roles are not defined. See [Dark Mode](./docs-dark-mode.html).
+The page always has a theme: `data-theme="light"` or `data-theme="dark"` on `<html>`. Without it, the page follows the computer's light or dark setting, and is light when the computer says nothing. See [Dark Mode](./docs-dark-mode.html).
 
 ```css
 .my-panel {
@@ -877,7 +877,7 @@ import "@aurea-uds/core/css";
 <html data-theme="light" data-density="comfortable">
 ```
 
-- `data-theme` is required: without it the color roles are not defined.
+- `data-theme` is optional: without it the page follows the computer's light or dark setting, and is light when the computer says nothing.
 - `data-density` is optional: without it you get the comfortable sizes.
 
 To switch the theme at run time, see [Dark Mode](./docs-dark-mode.html). For the density, see [Density](./docs-density.html).
@@ -1030,7 +1030,7 @@ Aurea's themes are CSS. The page reads its colors from the `data-theme` attribut
 <html data-theme="dark">
 ```
 
-The attribute is required. Without it, the color roles are not defined and the page has no colors.
+Without the attribute, the page follows the computer's light or dark setting (`prefers-color-scheme`), and is light when the computer says nothing. A part of the page with its own `data-theme` keeps it.
 
 Each theme also declares its `color-scheme` to the browser, so the browser's own scrollbars, date picker and form controls follow it — also in a part of the page with its own `data-theme`.
 
@@ -1212,7 +1212,7 @@ Avoid fixed colors. A hex value that reads well on one theme is usually wrong on
 The native `AureaProvider` owns the theme. It is required: without it, the components have no colors.
 
 - With no `theme` and no `defaultTheme`, it follows the device's light or dark setting, until `setTheme` is called. From then on, the choice wins.
-- If the device does not report a setting, the theme is dark.
+- If the device does not report a setting, the theme is light, as on the web.
 - `theme` is controlled. `defaultTheme` is the first value. `onThemeChange` reports a change.
 - `useAureaTheme()` from `@aurea-uds/native` returns `theme`, `density`, `setTheme`, `setDensity` and `toggleTheme`. On the device the theme is never `null`.
 - The native theme accepts `"light"` and `"dark"`. There is no `"system"` value: leaving the theme unset is how it follows the device.
@@ -2858,7 +2858,7 @@ toastPlacement picks one of six places for the messages of useToast(). bottom, t
 | `textSize` | `"md" \| "lg"` | "md" | Native only (on the web it is the AppShell's textSize). lg is the large-text reading mode: every type step from xs to 2xl goes up 2. Control heights stay, because the native medium control already has the touch target. A provider inside another without it keeps the outer one. |
 | `portalContainer` | `HTMLElement \| null` | — | Where every popup mounts: dialog, drawer, tooltip, popover, hover card, both menus, notification panel, combobox list and toasts. Unset, they mount on document.body — which is what lets them stack and position without inheriting overflow or transform from anything. Point it at a node inside one of your landmarks when you need popup content to satisfy the "all content in a landmark" check. |
 | `theme` | `AureaThemePreference` | — | Controlled theme. Pass it to command; the provider then never writes it on its own. "system" follows the computer's light/dark (prefers-color-scheme) and changes with it. |
-| `defaultTheme` | `AureaThemePreference` | — | Seeds the theme without controlling it. With NEITHER of the two, the provider adopts whatever the document already carries on <html> — the data-theme in the markup exists so the page does not flash, and a provider that overwrote it on first paint would bring the flash back. "system" follows the computer's light/dark (prefers-color-scheme) and changes with it. |
+| `defaultTheme` | `AureaThemePreference` | — | Seeds the theme without controlling it. With NEITHER of the two, the provider adopts whatever the document already carries on <html> — the data-theme in the markup exists so the page does not flash, and a provider that overwrote it on first paint would bring the flash back. With no data-theme on <html> either, the page follows the computer's light/dark through the CSS, and is light when the computer says nothing. On native, unset follows the device, and is light when the device says nothing. "system" follows the computer's light/dark (prefers-color-scheme) and changes with it. |
 | `onThemeChange` | `(theme: AureaTheme) => void` | — | Fires with the new theme, whether it changed from here or from useTheme. |
 | `onThemePreferenceChange` | `(preference: AureaThemePreference) => void` | — | Called with what was CHOSEN, which can be "system" (onThemeChange gets the theme on screen). The moment to save the choice. |
 | `density` | `AureaDensity` | — | Controlled density. Same convention as theme. |
@@ -18817,6 +18817,36 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-72-0.html">
+# v0.72.0
+
+The system theme — a page without data-theme follows the computer's light or dark setting, and is light when it says nothing.
+
+## ⚠ May break
+
+- **On native, when the device does not report a theme, an `AureaProvider` without `theme` is now light.** It used to be dark. When the device reports one, nothing changes: the provider still follows the device.
+- **On the web, in the browser, `useAureaTheme` on a page without `data-theme` now returns the system theme** (`"light"` or `"dark"`) instead of `null`. On the server it is still `null`.
+
+## Changed
+
+- **A page without `data-theme` on `<html>` follows the computer's light or dark setting** (`prefers-color-scheme`), and is light when the computer says nothing. This is pure CSS, with no script. It used to have no colors at all. It works with every brand, including Aurea Ember. A part of the page with its own `data-theme` keeps it, and a page that writes `data-theme` does not change.
+- **Toggling the theme on a page that follows a dark system goes to light on the first click** — in `ThemeToggle`, `useAureaTheme`, the `AureaProvider`'s `toggleTheme` and `window.Aurea.toggleTheme`. Before, the first click went to dark and nothing changed on screen.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.72.0 @aurea-uds/core@0.72.0 @aurea-uds/fonts@0.72.0 @aurea-uds/icons@0.72.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.72.0
 ```
 </page>
 
