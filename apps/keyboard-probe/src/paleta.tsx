@@ -18,7 +18,9 @@ import {
 import "@aurea-uds/core/css";
 
 const q = new URLSearchParams(location.search);
-const tema = q.get("tema") === "dark" ? "dark" : "light";
+// `?tema=sistema` (o D16, 0.72.0): o provedor sem tema, e o `<html>` sem `data-theme` — a página segue o sistema.
+const tema = q.get("tema") === "sistema" ? undefined : q.get("tema") === "dark" ? "dark" : "light";
+if (tema === undefined) document.documentElement.removeAttribute("data-theme");   // o HTML do banco traz `light` escrito
 const marca = q.get("marca");
 if (marca) document.documentElement.setAttribute("data-brand", marca);
 const SPRITE = new URL("../../../packages/icons/dist/aurea-icons.svg", location.href).href;

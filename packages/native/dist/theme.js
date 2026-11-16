@@ -32,7 +32,8 @@ function aplicarModos(t, m) {
 // CSS já assume quando ninguém declara `data-density`.
 const DENSIDADE_PADRAO = "comfortable";
 // `dark` é o que o catálogo inteiro declara no `<html>`, e o que a identidade da Aurea assume.
-const TEMA_PADRAO = "dark";
+// O D16 (0.72.0, como a web): quando o aparelho não diz o tema, o claro. Era o escuro.
+const TEMA_PADRAO = "light";
 const Contexto = React.createContext(null);
 export function AureaProvider({ children, theme, density, brand, defaultTheme, defaultDensity, fontFamilies, icons, strings, direction, highContrast, textSize, onThemeChange, onDensityChange, }) {
     // Os modos de leitura herdam do provedor de fora quando este não diz (o tema num pedaço continua com eles).

@@ -585,10 +585,20 @@ if missing:
 # Os tokens entram na camada junto: declaração de custom property compete na cascata como
 # qualquer outra, e deixá-los fora fazia o override que o core declara em @media perder para o
 # valor base. JS ainda é cópia.
+# O D16 (0.72.0): o core passa pelo `scripts/tema-implicito.mjs` (as cópias das regras de tema para a página sem
+# `data-theme`). O validador chama o MESMO conversor pelo node, em vez de reescrevê-lo aqui — duas cópias da conversão
+# seriam duas verdades.
+import subprocess
+_core_convertido = subprocess.run(
+    ["node", "--input-type=module", "-e",
+     "import {readFileSync} from 'node:fs';"
+     "import {temaImplicito} from './scripts/tema-implicito.mjs';"
+     "process.stdout.write(temaImplicito(readFileSync('packages/core/src/aurea.css','utf8')));"],
+    cwd=root, capture_output=True, check=True).stdout.decode("utf-8")
 expected_css = (
     "@layer aurea{\n"
     + (root / "packages/tokens/dist/aurea.tokens.css").read_text(encoding="utf-8")
-    + (root / "packages/core/src/aurea.css").read_text(encoding="utf-8")
+    + _core_convertido
     + "}\n"
 )
 if (root / "packages/core/dist/aurea.css").read_text(encoding="utf-8") != expected_css:

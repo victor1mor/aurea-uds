@@ -341,6 +341,47 @@ como deveria funcionar"*.
 
 ---
 
+## [0.72.0] — 2026-11-16
+
+**O tema do sistema** — o D16 (*"Aceito todas as recomendações do plano, de D1 a D20"*, 19/10/2026: *"o tema do sistema;
+claro quando ele não diz"*), a parte que faltava depois do `color-scheme` da 0.70.0. Aprovado na bancada, com a página sem
+tema da Aurea de hoje, a proposta e a da referência lado a lado, no sistema claro e no escuro (*"Pode"*, 16/11/2026). A
+referência fica sempre no claro; a Aurea segue o sistema, que é o que o D16 decidiu.
+
+### ⚠ Pode quebrar
+
+- **No nativo, quando o aparelho não diz o tema, o `AureaProvider` sem `theme` fica no claro.** Era o escuro. Com o
+  aparelho dizendo, nada muda: ele continua seguindo o aparelho.
+- **O `useAureaTheme` da web, no navegador, numa página sem `data-theme`, devolve o tema do sistema** (`"light"` ou
+  `"dark"`), e não mais `null`. No servidor continua `null`. Quem desenhava algo só quando o tema não era `null` passa a
+  desenhar já no primeiro quadro do navegador.
+
+### Mudou
+
+- **A página sem `data-theme` no `<html>` segue o sistema** (`prefers-color-scheme`), e fica no claro quando ele não diz
+  escuro — na web, no CSS, sem JavaScript. Antes ela não tinha cor nenhuma (o fundo vazio e o texto preto do navegador).
+  Vale nos tokens, nas regras do core e nas treze marcas, também na Ember. Uma região com `data-theme` próprio continua com
+  o dela. Com `data-theme` escrito, nada muda.
+- Como: na MONTAGEM, cada regra presa a um tema ganha uma cópia para a raiz sem atributo, dentro da pergunta ao sistema,
+  com o mesmo peso e logo depois da original (`scripts/tema-implicito.mjs`, no `build-tokens.mjs` e no `build-core.mjs`).
+  A fonte continua escrita só com `data-theme`. Uma regra de tema sem a guarda de região para a montagem.
+- **Alternar o tema numa página que segue o sistema escuro leva ao claro no primeiro clique** — no `ThemeToggle`, no
+  `useAureaTheme`, no `toggleTheme` do `AureaProvider` e no `window.Aurea.toggleTheme`. Antes, sem atributo, o primeiro
+  clique ia ao escuro, e nada mudava na tela.
+- As fichas do `AureaProvider` e do `useAureaTheme` e as páginas Dark Mode, Colors e Theming dizem o comportamento novo
+  (antes diziam que sem `data-theme` não havia cor).
+
+### Quem cobra
+
+- `tests/visual/tema-do-sistema.spec.ts` — a página sem atributo, no sistema claro e no escuro, sai igual à com o tema
+  escrito, elemento por elemento, na Aurea Gold, na Ember e na `cobalt`. Com a folha da 0.71.0 reprova (mais de 1.100
+  diferenças em cada caso).
+- `tests/unit/tema-do-sistema.test.tsx` (a cópia de cada regra, o hook, o provedor e o `aurea.js`) e
+  `tests/unit/native-tema-do-sistema.test.tsx` (o aparelho que não diz dá o claro) — os de comportamento reprovam com o
+  código da 0.71.0 (5 de 5).
+- O dublê do React Native nos testes passou a dizer "aparelho no escuro" (`useColorScheme`), que é o tema que os testes
+  do nativo já mediam; o "não diz" é simulado no teste do D16.
+
 ## [0.71.0] — 2026-11-15
 
 ✅ **Publicada em 16/11/2026, entre 07:09 e 07:20 (Brasília, medido no npm: seis pacotes entre 07:09 e 07:12 e o `native`

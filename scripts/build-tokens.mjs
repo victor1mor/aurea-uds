@@ -11,6 +11,7 @@ import {dirname, join} from "node:path";
 // ver o cabeçalho de lá. Aqui ficou só o que é do ALVO CSS e do ALVO NATIVO.
 import {num, serialize} from "./token-value.mjs";
 import {corta, gama, linearSrgbParaHex, oklchParaLinearSrgb} from "./cor-oklch.mjs";
+import {temaImplicito} from "./tema-implicito.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(root, "packages/tokens/src/aurea.tokens.json");
@@ -60,7 +61,9 @@ css += emitGroup(sel["density.spacious"], dtcg.density.spacious);
 // (o mesmo peso de seletor; ganha quem vem depois).
 css += emitGroup(sel["textSize.lg"], dtcg.textSize.lg);
 
-writeFileSync(OUT, css);
+// O D16: a página sem `data-theme` segue o sistema — cada bloco de tema (e de marca com tema) ganha a cópia para a raiz
+// sem atributo, dentro da pergunta ao sistema (`tema-implicito.mjs`).
+writeFileSync(OUT, temaImplicito(css));
 writeFileSync(join(root, "packages/tokens/dist/aurea.tokens.css.d.ts"),
   "// Gerado por scripts/build-tokens.mjs. A folha de estilo não exporta nada — este arquivo\n"
   + "// existe para a condição `types` do subpath ./css do mapa `exports`.\n"

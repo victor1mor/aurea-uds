@@ -6,7 +6,7 @@ Aurea names colors by role, not by hue. A component asks for "the card" or "the 
 
 Every role is a CSS custom property. The values come from the token file (DTCG format) and are written in hex or OKLCH. The same roles exist in React Native, with camelCase names.
 
-The page always has a theme: `data-theme="light"` or `data-theme="dark"` on `<html>`. Without it, the color roles are not defined. See [Dark Mode](./docs-dark-mode.html).
+The page always has a theme: `data-theme="light"` or `data-theme="dark"` on `<html>`. Without it, the page follows the computer's light or dark setting, and is light when the computer says nothing. See [Dark Mode](./docs-dark-mode.html).
 
 ```css
 .my-panel {

@@ -404,11 +404,13 @@ describe("useAureaTheme — o React acompanha quem manda no <html>", () => {
         .toHaveTextContent("light"));
   });
 
-  test("sem ninguém ter escolhido, o tema é desconhecido — e alternar leva ao escuro", async () => {
+  // D16 (0.72.0): sem atributo, no navegador, o tema na tela é o do SISTEMA — aqui, sem `matchMedia`, o claro. No
+  // servidor continua `null`. O escuro do sistema está em `tema-do-sistema.test.tsx`.
+  test("sem ninguém ter escolhido, o tema é o do sistema (o claro) — e alternar leva ao escuro", async () => {
     const u = userEvent.setup();
     render(<AureaProvider><Palco /></AureaProvider>);
-    expect(document.querySelector("[data-lido]"), "no servidor e antes da escolha, null")
-      .toHaveTextContent("desconhecido");
+    expect(document.querySelector("[data-lido]"), "no navegador, sem atributo, o tema do sistema")
+      .toHaveTextContent("light");
     await u.click(screen.getByRole("button", {name: "alternar"}));
     expect(document.documentElement.dataset.theme).toBe("dark");
   });

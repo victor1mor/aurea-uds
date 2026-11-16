@@ -133,7 +133,7 @@
       "name": "defaultTheme",
       "type": "AureaThemePreference",
       "default": "—",
-      "description": "Seeds the theme without controlling it. With NEITHER of the two, the provider adopts whatever the document already carries on <html> — the data-theme in the markup exists so the page does not flash, and a provider that overwrote it on first paint would bring the flash back. \"system\" follows the computer's light/dark (prefers-color-scheme) and changes with it."
+      "description": "Seeds the theme without controlling it. With NEITHER of the two, the provider adopts whatever the document already carries on <html> — the data-theme in the markup exists so the page does not flash, and a provider that overwrote it on first paint would bring the flash back. With no data-theme on <html> either, the page follows the computer's light/dark through the CSS, and is light when the computer says nothing. On native, unset follows the device, and is light when the device says nothing. \"system\" follows the computer's light/dark (prefers-color-scheme) and changes with it."
     },
     {
       "name": "onThemeChange",

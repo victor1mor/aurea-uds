@@ -760,6 +760,103 @@ svg.react-flow__connectionline {
   --link-underline:var(--primary);
   --shadow-sm:0 1px 3px rgba(0,0,0,0.45);
 }
+@media (prefers-color-scheme: dark){:where(:root):not([data-theme]){
+  --background:#09090b;
+  --foreground:#fafafa;
+  --card:#18181b;
+  --card-foreground:#fafafa;
+  --popover:#18181b;
+  --popover-foreground:#fafafa;
+  --primary:var(--brand-yellow);
+  --primary-foreground:var(--brand-yellow-ink);
+  --link:var(--brand-yellow);
+  --link-hover:var(--brand-yellow);
+  --secondary:#27272a;
+  --secondary-foreground:#fafafa;
+  --muted:var(--secondary);
+  --muted-foreground:#a1a1aa;
+  --accent:var(--secondary);
+  --accent-foreground:#fafafa;
+  --destructive:#c50f1f;
+  --destructive-foreground:#ffffff;
+  --border:#2f2f35;
+  --input:#3f3f46;
+  --ring:#71717a;
+  --chart-1:#bbdbff;
+  --chart-2:#97bfff;
+  --chart-3:#76a4ff;
+  --chart-4:#5789ff;
+  --chart-5:#4371f2;
+  --sidebar:#18181b;
+  --sidebar-foreground:#fafafa;
+  --sidebar-primary:var(--brand-yellow);
+  --sidebar-primary-foreground:var(--brand-yellow-ink);
+  --sidebar-accent:var(--secondary);
+  --sidebar-accent-foreground:#fafafa;
+  --sidebar-border:#2f2f35;
+  --sidebar-ring:#71717a;
+  --surface-1:var(--card);
+  --surface-2:var(--secondary);
+  --surface-3:var(--muted);
+  --surface-inset:#050506;
+  --surface-hover:#27272a;
+  --foreground-strong:var(--foreground);
+  --subtle-foreground:#a1a1aa;
+  --border-strong:#a1a1aa;
+  --field-bg:var(--muted);
+  --overlay:oklch(0 0 0 / 0.5);
+  --primary-hover:oklch(0.835 0.19 89);
+  --primary-active:oklch(0.74 0.17 84);
+  --secondary-hover:#303036;
+  --segment:#3f3f46;
+  --focus:var(--primary);
+  --focus-strong:var(--primary);
+  --primary-emphasis:var(--primary);
+  --primary-outline:var(--primary);
+  --control-selected:var(--primary);
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:oklch(0.985 0 0);
+  --primary-mark:var(--brand-yellow-ink);
+  --selection:oklch(0.795 0.184 86.047 / 0.22);
+  --success-bg:#052505;
+  --warning-bg:#4a1e04;
+  --danger-bg:#3b0509;
+  --info-bg:#002440;
+  --category-red:oklch(0.85 0.08 25);
+  --category-red-bg:oklch(0.28 0.07 25 / 0.62);
+  --category-orange:oklch(0.76 0.13 55);
+  --category-orange-bg:oklch(0.36 0.089 55 / 0.62);
+  --category-green:oklch(0.85 0.13 150);
+  --category-green-bg:oklch(0.28 0.07 150 / 0.62);
+  --category-teal:oklch(0.76 0.13 180);
+  --category-teal-bg:oklch(0.36 0.065 180 / 0.62);
+  --category-cyan:oklch(0.85 0.098 225);
+  --category-cyan-bg:oklch(0.28 0.053 225 / 0.62);
+  --category-blue:oklch(0.76 0.121 260);
+  --category-blue-bg:oklch(0.36 0.09 260 / 0.62);
+  --category-violet:oklch(0.85 0.086 300);
+  --category-violet-bg:oklch(0.28 0.07 300 / 0.62);
+  --category-pink:oklch(0.76 0.13 350);
+  --category-pink-bg:oklch(0.36 0.09 350 / 0.62);
+  --warning-400:#faa06b;
+  --success-400:#54b054;
+  --danger-400:#eeacb2;
+  --info-400:#5caae5;
+  --success:#107c10;
+  --success-foreground:#ffffff;
+  --success-hover:#0e700e;
+  --info:#0078d4;
+  --info-foreground:#ffffff;
+  --info-hover:#006cbf;
+  --warning:#f7630c;
+  --warning-foreground:var(--brand-yellow-ink);
+  --warning-hover:#de590b;
+  --input-strong:#646467;
+  --control-thumb:#ffffff;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:var(--primary);
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.45);
+}}
 [data-theme="light"]{
   --background:#f5f5f5;
   --foreground:#09090b;
@@ -860,6 +957,106 @@ svg.react-flow__connectionline {
   --warning-500:#d07612;
   --shadow-sm:0 2px 4px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06), 0 0 1px rgba(0,0,0,0.06);
 }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]){
+  --background:#f5f5f5;
+  --foreground:#09090b;
+  --card:#ffffff;
+  --card-foreground:#09090b;
+  --popover:#ffffff;
+  --popover-foreground:#09090b;
+  --primary:var(--brand-yellow);
+  --primary-foreground:var(--brand-yellow-ink);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --secondary:#ebebed;
+  --secondary-foreground:#09090b;
+  --muted:var(--secondary);
+  --muted-foreground:#5e5e65;
+  --accent:var(--secondary);
+  --accent-foreground:#09090b;
+  --destructive:#c50f1f;
+  --destructive-foreground:#ffffff;
+  --border:#e4e4e7;
+  --input:#d4d4d8;
+  --ring:#8a8a93;
+  --chart-1:#4589d2;
+  --chart-2:#246cdf;
+  --chart-3:#114fda;
+  --chart-4:#0c37c4;
+  --chart-5:#0c24a3;
+  --sidebar:var(--card);
+  --sidebar-foreground:#09090b;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:var(--brand-yellow-ink);
+  --sidebar-accent:var(--secondary);
+  --sidebar-accent-foreground:#09090b;
+  --sidebar-border:#e4e4e7;
+  --sidebar-ring:#8a8a93;
+  --surface-1:var(--card);
+  --surface-2:var(--secondary);
+  --surface-3:var(--muted);
+  --surface-inset:#efeff1;
+  --surface-hover:#f4f4f5;
+  --foreground-strong:var(--foreground);
+  --subtle-foreground:#5e5e65;
+  --border-strong:#5e5e65;
+  --field-bg:var(--muted);
+  --overlay:oklch(0 0 0 / 0.4);
+  --primary-hover:oklch(0.835 0.19 89);
+  --primary-active:oklch(0.74 0.17 84);
+  --secondary-hover:#e4e4e7;
+  --segment:oklch(1 0 0);
+  --focus:#bd7000;
+  --focus-strong:var(--foreground);
+  --primary-emphasis:var(--foreground);
+  --primary-outline:rgba(240,177,0,0.35);
+  --control-selected:var(--brand-yellow);
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:oklch(0.985 0 0);
+  --primary-mark:var(--brand-yellow-ink);
+  --success-400:#0e700e;
+  --warning-400:#8a3707;
+  --danger-400:#b10e1c;
+  --info-400:#006cbf;
+  --oracle-300:var(--chart-4);
+  --oracle-400:var(--chart-4);
+  --selection:oklch(0.795 0.184 86.047 / 0.18);
+  --success-bg:#f1faf1;
+  --warning-bg:#fff9f5;
+  --danger-bg:#fdf3f4;
+  --info-bg:#f3f9fd;
+  --category-red:oklch(0.52 0.15 25);
+  --category-red-bg:oklch(0.96 0.019 25);
+  --category-orange:oklch(0.47 0.115 55);
+  --category-orange-bg:oklch(0.925 0.044 55);
+  --category-green:oklch(0.52 0.141 150);
+  --category-green-bg:oklch(0.96 0.035 150);
+  --category-teal:oklch(0.47 0.084 180);
+  --category-teal-bg:oklch(0.925 0.055 180);
+  --category-cyan:oklch(0.52 0.097 225);
+  --category-cyan-bg:oklch(0.96 0.025 225);
+  --category-blue:oklch(0.47 0.15 260);
+  --category-blue-bg:oklch(0.925 0.035 260);
+  --category-violet:oklch(0.52 0.15 300);
+  --category-violet-bg:oklch(0.96 0.022 300);
+  --category-pink:oklch(0.47 0.15 350);
+  --category-pink-bg:oklch(0.925 0.044 350);
+  --success:#107c10;
+  --success-foreground:#ffffff;
+  --success-hover:#0e700e;
+  --info:#0078d4;
+  --info-foreground:#ffffff;
+  --info-hover:#006cbf;
+  --warning:#f7630c;
+  --warning-foreground:var(--brand-yellow-ink);
+  --warning-hover:#de590b;
+  --input-strong:#8d8d91;
+  --link-mark:rgba(240,177,0,0.45);
+  --link-underline:var(--primary);
+  --control-thumb:#ffffff;
+  --warning-500:#d07612;
+  --shadow-sm:0 2px 4px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06), 0 0 1px rgba(0,0,0,0.06);
+}}
 [data-brand="ember"][data-theme="dark"],[data-brand="ember"] [data-theme="dark"]{
   --background:oklch(0.16 0.018 250);
   --foreground:oklch(0.96 0.006 250);
@@ -934,6 +1131,80 @@ svg.react-flow__connectionline {
   --warning-foreground:#242424;
   --control-thumb:oklch(1 0 0);
 }
+@media (prefers-color-scheme: dark){[data-brand="ember"]:where(:root):not([data-theme]){
+  --background:oklch(0.16 0.018 250);
+  --foreground:oklch(0.96 0.006 250);
+  --foreground-strong:oklch(1 0 0);
+  --card:oklch(0.21 0.02 250);
+  --card-foreground:oklch(0.96 0.006 250);
+  --popover:oklch(0.21 0.02 250);
+  --popover-foreground:oklch(0.96 0.006 250);
+  --surface-1:oklch(0.21 0.02 250);
+  --surface-2:oklch(0.245 0.02 250);
+  --surface-3:oklch(0.19 0.02 250);
+  --surface-inset:oklch(0.19 0.02 250);
+  --surface-hover:oklch(0.245 0.02 250);
+  --primary:oklch(0.72 0.19 48);
+  --primary-foreground:oklch(0.16 0.02 250);
+  --primary-hover:oklch(0.78 0.17 50);
+  --primary-active:oklch(0.66 0.19 46);
+  --primary-emphasis:oklch(0.85 0.14 60);
+  --primary-outline:oklch(0.72 0.19 48 / 0.4);
+  --secondary:oklch(0.245 0.02 250);
+  --secondary-foreground:oklch(0.96 0.006 250);
+  --secondary-hover:oklch(0.28 0.02 250);
+  --segment:oklch(0.312 0.02 250);
+  --muted:oklch(0.19 0.02 250);
+  --muted-foreground:oklch(0.72 0.015 250);
+  --subtle-foreground:oklch(0.72 0.015 250);
+  --accent:oklch(0.32 0.08 50);
+  --accent-foreground:oklch(0.85 0.14 60);
+  --destructive:oklch(0.7 0.19 25);
+  --destructive-foreground:oklch(0.16 0.02 250);
+  --border:oklch(1 0 0 / 0.1);
+  --border-strong:oklch(1 0 0 / 0.18);
+  --input:oklch(1 0 0 / 0.1);
+  --field-bg:oklch(0.19 0.02 250);
+  --ring:oklch(0.72 0.19 48);
+  --focus:oklch(0.72 0.19 48);
+  --focus-strong:oklch(0.72 0.19 48);
+  --link:oklch(0.72 0.19 48);
+  --link-hover:oklch(0.78 0.17 50);
+  --selection:oklch(0.32 0.08 50);
+  --control-selected:oklch(0.72 0.19 48);
+  --control-selected-foreground:oklch(1 0 0);
+  --control-selected-dot:oklch(1 0 0);
+  --primary-mark:oklch(0.16 0.02 250);
+  --overlay:oklch(0 0 0 / 0.6);
+  --chart-1:oklch(0.74 0.18 50);
+  --chart-2:oklch(0.84 0.14 88);
+  --chart-3:oklch(0.72 0.15 158);
+  --chart-4:oklch(0.7 0.13 235);
+  --chart-5:oklch(0.68 0.16 320);
+  --sidebar:oklch(0.21 0.02 250);
+  --sidebar-foreground:oklch(0.96 0.006 250);
+  --sidebar-primary:oklch(0.72 0.19 48);
+  --sidebar-primary-foreground:oklch(0.16 0.02 250);
+  --sidebar-accent:oklch(0.245 0.02 250);
+  --sidebar-accent-foreground:oklch(0.96 0.006 250);
+  --sidebar-border:oklch(1 0 0 / 0.1);
+  --sidebar-ring:oklch(0.72 0.19 48);
+  --sidebar-contrast:#04080d;
+  --sidebar-contrast-accent:#0d151c;
+  --sidebar-contrast-foreground:#e1e5ea;
+  --sidebar-contrast-muted:#7a8188;
+  --success-400:oklch(0.72 0.15 158);
+  --warning-400:oklch(0.78 0.14 78);
+  --danger-400:oklch(0.722 0.1717 25);
+  --info-400:oklch(0.7 0.13 235);
+  --success-bg:oklch(0.32 0.07 158);
+  --warning-bg:oklch(0.34 0.07 80);
+  --danger-bg:oklch(0.34 0.09 25);
+  --info-bg:oklch(0.32 0.06 235);
+  --brand-yellow-ink:#242424;
+  --warning-foreground:#242424;
+  --control-thumb:oklch(1 0 0);
+}}
 [data-brand="ember"][data-theme="light"],[data-brand="ember"] [data-theme="light"]{
   --background:oklch(0.984 0.004 70);
   --foreground:oklch(0.24 0.022 250);
@@ -1008,6 +1279,80 @@ svg.react-flow__connectionline {
   --control-thumb:var(--primary-mark);
   --warning-500:oklch(0.727 0.149 60);
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="ember"]:where(:root):not([data-theme]){
+  --background:oklch(0.984 0.004 70);
+  --foreground:oklch(0.24 0.022 250);
+  --foreground-strong:oklch(0.16 0.02 250);
+  --card:oklch(1 0 0);
+  --card-foreground:oklch(0.24 0.022 250);
+  --popover:oklch(1 0 0);
+  --popover-foreground:oklch(0.24 0.022 250);
+  --surface-1:oklch(1 0 0);
+  --surface-2:oklch(0.975 0.004 70);
+  --surface-3:oklch(0.965 0.006 70);
+  --surface-inset:oklch(0.965 0.006 70);
+  --surface-hover:oklch(0.965 0.006 70);
+  --primary:oklch(0.682 0.197 44.5);
+  --primary-foreground:oklch(1 0 0);
+  --primary-hover:oklch(0.63 0.197 44.5);
+  --primary-active:oklch(0.58 0.19 44.5);
+  --primary-emphasis:oklch(0.52 0.17 45);
+  --primary-outline:oklch(0.682 0.197 44.5 / 0.35);
+  --secondary:oklch(0.965 0.006 70);
+  --secondary-foreground:oklch(0.24 0.022 250);
+  --secondary-hover:oklch(0.94 0.006 70);
+  --muted:oklch(0.965 0.006 70);
+  --muted-foreground:oklch(0.49 0.018 255);
+  --subtle-foreground:oklch(0.49 0.018 255);
+  --accent:oklch(0.96 0.04 60);
+  --accent-foreground:oklch(0.52 0.17 45);
+  --destructive:oklch(0.62 0.21 26);
+  --destructive-foreground:oklch(1 0 0);
+  --border:oklch(0.915 0.006 255);
+  --border-strong:oklch(0.86 0.008 255);
+  --input:oklch(0.915 0.006 255);
+  --field-bg:oklch(1 0 0);
+  --ring:oklch(0.682 0.197 44.5);
+  --focus:oklch(0.682 0.197 44.5);
+  --focus-strong:#ff6600;
+  --selection:oklch(0.96 0.04 60);
+  --control-selected:oklch(0.682 0.197 44.5);
+  --control-selected-foreground:oklch(1 0 0);
+  --control-selected-dot:oklch(1 0 0);
+  --primary-mark:oklch(1 0 0);
+  --overlay:oklch(0.16 0.018 250 / 0.45);
+  --chart-1:oklch(0.682 0.197 44.5);
+  --chart-2:oklch(0.82 0.15 88);
+  --chart-3:oklch(0.66 0.15 155);
+  --chart-4:oklch(0.62 0.13 235);
+  --chart-5:oklch(0.6 0.16 320);
+  --sidebar:oklch(1 0 0);
+  --sidebar-foreground:oklch(0.24 0.022 250);
+  --sidebar-primary:oklch(0.52 0.17 45);
+  --sidebar-primary-foreground:oklch(1 0 0);
+  --sidebar-accent:oklch(0.975 0.004 70);
+  --sidebar-accent-foreground:oklch(0.24 0.022 250);
+  --sidebar-border:oklch(0.915 0.006 255);
+  --sidebar-ring:oklch(0.682 0.197 44.5);
+  --sidebar-contrast:#0e141c;
+  --sidebar-contrast-accent:#182029;
+  --sidebar-contrast-foreground:#e4e8ed;
+  --sidebar-contrast-muted:#8c939b;
+  --success-400:oklch(0.52 0.1276 155);
+  --warning-400:oklch(0.532 0.1129 75);
+  --danger-400:oklch(0.542 0.21 26);
+  --info-400:oklch(0.526 0.1106 235);
+  --success-bg:oklch(0.95 0.05 155);
+  --warning-bg:oklch(0.95 0.06 80);
+  --danger-bg:oklch(0.95 0.05 25);
+  --info-bg:oklch(0.95 0.04 235);
+  --link:oklch(0.682 0.197 44.5);
+  --link-hover:oklch(0.63 0.197 44.5);
+  --brand-yellow-ink:#242424;
+  --warning-foreground:#242424;
+  --control-thumb:var(--primary-mark);
+  --warning-500:oklch(0.727 0.149 60);
+}}
 [data-brand="sun"][data-theme="dark"],[data-brand="sun"] [data-theme="dark"]{
   --primary:#facc15;
   --primary-foreground:#18181b;
@@ -1033,6 +1378,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#facc15;
   --sidebar-current-line:rgba(250,204,21,0.75);
 }
+@media (prefers-color-scheme: dark){[data-brand="sun"]:where(:root):not([data-theme]){
+  --primary:#facc15;
+  --primary-foreground:#18181b;
+  --primary-hover:#fbd34e;
+  --primary-active:#eabe13;
+  --primary-emphasis:#facc15;
+  --primary-outline:rgba(250,204,21,0.349);
+  --link:#facc15;
+  --link-hover:#facc15;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:#facc15;
+  --focus:#facc15;
+  --ring:#facc15;
+  --control-selected:#facc15;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(250,204,21,0.2196);
+  --accent:#38311a;
+  --accent-foreground:#facc15;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#facc15;
+  --sidebar-current-line:rgba(250,204,21,0.75);
+}}
 [data-brand="sun"][data-theme="light"],[data-brand="sun"] [data-theme="light"]{
   --primary:#facc15;
   --primary-foreground:#18181b;
@@ -1058,6 +1428,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#b27600;
   --sidebar-current-line:rgba(250,204,21,0.75);
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="sun"]:where(:root):not([data-theme]){
+  --primary:#facc15;
+  --primary-foreground:#18181b;
+  --primary-hover:#fbd34e;
+  --primary-active:#eabe13;
+  --primary-emphasis:var(--foreground);
+  --primary-outline:rgba(250,204,21,0.349);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --link-mark:rgba(250,204,21,0.451);
+  --link-underline:#facc15;
+  --focus:#b27600;
+  --ring:#b27600;
+  --control-selected:#facc15;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(250,204,21,0.1804);
+  --accent:#fef8de;
+  --accent-foreground:var(--foreground);
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#b27600;
+  --sidebar-current-line:rgba(250,204,21,0.75);
+}}
 [data-brand="honey"][data-theme="dark"],[data-brand="honey"] [data-theme="dark"]{
   --primary:#f5a524;
   --primary-foreground:#18181b;
@@ -1083,6 +1478,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#f5a524;
   --sidebar-current-line:rgba(245,165,36,0.75);
 }
+@media (prefers-color-scheme: dark){[data-brand="honey"]:where(:root):not([data-theme]){
+  --primary:#f5a524;
+  --primary-foreground:#18181b;
+  --primary-hover:#f7b04e;
+  --primary-active:#e59a21;
+  --primary-emphasis:#f5a524;
+  --primary-outline:rgba(245,165,36,0.349);
+  --link:#f5a524;
+  --link-hover:#f5a524;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:#f5a524;
+  --focus:#f5a524;
+  --ring:#f5a524;
+  --control-selected:#f5a524;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(245,165,36,0.2196);
+  --accent:#372c1c;
+  --accent-foreground:#f5a524;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#f5a524;
+  --sidebar-current-line:rgba(245,165,36,0.75);
+}}
 [data-brand="honey"][data-theme="light"],[data-brand="honey"] [data-theme="light"]{
   --primary:#f5a524;
   --primary-foreground:#18181b;
@@ -1108,6 +1528,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#cc6700;
   --sidebar-current-line:rgba(245,165,36,0.75);
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="honey"]:where(:root):not([data-theme]){
+  --primary:#f5a524;
+  --primary-foreground:#18181b;
+  --primary-hover:#f7b04e;
+  --primary-active:#e59a21;
+  --primary-emphasis:var(--foreground);
+  --primary-outline:rgba(245,165,36,0.349);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --link-mark:rgba(245,165,36,0.451);
+  --link-underline:#f5a524;
+  --focus:#cc6700;
+  --ring:#cc6700;
+  --control-selected:#f5a524;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(245,165,36,0.1804);
+  --accent:#fef2e0;
+  --accent-foreground:var(--foreground);
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#cc6700;
+  --sidebar-current-line:rgba(245,165,36,0.75);
+}}
 [data-brand="orange"][data-theme="dark"],[data-brand="orange"] [data-theme="dark"]{
   --primary:#ff7a1a;
   --primary-foreground:#18181b;
@@ -1137,6 +1582,35 @@ svg.react-flow__connectionline {
   --warning-400:#f5a524;
   --warning-bg:#4a320b;
 }
+@media (prefers-color-scheme: dark){[data-brand="orange"]:where(:root):not([data-theme]){
+  --primary:#ff7a1a;
+  --primary-foreground:#18181b;
+  --primary-hover:#ff8c46;
+  --primary-active:#ee7218;
+  --primary-emphasis:#ff904f;
+  --primary-outline:rgba(255,122,26,0.349);
+  --link:#ff904f;
+  --link-hover:#ff904f;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:#ff7a1a;
+  --focus:#ff7a1a;
+  --ring:#ff7a1a;
+  --control-selected:#ff7a1a;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(255,122,26,0.2196);
+  --accent:#38261b;
+  --accent-foreground:#ff904f;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#ff7a1a;
+  --sidebar-current-line:rgba(255,122,26,0.75);
+  --warning:#f5a524;
+  --warning-hover:#f7b04e;
+  --warning-400:#f5a524;
+  --warning-bg:#4a320b;
+}}
 [data-brand="orange"][data-theme="light"],[data-brand="orange"] [data-theme="light"]{
   --primary:#ff7a1a;
   --primary-foreground:#18181b;
@@ -1166,6 +1640,35 @@ svg.react-flow__connectionline {
   --warning-400:#8c5b00;
   --warning-bg:#fffbf6;
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="orange"]:where(:root):not([data-theme]){
+  --primary:#ff7a1a;
+  --primary-foreground:#18181b;
+  --primary-hover:#ff8c46;
+  --primary-active:#ee7218;
+  --primary-emphasis:#a44900;
+  --primary-outline:rgba(255,122,26,0.349);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --link-mark:rgba(255,122,26,0.451);
+  --link-underline:#ff7a1a;
+  --focus:#d46100;
+  --ring:#d46100;
+  --control-selected:#ff7a1a;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(255,122,26,0.1804);
+  --accent:#ffecdf;
+  --accent-foreground:#a44900;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#d46100;
+  --sidebar-current-line:rgba(255,122,26,0.75);
+  --warning:#f5a524;
+  --warning-hover:#f7b04e;
+  --warning-400:#8c5b00;
+  --warning-bg:#fffbf6;
+}}
 [data-brand="magenta"][data-theme="dark"],[data-brand="magenta"] [data-theme="dark"]{
   --primary:#e0196e;
   --primary-foreground:#ffffff;
@@ -1192,6 +1695,32 @@ svg.react-flow__connectionline {
   --sidebar-current-line:rgba(224,25,110,0.75);
   --primary-gradient-end:oklch(0.4137 0.1594 3.94);
 }
+@media (prefers-color-scheme: dark){[data-brand="magenta"]:where(:root):not([data-theme]){
+  --primary:#e0196e;
+  --primary-foreground:#ffffff;
+  --primary-hover:#bd135c;
+  --primary-active:#bd135c;
+  --primary-emphasis:#ff88a8;
+  --primary-outline:rgba(224,25,110,0.349);
+  --link:#ff88a8;
+  --link-hover:#ff88a8;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:#e0196e;
+  --focus:#ff4688;
+  --ring:#ff4688;
+  --control-selected:#e0196e;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#ffffff;
+  --selection:rgba(224,25,110,0.2196);
+  --accent:#341827;
+  --accent-foreground:#ff88a8;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#ffffff;
+  --sidebar-ring:#ff4688;
+  --sidebar-current-line:rgba(224,25,110,0.75);
+  --primary-gradient-end:oklch(0.4137 0.1594 3.94);
+}}
 [data-brand="magenta"][data-theme="light"],[data-brand="magenta"] [data-theme="light"]{
   --primary:#e0196e;
   --primary-foreground:#ffffff;
@@ -1218,6 +1747,32 @@ svg.react-flow__connectionline {
   --sidebar-current-line:rgba(224,25,110,0.75);
   --primary-gradient-end:oklch(0.4137 0.1594 3.94);
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="magenta"]:where(:root):not([data-theme]){
+  --primary:#e0196e;
+  --primary-foreground:#ffffff;
+  --primary-hover:#bd135c;
+  --primary-active:#bd135c;
+  --primary-emphasis:#bb0059;
+  --primary-outline:rgba(224,25,110,0.349);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --link-mark:rgba(224,25,110,0.451);
+  --link-underline:#e0196e;
+  --focus:#e0196e;
+  --ring:#e0196e;
+  --control-selected:#e0196e;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#ffffff;
+  --selection:rgba(224,25,110,0.1804);
+  --accent:#fbdfeb;
+  --accent-foreground:#bb0059;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#ffffff;
+  --sidebar-ring:#e0196e;
+  --sidebar-current-line:rgba(224,25,110,0.75);
+  --primary-gradient-end:oklch(0.4137 0.1594 3.94);
+}}
 [data-brand="violet"][data-theme="dark"],[data-brand="violet"] [data-theme="dark"]{
   --primary:#7c3aed;
   --primary-foreground:#ffffff;
@@ -1244,6 +1799,32 @@ svg.react-flow__connectionline {
   --sidebar-current-line:rgba(124,58,237,0.75);
   --primary-gradient-end:oklch(0.3789 0.1726 293.01);
 }
+@media (prefers-color-scheme: dark){[data-brand="violet"]:where(:root):not([data-theme]){
+  --primary:#7c3aed;
+  --primary-foreground:#ffffff;
+  --primary-hover:#682fc8;
+  --primary-active:#682fc8;
+  --primary-emphasis:#b49eff;
+  --primary-outline:rgba(124,58,237,0.349);
+  --link:#b49eff;
+  --link-hover:#b49eff;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:#7c3aed;
+  --focus:#9c76ff;
+  --ring:#9c76ff;
+  --control-selected:#7c3aed;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#ffffff;
+  --selection:rgba(124,58,237,0.2196);
+  --accent:#261d38;
+  --accent-foreground:#b49eff;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#ffffff;
+  --sidebar-ring:#9c76ff;
+  --sidebar-current-line:rgba(124,58,237,0.75);
+  --primary-gradient-end:oklch(0.3789 0.1726 293.01);
+}}
 [data-brand="violet"][data-theme="light"],[data-brand="violet"] [data-theme="light"]{
   --primary:#7c3aed;
   --primary-foreground:#ffffff;
@@ -1270,6 +1851,32 @@ svg.react-flow__connectionline {
   --sidebar-current-line:rgba(124,58,237,0.75);
   --primary-gradient-end:oklch(0.3789 0.1726 293.01);
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="violet"]:where(:root):not([data-theme]){
+  --primary:#7c3aed;
+  --primary-foreground:#ffffff;
+  --primary-hover:#682fc8;
+  --primary-active:#682fc8;
+  --primary-emphasis:#7530e4;
+  --primary-outline:rgba(124,58,237,0.349);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --link-mark:rgba(124,58,237,0.451);
+  --link-underline:#7c3aed;
+  --focus:#7c3aed;
+  --ring:#7c3aed;
+  --control-selected:#7c3aed;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#ffffff;
+  --selection:rgba(124,58,237,0.1804);
+  --accent:#ede3fc;
+  --accent-foreground:#7530e4;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#ffffff;
+  --sidebar-ring:#7c3aed;
+  --sidebar-current-line:rgba(124,58,237,0.75);
+  --primary-gradient-end:oklch(0.3789 0.1726 293.01);
+}}
 [data-brand="indigo"][data-theme="dark"],[data-brand="indigo"] [data-theme="dark"]{
   --primary:#4f46e5;
   --primary-foreground:#ffffff;
@@ -1296,6 +1903,32 @@ svg.react-flow__connectionline {
   --sidebar-current-line:rgba(79,70,229,0.75);
   --primary-gradient-end:oklch(0.3574 0.161 276.97);
 }
+@media (prefers-color-scheme: dark){[data-brand="indigo"]:where(:root):not([data-theme]){
+  --primary:#4f46e5;
+  --primary-foreground:#ffffff;
+  --primary-hover:#413ac1;
+  --primary-active:#413ac1;
+  --primary-emphasis:#9aa6ff;
+  --primary-outline:rgba(79,70,229,0.349);
+  --link:#9aa6ff;
+  --link-hover:#9aa6ff;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:#4f46e5;
+  --focus:#7982ff;
+  --ring:#7982ff;
+  --control-selected:#4f46e5;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#ffffff;
+  --selection:rgba(79,70,229,0.2196);
+  --accent:#201e37;
+  --accent-foreground:#9aa6ff;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#ffffff;
+  --sidebar-ring:#7982ff;
+  --sidebar-current-line:rgba(79,70,229,0.75);
+  --primary-gradient-end:oklch(0.3574 0.161 276.97);
+}}
 [data-brand="indigo"][data-theme="light"],[data-brand="indigo"] [data-theme="light"]{
   --primary:#4f46e5;
   --primary-foreground:#ffffff;
@@ -1322,6 +1955,32 @@ svg.react-flow__connectionline {
   --sidebar-current-line:rgba(79,70,229,0.75);
   --primary-gradient-end:oklch(0.3574 0.161 276.97);
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="indigo"]:where(:root):not([data-theme]){
+  --primary:#4f46e5;
+  --primary-foreground:#ffffff;
+  --primary-hover:#413ac1;
+  --primary-active:#413ac1;
+  --primary-emphasis:#4e45e4;
+  --primary-outline:rgba(79,70,229,0.349);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --link-mark:rgba(79,70,229,0.451);
+  --link-underline:#4f46e5;
+  --focus:#4f46e5;
+  --ring:#4f46e5;
+  --control-selected:#4f46e5;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#ffffff;
+  --selection:rgba(79,70,229,0.1804);
+  --accent:#e6e5fb;
+  --accent-foreground:#4e45e4;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#ffffff;
+  --sidebar-ring:#4f46e5;
+  --sidebar-current-line:rgba(79,70,229,0.75);
+  --primary-gradient-end:oklch(0.3574 0.161 276.97);
+}}
 [data-brand="cobalt"][data-theme="dark"],[data-brand="cobalt"] [data-theme="dark"]{
   --primary:#0246f1;
   --primary-foreground:#ffffff;
@@ -1348,6 +2007,32 @@ svg.react-flow__connectionline {
   --sidebar-current-line:rgba(2,70,241,0.75);
   --primary-gradient-end:oklch(0.3466 0.1812 263.46);
 }
+@media (prefers-color-scheme: dark){[data-brand="cobalt"]:where(:root):not([data-theme]){
+  --primary:#0246f1;
+  --primary-foreground:#ffffff;
+  --primary-hover:#013acb;
+  --primary-active:#013acb;
+  --primary-emphasis:#82acff;
+  --primary-outline:rgba(2,70,241,0.349);
+  --link:#82acff;
+  --link-hover:#82acff;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:#0246f1;
+  --focus:#548aff;
+  --ring:#548aff;
+  --control-selected:#0246f1;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#ffffff;
+  --selection:rgba(2,70,241,0.2196);
+  --accent:#151e39;
+  --accent-foreground:#82acff;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#ffffff;
+  --sidebar-ring:#548aff;
+  --sidebar-current-line:rgba(2,70,241,0.75);
+  --primary-gradient-end:oklch(0.3466 0.1812 263.46);
+}}
 [data-brand="cobalt"][data-theme="light"],[data-brand="cobalt"] [data-theme="light"]{
   --primary:#0246f1;
   --primary-foreground:#ffffff;
@@ -1374,6 +2059,32 @@ svg.react-flow__connectionline {
   --sidebar-current-line:rgba(2,70,241,0.75);
   --primary-gradient-end:oklch(0.3466 0.1812 263.46);
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="cobalt"]:where(:root):not([data-theme]){
+  --primary:#0246f1;
+  --primary-foreground:#ffffff;
+  --primary-hover:#013acb;
+  --primary-active:#013acb;
+  --primary-emphasis:#0246f1;
+  --primary-outline:rgba(2,70,241,0.349);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --link-mark:rgba(2,70,241,0.451);
+  --link-underline:#0246f1;
+  --focus:#0246f1;
+  --ring:#0246f1;
+  --control-selected:#0246f1;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#ffffff;
+  --selection:rgba(2,70,241,0.1804);
+  --accent:#dce5fd;
+  --accent-foreground:#0246f1;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#ffffff;
+  --sidebar-ring:#0246f1;
+  --sidebar-current-line:rgba(2,70,241,0.75);
+  --primary-gradient-end:oklch(0.3466 0.1812 263.46);
+}}
 [data-brand="cyan"][data-theme="dark"],[data-brand="cyan"] [data-theme="dark"]{
   --primary:#06b6d4;
   --primary-foreground:#18181b;
@@ -1399,6 +2110,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#06b6d4;
   --sidebar-current-line:rgba(6,182,212,0.75);
 }
+@media (prefers-color-scheme: dark){[data-brand="cyan"]:where(:root):not([data-theme]){
+  --primary:#06b6d4;
+  --primary-foreground:#18181b;
+  --primary-hover:#48bfd9;
+  --primary-active:#05aac6;
+  --primary-emphasis:#1cbcdb;
+  --primary-outline:rgba(6,182,212,0.349);
+  --link:#1cbcdb;
+  --link-hover:#1cbcdb;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:#06b6d4;
+  --focus:#06b6d4;
+  --ring:#06b6d4;
+  --control-selected:#06b6d4;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(6,182,212,0.2196);
+  --accent:#152e35;
+  --accent-foreground:#1cbcdb;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#06b6d4;
+  --sidebar-current-line:rgba(6,182,212,0.75);
+}}
 [data-brand="cyan"][data-theme="light"],[data-brand="cyan"] [data-theme="light"]{
   --primary:#06b6d4;
   --primary-foreground:#18181b;
@@ -1424,6 +2160,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#008fa8;
   --sidebar-current-line:rgba(6,182,212,0.75);
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="cyan"]:where(:root):not([data-theme]){
+  --primary:#06b6d4;
+  --primary-foreground:#18181b;
+  --primary-hover:#48bfd9;
+  --primary-active:#05aac6;
+  --primary-emphasis:#006d80;
+  --primary-outline:rgba(6,182,212,0.349);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --link-mark:rgba(6,182,212,0.451);
+  --link-underline:#06b6d4;
+  --focus:#008fa8;
+  --ring:#008fa8;
+  --control-selected:#06b6d4;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(6,182,212,0.1804);
+  --accent:#dcf5f9;
+  --accent-foreground:#006d80;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#008fa8;
+  --sidebar-current-line:rgba(6,182,212,0.75);
+}}
 [data-brand="turquoise"][data-theme="dark"],[data-brand="turquoise"] [data-theme="dark"]{
   --primary:#14c8a8;
   --primary-foreground:#18181b;
@@ -1449,6 +2210,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#14c8a8;
   --sidebar-current-line:rgba(20,200,168,0.75);
 }
+@media (prefers-color-scheme: dark){[data-brand="turquoise"]:where(:root):not([data-theme]){
+  --primary:#14c8a8;
+  --primary-foreground:#18181b;
+  --primary-hover:#4ecfb2;
+  --primary-active:#12bb9d;
+  --primary-emphasis:#14c8a8;
+  --primary-outline:rgba(20,200,168,0.349);
+  --link:#14c8a8;
+  --link-hover:#14c8a8;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:#14c8a8;
+  --focus:#14c8a8;
+  --ring:#14c8a8;
+  --control-selected:#14c8a8;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(20,200,168,0.2196);
+  --accent:#17312f;
+  --accent-foreground:#14c8a8;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#14c8a8;
+  --sidebar-current-line:rgba(20,200,168,0.75);
+}}
 [data-brand="turquoise"][data-theme="light"],[data-brand="turquoise"] [data-theme="light"]{
   --primary:#14c8a8;
   --primary-foreground:#18181b;
@@ -1474,6 +2260,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#00937b;
   --sidebar-current-line:rgba(20,200,168,0.75);
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="turquoise"]:where(:root):not([data-theme]){
+  --primary:#14c8a8;
+  --primary-foreground:#18181b;
+  --primary-hover:#4ecfb2;
+  --primary-active:#12bb9d;
+  --primary-emphasis:#00715e;
+  --primary-outline:rgba(20,200,168,0.349);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --link-mark:rgba(20,200,168,0.451);
+  --link-underline:#14c8a8;
+  --focus:#00937b;
+  --ring:#00937b;
+  --control-selected:#14c8a8;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(20,200,168,0.1804);
+  --accent:#def7f3;
+  --accent-foreground:#00715e;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#00937b;
+  --sidebar-current-line:rgba(20,200,168,0.75);
+}}
 [data-brand="emerald"][data-theme="dark"],[data-brand="emerald"] [data-theme="dark"]{
   --primary:#17c964;
   --primary-foreground:#18181b;
@@ -1499,6 +2310,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#17c964;
   --sidebar-current-line:rgba(23,201,100,0.75);
 }
+@media (prefers-color-scheme: dark){[data-brand="emerald"]:where(:root):not([data-theme]){
+  --primary:#17c964;
+  --primary-foreground:#18181b;
+  --primary-hover:#4dd078;
+  --primary-active:#15bc5d;
+  --primary-emphasis:#17c964;
+  --primary-outline:rgba(23,201,100,0.349);
+  --link:#17c964;
+  --link-hover:#17c964;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:#17c964;
+  --focus:#17c964;
+  --ring:#17c964;
+  --control-selected:#17c964;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(23,201,100,0.2196);
+  --accent:#183125;
+  --accent-foreground:#17c964;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#17c964;
+  --sidebar-current-line:rgba(23,201,100,0.75);
+}}
 [data-brand="emerald"][data-theme="light"],[data-brand="emerald"] [data-theme="light"]{
   --primary:#17c964;
   --primary-foreground:#18181b;
@@ -1524,6 +2360,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#009647;
   --sidebar-current-line:rgba(23,201,100,0.75);
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="emerald"]:where(:root):not([data-theme]){
+  --primary:#17c964;
+  --primary-foreground:#18181b;
+  --primary-hover:#4dd078;
+  --primary-active:#15bc5d;
+  --primary-emphasis:#007435;
+  --primary-outline:rgba(23,201,100,0.349);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --link-mark:rgba(23,201,100,0.451);
+  --link-underline:#17c964;
+  --focus:#009647;
+  --ring:#009647;
+  --control-selected:#17c964;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(23,201,100,0.1804);
+  --accent:#dff7e9;
+  --accent-foreground:#007435;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#009647;
+  --sidebar-current-line:rgba(23,201,100,0.75);
+}}
 [data-brand="lime"][data-theme="dark"],[data-brand="lime"] [data-theme="dark"]{
   --primary:#a3e635;
   --primary-foreground:#18181b;
@@ -1549,6 +2410,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#a3e635;
   --sidebar-current-line:rgba(163,230,53,0.75);
 }
+@media (prefers-color-scheme: dark){[data-brand="lime"]:where(:root):not([data-theme]){
+  --primary:#a3e635;
+  --primary-foreground:#18181b;
+  --primary-hover:#aeea5b;
+  --primary-active:#98d731;
+  --primary-emphasis:#a3e635;
+  --primary-outline:rgba(163,230,53,0.349);
+  --link:#a3e635;
+  --link-hover:#a3e635;
+  --link-mark:rgba(0,0,0,0);
+  --link-underline:#a3e635;
+  --focus:#a3e635;
+  --ring:#a3e635;
+  --control-selected:#a3e635;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(163,230,53,0.2196);
+  --accent:#2b351f;
+  --accent-foreground:#a3e635;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#a3e635;
+  --sidebar-current-line:rgba(163,230,53,0.75);
+}}
 [data-brand="lime"][data-theme="light"],[data-brand="lime"] [data-theme="light"]{
   --primary:#a3e635;
   --primary-foreground:#18181b;
@@ -1574,6 +2460,31 @@ svg.react-flow__connectionline {
   --sidebar-ring:#619000;
   --sidebar-current-line:rgba(163,230,53,0.75);
 }
+@media not all and (prefers-color-scheme: dark){[data-brand="lime"]:where(:root):not([data-theme]){
+  --primary:#a3e635;
+  --primary-foreground:#18181b;
+  --primary-hover:#aeea5b;
+  --primary-active:#98d731;
+  --primary-emphasis:#4c7200;
+  --primary-outline:rgba(163,230,53,0.349);
+  --link:var(--foreground);
+  --link-hover:var(--foreground);
+  --link-mark:rgba(163,230,53,0.451);
+  --link-underline:#a3e635;
+  --focus:#619000;
+  --ring:#619000;
+  --control-selected:#a3e635;
+  --control-selected-foreground:#ffffff;
+  --control-selected-dot:#ffffff;
+  --primary-mark:#18181b;
+  --selection:rgba(163,230,53,0.1804);
+  --accent:#f2fce3;
+  --accent-foreground:#4c7200;
+  --sidebar-primary:var(--primary-emphasis);
+  --sidebar-primary-foreground:#18181b;
+  --sidebar-ring:#619000;
+  --sidebar-current-line:rgba(163,230,53,0.75);
+}}
 [data-density="compact"]{
   --control-h-xs:1.5rem;
   --control-h-sm:1.75rem;
@@ -1636,7 +2547,9 @@ body { margin:0; background:var(--background); color:var(--foreground); font-fam
    do D16 (a página SEM `data-theme` seguir o sistema, clara quando ele não diz nada) mexe em 78 regras e nas 13 marcas:
    fica para um lote só dela. */
 [data-theme="dark"] { color-scheme:dark; }
+@media (prefers-color-scheme: dark){:where(:root):not([data-theme]){ color-scheme:dark; }}
 [data-theme="light"] { color-scheme:light; }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]){ color-scheme:light; }}
 button,input,textarea,select { font:inherit; }
 /* ADR-0077 (22/10/2026): todo título, do h1 ao h6, na fonte de título (a Sora), por uma regra geral de força zero,
    como no sistema que serviu de modelo: quem fixa outra fonte NO PRÓPRIO título ganha dela; a fonte que o título só
@@ -2484,6 +3397,7 @@ img,svg { display:block; }
    Nas outras marcas o token não existe, e vale a conta. */
 .sidebar.sidebar-contrast { --sidebar-contrast:inherit; --sidebar-contrast-accent:inherit; --sidebar-contrast-foreground:inherit; --sidebar-contrast-muted:inherit; --sidebar:var(--sidebar-contrast,var(--card)); --sidebar-accent:var(--sidebar-contrast-accent,var(--secondary)); }
 [data-theme="dark"] .sidebar.sidebar-contrast:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { --sidebar:var(--sidebar-contrast,color-mix(in oklch,var(--background) 55%,black)); --sidebar-accent:var(--sidebar-contrast-accent,var(--card)); }
+@media (prefers-color-scheme: dark){:where(:root):not([data-theme]) .sidebar.sidebar-contrast:where(:not([data-theme] *)){ --sidebar:var(--sidebar-contrast,color-mix(in oklch,var(--background) 55%,black)); --sidebar-accent:var(--sidebar-contrast-accent,var(--card)); }}
 .sidebar.sidebar-contrast:where([data-brand="ember"] *) { --sidebar-foreground:var(--sidebar-contrast-foreground); --sidebar-accent-foreground:var(--sidebar-contrast-foreground); --muted-foreground:var(--sidebar-contrast-muted); }
 /* A `plain` não tem caixa nem fundo; escura, a letra clara ficaria sobre a página clara (ilegível). Com `contrast`, ela pinta
    o fundo da lateral — a flutuante sem a sombra. As outras (a flutuante, a de canto reto, a trilha e o painel) já pintam. */
@@ -2914,6 +3828,7 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 /* A mistura de 45% ficou SÓ na `ember` (ADR-0083, 26/10/2026): na Aurea, a letra de destaque do claro é o grafite —
    a regra fica na seção "A paleta da 1.0", no fim da folha. */
 [data-theme="light"] .eyebrow:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .eyebrow:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme] *)){ color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }}
 .demo { min-width:0; padding:var(--card-pad); border:1px solid transparent; border-radius:var(--radius-card); background:var(--card); color:var(--card-foreground); box-shadow:none; }
 
 /* ========================================================================== */
@@ -3012,6 +3927,7 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .btn-danger-ghost { --btn-bg:transparent; --btn-fg:var(--danger-400); --btn-border:transparent; }
 .btn-danger-ghost:hover:not(:disabled):not([aria-disabled="true"]) { --btn-bg:color-mix(in oklab, var(--destructive) 14%, transparent); }
 [data-theme="light"] .btn-danger-outline:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-danger-ghost:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-link-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:var(--danger-400); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .btn-danger-outline:where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-danger-ghost:where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-link-danger:where(:not([data-theme] *)){ --btn-fg:var(--danger-400); }}
 /* A LETRA DA MARCA nos botões sem caixa é a de DESTAQUE (ADR-0081, 24/10/2026 — a ADR-0076 aplicada a eles): o azul no
    claro, o amarelo no escuro, e na `ember` o laranja escuro dela. De 21/08 até aqui, o claro levava a mistura marrom
    (a marca a 45% no texto): passava sobre a página e caía para 4,22 dentro da barra de ferramentas; o azul dá 4,69. O
@@ -3089,6 +4005,7 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .btn-tone-brand:not(.btn-link):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--primary) 14%, transparent); }
 .btn-tone-danger,.btn-tone-danger:hover:not(:disabled) { --btn-fg:var(--danger-400); }
 [data-theme="light"] .btn-tone-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-tone-danger:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:var(--danger-400); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .btn-tone-danger:where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-tone-danger:hover:not(:disabled):where(:not([data-theme] *)){ --btn-fg:var(--danger-400); }}
 .btn-outline.btn-tone-danger { --btn-border:var(--danger-400); }
 .btn-tone-danger:not(.btn-link):hover:not(:disabled) { --btn-bg:color-mix(in oklab, var(--destructive) 14%, transparent); }
 .btn-tone-success,.btn-tone-success:hover:not(:disabled) { --btn-fg:var(--success-400); }
@@ -3284,6 +4201,7 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 /* chevron: cor = --muted-foreground de cada tema (dark #a1a1a1, light #505050); tokenizar na Fase 1 */
 .select { appearance:none; padding-inline-end:var(--step-select-pe,38px); background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23a1a1a1' stroke-width='1.6'/%3E%3C/svg%3E"); background-position:calc(100% - 12px) 50%; background-size:12px 8px; background-repeat:no-repeat; }
 [data-theme="light"] .select:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23505050' stroke-width='1.6'/%3E%3C/svg%3E"); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .select:where(:not([data-theme] *)){ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23505050' stroke-width='1.6'/%3E%3C/svg%3E"); }}
 /* Widgets nativos dos campos (calendário do type=date, dropdown do select, scrollbar do textarea) seguem o tema */
 .input,.textarea,.select { color-scheme:dark; font-size:var(--step-fs,inherit); }
 /* ESCALA DA REFERÊNCIA (ADR-0050, 24/09/2026): no computador o texto digitado é 14, como toda peça;
@@ -3291,6 +4209,7 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    é do Safari do iPhone: campo com letra menor que 16 faz a página AMPLIAR sozinha ao ganhar foco. */
 @media (max-width:39.99875em) { .input,.textarea,.number-field-input,.select-value { font-size:var(--text-base); } }
 [data-theme="light"] .input:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .textarea:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .select:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color-scheme:light; }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .input:where(:not([data-theme] *)),:where(:root):not([data-theme]) .textarea:where(:not([data-theme] *)),:where(:root):not([data-theme]) .select:where(:not([data-theme] *)){ color-scheme:light; }}
 /* NumberField (Lote 1): menos · campo · mais numa peça só, que é onde as referências convergem.
    O campo é `.input` — a mesma altura, o mesmo raio, o mesmo foco de qualquer campo do sistema.
    Largura em token para caber de 3 a 4 dígitos sem virar caixa de texto. */
@@ -3578,6 +4497,7 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 /* No escuro, o texto de apoio do cartão marcado lia 4,07:1 no --segment (o axe da varredura, 02/11/2026): ali dentro ele é o
    texto a 80% sobre o --segment, como a letra apagada de uma peça erguida. */
 [data-theme="dark"] .radio-group-cards > .radio:has(input:checked):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { --muted-foreground:color-mix(in oklab, var(--foreground) 80%, var(--segment)); }
+@media (prefers-color-scheme: dark){:where(:root):not([data-theme]) .radio-group-cards > .radio:has(input:checked):where(:not([data-theme] *)){ --muted-foreground:color-mix(in oklab, var(--foreground) 80%, var(--segment)); }}
 .radio-group-cards > .radio:has(input:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 .radio-group-cards > .radio input:focus-visible + .control-mark { outline:none; }
 .radio-group-indicator-none > .radio-group-cards > .radio > .control-mark { display:none; }
@@ -3868,6 +4788,7 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    item atual e, vindo depois, APAGAVA o laranja dele. Medido no mesmo minuto: ativo e inativo
    saíram com a mesma cor. Com o `:not` ela pesa (0,3,1) e só alcança quem está em repouso. */
 [data-theme="light"] .doc-nav a:not(.active):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color:color-mix(in oklab, var(--sidebar-foreground) 72%, transparent); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .doc-nav a:not(.active):where(:not([data-theme] *)){ color:color-mix(in oklab, var(--sidebar-foreground) 72%, transparent); }}
 .is-selected::after,.btn-nav[aria-current]:not([aria-current="false"])::after,
 .btn[aria-pressed="true"]:not(.btn-icon):where([data-brand="ember"],[data-brand="ember"] *)::after,.segmented :is(button,a).active::after,.tabs-secondary .tab[data-active]::after,
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { content:""; position:absolute; inset-inline:15px; bottom:0; height:2px; border-radius:var(--radius-full); background:color-mix(in oklab, var(--primary) 75%, transparent); }
@@ -3881,11 +4802,13 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    Sobre o amarelo, a letra de destaque de DENTRO do item (o selo primário de contagem, um ícone de destaque) é a tinta do
    botão: o azul sobre o amarelo mede 3,49:1 — o axe da varredura achou, no "12" do exemplo da `Sidebar`. */
 [data-theme="light"] :is(.sidebar-item[aria-current],.doc-nav a.active):not(:where([data-brand],[data-brand] *,.sidebar[class*="sidebar-indicator-"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --sidebar-current-line:transparent; --primary-emphasis:var(--primary-foreground); --sidebar-primary:var(--primary-foreground); background:var(--primary); color:var(--primary-foreground); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) :is(.sidebar-item[aria-current],.doc-nav a.active):not(:where([data-brand],[data-brand] *,.sidebar[class*="sidebar-indicator-"] *)):where(:not([data-theme] *)){ --sidebar-current-line:transparent; --primary-emphasis:var(--primary-foreground); --sidebar-primary:var(--primary-foreground); background:var(--primary); color:var(--primary-foreground); }}
 /* A mistura de 45% (o "marrom") ficou SÓ na `ember` (ADR-0083, 26/10/2026). Na Aurea, o escolhido do claro tem a letra
    grafite, e o botão ligado é amarelo — as duas regras ficam na seção "A paleta da 1.0", no fim da folha. */
 [data-theme="light"] .is-selected:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
 [data-theme="light"] .btn[aria-pressed="true"]:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .segmented :is(button,a).active:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
   { --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .is-selected:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-nav[aria-current]:not([aria-current="false"]):where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn[aria-pressed="true"]:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme] *)),:where(:root):not([data-theme]) .segmented :is(button,a).active:where([data-brand="ember"],[data-brand="ember"] *):where(:not([data-theme] *)){ --btn-fg:color-mix(in oklab, var(--primary) 45%, var(--foreground)); color:color-mix(in oklab, var(--primary) 45%, var(--foreground)); }}
 /* A NAV DA LATERAL SAIU DESTA LISTA em 20/08/2026. O ajuste existe porque o amarelo puro não se lê
    sobre o claro — mas ele mistura o `--foreground` da PÁGINA, e o item da lateral não está sobre a
    página: está sobre `--sidebar-accent`. Sob a marca `ember`, onde esse fundo é escuro no tema
@@ -4093,6 +5016,7 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    cartão não conta, e uma faixa clara dentro da página escura não ganha o contorno. */
 .card-contrast { border-color:transparent; }
 [data-theme="dark"] .card-contrast:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { border-color:transparent; }
+@media (prefers-color-scheme: dark){:where(:root):not([data-theme]) .card-contrast:where(:not([data-theme] *)){ border-color:transparent; }}
 /* MT-02 (10/10/2026, ADR-0063): o traço no topo, `--accent-width` (4), na cor CHEIA do tom e igual
    nos dois temas — a exceção que a ADR-0063 abriu na ADR-0061 para enfeite. O navegador desenha a
    borda grossa do topo afinando na curva do canto, até a de 1 dos lados. `.card.card-accent` tem a
@@ -5149,7 +6073,9 @@ button.tag-main { cursor:pointer; }
    GAR-05 espelhada: uma faixa CLARA dentro da página escura volta a mostrar a captura clara. */
 .image-theme-dark { display:none; }
 [data-theme="dark"] .image-theme-dark:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { display:block; }
+@media (prefers-color-scheme: dark){:where(:root):not([data-theme]) .image-theme-dark:where(:not([data-theme] *)){ display:block; }}
 [data-theme="dark"] .image-theme-light:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { display:none; }
+@media (prefers-color-scheme: dark){:where(:root):not([data-theme]) .image-theme-light:where(:not([data-theme] *)){ display:none; }}
 
 /* VÍDEO INCORPORADO (achado N-10, 24/09/2026). A caixa é a mesma superfície do `.media-player` —
    raio de cartão, borda e o fundo `--media-canvas` —, então um trailer do YouTube e um vídeo
@@ -6627,6 +7553,7 @@ button.graph-node-body { cursor:pointer; }
      que pinta `--card` ou `--popover` e recebe conteúdo do app entra nesta lista. */
 :root,[data-theme] { --field-fill-page:var(--fill-2); --field-lift-page:none; }
 [data-theme="light"] { --field-fill-page:var(--card); --field-lift-page:var(--shadow-sm); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]){ --field-fill-page:var(--card); --field-lift-page:var(--shadow-sm); }}
 :root,[data-theme],.demo-panel[data-panel="preview"] { --field-fill:var(--field-fill-page); --field-lift:var(--field-lift-page); }
 :is(.card:not(.card-outline):not(.card-inset),.content:not(.content-plain),.section-card,.demo,.dialog,.drawer,.popover,.menu,.command-palette,.alert,.banner-consent,.toast,.accordion-surface,.datagrid-detail,:is(.table,.table-wrap) tbody :is(td,th),.topbar-floating,.topbar-pill,.sortable-item,.app-shell-docs > .sidebar[popover]:popover-open) { --field-fill:var(--fill-2); --field-lift:none; }
 .input:where(:not(.input-secondary)),.textarea:where(:not(.textarea-secondary)),.select,.input-group:where(:not(:has(>.input-secondary))),.number-field-group,.combobox-multi { background-color:var(--field-fill); box-shadow:var(--field-lift); }
@@ -6647,9 +7574,13 @@ button.graph-node-body { cursor:pointer; }
 .btn-outline.btn-tone-info:hover:not(:disabled) { --btn-bg:color-mix(in oklab,var(--info) 22%,transparent); }
 .btn-outline.btn-tone-warning:hover:not(:disabled) { --btn-bg:color-mix(in oklab,var(--warning) 22%,transparent); }
 [data-theme="light"] .btn-outline.btn-tone-danger:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-outline.btn-tone-danger:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-danger-outline:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-danger-outline:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab,var(--danger-400) 80%,var(--foreground)); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .btn-outline.btn-tone-danger:where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-outline.btn-tone-danger:hover:not(:disabled):where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-danger-outline:where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-danger-outline:hover:not(:disabled):where(:not([data-theme] *)){ --btn-fg:color-mix(in oklab,var(--danger-400) 80%,var(--foreground)); }}
 [data-theme="light"] .btn-outline.btn-tone-success:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-outline.btn-tone-success:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab,var(--success-400) 80%,var(--foreground)); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .btn-outline.btn-tone-success:where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-outline.btn-tone-success:hover:not(:disabled):where(:not([data-theme] *)){ --btn-fg:color-mix(in oklab,var(--success-400) 80%,var(--foreground)); }}
 [data-theme="light"] .btn-outline.btn-tone-info:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-outline.btn-tone-info:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab,var(--info-400) 80%,var(--foreground)); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .btn-outline.btn-tone-info:where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-outline.btn-tone-info:hover:not(:disabled):where(:not([data-theme] *)){ --btn-fg:color-mix(in oklab,var(--info-400) 80%,var(--foreground)); }}
 [data-theme="light"] .btn-outline.btn-tone-warning:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),[data-theme="light"] .btn-outline.btn-tone-warning:hover:not(:disabled):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { --btn-fg:color-mix(in oklab,var(--warning-400) 80%,var(--foreground)); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .btn-outline.btn-tone-warning:where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-outline.btn-tone-warning:hover:not(:disabled):where(:not([data-theme] *)){ --btn-fg:color-mix(in oklab,var(--warning-400) 80%,var(--foreground)); }}
 .code-block,.log-stream,.dropzone,.toolbar,.file-item,.agent-cap { background-color:var(--fill-2); }
 /* O selo de CONTORNO, sem a linha, ganha o acento a 16%, e a letra vai 20% para a cor do texto, nos dois temas (a regra
    da "C" dos botões): com a letra de sempre, o verde caía a 3,79:1 no claro e o `success` a 4,15:1 no escuro, dentro do
@@ -6688,6 +7619,7 @@ button.graph-node-body { cursor:pointer; }
 [data-theme="light"] .btn-nav[aria-current]:not([aria-current="false"]):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
 [data-theme="light"] .segmented :is(button,a).active:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *)
   { --btn-fg:var(--foreground); color:var(--foreground); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .is-selected:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)),:where(:root):not([data-theme]) .eyebrow:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-nav[aria-current]:not([aria-current="false"]):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)),:where(:root):not([data-theme]) .segmented :is(button,a).active:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)){ --btn-fg:var(--foreground); color:var(--foreground); }}
 /* NO ESCURO, a letra do escolhido é o `--primary-emphasis`, a versão do primário feita para ser letra (a regra 2.1b da
    proposta; passo C, 28/10/2026). Na Aurea Gold ele é o próprio amarelo, e nada muda. Nas marcas escuras, o primário puro
    como letra media 1,56:1 (cobalt) a 4,3:1 (cyan) — o axe achou no banco das marcas, e também no `.eyebrow`, que a proposta
@@ -6697,6 +7629,7 @@ button.graph-node-body { cursor:pointer; }
 [data-theme="dark"] .btn-nav[aria-current]:not([aria-current="false"]):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *),
 [data-theme="dark"] .segmented :is(button,a).active:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *)
   { --btn-fg:var(--primary-emphasis); color:var(--primary-emphasis); }
+@media (prefers-color-scheme: dark){:where(:root):not([data-theme]) .is-selected:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)),:where(:root):not([data-theme]) .eyebrow:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)),:where(:root):not([data-theme]) .btn-nav[aria-current]:not([aria-current="false"]):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)),:where(:root):not([data-theme]) .segmented :is(button,a).active:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)){ --btn-fg:var(--primary-emphasis); color:var(--primary-emphasis); }}
 
 /* O BOTÃO LIGADO (Toggle, ToggleGroup, ToolbarButton): amarelo cheio com a letra do botão primário, nos dois temas, sem
    o fio de baixo e sem o fundo "clarinho". As cores passam por `--pressed-*` no próprio botão, para uma faixa com outro
@@ -6725,30 +7658,44 @@ button.graph-node-body { cursor:pointer; }
 [data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not([data-link="underline"],[data-link="underline"] *):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   text-decoration-color:var(--link-mark); text-decoration-thickness:.5em; text-underline-offset:-.32em; text-decoration-skip-ink:none;
   transition:text-decoration-thickness var(--duration-fast) var(--ease-standard),text-underline-offset var(--duration-fast) var(--ease-standard); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not([data-link="underline"],[data-link="underline"] *):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)){
+  text-decoration-color:var(--link-mark); text-decoration-thickness:.5em; text-underline-offset:-.32em; text-decoration-skip-ink:none;
+  transition:text-decoration-thickness var(--duration-fast) var(--ease-standard),text-underline-offset var(--duration-fast) var(--ease-standard); }}
 [data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not([data-link="underline"],[data-link="underline"] *):hover:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   text-decoration-thickness:1.25em; text-underline-offset:-1.02em; }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) :is(a:not([class]),.link,.typography-tone-link):not(.breadcrumb a,nav a,.segmented a):not([data-link="underline"],[data-link="underline"] *):hover:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)){
+  text-decoration-thickness:1.25em; text-underline-offset:-1.02em; }}
 @media (prefers-reduced-motion:reduce) {
   [data-theme="light"] :is(a:not([class]),.link,.typography-tone-link):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { transition:none; }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) :is(a:not([class]),.link,.typography-tone-link):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)){ transition:none; }}
 }
 
 /* As TINTAS que saíam do destaque ficariam cinza com o destaque grafite: no claro, elas saem do próprio amarelo — o selo
    primário de contorno (16%) e a marca do item atual da barra de baixo de aro (15%). */
 [data-theme="light"] .badge-primary.badge-outline:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   background-color:color-mix(in oklab, var(--primary) 16%, transparent); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .badge-primary.badge-outline:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)){
+  background-color:color-mix(in oklab, var(--primary) 16%, transparent); }}
 [data-theme="light"] .bottom-nav-ind-circle-outline .bottom-nav-item[aria-current] .bottom-nav-mark:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   background:color-mix(in srgb, var(--primary) 15%, transparent); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .bottom-nav-ind-circle-outline .bottom-nav-item[aria-current] .bottom-nav-mark:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)){
+  background:color-mix(in srgb, var(--primary) 15%, transparent); }}
 
 /* O CAMPO no claro é BRANCO com a sombra fina em todo lugar, também DENTRO das superfícies brancas (era o cinza
    `--fill-2` ali — ADR-0078, item 2, revertido pela ADR-0083): dentro de um cartão branco, quem separa o campo é a
    sombra. A lista é a das superfícies da regra de campo, acima. No escuro, nada muda. */
 [data-theme="light"] :is(.card:not(.card-outline):not(.card-inset),.content:not(.content-plain),.section-card,.demo,.dialog,.drawer,.popover,.menu,.command-palette,.alert,.banner-consent,.toast,.accordion-surface,.datagrid-detail,:is(.table,.table-wrap) tbody :is(td,th),.topbar-floating,.topbar-pill,.sortable-item,.app-shell-docs > .sidebar[popover]:popover-open):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   --field-fill:var(--card); --field-lift:var(--field-lift-page); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) :is(.card:not(.card-outline):not(.card-inset),.content:not(.content-plain),.section-card,.demo,.dialog,.drawer,.popover,.menu,.command-palette,.alert,.banner-consent,.toast,.accordion-surface,.datagrid-detail,:is(.table,.table-wrap) tbody :is(td,th),.topbar-floating,.topbar-pill,.sortable-item,.app-shell-docs > .sidebar[popover]:popover-open):where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)){
+  --field-fill:var(--card); --field-lift:var(--field-lift-page); }}
 
 /* O FOCO DOS CAMPOS no claro é o amarelo, uma linha só, como no escuro (decisão do Victor, 26/10/2026; a medida — 1,75:1
    na página, 1,91:1 no cartão, abaixo dos 3:1 — vai à bancada do passo A). Os botões e o resto continuam com o grafite. */
 [data-theme="light"] :is(.input,.textarea,.select):focus-visible:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
 [data-theme="light"] :is(.input-group,.combobox-multi,.command-field):focus-within:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
   outline-color:var(--primary); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) :is(.input,.textarea,.select):focus-visible:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)),:where(:root):not([data-theme]) :is(.input-group,.combobox-multi,.command-field):focus-within:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)){
+  outline-color:var(--primary); }}
 
 /* "AUMENTAR CONTRASTE" do sistema (`prefers-contrast: more`: o "Aumentar contraste" do macOS, do iOS e do Android, o
    alto contraste do Windows). Sem linha nenhuma, um campo branco nunca chega aos 3:1 da WCAG 1.4.11 — a página ou o
@@ -6763,6 +7710,8 @@ button.graph-node-body { cursor:pointer; }
   [data-theme="light"] :is(.input,.textarea,.select):focus-visible:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *),
   [data-theme="light"] :is(.input-group,.combobox-multi,.command-field):focus-within:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) {
     outline-color:var(--focus-strong); }
+@media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) :is(.input,.textarea,.select):focus-visible:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)),:where(:root):not([data-theme]) :is(.input-group,.combobox-multi,.command-field):focus-within:where(:not([data-brand="ember"],[data-brand="ember"] *)):where(:not([data-theme] *)){
+    outline-color:var(--focus-strong); }}
 }
 
 /* A LINHA DO TEMPO: o trilho por baixo dos pontos é conserto de todas as marcas (na regra da linha do tempo, acima). Aqui

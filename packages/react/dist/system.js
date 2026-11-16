@@ -55,7 +55,9 @@ export function AureaProvider({ children, strings, direction = "ltr", spriteUrl 
         // ⚠ Achado em 09/09/2026 SÓ porque o `useAureaTheme` passou a delegar para cá: a divergência
         // existia desde sempre e nenhum teste a pegava, porque cada metade era testada sozinha.
         // Agora a regra é uma: desconhecido resolve para claro e alterna para ESCURO.
-        toggleTheme: () => escolher(temaCtx.valor === "dark" ? "light" : "dark") }), [temaCtx, preferencia, escolher]);
+        // O D16 (0.72.0): sem tema escolhido, a página está no tema do SISTEMA (o CSS segue o `prefers-color-scheme`), então
+        // alternar parte dele — no escuro do sistema, o primeiro clique leva ao claro.
+        toggleTheme: () => escolher((temaCtx.valor ?? (leEsquemaEscuro() ? "dark" : "light")) === "dark" ? "light" : "dark") }), [temaCtx, preferencia, escolher]);
     const dens = React.useMemo(() => ({ density: densCtx.valor, setDensity: densCtx.set }), [densCtx]);
     // GAR-14: os avisos presos a um botão vivem num gerenciador do MÓDULO (ver `avisosAncorados`), então
     // só o provedor de FORA monta o hospedeiro deles — com dois, cada aviso apareceria duas vezes.
@@ -138,9 +140,14 @@ const assinaHtml = (cb) => {
     return () => obs.disconnect();
 };
 const leAtributo = (nome) => () => typeof document === "undefined" ? null : document.documentElement.getAttribute(nome);
+// O D16 (0.72.0): sem `data-theme` no `<html>`, a página está no tema do SISTEMA — o CSS segue o `prefers-color-scheme`,
+// e o claro quando ele não diz escuro. O tema "na tela" é esse, e o hook o devolve (no servidor continua `null`).
+const assinaTema = (cb) => { const html = assinaHtml(cb), sistema = assinaEsquema(cb); return () => { html(); sistema(); }; };
+const leTema = () => typeof document === "undefined" ? null
+    : document.documentElement.getAttribute("data-theme") ?? (leEsquemaEscuro() ? "dark" : "light");
 const semServidor = () => null;
 export function useAureaTheme() {
-    const theme = React.useSyncExternalStore(assinaHtml, leAtributo("data-theme"), semServidor);
+    const theme = React.useSyncExternalStore(assinaTema, leTema, semServidor);
     const density = React.useSyncExternalStore(assinaHtml, leAtributo("data-density"), semServidor);
     // 🔴 QUEM ESCREVE MUDA CONFORME HAJA PROVIDER — conserto de 09/09/2026, com o defeito medido
     // em `tests/unit/tema-fonte-unica.test.tsx`. Escrever o atributo direto DENTRO de um
@@ -171,9 +178,8 @@ export function useAureaTheme() {
             }
             document.documentElement.dataset.density = d;
         },
-        // Alternar é sobre o que está NA TELA, então `null` (servidor, ou ninguém escolheu ainda)
-        // resolve para claro e vira escuro — e não o contrário, que deixaria o primeiro clique sem
-        // efeito visível em quem estava no claro do sistema.
+        // Alternar é sobre o que está NA TELA: sem atributo, o `theme` já é o do sistema (o D16), e `null` (servidor)
+        // resolve para claro e vira escuro.
         toggleTheme: () => {
             if (dentroDeProvider) {
                 ctxTema.toggleTheme();
