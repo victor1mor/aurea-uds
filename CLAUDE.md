@@ -229,6 +229,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.68.0` | O `Field` dá o nome e a frase de erro ao campo do `NumberField`, do `OTPField`, do `InputGroup` e do `FileInput` (web): `aria-labelledby`, `aria-describedby` e `aria-invalid`, e o `Field` que nomeia o campo deixa de ser grupo; nada muda na tela — pedido #135. **Publicada em 13/11/2026** (entre 17:58 e 18:09, Brasília, medido no npm), pelo terminal do Victor |
 | `0.69.0` | As setas apontam para onde se lê na escrita da direita para a esquerda: `direction` no `AureaProvider` do nativo, e a seta que vira no `Breadcrumb`, na `Pagination`, no `Carousel`, na `NavList`, nos submenus, na `InterAgentMessage` e na `DataGrid` (web) e na `NavList` e no submenu do `DropdownMenu` (nativo) — pedido #138. **Publicada em 14/11/2026** (entre 13:49 e 13:58, Brasília, medido no npm), pelo terminal do Victor |
 | `0.70.0` | O lote maior: o `Stepper` em pé (`orientation`, web e nativo), os modos de leitura no `AureaProvider` do nativo (`highContrast`, `textSize`), o `Input` e o `Field` do nativo como os da web, o painel do `AppShell` que não se corta sob a barra rente (S-12), o arco do `Card accent` no nativo, a marca do escolhido no fim da linha (D4), a linha das `Tabs` `secondary` e entre os grupos da `ListBox` e os acertos de medida — pedido #140. **Publicada em 15/11/2026** (entre 13:41 e 13:51, Brasília, medido no npm), pelo terminal do Victor |
+| `0.71.0` | Os padrões da referência: o `Button` sem tom é o principal (o botão de ligar continua o cinza), o `Alert` sem tom é o neutro (`neutral`), o `Drawer` da web sai de baixo, a `ConfirmDialog` ignora o Esc, e as `Tabs` `secondary` enchem a fila — o D3 e o 2-C b, pedido #142. **Publicada em 16/11/2026** (entre 07:09 e 07:20, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -984,6 +985,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    (2) com o Victor dizendo que vai desligar o notebook, nada roda nele depois, nem por aviso da CI. **Publicada em
    15/11/2026** (entre 13:41 e 13:51, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #140. O
    registro entrou no lote seguinte (o 081, só de registro, sem versão).
+
+68. **`0.71.0`, os padrões da referência, feita em 15/11/2026** (*"pode, comece pelos aprovados"*; a bancada, *"Pode,
+   aprovado"*) — o D3 (o `Button` sem tom é o principal, o `Alert` sem tom é o neutro, o `Drawer` da web sai de baixo, a
+   `ConfirmDialog` ignora o Esc e não o deixa passar para a janela de fora) e o 2-C b (as `Tabs` `secondary` enchem a fila).
+   ⚠ **A regra nova:** a bancada de aprovação roda no NAVEGADOR (não só imagem), e a página viva da referência fica aberta
+   ao lado, com a mesma peça (o Victor, 15/11/2026). ⚠ **As lições:** (1) a suíte do fim achou o botão de ligar (`pressed`)
+   sem tom amarelo nos dois estados — ele continua o cinza, na web e no nativo; mudar um padrão pede a pergunta "quem usa
+   o padrão sem querer?"; (2) o axe achou o botão principal da Ember (branco no laranja, 3,08:1, o par já decidido) num
+   exemplo do nativo que antes mostrava o cinza — a varredura aceita só esse par exato; (3) o navegador guardou o
+   `live.js` antigo e mostrou o defeito já consertado — medir com a página recarregada sem o cache. **Publicada em
+   16/11/2026** (entre 07:09 e 07:20, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #142. O
+   registro entrou no lote seguinte (o 083, só de registro, sem versão).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

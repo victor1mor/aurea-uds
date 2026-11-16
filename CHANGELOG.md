@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.71.0 (16/11/2026)
+
+- **A 0.71.0 publicada em 16/11/2026, entre 07:09 e 07:20** (Brasília, medido no npm), da junção do pedido #142
+  (`dc5216f3`): o `released-surface.json` desse commit. O CHANGELOG ([0.71.0] publicada), o CLAUDE.md (a linha na tabela
+  e o item 68) e a release `v0.71.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.70.0 (15/11/2026)
 
 - **A 0.70.0 publicada em 15/11/2026, entre 13:41 e 13:51** (Brasília, medido no npm), da junção do pedido #140
@@ -335,6 +342,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.71.0] — 2026-11-15
+
+✅ **Publicada em 16/11/2026, entre 07:09 e 07:20 (Brasília, medido no npm: seis pacotes entre 07:09 e 07:12 e o `native`
+às 07:20), pelo terminal do Victor, da junção do pedido #142** (`dc5216f3`).
 
 **Os padrões da referência** — o primeiro lote dos aprovados que faltava construir: o D3 (*"Aceito todas as recomendações do
 plano, de D1 a D20"*, 19/10/2026: *"padrões iguais à referência, com aviso na nota"*) e o 2-C b (*"Aprovo"*, 04/11/2026).
