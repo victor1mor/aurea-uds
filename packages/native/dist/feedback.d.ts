@@ -115,7 +115,8 @@ export interface ProgressProps {
  * ele não corre: a barra inteira, apagada, e nunca um pedaço parado, que leria como 40% feito.
  */
 export declare function Progress({ value, label, detail, tone, style, testID }: ProgressProps): React.JSX.Element;
-export type AureaAlertVariant = "info" | "success" | "warning" | "danger";
+/** `neutral` (0.71.0, o D3, como a web e a referência): o ícone na cor do texto. É o padrão sem `variant` nem `state`. */
+export type AureaAlertVariant = "neutral" | "info" | "success" | "warning" | "danger";
 /** Mesmos quatro glifos do `feedback-client.tsx:43`. */
 export declare const ICONE_DA_VARIANTE: Readonly<Record<AureaAlertVariant, IconName>>;
 export interface AlertProps extends ViewProps {

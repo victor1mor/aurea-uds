@@ -69,7 +69,8 @@ import type {AureaTokens} from "./tokens.js";
 const SEM_RECUO = {top: 0, right: 0, bottom: 0, left: 0} as const;
 
 /** As mesmas quatro faces do `AureaToastType` da web (`system.tsx:65`). */
-export type AureaToastType = AureaAlertVariant;
+// O `neutral` do `Alert` (0.71.0) não entra no aviso que some: o tipo do `Toast` continua os quatro de antes.
+export type AureaToastType = Exclude<AureaAlertVariant, "neutral">;
 
 const folha = criarFolha((t: AureaTokens) => ({
   hospedeiro: {flex: 1},

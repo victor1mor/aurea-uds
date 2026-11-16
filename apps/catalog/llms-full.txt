@@ -2593,7 +2593,7 @@ What is happening, apart from how serious it is. Without children, the alert say
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `variant` | `info \| success \| warning \| danger \| accent` | info | Tone and, with it, the live region: `danger` renders role="alert", which interrupts the screen reader; the others render role="status", which waits for a pause. `accent` is the reference library's accent, in Aurea's link colour. The state colour paints the icon and the title, on the card surface. Colour is never the only signal — what carries the meaning is the text. |
+| `variant` | `neutral \| info \| success \| warning \| danger \| accent` | neutral | Tone and, with it, the live region: `danger` renders role="alert", which interrupts the screen reader; the others render role="status", which waits for a pause. `neutral` (the default, as in the reference library) paints the icon and the title in the text colour. `accent` is the reference library's accent, in Aurea's link colour. The state colour paints the icon and the title, on the card surface. Colour is never the only signal — what carries the meaning is the text. |
 | `title` | `ReactNode` | — | Rendered as a <strong> above the body. Optional on purpose: a one-line alert reads better without one. |
 | `children` | `ReactNode` | — | The message. An Alert stays in the reading flow, in context — a page-width warning is a Banner and a transient one is a Toast. |
 | `state` | `waiting_user \| waiting_approval \| waiting_dependency \| offline \| stale \| partial \| degraded` | — | Universal state (Part J) — an axis of its own alongside `variant`, because the two answer different questions: `variant` is how serious this is, `state` is what is happening. Merging them would put “out of date” next to “danger” and force the caller to pick one. It sets `data-state`, derives the severity when no `variant` is given — waiting states inform, the rest warn, and none of the seven is `danger`, because in all seven the screen still works — and supplies the message when there are no children. |
@@ -3743,7 +3743,7 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `variant` | `primary \| secondary \| tertiary \| outline \| ghost \| primary-outline \| primary-ghost \| danger \| danger-outline \| danger-ghost \| link \| link-primary \| link-danger \| nav \| danger-soft` | tertiary | A shortcut for the (appearance, tone) pair; the two-axis API is appearance + tone. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label (the default). |
+| `variant` | `primary \| secondary \| tertiary \| outline \| ghost \| primary-outline \| primary-ghost \| danger \| danger-outline \| danger-ghost \| link \| link-primary \| link-danger \| nav \| danger-soft` | primary | A shortcut for the (appearance, tone) pair; the two-axis API is appearance + tone. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label. With no variant, appearance or tone, the button is `primary`, as in the reference library; passing only `appearance` or only `tone` keeps the other axis at the neutral fill. |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | solid | How much weight the box carries. nav is an appearance of its own (a navigation item), not a tone. soft is the tone's light background with the tone's text (the reference's danger-soft). |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | What the colour means. Every tone works with every appearance, filled included — each has its own colour and text pair per theme. |
 | `size` | `xs \| sm \| md \| lg \| xl` | md | Height comes from the density tokens; the pill radius never changes. |
@@ -3756,7 +3756,7 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 | `type` | `button \| submit \| reset` | button | Deliberately not submit: a Cancel inside a form must not fire the main action. |
 | `fullWidth` | `boolean` | false | Stretches to the container. Only the width changes — the pill radius is invariant. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller (12 on sm) — a site header's tool button, as the reference's "Theme". The box and the background stay the appearance's. |
-| `pressed` | `boolean` | — | DEPRECATED, removed in 1.0 — use <Toggle>. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. On, it shows the raised capsule with a yellow underline. |
+| `pressed` | `boolean` | — | DEPRECATED, removed in 1.0 — use <Toggle>. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. On, it shows the raised capsule with a yellow underline. With pressed and no variant, appearance or tone, the button is tertiary, not primary: off and on stay different. |
 | `kbd` | `string \| string[]` | — | Shortcut shown as a Kbd inside the button and announced with aria-keyshortcuts. A list (["Ctrl", "K"]) shows one key cap per key and announces the combination (Control+K). |
 | `grow` | `boolean` | false | In a row (Cluster), takes an equal share with the other buttons that also grow. `fullWidth` asks for the whole line instead. |
 | `target` | `HTMLAttributeAnchorTarget` | — | Link attribute, only with `href`. |
@@ -5511,7 +5511,7 @@ The colour of the circle behind the icon. destructive picks danger on its own.
 | `cancelLabel` | `string` | "Cancel" | The way out. It is the focused control when the dialog opens. |
 | `destructive` | `boolean` | false | Turns the confirm button danger. Use it when the action destroys data — not for merely important ones, or the colour stops meaning anything. |
 | `onConfirm` | `() => void` | — | REQUIRED. Fires only on the confirm button. Nothing else in this dialog can reach it. |
-| `onCancel` | `() => void` | — | REQUIRED. Fires on the cancel button and on Escape. A click outside does NOT close this dialog — that is the difference from Dialog, and it is why an accidental click cannot answer for the user. |
+| `onCancel` | `() => void` | — | REQUIRED. Fires on the cancel button. Neither Escape nor a click outside closes this dialog (as in the reference library) — that is the difference from Dialog, and it is why an accidental click cannot answer for the user. |
 | `icon` | `IconName` | — | An icon in a 40 circle above the title, as in the reference library's alert dialog. |
 | `iconTone` | `"neutral" \| "brand" \| "info" \| "success" \| "warning" \| "danger"` | destructive ? "danger" : "neutral" | The circle's colour. Left out, it follows destructive. |
 | `placement` | `"auto" \| "center" \| "top" \| "bottom"` | "auto" | Where it sits; auto is at the bottom on a phone and in the middle from 640 up. |
@@ -6150,7 +6150,7 @@ Which edge the panel comes from. bottom is the sheet that rises on a phone, with
 | `children` | `ReactNode` | — | The panel body. |
 | `footer` | `ReactNode` | — | The actions row, at the end, with 8 between the buttons. Left out, there is no footer. |
 | `onClose` | `() => void` | — | Escape, backdrop and close button all route here. |
-| `side` | `"left" \| "right" \| "top" \| "bottom"` | right | The edge it slides from — all four, as in the reference library; bottom is the panel that rises on a phone. left/right are PHYSICAL sides. The side ones are 320 wide on a phone and 384 from 640 up (never more than 85% of the screen), with the 22 corner on the inner side; top and bottom take the full width and up to 85% of the height, with the 32 sheet corner and the 36 × 4 handle. A swipe toward its edge closes it. The default is right (the reference library's is bottom). |
+| `side` | `"left" \| "right" \| "top" \| "bottom"` | bottom | The edge it slides from — all four, as in the reference library; bottom is the panel that rises on a phone. left/right are PHYSICAL sides. The side ones are 320 wide on a phone and 384 from 640 up (never more than 85% of the screen), with the 22 corner on the inner side; top and bottom take the full width and up to 85% of the height, with the 32 sheet corner and the 36 × 4 handle. A swipe toward its edge closes it. The default is bottom, as in the reference library. On native the default stays right: the native drawer only slides sideways, and the panel that rises from the bottom is BottomSheet. |
 </page>
 
 <page url="https://aureauds.dev/dropdownmenu.html">
@@ -7149,7 +7149,7 @@ The Button's finishes, chosen by the app: glow under the primary one, ring aroun
 |---|---|---|---|
 | `label` | `string` | — | REQUIRED. Becomes aria-label: an icon with no text has no accessible name without it. |
 | `icon` | `AureaIcon` | — | Glyph, from the contract's allowlist — or the app's own drawing (a component that returns its <svg>), as Icon takes. Same name on native, where `name` is also accepted (the older name). |
-| `variant` | `ButtonVariant \| danger-soft` | ghost | Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label (the default). |
+| `variant` | `ButtonVariant \| danger-soft` | ghost | Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label. |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | ghost | Inherited from Button. How much weight the box carries; the default here is ghost. |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | Inherited from Button. What the colour means; every combination exists. |
 | `size` | `xs \| sm \| md \| lg \| xl` | md | Square target: the width follows the same density token as the height. |
@@ -10541,7 +10541,7 @@ No track: a line under the list, and the chosen tab marked by the selected line.
 | `activateOnFocus` | `boolean` | true | Automatic activation: the arrow switches the panel along with focus. Set false for the APG's manual pattern — the arrow moves focus and Enter/Space activates. Use false when switching a tab is expensive. |
 | `loopFocus` | `boolean` | true | Whether the arrow wraps from the last tab back to the first. |
 | `panel` | `'card' \| 'plain'` | card | The panel. `card` is an inset card. `plain` drops the box, like the reference library's panel: the content starts on the same line as what is outside the Tabs, with only the space-3 gap above it. Use it when the content already has a frame (Table, DataGrid, a list of cards), which would otherwise be a box inside a box. The same prop on native. |
-| `variant` | `primary \| secondary` | primary | secondary is the reference's secondary tabs: no track, a hairline under the list, the chosen tab marked by the Aurea selected line. |
+| `variant` | `primary \| secondary` | primary | secondary is the reference's secondary tabs: no track, a hairline under the list, the chosen tab marked by the Aurea selected line. Laid flat, the tabs fill the row and share it equally (never narrower than their label; when they do not fit, the row scrolls), as in the reference library. |
 </page>
 
 <page url="https://aureauds.dev/taggroup.html">
@@ -11355,7 +11355,7 @@ pressedStyle (ADR-0084), when the button is pressed: brand — the default — n
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `variant` | `ButtonVariant \| danger-soft` | ghost | Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label (the default). |
+| `variant` | `ButtonVariant \| danger-soft` | ghost | Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label. |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | ghost | Inherited from Button. How much weight the box carries; the default here is ghost. |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | Inherited from Button. What the colour means; every combination exists. |
 | `pressed` | `boolean` | — | Toggle inside the toolbar (bold, italic). aria-pressed, not a variant. |
@@ -18817,6 +18817,37 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-71-0.html">
+# v0.71.0
+
+The reference defaults — a primary Button, a neutral Alert, a Drawer from the bottom, a ConfirmDialog that ignores Escape, and secondary Tabs that fill the row.
+
+## ⚠ May break
+
+- **A `Button` with no `variant`, `appearance` or `tone` is now the primary button**, on the web and on native. It used to be `tertiary` (web) and the neutral fill (native). Write `variant="tertiary"` (web) or `tone="neutral"` (native) to keep the grey one. Passing only one axis keeps the other as before, so `appearance="ghost"` alone does not turn yellow. A `ButtonGroup` with no `variant` follows the button. A button with `pressed` and no axis stays the grey one, so off and on still look different. `IconButton` and `ToolbarButton` do not change.
+- **An `Alert` with no `variant` or `state` is now `neutral`**: the icon and the title in the text colour. The blue one is still `variant="info"`. If you wrote a `Record<AlertVariant, …>` (or `AureaAlertVariant` on native), add the new key. The native `AureaToastType` does not gain `neutral`.
+- **A web `Drawer` with no `side` now rises from the bottom.** It used to open from the right. The native `Drawer` still opens from the right; the panel that rises from the bottom on native is `BottomSheet`.
+- **The web `ConfirmDialog` no longer closes on Escape.** The decision is made with its two buttons only (a click outside already did nothing). On native, the Android back button still closes it.
+
+## Changed
+
+- **`Tabs variant="secondary"`, laid flat: the tabs fill the row** and share it equally, never narrower than their label; when they do not fit, the row scrolls. On native, each tab grows from its label. Vertical and primary tabs do not change.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.71.0 @aurea-uds/core@0.71.0 @aurea-uds/fonts@0.71.0 @aurea-uds/icons@0.71.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.71.0
 ```
 </page>
 

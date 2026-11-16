@@ -8,7 +8,7 @@ export declare function Status({ variant, state, children, className, ...props }
     variant?: StatusVariant;
     state?: UniversalState;
 }): React.JSX.Element;
-export type AlertVariant = "info" | "success" | "warning" | "danger" | "accent";
+export type AlertVariant = "neutral" | "info" | "success" | "warning" | "danger" | "accent";
 export declare function Alert({ variant, state, title, icon, onDismiss, action, appearance, children, className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> & {
     variant?: AlertVariant;
     state?: UniversalState;

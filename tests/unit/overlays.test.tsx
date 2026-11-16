@@ -314,12 +314,18 @@ describe("ConfirmDialog — a decisão não se toma por acidente", () => {
     await waitFor(() => expect(document.querySelector("[data-resultado]")).toHaveTextContent("confirmou"));
   });
 
-  test("Escape cancela — a saída pelo teclado existe", async () => {
+  // 0.71.0 (o D3, como a referência): o Esc NÃO responde. Até a 0.70.0 ele cancelava; com o código de antes este teste
+  // reprova (o resultado vira "cancelou" e a janela fecha).
+  test("Escape não fecha — a decisão sai só pelos botões", async () => {
     const u = userEvent.setup();
     wrap(<ConfirmPalco />);
     await u.click(screen.getByRole("button", {name: "Apagar"}));
     await screen.findByRole("alertdialog");
     await u.keyboard("{Escape}");
+    await new Promise((r) => setTimeout(r, 300));
+    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+    expect(document.querySelector("[data-resultado]")).not.toHaveTextContent("cancelou");
+    await u.click(screen.getByRole("button", {name: "Cancel"}));
     await waitFor(() => expect(document.querySelector("[data-resultado]")).toHaveTextContent("cancelou"));
   });
 

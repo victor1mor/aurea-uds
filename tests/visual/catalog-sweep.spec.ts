@@ -279,7 +279,14 @@ test.describe("catálogo · varredura de todas as páginas", () => {
           // ~~ADR-0073 (18/10/2026): no tema claro, a letra de destaque era o amarelo da marca (1,76:1), e a
           // varredura aceitava SÓ essa acusação.~~ A ADR-0076 (20/10/2026) trocou a letra de destaque do claro
           // pelo azul da marca (5,59 a 6,67:1): a exceção saiu, e toda acusação de contraste reprova, nos dois temas.
-          return r.violations.flatMap((x: any) => x.nodes.map((n: any) => `${x.id} · ${n.html.slice(0, 60)}`));
+          // A única acusação aceita: o botão primário da Ember no claro, a letra branca no laranja dela (3,08:1) — a Ember
+          // fica "100% como é hoje, inclusive os pontos que já reprovam nela" (o Victor, 26/10/2026, ADR-0083), e o
+          // `marcas-passo-c.spec.ts` aceita o mesmo par. Ela aparece aqui desde que o botão sem tom é o principal (D3,
+          // a 0.71.0): o exemplo de marcas do `AureaProvider` do nativo. Só esse par exato; qualquer outro reprova.
+          const daEmber = (x: any, n: any) => x.id === "color-contrast" && n.any.some((a: any) =>
+            a.data?.fgColor === "#ffffff" && a.data?.bgColor === "#f76500" && a.data?.contrastRatio === 3.08);
+          return r.violations.flatMap((x: any) => x.nodes.filter((n: any) => !daEmber(x, n))
+            .map((n: any) => `${x.id} · ${n.html.slice(0, 60)}`));
         });
         for (const one of v) falhas.push(`${f}: ${one}`);
       }

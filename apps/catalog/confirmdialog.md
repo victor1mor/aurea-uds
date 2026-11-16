@@ -60,7 +60,7 @@ The colour of the circle behind the icon. destructive picks danger on its own.
 | `cancelLabel` | `string` | "Cancel" | The way out. It is the focused control when the dialog opens. |
 | `destructive` | `boolean` | false | Turns the confirm button danger. Use it when the action destroys data — not for merely important ones, or the colour stops meaning anything. |
 | `onConfirm` | `() => void` | — | REQUIRED. Fires only on the confirm button. Nothing else in this dialog can reach it. |
-| `onCancel` | `() => void` | — | REQUIRED. Fires on the cancel button and on Escape. A click outside does NOT close this dialog — that is the difference from Dialog, and it is why an accidental click cannot answer for the user. |
+| `onCancel` | `() => void` | — | REQUIRED. Fires on the cancel button. Neither Escape nor a click outside closes this dialog (as in the reference library) — that is the difference from Dialog, and it is why an accidental click cannot answer for the user. |
 | `icon` | `IconName` | — | An icon in a 40 circle above the title, as in the reference library's alert dialog. |
 | `iconTone` | `"neutral" \| "brand" \| "info" \| "success" \| "warning" \| "danger"` | destructive ? "danger" : "neutral" | The circle's colour. Left out, it follows destructive. |
 | `placement` | `"auto" \| "center" \| "top" \| "bottom"` | "auto" | Where it sits; auto is at the bottom on a phone and in the middle from 640 up. |

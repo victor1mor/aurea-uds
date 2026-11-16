@@ -28,8 +28,7 @@
     "role": "alertdialog",
     "apg": "alertdialog",
     "keyboard": [
-      "Tab",
-      "Escape"
+      "Tab"
     ]
   },
   "dependencies": {
@@ -93,7 +92,7 @@
       "name": "onCancel",
       "type": "() => void",
       "default": "—",
-      "description": "REQUIRED. Fires on the cancel button and on Escape. A click outside does NOT close this dialog — that is the difference from Dialog, and it is why an accidental click cannot answer for the user."
+      "description": "REQUIRED. Fires on the cancel button. Neither Escape nor a click outside closes this dialog (as in the reference library) — that is the difference from Dialog, and it is why an accidental click cannot answer for the user."
     },
     {
       "name": "icon",

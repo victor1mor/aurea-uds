@@ -35,14 +35,16 @@ export function Status({variant,state,children,className,...props}:HTMLAttribute
 
 // 0.32.0: `accent`, o "acento" da referência — na Aurea, a cor de link (o amarelo como letra). O `info`
 // continua (é o azul de informação, que ela não separa do acento).
-export type AlertVariant="info"|"success"|"warning"|"danger"|"accent";
+// 0.71.0 (o D3): `neutral`, o "default" da referência — o ícone e o título na cor do texto. É o padrão sem `variant` nem
+// `state` (era o `info`).
+export type AlertVariant="neutral"|"info"|"success"|"warning"|"danger"|"accent";
 // O ícone é FUNÇÃO da variante, como o `role` já era. A referência congelada desenha o alerta
 // com ele em toda variante, e um sistema que faz o consumidor lembrar qual glifo significa
 // "perigo" acaba com quatro respostas diferentes para a mesma pergunta. `icon` sobrepõe quando o
 // caso é específico. O Banner NÃO ganha o mesmo padrão de propósito: ele não existe na
 // referência e o aviso de largura de página nem sempre quer glifo — a assimetria é decidida,
 // não herdada.
-const ICONE_DA_VARIANTE:Record<AlertVariant,IconName>={info:"info",
+const ICONE_DA_VARIANTE:Record<AlertVariant,IconName>={neutral:"info",info:"info",
 success:"check-circle",warning:"warning",danger:"x-circle",accent:"info"};
 // A grade do `.alert` tem TRÊS trilhas (auto 1fr auto): ícone, corpo, ação. Uma versão anterior
 // emitia o título solto na trilha 1 — a do ícone — e o corpo como item anônimo. Medido no
@@ -66,7 +68,7 @@ export function Alert({variant,state,title,icon,onDismiss,action,appearance,chil
   /** A pele: `card` (o cartão, o padrão) ou `soft` (o fundo da cor do estado, sem sombra, o texto maior). */
   appearance?:"card"|"soft";
   /** O botão do aviso ("Atualizar", "Desfazer"): depois do texto, antes do X. No celular, embaixo do texto. */
-  action?:ReactNode}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"info");return <div className={cx("alert",`alert-${v}`,appearance==="soft"&&"alert-soft",action!=null&&"alert-has-action",className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??proprio(ICONE_DA_VARIANTE,v)??"info"} weight={icon?undefined:"fill"}/><div>{title&&<strong>{title}</strong>}{children??(state?proprio(s.universalState,state):null)}</div>{action!=null&&<div className="alert-action">{action}</div>}{onDismiss?<CloseButton onClick={onDismiss}/>:<span/>}</div>}
+  action?:ReactNode}){const s=useAureaStrings();const v=variant??(state?stateSeverity(state):"neutral");return <div className={cx("alert",`alert-${v}`,appearance==="soft"&&"alert-soft",action!=null&&"alert-has-action",className)} role={v==="danger"?"alert":"status"} data-state={state} {...props}><Icon name={icon??proprio(ICONE_DA_VARIANTE,v)??"info"} weight={icon?undefined:"fill"}/><div>{title&&<strong>{title}</strong>}{children??(state?proprio(s.universalState,state):null)}</div>{action!=null&&<div className="alert-action">{action}</div>}{onDismiss?<CloseButton onClick={onDismiss}/>:<span/>}</div>}
 // 0.32.0 (o Alert da referência): o X de dispensar é o `CloseButton` (HER-12), e a pele mudou no core —
 // fundo de cartão, sem borda, sombra, 12/16, o ícone de 16 numa caixa de 24 e o título na cor do estado.
 // Banner: aviso de largura de página, opcionalmente dispensável. Os <span/> vazios
@@ -238,7 +240,7 @@ export function DataState({catchErrors,onCatch,...props}:DataStateProps){
   return <BarreiraDeErro onCatch={onCatch} falha={tentar=>
     <div className={cx("data-state",props.className)} data-state="error">
       <Alert variant="danger">{props.message??s.dataCrashed}</Alert>
-      <div><Button size="sm" onClick={tentar}>{s.dataRetry}</Button></div>
+      <div><Button variant="tertiary" size="sm" onClick={tentar}>{s.dataRetry}</Button></div>
     </div>}><CorpoDoDataState {...props}/></BarreiraDeErro>;
 }
 function CorpoDoDataState({state,message,skeleton,emptyTitle,emptyIcon,action,children,className,...props}:Omit<HTMLAttributes<HTMLDivElement>,"children">&RefAttributes<HTMLDivElement>&{state?:DataStateValue;message?:ReactNode;skeleton?:ReactNode;emptyTitle?:ReactNode;emptyIcon?:IconName;action?:ReactNode;children:ReactNode|(()=>ReactNode)}){

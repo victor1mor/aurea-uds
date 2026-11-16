@@ -74,7 +74,7 @@ describe("o nativo: as mesmas duas props", () => {
     expect(__instancias("View").some((p) => (p.dataSet as {glow?: string} | undefined)?.glow === "true")).toBe(true);
   });
   it("o brilho não desenha fora do principal, nem desativado", () => {
-    render(<Envolve><Button glow>Neutral</Button><Button tone="brand" appearance="outline" glow>Outline</Button><Button tone="brand" glow disabled>Off</Button></Envolve>);
+    render(<Envolve><Button tone="neutral" glow>Neutral</Button><Button tone="brand" appearance="outline" glow>Outline</Button><Button tone="brand" glow disabled>Off</Button></Envolve>);
     expect(camadas()).toEqual([]);
   });
   it("o fio no Button de contorno: o tom a 30%, por dentro, uma largura de borda", () => {

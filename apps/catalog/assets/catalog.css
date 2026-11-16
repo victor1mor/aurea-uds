@@ -4123,7 +4123,7 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    partes; o ícone de 16 numa caixa de 24; o título 14/24 peso médio NA COR DO ESTADO, e o corpo 14/20
    esmaecido. Até a 0.31.0 a cor do estado tingia o fundo e a borda. `--alert-tone` é a cor do estado. */
 .alert { --alert-tone:var(--info-400); display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:start; gap:var(--space-4); padding:var(--space-3) var(--space-4); border:0; border-radius:var(--radius-card); background:var(--card); color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--space-5); box-shadow:var(--shadow-sm); }
-.alert-success { --alert-tone:var(--success-400); } .alert-warning { --alert-tone:var(--warning-400); } .alert-danger { --alert-tone:var(--danger-400); } .alert-accent { --alert-tone:var(--link); }
+.alert-neutral { --alert-tone:var(--foreground); } .alert-success { --alert-tone:var(--success-400); } .alert-warning { --alert-tone:var(--warning-400); } .alert-danger { --alert-tone:var(--danger-400); } .alert-accent { --alert-tone:var(--link); }
 /* action (15/10/2026): a coluna do botão, depois do texto e antes do X, no meio da altura. Abaixo de 640 o botão desce
    para baixo do texto, na mesma coluna — a referência repete o botão no celular; aqui ele só muda de lugar. */
 .alert-has-action { grid-template-columns:auto minmax(0,1fr) auto auto; }
@@ -4242,6 +4242,10 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    mudou. Vale também para a Ember (a regra de 14/11/2026). */
 .tabs-secondary:not([data-orientation="vertical"]) { display:flex; }
 .tabs-secondary:not([data-orientation="vertical"]) { border-block-end-color:color-mix(in oklab,var(--foreground) 10%,transparent); }
+/* AS ABAS ENCHEM A FILA (2-C b, aprovado pelo Victor em 04/11/2026, *"Aprovo"*; a 0.71.0): na referência cada aba tem a
+   largura toda (`w-full`) e a lista no mínimo a da fila, então elas dividem a linha em partes IGUAIS e nunca ficam menores
+   que o rótulo (aí a fila rola). Aqui, o mesmo com `flex:1 1 0` — o mínimo do item continua o do conteúdo. */
+.tabs-secondary:not([data-orientation="vertical"]) .tab { flex:1 1 0; }
 /* O ESCOLHIDO DESLIZA (S-04, 05/11/2026): no `SegmentedControl` e no `Tabs` ele PULAVA, porque o fundo do escolhido é
    pintado no próprio item. A referência tem uma peça separada atrás dos itens, que anda. Aqui o desenho do escolhido NÃO
    muda (as sete cores do segmento, as treze marcas e os dois temas continuam nas regras de sempre): quando a escolha

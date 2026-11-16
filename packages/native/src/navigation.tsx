@@ -301,7 +301,11 @@ const folha = criarFolha((t: AureaTokens) => ({
   // linha da tabela. (14/11/2026: vale também para a Ember.)
   filaSecundariaComFio: {borderBottomWidth: t.size.borderWidth, borderColor: preenchimento(t, 2)},
   abasSecundariasSemBorda: {borderBottomWidth: 0},
+  // AS ABAS ENCHEM A FILA (2-C b, a 0.71.0, como a web): cada aba cresce e a fila ocupa a linha (`fill` na `FilaRolante`).
+  // A sobra se reparte por igual a partir do rótulo — no Yoga não existe o "mínimo do conteúdo" da web, e a base 0
+  // espremeria o rótulo quando não cabe; com a base do rótulo, quando não cabe, a fila rola, como antes.
   abaSecundaria: {
+    flexGrow: 1,
     alignItems: "center", justifyContent: "center", minHeight: t.size.controlHMd,
     paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
   },
@@ -1081,10 +1085,10 @@ export function Tabs({
           não achava a terceira. **Quem nomeou foi o consumidor, pedindo outra coisa** (a fila de
           opções do `SegmentedControl`), e a regra *"quem mais tem esse problema?"* trouxe até
           aqui. A `FilaRolante` é a mesma peça nos dois. */}
-      <FilaRolante justify={justify} style={comFio ? s.filaSecundariaComFio : undefined}
+      <FilaRolante justify={justify} fill={secundaria || undefined} style={comFio ? s.filaSecundariaComFio : undefined}
         marca={comFio ? {dataSet: {aureaLine: "tabs"}} : undefined}>
         <View accessibilityRole="tablist" accessibilityLabel={label ?? strings.tabsLabel}
-              style={secundaria ? [s.abasSecundarias, comFio && s.abasSecundariasSemBorda] : s.abas}>
+              style={secundaria ? [s.abasSecundarias, {flexGrow: 1}, comFio && s.abasSecundariasSemBorda] : s.abas}>
           <IndicadorQueDesliza alvo={fila.alvo} aoFicarPronto={fila.aoFicarPronto}
             style={secundaria ? undefined : [canto(t.size.radiusControl), s.abaDeTabAtiva]}>
             {secundaria ? <View style={s.fioDaAba} /> : null}

@@ -92,7 +92,9 @@ export function ConfirmDialog({open,title,description,confirmLabel,cancelLabel,d
   const s=useAureaStrings();
   const portal=usePortalContainer();
   const seguro=React.useRef<HTMLButtonElement>(null);
-  return <BaseAlertDialog.Root open={open} onOpenChange={o=>{if(!o)onCancel()}}>
+  // 0.71.0 (o D3): o Esc NÃO fecha, como na referência (`isKeyboardDismissDisabled`). A decisão sai só pelos dois botões;
+  // o Esc por reflexo não responde por quem usa. `cancel()` diz ao motor que o evento não é dele.
+  return <BaseAlertDialog.Root open={open} onOpenChange={(o,d)=>{if(o)return;if(d.reason==="escape-key"){d.cancel();return}onCancel()}}>
     <BaseAlertDialog.Portal container={portal}>
       <BaseAlertDialog.Backdrop className="dialog-backdrop"/>
       <BaseAlertDialog.Popup className="dialog dialog-confirm" initialFocus={seguro} data-placement={placement}>
@@ -112,12 +114,12 @@ export function ConfirmDialog({open,title,description,confirmLabel,cancelLabel,d
 // 320 no celular e 384 de 640 para cima, nunca mais que 85% da tela; a de cima e a de baixo ocupam a
 // largura toda e até 85% da altura, com a alça (36 × 4) do lado de dentro. Os cantos são os da Aurea:
 // as laterais com o 22 do lado de dentro (a dela é quadrada, e nada na Aurea é), a de baixo e a de
-// cima com o 32 da folha (ADR-0058). O padrão continua `right`: o dela é `bottom`, mas trocar o lado
-// de quem já usa seria a gaveta abrindo noutro lugar sem aviso.
+// cima com o 32 da folha (ADR-0058). O padrão é `bottom`, o dela, desde a 0.71.0 (o D3, aprovado pelo Victor em
+// 19/10/2026, com aviso na nota de versão); até a 0.70.0 era `right`.
 // `left`/`right` prometem lado FÍSICO no nome (ver o comentário da `.drawer-left` no core).
 export type DrawerSide="left"|"right"|"top"|"bottom";
 const ARRASTO_DO_LADO:Record<DrawerSide,"left"|"right"|"up"|"down">={left:"left",right:"right",top:"up",bottom:"down"};
-export function Drawer({open,title,children,footer,onClose,side="right"}:{open:boolean;title:ReactNode;children:ReactNode;footer?:ReactNode;onClose:()=>void;side?:DrawerSide}){
+export function Drawer({open,title,children,footer,onClose,side="bottom"}:{open:boolean;title:ReactNode;children:ReactNode;footer?:ReactNode;onClose:()=>void;side?:DrawerSide}){
   const portal=usePortalContainer();
   const alca=<div className="drawer-handle" aria-hidden="true"/>;
   return <BaseDrawer.Root open={open} onOpenChange={o=>{if(!o)onClose()}} swipeDirection={ARRASTO_DO_LADO[side]}>

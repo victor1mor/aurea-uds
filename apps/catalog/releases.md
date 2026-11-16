@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.71.0
+
+November 15, 2026
+
+The reference defaults — a primary Button, a neutral Alert, a Drawer from the bottom, a ConfirmDialog that ignores Escape, and secondary Tabs that fill the row.
+
+[Read full release notes →](https://aureauds.dev/release-v0-71-0.md)
+
 ## v0.70.0
 
 November 14, 2026

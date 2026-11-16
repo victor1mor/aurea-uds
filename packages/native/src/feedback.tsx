@@ -407,10 +407,12 @@ export function Progress({value, label, detail, tone = "brand", style, testID}: 
 // Alert
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
-export type AureaAlertVariant = "info" | "success" | "warning" | "danger";
+/** `neutral` (0.71.0, o D3, como a web e a referência): o ícone na cor do texto. É o padrão sem `variant` nem `state`. */
+export type AureaAlertVariant = "neutral" | "info" | "success" | "warning" | "danger";
 
 /** Mesmos quatro glifos do `feedback-client.tsx:43`. */
 export const ICONE_DA_VARIANTE: Readonly<Record<AureaAlertVariant, IconName>> = {
+  neutral: "info",
   info: "info",
   success: "check-circle",
   warning: "warning",
@@ -453,10 +455,11 @@ export function Alert({
   const t = useAureaTokens();
   const s = folha(t);
   const strings = useAureaStrings();
-  const v: AureaAlertVariant = variant ?? (state ? gravidadeDoEstado(state) : "info");
+  const v: AureaAlertVariant = variant ?? (state ? gravidadeDoEstado(state) : "neutral");
   const corDoIcone = v === "success" ? (t.color.success400 ?? t.color.success)
     : v === "warning" ? (t.color.warning400 ?? t.color.warning)
     : v === "danger" ? (t.color.danger400 ?? t.color.destructive)
+    : v === "neutral" ? t.color.foreground
     : (t.color.info400 ?? t.color.info);
 
   return (
@@ -506,7 +509,7 @@ export function Alert({
           {/* 0.32.0: o título é 16 em peso médio, na entrelinha do token (24), e na cor do estado
               (o mesmo par `-400` do ícone); a descrição é 14 (o `xs` do nativo). Era 16 em
               seminegrito, na cor do texto, e a descrição também 16. */}
-          {title != null && <Text size="base" weight={500} tone={v}>{title}</Text>}
+          {title != null && <Text size="base" weight={500} tone={v === "neutral" ? undefined : v}>{title}</Text>}
           {children != null
             ? (typeof children === "string" ? <Text size="xs" tone="muted">{children}</Text> : children)
             : state ? <Text size="xs" tone="muted">{strings.universalState[state]}</Text> : null}
@@ -622,7 +625,7 @@ export function DataState({catchErrors, onCatch, ...props}: DataStateProps) {
     <BarreiraDeErro onCatch={onCatch} falha={(tentar) => (
       <View style={[s.regiao, props.style]}>
         <Alert variant="danger">{props.message ?? strings.dataCrashed}</Alert>
-        <View style={{alignSelf: "flex-start"}}><Button size="sm" onPress={tentar}>{strings.dataRetry}</Button></View>
+        <View style={{alignSelf: "flex-start"}}><Button tone="neutral" size="sm" onPress={tentar}>{strings.dataRetry}</Button></View>
       </View>
     )}>
       <CorpoDoDataState {...props} />

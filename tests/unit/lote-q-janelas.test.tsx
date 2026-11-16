@@ -79,9 +79,10 @@ describe("Drawer — os quatro lados (WEB-06)", () => {
       } else expect(alca).toBeNull();
     });
   }
-  test("o padrão continua a direita", async () => {
+  // 0.71.0 (o D3): o padrão é o de baixo, o da referência (até a 0.70.0, a direita).
+  test("o padrão é a de baixo", async () => {
     wrap(<Drawer open title="Filtros" onClose={() => {}}>x</Drawer>);
-    expect(await screen.findByRole("dialog")).toHaveClass("drawer-right");
+    expect(await screen.findByRole("dialog")).toHaveClass("drawer-bottom");
   });
 });
 

@@ -105,7 +105,7 @@
       "name": "variant",
       "type": "primary | secondary",
       "default": "primary",
-      "description": "secondary is the reference's secondary tabs: no track, a hairline under the list, the chosen tab marked by the Aurea selected line."
+      "description": "secondary is the reference's secondary tabs: no track, a hairline under the list, the chosen tab marked by the Aurea selected line. Laid flat, the tabs fill the row and share it equally (never narrower than their label; when they do not fit, the row scrolls), as in the reference library."
     }
   ],
   "axes": {

@@ -334,6 +334,44 @@ como deveria funcionar"*.
 
 ---
 
+## [0.71.0] — 2026-11-15
+
+**Os padrões da referência** — o primeiro lote dos aprovados que faltava construir: o D3 (*"Aceito todas as recomendações do
+plano, de D1 a D20"*, 19/10/2026: *"padrões iguais à referência, com aviso na nota"*) e o 2-C b (*"Aprovo"*, 04/11/2026).
+Cada padrão foi lido no código publicado da referência (3.2.7 na web, 1.0.11 no nativo). Aprovado na bancada, com a Ember
+e as peças da referência abertas ao lado (*"Pode, aprovado"*, 15/11/2026).
+
+### ⚠ Pode quebrar
+
+- **O `Button` sem `variant`, `appearance` nem `tone` passa a ser o principal** (o amarelo), na web e no nativo. Era o
+  `tertiary` (na web) e o cheio neutro (no nativo). Quem queria o cinza escreve `variant="tertiary"` (web) ou
+  `tone="neutral"` (nativo). Quem pede só um eixo continua com o outro no de antes: `appearance="ghost"` sozinho não vira
+  amarelo. O `ButtonGroup` sem `variant` segue o botão. O botão de ligar (`pressed`) sem eixo continua o cinza: desligado amarelo ficaria igual ao ligado (achado da suíte do fim). O `IconButton` e o `ToolbarButton` não mudam (o fantasma).
+- **O `Alert` sem `variant` nem `state` passa a ser o neutro** — o ícone e o título na cor do texto. Era o `info` (o
+  azul), que continua com `variant="info"`. Valor novo `neutral`, na web e no nativo. Quem tem um
+  `Record<AlertVariant, …>` (ou `AureaAlertVariant`) escrito à mão precisa da chave nova. O tipo do `Toast` do nativo
+  (`AureaToastType`) não ganha o `neutral`.
+- **A `Drawer` da web sem `side` passa a subir de baixo** (`bottom`). Era a da direita. A do nativo fica na direita: ela só
+  desliza de lado, e a folha de baixo do nativo é a `BottomSheet`.
+- **O `ConfirmDialog` da web não fecha mais com o Esc** — a decisão sai só pelos dois botões (clicar fora já não fechava).
+  O do nativo continua fechando com o Voltar do Android: o React Native exige o `onRequestClose`, ou a tela fica presa.
+
+### Mudou
+
+- **`Tabs variant="secondary"` deitada: as abas enchem a fila**, em partes iguais, como na referência (medido na página
+  dela: 3 × 149 numa fila de 448). Nunca ficam menores que o rótulo; quando não cabem, a fila rola. No nativo, cada aba
+  cresce a partir do rótulo (o Yoga não tem o "mínimo do conteúdo" da web). A em pé não muda; a primária não muda.
+- O botão "Tentar de novo" do `DataState` (web e nativo) ganhou o `tertiary`/`neutral` escrito e não muda de cara.
+- As fichas do `Button`, do `Alert`, da `Drawer`, do `ConfirmDialog` e do `Tabs` dizem o padrão novo.
+
+### Quem cobra
+
+- `tests/unit/lote-082-d3.test.tsx` (o `Alert` neutro e a regra do CSS) e `tests/unit/native-lote-082.test.tsx` (o botão
+  principal, o aviso neutro e as abas que crescem, no nativo) — reprovam com o código da 0.70.0 (5 de 9).
+- Os testes de sempre passaram a cobrar o padrão novo: o `lote-q-acoes` (o `primary`, e um eixo só mantém o outro), o
+  `lote-q-janelas` (a gaveta de baixo), o `overlays` (o Esc não fecha — provado contra o código antigo), o `components`, o
+  `acabamentos` e o `native-lote-080` (estes dois passaram a pedir o neutro por escrito, que é o que eles mediam).
+
 ## [0.70.0] — 2026-11-14
 
 ✅ **Publicada em 15/11/2026, entre 13:41 e 13:51 (Brasília, medido no npm: seis pacotes entre 13:41 e 13:42 e o `native`

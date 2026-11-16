@@ -320,10 +320,16 @@ function acabamentoDoBotao(t: AureaTokens, glow: boolean | undefined, ring: bool
 
 /** O corpo do `Button`. `semRecuo` é só do `LinkButton`: sem recuo, sem borda e sem altura. */
 function CorpoDoBotao({
-  children, appearance = "solid", tone = "neutral", size = "md",
+  children, appearance: aparenciaPedida, tone: tomPedido, size = "md",
   leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed,
   disabled, accessibilityLabel, semRecuo = false, share, glow, ring, onPress, ...rest
 }: ButtonProps & {semRecuo?: boolean}) {
+  // 0.71.0 (o D3, como a web e a referência): sem `appearance` nem `tone`, o botão é o principal (cheio, na marca). Quem
+  // pede um dos eixos continua com o outro no de antes (cheio, neutro) — `appearance="ghost"` sozinho não vira amarelo.
+  const appearance: AureaButtonAppearance = aparenciaPedida ?? "solid";
+  // O botão de ligar (`pressed`) sem tom continua neutro, como na web: o estado não pinta o botão aqui, e o principal
+  // ligado e desligado seriam iguais.
+  const tone: AureaButtonTone = tomPedido ?? (aparenciaPedida === undefined && pressed === undefined ? "brand" : "neutral");
   const t = useAureaTokens();
   const aoTocar = useToqueComShare(share, onPress);
   const s = folha(t);

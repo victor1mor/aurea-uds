@@ -324,8 +324,9 @@
     },
     "AlertVariant": {
       "module": "feedback-client",
-      "raw": "\"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\"",
+      "raw": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" | \"accent\"",
       "union": [
+        "neutral",
         "info",
         "success",
         "warning",
@@ -5246,6 +5247,7 @@
               "optional": true,
               "type": "AlertVariant",
               "values": [
+                "neutral",
                 "info",
                 "success",
                 "warning",
