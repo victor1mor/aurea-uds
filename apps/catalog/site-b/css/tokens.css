@@ -16,7 +16,7 @@
 
 /* As amostras: um escopo com o tema de "Values for" (o fundo é o da página daquele tema, para a cor se ler). */
 .tk-amostras { display:grid; gap:var(--space-4); padding:var(--space-4); border-radius:var(--radius-card); background:var(--background); color:var(--foreground); }
-.tk-sec { display:grid; gap:var(--space-3); padding-block-start:var(--space-6); scroll-margin-block-start:calc(var(--topbar-height) + var(--space-16) * 2); }
+.tk-sec { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-3); padding-block-start:var(--space-6); scroll-margin-block-start:calc(var(--topbar-height) + var(--space-16) * 2); }
 .tk-sec:first-child { padding-block-start:0; }
 .tk-sec[hidden], .tk-amostras [hidden] { display:none !important; }
 .tk-cabeca { margin:0; }
