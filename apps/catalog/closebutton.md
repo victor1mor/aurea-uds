@@ -52,5 +52,6 @@ When closing is not possible yet — while a save is still running, for example.
 |---|---|---|---|
 | `label` | `string` | strings.close | The accessible name. Defaults to "Close" ("Fechar" in ptBR); pass what closes when there is more than one on the screen, e.g. "Close notice". |
 | `children` | `ReactNode` | the X (Bold) | Replaces the X, as in the reference. Keep it a 16 glyph. |
-| `onClick` | `MouseEventHandler` | — | What closing does. On native, `onPress`. |
+| `onPress` | `(e: MouseEvent) => void` | — | What closing does — the same name on the web and on native. onClick still works, as an alias; with both, both run, onPress first. |
+| `onClick` | `MouseEventHandler` | — | An alias of onPress, kept for compatibility. |
 | `disabled` | `boolean` | false | Disables the button; it leaves the focus order. |

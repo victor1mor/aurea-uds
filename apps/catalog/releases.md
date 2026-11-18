@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.73.0
+
+November 18, 2026
+
+onPress on the web, and layout pieces that keep their size anywhere — alone, in a Stack, a Cluster or a Grid.
+
+[Read full release notes →](https://aureauds.dev/release-v0-73-0.md)
+
 ## v0.72.0
 
 November 16, 2026

@@ -14,7 +14,7 @@ import {ContextMenu as BaseContextMenu} from "@base-ui/react/context-menu";
 import {PreviewCard as BasePreviewCard} from "@base-ui/react/preview-card";
 import {cx, useAureaStrings, usePortalContainer} from "./internal.js";
 import {useDirection} from "@base-ui/react/direction-provider";
-import {type Responsive} from "./pure.js";
+import {juntarToque, type Responsive} from "./pure.js";
 import {useValorResponsivo} from "./responsivo-runtime.js";
 import {Icon, type IconName} from "./system.js";
 import {Button, CloseButton} from "./actions.js";
@@ -248,7 +248,7 @@ interface MenuItemBase{label:ReactNode;disabled?:boolean;leadingIcon?:IconName;
   /** 0.55.0: o ícone na ponta do item — por exemplo, o "abre fora" de um link que abre outro site. */
   trailingIcon?:IconName}
 /** Item de ação — a forma de sempre. `kind` é opcional para não quebrar quem já usa. */
-export interface MenuActionDef extends MenuItemBase{kind?:"item";onClick?:()=>void;
+export interface MenuActionDef extends MenuItemBase{kind?:"item";/** O toque (DOC-11): o mesmo nome do nativo. O `onClick` continua valendo, como apelido; com os dois, rodam os dois. */onPress?:()=>void;onClick?:()=>void;
   /** O elemento que MATERIALIZA o item, no idioma `render` da casa (o mesmo do `Card`). Para
    *  navegação prefira `href`, que usa o `LinkItem` do motor. */
   render?:ReactElement}
@@ -361,7 +361,7 @@ function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null,ids=""):Reac
     default:{
       const a=it as MenuActionDef;
       return <BaseMenu.Item key={i} className="menu-item" disabled={a.disabled}
-        onClick={a.onClick} render={a.render} {...nomeDoItem(a,id)}>{dentro(a)}</BaseMenu.Item>;
+        onClick={juntarToque(a.onPress,a.onClick)} render={a.render} {...nomeDoItem(a,id)}>{dentro(a)}</BaseMenu.Item>;
     }
   }
 })}

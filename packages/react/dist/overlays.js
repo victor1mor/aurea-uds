@@ -15,6 +15,7 @@ import { ContextMenu as BaseContextMenu } from "@base-ui/react/context-menu";
 import { PreviewCard as BasePreviewCard } from "@base-ui/react/preview-card";
 import { cx, useAureaStrings, usePortalContainer } from "./internal.js";
 import { useDirection } from "@base-ui/react/direction-provider";
+import { juntarToque } from "./pure.js";
 import { useValorResponsivo } from "./responsivo-runtime.js";
 import { Icon } from "./system.js";
 import { Button, CloseButton } from "./actions.js";
@@ -202,7 +203,7 @@ function renderMenuItems(items, portal, ids = "") {
             }
             default: {
                 const a = it;
-                return _jsx(BaseMenu.Item, { className: "menu-item", disabled: a.disabled, onClick: a.onClick, render: a.render, ...nomeDoItem(a, id), children: dentro(a) }, i);
+                return _jsx(BaseMenu.Item, { className: "menu-item", disabled: a.disabled, onClick: juntarToque(a.onPress, a.onClick), render: a.render, ...nomeDoItem(a, id), children: dentro(a) }, i);
             }
         }
     });

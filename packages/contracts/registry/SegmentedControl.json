@@ -121,7 +121,7 @@
       "name": "orientation",
       "type": "\"horizontal\" | \"vertical\"",
       "default": "\"horizontal\"",
-      "description": "vertical stands the control up: each segment the full width, the track with the card radius (22)."
+      "description": "vertical stands the control up: the control as wide as its widest segment and every segment that width, the track with the card radius (22). With fullWidth it takes the width of its container."
     },
     {
       "name": "className",

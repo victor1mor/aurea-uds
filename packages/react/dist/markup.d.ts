@@ -15,6 +15,9 @@ type CardBase = HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement> &
     accent?: CardAccent;
     lift?: boolean;
     fill?: "brand";
+    /** O toque (DOC-11, 16/11/2026): o mesmo nome do nativo. Vai para o elemento do `render`, junto do `onClick`, que continua
+     *  valendo como apelido; com os dois, rodam os dois. */
+    onPress?: HTMLAttributes<HTMLDivElement>["onClick"];
 };
 export type CardProps = CardBase & ({
     variant?: "base" | "raised" | "inset" | "outline" | "selected" | "danger" | "contrast";
@@ -23,7 +26,7 @@ export type CardProps = CardBase & ({
     variant: "interactive";
     render: ReactElement;
 });
-export declare function Card({ variant, padding, orientation, accent, lift, fill, className, render, ...props }: CardProps): ReactElement<unknown, string | React.JSXElementConstructor<any>>;
+export declare function Card({ variant, padding, orientation, accent, lift, fill, className, render, onPress, onClick, ...props }: CardProps): ReactElement<unknown, string | React.JSXElementConstructor<any>>;
 export declare namespace Card {
     export { CardMedia as Media };
     export { CardHeader as Header };

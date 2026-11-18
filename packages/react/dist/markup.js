@@ -36,11 +36,12 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // PARA QUEM VIER: componente novo só entra aqui se não chamar hook, não prender manipulador e não
 // tocar motor. Na dúvida, ele NÃO entra — cliente a mais é lento, servidor a mais é quebrado.
 import React, { forwardRef } from "react";
-import { cx, fundirRender, peleDoEixo } from "./pure.js";
+import { cx, fundirRender, juntarToque, peleDoEixo } from "./pure.js";
 // As contas de cor são funções puras, sem estado e sem navegador (ADR-0069): o `ColorSwatch` usa a do contraste.
 import { contrastingInk, hsbToRgb, parseColor } from "./color.js";
-export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, lift, fill, className, render, ...props }) {
-    return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, lift && variant === "interactive" && "card-lift", accent && `card-accent card-accent-${accent}`, fill === "brand" && "card-fill-brand", padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...(variant === "contrast" ? { "data-theme": "dark" } : null), ...props });
+export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, lift, fill, className, render, onPress, onClick, ...props }) {
+    const toque = juntarToque(onPress, onClick);
+    return fundirRender(render, { className: cx("card", variant !== "base" && `card-${variant}`, lift && variant === "interactive" && "card-lift", accent && `card-accent card-accent-${accent}`, fill === "brand" && "card-fill-brand", padding === "none" && "card-flush", orientation === "horizontal" && "card-horizontal", className), ...(variant === "contrast" ? { "data-theme": "dark" } : null), ...(toque ? { onClick: toque } : null), ...props });
 }
 /** A mídia do cartão — a primeira das partes da especificação do `Card` (A-14). No vertical,
  *  primeira filha, ela SANGRA até a borda de cima e dos lados; no horizontal, fica à esquerda com a
@@ -221,7 +222,7 @@ function linksDoHeader(items, current) {
     return _jsx("ul", { className: "topbar-links", children: items.map(it => {
             // O `onClick` do item vale aqui também (06/11/2026): a `Sidebar` o liga e o `Header` o jogava fora — o mesmo `SidebarItem`
             // fazia coisas diferentes nas duas peças. Não é hook: é a prop do `<a>`, que a marcação pura pode passar.
-            const p = { className: "topbar-link", "aria-current": it.id === current ? "page" : undefined, onClick: it.onClick, children: it.label };
+            const p = { className: "topbar-link", "aria-current": it.id === current ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: it.label };
             return _jsx("li", { children: it.render ? fundirRender(it.render, p, "a") : _jsx("a", { href: it.href, ...p }) }, it.id);
         }) });
 }

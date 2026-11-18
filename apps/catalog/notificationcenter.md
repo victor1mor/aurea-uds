@@ -35,8 +35,8 @@ Which side of the trigger it opens on. When there is no room on that side, it fl
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `NotificationItem[]` | — | The feed, as data: {id, title, description?, time?, icon?, read?, group?, onClick?}. Read and unread are yours — the panel is presentational. So is the order: groups are formed in order of first appearance and never re-sorted. |
-| `onItemClick` | `(item: NotificationItem) => void` | — | Fires for every item. An item that has neither this nor its own onClick renders as a <div>, not a button — nothing that does nothing is focusable. |
+| `items` | `NotificationItem[]` | — | The feed, as data: {id, title, description?, time?, icon?, read?, group?, onPress?, onClick?} — onClick is an alias of onPress. Read and unread are yours — the panel is presentational. So is the order: groups are formed in order of first appearance and never re-sorted. |
+| `onItemClick` | `(item: NotificationItem) => void` | — | Fires for every item. An item that has neither this nor its own onPress or onClick renders as a <div>, not a button — nothing that does nothing is focusable. |
 | `onMarkAllRead` | `() => void` | — | Draws the mark-all action, and only while something is unread. |
 | `label` | `string` | "Notifications" | Accessible name of the trigger and of the panel. The unread count is appended to the trigger's name, so it is heard and not only seen. |
 | `icon` | `IconName` | notification | Glyph on the trigger. |

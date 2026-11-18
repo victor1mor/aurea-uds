@@ -2834,6 +2834,15 @@ img,svg { display:block; }
    `--topbar-height` à mão). O app que põe uma barra própria em cima dela diz a altura em `--sidebar-offset`. */
 .sidebar:not(.app-shell > *) { --shell-top:calc(var(--sidebar-offset, 0px) + var(--space-4)); }
 .sidebar-flush:not(.app-shell > *) { --shell-top:var(--sidebar-offset, 0px); }
+/* PV-14 (16/11/2026, aprovado na bancada: *"Pode construir"*): FORA do `AppShell`, a lateral tem a largura DELA — o
+   `--sidebar-width` aberta, o `--sidebar-rail` recolhida —, sozinha, numa coluna, numa fila ou numa grade. Antes ela não
+   tinha largura: enchia a caixa sozinha e encolhia até o texto numa coluna, porque a largura vinha da trilha da grade do
+   `AppShell`. É o que 9 de 11 bibliotecas fazem (a principal: `w-(--sidebar-width)`). Dentro do `AppShell` quem dá a
+   largura continua sendo a trilha (no arranjo `docs` ela é outra), e a lateral com painel tem a conta dela. Nunca maior
+   que o espaço que recebe: na grade estreita, ocupa o que tem, descontada a margem da flutuante, sem cobrir o vizinho. */
+.sidebar:not(.app-shell > *):not(.sidebar-panel-docked,.sidebar-panel-overlay) { inline-size:var(--sidebar-width); max-inline-size:calc(100% - var(--space-4)*2); }
+.sidebar-collapsed:not(.app-shell > *):not(.sidebar-panel-docked,.sidebar-panel-overlay) { inline-size:var(--sidebar-rail); }
+.sidebar-flush:not(.app-shell > *):not(.sidebar-panel-docked,.sidebar-panel-overlay) { max-inline-size:100%; }
 /* 4-A — a trilha em cápsula: recolhida, o canto é o do controle, e não o do cartão. */
 .sidebar-collapse-capsule.sidebar-collapsed { border-radius:var(--radius-control); }
 /* 4-A — a que sai da tela: recolhida, ela some, e a trilha do shell vai a zero. O botão da junção fica dentro da tela, a 16
@@ -4186,6 +4195,10 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    reparte a largura em partes iguais, e é isso que quebrava o rótulo no nativo rodando no
    navegador. Quando não cabe, rola pela regra de tela estreita, como sem a prop. */
 .segmented-full { display:flex; } .segmented-full :is(button,a) { flex:1 0 auto; }
+/* PV-14 (16/11/2026, aprovado na bancada): do tamanho do conteúdo em TODO lugar, como a principal (`w-fit`) e como o
+   nativo (`alignSelf: "flex-start"`). Antes, numa coluna (`Stack`) ele esticava até a borda — o item de uma coluna
+   flexível estica quando não tem largura. Ocupar a linha continua sendo pedido explícito: `fullWidth`. */
+.segmented:not(.segmented-full) { inline-size:fit-content; max-inline-size:100%; }
 /* A CÁPSULA QUE NAVEGA (bloco 1, o 5-A — 23/10/2026): com `href` nos itens, o `SegmentedControl` é um <nav> de links — a
    chave Web | Native do site, a peça "Tabs em pílula" da referência na ponta da linha das áreas. O link tem a pele do
    segmento; o atual leva `aria-current="page"` e a mesma marca do escolhido. */
@@ -5333,7 +5346,10 @@ button.tag-main { cursor:pointer; }
   color:var(--foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); overflow:visible; white-space:pre-wrap; overflow-wrap:anywhere; }
 /* "On this page": índice da própria página, fixo na lateral. Navegação, não decoração —
    por isso é <nav> com rótulo, e o item atual se marca com aria-current. */
-.toc { position:sticky; top:var(--space-4); align-self:start; display:grid; gap:var(--space-1); max-height:calc(100vh - var(--space-8)); overflow:auto; padding:var(--space-2) 0; }
+/* PV-14 (16/11/2026, aprovado na bancada): `align-self:stretch` (era `start`). Com `start`, numa coluna (`Stack`) o índice
+   encolhia até o texto, e sozinho enchia a caixa; nenhuma biblioteca que tem a peça faz isso — o índice ocupa a caixa.
+   O `max-height` segura a altura na da tela, então numa fila ou numa grade o índice esticado continua grudando ao rolar. */
+.toc { position:sticky; top:var(--space-4); align-self:stretch; display:grid; gap:var(--space-1); max-height:calc(100vh - var(--space-8)); overflow:auto; padding:var(--space-2) 0; }
 
 /* O "On this page" é o da referência (ADR-0067): letra 14, peso normal, esmaecido, SEM maiúsculas, e o
    ícone de linhas ao lado — desenho do CSS por máscara (o `text-align-left` do Phosphor), para o sumário

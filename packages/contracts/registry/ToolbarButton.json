@@ -140,6 +140,12 @@
       "description": "Toggle inside the toolbar (bold, italic). aria-pressed, not a variant."
     },
     {
+      "name": "onPress",
+      "type": "(e: MouseEvent) => void",
+      "default": "—",
+      "description": "Inherited from Button. The press — the same name on the web and on native; onClick still works, as an alias, and with both, both run, onPress first."
+    },
+    {
       "name": "leadingIcon",
       "type": "AureaIcon",
       "default": "—",

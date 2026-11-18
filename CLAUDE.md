@@ -1313,6 +1313,12 @@ componente que já existe e propor a variação (`variant` ou prop nova); quando
 perguntar. Troca de nome só com ordem dele, e o nome antigo continua funcionando (como o `Topbar`,
 hoje `Header`).
 
+**Peça independente, combinável de qualquer jeito** (PV-14, pedido do Victor de 20/10/2026: *"preciso de uma solução
+robusta que componentes sejam independentes em conjuntos de toda forma"*). Nenhuma peça depende, escondido, de outra (o
+`AppShell`, um contêiner) para ter tamanho, altura ou posição certos: o que ela precisa é dela, e o `AppShell` só arruma.
+Quem cobra: `tests/visual/independentes.spec.ts` — cada peça de leiaute sozinha e dentro de `Stack`, `Cluster` e `Grid`,
+em três larguras, no banco `apps/keyboard-probe/independentes.html`. Peça de leiaute nova entra na lista do banco.
+
 **As regras que custaram caro:**
 
 - **Medir, não contar.**

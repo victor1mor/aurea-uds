@@ -157,6 +157,7 @@ The Button's finishes, chosen by the app: glow under the primary one, ring aroun
 | `variant` | `ButtonVariant \| danger-soft` | ghost | Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label. |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | ghost | Inherited from Button. How much weight the box carries; the default here is ghost. |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | Inherited from Button. What the colour means; every combination exists. |
+| `onPress` | `(e: MouseEvent) => void` | — | Inherited from Button. The press — the same name on the web and on native; onClick still works, as an alias, and with both, both run, onPress first. |
 | `size` | `xs \| sm \| md \| lg \| xl` | md | Square target: the width follows the same density token as the height. |
 | `loading` | `boolean` | false | Spinner in place of the glyph, aria-busy set, interaction blocked. |
 | `href` | `string` | — | Renders an anchor with the same skin, like Button. |

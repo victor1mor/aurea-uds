@@ -6,7 +6,8 @@ export type StepState = "default" | "active" | "done" | "error";
 export interface StepItem {
     label: ReactNode;
     state?: StepState;
-    optional?: ReactNode;
+    optional?: ReactNode; /** O toque (DOC-11): o mesmo nome do nativo. O `onClick` continua valendo, como apelido; com os dois, rodam os dois. */
+    onPress?: () => void;
     onClick?: () => void;
     href?: string;
 }
@@ -100,7 +101,8 @@ export interface SidebarItem {
     label: ReactNode;
     href?: string;
     icon?: IconName;
-    badge?: ReactNode;
+    badge?: ReactNode; /** O toque (DOC-11): o mesmo nome do nativo. O `onClick` continua valendo, como apelido; com os dois, rodam os dois. */
+    onPress?: () => void;
     onClick?: () => void;
     items?: SidebarEntry[];
     /** O link do roteador do app (M-01): `<Link href="/relatorios" />`. Recebe a pele, o estado de página atual e o conteúdo do item. */
@@ -243,7 +245,8 @@ export interface NavListItem {
     description?: ReactNode;
     value?: ReactNode;
     icon?: IconName;
-    href?: string;
+    href?: string; /** O toque (DOC-11): o mesmo nome do nativo. O `onClick` continua valendo, como apelido; com os dois, rodam os dois. */
+    onPress?: () => void;
     onClick?: () => void;
     disabled?: boolean;
     /** O link do roteador do app (M-01). Linha com `render` é linha com destino: leva a seta, como a com `href`. */

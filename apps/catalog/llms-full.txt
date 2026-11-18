@@ -3511,7 +3511,7 @@ Every icon and label in ink; the current item marked by bar-ink, bar-ring, bar-p
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `SidebarItem[]` | — | The navigation, as data — the SAME type Sidebar takes, on purpose: one list feeds the sidebar on desktop and the bar on the phone, and two lists of one menu drift apart. Each item is {id, label, href?, icon?, badge?, onClick?}. A nested `items` is ignored here: a bottom bar is flat. `badge` hangs off the icon's top corner and is sized against it (16px on a 24px icon, the ratio measured in shipping apps); pass an EMPTY badge (`badge: ""`) to get the plain dot that means "something new". An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. |
+| `items` | `SidebarItem[]` | — | The navigation, as data — the SAME type Sidebar takes, on purpose: one list feeds the sidebar on desktop and the bar on the phone, and two lists of one menu drift apart. Each item is {id, label, href?, icon?, badge?, onPress?, onClick?}. onClick is an alias of onPress. A nested `items` is ignored here: a bottom bar is flat. `badge` hangs off the icon's top corner and is sized against it (16px on a 24px icon, the ratio measured in shipping apps); pass an EMPTY badge (`badge: ""`) to get the plain dot that means "something new". An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. |
 | `current` | `string` | — | The id of the item you are on. It gets aria-current="page", which is also what the skin paints — one source for both, so they cannot drift apart. |
 | `variant` | `"floating" \| "edge"` | "floating" | Where the BAR sits: floating as a loose pill, or edge against the screen with a hairline above it. It says nothing about how the current item is marked — that is `indicator`, and keeping the two apart is the point. The older names (flat, surface, pill, dock) are still accepted and map onto the pair; they are deprecated, not removed. |
 | `indicator` | `"none" \| "subtle" \| "pill" \| "circle" \| "circle-raised" \| "circle-bold" \| "circle-outline" \| "capsule" \| "expand"` | "none" | The SHAPE that marks the current item. The meaning never changes with the shape: current is always the brand gold. `none` marks by colour alone; `subtle` and `pill` wrap icon and label in a tinted container and differ only in radius; `circle`, `circle-raised` and `circle-outline` wrap only the icon, by fill, by elevation or by a ring; `circle-bold` is a solid disc around icon and label, the only one that flips the whole foreground; `capsule` is a 56 × 28 capsule behind the icon (the active indicator of the design reference, kept at the bar's height), behind the icon; `expand` draws only icons and grows the current item into a gold capsule with its label — the others keep theirs for the screen reader. Every other indicator keeps every label visible. No measure depends on which item is current, so the bar never moves. |
@@ -3758,6 +3758,7 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller (12 on sm) — a site header's tool button, as the reference's "Theme". The box and the background stay the appearance's. |
 | `pressed` | `boolean` | — | DEPRECATED, removed in 1.0 — use <Toggle>. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. On, it shows the raised capsule with a yellow underline. With pressed and no variant, appearance or tone, the button is tertiary, not primary: off and on stay different. |
 | `kbd` | `string \| string[]` | — | Shortcut shown as a Kbd inside the button and announced with aria-keyshortcuts. A list (["Ctrl", "K"]) shows one key cap per key and announces the combination (Control+K). |
+| `onPress` | `(e: MouseEvent) => void` | — | The press — the same name on the web and on native. It runs on a click and on Enter and Space. onClick still works, as an alias; with both, both run, onPress first. A disabled or loading button runs neither. |
 | `grow` | `boolean` | false | In a row (Cluster), takes an equal share with the other buttons that also grow. `fullWidth` asks for the whole line instead. |
 | `target` | `HTMLAttributeAnchorTarget` | — | Link attribute, only with `href`. |
 | `rel` | `string` | — | Link attribute, only with `href`. |
@@ -4018,6 +4019,7 @@ fill="brand" paints the whole card in the brand colour, with the ink on top — 
 | `variant` | `base \| raised \| interactive \| inset \| outline \| selected \| danger \| contrast` | base | Which surface it is. `interactive` is the only one that answers the pointer, so use it only when the whole card really is a target; `inset` recesses instead of floating, which is what a panel inside a card wants. `contrast` stands out from the screen in both themes: in the light theme it is the dark theme's card, with no outline; in the dark theme it is the regular card with a yellow outline. Inside it the whole dark theme applies (data-theme="dark" on the card), so every child adjusts by itself. Do not use it in a list of choices: in the dark theme its outline is close to `selected`. `outline` has no fill of its own — it takes the colour of whatever it sits on — and keeps only the line around it: the big showcase box of a documentation home page. |
 | `children` | `ReactNode` | — | The content. Padding comes from --card-pad and the 22px radius from --radius-card; neither is a prop, because the floating surface is the identity of the system. |
 | `render` | `ReactElement` | — | The ELEMENT the card renders as, with the Aurea surface merged into it. Required when variant is "interactive": a card that is a target has to be a real target — <button> for an action, <a href> for navigation — and only you know which. tabIndex on a <div> would give focus with no role, no key and no accessible name. |
+| `onPress` | `MouseEventHandler` | — | The press — the same name as on native. It goes to the element of render, together with onClick, which still works as an alias; with both, both run, onPress first. |
 | `accent` | `brand \| success \| info \| warning \| danger` | — | A colour stroke on the top edge, --accent-width (4) tall, in the tone's FILL colour, the same in both themes. It is decoration: the card's own title says the subject, so the stroke carries no information of its own. The other sides keep the regular 1px border, and the stroke wins over `selected`, `danger` and the `contrast` outline. |
 | `fill` | `"brand"` | — | Paints the whole card in the brand colour, with the ink on top (--primary-foreground): the title, the supporting text and anything that reads the card colour follow. The accent stroke is hidden (brand on brand); an interactive card keeps the colour under the pointer. Under the Aurea Ember brand, the card stays a regular card. |
 | `padding` | `"normal" \| "none"` | "normal" | none removes the inner padding so media bleeds to the edge; the 22 radius stays and clips the media. |
@@ -4405,7 +4407,8 @@ When closing is not possible yet — while a save is still running, for example.
 |---|---|---|---|
 | `label` | `string` | strings.close | The accessible name. Defaults to "Close" ("Fechar" in ptBR); pass what closes when there is more than one on the screen, e.g. "Close notice". |
 | `children` | `ReactNode` | the X (Bold) | Replaces the X, as in the reference. Keep it a 16 glyph. |
-| `onClick` | `MouseEventHandler` | — | What closing does. On native, `onPress`. |
+| `onPress` | `(e: MouseEvent) => void` | — | What closing does — the same name on the web and on native. onClick still works, as an alias; with both, both run, onPress first. |
+| `onClick` | `MouseEventHandler` | — | An alias of onPress, kept for compatibility. |
 | `disabled` | `boolean` | false | Disables the button; it leaves the focus order. |
 </page>
 
@@ -5613,7 +5616,7 @@ import {ContextMenu} from "@aurea-uds/react";
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `children` | `ReactNode` | — | The region that answers the right button. It is rendered focusable (tabIndex 0) on purpose: the keyboard route into a context menu is Shift+F10 or the Menu key, and the browser only fires those over a FOCUSED element. Without that, the menu is mouse-only. |
-| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onClick?, disabled?, leadingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. Each item can carry a description (a line under the label) and a trailingIcon (an icon at the end), as in DropdownMenu. |
+| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onPress?, onClick?, disabled?, leadingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. Each item can carry a description (a line under the label) and a trailingIcon (an icon at the end), as in DropdownMenu. |
 | `label` | `string` | — | Names both the trigger region and the menu. A right-click target with no name is announced as nothing at all. |
 | `className` | `string` | — | Goes on the trigger region, which is the element you can see. |
 </page>
@@ -6222,7 +6225,7 @@ description puts a line under the label, in the small muted text; trailingIcon s
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `trigger` | `ReactElement` | — | The element that opens the menu. Usually a Button or an IconButton. |
-| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onClick?, disabled?, leadingIcon?, description?, trailingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. description is a line under the label, in the small muted text; trailingIcon sits at the end of the item (for example, arrow-square-out on a link that opens another site). On native, a link item opens only https:, mailto: and tel: addresses; any other scheme is ignored. |
+| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onPress?, onClick?, disabled?, leadingIcon?, description?, trailingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. description is a line under the label, in the small muted text; trailingIcon sits at the end of the item (for example, arrow-square-out on a link that opens another site). On native, a link item opens only https:, mailto: and tel: addresses; any other scheme is ignored. |
 | `side` | `top \| right \| bottom \| left` | bottom | Preferred side; it flips when there is no room. |
 | `align` | `start \| center \| end` | center | How the menu lines up with the trigger along that side. end puts the menu's edge on the trigger's edge, as on a split button. |
 | `label` | `string` | — | Accessible name of the menu itself. Worth setting when a page has more than one — otherwise a screen reader lists several menus with nothing to tell them apart. |
@@ -6726,7 +6729,7 @@ itemsJustify="start" puts the links right after the brand; end, the default, put
 | `brand` | `ReactNode` | — | The lockup. It lives here and not in the sidebar: the top crosses the full width and the side panel starts below it. Inside a shell this is also where the drawer toggle sits, injected before what you pass. |
 | `children` | `ReactNode` | — | Everything beside the brand: sections, search, actions, account. Presentational — the bar never decides what collapses. It wraps by content, so text at 200% breaks it to a second line instead of overflowing; hide what is secondary with hide-below-md/lg. |
 | `divider` | `boolean` | false | Only on `flush`: a hairline under the bar. flush has the page's background and sticks to the top, so without a line the content scrolls under it with nothing saying where the bar ends. |
-| `items` | `SidebarItem[]` | — | The website's links — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href, render (the router link) and onClick, as the Sidebar does; sub-items and icon are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel. |
+| `items` | `SidebarItem[]` | — | The website's links — the same list the Sidebar and the BottomNav take, so the app keeps one menu. Uses id, label, href, render (the router link) and onPress (onClick still works, as an alias), as the Sidebar does; sub-items and icon are ignored: the bar is flat. Below 768px they leave the bar and drop into the menu panel. |
 | `current` | `string` | — | The id of the current page's item: it gets aria-current="page", the highlight colour and the medium weight, in the bar and in the menu panel. |
 | `actions` | `ReactNode` | — | What sits on the right: search, a call to action, the account. It stays in the bar on a phone too. |
 | `maxWidth` | `"sm" \| "md" \| "lg" \| "xl" \| "2xl" \| "docs" \| "full"` | — | How far the bar's content grows, on the Container's scale, so the bar lines up with the page below it. Without it, the bar keeps its own padding. docs is the documentation block, 1400 (--docs-width), with 24 of padding from 768 up. On pill, the capsule itself takes that width, instead of hugging its content. |
@@ -7152,6 +7155,7 @@ The Button's finishes, chosen by the app: glow under the primary one, ring aroun
 | `variant` | `ButtonVariant \| danger-soft` | ghost | Same variants as Button. Ghost by default, so a row of them stays quiet. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label. |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | ghost | Inherited from Button. How much weight the box carries; the default here is ghost. |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | Inherited from Button. What the colour means; every combination exists. |
+| `onPress` | `(e: MouseEvent) => void` | — | Inherited from Button. The press — the same name on the web and on native; onClick still works, as an alias, and with both, both run, onPress first. |
 | `size` | `xs \| sm \| md \| lg \| xl` | md | Square target: the width follows the same density token as the height. |
 | `loading` | `boolean` | false | Spinner in place of the glyph, aria-busy set, interaction blocked. |
 | `href` | `string` | — | Renders an anchor with the same skin, like Button. |
@@ -8171,7 +8175,7 @@ size="lg" is the phone menu: 56 capsule rows, the icon in a 40 circle tinted by 
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `NavListItem[]` | — | The rows, as data — the house idiom, the same one Sidebar, BottomNav, Timeline and Breadcrumb use. Each item is {id, label, description?, value?, icon?, avatar?, indicators?, href?, onClick?, disabled?}. `description` is the second line and it is optional on purpose: a settings row often needs it ("Notifications" / "Push, email") and a plain destination row does not. `value` is the trailing accessory and takes any node, so Badge, Status or plain text compose in without this component knowing about them. `href` decides the element AND the chevron: with it the row is a link and gets the arrow, without it the row is a button and carries none — an arrow promises the row opens something. `disabled` forces the button form and marks it aria-disabled. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. `avatar` ({src?, fallback?}, the same shape as ChatMessage.avatar) puts a photo at the start of the row, in place of the icon. `indicators` ([{icon, label}]) are small muted signs before the value — pinned, muted — and each label is read by the screen reader, not drawn. |
+| `items` | `NavListItem[]` | — | The rows, as data — the house idiom, the same one Sidebar, BottomNav, Timeline and Breadcrumb use. Each item is {id, label, description?, value?, icon?, avatar?, indicators?, href?, onPress?, onClick?, disabled?}. onClick is an alias of onPress. `description` is the second line and it is optional on purpose: a settings row often needs it ("Notifications" / "Push, email") and a plain destination row does not. `value` is the trailing accessory and takes any node, so Badge, Status or plain text compose in without this component knowing about them. `href` decides the element AND the chevron: with it the row is a link and gets the arrow, without it the row is a button and carries none — an arrow promises the row opens something. `disabled` forces the button form and marks it aria-disabled. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. `avatar` ({src?, fallback?}, the same shape as ChatMessage.avatar) puts a photo at the start of the row, in place of the icon. `indicators` ([{icon, label}]) are small muted signs before the value — pinned, muted — and each label is read by the screen reader, not drawn. |
 | `size` | `"md" \| "lg"` | "md" | lg is the large list (the phone menu): a 56 capsule row (a 40 circle and 8 above and below), 16 between the circle and the name, 18 semibold letters; the 20 icon sits in a 40 circle tinted by the item's tone. |
 | `items[].tone` | `BadgeCategory` | — | With lg: the category color of the icon circle (the Badge colors); without it, the neutral circle. |
 | `items[].current` | `boolean` | false | The row of the page you are on: aria-current="page" and the --fill-2 fill; with currentLabel, its badge replaces the arrow. |
@@ -8217,8 +8221,8 @@ Which side of the trigger it opens on. When there is no room on that side, it fl
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `NotificationItem[]` | — | The feed, as data: {id, title, description?, time?, icon?, read?, group?, onClick?}. Read and unread are yours — the panel is presentational. So is the order: groups are formed in order of first appearance and never re-sorted. |
-| `onItemClick` | `(item: NotificationItem) => void` | — | Fires for every item. An item that has neither this nor its own onClick renders as a <div>, not a button — nothing that does nothing is focusable. |
+| `items` | `NotificationItem[]` | — | The feed, as data: {id, title, description?, time?, icon?, read?, group?, onPress?, onClick?} — onClick is an alias of onPress. Read and unread are yours — the panel is presentational. So is the order: groups are formed in order of first appearance and never re-sorted. |
+| `onItemClick` | `(item: NotificationItem) => void` | — | Fires for every item. An item that has neither this nor its own onPress or onClick renders as a <div>, not a button — nothing that does nothing is focusable. |
 | `onMarkAllRead` | `() => void` | — | Draws the mark-all action, and only while something is unread. |
 | `label` | `string` | "Notifications" | Accessible name of the trigger and of the panel. The unread count is appended to the trigger's name, so it is heard and not only seen. |
 | `icon` | `IconName` | notification | Glyph on the trigger. |
@@ -9318,7 +9322,7 @@ selectedStyle (ADR-0084): current — the raised capsule with the yellow line, t
 | `selectedStyle` | `"current" \| "neutral" \| "contrast" \| "brand" \| "ring" \| "dot" \| "emphasis"` | "current" | The colour of the selected segment: current — the raised capsule with the yellow line, the default (on React Native, the yellow capsule) — neutral (the raised capsule, no line), contrast (graphite), brand (yellow), ring (the neutral capsule with a yellow ring) or dot (the neutral capsule with a yellow dot before the label; the dot's place is kept in every segment so the width does not jump) or emphasis (the raised capsule with the emphasis letter — yellow in the dark theme, the text colour in the light one — and no line). Written as data-segment-style; the same attribute on a container, or on <html>, sets it for every segmented control inside. Web and React Native. |
 | `items[].icon` | `IconName` | — | An icon before the label (16, 8 from it); the selected item switches to the filled form by itself. |
 | `wrap` | `boolean` | false | The track breaks onto more lines when the options do not fit, and takes the card radius (22). |
-| `orientation` | `"horizontal" \| "vertical"` | "horizontal" | vertical stands the control up: each segment the full width, the track with the card radius (22). |
+| `orientation` | `"horizontal" \| "vertical"` | "horizontal" | vertical stands the control up: the control as wide as its widest segment and every segment that width, the track with the card radius (22). With fullWidth it takes the width of its container. |
 | `className` | `string` | — | Web only. Added to the track (the radio group, or the <nav> when every item has href). |
 </page>
 
@@ -9769,7 +9773,7 @@ The string "separator" between items splits the list with a gap — no line. ava
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `SidebarEntry[]` | — | The navigation, as data. One shape covers grouping and nesting: an item with `items` and no href is a group heading; with an href it is a parent that also has a sublist. Each item is {id, label, href?, icon?, badge?, onClick?, items?}. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. An item also takes avatar ({src?, fallback?}, a photo or a team logo in place of the icon — it stays on the rail), action (a small IconButton such as "⋯" or "+", rendered NEXT TO the link, never inside it; hidden on the rail, as in the reference) and, on a group heading, collapsible and defaultOpen (the heading becomes a disclosure button with aria-expanded). The string "separator" between items splits the list in two with a gap — no line. On the rail, sublists are hidden, as the reference does: a sub-item without an icon used to become an empty button there. |
+| `items` | `SidebarEntry[]` | — | The navigation, as data. One shape covers grouping and nesting: an item with `items` and no href is a group heading; with an href it is a parent that also has a sublist. Each item is {id, label, href?, icon?, badge?, onPress?, onClick?, items?}. onClick is an alias of onPress. An item may carry render (a ReactElement, your router's link) instead of href — it receives the item's skin, the current-page state and the item's content. An item also takes avatar ({src?, fallback?}, a photo or a team logo in place of the icon — it stays on the rail), action (a small IconButton such as "⋯" or "+", rendered NEXT TO the link, never inside it; hidden on the rail, as in the reference) and, on a group heading, collapsible and defaultOpen (the heading becomes a disclosure button with aria-expanded). The string "separator" between items splits the list in two with a gap — no line. On the rail, sublists are hidden, as the reference does: a sub-item without an icon used to become an empty button there. |
 | `variant` | `"floating" \| "flush" \| "plain"` | floating | floating is the default and it is what this design system looks like: the panel detaches from the edges, takes the card radius and a border all the way around. flush is the ONE exception this system makes to that rule, and it is opt-in: the sidebar sits against the edges, takes the full height and is separated from the content by a single rule instead of a gap. That is what four shipping admin panels do — the reference library's own dashboard among the ones measured. Aurea's own pages stay floating; flush is there for the applications that want it. plain is the sidebar with NO box — no fill, no line, no shadow — in the floating one's place and height: the items sit loose on the page, like a documentation page's "On this page" column. The 1px border stays, transparent, so switching variants moves nothing. |
 | `current` | `string` | — | The id of the item you are on. It gets aria-current="page", which is also what the skin paints — one source for both, so they cannot drift apart. |
 | `collapsed` | `boolean` | false | Icon rail. Labels stay in the DOM as screen-reader-only text, and the panel narrows to --sidebar-rail. In AppShell, a floating rail keeps its outer margins in the grid track; flush uses the token as the raw track width. Controlled by you: the sidebar never decides on its own when to collapse. |
@@ -10273,7 +10277,8 @@ variant="bar" is progress in parts: each part is the link to its step and turns 
 | `items` | `StepItem[]` | none | REQUIRED. One entry per step: label, state, optional note, and an optional handler. The number comes from the position, so it can never drift. |
 | `items[].state` | `"default" \| "active" \| "done" \| "error"` | "default" | `done` shows a check, `error` shows the error glyph in the danger colour, `active` is the one announced as current. |
 | `items[].optional` | `ReactNode` | none | A note under the label, for a step that may be skipped. |
-| `items[].onClick` | `() => void` | none | Makes the step a real button, for a flow the user may enter at any point. Without it the step is not interactive. |
+| `items[].onPress` | `() => void` | none | Makes the step a real button, for a flow the user may enter at any point. Without it (or onClick) the step is not interactive. The same name as on native. |
+| `items[].onClick` | `() => void` | none | An alias of items[].onPress, kept for compatibility; with both, both run, onPress first. |
 | `items[].href` | `string` | — | Makes the step a link (in the bar, each part leads to its step). |
 | `label` | `string` | the provider's "Steps" | Accessible name of the whole list. |
 | `variant` | `"default" \| "path" \| "bar"` | "default" | path: a path you choose on — 50 dots (--control-h-xl) on the card with the small shadow, numbers in the code font, one 8 rail (--fill-2) end to end, the chosen step inverted and 56; the labels stay for screen readers; under a 30rem container, four per row and no rail. bar: progress in parts — each step is a 12 part of the bar, 6 apart, the link or button of its step, green when done; the label stays for screen readers. |
@@ -11359,6 +11364,7 @@ pressedStyle (ADR-0084), when the button is pressed: brand — the default — n
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | ghost | Inherited from Button. How much weight the box carries; the default here is ghost. |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | Inherited from Button. What the colour means; every combination exists. |
 | `pressed` | `boolean` | — | Toggle inside the toolbar (bold, italic). aria-pressed, not a variant. |
+| `onPress` | `(e: MouseEvent) => void` | — | Inherited from Button. The press — the same name on the web and on native; onClick still works, as an alias, and with both, both run, onPress first. |
 | `leadingIcon` | `AureaIcon` | — | Same icon API as Button; every Button prop is accepted. |
 | `disabled` | `boolean` | false | Stays in the roving order but is not activatable, so the set does not shift. |
 | `size` | `Responsive<ComponentSize>` | md | The system's size step, shared with Button. Responsive. |
@@ -18817,6 +18823,33 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-73-0.html">
+# v0.73.0
+
+onPress on the web, and layout pieces that keep their size anywhere — alone, in a Stack, a Cluster or a Grid.
+
+## Changed
+
+- **`onPress` on the web**, the same name as on native: `Button`, `IconButton`, `CloseButton`, `ToolbarButton`, `Card` and the items of `Sidebar`, `NavList`, `Stepper`, `BottomNav`, `Header`, the menus and `NotificationCenter`. `onClick` still works, as an alias; with both, both run, `onPress` first.
+- **A `Sidebar` outside `AppShell` has its own width** (`--sidebar-width`; collapsed, `--sidebar-rail`) — alone, in a column, a row or a grid — and never grows wider than the space it gets. Inside `AppShell`, nothing changes.
+- **`SegmentedControl` keeps the width of its content everywhere.** In a column it used to stretch to the edge. To fill the row, use `fullWidth`.
+- **`TableOfContents` fills the box it is in.** In a column it used to shrink to its text. It still sticks while the page scrolls.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.73.0 @aurea-uds/core@0.73.0 @aurea-uds/fonts@0.73.0 @aurea-uds/icons@0.73.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.73.0
 ```
 </page>
 

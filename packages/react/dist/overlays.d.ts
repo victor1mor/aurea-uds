@@ -83,7 +83,8 @@ interface MenuItemBase {
 }
 /** Item de ação — a forma de sempre. `kind` é opcional para não quebrar quem já usa. */
 export interface MenuActionDef extends MenuItemBase {
-    kind?: "item";
+    kind?: "item"; /** O toque (DOC-11): o mesmo nome do nativo. O `onClick` continua valendo, como apelido; com os dois, rodam os dois. */
+    onPress?: () => void;
     onClick?: () => void;
     /** O elemento que MATERIALIZA o item, no idioma `render` da casa (o mesmo do `Card`). Para
      *  navegação prefira `href`, que usa o `LinkItem` do motor. */
