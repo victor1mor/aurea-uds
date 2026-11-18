@@ -229,6 +229,12 @@
       "description": "Shortcut shown as a Kbd inside the button and announced with aria-keyshortcuts. A list ([\"Ctrl\", \"K\"]) shows one key cap per key and announces the combination (Control+K)."
     },
     {
+      "name": "onPress",
+      "type": "(e: MouseEvent) => void",
+      "default": "—",
+      "description": "The press — the same name on the web and on native. It runs on a click and on Enter and Space. onClick still works, as an alias; with both, both run, onPress first. A disabled or loading button runs neither."
+    },
+    {
       "name": "grow",
       "type": "boolean",
       "default": "false",

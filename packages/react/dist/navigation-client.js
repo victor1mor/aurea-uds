@@ -10,6 +10,7 @@ import { Autocomplete as BaseAutocomplete } from "@base-ui/react/autocomplete";
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { Popover as BasePopover } from "@base-ui/react/popover";
 import { useValorResponsivo } from "./responsivo-runtime.js";
+import { juntarToque } from "./pure.js";
 import { cx, fundirRender, useAureaStrings, usePortalContainer, useDeslize } from "./internal.js";
 import { Kbd, ProgressCircle } from "./markup.js";
 import { Icon } from "./system.js";
@@ -30,7 +31,7 @@ export function Stepper({ items, label, variant = "default", orientation = "hori
                 const st = it.state ?? "default";
                 const marca = st === "done" && variant !== "path" ? _jsx(Icon, { name: "check" }) : st === "error" ? _jsx(Icon, { name: "x-circle" }) : n + 1;
                 const miolo = variant === "bar" ? _jsx("span", { className: "sr-only", children: it.label }) : _jsxs(_Fragment, { children: [_jsx("span", { className: "step-dot", children: marca }), _jsx("strong", { children: it.label }), it.optional && _jsx("small", { className: "step-optional", children: it.optional })] });
-                return _jsx("div", { role: "listitem", className: cx("step", st !== "default" && `step-${st}`), "aria-current": st === "active" ? "step" : undefined, children: it.href ? _jsx("a", { className: "step-trigger", href: it.href, onClick: it.onClick, children: miolo }) : it.onClick || variant === "bar" ? _jsx("button", { type: "button", className: "step-trigger", onClick: it.onClick, children: miolo }) : miolo }, n);
+                return _jsx("div", { role: "listitem", className: cx("step", st !== "default" && `step-${st}`), "aria-current": st === "active" ? "step" : undefined, children: it.href ? _jsx("a", { className: "step-trigger", href: it.href, onClick: juntarToque(it.onPress, it.onClick), children: miolo }) : juntarToque(it.onPress, it.onClick) || variant === "bar" ? _jsx("button", { type: "button", className: "step-trigger", onClick: juntarToque(it.onPress, it.onClick), children: miolo }) : miolo }, n);
             }), comPontas && endContent != null && _jsx("div", { role: "listitem", className: "step-end", children: endContent })] });
     if (variant === "path")
         return _jsx("div", { className: cx("stepper-path", className), children: lista });
@@ -271,16 +272,16 @@ function sidebarEntry(it, ctx) {
     // Rótulo escondido vira `.sr-only` em vez de sumir do DOM: na lateral recolhida o item
     // continua tendo nome para quem usa leitor de tela. Ícone sozinho não nomeia nada.
     const oculto = (no) => ctx.collapsed ? _jsx("span", { className: "sr-only", children: no }) : no;
-    if (filhos && !it.href && !it.onClick && !it.render)
+    if (filhos && !it.href && !juntarToque(it.onPress, it.onClick) && !it.render)
         return _jsx(SidebarGroup, { item: it, filhos: filhos, lid: lid, ctx: ctx }, it.id);
     const ativo = it.id === ctx.current;
     // O item escolhido desenha o ícone CHEIO (ADR-0053). Com `avatar`, a foto toma o lugar do ícone (4-E).
     const miolo = _jsxs(_Fragment, { children: [it.avatar ? _jsx(Avatar, { src: it.avatar.src, fallback: it.avatar.fallback, className: "sidebar-avatar" }) : it.icon && _jsx(Icon, { name: it.icon, weight: ativo ? "fill" : undefined }), _jsx("span", { className: cx("sidebar-label", ctx.collapsed && "sr-only"), children: it.label }), it.badge != null && oculto(it.badge)] });
     const alvo = it.render
-        ? fundirRender(it.render, { id: lid, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, "a")
+        ? fundirRender(it.render, { id: lid, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo }, "a")
         : it.href
-            ? _jsx("a", { id: lid, href: it.href, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo })
-            : _jsx("button", { id: lid, type: "button", className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo });
+            ? _jsx("a", { id: lid, href: it.href, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo })
+            : _jsx("button", { id: lid, type: "button", className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo });
     // NO TRILHO O NOME SÓ EXISTE NO TOOLTIP. Recolhida, a lateral manda o rótulo para `.sr-only`: quem
     // usa leitor de tela continua ouvindo, e quem ENXERGA fica com um ícone mudo. A referência resolve
     // isso com tooltip no botão de navegação dela, e é o que falta para um trilho de ícone não virar adivinhação.
@@ -491,10 +492,10 @@ export function BottomNav({ items, current, variant = "floating", indicator = "n
             const corpo = _jsxs(_Fragment, { children: [marca, _jsx("span", { className: cx("bottom-nav-label", ind === "expand" && !ativo && "sr-only"), children: it.label })] });
             const miolo = ind === "circle-bold" ? _jsx("span", { className: "bottom-nav-disc", children: corpo }) : corpo;
             return it.render
-                ? _jsx(React.Fragment, { children: fundirRender(it.render, { className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, "a") }, it.id)
+                ? _jsx(React.Fragment, { children: fundirRender(it.render, { className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo }, "a") }, it.id)
                 : it.href
-                    ? _jsx("a", { href: it.href, className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, it.id)
-                    : _jsx("button", { type: "button", className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: it.onClick, children: miolo }, it.id);
+                    ? _jsx("a", { href: it.href, className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo }, it.id)
+                    : _jsx("button", { type: "button", className: "bottom-nav-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo }, it.id);
         }) });
 }
 // `size="lg"` (o site B — o menu do celular, aprovado pela bancada em 01/11/2026, o item 10): a linha de 56 em cápsula (o
@@ -510,10 +511,10 @@ export function NavList({ items, size = "md", currentLabel, className, ...props 
                         : (it.href || it.render) && _jsx(Icon, { name: rtl ? "caret-left" : "caret-right", size: "sm", className: "nav-list-chevron" })] });
             const atual = it.current ? "page" : undefined;
             return _jsx("li", { children: it.render && !it.disabled
-                    ? fundirRender(it.render, { className: "nav-list-row", onClick: it.onClick, "aria-current": atual, children: miolo }, "a")
+                    ? fundirRender(it.render, { className: "nav-list-row", onClick: juntarToque(it.onPress, it.onClick), "aria-current": atual, children: miolo }, "a")
                     : it.href && !it.disabled
-                        ? _jsx("a", { href: it.href, className: "nav-list-row", "aria-current": atual, onClick: it.onClick, children: miolo })
-                        : _jsx("button", { type: "button", className: "nav-list-row", "aria-current": atual, "aria-disabled": it.disabled || undefined, onClick: it.disabled ? undefined : it.onClick, children: miolo }) }, it.id);
+                        ? _jsx("a", { href: it.href, className: "nav-list-row", "aria-current": atual, onClick: juntarToque(it.onPress, it.onClick), children: miolo })
+                        : _jsx("button", { type: "button", className: "nav-list-row", "aria-current": atual, "aria-disabled": it.disabled || undefined, onClick: it.disabled ? undefined : juntarToque(it.onPress, it.onClick), children: miolo }) }, it.id);
         }) });
 }
 // `size="lg"` (o site B — a busca nova, aprovada pela bancada em 01/11/2026, o item 2 e o D-2): a janela da largura `lg`

@@ -92,10 +92,16 @@
       "description": "A note under the label, for a step that may be skipped."
     },
     {
+      "name": "items[].onPress",
+      "type": "() => void",
+      "default": "none",
+      "description": "Makes the step a real button, for a flow the user may enter at any point. Without it (or onClick) the step is not interactive. The same name as on native."
+    },
+    {
       "name": "items[].onClick",
       "type": "() => void",
       "default": "none",
-      "description": "Makes the step a real button, for a flow the user may enter at any point. Without it the step is not interactive."
+      "description": "An alias of items[].onPress, kept for compatibility; with both, both run, onPress first."
     },
     {
       "name": "items[].href",

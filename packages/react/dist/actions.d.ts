@@ -56,6 +56,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Re
     /** O atalho, à mostra e anunciado. Texto: uma caixinha só ("⌘K"). LISTA (15/10/2026): uma caixinha por tecla, como
      *  a busca da referência (`["Ctrl", "K"]`), e o leitor de tela recebe a combinação (`Control+K`). */
     kbd?: string | readonly string[];
+    /** DOC-11 (16/11/2026): o toque, com o mesmo nome do nativo e da referência. O `onClick` continua valendo, como apelido;
+     *  com os dois, rodam os dois, o `onPress` primeiro. O evento é o do clique (também pelo Enter e pelo Espaço). */
+    onPress?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     /**
      * GAR-14 (0.28.0): o botão COMPARTILHA. Ele pergunta ao navegador se sabe compartilhar este link
      * (`navigator.canShare`) — detectar o recurso, e não adivinhar o aparelho, é o padrão da web. Sabe
@@ -126,7 +129,7 @@ export interface CloseButtonProps extends Omit<ButtonProps, "quiet" | "variant" 
     label?: string;
 }
 export declare const CloseButton: React.ForwardRefExoticComponent<Omit<CloseButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
-export interface ThemeToggleProps extends Omit<IconButtonProps, "quiet" | "icon" | "label" | "onClick" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share" | "glow" | "ring"> {
+export interface ThemeToggleProps extends Omit<IconButtonProps, "quiet" | "icon" | "label" | "onClick" | "onPress" | "variant" | "appearance" | "tone" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "loading" | "leadingIcon" | "trailingIcon" | "fullWidth" | "share" | "glow" | "ring"> {
     /** `"light-dark"` (o padrão): o botão que alterna. `"light-dark-system"` (15/10/2026): a chave de três posições do
      *  topo da referência — claro, escuro e sistema (seguir o do computador, e mudar junto). */
     mode?: "light-dark" | "light-dark-system";

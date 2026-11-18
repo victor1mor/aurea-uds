@@ -36,7 +36,7 @@
 // tocar motor. Na dúvida, ele NÃO entra — cliente a mais é lento, servidor a mais é quebrado.
 import React, {forwardRef, type AnchorHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactElement,
   type ReactNode, type RefAttributes, type SelectHTMLAttributes, type TextareaHTMLAttributes} from "react";
-import {cx, fundirRender, peleDoEixo, type Responsive} from "./pure.js";
+import {cx, fundirRender, juntarToque, peleDoEixo, type Responsive} from "./pure.js";
 // As contas de cor são funções puras, sem estado e sem navegador (ADR-0069): o `ColorSwatch` usa a do contraste.
 import {contrastingInk, hsbToRgb, parseColor} from "./color.js";
 // TIPO apenas: `import type` some na emissão, então isto não faz o `markup` depender de um
@@ -91,14 +91,18 @@ export type CardAccent="brand"|"success"|"info"|"warning"|"danger";
 // `lift` (o site B, aprovado pela bancada em 01/11/2026): no cartão clicável, ao passar o mouse ele SOBE com sombra em vez de
 // trocar o fundo. Só vale com `variant="interactive"`; nos outros, não faz nada.
 // `fill="brand"` (o site B, 02/11/2026, a "B" na imagem): o cartão pintado no amarelo da marca, com a tinta por cima.
-type CardBase=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{padding?:"normal"|"none";orientation?:"vertical"|"horizontal";accent?:CardAccent;lift?:boolean;fill?:"brand"};
+type CardBase=HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{padding?:"normal"|"none";orientation?:"vertical"|"horizontal";accent?:CardAccent;lift?:boolean;fill?:"brand";
+  /** O toque (DOC-11, 16/11/2026): o mesmo nome do nativo. Vai para o elemento do `render`, junto do `onClick`, que continua
+   *  valendo como apelido; com os dois, rodam os dois. */
+  onPress?:HTMLAttributes<HTMLDivElement>["onClick"]};
 // Os literais são escritos NOS DOIS RAMOS, sem `Exclude<Alias,…>`: quem lê a assinatura pública
 // vê os valores em vez de seguir dois aliases, e o `api-surface` os enxerga sem ginástica.
 export type CardProps=CardBase&(
   {variant?:"base"|"raised"|"inset"|"outline"|"selected"|"danger"|"contrast";render?:ReactElement}|
   {variant:"interactive";render:ReactElement});
-export function Card({variant="base",padding="normal",orientation="vertical",accent,lift,fill,className,render,...props}:CardProps){
-return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${variant}`,lift&&variant==="interactive"&&"card-lift",accent&&`card-accent card-accent-${accent}`,fill==="brand"&&"card-fill-brand",padding==="none"&&"card-flush",orientation==="horizontal"&&"card-horizontal",className),...(variant==="contrast"?{"data-theme":"dark"}:null),...props})}
+export function Card({variant="base",padding="normal",orientation="vertical",accent,lift,fill,className,render,onPress,onClick,...props}:CardProps){
+const toque=juntarToque(onPress,onClick);
+return fundirRender(render,{className:cx("card",variant!=="base"&&`card-${variant}`,lift&&variant==="interactive"&&"card-lift",accent&&`card-accent card-accent-${accent}`,fill==="brand"&&"card-fill-brand",padding==="none"&&"card-flush",orientation==="horizontal"&&"card-horizontal",className),...(variant==="contrast"?{"data-theme":"dark"}:null),...(toque?{onClick:toque}:null),...props})}
 /** A mídia do cartão — a primeira das partes da especificação do `Card` (A-14). No vertical,
  *  primeira filha, ela SANGRA até a borda de cima e dos lados; no horizontal, fica à esquerda com a
  *  largura de miniatura, dentro do respiro, com o raio que sai da conta da casa (ADR-0033: raio do
@@ -737,7 +741,7 @@ function linksDoHeader(items:SidebarItem[],current:string|undefined){
   return <ul className="topbar-links">{items.map(it=>{
     // O `onClick` do item vale aqui também (06/11/2026): a `Sidebar` o liga e o `Header` o jogava fora — o mesmo `SidebarItem`
     // fazia coisas diferentes nas duas peças. Não é hook: é a prop do `<a>`, que a marcação pura pode passar.
-    const p={className:"topbar-link","aria-current":it.id===current?"page" as const:undefined,onClick:it.onClick,children:it.label};
+    const p={className:"topbar-link","aria-current":it.id===current?"page" as const:undefined,onClick:juntarToque(it.onPress,it.onClick),children:it.label};
     return <li key={it.id}>{it.render?fundirRender(it.render,p,"a"):<a href={it.href} {...p}/>}</li>;
   })}</ul>;
 }

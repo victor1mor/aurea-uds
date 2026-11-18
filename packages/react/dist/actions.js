@@ -4,7 +4,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, { useRef, forwardRef, cloneElement } from "react";
-import { classesResponsivas, ehResponsivo, peleDoEixo, soOValor, valorBase } from "./pure.js";
+import { classesResponsivas, ehResponsivo, juntarToque, peleDoEixo, soOValor, valorBase } from "./pure.js";
 import { useValorResponsivo } from "./responsivo-runtime.js";
 import { Toolbar as BaseToolbar } from "@base-ui/react/toolbar";
 import { Toggle as BaseToggle } from "@base-ui/react/toggle";
@@ -111,8 +111,9 @@ const NOME_DA_TECLA = { ctrl: "Control", control: "Control", "⌃": "Control", c
     shift: "Shift", "⇧": "Shift", alt: "Alt", option: "Alt", "⌥": "Alt", enter: "Enter", "↵": "Enter", esc: "Escape", escape: "Escape" };
 const atalhoAnunciado = (kbd) => typeof kbd === "string" ? (kbd || undefined)
     : kbd && kbd.length > 0 ? kbd.map(k => NOME_DA_TECLA[k.toLowerCase()] ?? k).join("+") : undefined;
-export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, quiet, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onClick, onClickCapture, "aria-disabled": ariaDisabled, render, share, glow, ring, ...props }, ref) {
+export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, quiet, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onPress, onClick: onClickPedido, onClickCapture, "aria-disabled": ariaDisabled, render, share, glow, ring, ...props }, ref) {
     const grupo = React.useContext(GrupoDeBotoesContext);
+    const onClick = juntarToque(onPress, onClickPedido);
     // O botão de ligar (`pressed`) sem tom continua o neutro de antes da 0.71.0: o ligado é que é amarelo, e o desligado
     // amarelo também ficaria igual a ele. O `Toggle` da referência também é neutro por padrão.
     const variant = variantPedida ?? grupo?.variant ?? (pressed !== undefined && appearance === undefined && tone === undefined ? "tertiary" : undefined);

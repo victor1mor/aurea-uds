@@ -3,7 +3,7 @@
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, {useRef, forwardRef, cloneElement, type ButtonHTMLAttributes, type HTMLAttributes, type ReactElement, type RefAttributes} from "react";
-import {classesResponsivas, ehResponsivo, peleDoEixo, soOValor, valorBase, type Orientation, type Responsive} from "./pure.js";
+import {classesResponsivas, ehResponsivo, juntarToque, peleDoEixo, soOValor, valorBase, type Orientation, type Responsive} from "./pure.js";
 import {useValorResponsivo} from "./responsivo-runtime.js";
 import {Toolbar as BaseToolbar} from "@base-ui/react/toolbar";
 import {Toggle as BaseToggle} from "@base-ui/react/toggle";
@@ -109,6 +109,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>,Ref
   /** O atalho, à mostra e anunciado. Texto: uma caixinha só ("⌘K"). LISTA (15/10/2026): uma caixinha por tecla, como
    *  a busca da referência (`["Ctrl", "K"]`), e o leitor de tela recebe a combinação (`Control+K`). */
   kbd?:string|readonly string[];
+  /** DOC-11 (16/11/2026): o toque, com o mesmo nome do nativo e da referência. O `onClick` continua valendo, como apelido;
+   *  com os dois, rodam os dois, o `onPress` primeiro. O evento é o do clique (também pelo Enter e pelo Espaço). */
+  onPress?:(e:React.MouseEvent<HTMLButtonElement>)=>void;
   /**
    * GAR-14 (0.28.0): o botão COMPARTILHA. Ele pergunta ao navegador se sabe compartilhar este link
    * (`navigator.canShare`) — detectar o recurso, e não adivinhar o aparelho, é o padrão da web. Sabe
@@ -173,8 +176,9 @@ const NOME_DA_TECLA:Record<string,string>={ctrl:"Control",control:"Control","⌃
   shift:"Shift","⇧":"Shift",alt:"Alt",option:"Alt","⌥":"Alt",enter:"Enter","↵":"Enter",esc:"Escape",escape:"Escape"};
 const atalhoAnunciado=(kbd:string|readonly string[]|undefined)=>typeof kbd==="string"?(kbd||undefined)
   :kbd&&kbd.length>0?kbd.map(k=>NOME_DA_TECLA[k.toLowerCase()]??k).join("+"):undefined;
-export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant:variantPedida,appearance,tone,size:sizePedido,quiet,loading,leadingIcon,trailingIcon,className,children,disabled:disabledPedido,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onClick,onClickCapture,"aria-disabled":ariaDisabled,render,share,glow,ring,...props},ref){
+export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant:variantPedida,appearance,tone,size:sizePedido,quiet,loading,leadingIcon,trailingIcon,className,children,disabled:disabledPedido,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onPress,onClick:onClickPedido,onClickCapture,"aria-disabled":ariaDisabled,render,share,glow,ring,...props},ref){
 const grupo=React.useContext(GrupoDeBotoesContext);
+const onClick=juntarToque(onPress,onClickPedido);
 // O botão de ligar (`pressed`) sem tom continua o neutro de antes da 0.71.0: o ligado é que é amarelo, e o desligado
 // amarelo também ficaria igual a ele. O `Toggle` da referência também é neutro por padrão.
 const variant=variantPedida??grupo?.variant??(pressed!==undefined&&appearance===undefined&&tone===undefined?"tertiary":undefined);
@@ -344,7 +348,7 @@ export const CloseButton=forwardRef<HTMLButtonElement,CloseButtonProps>(function
 // isso que não existe a combinação inversa. Quem troca é o `useAureaTheme`, com ou sem provider.
 // Fechado como a referência faria: tamanho e desligado. Sem cor (variant, appearance, tone) — a cor é a
 // do glifo, e é a razão de a peça existir —, sem link, sem atalho e sem ícone extra.
-export interface ThemeToggleProps extends Omit<IconButtonProps,"quiet"|"icon"|"label"|"onClick"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth"|"share"|"glow"|"ring">{
+export interface ThemeToggleProps extends Omit<IconButtonProps,"quiet"|"icon"|"label"|"onClick"|"onPress"|"variant"|"appearance"|"tone"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"loading"|"leadingIcon"|"trailingIcon"|"fullWidth"|"share"|"glow"|"ring">{
   /** `"light-dark"` (o padrão): o botão que alterna. `"light-dark-system"` (15/10/2026): a chave de três posições do
    *  topo da referência — claro, escuro e sistema (seguir o do computador, e mudar junto). */
   mode?:"light-dark"|"light-dark-system"}

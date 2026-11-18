@@ -52,7 +52,8 @@ variant="bar" is progress in parts: each part is the link to its step and turns 
 | `items` | `StepItem[]` | none | REQUIRED. One entry per step: label, state, optional note, and an optional handler. The number comes from the position, so it can never drift. |
 | `items[].state` | `"default" \| "active" \| "done" \| "error"` | "default" | `done` shows a check, `error` shows the error glyph in the danger colour, `active` is the one announced as current. |
 | `items[].optional` | `ReactNode` | none | A note under the label, for a step that may be skipped. |
-| `items[].onClick` | `() => void` | none | Makes the step a real button, for a flow the user may enter at any point. Without it the step is not interactive. |
+| `items[].onPress` | `() => void` | none | Makes the step a real button, for a flow the user may enter at any point. Without it (or onClick) the step is not interactive. The same name as on native. |
+| `items[].onClick` | `() => void` | none | An alias of items[].onPress, kept for compatibility; with both, both run, onPress first. |
 | `items[].href` | `string` | — | Makes the step a link (in the bar, each part leads to its step). |
 | `label` | `string` | the provider's "Steps" | Accessible name of the whole list. |
 | `variant` | `"default" \| "path" \| "bar"` | "default" | path: a path you choose on — 50 dots (--control-h-xl) on the card with the small shadow, numbers in the code font, one 8 rail (--fill-2) end to end, the chosen step inverted and 56; the labels stay for screen readers; under a 30rem container, four per row and no rail. bar: progress in parts — each step is a 12 part of the bar, 6 apart, the link or button of its step, green when done; the label stays for screen readers. |

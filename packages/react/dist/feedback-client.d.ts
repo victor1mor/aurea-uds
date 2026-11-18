@@ -87,7 +87,8 @@ export interface NotificationItem {
     time?: ReactNode;
     icon?: IconName;
     read?: boolean;
-    group?: string;
+    group?: string; /** O toque (DOC-11): o mesmo nome do nativo. O `onClick` continua valendo, como apelido; com os dois, rodam os dois. */
+    onPress?: () => void;
     onClick?: () => void;
 }
 export declare function NotificationCenter({ items, onItemClick, onMarkAllRead, label, icon, side }: {

@@ -86,6 +86,12 @@
       "description": "The ELEMENT the card renders as, with the Aurea surface merged into it. Required when variant is \"interactive\": a card that is a target has to be a real target — <button> for an action, <a href> for navigation — and only you know which. tabIndex on a <div> would give focus with no role, no key and no accessible name."
     },
     {
+      "name": "onPress",
+      "type": "MouseEventHandler",
+      "default": "—",
+      "description": "The press — the same name as on native. It goes to the element of render, together with onClick, which still works as an alias; with both, both run, onPress first."
+    },
+    {
       "name": "accent",
       "type": "brand | success | info | warning | danger",
       "default": "—",

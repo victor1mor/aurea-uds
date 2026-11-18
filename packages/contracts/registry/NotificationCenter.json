@@ -70,13 +70,13 @@
       "name": "items",
       "type": "NotificationItem[]",
       "default": "—",
-      "description": "The feed, as data: {id, title, description?, time?, icon?, read?, group?, onClick?}. Read and unread are yours — the panel is presentational. So is the order: groups are formed in order of first appearance and never re-sorted."
+      "description": "The feed, as data: {id, title, description?, time?, icon?, read?, group?, onPress?, onClick?} — onClick is an alias of onPress. Read and unread are yours — the panel is presentational. So is the order: groups are formed in order of first appearance and never re-sorted."
     },
     {
       "name": "onItemClick",
       "type": "(item: NotificationItem) => void",
       "default": "—",
-      "description": "Fires for every item. An item that has neither this nor its own onClick renders as a <div>, not a button — nothing that does nothing is focusable."
+      "description": "Fires for every item. An item that has neither this nor its own onPress or onClick renders as a <div>, not a button — nothing that does nothing is focusable."
     },
     {
       "name": "onMarkAllRead",

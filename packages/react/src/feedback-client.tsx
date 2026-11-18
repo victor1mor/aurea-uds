@@ -1,7 +1,7 @@
 "use client";
 // Fase 9 (achado A5): este arquivo saiu do index.tsx de 970 linhas. Um módulo por categoria
 // do registry — a taxonomia já existia e é gateada. A ordem de import entre eles é um DAG:
-import {peleDoEixo, proprio, type Responsive} from "./pure.js";
+import {juntarToque, peleDoEixo, proprio, type Responsive} from "./pure.js";
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, {type HTMLAttributes, type RefAttributes, type ReactNode} from "react";
 import {Popover as BasePopover} from "@base-ui/react/popover";
@@ -274,7 +274,7 @@ export function EmptyState({icon="file",title,titleAs:TitleTag="h3",description,
 // por diff de ids desde a montagem; a montagem inicial não anuncia (senão despeja
 // o feed todo de uma vez). O count no gatilho é decorativo (aria-hidden); o nome
 // acessível do botão traz o número e cada item não lido é prefixado por sr-only.
-export interface NotificationItem{id:string;title:ReactNode;description?:ReactNode;time?:ReactNode;icon?:IconName;read?:boolean;group?:string;onClick?:()=>void}
+export interface NotificationItem{id:string;title:ReactNode;description?:ReactNode;time?:ReactNode;icon?:IconName;read?:boolean;group?:string;/** O toque (DOC-11): o mesmo nome do nativo. O `onClick` continua valendo, como apelido; com os dois, rodam os dois. */onPress?:()=>void;onClick?:()=>void}
 function groupNotifications(items:NotificationItem[]):Array<{label?:string;items:NotificationItem[]}>{
   const out:Array<{label?:string;items:NotificationItem[]}>=[];
   for(const it of items){
@@ -309,8 +309,8 @@ export function NotificationCenter({items,onItemClick,onMarkAllRead,label,icon="
       {it.time&&<span className="notification-time">{it.time}</span>}
       {it.description&&<span className="notification-item-desc">{it.description}</span>}
     </>;
-    return it.onClick||onItemClick
-      ?<button type="button" className="notification-item" data-read={it.read||undefined} onClick={()=>{it.onClick?.();onItemClick?.(it)}}>{body}</button>
+    return it.onPress||it.onClick||onItemClick
+      ?<button type="button" className="notification-item" data-read={it.read||undefined} onClick={()=>{it.onPress?.();it.onClick?.();onItemClick?.(it)}}>{body}</button>
       :<div className="notification-item" data-read={it.read||undefined}>{body}</div>;
   };
   return <BasePopover.Root>

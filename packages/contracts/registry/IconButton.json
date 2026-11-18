@@ -152,6 +152,12 @@
       "description": "Inherited from Button. What the colour means; every combination exists."
     },
     {
+      "name": "onPress",
+      "type": "(e: MouseEvent) => void",
+      "default": "—",
+      "description": "Inherited from Button. The press — the same name on the web and on native; onClick still works, as an alias, and with both, both run, onPress first."
+    },
+    {
       "name": "size",
       "type": "xs | sm | md | lg | xl",
       "default": "md",

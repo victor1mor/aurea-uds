@@ -70,10 +70,16 @@
       "description": "Replaces the X, as in the reference. Keep it a 16 glyph."
     },
     {
+      "name": "onPress",
+      "type": "(e: MouseEvent) => void",
+      "default": "—",
+      "description": "What closing does — the same name on the web and on native. onClick still works, as an alias; with both, both run, onPress first."
+    },
+    {
       "name": "onClick",
       "type": "MouseEventHandler",
       "default": "—",
-      "description": "What closing does. On native, `onPress`."
+      "description": "An alias of onPress, kept for compatibility."
     },
     {
       "name": "disabled",

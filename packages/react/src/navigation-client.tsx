@@ -9,7 +9,7 @@ import {Autocomplete as BaseAutocomplete} from "@base-ui/react/autocomplete";
 import {Dialog as BaseDialog} from "@base-ui/react/dialog";
 import {Popover as BasePopover} from "@base-ui/react/popover";
 import {useValorResponsivo} from "./responsivo-runtime.js";
-import {type Responsive} from "./pure.js";
+import {juntarToque, type Responsive} from "./pure.js";
 import {cx, fundirRender, useAureaStrings, usePortalContainer, useDeslize} from "./internal.js";
 import {Kbd, ProgressCircle} from "./markup.js";
 import {Icon, type IconName} from "./system.js";
@@ -39,7 +39,7 @@ import {Avatar} from "./identity-client.js";
 // na etapa atual, que é o que aquela quinta referência também faz.
 export type StepState="default"|"active"|"done"|"error";
 // `href` (o site B, 02/11/2026): a etapa é um LINK — na barra em partes, cada parte leva à seção do passo.
-export interface StepItem{label:ReactNode;state?:StepState;optional?:ReactNode;onClick?:()=>void;href?:string}
+export interface StepItem{label:ReactNode;state?:StepState;optional?:ReactNode;/** O toque (DOC-11): o mesmo nome do nativo. O `onClick` continua valendo, como apelido; com os dois, rodam os dois. */onPress?:()=>void;onClick?:()=>void;href?:string}
 // `variant` (o site B, aprovado pela bancada em 01/11/2026): `path` é o caminho que escolhe (o Roadmap, o item 5) e `bar` a
 // barra em partes (o "Your setup" do Quick Start, o D-1). `startContent` e `endContent`: no `path`, as pontas que não
 // clicam ("0.x", "1.0"); no `bar`, o nome antes da barra e a contagem depois. Sem `variant`, o `Stepper` de sempre.
@@ -56,7 +56,7 @@ const lista=<div role="list" aria-label={label??s.stepperLabel} className={cx("s
 const marca=st==="done"&&variant!=="path"?<Icon name="check"/>:st==="error"?<Icon name="x-circle"/>:n+1;
 const miolo=variant==="bar"?<span className="sr-only">{it.label}</span>:<><span className="step-dot">{marca}</span><strong>{it.label}</strong>{it.optional&&<small className="step-optional">{it.optional}</small>}</>;
 return <div key={n} role="listitem" className={cx("step",st!=="default"&&`step-${st}`)} aria-current={st==="active"?"step":undefined}>
-{it.href?<a className="step-trigger" href={it.href} onClick={it.onClick}>{miolo}</a>:it.onClick||variant==="bar"?<button type="button" className="step-trigger" onClick={it.onClick}>{miolo}</button>:miolo}
+{it.href?<a className="step-trigger" href={it.href} onClick={juntarToque(it.onPress,it.onClick)}>{miolo}</a>:juntarToque(it.onPress,it.onClick)||variant==="bar"?<button type="button" className="step-trigger" onClick={juntarToque(it.onPress,it.onClick)}>{miolo}</button>:miolo}
 </div>})}
 {comPontas&&endContent!=null&&<div role="listitem" className="step-end">{endContent}</div>}
 </div>;
@@ -369,7 +369,7 @@ export function TreeView({items,defaultExpandedIds,onSelect,onExpand,selectedId,
 // TECLADO: não há padrão APG para navegação de site — o que existe é link em `<nav>`, ordem de
 // Tab nativa e `aria-current="page"` no atual. Roving tabindex aqui seria copiar o TreeView
 // para um lugar onde ele atrapalha: numa lateral o usuário ESPERA tabular item a item.
-export interface SidebarItem{id:string;label:ReactNode;href?:string;icon?:IconName;badge?:ReactNode;onClick?:()=>void;items?:SidebarEntry[];
+export interface SidebarItem{id:string;label:ReactNode;href?:string;icon?:IconName;badge?:ReactNode;/** O toque (DOC-11): o mesmo nome do nativo. O `onClick` continua valendo, como apelido; com os dois, rodam os dois. */onPress?:()=>void;onClick?:()=>void;items?:SidebarEntry[];
   /** O link do roteador do app (M-01): `<Link href="/relatorios" />`. Recebe a pele, o estado de página atual e o conteúdo do item. */
   render?:ReactElement;
   /** A foto ou o logotipo do item (4-E — o time, a pessoa): toma o lugar do `icon`, no mesmo formato da `NavList`. Recolhida, ele
@@ -404,15 +404,15 @@ const filhos=it.items?.length?it.items:undefined;
 // Rótulo escondido vira `.sr-only` em vez de sumir do DOM: na lateral recolhida o item
 // continua tendo nome para quem usa leitor de tela. Ícone sozinho não nomeia nada.
 const oculto=(no:ReactNode)=>ctx.collapsed?<span className="sr-only">{no}</span>:no;
-if(filhos&&!it.href&&!it.onClick&&!it.render)return <SidebarGroup key={it.id} item={it} filhos={filhos} lid={lid} ctx={ctx}/>;
+if(filhos&&!it.href&&!juntarToque(it.onPress,it.onClick)&&!it.render)return <SidebarGroup key={it.id} item={it} filhos={filhos} lid={lid} ctx={ctx}/>;
 const ativo=it.id===ctx.current;
 // O item escolhido desenha o ícone CHEIO (ADR-0053). Com `avatar`, a foto toma o lugar do ícone (4-E).
 const miolo=<>{it.avatar?<Avatar src={it.avatar.src} fallback={it.avatar.fallback} className="sidebar-avatar"/>:it.icon&&<Icon name={it.icon} weight={ativo?"fill":undefined}/>}<span className={cx("sidebar-label",ctx.collapsed&&"sr-only")}>{it.label}</span>{it.badge!=null&&oculto(it.badge)}</>;
 const alvo=it.render
-?fundirRender(it.render,{id:lid,className:"sidebar-item","aria-current":ativo?"page":undefined,onClick:it.onClick,children:miolo},"a")
+?fundirRender(it.render,{id:lid,className:"sidebar-item","aria-current":ativo?"page":undefined,onClick:juntarToque(it.onPress,it.onClick),children:miolo},"a")
 :it.href
-?<a id={lid} href={it.href} className="sidebar-item" aria-current={ativo?"page":undefined} onClick={it.onClick}>{miolo}</a>
-:<button id={lid} type="button" className="sidebar-item" aria-current={ativo?"page":undefined} onClick={it.onClick}>{miolo}</button>;
+?<a id={lid} href={it.href} className="sidebar-item" aria-current={ativo?"page":undefined} onClick={juntarToque(it.onPress,it.onClick)}>{miolo}</a>
+:<button id={lid} type="button" className="sidebar-item" aria-current={ativo?"page":undefined} onClick={juntarToque(it.onPress,it.onClick)}>{miolo}</button>;
 // NO TRILHO O NOME SÓ EXISTE NO TOOLTIP. Recolhida, a lateral manda o rótulo para `.sr-only`: quem
 // usa leitor de tela continua ouvindo, e quem ENXERGA fica com um ícone mudo. A referência resolve
 // isso com tooltip no botão de navegação dela, e é o que falta para um trilho de ícone não virar adivinhação.
@@ -758,10 +758,10 @@ const marca=<span className="bottom-nav-mark">
 const corpo=<>{marca}<span className={cx("bottom-nav-label",ind==="expand"&&!ativo&&"sr-only")}>{it.label}</span></>;
 const miolo=ind==="circle-bold"?<span className="bottom-nav-disc">{corpo}</span>:corpo;
 return it.render
-?<React.Fragment key={it.id}>{fundirRender(it.render,{className:"bottom-nav-item","aria-current":ativo?"page":undefined,onClick:it.onClick,children:miolo},"a")}</React.Fragment>
+?<React.Fragment key={it.id}>{fundirRender(it.render,{className:"bottom-nav-item","aria-current":ativo?"page":undefined,onClick:juntarToque(it.onPress,it.onClick),children:miolo},"a")}</React.Fragment>
 :it.href
-?<a key={it.id} href={it.href} className="bottom-nav-item" aria-current={ativo?"page":undefined} onClick={it.onClick}>{miolo}</a>
-:<button key={it.id} type="button" className="bottom-nav-item" aria-current={ativo?"page":undefined} onClick={it.onClick}>{miolo}</button>;
+?<a key={it.id} href={it.href} className="bottom-nav-item" aria-current={ativo?"page":undefined} onClick={juntarToque(it.onPress,it.onClick)}>{miolo}</a>
+:<button key={it.id} type="button" className="bottom-nav-item" aria-current={ativo?"page":undefined} onClick={juntarToque(it.onPress,it.onClick)}>{miolo}</button>;
 })}
 </nav>}
 
@@ -808,7 +808,7 @@ return it.render
 export interface NavListIndicator{icon:IconName;
   /** O que o sinal quer dizer ("Fixada"). Sai da tela e fica para o leitor de tela. */
   label:string}
-export interface NavListItem{id:string;label:ReactNode;description?:ReactNode;value?:ReactNode;icon?:IconName;href?:string;onClick?:()=>void;disabled?:boolean;
+export interface NavListItem{id:string;label:ReactNode;description?:ReactNode;value?:ReactNode;icon?:IconName;href?:string;/** O toque (DOC-11): o mesmo nome do nativo. O `onClick` continua valendo, como apelido; com os dois, rodam os dois. */onPress?:()=>void;onClick?:()=>void;disabled?:boolean;
   /** O link do roteador do app (M-01). Linha com `render` é linha com destino: leva a seta, como a com `href`. */
   render?:ReactElement;
   /** A foto da linha (AN-04) — o mesmo formato do `ChatMessage.avatar`. Toma o lugar do `icon`. */
@@ -846,10 +846,10 @@ const miolo=<>
 </>;
 const atual=it.current?"page" as const:undefined;
 return <li key={it.id}>{it.render&&!it.disabled
-?fundirRender(it.render,{className:"nav-list-row",onClick:it.onClick,"aria-current":atual,children:miolo},"a")
+?fundirRender(it.render,{className:"nav-list-row",onClick:juntarToque(it.onPress,it.onClick),"aria-current":atual,children:miolo},"a")
 :it.href&&!it.disabled
-?<a href={it.href} className="nav-list-row" aria-current={atual} onClick={it.onClick}>{miolo}</a>
-:<button type="button" className="nav-list-row" aria-current={atual} aria-disabled={it.disabled||undefined} onClick={it.disabled?undefined:it.onClick}>{miolo}</button>}</li>;
+?<a href={it.href} className="nav-list-row" aria-current={atual} onClick={juntarToque(it.onPress,it.onClick)}>{miolo}</a>
+:<button type="button" className="nav-list-row" aria-current={atual} aria-disabled={it.disabled||undefined} onClick={it.disabled?undefined:juntarToque(it.onPress,it.onClick)}>{miolo}</button>}</li>;
 })}
 </ul>}
 

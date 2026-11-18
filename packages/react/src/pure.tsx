@@ -23,6 +23,16 @@ export const cx=(...v:Array<string|false|null|undefined>)=>v.filter(Boolean).joi
 export const proprio=<V,>(tabela:Readonly<Partial<Record<string,V>>>,chave:string|null|undefined):V|undefined=>
   chave!=null&&Object.hasOwn(tabela,chave)?tabela[chave]:undefined;
 
+// O `onPress` na web (DOC-11, 16/11/2026; decisão do Victor de 06/10/2026: *"onPress nos dois"*, como a referência e como o
+// nativo). O `onPress` é o nome principal e o `onClick` continua valendo, como apelido: a referência faz igual (o `onClick`
+// dela é "um apelido do `onPress`, para compatibilidade"). Os dois juntos rodam os dois, o `onPress` primeiro. Na web, o
+// evento é o do clique, que o navegador também dispara pelo Enter e pelo Espaço num botão.
+export function juntarToque<E>(onPress:((e:E)=>void)|undefined,onClick:((e:E)=>void)|undefined):((e:E)=>void)|undefined{
+  if(!onPress)return onClick;
+  if(!onClick)return onPress;
+  return (e:E)=>{onPress(e);onClick(e)};
+}
+
 // ── `render`: a superfície é da Aurea, o ELEMENTO é de quem consome ───────────────────────────
 //
 // Nasceu do `G-A11Y-11`. O `Card` oferecia `variant="interactive"` — ponteiro de mão, elevação

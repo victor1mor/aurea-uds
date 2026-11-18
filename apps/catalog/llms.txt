@@ -461,6 +461,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.73.0](https://aureauds.dev/release-v0-73-0.md): onPress on the web, and layout pieces that keep their size anywhere — alone, in a Stack, a Cluster or a Grid.
 - [v0.72.0](https://aureauds.dev/release-v0-72-0.md): The system theme — a page without data-theme follows the computer's light or dark setting, and is light when it says nothing.
 - [v0.71.0](https://aureauds.dev/release-v0-71-0.md): The reference defaults — a primary Button, a neutral Alert, a Drawer from the bottom, a ConfirmDialog that ignores Escape, and secondary Tabs that fill the row.
 - [v0.70.0](https://aureauds.dev/release-v0-70-0.md): A vertical Stepper, reading modes on native, a panel that keeps its corners under the top bar, and a set of measurement fixes.

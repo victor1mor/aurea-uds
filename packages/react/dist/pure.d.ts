@@ -1,6 +1,7 @@
 import { type ReactElement } from "react";
 export declare const cx: (...v: Array<string | false | null | undefined>) => string;
 export declare const proprio: <V>(tabela: Readonly<Partial<Record<string, V>>>, chave: string | null | undefined) => V | undefined;
+export declare function juntarToque<E>(onPress: ((e: E) => void) | undefined, onClick: ((e: E) => void) | undefined): ((e: E) => void) | undefined;
 export declare function fundirRender(render: ReactElement | undefined, props: {
     className?: string;
 } & Record<string, unknown>, padrao?: string): ReactElement;

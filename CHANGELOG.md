@@ -348,6 +348,30 @@ como deveria funcionar"*.
 
 ---
 
+## [0.73.0] — 2026-11-18
+
+**O `onPress` na web e as peças independentes** — o DOC-11 (*"onPress nos dois"*, 06/10/2026) e o PV-14 (*"componentes
+independentes em conjuntos de toda forma"*, 20/10/2026), aprovados na bancada (*"Pode construir"*, 16/11/2026), decididos
+pela maioria das referências lidas no código publicado.
+
+### Mudou
+
+- **`onPress` na web**, com o mesmo nome do nativo: `Button`, `IconButton`, `CloseButton`, `ToolbarButton`, `Card` e os
+  itens da `Sidebar`, da `NavList`, do `Stepper`, da `BottomNav`, do `Header`, do menu e da central de avisos. O `onClick`
+  continua valendo, como apelido; com os dois, rodam os dois, o `onPress` primeiro.
+- **A `Sidebar` fora do `AppShell` tem a largura dela** (`--sidebar-width`; recolhida, `--sidebar-rail`), sozinha, numa
+  coluna, numa fila ou numa grade; nunca maior que o espaço que recebe. Dentro do `AppShell`, nada muda.
+- **O `SegmentedControl` fica do tamanho do conteúdo em todo lugar** — numa coluna ele esticava até a borda. Ocupar a
+  linha continua sendo o `fullWidth`.
+- **O `TableOfContents` ocupa a caixa onde está** — numa coluna ele encolhia até o texto. Continua grudando ao rolar.
+
+### Quem cobra
+
+- `tests/unit/onpress-web.test.tsx` (reprova no código da 0.72.0) e `tests/visual/independentes.spec.ts` (cada peça de
+  leiaute sozinha e em `Stack`, `Cluster` e `Grid`, em três larguras; reprova com o CSS da 0.72.0).
+
+---
+
 ## [0.72.0] — 2026-11-16
 
 ✅ **Publicada em 16/11/2026, entre 15:35 e 15:47 (Brasília, medido no npm: seis pacotes entre 15:35 e 15:36 e o `native`
