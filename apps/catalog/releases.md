@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.74.0
+
+November 19, 2026
+
+List items start where the corner curve ends — ListBox, the menus and NavList now line up with Sidebar.
+
+[Read full release notes →](https://aureauds.dev/release-v0-74-0.md)
+
 ## v0.73.0
 
 November 18, 2026
