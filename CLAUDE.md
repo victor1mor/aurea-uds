@@ -231,6 +231,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.70.0` | O lote maior: o `Stepper` em pé (`orientation`, web e nativo), os modos de leitura no `AureaProvider` do nativo (`highContrast`, `textSize`), o `Input` e o `Field` do nativo como os da web, o painel do `AppShell` que não se corta sob a barra rente (S-12), o arco do `Card accent` no nativo, a marca do escolhido no fim da linha (D4), a linha das `Tabs` `secondary` e entre os grupos da `ListBox` e os acertos de medida — pedido #140. **Publicada em 15/11/2026** (entre 13:41 e 13:51, Brasília, medido no npm), pelo terminal do Victor |
 | `0.71.0` | Os padrões da referência: o `Button` sem tom é o principal (o botão de ligar continua o cinza), o `Alert` sem tom é o neutro (`neutral`), o `Drawer` da web sai de baixo, a `ConfirmDialog` ignora o Esc, e as `Tabs` `secondary` enchem a fila — o D3 e o 2-C b, pedido #142. **Publicada em 16/11/2026** (entre 07:09 e 07:20, Brasília, medido no npm), pelo terminal do Victor |
 | `0.72.0` | O tema do sistema: a página sem `data-theme` segue o claro ou o escuro do computador (`prefers-color-scheme`), e fica no claro quando ele não diz — CSS puro, pelas cópias da montagem; o tema alternado parte do sistema; no nativo, sem o tema do aparelho, o `AureaProvider` fica no claro — o D16, pedido #144. **Publicada em 16/11/2026** (entre 15:35 e 15:47, Brasília, medido no npm), pelo terminal do Victor |
+| `0.73.0` | O `onPress` na web, com o mesmo nome do nativo (o `onClick` continua, como apelido), no `Button`, no `IconButton`, no `ToolbarButton`, no `CloseButton`, no `Card` e nos itens de oito peças de navegação e menu — o DOC-11; e as peças de leiaute independentes: a `Sidebar` fora do `AppShell` com a largura dela, o `SegmentedControl` do tamanho do conteúdo numa coluna e o `TableOfContents` que estica sem empurrar o vizinho — o PV-14, pedido #146. **Publicada em 18/11/2026** (entre 17:41 e 17:51, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -1010,6 +1011,24 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    PowerShell, o texto do commit não passa pela entrada (`git commit -F -`) — vai num arquivo. **Publicada em 16/11/2026**
    (entre 15:35 e 15:47, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #144. O registro entrou no
    lote seguinte (o 085, só de registro, sem versão).
+
+70. **`0.73.0`, o `onPress` na web e as peças independentes, feita de 16 a 18/11/2026** (o DOC-11 e o PV-14; a bancada,
+   *"Pode construir"*) — o toque com o mesmo nome nos dois alvos (`juntarToque`, no `pure.tsx`: com os dois, os dois
+   rodam, o `onPress` primeiro) e a peça de leiaute que não depende de onde está, decidida pela maioria das referências
+   lidas no código publicado. ⚠ **A regra nova:** peça independente, combinável de qualquer jeito (seção 7) — quem cobra é
+   o `tests/visual/independentes.spec.ts`, no banco `apps/keyboard-probe/independentes.html`. ⚠ **As lições:** (1) a
+   regra do `SegmentedControl` do tamanho do conteúdo (`inline-size:fit-content`) passou no Chromium daqui e reprovou a
+   varredura "nenhuma página rola de lado" no Firefox e no WebKit da CI: numa coluna automática de grade, os dois
+   alargam a coluna até o conteúdo inteiro (a página de tokens rolava 14 em 320), e o Chromium respeita o
+   `max-inline-size:100%` — mudança de largura ou de tamanho de peça roda essa varredura AQUI nos três navegadores antes
+   do envio; o conserto foi o `minmax(0,1fr)` na seção da página, como em todas as outras grades dela; (2) a medida achou
+   um defeito antigo, de antes do lote: o seletor de densidade da página de tokens não cabe em 320 ("Spacious" cortado) —
+   fica para o Victor, com imagem; (3) a conta ativa do `gh` pode ser a de outro trabalho (outra sessão, ao mesmo tempo):
+   a Aurea usa a `victor1mor` só no comando (`GH_TOKEN`), sem trocar a ativa, e sem o Auto-fix a CI se acompanha com o
+   `gh run watch`; (4) um alerta de segurança (`picomatch`) reprovou a auditoria e foi retirado pelo GitHub no mesmo dia —
+   antes de aceitar alerta, ler a página dele (`gh api advisories/<id>`). **Publicada em 18/11/2026** (entre 17:41 e
+   17:51, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #146. O registro entrou no lote seguinte
+   (o 087, só de registro, sem versão).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
