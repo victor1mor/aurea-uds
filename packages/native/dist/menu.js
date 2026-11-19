@@ -51,7 +51,7 @@ const folha = criarFolha((t) => ({
     // O `Popover` da referência: 12 em cima e embaixo, 16 dos lados.
     painelPopover: { paddingVertical: t.size.space3, paddingHorizontal: t.size.space4 },
     // O `Menu` da referência: 12 em cima e embaixo; dos lados ela usa 6, que a escala não tem — vale
-    // o `space1` (4), o recheio do `.menu` da web. O texto do item continua a 16 da borda (4 + 12).
+    // o `space1` (4), o recheio do `.menu` da web. O item começa a 20 da borda do painel (4 + 16), como na web.
     painelMenu: { paddingVertical: t.size.space3, paddingHorizontal: t.size.space1 },
     // O título do `Popover`: 18 em peso médio (no componente), e 4 até o corpo — o `gap-1` do exemplo
     // da referência.
@@ -62,9 +62,11 @@ const folha = criarFolha((t) => ({
     // não tem: aqui 12 (o texto fica a 16 da borda, o mesmo número dela) e 8. ⚠ A altura dela é 40
     // (8 + a linha de 24 + 8); aqui o mínimo é o `targetMin` (44), e não `hitSlop` — o `actions.tsx`
     // mediu que o TalkBack não enxerga o `hitSlop`.
+    // ONDE O ITEM COMEÇA (o achado 1 do 2-D, o Victor, 19/11/2026: *"Aprovo as três"*): o 12 deixava o conteúdo dentro da
+    // curva de 16 do item. Agora 16 (`space4`), no fim da curva — o mesmo da web desde a 0.74.0 e da `NavList` do nativo.
     item: {
         minHeight: t.size.targetMin, flexDirection: "row", alignItems: "center",
-        gap: t.size.space2, paddingVertical: t.size.space2, paddingHorizontal: t.size.space3,
+        gap: t.size.space2, paddingVertical: t.size.space2, paddingHorizontal: t.size.space4,
         ...canto(t.size.radiusLg),
     },
     // O toque: o fundo de destaque do `.menu-item` da web (`surface-3`) e o 0,98 da referência; no item
@@ -87,7 +89,7 @@ const folha = criarFolha((t) => ({
         backgroundColor: t.color.mutedForeground,
     },
     // O rótulo de seção: 14 em peso médio e esmaecido (no componente), alinhado ao texto dos itens.
-    rotuloDoGrupo: { paddingHorizontal: t.size.space3, paddingTop: t.size.space2, paddingBottom: t.size.space1 },
+    rotuloDoGrupo: { paddingHorizontal: t.size.space4, paddingTop: t.size.space2, paddingBottom: t.size.space1 },
     separador: {
         height: t.size.borderWidth, marginVertical: t.size.space2, marginHorizontal: t.size.space2,
         backgroundColor: t.color.border,

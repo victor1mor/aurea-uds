@@ -299,14 +299,17 @@ describe("DropdownMenu · o painel e o item da referência", () => {
     expect([e.backgroundColor, e.borderRadius, e.borderCurve]).toEqual([ESCURO.color.popover, ESCURO.size.radiusCard, "continuous"]);
   });
 
-  it("o item: 44 de alvo, 8 × 12 de recheio, 8 de vão, canto 16 contínuo, `menuitem`", async () => {
+  // 0.74.0 (o achado 1 do 2-D, *"Aprovo as três"*, 19/11/2026): dos lados, 16 — o conteúdo começa no fim da curva de 16,
+  // e não dentro dela (era 12). Com o `menu.tsx` da 0.73.0, reprova.
+  it("o item: 44 de alvo, 8 × 16 de recheio, 8 de vão, canto 16 contínuo, `menuitem`", async () => {
     montar(umMenu(ITENS));
     await abrir();
     const p = linha("Editar")!;
     expect(p.accessibilityRole).toBe("menuitem");
     const e = plano(p.style);
     expect([e.minHeight, e.paddingVertical, e.paddingHorizontal, e.gap])
-      .toEqual([ESCURO.size.targetMin, ESCURO.size.space2, ESCURO.size.space3, ESCURO.size.space2]);
+      .toEqual([ESCURO.size.targetMin, ESCURO.size.space2, ESCURO.size.space4, ESCURO.size.space2]);
+    expect(e.paddingHorizontal, "não começa dentro da curva").toBeGreaterThanOrEqual(e.borderRadius as number);
     expect([e.borderRadius, e.borderCurve]).toEqual([ESCURO.size.radiusLg, "continuous"]);
     const t = texto("Editar");
     expect([t.e.fontSize, t.e.fontFamily, t.e.color]).toEqual([16, "Ui500", ESCURO.color.foreground]);

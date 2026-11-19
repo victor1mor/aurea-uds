@@ -369,12 +369,16 @@ referências lidas no código publicado (8 de 12 começam o conteúdo no fim da 
   dele era um número escrito à mão. O título da seção da `ListBox` e o rótulo de grupo do menu continuam alinhados ao
   texto dos itens; a marca do escolhido da `ListBox` fica a 16 do fim.
 - Vale também para a Ember. Só a distância muda; as cores não.
-- A `NavList` grande (`size="lg"`, a cápsula com o ladrilho) não muda. O nativo é o lote seguinte.
+- A `NavList` grande (`size="lg"`, a cápsula com o ladrilho) não muda.
+- **No nativo, o item do `DropdownMenu` começa a 16** (era 12, dentro da curva de 16 do item), e o rótulo de grupo
+  acompanha (*"Aprovo as três"*, 19/11/2026). A `NavList` do nativo já começava a 16.
 
 ### Quem cobra
 
 - `tests/visual/lote-088-listas.spec.ts` — onde começa o conteúdo de cada lista, nos dois lados, no Gold e na Ember;
   reprova com o CSS da 0.73.0 (8, 10 e 12).
+- `tests/unit/native-lote-q-9b-menu.test.tsx` — o recheio do item do menu do nativo é 16 e não começa dentro da
+  curva; reprova com o `menu.tsx` da 0.73.0.
 
 ---
 
