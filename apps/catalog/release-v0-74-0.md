@@ -1,0 +1,23 @@
+# v0.74.0
+
+List items start where the corner curve ends — ListBox, the menus and NavList now line up with Sidebar.
+
+## Changed
+
+- **`ListBox`, the menus and `NavList` start 16 from the edge, like `Sidebar`**, on both sides (`--space-4`). The menu change covers `DropdownMenu`, `ContextMenu`, `Menubar`, `Select`, `Combobox`, `MultiCombobox` and the `CommandPalette` list. Before, they started at 8, 10 and 12 — inside the 18 corner curve.
+- The `ListBox` section title and the menu group label still line up with the item text; the `ListBox` check mark sits 16 from the end.
+- The large `NavList` (`size="lg"`) does not change.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.74.0 @aurea-uds/core@0.74.0 @aurea-uds/fonts@0.74.0 @aurea-uds/icons@0.74.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.74.0
+```

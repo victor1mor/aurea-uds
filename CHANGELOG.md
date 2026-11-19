@@ -355,6 +355,29 @@ como deveria funcionar"*.
 
 ---
 
+## [0.74.0] — 2026-11-19
+
+**Onde os itens de lista começam** — o achado 1 do 2-D, a varredura de alinhamento de 19/11/2026: os itens de lista
+começavam em quatro lugares (ListBox 8, menu 10 escrito à mão, NavList 12, Sidebar 16), todos com o canto de 18, e só a
+Sidebar começava no fim da curva. Aprovado na bancada (*"Pode, proposta A"*, 19/11/2026), decidido pela maioria das
+referências lidas no código publicado (8 de 12 começam o conteúdo no fim da curva ou depois).
+
+### Mudou
+
+- **`ListBox`, o menu e a `NavList` começam a 16 da borda, como a `Sidebar`**, nos dois lados (`--space-4`). O menu vale
+  para `DropdownMenu`, `ContextMenu`, `Menubar`, `Select`, `Combobox`, `MultiCombobox` e a lista da `CommandPalette`; o 10
+  dele era um número escrito à mão. O título da seção da `ListBox` e o rótulo de grupo do menu continuam alinhados ao
+  texto dos itens; a marca do escolhido da `ListBox` fica a 16 do fim.
+- Vale também para a Ember. Só a distância muda; as cores não.
+- A `NavList` grande (`size="lg"`, a cápsula com o ladrilho) não muda. O nativo é o lote seguinte.
+
+### Quem cobra
+
+- `tests/visual/lote-088-listas.spec.ts` — onde começa o conteúdo de cada lista, nos dois lados, no Gold e na Ember;
+  reprova com o CSS da 0.73.0 (8, 10 e 12).
+
+---
+
 ## [0.73.0] — 2026-11-18
 
 ✅ **Publicada em 18/11/2026, entre 17:41 e 17:51 (Brasília, medido no npm: seis pacotes entre 17:41 e 17:43 e o `native`
