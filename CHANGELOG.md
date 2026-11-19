@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.73.0 (19/11/2026)
+
+- **A 0.73.0 publicada em 18/11/2026, entre 17:41 e 17:51** (Brasília, medido no npm), da junção do pedido #146
+  (`fc87440f`): o `released-surface.json` desse commit. O CHANGELOG ([0.73.0] publicada), o CLAUDE.md (a linha na tabela
+  e o item 70) e a release `v0.73.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.72.0 (16/11/2026)
 
 - **A 0.72.0 publicada em 16/11/2026, entre 15:35 e 15:47** (Brasília, medido no npm), da junção do pedido #144
@@ -349,6 +356,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.73.0] — 2026-11-18
+
+✅ **Publicada em 18/11/2026, entre 17:41 e 17:51 (Brasília, medido no npm: seis pacotes entre 17:41 e 17:43 e o `native`
+às 17:51), pelo terminal do Victor, da junção do pedido #146** (`fc87440f`).
 
 **O `onPress` na web e as peças independentes** — o DOC-11 (*"onPress nos dois"*, 06/10/2026) e o PV-14 (*"componentes
 independentes em conjuntos de toda forma"*, 20/10/2026), aprovados na bancada (*"Pode construir"*, 16/11/2026), decididos
