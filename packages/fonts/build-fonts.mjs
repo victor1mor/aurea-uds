@@ -49,8 +49,7 @@ const WEB = [
 // fonte variável no Android. Saem de `fontes-nativas.py`: a Inter e a IBM Plex Mono são os .ttf dos autores
 // sem mudança; a Sora, a variável da web instanciada por peso. `role` é o token de tipografia que a fonte
 // serve (`ui`, `heading`, `code`), para o nativo indexar por papel e não por nome de família.
-// ⚠ O papel `editorial` NÃO tem arquivo desde a ADR-0053 (a serifada saiu): é APELIDO do `ui`, sem itálico,
-// para não quebrar quem o usa — o `--font-editorial` do core e o `font.editorial` do nativo. Sai na 1.0.
+// O papel `editorial` (apelido do `ui` desde a ADR-0053, sem arquivo próprio) saiu no 1.0-A, 0.76.0.
 // Até a 0.40.0 o nativo era a Atkinson Hyperlegible Next e Mono (ADR-0053), e o título usava a fonte do texto.
 const NATIVO = [
   {arquivo: "inter-400-normal.ttf",         role: "ui",      weight: 400, style: "normal"},
@@ -138,9 +137,6 @@ const porPapel = {};
 for (const m of medidos) {
   (porPapel[m.role] ??= {})[`${m.weight}${m.style === "italic" ? "i" : ""}`] = m.postscript;
 }
-// `editorial` é apelido do `ui` desde a ADR-0053 (ver o comentário da lista NATIVO). Sem itálico,
-// como a serifada que ele substitui não tinha.
-porPapel.editorial = Object.fromEntries(Object.entries(porPapel.ui).filter(([k]) => !k.endsWith("i")));
 // `heading` (GAR-16, 0.28.0) é o papel do título — o `--font-heading` da web. Desde a 0.40.1 (ADR-0077) ele
 // tem arquivos próprios, a Sora; até a 0.40.0 apontava para os do texto.
 

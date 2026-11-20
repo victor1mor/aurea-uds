@@ -1,19 +1,15 @@
 /* Aurea tokens — generated from aurea.tokens.json (DTCG 2025.10). Do not edit. */
 :root{
   --brand-yellow:oklch(0.795 0.184 86.047);
-  --brand-yellow-foreground:oklch(0.421 0.095 57.708);
-  --brand-yellow-text:oklch(0.516 0.105 86.047);
   --brand-yellow-ink:#18181b;
   --brand-blue:#0246f1;
   --white:oklch(1 0 0);
   --black:oklch(0 0 0);
   --font-ui:Inter,"Segoe UI",sans-serif;
   --font-heading:Sora,Inter,"Segoe UI",sans-serif;
-  --font-editorial:Inter,"Segoe UI",sans-serif;
   --font-code:"IBM Plex Mono",SFMono-Regular,Consolas,monospace;
   --text-xs:0.75rem;
   --text-sm:0.875rem;
-  --text-md:var(--text-sm);
   --text-base:1rem;
   --text-lg:1.125rem;
   --text-xl:1.25rem;

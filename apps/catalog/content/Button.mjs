@@ -31,7 +31,7 @@ export default {
     "Loading shows a spinner and sets aria-busy; the label stays for context.",
     "With href it renders an anchor — same skin, link semantics. Disabled becomes aria-disabled.",
     "share opens the device's share sheet when the browser has one; otherwise it copies the link and says \"Link copied\" under the button, at the button's own size, and to the screen reader.",
-    "Stretch with fullWidth, announce a shortcut with kbd. For a button that STAYS on, the component is Toggle — `pressed` here is deprecated since 0.4.0 and goes away in 1.0.",
+    "Stretch with fullWidth, announce a shortcut with kbd. For a button that stays on, use Toggle.",
   ],
 
   examples: [

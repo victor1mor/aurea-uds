@@ -384,7 +384,7 @@ function SidebarToggle({ variant = "icon", className, onClick, ...props }) {
             estado.toggle(); } };
     if (variant === "item") {
         // A linha é um botão do HTML: o que só o `IconButton` entende (tamanho, aparência, ocupado) não passa para ele.
-        const { size: _t, appearance: _a, tone: _o, loading: _l, leadingIcon: _li, trailingIcon: _ti, href: _h, fullWidth: _f, quiet: _q, grow: _g, render: _r, target: _tg, rel: _rl, download: _d, pressed: _p, share: _s, kbd: _k, ...html } = props;
+        const { size: _t, appearance: _a, tone: _o, loading: _l, leadingIcon: _li, trailingIcon: _ti, href: _h, fullWidth: _f, quiet: _q, grow: _g, render: _r, target: _tg, rel: _rl, download: _d, share: _s, kbd: _k, ...html } = props;
         const linha = _jsxs("button", { type: "button", ...html, ...comum, className: cx("sidebar-item", "sidebar-toggle-item", className), children: [_jsx(Icon, { name: "sidebar-simple" }), _jsx("span", { className: cx("sidebar-label", collapsed && "sr-only"), children: rotulo })] });
         return collapsed ? _jsx(Tooltip, { content: rotulo, side: "right", children: linha }) : linha;
     }

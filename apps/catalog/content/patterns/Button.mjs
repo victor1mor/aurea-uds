@@ -14,8 +14,7 @@
 //   code        — o que o consumidor escreve
 //   render      — o elemento de verdade (Preview dogfooded)
 import {createElement as h} from "react";
-import {Avatar, Button, ButtonGroup, Checkbox, IconButton, Badge, Kbd, Switch} from "../../../../packages/react/dist/index.js";
-import {ComLigado} from "../_estado.mjs";
+import {Avatar, Button, ButtonGroup, Checkbox, IconButton, Badge, Kbd, Switch, Toggle} from "../../../../packages/react/dist/index.js";
 
 // A moldura das provas de eixo responsivo: contêineres de largura FIXA, lado a lado, na mesma
 // viewport. É o que separa os dois mecanismos aos olhos — se as três colunas medissem igual,
@@ -129,17 +128,17 @@ export default [
   {
     variant: "Toggle",
     name: "Pinned filter",
-    description: "A filter that stays on: aria-pressed keeps the state visible and audible after the click.",
-    uses: ["Button"],
+    description: "A filter that stays on is a Toggle: it keeps the state, and aria-pressed keeps it visible and audible after the click.",
+    uses: ["Toggle"],
     // o código mostra o estado que o clique troca (06/11/2026), como o exemplo vivo faz
     code: ['const [starred, setStarred] = useState(true);',
       'const [archived, setArchived] = useState(false);',
       '',
-      '<Button pressed={starred} onClick={() => setStarred(!starred)} leadingIcon="star">Starred</Button>',
-      '<Button pressed={archived} onClick={() => setArchived(!archived)}>Archived</Button>'].join("\n"),
+      '<Toggle pressed={starred} onPressedChange={setStarred} icon="star">Starred</Toggle>',
+      '<Toggle pressed={archived} onPressedChange={setArchived}>Archived</Toggle>'].join("\n"),
     render: () => h("div", {style: row},
-      h(ComLigado, {componente: Button, pressed: true, leadingIcon: "star"}, "Starred"),
-      h(ComLigado, {componente: Button, pressed: false}, "Archived")),
+      h(Toggle, {defaultPressed: true, icon: "star"}, "Starred"),
+      h(Toggle, null, "Archived")),
   },
   {
     variant: "Primary",

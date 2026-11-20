@@ -617,24 +617,25 @@ These can ship in a **minor** or **patch** release:
 <page url="https://aureauds.dev/docs-migration.html">
 # Migration
 
-The old names that leave in 1.0, what replaces each one, and how to move before you upgrade.
+The old names removed in 0.76.0, ahead of 1.0, what replaces each one, and how to move before you upgrade.
 
-Version 1.0 removes a short list of old names. Each one has been deprecated for several versions and has a replacement. All of them still work in `0.x`, so you can move to the new names today and upgrade to 1.0 without anything breaking.
+Version 0.76.0 removes a short list of old names, ahead of 1.0. Each one had been deprecated for several versions and has a replacement. They all still work in 0.75.0 and earlier, so you can move to the new names first and then upgrade without anything breaking.
 
 ## Before you upgrade
 
-1. Upgrade all seven packages together, to the same version.
-2. Search your code for each old name below and replace it.
+1. While you are still on 0.75.0 or earlier, search your code for each old name below and replace it.
+2. Upgrade all seven packages together, to the same version.
 3. After the upgrade, run the TypeScript compiler: it flags every `pressed` left. It cannot flag a CSS variable, so search your stylesheets too.
 
-## What leaves in 1.0
+## What leaves in 0.76.0
 
 | Old name | Use instead | Where |
 |---|---|---|
 | `--text-md` | `--text-sm` | CSS |
 | `textMd` | `textSm` | React Native |
 | `--font-editorial` | `--font-ui` | CSS |
-| `font.editorial` | `font.ui` | React Native |
+| `font.editorial`, `font="editorial"` on `Text` and `fontFamilies.editorial` | `font.ui`, `font="ui"` and `fontFamilies.ui` | React Native |
+| `FONT_FAMILIES.editorial` | `FONT_FAMILIES.ui` | `@aurea-uds/fonts/native` |
 | `--brand-yellow-foreground` | `--brand-yellow-ink` | CSS |
 | `--brand-yellow-text` | `--foreground` | CSS |
 | `pressed` on `Button` and `IconButton` | `Toggle` | React |
@@ -643,11 +644,11 @@ Version 1.0 removes a short list of old names. Each one has been deprecated for 
 
 With `pressed`, the button only paints the on state and you keep the state yourself. `Toggle` keeps the state, reports each change and requires an accessible name when it shows only an icon.
 
-```tsx
-// Before
+```jsx
 <Button pressed={on} onPress={() => setOn(!on)}>Bold</Button>
+```
 
-// After
+```tsx
 <Toggle pressed={on} onPressedChange={setOn}>Bold</Toggle>
 ```
 
@@ -850,7 +851,6 @@ Primitives are the raw values behind the roles. They are the same in both themes
 |---|---|
 | `--brand-yellow` | `oklch(0.795 0.184 86.047)` |
 | `--brand-yellow-ink` | `#18181B`, the ink on the yellow |
-| `--brand-yellow-foreground` | `oklch(0.421 0.095 57.708)`. Deprecated: no longer used, leaves in 1.0 |
 | `--white` | `oklch(1 0 0)` |
 | `--black` | `oklch(0 0 0)` |
 
@@ -3679,7 +3679,7 @@ import {Button} from "@aurea-uds/react";
 
 - share opens the device's share sheet when the browser has one; otherwise it copies the link and says "Link copied" under the button, at the button's own size, and to the screen reader.
 
-- Stretch with fullWidth, announce a shortcut with kbd. For a button that STAYS on, the component is Toggle — `pressed` here is deprecated since 0.4.0 and goes away in 1.0.
+- Stretch with fullWidth, announce a shortcut with kbd. For a button that stays on, use Toggle.
 
 ## Examples
 
@@ -3856,7 +3856,6 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 | `type` | `button \| submit \| reset` | button | Deliberately not submit: a Cancel inside a form must not fire the main action. |
 | `fullWidth` | `boolean` | false | Stretches to the container. Only the width changes — the pill radius is invariant. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller (12 on sm) — a site header's tool button, as the reference's "Theme". The box and the background stay the appearance's. |
-| `pressed` | `boolean` | — | DEPRECATED, removed in 1.0 — use <Toggle>. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. On, it shows the raised capsule with a yellow underline. With pressed and no variant, appearance or tone, the button is tertiary, not primary: off and on stay different. |
 | `kbd` | `string \| string[]` | — | Shortcut shown as a Kbd inside the button and announced with aria-keyshortcuts. A list (["Ctrl", "K"]) shows one key cap per key and announces the combination (Control+K). |
 | `onPress` | `(e: MouseEvent) => void` | — | The press — the same name on the web and on native. It runs on a click and on Enter and Space. onClick still works, as an alias; with both, both run, onPress first. A disabled or loading button runs neither. |
 | `grow` | `boolean` | false | In a row (Cluster), takes an equal share with the other buttons that also grow. `fullWidth` asks for the whole line instead. |
@@ -7119,7 +7118,7 @@ import {IconButton} from "@aurea-uds/react";
 
 - Softly squared, not pill: a round-ended square would read as a dot next to a text button.
 
-- Every Button variant and state applies, including loading, href and pressed.
+- Every Button variant and state applies, including loading and href.
 
 - Pair it with Tooltip when the glyph alone is not obvious; the tooltip repeats the label.
 
@@ -7149,11 +7148,11 @@ When the glyph is not self-evident, the tooltip says the same words as the label
 
 ### Toggle
 
-aria-pressed works here too: a pinned view, a muted channel, a starred row.
+An icon button that stays on (a pinned view, a muted channel, a starred row) is a Toggle with only an icon.
 
 ```tsx
-<IconButton icon="star" label="Star" pressed />
-<IconButton icon="push-pin" label="Pin" pressed={false} />
+<Toggle icon="star" label="Star" variant="ghost" defaultPressed />
+<Toggle icon="push-pin" label="Pin" variant="ghost" />
 ```
 
 ### Loading and disabled
@@ -7268,7 +7267,6 @@ The Button's finishes, chosen by the app: glow under the primary one, ring aroun
 | `rel` | `string` | — | Link attribute, only with `href`. |
 | `download` | `boolean \| string` | — | Link attribute, only with `href`. |
 | `render` | `ReactElement` | — | The element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href="/reports" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link. |
-| `pressed` | `boolean` | — | Deprecated, removed in 1.0: paints and announces aria-pressed while YOU keep the state. Use Toggle, which keeps the state and demands an accessible name when it is icon-only. |
 | `share` | `{ url?: string; title?: string; text?: string }` | — | The button shares. It asks the browser whether it can share this link (navigator.canShare) — detecting the capability, not guessing the device. If it can (phones; Chrome, Edge and Safari on desktop), the device's share sheet opens, and cancelling is not an error. If it cannot, it copies the link and shows "Link copied" anchored to the button, at the button's size. If the copy fails, it says so and shows the link selected. The notice speaks to the screen reader. Without url, it is the page's address. Needs the AureaProvider (or aurea.js on the page) to give the notice; it emits [data-aurea-share], which aurea.js also reads. Only on a <button> (ignored with href or render). On native, the same name opens the system share sheet. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller — the Button's quiet. |
 | `glow` | `boolean` | — | A finish the app chooses: under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native. |
@@ -8849,7 +8847,6 @@ import {Prose} from "@aurea-uds/react";
 | `children` | `ReactNode` | — | The rendered article. Bring your own Markdown renderer — react-markdown, MDX, or the HTML your CMS already returns. Prose styles h1-h4, p, a, ul, ol, li, blockquote, code, pre, img, hr, figcaption, table, th and td, all scoped under .prose. |
 | `dangerouslySetInnerHTML` | `{__html: string}` | — | Accepted because it is a div, and it is the most likely way to use this. SANITISE FIRST — with DOMPurify or your framework's sanitiser. Aurea styles the text; it cannot and must not decide what is safe to render. |
 | `--prose-measure` | `CSS custom property` | 68ch | The reading measure. Long lines are hard to track back to the next one, so the text caps its own width rather than filling the container. Set it, or set it to none if the page already constrains the column. |
-| `--font-editorial` | `CSS custom property` | not applied | An alias of the body font, kept so code that already uses it keeps working: the fonts package has no serif face, and Prose reads in the body font. To give long-form text a different face, point font-family at a typeface of your own on .prose. |
 </page>
 
 <page url="https://aureauds.dev/qrcode.html">
@@ -11000,7 +10997,6 @@ The control sizes, from xs to xl; on a touch screen every size floors at 44.
 | `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | "md" | The IconButton size. The button is round, like every icon-only button. |
 | `disabled` | `boolean` | false | Blocks the switch. |
 | `className` | `string` | — | Added to the button. |
-| `pressed` | `boolean` | — | Inherited from IconButton, where it is deprecated. The toggle's state is the document theme, not this prop. |
 | `grow` | `boolean` | false | Inherited from Button: the button takes the free space of its row. |
 </page>
 
@@ -11463,7 +11459,7 @@ pressedStyle (ADR-0084), when the button is pressed: brand — the default — n
 | `variant` | `ButtonVariant \| danger-soft` | ghost | Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label. |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | ghost | Inherited from Button. How much weight the box carries; the default here is ghost. |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | Inherited from Button. What the colour means; every combination exists. |
-| `pressed` | `boolean` | — | Toggle inside the toolbar (bold, italic). aria-pressed, not a variant. |
+| `pressed` | `boolean` | — | Toggle inside the toolbar (bold, italic), announced as aria-pressed, not a variant. Button and IconButton have no pressed; a button that stays on outside a toolbar is a Toggle. |
 | `onPress` | `(e: MouseEvent) => void` | — | Inherited from Button. The press — the same name on the web and on native; onClick still works, as an alias, and with both, both run, onPress first. |
 | `leadingIcon` | `AureaIcon` | — | Same icon API as Button; every Button prop is accepted. |
 | `disabled` | `boolean` | false | Stays in the roving order but is not activatable, so the set does not shift. |
@@ -12951,20 +12947,20 @@ import {Button} from "@aurea-uds/react";
 <page url="https://aureauds.dev/pattern-button-pinned-filter.html">
 # Pinned filter
 
-A filter that stays on: aria-pressed keeps the state visible and audible after the click.
+A filter that stays on is a Toggle: it keeps the state, and aria-pressed keeps it visible and audible after the click.
 
 ## Usage
 
 ```tsx
-import {Button} from "@aurea-uds/react";
+import {Toggle} from "@aurea-uds/react";
 ```
 
 ```tsx
 const [starred, setStarred] = useState(true);
 const [archived, setArchived] = useState(false);
 
-<Button pressed={starred} onClick={() => setStarred(!starred)} leadingIcon="star">Starred</Button>
-<Button pressed={archived} onClick={() => setArchived(!archived)}>Archived</Button>
+<Toggle pressed={starred} onPressedChange={setStarred} icon="star">Starred</Toggle>
+<Toggle pressed={archived} onPressedChange={setArchived}>Archived</Toggle>
 ```
 </page>
 
@@ -13185,23 +13181,22 @@ import {ButtonGroup, Button} from "@aurea-uds/react";
 <page url="https://aureauds.dev/pattern-buttongroup-pinned-filters.html">
 # Pinned filters
 
-Many-of-many: each button is its own toggle, so two can be on at once.
+Many-of-many is a ToggleGroup with multiple: each button is its own toggle, so two can be on at once.
 
 ## Usage
 
 ```tsx
-import {ButtonGroup, Button} from "@aurea-uds/react";
+import {ToggleGroup, Toggle} from "@aurea-uds/react";
 ```
 
 ```tsx
-const [on, setOn] = useState({starred: true, archived: false, shared: true});
-const toggle = (k) => setOn({...on, [k]: !on[k]});
+const [on, setOn] = useState(["starred", "shared"]);
 
-<ButtonGroup label="Filters">
-  <Button pressed={on.starred} onClick={() => toggle("starred")}>Starred</Button>
-  <Button pressed={on.archived} onClick={() => toggle("archived")}>Archived</Button>
-  <Button pressed={on.shared} onClick={() => toggle("shared")}>Shared</Button>
-</ButtonGroup>
+<ToggleGroup label="Filters" multiple value={on} onValueChange={setOn}>
+  <Toggle value="starred">Starred</Toggle>
+  <Toggle value="archived">Archived</Toggle>
+  <Toggle value="shared">Shared</Toggle>
+</ToggleGroup>
 ```
 </page>
 
@@ -14734,18 +14729,18 @@ import {Card, IconButton, Badge} from "@aurea-uds/react";
 <page url="https://aureauds.dev/pattern-iconbutton-starred-row.html">
 # Starred row
 
-State that survives the click: aria-pressed keeps it visible and audible.
+State that survives the click is a Toggle with only an icon: aria-pressed keeps it visible and audible.
 
 ## Usage
 
 ```tsx
-import {IconButton} from "@aurea-uds/react";
+import {Toggle} from "@aurea-uds/react";
 ```
 
 ```tsx
 const [starred, setStarred] = useState(true);
 
-<IconButton icon="star" label="Star this row" pressed={starred} onClick={() => setStarred(!starred)} />
+<Toggle icon="star" label="Star this row" variant="ghost" pressed={starred} onPressedChange={setStarred} />
 ```
 </page>
 
@@ -18923,6 +18918,42 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-76-0.html">
+# v0.76.0
+
+The old names marked to leave before 1.0 are removed. Each one has a replacement, listed on the Migration page.
+
+## Removed
+
+Each of these was deprecated for several versions. The [Migration](./docs-migration.html) page lists what replaces each one.
+
+- **`pressed` on `Button` and `IconButton`.** A button that stays on is a [`Toggle`](./toggle.html): it keeps the state, reports `onPressedChange` and requires an accessible name when it shows only an icon. `ToolbarButton` keeps its `pressed`.
+- **`--text-md`** (CSS) and **`textMd`** (React Native). Use `--text-sm` and `textSm`; both are 14.
+- **`--font-editorial`** (CSS), and in React Native the `editorial` font role: `font.editorial`, `font="editorial"` on `Text` and `fontFamilies.editorial`. Use the `ui` role, the same Inter.
+- **`FONT_FAMILIES.editorial`** in `@aurea-uds/fonts/native`. Use `FONT_FAMILIES.ui`.
+- **`--brand-yellow-foreground`**. Use `--brand-yellow-ink`.
+- **`--brand-yellow-text`**. In the light theme yellow is never a text color: use `--foreground`.
+
+## Site
+
+- **The examples that used `pressed`** on `Button`, `IconButton` and `ButtonGroup` now use `Toggle` and `ToggleGroup`. They look the same.
+- **The Migration page** says the names leave in 0.76.0, and lists the React Native and fonts names too.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.76.0 @aurea-uds/core@0.76.0 @aurea-uds/fonts@0.76.0 @aurea-uds/icons@0.76.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.76.0
 ```
 </page>
 

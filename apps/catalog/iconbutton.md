@@ -21,7 +21,7 @@ import {IconButton} from "@aurea-uds/react";
 
 - Softly squared, not pill: a round-ended square would read as a dot next to a text button.
 
-- Every Button variant and state applies, including loading, href and pressed.
+- Every Button variant and state applies, including loading and href.
 
 - Pair it with Tooltip when the glyph alone is not obvious; the tooltip repeats the label.
 
@@ -51,11 +51,11 @@ When the glyph is not self-evident, the tooltip says the same words as the label
 
 ### Toggle
 
-aria-pressed works here too: a pinned view, a muted channel, a starred row.
+An icon button that stays on (a pinned view, a muted channel, a starred row) is a Toggle with only an icon.
 
 ```tsx
-<IconButton icon="star" label="Star" pressed />
-<IconButton icon="push-pin" label="Pin" pressed={false} />
+<Toggle icon="star" label="Star" variant="ghost" defaultPressed />
+<Toggle icon="push-pin" label="Pin" variant="ghost" />
 ```
 
 ### Loading and disabled
@@ -170,7 +170,6 @@ The Button's finishes, chosen by the app: glow under the primary one, ring aroun
 | `rel` | `string` | — | Link attribute, only with `href`. |
 | `download` | `boolean \| string` | — | Link attribute, only with `href`. |
 | `render` | `ReactElement` | — | The element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href="/reports" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link. |
-| `pressed` | `boolean` | — | Deprecated, removed in 1.0: paints and announces aria-pressed while YOU keep the state. Use Toggle, which keeps the state and demands an accessible name when it is icon-only. |
 | `share` | `{ url?: string; title?: string; text?: string }` | — | The button shares. It asks the browser whether it can share this link (navigator.canShare) — detecting the capability, not guessing the device. If it can (phones; Chrome, Edge and Safari on desktop), the device's share sheet opens, and cancelling is not an error. If it cannot, it copies the link and shows "Link copied" anchored to the button, at the button's size. If the copy fails, it says so and shows the link selected. The notice speaks to the screen reader. Without url, it is the page's address. Needs the AureaProvider (or aurea.js on the page) to give the notice; it emits [data-aurea-share], which aurea.js also reads. Only on a <button> (ignored with href or render). On native, the same name opens the system share sheet. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller — the Button's quiet. |
 | `glow` | `boolean` | — | A finish the app chooses: under the primary button, a soft glow in its own colour at 40%. Focus is still the ring. Writes data-glow; the same attribute on a container (or <html>) covers the buttons inside, and glow={false} takes one out. On any other button it draws nothing. Web and native. |

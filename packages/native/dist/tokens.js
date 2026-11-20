@@ -98,7 +98,6 @@ export function resolverTokens(theme, density, fontFamilies, brand) {
     // e é por isso que o `fontFamilies` do provider existe.
     const font = {
         ui: normalizarEscala(fontFamilies?.ui, texto.fontUi ?? "System"),
-        editorial: normalizarEscala(fontFamilies?.editorial, texto.fontEditorial ?? "System"),
         code: normalizarEscala(fontFamilies?.code, texto.fontCode ?? "System"),
         heading: normalizarEscala(fontFamilies?.heading ?? fontFamilies?.ui, texto.fontHeading ?? texto.fontUi ?? "System"),
     };

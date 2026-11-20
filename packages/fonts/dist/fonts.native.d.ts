@@ -1,5 +1,5 @@
 // Gerado por packages/fonts/build-fonts.mjs. NÃO EDITAR.
-export type AureaFontRole = "ui" | "heading" | "code" | "editorial";
+export type AureaFontRole = "ui" | "heading" | "code";
 export type AureaFontFile = {
   file: string; postScriptName: string; family: string; typographicFamily: string;
   role: AureaFontRole; weight: number; style: "normal" | "italic";
@@ -11,6 +11,5 @@ export declare const FONT_FAMILIES: {
   ui: Record<"400" | "500" | "600" | "700" | "800" | "400i", string>;
   heading: Record<"400" | "500" | "600" | "700" | "800", string>;
   code: Record<"400" | "500" | "600", string>;
-  editorial: Record<"400" | "500" | "600" | "700" | "800", string>;
 };
 export declare const AUREA_FONT_FILES: readonly AureaFontFile[];

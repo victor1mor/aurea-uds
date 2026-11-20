@@ -102,7 +102,7 @@ describe("GAR-15 · a moldura de celular", () => {
 describe("GAR-16 · títulos e números no nativo", () => {
   const FONTES: AureaFontFamilies = {
     ui: {"400": "Ui-Regular", "600": "Ui-SemiBold", "700": "Ui-Bold", "800": "Ui-ExtraBold"},
-    editorial: {"400": "Ui-Regular"}, code: {"400": "Mono-Regular"},
+    code: {"400": "Mono-Regular"},
     heading: {"600": "Titulo-SemiBold", "800": "Titulo-ExtraBold"},
   };
   it("numeric liga os algarismos da mesma largura, e só quando pedido", () => {

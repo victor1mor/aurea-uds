@@ -27,7 +27,7 @@ const ITENS = [{id: "a", label: "Início", icon: "house"}, {id: "b", label: "Avi
 const NOMES = ["Início", "Avisos", "Perfil"];
 // Uma família por peso, como no aparelho (a Atkinson tem um arquivo por peso). Sem isto os quatro
 // pesos caem na mesma família crua, e o peso que muda com a escolha não apareceria no estilo.
-const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, editorial: {}, code: {}};
+const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, code: {}};
 
 // O que decide TAMANHO e LUGAR. Borda fica de fora: no React Native ela é desenhada dentro da caixa.
 const LAYOUT = ["width", "minWidth", "maxWidth", "height", "minHeight", "maxHeight", "flex", "flexGrow",

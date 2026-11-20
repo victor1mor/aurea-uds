@@ -178,7 +178,6 @@ Primitives are the raw values behind the roles. They are the same in both themes
 |---|---|
 | `--brand-yellow` | `oklch(0.795 0.184 86.047)` |
 | `--brand-yellow-ink` | `#18181B`, the ink on the yellow |
-| `--brand-yellow-foreground` | `oklch(0.421 0.095 57.708)`. Deprecated: no longer used, leaves in 1.0 |
 | `--white` | `oklch(1 0 0)` |
 | `--black` | `oklch(0 0 0)` |
 

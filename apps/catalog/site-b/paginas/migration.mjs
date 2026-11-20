@@ -24,12 +24,12 @@ export default function migration(site, doc) {
   };
 
   // Quantos nomes saem: as linhas da tabela, contadas, e não escritas à mão.
-  const quantos = primeiro("What leaves in 1.0", "tabela").linhas.length;
+  const quantos = primeiro("What leaves in 0.76.0", "tabela").linhas.length;
   const abertura = g.abertura(doc, [
-    g.capsula(g.amarela("0.x → 1.0"), "mg-peca-versao"),
-    g.numerao(String(quantos), "old names", "leave in 1.0"),
+    g.capsula(g.amarela("0.75 → 0.76"), "mg-peca-versao"),
+    g.numerao(String(quantos), "old names", "leave in 0.76"),
     g.cartao([h("span", {key: "k", className: "intro-mini"}, "Works today"),
-      h("span", {key: "t", className: "intro-mini intro-forte"}, "Every old name still works in 0.x.")], "gs-coluna mg-peca-hoje"),
+      h("span", {key: "t", className: "intro-mini intro-forte"}, "Every old name still works up to 0.75.0.")], "gs-coluna mg-peca-hoje"),
     g.capsula(h("span", {className: "gs-mono"}, "pressed → Toggle"))]);
 
   // OS TRÊS PASSOS: o número grande e o texto, um cartão por passo.
@@ -40,12 +40,12 @@ export default function migration(site, doc) {
         h("p", null, ...site.pedacos(it, `pa${n}`))))));
 
   // O QUE SAI: a tabela do .md, na grade do site.
-  const saem = g.secao(s("What leaves in 1.0").id, "Removed in 1.0", "What leaves in 1.0",
-    ...g.corpo(s("What leaves in 1.0").blocos, {chave: "sa"}));
+  const saem = g.secao(s("What leaves in 0.76.0").id, "Removed in 0.76.0", "What leaves in 0.76.0",
+    ...g.corpo(s("What leaves in 0.76.0").blocos, {chave: "sa"}));
 
   // DO PRESSED AO TOGGLE: a frase e o bloco de código.
   const toggle = g.secao(s("From pressed to Toggle").id, "Example", "From pressed to Toggle",
-    ...g.corpo(s("From pressed to Toggle").blocos, {chave: "tg", arquivos: ["App.tsx"]}));
+    ...g.corpo(s("From pressed to Toggle").blocos, {chave: "tg", arquivos: ["Before: 0.75.0", "After: 0.76.0"]}));
 
   // A COR DO AMARELO: a nota no fundo do palco.
   const amarelo = g.secao(s("The yellow text color").id, "Tokens", "The yellow text color",
@@ -62,7 +62,7 @@ export default function migration(site, doc) {
   const node = g.pagina(doc, abertura,
     ...g.corpo(sec.antes, {chave: "a"}),
     passos, saem, toggle, amarelo, ficam, depois);
-  const toc = ["Before you upgrade", "What leaves in 1.0", "From pressed to Toggle", "The yellow text color", "Old names that stay", "After 1.0"]
+  const toc = ["Before you upgrade", "What leaves in 0.76.0", "From pressed to Toggle", "The yellow text color", "Old names that stay", "After 1.0"]
     .map(rotulo => ({id: s(rotulo).id, label: rotulo}));
   return {node, toc};
 }

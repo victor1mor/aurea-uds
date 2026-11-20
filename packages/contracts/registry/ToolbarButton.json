@@ -137,7 +137,7 @@
       "name": "pressed",
       "type": "boolean",
       "default": "—",
-      "description": "Toggle inside the toolbar (bold, italic). aria-pressed, not a variant."
+      "description": "Toggle inside the toolbar (bold, italic), announced as aria-pressed, not a variant. Button and IconButton have no pressed; a button that stays on outside a toolbar is a Toggle."
     },
     {
       "name": "onPress",

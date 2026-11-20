@@ -16,7 +16,9 @@
 //   ::: demo id   um exemplo vivo, que o gerador desenha; o bloco de código logo depois vira a aba "Code" dele
 // No meio do texto: **forte**, `código` e [nome](endereço).
 
-export const LINGUAS = new Set(["bash", "tsx", "ts", "html", "css", "json"]);
+// O `jsx` (lote 092, 20/11/2026): o código que NÃO compila de propósito — o "antes" da página Migration, com uma prop que
+// saiu. A trava dos exemplos (`exemplos-compilam.mjs`) só compila `tsx` e `ts`; o resto do site continua em `tsx`.
+export const LINGUAS = new Set(["bash", "tsx", "ts", "jsx", "html", "css", "json"]);
 
 const slug = t => t.toLowerCase().replace(/`/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 

@@ -45,7 +45,7 @@ const assentar = async () => { await act(async () => { await Promise.resolve(); 
 let setas: Array<{size?: number; color?: string}> = [];
 const Seta = (p: {size?: number; color?: string}) => { setas.push(p); return null; };
 const ICONES = criarRegistroDeIcones({"caret-down": Seta as never});
-const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, editorial: {}, code: {}};
+const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, code: {}};
 const Envolve = ({children}: {children: React.ReactNode}) =>
   <AureaProvider icons={ICONES} fontFamilies={FONTES}>{children}</AureaProvider>;
 const montar = (no: React.ReactNode) => render(<Envolve>{no}</Envolve>);

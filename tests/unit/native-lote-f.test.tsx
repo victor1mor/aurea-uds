@@ -206,21 +206,16 @@ describe("R-19 · RadioGroup: ícone na opção", () => {
   });
 });
 
-// ── R-10 · textMd é apelido do textSm ───────────────────────────────────────────────────────
-describe("R-10 · textMd vira apelido do textSm, marcado para sair na 1.0", () => {
-  it("no telefone os dois continuam valendo 14 — nada muda na tela", () => {
-    expect(t.size.textMd).toBe(t.size.textSm);
+// ── R-10 · o textMd foi apelido do textSm, e saiu no 1.0-A (0.76.0) ─────────────────────────
+describe("R-10 · o textMd saiu; o textSm continua 14", () => {
+  it("no telefone, o textSm vale 14 e o textMd não existe mais", () => {
     expect(t.size.textSm).toBe(14);
+    expect(t.size).not.toHaveProperty("textMd");
   });
-  it("no arquivo de tokens, text-md APONTA para text-sm e leva $deprecated", () => {
+  it("no arquivo de tokens, o text-md não existe mais", () => {
     const json = JSON.parse(readFileSync(resolve(raiz, "packages/tokens/src/aurea.tokens.json"), "utf8"));
-    expect(json.base["text-md"].$value).toBe("{text-sm}");
-    expect(json.base["text-md"].$deprecated).toMatch(/text-sm/);
-  });
-  it("o CSS da Aurea não usa mais o nome velho (quem usa é só quem veio de fora)", () => {
-    const css = readFileSync(resolve(raiz, "packages/core/src/aurea.css"), "utf8");
-    expect(css).not.toMatch(/var\(--text-md\)/);
+    expect(json.base).not.toHaveProperty("text-md");
     const tokens = readFileSync(resolve(raiz, "packages/tokens/dist/aurea.tokens.css"), "utf8");
-    expect(tokens).toMatch(/--text-md:var\(--text-sm\);/);
+    expect(tokens).not.toMatch(/--text-md:/);
   });
 });

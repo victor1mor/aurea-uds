@@ -270,20 +270,15 @@ function Tela({irParaScreen, irParaLote2}) {
             {p} {nome} — Aurea Universal Design System
           </Text>
         ))}
-        <Text style={{color: t.color.mutedForeground, fontSize: t.size.textMd,
+        <Text style={{color: t.color.mutedForeground, fontSize: t.size.textSm,
                       fontFamily: t.font.ui.italic}}>
           400 Italic — o único itálico do pacote
         </Text>
         <Text style={s.nota}>
           `code[700]` NÃO existe na IBM Plex Mono do pacote — o provider fecha a grade caindo
-          para o peso mais próximo. Aqui isso dá {t.font.code[700]}; não pode sair vazio. O
-          `editorial` é apelido do texto desde a ADR-0053: {t.font.editorial[400]}.
+          para o peso mais próximo. Aqui isso dá {t.font.code[700]}; não pode sair vazio.
         </Text>
-        <Text style={{color: t.color.foreground, fontSize: t.size.textLg,
-                      fontFamily: t.font.editorial[700], marginTop: t.size.space2}}>
-          Editorial 700 — a mesma Inter do texto (a serifada saiu)
-        </Text>
-        <Text style={{color: t.color.foreground, fontSize: t.size.textMd,
+        <Text style={{color: t.color.foreground, fontSize: t.size.textSm,
                       fontFamily: t.font.code[400]}}>
           Mono 400 — const x = 42;
         </Text>
@@ -381,7 +376,7 @@ function Tela({irParaScreen, irParaLote2}) {
         {Array.from({length: 40}, (_, i) => (
           <View key={i} style={s.linha}>
             <IconCheckCircleFill size={t.size.iconSm} color={t.color.primary} />
-            <Text style={{color: t.color.foreground, fontSize: t.size.textMd,
+            <Text style={{color: t.color.foreground, fontSize: t.size.textSm,
                           fontFamily: t.font.ui[400], flex: 1}}>
               linha {String(i + 1).padStart(2, "0")} — altura de controle {t.size.controlHMd} dp
             </Text>
@@ -2213,7 +2208,7 @@ function Botao({t, onPress, rotulo}) {
         backgroundColor: pressed ? t.color.primaryActive : t.color.primary,
       })}>
       <Text style={{color: t.color.primaryForeground, fontFamily: t.font.ui[600],
-                    fontSize: t.size.textMd}}>
+                    fontSize: t.size.textSm}}>
         {rotulo}
       </Text>
     </Pressable>

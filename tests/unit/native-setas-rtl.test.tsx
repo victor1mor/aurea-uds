@@ -13,7 +13,7 @@ import {DropdownMenu} from "../../packages/native/src/menu.js";
 
 const Glifo = () => null;
 const ICONES = criarRegistroDeIcones({"caret-right": Glifo as never, "arrow-right": Glifo as never, gear: Glifo as never});
-const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, editorial: {}, code: {}};
+const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, code: {}};
 type Props = Record<string, unknown>;
 const transformacoes = (p: Props) => ((StyleSheet.flatten(p.style as never) ?? {}) as {transform?: Array<Record<string, unknown>>}).transform ?? [];
 /** Quantas caixas (de um tipo) estão espelhadas. */
