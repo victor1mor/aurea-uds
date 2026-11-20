@@ -53,6 +53,14 @@ check with it stays with the maintainer.
   Apache; it does **not** accept AGPL or non-commercial licences), credited in
   [`docs/REFERENCES.md`](docs/REFERENCES.md).
 
+## Versioning
+
+Aurea follows Semantic Versioning, with one rule set for web and native: the seven packages share a
+version. After 1.0, removing or renaming anything documented, moving an import path, changing a default or
+making a type stricter is a major change; small visual adjustments that keep a component's size and
+contrast are not. Old names are deprecated in a minor release and removed only in the next major one. The
+full rule: https://aureauds.dev/docs-versioning
+
 ## Licence
 
 By contributing, you agree that your contribution is released under [Apache 2.0](LICENSE).

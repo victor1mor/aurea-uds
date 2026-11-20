@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.75.0 (20/11/2026)
+
+- **A 0.75.0 publicada em 20/11/2026, entre 06:40 e 07:01** (Brasília, medido no npm), da junção do pedido #149
+  (`7a311b09`): o `released-surface.json` desse commit. O CHANGELOG ([0.75.0] publicada), o CLAUDE.md (a linha na tabela
+  e o item 72) e a release `v0.75.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.74.0 (19/11/2026)
 
 - **A 0.74.0 publicada em 19/11/2026, entre 21:29 e 21:39** (Brasília, medido no npm), da junção do pedido #148
@@ -363,6 +370,9 @@ como deveria funcionar"*.
 ---
 
 ## [0.75.0] — 2026-11-19
+
+✅ **Publicada em 20/11/2026, entre 06:40 e 07:01 (Brasília, medido no npm: seis pacotes entre 06:40 e 06:53 e o `native`
+às 07:01), pelo terminal do Victor, da junção do pedido #149** (`7a311b09`).
 
 **O traço do escolhido e as divisões de dentro** — o achado 2 do 2-D e o resto da ADR-0072, aprovados na bancada
 (*"Aprovo as três"*, 19/11/2026), decididos pela maioria das referências lidas no código publicado.

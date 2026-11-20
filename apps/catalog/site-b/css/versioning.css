@@ -1,0 +1,41 @@
+/* A VERSIONING NO DESENHO B (lote 090, 20/11/2026). As medidas são as da Roadmap (`roadmap.css`), com o prefixo "vs-":
+   a mesma cápsula de versão, os mesmos cartões com ladrilho e o mesmo número grande. */
+
+/* As peças que flutuam: o "major.minor.patch" maior, como o "0.x" da Roadmap, e o cartão dos nomes, mais estreito. */
+.vs-peca-semver .gs-amarela { min-block-size:var(--control-h-md); font-size:var(--text-base); }
+.vs-peca-nomes { max-inline-size:calc(var(--space-24) * 2); }
+
+/* Os três números: a cápsula do número (40 de alto, código 20) e o texto. A de "major" no amarelo. */
+.vs-numeros { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.vs-numero { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-3); padding:var(--space-5); }
+.vs-versao { display:inline-flex; align-items:center; min-block-size:var(--space-10); padding-inline:var(--space-4); border-radius:var(--radius-full);
+  background:var(--fill-2); font-family:var(--font-code); font-size:var(--text-xl); font-weight:var(--weight-semibold); }
+.vs-versao[data-v="major"] { background:var(--primary); color:var(--primary-foreground); }
+.vs-numero p { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); line-height:var(--leading-relaxed); }
+
+/* As duas notas: o recheio e o título da Roadmap. */
+.vs-nota { display:flex; flex-direction:column; gap:var(--space-3); padding:var(--space-5); scroll-margin-block-start:calc(var(--topbar-height) + var(--space-8)); }
+.vs-nota > b { font-family:var(--font-heading); font-size:var(--text-lg); font-weight:var(--weight-bold); }
+.vs-nota .gs-p { margin:0; font-size:var(--text-base); }
+
+/* O que quebra e o que não quebra: o ladrilho de 30 e o texto de 14, como os cartões do "Already in place". */
+.vs-itens { gap:calc(var(--space-2) + var(--space-05)); }
+.vs-item { display:flex; align-items:flex-start; gap:var(--space-3); padding:var(--space-4) calc(var(--space-4) + var(--space-05)); font-size:var(--text-sm);
+  line-height:var(--leading-relaxed); }
+.vs-item-tile { flex:none; inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
+.vs-item-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+/* O nome de pacote não quebra no hífen ("@aurea-" e "uds/…" pareciam duas palavras). Só numa tela estreita, onde
+   inteiro ele não cabe no cartão, ele volta a quebrar onde couber. */
+.vs-item code { white-space:nowrap; }
+@media (max-width:30em) { .vs-item code { white-space:normal; overflow-wrap:anywhere; } }
+
+/* Os dois passos: o número grande (48, código) e o texto, como o quadro da etapa da Roadmap. */
+.vs-passos { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.vs-passo { display:grid; grid-template-columns:auto minmax(0, 1fr); align-items:start; gap:calc(var(--space-4) + var(--space-05)); padding:var(--space-5); }
+.vs-passo-n { font-family:var(--font-code); font-size:var(--text-5xl); font-weight:var(--weight-semibold); line-height:var(--leading-none);
+  letter-spacing:calc(var(--tracking-tight) * 2); }
+.vs-passo p { margin:0; font-size:var(--text-base); line-height:var(--leading-relaxed); }
+
+@media (max-width:56.1875em) {
+  .vs-numeros { grid-template-columns:minmax(0, 1fr); }
+}

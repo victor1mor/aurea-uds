@@ -37,9 +37,9 @@ as etapas; aqui ficam os números — e eles são medidos, não escritos.
 | Pattern | 238 |
 | Block | 15 |
 | Recipe | 23 |
-| Documentação | 115 |
+| Documentação | 116 |
 | Índice de área | 11 |
-| **Total** | **630** |
+| **Total** | **631** |
 
 ## Cobertura das fichas
 
