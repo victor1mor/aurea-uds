@@ -465,8 +465,17 @@ test.describe("catálogo · varredura de todas as páginas", () => {
             const fioDasAbas = e.matches('.tabs.tabs-secondary, [data-aurea-line="tabs"]');
             const linhaNativa = e.matches('[data-aurea-accent="true"], [data-aurea-contrast="high"]');
             if (linhaNativa) continue;
+            // AS SEIS DIVISÕES DE DENTRO DE 19/11/2026 (ADR-0072, *"Aprovo as três"*), cada uma só no lado dela: em cima
+            // (o `hr`, a parte legal do rodapé, as ações do menu do celular), embaixo (as fileiras do `Prose`, o cabeçalho
+            // da central de avisos) e no começo da linha (a barra da citação — à esquerda, ou à direita na escrita RTL).
+            const ladoDe = (x: string, lado: string) => x.startsWith(`borda ${lado}`);
+            const divisaoEmCima = e.matches(".prose hr, .section-footer-legal, .topbar-menu-actions");
+            const divisaoEmbaixo = e.matches(".prose th, .prose td, .notification-head");
+            const barraDaCitacao = e.matches(".prose blockquote");
             const conta = (x: string) => !(deAro && x.startsWith("anel")) && !(entreFileiras && x.startsWith("borda bottom"))
-              && !(fioDasAbas && x.startsWith("borda bottom"));
+              && !(fioDasAbas && x.startsWith("borda bottom"))
+              && !(divisaoEmCima && ladoDe(x, "top")) && !(divisaoEmbaixo && ladoDe(x, "bottom"))
+              && !(barraDaCitacao && (ladoDe(x, "left") || ladoDe(x, "right")));
             // O CONTORNO DO ERRO (ADR-0094, 11/11/2026): o campo com erro tem a borda (no cartão de escolha, o anel por
             // dentro) no `--danger-400`, a cor da frase de erro. Só a peça EM ERRO, pelos mesmos seletores do `aurea.css`,
             // só no próprio elemento (nada de `::before`/`::after`) e só nessa cor, medida ali mesmo.

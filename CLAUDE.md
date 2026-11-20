@@ -232,6 +232,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.71.0` | Os padrões da referência: o `Button` sem tom é o principal (o botão de ligar continua o cinza), o `Alert` sem tom é o neutro (`neutral`), o `Drawer` da web sai de baixo, a `ConfirmDialog` ignora o Esc, e as `Tabs` `secondary` enchem a fila — o D3 e o 2-C b, pedido #142. **Publicada em 16/11/2026** (entre 07:09 e 07:20, Brasília, medido no npm), pelo terminal do Victor |
 | `0.72.0` | O tema do sistema: a página sem `data-theme` segue o claro ou o escuro do computador (`prefers-color-scheme`), e fica no claro quando ele não diz — CSS puro, pelas cópias da montagem; o tema alternado parte do sistema; no nativo, sem o tema do aparelho, o `AureaProvider` fica no claro — o D16, pedido #144. **Publicada em 16/11/2026** (entre 15:35 e 15:47, Brasília, medido no npm), pelo terminal do Victor |
 | `0.73.0` | O `onPress` na web, com o mesmo nome do nativo (o `onClick` continua, como apelido), no `Button`, no `IconButton`, no `ToolbarButton`, no `CloseButton`, no `Card` e nos itens de oito peças de navegação e menu — o DOC-11; e as peças de leiaute independentes: a `Sidebar` fora do `AppShell` com a largura dela, o `SegmentedControl` do tamanho do conteúdo numa coluna e o `TableOfContents` que estica sem empurrar o vizinho — o PV-14, pedido #146. **Publicada em 18/11/2026** (entre 17:41 e 17:51, Brasília, medido no npm), pelo terminal do Victor |
+| `0.74.0` | Onde os itens de lista começam (o achado 1 do 2-D): a `ListBox`, o menu e a `NavList` começam a 16 da borda, como a `Sidebar`, nos dois lados, no fim da curva de 18; o título da seção e a marca do escolhido acompanham; no nativo, o item do `DropdownMenu` também — pedido #148. **Publicada em 19/11/2026** (entre 21:29 e 21:39, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -1029,6 +1030,19 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    antes de aceitar alerta, ler a página dele (`gh api advisories/<id>`). **Publicada em 18/11/2026** (entre 17:41 e
    17:51, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #146. O registro entrou no lote seguinte
    (o 087, só de registro, sem versão).
+
+71. **`0.74.0`, onde os itens de lista começam, feita em 19/11/2026** (o achado 1 do 2-D, a varredura de alinhamento;
+   *"Pode, proposta A"* e, para o nativo, *"Aprovo as três"*) — os itens de lista começavam em quatro lugares, todos com o
+   canto de 18 (`ListBox` 8, o menu 10 escrito à mão, `NavList` 12, `Sidebar` 16); em 8 de 12 referências o conteúdo
+   começa no fim da curva ou depois, e com o 18 da Aurea isso é o 16. ⚠ **As lições:** (1) a página viva da referência nº 1
+   usa outro estilo que o registro antigo dela (6 / 8, não 8 / 6) — a tabela se faz com a PÁGINA; (2) a suíte local do
+   Chromium não coube antes de o Victor desligar (parada no 385 de 696, sem falhas) e a CI fez o papel dela, como na
+   0.36.0; (3) comparar foto com PIL em RGBA dá "igual" falso — o `getbbox` de uma imagem RGBA só olha a transparência;
+   compara-se em RGB; (4) proposta levada ao Victor tem NOME, nunca só letra — duas perguntas com "A" e "B" o confundiram;
+   (5) a bancada viva (a página de verdade, com o mouse dele) mostrou o que a foto escondia: o estado "aberto" do botão
+   copiado do passar o mouse não se via, porque o passar o mouse de vários botões quase não muda a cor. **Publicada em
+   19/11/2026** (entre 21:29 e 21:39, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #148. O registro
+   entrou no lote seguinte (o 089, a 0.75.0).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

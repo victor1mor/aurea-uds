@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.74.0 (19/11/2026)
+
+- **A 0.74.0 publicada em 19/11/2026, entre 21:29 e 21:39** (Brasília, medido no npm), da junção do pedido #148
+  (`bc24240c`): o `released-surface.json` desse commit. O CHANGELOG ([0.74.0] publicada), o CLAUDE.md (a linha na tabela
+  e o item 71) e a release `v0.74.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.73.0 (19/11/2026)
 
 - **A 0.73.0 publicada em 18/11/2026, entre 17:41 e 17:51** (Brasília, medido no npm), da junção do pedido #146
@@ -355,7 +362,49 @@ como deveria funcionar"*.
 
 ---
 
+## [0.75.0] — 2026-11-19
+
+**O traço do escolhido e as divisões de dentro** — o achado 2 do 2-D e o resto da ADR-0072, aprovados na bancada
+(*"Aprovo as três"*, 19/11/2026), decididos pela maioria das referências lidas no código publicado.
+
+### Mudou
+
+- **O traço de baixo do escolhido começa a 16 (`--space-4`), junto com o texto** — era um 15 escrito à mão. Vale no
+  `SegmentedControl`, nas abas do `CodeBlock`, no ladrilho da `Gallery`, no botão ligado da Ember e na lateral do site.
+  Nenhuma das 12 referências desenha o traço dentro de uma cápsula; dentro da cápsula da Aurea, ele começa no fim da
+  curva, que coincide com o texto.
+- **Nas `Tabs` `secondary` deitadas, o traço vai de ponta a ponta da aba**, como em 9 de 12 referências — a aba é
+  quadrada. Também no nativo.
+- **As seis divisões de dentro que faltavam ganham a linha clara** (o texto a 10%, a mesma das abas e dos grupos da
+  0.70.0): a linha do `hr`, as fileiras da tabela e a barra da citação do `Prose`; embaixo do cabeçalho da
+  `NotificationCenter`; acima da parte legal do rodapé (`Section variant="footer"`); e acima das ações do menu do
+  celular do `Header`. É a ordem de 05/11/2026: o "sem linha" tira a borda em volta, e as divisões de dentro ficam.
+- Vale também para a Ember.
+
+### O site
+
+- **Na lateral, o texto do item atual fica alinhado com os vizinhos** (o achado 3 do 2-D, *"Fundo cresce p/
+  esquerda"*): o fundo do item atual começa 14 antes, e o ponto amarelo cabe dentro dele. Antes, o ponto empurrava o
+  texto 14 para a direita. O item atual sem ponto (o mês, em Releases) volta ao recuo dos outros.
+- **Na página de tokens, numa tela estreita, o seletor de densidade vira um `Select`** (*"Vira um Select"*): os três
+  botões pediam 308 e, em 320, o "Spacious" saía cortado. A troca mede a seção (`@container`, em `em`).
+
+### Quem cobra
+
+- `tests/visual/lote-089.spec.ts` — onde começa o traço (na cápsula, com o texto; na aba quadrada, de ponta a ponta) e
+  as seis linhas claras, no Gold e na Ember; e as duas do site (o texto do atual alinhado; o `Select` em 320); reprova
+  com o CSS e o site da 0.74.0.
+- `tests/unit/native-lote-089.test.tsx` — o fio da aba `secondary` do nativo vai de ponta a ponta; reprova com o
+  `estilos.ts` da 0.74.0.
+- As duas travas do "sem linha" (`tests/unit/sem-linha.test.tsx` e a varredura do catálogo) conhecem as seis linhas,
+  cada uma só no seletor e no lado dela.
+
+---
+
 ## [0.74.0] — 2026-11-19
+
+✅ **Publicada em 19/11/2026, entre 21:29 e 21:39 (Brasília, medido no npm: seis pacotes entre 21:29 e 21:30 e o `native`
+às 21:39), pelo terminal do Victor, da junção do pedido #148** (`bc24240c`).
 
 **Onde os itens de lista começam** — o achado 1 do 2-D, a varredura de alinhamento de 19/11/2026: os itens de lista
 começavam em quatro lugares (ListBox 8, menu 10 escrito à mão, NavList 12, Sidebar 16), todos com o canto de 18, e só a

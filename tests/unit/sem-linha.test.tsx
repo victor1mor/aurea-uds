@@ -93,6 +93,14 @@ const LINHA_PERMITIDA_CSS: {seletor: string; prop: string; valor?: string; media
     prop: "border-block-end-color", valor: "color-mix(in oklab,var(--foreground) 10%,transparent)"},
   {seletor: '.list-box-section + .list-box-section::before',
     prop: "border-block-start-color", valor: "color-mix(in oklab,var(--foreground) 10%,transparent)"},
+  // E AS SEIS QUE FALTAVAM (ADR-0072, o Victor, 19/11/2026, *"Aprovo as três"*): a linha do `hr`, as fileiras e a barra
+  // da citação do `Prose`, embaixo do cabeçalho da central de avisos, acima da parte legal do rodapé e acima das ações
+  // do menu do celular. Cada uma só no seletor dela, só a cor da borda que já existia, só a linha clara.
+  ...([
+    ['.prose hr', "border-block-start-color"], ['.prose th,.prose td', "border-block-end-color"],
+    ['.prose blockquote', "border-inline-start-color"], ['.notification-head', "border-block-end-color"],
+    ['.section-footer-legal', "border-block-start-color"], ['.topbar-menu-actions', "border-block-start-color"],
+  ] as const).map(([seletor, prop]) => ({seletor, prop, valor: "color-mix(in oklab,var(--foreground) 10%,transparent)"})),
   // O botão ligado CINZA (o `neutral`, ADR-0084) é o mais discreto, e ganha o contorno de 3:1 com "aumentar contraste" —
   // a mesma exceção dos campos, só nessa preferência e só com a cor dela.
   {seletor: ':is([data-pressed-style="neutral"] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed]):not([data-pressed-style]),:is(.btn[aria-pressed="true"],.btn.toggle[data-pressed])[data-pressed-style="neutral"])',

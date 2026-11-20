@@ -2724,6 +2724,8 @@ img,svg { display:block; }
 .section-footer-link { color:var(--muted-foreground); font-size:var(--text-sm); text-decoration:none; }
 .section-footer-link:hover { color:var(--foreground); }
 .section-footer-legal { display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--space-2) var(--space-6); margin-block-start:var(--space-8); padding-block-start:var(--space-6); border-block-start:var(--border-width) solid transparent; color:var(--muted-foreground); font-size:var(--text-sm); }
+/* A divisão de dentro volta (ADR-0072, o Victor, 19/11/2026, *"Aprovo as três"*): a linha clara, o texto a 10%. */
+.section-footer-legal { border-block-start-color:color-mix(in oklab,var(--foreground) 10%,transparent); }
 /* layout="inline" (15/10/2026): o rodapé da página inicial da referência — UMA linha centrada, 12 de respiro em cima e
    embaixo, 8 entre as partes, letra 14 apagada; os links acendem com o ponteiro. Quebra linha se não couber. */
 .section.section-footer-inline { padding-block:var(--space-3); }
@@ -2880,6 +2882,8 @@ img,svg { display:block; }
 /* menuActions (15/10/2026): o que só o menu do celular leva (o GitHub, na referência), embaixo dos links, depois de uma
    linha. */
 .topbar-menu-actions { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-2); margin-block-start:var(--space-4); padding-block-start:var(--space-4); border-block-start:var(--border-width) solid transparent; }
+/* A divisão de dentro volta (ADR-0072, o Victor, 19/11/2026, *"Aprovo as três"*): a linha clara, o texto a 10%. */
+.topbar-menu-actions { border-block-start-color:color-mix(in oklab,var(--foreground) 10%,transparent); }
 /* O botão e o painel só existem no celular, e só onde há popover. O @supports lá embaixo é a rede,
    como na gaveta do `AppShell`: navegador sem popover não esconde o `<nav popover>` sozinho, e o
    painel apareceria solto na barra. Ali os links ficam na barra, que já quebra linha por conteúdo, e
@@ -4806,9 +4810,12 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    saíram com a mesma cor. Com o `:not` ela pesa (0,3,1) e só alcança quem está em repouso. */
 [data-theme="light"] .doc-nav a:not(.active):where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { color:color-mix(in oklab, var(--sidebar-foreground) 72%, transparent); }
 @media not all and (prefers-color-scheme: dark){:where(:root):not([data-theme]) .doc-nav a:not(.active):where(:not([data-theme] *)){ color:color-mix(in oklab, var(--sidebar-foreground) 72%, transparent); }}
+/* O TRAÇO DO ESCOLHIDO começa a 16 (`--space-4`), junto com o texto — o achado 2 do 2-D (o Victor, 19/11/2026, *"Aprovo
+   as três"*). Era um 15 escrito à mão. Na cápsula ele não pode ir até a borda (sairia pela curva); o fim da curva coincide
+   com o texto. Na aba QUADRADA (`Tabs secondary`, deitada) ele vai de ponta a ponta, como em 9 de 12 referências (abaixo). */
 .is-selected::after,.btn-nav[aria-current]:not([aria-current="false"])::after,
 .btn[aria-pressed="true"]:not(.btn-icon):where([data-brand="ember"],[data-brand="ember"] *)::after,.segmented :is(button,a).active::after,.tabs-secondary .tab[data-active]::after,
-.doc-nav a.active::after,.sidebar-item[aria-current]::after { content:""; position:absolute; inset-inline:15px; bottom:0; height:2px; border-radius:var(--radius-full); background:color-mix(in oklab, var(--primary) 75%, transparent); }
+.doc-nav a.active::after,.sidebar-item[aria-current]::after { content:""; position:absolute; inset-inline:var(--space-4); bottom:0; height:2px; border-radius:var(--radius-full); background:color-mix(in oklab, var(--primary) 75%, transparent); }
 /* e o fio do ativo da lateral segue a marca DELA, pelo mesmo motivo da regra de cor acima. */
 .doc-nav a.active::after,.sidebar-item[aria-current]::after { background:var(--sidebar-current-line, color-mix(in oklab, var(--sidebar-primary) 75%, transparent)); }
 .sidebar-item[aria-current]::after { inset-inline:var(--sidebar-item-x, var(--space-4)); }
@@ -5177,6 +5184,8 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .tabs-secondary .tab { border-radius:0; }
 .tabs-secondary .tab.active,.tabs-secondary .tab[data-active] { background:transparent; box-shadow:none; color:var(--foreground); }
 .tabs-secondary .tab[data-active]::after { display:block; }
+/* Deitada, a aba é quadrada: o traço do escolhido vai de ponta a ponta (o achado 2 do 2-D, 19/11/2026). */
+.tabs-secondary:not([data-orientation="vertical"]) .tab[data-active]::after { inset-inline:0; }
 /* A LINHA DE PONTA A PONTA (o Victor, 14/11/2026, *"B, ponta a ponta"* — o "sem linha" não é 100%: as divisões de dentro
    ficam): a fila secundária deitada ocupa a linha inteira (as abas continuam no começo), e o fio de baixo, que já existia
    transparente, vira a linha clara (o texto a 10%, a mesma da tabela com `dividers`), como a referência. A em pé não
@@ -6235,6 +6244,8 @@ button.tag-main { cursor:pointer; }
 .prose h3 { font-size:var(--text-xl); line-height:var(--text-xl-leading); }
 .prose h4 { font-size:var(--text-lg); line-height:var(--text-lg-leading); }
 .prose blockquote { margin-inline:0; padding-inline-start:var(--space-4); border-inline-start:2px solid transparent; color:var(--muted-foreground); }
+/* A divisão de dentro volta (ADR-0072, o Victor, 19/11/2026, *"Aprovo as três"*): a linha clara, o texto a 10%. */
+.prose blockquote { border-inline-start-color:color-mix(in oklab,var(--foreground) 10%,transparent); }
 .prose ul,.prose ol { padding-inline-start:var(--space-6); }
 .prose li + li { margin-block-start:var(--space-2); }
 /* `0.9em` e não um token: código dentro do texto se mede em relação à LINHA em que está, e um
@@ -6248,6 +6259,8 @@ button.tag-main { cursor:pointer; }
 .prose pre code { padding:0; border-radius:0; background:transparent; font-size:var(--text-sm); }
 .prose img { max-width:100%; height:auto; border-radius:var(--radius-lg); }
 .prose hr { border:0; border-block-start:1px solid transparent; }
+/* A divisão de dentro volta (ADR-0072, o Victor, 19/11/2026, *"Aprovo as três"*): a linha clara, o texto a 10%. */
+.prose hr { border-block-start-color:color-mix(in oklab,var(--foreground) 10%,transparent); }
 .prose figcaption { color:var(--muted-foreground); font-size:var(--text-sm); }
 /* A tabela da prosa NÃO é a tabela de dados: sem `min-width:720px`, sem faixa de cabeçalho em
    caixa alta e sem hover de linha. Uma tabela de três colunas no meio de um artigo não é uma
@@ -6260,6 +6273,8 @@ button.tag-main { cursor:pointer; }
    borda (fica do tamanho do texto). */
 .prose table { display:block; inline-size:max-content; max-inline-size:100%; overflow-x:auto; border-collapse:collapse; font-size:var(--text-sm); }
 .prose th,.prose td { padding:var(--space-2) var(--space-3); text-align:start; border-block-end:1px solid transparent; }
+/* A divisão de dentro volta (ADR-0072, o Victor, 19/11/2026, *"Aprovo as três"*): a linha clara, o texto a 10%. */
+.prose th,.prose td { border-block-end-color:color-mix(in oklab,var(--foreground) 10%,transparent); }
 .prose th { color:var(--subtle-foreground); font-weight:var(--weight-semibold); }
 
 /* LISTA ORDENÁVEL (PLANO-1.0, item L3). Duas regras aqui não são decoração e quebram
@@ -6883,6 +6898,8 @@ button.tag-main { cursor:pointer; }
 .notification-count { position:absolute; inset-block-start:-4px; inset-inline-end:-4px; display:inline-flex; align-items:center; justify-content:center; min-width:18px; height:18px; padding:0 var(--space-1); border-radius:var(--radius-control); background:var(--primary); color:var(--primary-foreground); font-size:var(--text-xs); font-weight:var(--weight-semibold); line-height:var(--leading-none); pointer-events:none; }
 .notification-panel { width:min(360px,calc(100vw - 32px)); max-width:none; padding:0; gap:0; display:flex; flex-direction:column; overflow:hidden; }
 .notification-head { display:flex; align-items:center; justify-content:space-between; gap:var(--space-3); padding:var(--space-3) var(--space-4); border-block-end:1px solid transparent; }
+/* A divisão de dentro volta (ADR-0072, o Victor, 19/11/2026, *"Aprovo as três"*): a linha clara, o texto a 10%. */
+.notification-head { border-block-end-color:color-mix(in oklab,var(--foreground) 10%,transparent); }
 .notification-head strong { font-size:var(--text-sm); }
 .notification-list { margin:0; padding:var(--space-1); overflow-y:auto; max-height:min(60vh,440px); }
 .notification-sublist { margin:0; padding:0; list-style:none; }
@@ -8459,6 +8476,13 @@ a.related-card:hover { border-color:transparent; }
 /* O ponto do item atual: o recuo sai do item, e não de uma margem negativa — o rótulo corta o que sai dele. */
 .site-shell > .sidebar .sidebar-item[aria-current] { padding-inline-start:calc(var(--space-2) + var(--space-05)); color:var(--foreground); font-weight:var(--weight-semibold); }
 .site-shell > .sidebar .sidebar-item[aria-current] > .sidebar-label::before { margin-inline:0 calc(var(--space-2) + var(--space-05)); }
+/* O TEXTO DO ATUAL NÃO ANDA (o achado 3 do 2-D, o Victor, 19/11/2026: *"Fundo cresce p/ esquerda"*): com o ponto, o texto
+   do item atual ia a 28 e o dos vizinhos ficava a 14. Agora o FUNDO do atual começa 14 antes (a largura cresce o mesmo),
+   o ponto cabe dentro dele, e o texto fica alinhado com os vizinhos. O atual sem ponto (o mês dos Releases) volta ao
+   recuo dos outros. */
+.site-shell > .sidebar .sidebar-item[aria-current]:not(:has(.site-mes-n)) { margin-inline-start:calc(-1 * (var(--space-3) + var(--space-05)));
+  inline-size:calc(100% + var(--space-3) + var(--space-05)); }
+.site-shell > .sidebar .sidebar-item[aria-current]:has(.site-mes-n) { padding-inline-start:calc(var(--space-3) + var(--space-05)); }
 /* O nome do grupo SEM número (as áreas que não são a Getting Started) começa na linha do texto dos itens, como antes do
    site B (01/11/2026): com a margem de sempre ele ficava 6 à esquerda (medido: 40 contra 46). */
 .site-shell > .sidebar p.sidebar-group-label { margin-inline:calc(var(--space-3) + var(--space-05)); }
@@ -10937,6 +10961,16 @@ a.blk-chip:hover { background:var(--primary); color:var(--primary-foreground); }
 .tk-amostras { display:grid; gap:var(--space-4); padding:var(--space-4); border-radius:var(--radius-card); background:var(--background); color:var(--foreground); }
 .tk-sec { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-3); padding-block-start:var(--space-6); scroll-margin-block-start:calc(var(--topbar-height) + var(--space-16) * 2); }
 .tk-sec:first-child { padding-block-start:0; }
+/* O SELETOR DE DENSIDADE EM TELA ESTREITA (o Victor, 19/11/2026: *"Vira um Select"*): os três botões pedem ~308 e, numa
+   seção mais estreita que 20em, o "Spacious" saía cortado. Ali o seletor é o `Select`; mede a SEÇÃO (`@container`), não a
+   janela, e em `em`, para o texto grande também trocar a tempo. */
+.tk-sec { container-type:inline-size; }
+.tk-densidade-select { display:none; }
+.tk-densidade-select > .select, .tk-densidade-gatilho { inline-size:100%; }
+@container (max-width:20em) {
+  .tk-densidade-seg { display:none; }
+  .tk-densidade-select { display:block; }
+}
 .tk-sec[hidden], .tk-amostras [hidden] { display:none !important; }
 .tk-cabeca { margin:0; }
 .tk-texto { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); }
