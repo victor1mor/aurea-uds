@@ -233,6 +233,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.72.0` | O tema do sistema: a página sem `data-theme` segue o claro ou o escuro do computador (`prefers-color-scheme`), e fica no claro quando ele não diz — CSS puro, pelas cópias da montagem; o tema alternado parte do sistema; no nativo, sem o tema do aparelho, o `AureaProvider` fica no claro — o D16, pedido #144. **Publicada em 16/11/2026** (entre 15:35 e 15:47, Brasília, medido no npm), pelo terminal do Victor |
 | `0.73.0` | O `onPress` na web, com o mesmo nome do nativo (o `onClick` continua, como apelido), no `Button`, no `IconButton`, no `ToolbarButton`, no `CloseButton`, no `Card` e nos itens de oito peças de navegação e menu — o DOC-11; e as peças de leiaute independentes: a `Sidebar` fora do `AppShell` com a largura dela, o `SegmentedControl` do tamanho do conteúdo numa coluna e o `TableOfContents` que estica sem empurrar o vizinho — o PV-14, pedido #146. **Publicada em 18/11/2026** (entre 17:41 e 17:51, Brasília, medido no npm), pelo terminal do Victor |
 | `0.74.0` | Onde os itens de lista começam (o achado 1 do 2-D): a `ListBox`, o menu e a `NavList` começam a 16 da borda, como a `Sidebar`, nos dois lados, no fim da curva de 18; o título da seção e a marca do escolhido acompanham; no nativo, o item do `DropdownMenu` também — pedido #148. **Publicada em 19/11/2026** (entre 21:29 e 21:39, Brasília, medido no npm), pelo terminal do Victor |
+| `0.75.0` | O traço do escolhido e as divisões de dentro: o traço de baixo do escolhido começa a 16, com o texto, e nas `Tabs` `secondary` vai de ponta a ponta (web e nativo); seis divisões de dentro voltam com a linha clara (o `hr`, as fileiras e a citação do `Prose`, o cabeçalho da `NotificationCenter`, a parte legal da `Section variant="footer"` e as ações do menu do celular do `Header`) — o achado 2 do 2-D e o resto da ADR-0072, pedido #149. **Publicada em 20/11/2026** (entre 06:40 e 07:01, Brasília, medido no npm), pelo terminal do Victor |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -1043,6 +1044,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    copiado do passar o mouse não se via, porque o passar o mouse de vários botões quase não muda a cor. **Publicada em
    19/11/2026** (entre 21:29 e 21:39, Brasília, medido no npm), pelo terminal do Victor, da junção do pedido #148. O registro
    entrou no lote seguinte (o 089, a 0.75.0).
+
+72. **`0.75.0`, o traço do escolhido e as divisões de dentro, feita em 19/11/2026** (o achado 2 e o achado 3 do 2-D e o
+   resto da ADR-0072; *"Aprovo as três"*, *"Fundo cresce p/ esquerda"*, *"Vira um Select"* e *"Aprovo o lote 089"*) — o traço
+   do escolhido era um 15 escrito à mão; nenhuma de 12 referências o põe dentro de cápsula, e 9 de 12 o levam de ponta a
+   ponta. Junto, no site, o texto do item atual da lateral alinhado com os vizinhos e o seletor de densidade da página de
+   tokens que vira o `Select` da Aurea em tela estreita. ⚠ **As lições:** (1) o `<select>` do sistema na bancada foi
+   reprovado (*"está quadrado, pega do Windows"*) — no site, controle de formulário é sempre a peça da Aurea, acesa no lugar;
+   (2) número cru tirado do `aurea.css` baixa a trava (`raw-px-baseline.json`), e o validador cobra a baixa; (3) teste antigo
+   que guardava a medida velha (`native-lote-f`, o 15) reprovou na suíte inteira — mudar medida pede procurar quem a guarda;
+   (4) a publicação parou duas vezes com `getaddrinfo ENOENT`: era a VPN do Victor derrubando o DNS — perguntar pela VPN
+   antes de repetir. **Publicada em 20/11/2026** (entre 06:40 e 07:01, Brasília, medido no npm), pelo terminal do Victor, da
+   junção do pedido #149. O registro entrou no lote seguinte (o 090, a página de versões).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

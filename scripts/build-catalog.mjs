@@ -901,7 +901,7 @@ function homePage() {
 // Cada página é um arquivo de texto em `content/docs/` (o leitor, `docs-markdown.mjs`). A primeira continua no
 // `getting-started.html` — o endereço que o botão "Get started" do Início e quem já tem o link usam.
 const DOCS = [
-  {id: "overview", label: "Overview", paginas: ["introduction", "quick-start", "design-principles", "frameworks", "showcase", "roadmap"]},
+  {id: "overview", label: "Overview", paginas: ["introduction", "quick-start", "design-principles", "frameworks", "showcase", "roadmap", "versioning"]},
   {id: "handbook", label: "Handbook", paginas: ["colors", "theming", "dark-mode", "styling", "animation", "composition",
     "density", "icons", "rtl", "accessibility"]},
   // UI for Agents (SITE-06): sem o "MCP Server", que ainda não existe (decisão do Victor, 17/10/2026).

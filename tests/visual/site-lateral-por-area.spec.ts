@@ -45,8 +45,10 @@ for (const c of CASOS) {
 
 // O SITE B (0.54.0): as páginas da Getting Started terminam no cartão "Next", como a Introduction do desenho — o próximo
 // atravessa o grupo, como na referência: depois do último do Overview, o primeiro do Handbook.
+// O lote 090 (20/11/2026): a Versioning entrou no fim do Overview, entre a Roadmap e o Handbook.
 test("na Getting Started do site B, o Next é o vizinho seguinte na lateral", async ({page}) => {
-  for (const [pagina, depois] of [["docs-roadmap.html", "Colors"], ["docs-quick-start.html", "Design Principles"]]) {
+  for (const [pagina, depois] of [["docs-roadmap.html", "Versioning"], ["docs-versioning.html", "Colors"],
+    ["docs-quick-start.html", "Design Principles"]]) {
     await page.goto(`${base}/apps/catalog/${pagina}`);
     await expect(page.locator("a.intro-proxima b"), pagina).toHaveText(depois);
   }
