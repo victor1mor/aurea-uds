@@ -17,6 +17,19 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### A página Migration (20/11/2026)
+
+- **O site:** a área Getting Started ganha a página Migration, no fim do Overview, depois da Versioning (a área Migration
+  decidida pelo Victor em 17/10/2026, "na 1.0"; aprovada olhando em 20/11/2026: *"Aprovo os dois"*). Ela lista os sete
+  nomes que saem na 1.0 e o que fica no lugar de cada um (o levantamento do 1.0-A de 19/11/2026, com o `pressed` do
+  `Button` e do `IconButton` trocado pelo `Toggle`), o código de antes e de depois, e os nomes antigos que continuam
+  (`Topbar`, `MenuItemDef`, os quatro nomes antigos do `BottomNav` e o `onClick`). Os nomes ainda não saem: isso é o 1.0-A.
+- **O conserto da Versioning:** dentro dos cartões, o código (`@aurea-uds/native/system`) saía na fonte de código do
+  navegador, sem o fundo; agora é a mesma pílula do código no texto, como na Migration.
+- **Quem cobra:** o `site-getting-started.spec.ts` (a página na lista) e o `site-lateral-por-area.spec.ts` (o "Next" da
+  Versioning é a Migration, e o da Migration é a Colors).
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.75.0 (20/11/2026)
 
 - **A 0.75.0 publicada em 20/11/2026, entre 06:40 e 07:01** (Brasília, medido no npm), da junção do pedido #149

@@ -318,13 +318,13 @@
     "fichas": 138,
     "fichas_so_nativo": 12,
     "hooks": 11,
-    "paginas_total": 631,
+    "paginas_total": 632,
     "paginas": {
       "component": 228,
       "pattern": 238,
       "block": 15,
       "recipe": 23,
-      "doc": 116,
+      "doc": 117,
       "area": 11
     },
     "conteudo_rico": 44,

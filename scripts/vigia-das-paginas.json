@@ -75,6 +75,7 @@
     "pkg:native": "6d31dc8bbb4227f6"
   },
   "llms-txt": {},
+  "migration": {},
   "quick-start": {
     "ts:AureaProvider": "ad097572574ac140",
     "pkg:react": "e8e2943e9c489cd6",

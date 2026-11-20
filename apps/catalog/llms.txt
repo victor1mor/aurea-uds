@@ -12,6 +12,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Showcase](https://aureauds.dev/docs-showcase.md): What is built with Aurea today, and how to get your project listed here.
 - [Roadmap](https://aureauds.dev/docs-roadmap.md): Where Aurea stands, and what has to be true before version 1.0.
 - [Versioning](https://aureauds.dev/docs-versioning.md): What can change in a minor release, what only changes in a major one, and how old names leave.
+- [Migration](https://aureauds.dev/docs-migration.md): The old names that leave in 1.0, what replaces each one, and how to move before you upgrade.
 - [Colors](https://aureauds.dev/docs-colors.md): The color roles of Aurea, what each one is for, and their values in the light and dark themes.
 - [Theming](https://aureauds.dev/docs-theming.md): How Aurea's tokens become CSS custom properties, the three attributes that switch them, and how to change a value.
 - [Dark Mode](https://aureauds.dev/docs-dark-mode.md): Switch between the light and dark themes, follow the system, and save the choice.
