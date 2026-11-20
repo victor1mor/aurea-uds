@@ -2947,12 +2947,6 @@
               "values": null
             },
             {
-              "name": "pressed",
-              "optional": true,
-              "type": "boolean",
-              "values": null
-            },
-            {
               "name": "kbd",
               "optional": true,
               "type": "string | readonly string[]",
@@ -3209,12 +3203,6 @@
               "values": null
             },
             {
-              "name": "pressed",
-              "optional": true,
-              "type": "boolean",
-              "values": null
-            },
-            {
               "name": "kbd",
               "optional": true,
               "type": "string | readonly string[]",
@@ -3277,12 +3265,6 @@
             },
             {
               "name": "grow",
-              "optional": true,
-              "type": "boolean",
-              "values": null
-            },
-            {
-              "name": "pressed",
               "optional": true,
               "type": "boolean",
               "values": null
@@ -3671,12 +3653,6 @@
               "values": null
             },
             {
-              "name": "pressed",
-              "optional": true,
-              "type": "boolean",
-              "values": null
-            },
-            {
               "name": "kbd",
               "optional": true,
               "type": "string | readonly string[]",
@@ -3696,6 +3672,12 @@
             },
             {
               "name": "ring",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
+              "name": "pressed",
               "optional": true,
               "type": "boolean",
               "values": null

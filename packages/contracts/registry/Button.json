@@ -217,12 +217,6 @@
       "description": "Less weight: muted text one step smaller (12 on sm) — a site header's tool button, as the reference's \"Theme\". The box and the background stay the appearance's."
     },
     {
-      "name": "pressed",
-      "type": "boolean",
-      "default": "—",
-      "description": "DEPRECATED, removed in 1.0 — use <Toggle>. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. On, it shows the raised capsule with a yellow underline. With pressed and no variant, appearance or tone, the button is tertiary, not primary: off and on stay different."
-    },
-    {
       "name": "kbd",
       "type": "string | string[]",
       "default": "—",

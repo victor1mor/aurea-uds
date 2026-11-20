@@ -26,7 +26,6 @@ const pesos = (familia, lista) => Object.fromEntries(lista.map((p) => {
 }));
 export const FONTES_NO_NAVEGADOR = {
   ui: pesos("Inter", ["400", "500", "600", "700", "800", "400i"]),
-  editorial: pesos("Inter", ["400", "500", "600", "700", "800", "400i"]),
   heading: pesos("Sora", ["400", "500", "600", "700", "800"]),
   code: pesos("PlexMono", ["400", "500", "600"]),
 };

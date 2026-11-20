@@ -14,7 +14,7 @@ checked. This file holds the rules.
 | Colour | `--<semantic>`, `--<family>-<step>` | oklch / hex | the semantic token comes first; a ramp step is for building a semantic token, not for direct use |
 | Space | `--space-0` … `--space-24` | rem | the scale skips values on purpose — not every integer exists |
 | Type size | `--text-xs` … `--text-7xl` | rem | |
-| Type family | `--font-ui`, `--font-heading`, `--font-editorial`, `--font-code` | — | Inter / Sora (every h1 to h6) / Inter (alias, removed in 1.0) / IBM Plex Mono |
+| Type family | `--font-ui`, `--font-heading`, `--font-code` | — | Inter / Sora (every h1 to h6) / IBM Plex Mono |
 | Type weight | `--weight-regular` … `--weight-extrabold` | number | |
 | Line height | `--leading-none` … `--leading-relaxed` | number | `--leading-none` exists for components whose HEIGHT is part of the contract |
 | Letter spacing | `--tracking-tight` … `--tracking-widest` | em | |

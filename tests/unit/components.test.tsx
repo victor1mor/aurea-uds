@@ -73,11 +73,8 @@ describe("Button — API do exemplar", () => {
     expect(el).toHaveAttribute("aria-disabled", "true");
   });
 
-  test("pressed é ESTADO (aria-pressed), não variante", () => {
-    wrap(<><Button pressed>Bold</Button><Button pressed={false}>Italic</Button></>);
-    expect(screen.getByRole("button", {name: "Bold", pressed: true})).toBeInTheDocument();
-    expect(screen.getByRole("button", {name: "Italic", pressed: false})).toBeInTheDocument();
-  });
+  // O `pressed` do Button saiu no 1.0-A (0.76.0): o botão que fica ligado é o `Toggle`. O ligado da barra de
+  // ferramentas continua, no `ToolbarButton`, e mora em `lote-092-nomes-que-saem.test.tsx`.
 
   test("kbd mostra a tecla E a anuncia (aria-keyshortcuts)", () => {
     wrap(<Button kbd="⌘K">Command</Button>);
@@ -144,7 +141,7 @@ describe("Button — API do exemplar", () => {
     const {container} = wrap(<>
       <Button variant="danger-outline">Delete</Button>
       <Button variant="link-primary">Upgrade</Button>
-      <Button pressed kbd="⌘K">Bold</Button>
+      <Button kbd="⌘K">Bold</Button>
       <Button href="/x">Go</Button>
     </>);
     await expectNoAxe(container);

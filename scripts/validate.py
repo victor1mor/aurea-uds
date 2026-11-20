@@ -4213,6 +4213,10 @@ NAO_E_NOME50 = {
     ".md": "extensão de arquivo",
     ".html": "extensão de arquivo",
     "useFonts": "o gancho do Expo, e a frase diz que é dele",
+    "--text-md": "token que saiu na 0.76.0 (o 1.0-A), citado na página Migration como o nome antigo",
+    "--font-editorial": "token que saiu na 0.76.0 (o 1.0-A), citado na página Migration como o nome antigo",
+    "--brand-yellow-foreground": "token que saiu na 0.76.0 (o 1.0-A), citado na página Migration como o nome antigo",
+    "--brand-yellow-text": "token que saiu na 0.76.0 (o 1.0-A), citado na página Migration como o nome antigo",
 }
 _css50 = ((root / "packages/tokens/dist/aurea.tokens.css").read_text(encoding="utf-8")
           + (root / "packages/core/src/aurea.css").read_text(encoding="utf-8"))

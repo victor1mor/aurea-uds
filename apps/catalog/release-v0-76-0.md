@@ -1,0 +1,33 @@
+# v0.76.0
+
+The old names marked to leave before 1.0 are removed. Each one has a replacement, listed on the Migration page.
+
+## Removed
+
+Each of these was deprecated for several versions. The [Migration](./docs-migration.html) page lists what replaces each one.
+
+- **`pressed` on `Button` and `IconButton`.** A button that stays on is a [`Toggle`](./toggle.html): it keeps the state, reports `onPressedChange` and requires an accessible name when it shows only an icon. `ToolbarButton` keeps its `pressed`.
+- **`--text-md`** (CSS) and **`textMd`** (React Native). Use `--text-sm` and `textSm`; both are 14.
+- **`--font-editorial`** (CSS), and in React Native the `editorial` font role: `font.editorial`, `font="editorial"` on `Text` and `fontFamilies.editorial`. Use the `ui` role, the same Inter.
+- **`FONT_FAMILIES.editorial`** in `@aurea-uds/fonts/native`. Use `FONT_FAMILIES.ui`.
+- **`--brand-yellow-foreground`**. Use `--brand-yellow-ink`.
+- **`--brand-yellow-text`**. In the light theme yellow is never a text color: use `--foreground`.
+
+## Site
+
+- **The examples that used `pressed`** on `Button`, `IconButton` and `ButtonGroup` now use `Toggle` and `ToggleGroup`. They look the same.
+- **The Migration page** says the names leave in 0.76.0, and lists the React Native and fonts names too.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.76.0 @aurea-uds/core@0.76.0 @aurea-uds/fonts@0.76.0 @aurea-uds/icons@0.76.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.76.0
+```

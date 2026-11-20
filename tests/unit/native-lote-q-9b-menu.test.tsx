@@ -27,7 +27,7 @@ type Props = Record<string, unknown>;
 const plano = (s: unknown) => (StyleSheet.flatten(s as never) ?? {}) as Estilo;
 const ESCURO = resolverTokens("dark", "comfortable");
 const CLARO = resolverTokens("light", "comfortable");
-const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, editorial: {}, code: {}};
+const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, code: {}};
 
 // O glifo registra o que pediram a ele: o nome, o tamanho e a cor.
 let desenhados: Array<{nome: string; size?: number; color?: string}> = [];

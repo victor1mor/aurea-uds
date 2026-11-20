@@ -1,12 +1,11 @@
 {
   "name": "Aurea — Universal Design System",
-  "version": "0.75.0",
+  "version": "0.76.0",
   "status": "organized-source-of-truth",
   "language": "pt-BR",
   "fonts": {
     "ui": "Inter",
     "heading": "Sora",
-    "editorial": "Inter",
     "code": "IBM Plex Mono"
   },
   "iconSystem": {

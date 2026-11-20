@@ -2,19 +2,15 @@
 /* Aurea tokens — generated from aurea.tokens.json (DTCG 2025.10). Do not edit. */
 :root{
   --brand-yellow:oklch(0.795 0.184 86.047);
-  --brand-yellow-foreground:oklch(0.421 0.095 57.708);
-  --brand-yellow-text:oklch(0.516 0.105 86.047);
   --brand-yellow-ink:#18181b;
   --brand-blue:#0246f1;
   --white:oklch(1 0 0);
   --black:oklch(0 0 0);
   --font-ui:Inter,"Segoe UI",sans-serif;
   --font-heading:Sora,Inter,"Segoe UI",sans-serif;
-  --font-editorial:Inter,"Segoe UI",sans-serif;
   --font-code:"IBM Plex Mono",SFMono-Regular,Consolas,monospace;
   --text-xs:0.75rem;
   --text-sm:0.875rem;
-  --text-md:var(--text-sm);
   --text-base:1rem;
   --text-lg:1.125rem;
   --text-xl:1.25rem;
@@ -5717,9 +5713,8 @@ button.tag-main { cursor:pointer; }
    interface e é pequeno para ler artigo. A entrelinha é `--leading-relaxed`, que existe no token
    e não tinha uso. A MEDIDA de linha é `--prose-measure`, no idioma das outras válvulas.
 
-   A FONTE não muda: a prosa usa a do texto. ~~`--font-editorial` (IBM Plex Serif) existe e está
-   sem uso~~ — desde a ADR-0053 (01/10/2026) a Plex Serif saiu, e `--font-editorial` é apelido da
-   fonte do texto (desde a ADR-0077, a Inter), mantido só para não quebrar quem o usa; sai na 1.0. */
+   A FONTE não muda: a prosa usa a do texto. O `--font-editorial` (o apelido dela desde a ADR-0053) saiu no
+   1.0-A, 0.76.0. */
 .prose { max-width:var(--prose-measure,68ch); font-size:var(--text-base); line-height:var(--leading-relaxed); }
 .prose > * + * { margin-block-start:var(--space-4); }
 .prose > h2,.prose > h3,.prose > h4 { margin-block-start:var(--space-8); }
@@ -5820,7 +5815,7 @@ button.tag-main { cursor:pointer; }
 .carousel-track { display:flex; gap:var(--space-3); overflow-x:auto; overflow-y:hidden; scroll-snap-type:inline mandatory; scroll-behavior:smooth; overscroll-behavior-inline:contain; }
 
 /* Sem regra de foco própria: a global do topo deste arquivo já dá o anel, e ela usa
-   `--focus-strong` — que é `--primary` no escuro e `--brand-yellow-foreground` no claro. A versão
+   `--focus-strong` — que é `--primary` no escuro e o grafite no claro (ADR-0083). A versão
    anterior desta linha fixava `--primary` nos dois e teria trocado a cor do foco num deles. */
 .carousel-slide { flex:0 0 var(--carousel-slide,100%); min-width:0; scroll-snap-align:start; }
 .carousel-controls { display:flex; align-items:center; justify-content:center; gap:var(--space-2); }

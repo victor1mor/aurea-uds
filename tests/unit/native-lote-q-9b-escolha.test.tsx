@@ -20,7 +20,7 @@ import {OTPField, Slider, TagGroup, type AureaTagItem} from "../../packages/nati
 
 const t = resolverTokens("dark", "comfortable");
 const claro = resolverTokens("light", "comfortable");
-const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, editorial: {}, code: {}};
+const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, code: {}};
 // O glifo anota quem foi desenhado e com que lado e cor.
 let glifos: Array<{nome: string; size?: number; color?: string}> = [];
 const glifo = (nome: string) => ({size, color}: {size?: number; color?: string}) => {

@@ -70,12 +70,6 @@
       "type": "CSS custom property",
       "default": "68ch",
       "description": "The reading measure. Long lines are hard to track back to the next one, so the text caps its own width rather than filling the container. Set it, or set it to none if the page already constrains the column."
-    },
-    {
-      "name": "--font-editorial",
-      "type": "CSS custom property",
-      "default": "not applied",
-      "description": "An alias of the body font, kept so code that already uses it keeps working: the fonts package has no serif face, and Prose reads in the body font. To give long-form text a different face, point font-family at a typeface of your own on .prose."
     }
   ]
 }

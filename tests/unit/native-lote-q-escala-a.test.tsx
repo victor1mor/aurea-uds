@@ -19,7 +19,7 @@ import {folgaDoToque} from "../../packages/native/src/actions.js";
 const t = resolverTokens("dark", "comfortable");
 // Uma família por peso, como no aparelho: sem isto os pesos caem na mesma família crua, e o peso
 // médio não se distinguiria do seminegrito no estilo.
-const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, editorial: {}, code: {}};
+const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, code: {}};
 // O glifo anota o lado que recebeu: é assim que se lê o tamanho do ícone dentro do botão.
 let lados: number[] = [];
 const Glifo = ({size}: {size?: number}) => { lados.push(size ?? -1); return null; };

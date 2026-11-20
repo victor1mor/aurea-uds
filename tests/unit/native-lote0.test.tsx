@@ -154,30 +154,30 @@ describe("AureaProvider", () => {
 
   // DEFEITO ACHADO EM 03/09/2026 ao escrever o app de smoke test — e é o mais silencioso de todos.
   // O pacote de fontes emitia uma grade PARCIAL, porque era a grade que a IBM Plex desenhava:
-  // `editorial` não tinha 400 e `code` não tem 700 (o `code` continua assim na Atkinson). O tipo prometia os quatro pesos para os três
-  // papéis, então `font.editorial[400]` compilava e devolvia `undefined` — e `fontFamily:
+  // o papel sem 400 e `code` sem 700 (o `code` continua assim). O tipo prometia os quatro pesos para os
+  // papéis, então o peso que faltava compilava e devolvia `undefined` — e `fontFamily:
   // undefined` cai na fonte de sistema SEM LEVANTAR. A tela pareceria certa num peso e errada
   // noutro, que é o defeito mais caro deste alvo: não some e não acusa.
   it("a escala é TOTAL mesmo com mapa parcial, e cai para o peso mais próximo", () => {
     const parcial = {
       ui: {"400": "Ui-Regular", "400i": "Ui-Italic", "700": "Ui-Bold"},
-      editorial: {"500": "Ed-Medium", "600": "Ed-SemiBold", "700": "Ed-Bold"}, // sem 400
+      heading: {"500": "Hd-Medium", "600": "Hd-SemiBold", "700": "Hd-Bold"}, // sem 400
       code: {"400": "Co-Regular", "500": "Co-Medium", "600": "Co-SemiBold"},   // sem 700
     };
     const t = resolverTokens("dark", "comfortable", parcial);
-    for (const papel of ["ui", "editorial", "code"] as const) {
+    for (const papel of ["ui", "heading", "code"] as const) {
       for (const peso of [400, 500, 600, 700] as const) {
         expect(t.font[papel][peso], `${papel}[${peso}]`).toBeTruthy();
       }
     }
     // Queda para o mais PRÓXIMO, e em empate para o mais leve.
-    expect(t.font.editorial[400]).toBe("Ed-Medium"); // 400 não existe -> 500, não 700
+    expect(t.font.heading[400]).toBe("Hd-Medium"); // 400 não existe -> 500, não 700
     expect(t.font.code[700]).toBe("Co-SemiBold");    // 700 não existe -> 600
     expect(t.font.ui[500]).toBe("Ui-Regular");       // 500 não existe -> 400 (empate 400/700)
     expect(t.font.ui[600]).toBe("Ui-Bold");          // 600 não existe -> 700
     // O itálico existe só no `ui`, e sai por campo próprio em vez de uma chave "400i" solta.
     expect(t.font.ui.italic).toBe("Ui-Italic");
-    expect(t.font.editorial.italic).toBeUndefined();
+    expect(t.font.heading.italic).toBeUndefined();
   });
 
   // E o mapa REAL do pacote de fontes é justamente parcial — este teste liga os dois pacotes,
@@ -187,16 +187,14 @@ describe("AureaProvider", () => {
     const bloco = /const FONT_FAMILIES = (\{[\s\S]*?\n\});/.exec(gerado)![1];
     const mapa = JSON.parse(bloco);
     // A grade é parcial na fonte — se um dia deixar de ser, este teste avisa que a normalização
-    // pode não ser mais necessária. Desde a ADR-0053 o `editorial` é apelido do `ui` (sem
-    // itálico) e passou a ter 400; o `code` continua sem 700.
+    // pode não ser mais necessária. O `code` continua sem 700; o `editorial` saiu no 1.0-A (0.76.0).
     expect(Object.keys(mapa.code)).not.toContain("700");
-    expect(mapa.editorial).toEqual(Object.fromEntries(
-      Object.entries(mapa.ui as Record<string, string>).filter(([k]) => !k.endsWith("i"))));
+    expect(mapa).not.toHaveProperty("editorial");
 
     const t = resolverTokens("dark", "comfortable", mapa);
     // ADR-0077 (0.40.1): a Inter no texto, a IBM Plex Mono no código (sem 700: o 700 cai no 600 desenhado) e a Sora
     // no TÍTULO, com arquivos próprios — até a 0.40.0 o `heading` apontava para os do texto.
-    expect(t.font.editorial[400]).toBe("Inter-Regular");
+    expect(t.font.ui[400]).toBe("Inter-Regular");
     expect(t.font.code[700]).toBe("IBMPlexMono-SmBld");
     expect(t.font.ui[600]).toBe("Inter-SemiBold");
     expect(t.font.ui.italic).toBe("Inter-Italic");
@@ -216,7 +214,6 @@ describe("AureaProvider", () => {
 
     const mapa = {
       ui: {400: "Inter-Regular", 500: "Inter-Medium", 600: "Inter-SemiBold", 700: "Inter-Bold"},
-      editorial: {400: "Inter-Regular", 500: "Inter-Medium", 600: "Inter-SemiBold", 700: "Inter-Bold"},
       code: {400: "IBMPlexMono", 500: "IBMPlexMono-Medm", 600: "IBMPlexMono-SmBld"},
     } as const;
     render(<AureaProvider fontFamilies={mapa}><Sonda /></AureaProvider>);

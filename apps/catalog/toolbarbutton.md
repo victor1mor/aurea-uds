@@ -132,7 +132,7 @@ pressedStyle (ADR-0084), when the button is pressed: brand — the default — n
 | `variant` | `ButtonVariant \| danger-soft` | ghost | Ghost by default: inside a toolbar the surface already frames the action. `secondary` is the neutral fill with the emphasis label (the brand colour in the dark theme, the text colour in the light one); `tertiary` the neutral fill with the plain label. |
 | `appearance` | `solid \| outline \| ghost \| link \| nav \| soft` | ghost | Inherited from Button. How much weight the box carries; the default here is ghost. |
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | Inherited from Button. What the colour means; every combination exists. |
-| `pressed` | `boolean` | — | Toggle inside the toolbar (bold, italic). aria-pressed, not a variant. |
+| `pressed` | `boolean` | — | Toggle inside the toolbar (bold, italic), announced as aria-pressed, not a variant. Button and IconButton have no pressed; a button that stays on outside a toolbar is a Toggle. |
 | `onPress` | `(e: MouseEvent) => void` | — | Inherited from Button. The press — the same name on the web and on native; onClick still works, as an alias, and with both, both run, onPress first. |
 | `leadingIcon` | `AureaIcon` | — | Same icon API as Button; every Button prop is accepted. |
 | `disabled` | `boolean` | false | Stays in the roving order but is not activatable, so the set does not shift. |

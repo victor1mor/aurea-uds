@@ -42,13 +42,6 @@ export function ComAtual({componente, valor = "current", lista = "items", ...pro
   return h(componente, {...props, [valor]: atual, [lista]: liga(props[lista])});
 }
 
-// O BOTÃO QUE LIGA E DESLIGA (06/11/2026, junto do `ComAtual`): o filtro fixo e a estrela da linha mostravam `pressed`
-// fixo, e o clique não mudava nada — justo o exemplo de "estado que sobrevive ao clique". Aqui o clique troca.
-export function ComLigado({componente, ...props}) {
-  const [ligado, setLigado] = useState(Boolean(props.pressed));
-  return h(componente, {...props, pressed: ligado, onClick: (e) => { props.onClick?.(e); setLigado((x) => !x); }});
-}
-
 // O PASSO QUE O CLIQUE ESCOLHE (06/11/2026): o Stepper de "voltar a um passo feito" passava o aviso vazio. Aqui o passo
 // clicado vira o ativo, os de antes ficam feitos e os de depois voltam a pendentes; os que já tinham sido alcançados
 // continuam clicáveis, para a pessoa ir e voltar.

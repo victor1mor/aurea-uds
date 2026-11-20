@@ -29,11 +29,10 @@ export type AureaFontScale = Record<400 | 500 | 600 | 700 | 800, string> & {
  * 03/09/2026 no `@aurea-uds/fonts/native`:
  *
  *     ui         400  400i  500  600  700  800   ← o 800 entrou na 0.28.0 (GAR-16)
- *     editorial  400       500  600  700      ← apelido do `ui` desde a ADR-0053 (sai na 1.0)
  *     code       400       500  600           ← não há 700
  *
- * É a grade dos arquivos de fonte, não um esquecimento nosso. Até a 0.12.4 o `editorial` era a
- * IBM Plex Serif, sem 400; a ADR-0053 tirou a serifada e o deixou apontando para a Atkinson.
+ * É a grade dos arquivos de fonte, não um esquecimento nosso. O papel `editorial` (apelido do `ui`
+ * desde a ADR-0053) saiu no 1.0-A, 0.76.0.
  */
 export type AureaFontInput = Partial<Record<"400" | "500" | "600" | "700" | "800" | "400i", string>>;
 export type AureaTokens = {
@@ -48,7 +47,6 @@ export type AureaTokens = {
     /** Família por papel de tipografia e peso. */
     font: {
         ui: AureaFontScale;
-        editorial: AureaFontScale;
         code: AureaFontScale;
         heading: AureaFontScale;
     };
@@ -72,7 +70,6 @@ export type AureaTokens = {
 /** O mapa que o consumidor injeta para o texto sair na Inter, na Sora e na IBM Plex Mono. Ver `AureaProviderProps`. */
 export type AureaFontFamilies = {
     ui: AureaFontInput;
-    editorial: AureaFontInput;
     code: AureaFontInput;
     /** O papel do título (GAR-16, 0.28.0). Opcional: sem ele, o título usa o mapa do `ui` — que é a
      *  mesma fonte hoje, e é o que acontece com quem ainda passa o mapa de antes da 0.28.0. */
