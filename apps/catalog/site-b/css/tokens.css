@@ -18,6 +18,16 @@
 .tk-amostras { display:grid; gap:var(--space-4); padding:var(--space-4); border-radius:var(--radius-card); background:var(--background); color:var(--foreground); }
 .tk-sec { display:grid; grid-template-columns:minmax(0,1fr); gap:var(--space-3); padding-block-start:var(--space-6); scroll-margin-block-start:calc(var(--topbar-height) + var(--space-16) * 2); }
 .tk-sec:first-child { padding-block-start:0; }
+/* O SELETOR DE DENSIDADE EM TELA ESTREITA (o Victor, 19/11/2026: *"Vira um Select"*): os três botões pedem ~308 e, numa
+   seção mais estreita que 20em, o "Spacious" saía cortado. Ali o seletor é o `Select`; mede a SEÇÃO (`@container`), não a
+   janela, e em `em`, para o texto grande também trocar a tempo. */
+.tk-sec { container-type:inline-size; }
+.tk-densidade-select { display:none; }
+.tk-densidade-select > .select, .tk-densidade-gatilho { inline-size:100%; }
+@container (max-width:20em) {
+  .tk-densidade-seg { display:none; }
+  .tk-densidade-select { display:block; }
+}
 .tk-sec[hidden], .tk-amostras [hidden] { display:none !important; }
 .tk-cabeca { margin:0; }
 .tk-texto { margin:0; color:var(--muted-foreground); font-size:var(--text-sm); }

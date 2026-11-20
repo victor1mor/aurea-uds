@@ -26,8 +26,9 @@ const plano = (p: Record<string, unknown>) => StyleSheet.flatten(
 const raiz = resolve(__dirname, "../..");
 
 // O fio da casa: os números do `aurea.css:1039` (`inset-inline:15px`, `height:2px`, amarelo a 75%).
+// O lote 089 (0.75.0): na aba QUADRADA o fio vai de ponta a ponta (0); antes, 15 escrito à mão.
 const ehFio = (e: Record<string, unknown>) =>
-  e.position === "absolute" && e.height === 2 && e.left === 15 && e.right === 15 && e.bottom === 0
+  e.position === "absolute" && e.height === 2 && e.left === 0 && e.right === 0 && e.bottom === 0
   && e.backgroundColor === comOpacidade(t.color.primary, 0.75);
 
 // ── R-12 · Tabs variant="secondary" ─────────────────────────────────────────────────────────

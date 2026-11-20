@@ -18,7 +18,7 @@ import {createRoot} from "react-dom/client";
 import {createElement as h, Fragment, type ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
 import {DataGrid} from "../../../packages/react/dist/data-grid.js";
 import {colunasDaGrade} from "../site-b/comum/grade.mjs";
-import {Badge, Button, ColorSwatch, CommandPalette, Drawer, Icon, IconButton, NavList, SegmentedControl, Toggle, ToggleGroup,
+import {Badge, Button, ColorSwatch, CommandPalette, Drawer, Icon, IconButton, NavList, SegmentedControl, Select, Toggle, ToggleGroup,
   useAureaTheme, useToast} from "../../../packages/react/dist/index.js";
 // O botão "Theme" (14/10/2026) é a outra peça viva do topo: vai no mesmo pacote, que toda página já carrega, e
 // sob o MESMO provedor (ver `tema.tsx`).
@@ -277,6 +277,35 @@ function GradeViva({el, estatico, dados}: Grade) {
   return h(DataGrid, {label: dados.label, fit: true, dividers: true, data: dados.linhas, columns: colunas as never});
 }
 
+// O SELETOR DE DENSIDADE DA PÁGINA DE TOKENS EM TELA ESTREITA (o Victor, 19/11/2026: *"Vira um Select"*, e depois, olhando a
+// bancada, o `<select>` comum reprovado: *"o seletor está quadrado, não segue o padrão da Aurea, acho que pega do Windows"* —
+// a lista aberta do `<select>` é a do sistema). A página traz o `<select>` comum como reserva (sem JavaScript); aqui o
+// `Select` da Aurea, vivo, entra no lugar, por portal, sob o provedor do site. Os três botões e o `Select` ficam iguais:
+// escolher no `Select` aperta o botão da mesma densidade (quem troca a densidade continua sendo o `tokens.js`), e trocar
+// pelos botões muda o `Select` (o atributo `data-density` do escopo).
+function DensidadeViva() {
+  const [el] = useState(() => document.querySelector<HTMLElement>("[data-vivo-densidade]"));
+  const escopo = () => document.querySelector<HTMLElement>("[data-tk-densidade-escopo]");
+  const [valor, setValor] = useState(() => escopo()?.dataset.density ?? "comfortable");
+  useLayoutEffect(() => {
+    if (!el) return;
+    el.querySelector("select")?.remove();
+    el.dataset.ligada = "sim";
+    const alvo = escopo();
+    if (!alvo) return;
+    const ob = new MutationObserver(() => setValor(alvo.dataset.density ?? "comfortable"));
+    ob.observe(alvo, {attributes: true, attributeFilter: ["data-density"]});
+    return () => ob.disconnect();
+  }, [el]);
+  if (!el) return null;
+  return createPortal(h(Select, {"aria-label": "Density", size: "lg", className: "tk-densidade-gatilho", value: valor,
+    items: ["compact", "comfortable", "spacious"].map((d) => ({value: d, label: d[0].toUpperCase() + d.slice(1)})),
+    onValueChange: (v: string) => {
+      setValor(v);
+      document.querySelector<HTMLElement>(`[data-tk-densidade="${v}"]`)?.click();
+    }}), el);
+}
+
 export function montarSite(...extras: ReactNode[]) {
   const raiz = document.createElement("div");
   raiz.id = "site-search-root";
@@ -284,5 +313,5 @@ export function montarSite(...extras: ReactNode[]) {
   // SÍNCRONO (21/10/2026): o primeiro desenho acontece aqui, dentro do script, e não num quadro depois. As caixas vivas
   // que já estão na tela (`vivo.tsx`) trocam o desenho pronto pelo vivo antes de a página terminar de carregar.
   const r = createRoot(raiz);
-  flushSync(() => r.render(h(ProvedorDoSite, null, h(Busca), h(MenuDoCelular), h(TemaDoTopo), h(ChavesDeTema), h(AcoesDaPagina), temHooks ? h(PonteDosHooks) : null, h(GradesDoSite), ...extras)));
+  flushSync(() => r.render(h(ProvedorDoSite, null, h(Busca), h(MenuDoCelular), h(TemaDoTopo), h(ChavesDeTema), h(AcoesDaPagina), temHooks ? h(PonteDosHooks) : null, h(GradesDoSite), h(DensidadeViva), ...extras)));
 }

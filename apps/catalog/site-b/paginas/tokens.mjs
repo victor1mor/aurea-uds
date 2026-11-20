@@ -109,9 +109,14 @@ export default function tokens(site) {
         h(A.Card, {className: "tk-linhas"}, ...LETRAS.map(t => linha(`text-${t}`, h("span", {className: "tk-letra", style: {fontSize: `var(--text-${t})`}}, "One look"), "tk-linha-letra"))),
         h("div", {className: "tk-grade-4"}, ...FONTES.map(f => tk(`font-${f}`, h("span", {className: "tk-aa", style: {fontFamily: `var(--font-${f})`}}, "Aa"), "tk-fonte")))),
       secao("density", "07", "Controls and density", "3 densities", "Heights come from the density. On a touch screen every control floors at the touch height.",
-        h("span", {className: "segmented segmented-lg", "data-segment-style": "emphasis", role: "group", "aria-label": "Density"},
+        h("span", {className: "segmented segmented-lg tk-densidade-seg", "data-segment-style": "emphasis", role: "group", "aria-label": "Density"},
           ...["compact", "comfortable", "spacious"].map(d => h("button", {key: d, type: "button", "data-tk-densidade": d,
             className: d === "comfortable" ? "active" : undefined, "aria-pressed": d === "comfortable" ? "true" : "false"}, d[0].toUpperCase() + d.slice(1)))),
+        // Em tela estreita os três botões não cabem (o Victor, 19/11/2026: *"Vira um Select"*): o mesmo seletor como `Select`.
+        // O `Select` da Aurea acende aqui (`live/site.tsx`, `DensidadeViva`); o `<select>` comum é só a reserva sem JavaScript.
+        h("div", {className: "tk-densidade-select", "data-vivo-densidade": ""},
+          h("select", {className: "select select-lg", "aria-label": "Density", "data-tk-densidade-select": "", defaultValue: "comfortable"},
+            ...["compact", "comfortable", "spacious"].map(d => h("option", {key: d, value: d}, d[0].toUpperCase() + d.slice(1))))),
         h("div", {className: "tk-dois", "data-tk-densidade-escopo": "", "data-density": "comfortable"},
           h(A.Card, {className: "tk-linhas"}, ...ALTURAS.map(n => linha(n, barra(n)))),
           h(A.Card, {className: "tk-linhas"}, ...TOQUE.map(n => linha(n, barra(n)))))),

@@ -29,16 +29,23 @@
   new MutationObserver(function () { if (!escolhido) tema(daPagina()); })
     .observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
 
+  // A densidade escolhida: pelos três botões ou, em tela estreita, pelo `Select` (19/11/2026) — os dois ficam iguais.
+  var densidade = function (d) {
+    raiz.querySelector("[data-tk-densidade-escopo]").setAttribute("data-density", d);
+    todos("[data-tk-densidade]").forEach(function (x) { var on = x.dataset.tkDensidade === d; x.setAttribute("aria-pressed", on ? "true" : "false"); x.classList.toggle("active", on); });
+    var sel = raiz.querySelector("[data-tk-densidade-select]");
+    if (sel && sel.value !== d) sel.value = d;
+    valores();
+  };
+  raiz.addEventListener("change", function (e) {
+    if (e.target.matches && e.target.matches("[data-tk-densidade-select]")) densidade(e.target.value);
+  });
+
   raiz.addEventListener("click", function (e) {
     var b = e.target.closest("button");
     if (!b || !raiz.contains(b)) return;
     if (b.dataset.tkTema) { escolhido = true; tema(b.dataset.tkTema); return; }
-    if (b.dataset.tkDensidade) {
-      raiz.querySelector("[data-tk-densidade-escopo]").setAttribute("data-density", b.dataset.tkDensidade);
-      todos("[data-tk-densidade]").forEach(function (x) { var on = x === b; x.setAttribute("aria-pressed", on ? "true" : "false"); x.classList.toggle("active", on); });
-      valores();
-      return;
-    }
+    if (b.dataset.tkDensidade) { densidade(b.dataset.tkDensidade); return; }
     if (b.dataset.tkPlay) {
       var bola = raiz.querySelector('[data-tk-mov="' + b.dataset.tkPlay + '"]');
       var nome = b.dataset.tkPlay;

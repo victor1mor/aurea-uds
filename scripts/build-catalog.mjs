@@ -2505,6 +2505,13 @@ a.related-card:hover { border-color:transparent; }
 /* O ponto do item atual: o recuo sai do item, e não de uma margem negativa — o rótulo corta o que sai dele. */
 .site-shell > .sidebar .sidebar-item[aria-current] { padding-inline-start:calc(var(--space-2) + var(--space-05)); color:var(--foreground); font-weight:var(--weight-semibold); }
 .site-shell > .sidebar .sidebar-item[aria-current] > .sidebar-label::before { margin-inline:0 calc(var(--space-2) + var(--space-05)); }
+/* O TEXTO DO ATUAL NÃO ANDA (o achado 3 do 2-D, o Victor, 19/11/2026: *"Fundo cresce p/ esquerda"*): com o ponto, o texto
+   do item atual ia a 28 e o dos vizinhos ficava a 14. Agora o FUNDO do atual começa 14 antes (a largura cresce o mesmo),
+   o ponto cabe dentro dele, e o texto fica alinhado com os vizinhos. O atual sem ponto (o mês dos Releases) volta ao
+   recuo dos outros. */
+.site-shell > .sidebar .sidebar-item[aria-current]:not(:has(.site-mes-n)) { margin-inline-start:calc(-1 * (var(--space-3) + var(--space-05)));
+  inline-size:calc(100% + var(--space-3) + var(--space-05)); }
+.site-shell > .sidebar .sidebar-item[aria-current]:has(.site-mes-n) { padding-inline-start:calc(var(--space-3) + var(--space-05)); }
 /* O nome do grupo SEM número (as áreas que não são a Getting Started) começa na linha do texto dos itens, como antes do
    site B (01/11/2026): com a margem de sempre ele ficava 6 à esquerda (medido: 40 contra 46). */
 .site-shell > .sidebar p.sidebar-group-label { margin-inline:calc(var(--space-3) + var(--space-05)); }

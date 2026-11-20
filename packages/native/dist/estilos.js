@@ -332,18 +332,20 @@ export const fundoDoTom = (t, tom) => tom === "info" ? t.color.infoBg
  * O `aurea.css:1037-1039` põe este fio em TODOS os selecionados (`.is-selected`, botão alternado,
  * `.segmented button.active`, item ativo da lateral), e o comentário de lá diz por quê: *"Um
  * usuário aprende uma vez e reconhece em todo lugar (pedido do Victor, 24/07)."* Os três números
- * saem daquela linha, não daqui: altura 2 (fração de pixel borra), recuo 15 de cada lado
- * (`inset-inline:15px`), e o amarelo a 75% (cheio ele grita mais que o próprio rótulo).
+ * saem daquela linha, não daqui: altura 2 (fração de pixel borra), o recuo (abaixo), e o amarelo a
+ * 75% (cheio ele grita mais que o próprio rótulo).
  *
  * ⚠ **Morava dentro do `SegmentedControl` e mudou de casa em 01/10/2026**, quando a aba de
  * `<Tabs variant="secondary">` (R-12) passou a precisar do mesmo fio. Copiar os números para o
  * segundo arquivo é o defeito que o `CLAUDE.md` nomeia. Quem desenha o fio, desenha este.
  *
- * ⚠ Em peça estreita o recuo de 15 de cada lado zera a largura e o fio some — **e é o mesmo
- * comportamento da web**, onde `inset-inline:15px` numa caixa estreita não desenha nada.
+ * ⚠ **0.75.0 (o achado 2 do 2-D, o Victor, 19/11/2026: *"Aprovo as três"*):** o recuo de 15 era um número escrito à
+ * mão. Hoje só a aba `secondary` usa este fio, e a aba dela é QUADRADA: o fio vai de ponta a ponta (0), como na web
+ * (`.tabs-secondary:not([data-orientation="vertical"]) .tab[data-active]::after { inset-inline:0 }`) e em 9 de 12
+ * referências. Na cápsula da web, o recuo é o 16 (`--space-4`), junto com o texto.
  */
 export const fioDoEscolhido = (t) => ({
-    position: "absolute", left: 15, right: 15, bottom: 0, height: 2,
+    position: "absolute", left: 0, right: 0, bottom: 0, height: 2,
     ...canto(t.size.radiusFull), backgroundColor: comOpacidade(t.color.primary, 0.75),
 });
 /**

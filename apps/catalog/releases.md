@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.75.0
+
+November 19, 2026
+
+The selected underline starts with the text, secondary tabs underline edge to edge, and six inner dividers come back.
+
+[Read full release notes →](https://aureauds.dev/release-v0-75-0.md)
+
 ## v0.74.0
 
 November 19, 2026
