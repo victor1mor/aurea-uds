@@ -24,6 +24,10 @@
   line-height:var(--leading-relaxed); }
 .vs-item-tile { flex:none; inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
 .vs-item-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+/* O código dentro do cartão: a mesma pílula do código no texto (`_getting-started.css`). Sem ela, o `<code>` caía na
+   fonte de código do navegador, sem o fundo (achado no lote 091, 20/11/2026). */
+.vs-item code { padding:var(--space-05) var(--space-2); border-radius:var(--radius-full); background:var(--fill-2);
+  font-family:var(--font-code); font-size:.86em; font-weight:var(--weight-medium); }
 /* O nome de pacote não quebra no hífen ("@aurea-" e "uds/…" pareciam duas palavras). Só numa tela estreita, onde
    inteiro ele não cabe no cartão, ele volta a quebrar onde couber. */
 .vs-item code { white-space:nowrap; }

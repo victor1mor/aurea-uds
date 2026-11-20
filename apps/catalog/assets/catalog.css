@@ -10387,6 +10387,43 @@ a.blk-chip:hover { background:var(--primary); color:var(--primary-foreground); }
 /* Com o texto a 200% (o texto fica com ~150): a coluna das escolhas é "até 280", e o botão do endereço quebra a linha. */
 .llms-endereco > .btn { min-inline-size:0; max-inline-size:100%; block-size:auto; white-space:normal; }
 
+/* site-b/css/migration.css */
+/* A MIGRATION NO DESENHO B (lote 091, 20/11/2026). As medidas são as da Versioning (`versioning.css`), com o prefixo "mg-":
+   o mesmo número grande dos passos, os mesmos cartões com ladrilho e a mesma nota no fundo do palco. */
+
+/* As peças que flutuam: o "0.x → 1.0" maior, como o "major.minor.patch" da Versioning, e o cartão do "hoje", mais estreito. */
+.mg-peca-versao .gs-amarela { min-block-size:var(--control-h-md); font-size:var(--text-base); }
+.mg-peca-hoje { max-inline-size:calc(var(--space-24) * 2); }
+
+/* Os três passos: o número grande (48, código) em cima e o texto embaixo. */
+.mg-passos { margin-block-start:calc(var(--space-4) + var(--space-05)); }
+.mg-passo { display:flex; flex-direction:column; align-items:flex-start; gap:var(--space-3); padding:var(--space-5); }
+.mg-passo-n { font-family:var(--font-code); font-size:var(--text-5xl); font-weight:var(--weight-semibold); line-height:var(--leading-none);
+  letter-spacing:calc(var(--tracking-tight) * 2); }
+.mg-passo p { margin:0; font-size:var(--text-base); line-height:var(--leading-relaxed); }
+
+/* A nota do amarelo: o recheio da Versioning. */
+.mg-nota { display:flex; flex-direction:column; gap:var(--space-3); padding:var(--space-5); }
+.mg-nota .gs-p { margin:0; font-size:var(--text-base); }
+
+/* Os nomes que ficam: o ladrilho de 30 e o texto de 14, como os cartões da Versioning. */
+.mg-itens { gap:calc(var(--space-2) + var(--space-05)); }
+.mg-item { display:flex; align-items:flex-start; gap:var(--space-3); padding:var(--space-4) calc(var(--space-4) + var(--space-05)); font-size:var(--text-sm);
+  line-height:var(--leading-relaxed); }
+.mg-item-tile { flex:none; inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
+.mg-item-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+/* O código dentro do cartão: a mesma pílula do código no texto (`_getting-started.css`). Sem ela, o `<code>` caía na
+   fonte de código do navegador, sem o fundo (achado no lote 091, 20/11/2026). */
+.mg-passo code, .mg-item code { padding:var(--space-05) var(--space-2); border-radius:var(--radius-full); background:var(--fill-2);
+  font-family:var(--font-code); font-size:.86em; font-weight:var(--weight-medium); }
+/* O nome de código não quebra no hífen; só numa tela estreita ele volta a quebrar onde couber. */
+.mg-item code { white-space:nowrap; }
+@media (max-width:30em) { .mg-item code { white-space:normal; overflow-wrap:anywhere; } }
+
+@media (max-width:56.1875em) {
+  .mg-passos { grid-template-columns:minmax(0, 1fr); }
+}
+
 /* site-b/css/pattern.css */
 /* A PÁGINA DE UM PADRÃO E A DE UM BLOCO NO SITE B (02/11/2026): o palco, a caixa e os cartões são os da página de
    componente (`componente.css`) e os do grupo (`_grupo-1.css`); aqui só a caixa principal, sem a altura de tela quando
@@ -11091,6 +11128,10 @@ a.blk-chip:hover { background:var(--primary); color:var(--primary-foreground); }
   line-height:var(--leading-relaxed); }
 .vs-item-tile { flex:none; inline-size:calc(var(--space-7) + var(--space-05)); block-size:calc(var(--space-7) + var(--space-05)); }
 .vs-item-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+/* O código dentro do cartão: a mesma pílula do código no texto (`_getting-started.css`). Sem ela, o `<code>` caía na
+   fonte de código do navegador, sem o fundo (achado no lote 091, 20/11/2026). */
+.vs-item code { padding:var(--space-05) var(--space-2); border-radius:var(--radius-full); background:var(--fill-2);
+  font-family:var(--font-code); font-size:.86em; font-weight:var(--weight-medium); }
 /* O nome de pacote não quebra no hífen ("@aurea-" e "uds/…" pareciam duas palavras). Só numa tela estreita, onde
    inteiro ele não cabe no cartão, ele volta a quebrar onde couber. */
 .vs-item code { white-space:nowrap; }

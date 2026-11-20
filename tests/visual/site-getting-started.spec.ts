@@ -9,7 +9,7 @@ import {test, expect} from "@playwright/test";
 // o arranjo delas mudar.
 const base = process.env.BASE_SITE ?? "";
 const PAGINAS = ["getting-started", "docs-quick-start", "docs-design-principles", "docs-frameworks", "docs-showcase",
-  "docs-roadmap", "docs-versioning", "docs-colors", "docs-theming", "docs-dark-mode", "docs-styling", "docs-animation", "docs-composition",
+  "docs-roadmap", "docs-versioning", "docs-migration", "docs-colors", "docs-theming", "docs-dark-mode", "docs-styling", "docs-animation", "docs-composition",
   "docs-density", "docs-icons", "docs-rtl", "docs-accessibility",
   // UI for Agents (SITE-06)
   "docs-llms-txt", "docs-agent-skills", "docs-agents-md"];
