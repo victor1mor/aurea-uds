@@ -8,17 +8,20 @@ name: Release
 # para ESTE workflow, neste repositório, e o npm o troca por permissão de publicar. É por isso
 # que `id-token: write` abaixo não é enfeite: sem ele o `npm publish` cai em "need auth".
 #
-# ⚠ ANTES DE ESTE ARQUIVO SERVIR PARA ALGUMA COISA, dois passos fora daqui:
-#   1. em npmjs.com, para CADA um dos seis pacotes: Settings → Trusted publisher → GitHub
-#      Actions, com o repositório, o nome deste arquivo (`release.yml`) e o ambiente `npm`;
-#   2. em Settings → Environments do repositório, criar o ambiente `npm`. Ele é onde se põe a
-#      exigência de aprovação humana, que é o que impede um publish acidental.
+# A PUBLICAÇÃO EM ETAPA (lote 093, 20/11/2026; o D18 + 1.0-C, decidido pelo Victor em 19/11/2026: "Sim, seguir").
+# Este fluxo NÃO deixa nada público: ele manda os sete para a área de espera do npm (`npm stage publish`), e eles
+# só ficam públicos quando o Victor aprova, com 2FA, em npmjs.com → Staged Packages (ou `npm stage approve`, do
+# terminal dele). Nem a CI publica sem ele. Documentação: docs.npmjs.com/staged-publishing (editada em 10/11/2026).
 #
-# ⚠ E UMA COISA A CONFERIR NA HORA, em vez de presumir: a ADR-0013 registra que **provenance não
-# é gerada para repositório privado**. Se o npm recusar o trusted publisher por causa disso, o
-# caminho continua sendo o publish local com 2FA que a ADR descreve — e este arquivo espera o
-# repositório virar público. Não invente token de longa duração para contornar: a ADR rejeitou
-# esse caminho, e ele acaba em ≈01/2027 de qualquer forma.
+# ⚠ ANTES DE RODAR, três passos fora daqui, no MESMO dia (o npm dá 2 dias para a primeira publicação de um
+#   publicador confiável novo; sem ela, ele vence — docs.npmjs.com/trusted-publishers, editada em 06/10/2026):
+#   1. em Settings → Environments do repositório, o ambiente `npm` existir;
+#   2. em npmjs.com, para CADA um dos sete pacotes: Settings → Trusted Publisher → GitHub Actions, com
+#      `victor1mor` / `aurea-uds` / `release.yml` / ambiente `npm`, e nas ações permitidas SÓ a etapa
+#      (`npm stage publish`; o `npm publish` desmarcado);
+#   3. rodar este fluxo (Actions → Release → Run workflow, escrevendo PUBLICAR).
+#
+# O caminho de reserva continua sendo o `node scripts/publicar.mjs` do terminal do Victor.
 
 on:
   # DISPARO MANUAL, e de propósito. Publicar é definitivo — não se desfaz um `npm publish` depois
@@ -54,7 +57,9 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 24
-          cache: pnpm
+          # SEM CACHE (lote 093): a documentação do npm manda nunca usar cache na montagem que publica — um cache
+          # envenenado por outra rodada iria para o pacote. O `false` desliga também o cache automático do setup-node.
+          package-manager-cache: false
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.x"
@@ -66,6 +71,7 @@ jobs:
       # versão maior podia entrar no passo que publica sem ninguém ver. A linha 11 é a do terminal do Victor e a do piso
       # da ADR-0013; a 11.21.2 (03/11/2026) é a última correção dela. A 12 é salto maior (pede Node ^22.22.2 ou ^24.15.0)
       # e entra só deliberadamente, como as ações fixadas pelo commit no ci.yml.
+      # A PUBLICAÇÃO EM ETAPA (lote 093) pede npm >= 11.15.0 e Node >= 22.14.0: a 11.21.2 e o Node 24 atendem.
       - name: npm com suporte a OIDC
         run: |
           npm install -g npm@11.21.2
@@ -142,10 +148,10 @@ jobs:
       # ao do npm — mesma lista de arquivos e mesmo manifesto, mudando só a ORDEM das chaves. Ou
       # seja, uniformizar não muda o que os seis já publicavam.
       #
-      # ⚠ O `@aurea-uds/native` NÃO tem trusted publisher configurado no npm (o `CLAUDE.md`
-      # registra isso como pendência do Victor). Enquanto não tiver, este passo falha NELE — e
-      # falhar é o certo: melhor parar do que pular em silêncio um pacote que devia sair.
-      - name: Publicar os sete
+      # ⚠ Pacote SEM publicador confiável no npm faz este passo falhar NELE (em 20/11/2026 os sete
+      # estavam sem: os vencidos foram apagados, e os novos se criam no dia de rodar) — e falhar é
+      # o certo: melhor parar do que pular em silêncio um pacote que devia sair.
+      - name: Mandar os sete para a área de espera do npm
         run: |
           set -euo pipefail
           V="${{ steps.versao.outputs.v }}"
@@ -166,16 +172,30 @@ jobs:
             if tar xzOf "$tgz" package/package.json | grep -q '"workspace:'; then
               echo "::error::$nome levaria protocolo workspace: no tarball"; exit 1
             fi
-            echo "--- publicando $tgz"
-            npm publish "$tgz"
+            # EM ETAPA (lote 093): o pacote vai para a área de espera e só fica público com a aprovação do Victor.
+            # Medido em 20/11/2026: `npm stage publish --dry-run <arquivo>.tgz` aceita o tarball e diz "(staged)".
+            # Se ESTA versão já estiver na área de espera (uma rodada anterior parou no meio), o npm recusa: aprove ou
+            # rejeite a que está lá em npmjs.com → Staged Packages, e rode de novo — os já públicos são pulados acima.
+            echo "--- mandando $tgz para a área de espera"
+            npm stage publish "$tgz"
+            echo "$nome@$V" >> .tarballs/em-espera.txt
           done
 
-      - name: Conferir no registro
+      # A CONFERÊNCIA MUDOU (lote 093): o que está na área de espera não aparece no `npm view` antes da aprovação,
+      # e o `npm stage list` não aceita o token da CI. Então este passo diz, no resumo da rodada, o que foi para a
+      # espera e o que fazer; a conferência no registro é depois da aprovação (`npm view @aurea-uds/<pacote> version`).
+      - name: O que foi para a área de espera
         run: |
           set -euo pipefail
           V="${{ steps.versao.outputs.v }}"
-          for p in tokens icons fonts core contracts react native; do
-            saiu=$(npm view "@aurea-uds/$p" version)
-            echo "@aurea-uds/$p -> $saiu"
-            [ "$saiu" = "$V" ] || { echo "::error::@aurea-uds/$p está em $saiu, esperado $V"; exit 1; }
-          done
+          {
+            echo "## Aurea $V — na área de espera do npm"
+            echo
+            if [ -f .tarballs/em-espera.txt ]; then
+              echo "Esperando a aprovação (npmjs.com → Staged Packages, com 2FA):"
+              echo
+              sed 's/^/- /' .tarballs/em-espera.txt
+            else
+              echo "Nenhum pacote foi para a espera: os sete já estavam públicos nesta versão."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
