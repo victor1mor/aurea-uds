@@ -2167,10 +2167,9 @@
     },
     "AureaTextFont": {
       "module": "text",
-      "raw": "\"ui\" | \"editorial\" | \"code\" | \"heading\"",
+      "raw": "\"ui\" | \"code\" | \"heading\"",
       "union": [
         "ui",
-        "editorial",
         "code",
         "heading"
       ]
@@ -2316,12 +2315,12 @@
     },
     "AureaTokens": {
       "module": "tokens",
-      "raw": "{ theme: AureaThemeName; density: AureaDensity; brand: AureaBrand | null; color: Record<string, string>; size: Record<string, number>; font: { ui: AureaFontScale; editorial: AureaFontScale; code: AureaFontScale; heading: AureaFontScale; }; shadow: Record<string, AureaShadow>; shadowLayers: Record<string, readonly AureaShadow[]>; easing: Record<string, readonly [number, number, number, number]>; tracking: Record<string, number>; remInDp: number; }",
+      "raw": "{ theme: AureaThemeName; density: AureaDensity; brand: AureaBrand | null; color: Record<string, string>; size: Record<string, number>; font: { ui: AureaFontScale; code: AureaFontScale; heading: AureaFontScale; }; shadow: Record<string, AureaShadow>; shadowLayers: Record<string, readonly AureaShadow[]>; easing: Record<string, readonly [number, number, number, number]>; tracking: Record<string, number>; remInDp: number; }",
       "union": null
     },
     "AureaFontFamilies": {
       "module": "tokens",
-      "raw": "{ ui: AureaFontInput; editorial: AureaFontInput; code: AureaFontInput; heading?: AureaFontInput; }",
+      "raw": "{ ui: AureaFontInput; code: AureaFontInput; heading?: AureaFontInput; }",
       "union": null
     }
   },
@@ -7349,7 +7348,6 @@
               "type": "AureaTextFont",
               "values": [
                 "ui",
-                "editorial",
                 "code",
                 "heading"
               ]

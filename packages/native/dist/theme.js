@@ -19,7 +19,7 @@ function aplicarModos(t, m) {
         return t;
     const s = t.size;
     const size = m.texto === "lg" ? { ...s,
-        textXs: s.textXs + 2, textSm: s.textSm + 2, textMd: s.textMd + 2, textBase: s.textBase + 2,
+        textXs: s.textXs + 2, textSm: s.textSm + 2, textBase: s.textBase + 2,
         textLg: s.textLg + 2, textXl: s.textXl + 2, text2xl: s.text2xl + 2 } : s;
     const c = t.color;
     const color = m.alto ? { ...c,

@@ -29,20 +29,8 @@ describe("D3 · o Alert sem tom é o neutro", () => {
   });
 });
 
-// Achado da suíte do fim: o botão de ligar (`pressed`) sem tom continua o cinza — desligado amarelo seria igual ao ligado.
-describe("D3 · o botão de ligar sem tom continua neutro", () => {
-  test("`pressed` falso e verdadeiro: `btn-tertiary`; com `variant` pedida, a pedida", () => {
-    wrap(<>
-      <Button pressed={false} data-t="off">Favorito</Button>
-      <Button pressed data-t="on">Favorito</Button>
-      <Button pressed variant="primary" data-t="pedida">Favorito</Button>
-    </>);
-    expect(document.querySelector("[data-t=off]")).toHaveClass("btn-tertiary");
-    expect(document.querySelector("[data-t=on]")).toHaveClass("btn-tertiary");
-    expect(document.querySelector("[data-t=on]")).toHaveAttribute("aria-pressed", "true");
-    expect(document.querySelector("[data-t=pedida]")).toHaveClass("btn-primary");
-  });
-});
+// O botão de ligar (`pressed`) do Button saiu no 1.0-A (0.76.0): o teste do cinza dele saiu junto. O ligado é o
+// `Toggle`, que tem o cinza como padrão.
 
 // O Esc que a confirmação ignora não pode escapar para a janela de fora: dentro de um `Dialog`, as duas continuam abertas.
 describe("D3 · o Esc na confirmação dentro de uma janela", () => {

@@ -29,7 +29,7 @@ import {Button} from "@aurea-uds/react";
 
 - share opens the device's share sheet when the browser has one; otherwise it copies the link and says "Link copied" under the button, at the button's own size, and to the screen reader.
 
-- Stretch with fullWidth, announce a shortcut with kbd. For a button that STAYS on, the component is Toggle — `pressed` here is deprecated since 0.4.0 and goes away in 1.0.
+- Stretch with fullWidth, announce a shortcut with kbd. For a button that stays on, use Toggle.
 
 ## Examples
 
@@ -206,7 +206,6 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 | `type` | `button \| submit \| reset` | button | Deliberately not submit: a Cancel inside a form must not fire the main action. |
 | `fullWidth` | `boolean` | false | Stretches to the container. Only the width changes — the pill radius is invariant. |
 | `quiet` | `boolean` | false | Less weight: muted text one step smaller (12 on sm) — a site header's tool button, as the reference's "Theme". The box and the background stay the appearance's. |
-| `pressed` | `boolean` | — | DEPRECATED, removed in 1.0 — use <Toggle>. It only paints and announces (aria-pressed) and YOU keep the state; Toggle owns the state, returns onPressedChange and demands an accessible name when it is icon-only. On, it shows the raised capsule with a yellow underline. With pressed and no variant, appearance or tone, the button is tertiary, not primary: off and on stay different. |
 | `kbd` | `string \| string[]` | — | Shortcut shown as a Kbd inside the button and announced with aria-keyshortcuts. A list (["Ctrl", "K"]) shows one key cap per key and announces the combination (Control+K). |
 | `onPress` | `(e: MouseEvent) => void` | — | The press — the same name on the web and on native. It runs on a click and on Enter and Space. onClick still works, as an alias; with both, both run, onPress first. A disabled or loading button runs neither. |
 | `grow` | `boolean` | false | In a row (Cluster), takes an equal share with the other buttons that also grow. `fullWidth` asks for the whole line instead. |

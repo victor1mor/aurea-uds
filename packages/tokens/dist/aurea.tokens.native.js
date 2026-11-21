@@ -26,16 +26,6 @@ export const base = {
     "p3": "color(display-p3 0.9037 0.7031 0.0745)",
     "oklch": "oklch(0.795 0.184 86.047)"
   },
-  "brandYellowForeground": {
-    "hex": "#733e0a",
-    "p3": "color(display-p3 0.4225 0.2527 0.0951)",
-    "oklch": "oklch(0.421 0.095 57.708)"
-  },
-  "brandYellowText": {
-    "hex": "#826202",
-    "p3": "color(display-p3 0.4921 0.3908 0.1193)",
-    "oklch": "oklch(0.516 0.105 86.047)"
-  },
   "brandYellowInk": {
     "hex": "#18181b",
     "p3": "color(display-p3 0.0941 0.0941 0.1059)",
@@ -58,11 +48,9 @@ export const base = {
   },
   "fontUi": "Inter",
   "fontHeading": "Sora",
-  "fontEditorial": "Inter",
   "fontCode": "IBM Plex Mono",
   "textXs": 12,
   "textSm": 14,
-  "textMd": 14,
   "textBase": 16,
   "textLg": 18,
   "textXl": 20,

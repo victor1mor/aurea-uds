@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.76.0
+
+November 20, 2026
+
+The old names marked to leave before 1.0 are removed. Each one has a replacement, listed on the Migration page.
+
+[Read full release notes →](https://aureauds.dev/release-v0-76-0.md)
+
 ## v0.75.0
 
 November 19, 2026

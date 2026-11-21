@@ -127,7 +127,7 @@ describe("0-D e 0-E · os modos de leitura no AureaProvider do nativo", () => {
 
   it("textSize=\"lg\": cada degrau da letra sobe 2, do xs ao 2xl; o resto não muda", () => {
     render(<AureaProvider theme="light" textSize="lg"><Ler /></AureaProvider>);
-    for (const k of ["textXs", "textSm", "textMd", "textBase", "textLg", "textXl", "text2xl"] as const) expect(lidos!.size[k]).toBe(CLARO.size[k] + 2);
+    for (const k of ["textXs", "textSm", "textBase", "textLg", "textXl", "text2xl"] as const) expect(lidos!.size[k]).toBe(CLARO.size[k] + 2);
     expect(lidos!.size.text3xl).toBe(CLARO.size.text3xl);
     expect(lidos!.size.controlHMd).toBe(CLARO.size.controlHMd);
   });

@@ -1,23 +1,24 @@
 # Migration
 
-The old names that leave in 1.0, what replaces each one, and how to move before you upgrade.
+The old names removed in 0.76.0, ahead of 1.0, what replaces each one, and how to move before you upgrade.
 
-Version 1.0 removes a short list of old names. Each one has been deprecated for several versions and has a replacement. All of them still work in `0.x`, so you can move to the new names today and upgrade to 1.0 without anything breaking.
+Version 0.76.0 removes a short list of old names, ahead of 1.0. Each one had been deprecated for several versions and has a replacement. They all still work in 0.75.0 and earlier, so you can move to the new names first and then upgrade without anything breaking.
 
 ## Before you upgrade
 
-1. Upgrade all seven packages together, to the same version.
-2. Search your code for each old name below and replace it.
+1. While you are still on 0.75.0 or earlier, search your code for each old name below and replace it.
+2. Upgrade all seven packages together, to the same version.
 3. After the upgrade, run the TypeScript compiler: it flags every `pressed` left. It cannot flag a CSS variable, so search your stylesheets too.
 
-## What leaves in 1.0
+## What leaves in 0.76.0
 
 | Old name | Use instead | Where |
 |---|---|---|
 | `--text-md` | `--text-sm` | CSS |
 | `textMd` | `textSm` | React Native |
 | `--font-editorial` | `--font-ui` | CSS |
-| `font.editorial` | `font.ui` | React Native |
+| `font.editorial`, `font="editorial"` on `Text` and `fontFamilies.editorial` | `font.ui`, `font="ui"` and `fontFamilies.ui` | React Native |
+| `FONT_FAMILIES.editorial` | `FONT_FAMILIES.ui` | `@aurea-uds/fonts/native` |
 | `--brand-yellow-foreground` | `--brand-yellow-ink` | CSS |
 | `--brand-yellow-text` | `--foreground` | CSS |
 | `pressed` on `Button` and `IconButton` | `Toggle` | React |
@@ -26,11 +27,11 @@ Version 1.0 removes a short list of old names. Each one has been deprecated for 
 
 With `pressed`, the button only paints the on state and you keep the state yourself. `Toggle` keeps the state, reports each change and requires an accessible name when it shows only an icon.
 
-```tsx
-// Before
+```jsx
 <Button pressed={on} onPress={() => setOn(!on)}>Bold</Button>
+```
 
-// After
+```tsx
 <Toggle pressed={on} onPressedChange={setOn}>Bold</Toggle>
 ```
 

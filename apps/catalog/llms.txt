@@ -12,7 +12,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Showcase](https://aureauds.dev/docs-showcase.md): What is built with Aurea today, and how to get your project listed here.
 - [Roadmap](https://aureauds.dev/docs-roadmap.md): Where Aurea stands, and what has to be true before version 1.0.
 - [Versioning](https://aureauds.dev/docs-versioning.md): What can change in a minor release, what only changes in a major one, and how old names leave.
-- [Migration](https://aureauds.dev/docs-migration.md): The old names that leave in 1.0, what replaces each one, and how to move before you upgrade.
+- [Migration](https://aureauds.dev/docs-migration.md): The old names removed in 0.76.0, ahead of 1.0, what replaces each one, and how to move before you upgrade.
 - [Colors](https://aureauds.dev/docs-colors.md): The color roles of Aurea, what each one is for, and their values in the light and dark themes.
 - [Theming](https://aureauds.dev/docs-theming.md): How Aurea's tokens become CSS custom properties, the three attributes that switch them, and how to change a value.
 - [Dark Mode](https://aureauds.dev/docs-dark-mode.md): Switch between the light and dark themes, follow the system, and save the choice.
@@ -226,7 +226,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Button · With Kbd](https://aureauds.dev/pattern-button-with-kbd.md): The action and the key that fires it, together — shown and announced by aria-keyshortcuts.
 - [Button · Destructive with Kbd](https://aureauds.dev/pattern-button-destructive-with-kbd.md): Irreversible plus a shortcut: the key is spelled out so nobody discovers it by accident.
 - [Button · Inline action](https://aureauds.dev/pattern-button-inline-action.md): Inside a sentence, where a capsule would break the line: text, underlined at rest.
-- [Button · Pinned filter](https://aureauds.dev/pattern-button-pinned-filter.md): A filter that stays on: aria-pressed keeps the state visible and audible after the click.
+- [Button · Pinned filter](https://aureauds.dev/pattern-button-pinned-filter.md): A filter that stays on is a Toggle: it keeps the state, and aria-pressed keeps it visible and audible after the click.
 - [Button · Full width on a narrow screen](https://aureauds.dev/pattern-button-full-width-on-a-narrow-screen.md): Form footer on a phone: the action takes the whole width so the thumb cannot miss it.
 - [Button · With counter](https://aureauds.dev/pattern-button-with-counter.md): Action carrying a live number: the Badge rides inside the label, not beside it.
 - [Button · The two axes](https://aureauds.dev/pattern-button-the-two-axes.md): Appearance is how much weight the box has; tone is what the colour means. The old names are shortcuts for pairs — variant="danger-outline" and appearance/tone below render the same button.
@@ -239,7 +239,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Button · Reacting to the window instead](https://aureauds.dev/pattern-button-reacting-to-the-window-instead.md): The other mechanism, for when the decision really does belong to the application and not to the slot: the step follows the viewport. Same axis, same scale, and the prefix in the emitted class says which of the two is measuring — `md` is always 768px, and never means two things depending on where you read it. Resize the window to see it move; the example above will not move, because its containers have fixed widths.
 - [Button · Every family follows its own scale](https://aureauds.dev/pattern-button-every-family-follows-its-own-scale.md): The same three containers, now with one piece from each family. Control, mark and avatar come from the control height and step together; the icon inside the button comes from the glyph scale and does NOT follow the button — a large button with a huge glyph is not a larger button, it is a different drawing. The two behaviours in one picture are the point: sharing a step is measured, never assumed.
 - [ButtonGroup · Time range](https://aureauds.dev/pattern-buttongroup-time-range.md): Day, week, month over the same chart — the label names the set, the buttons the spans.
-- [ButtonGroup · Pinned filters](https://aureauds.dev/pattern-buttongroup-pinned-filters.md): Many-of-many: each button is its own toggle, so two can be on at once.
+- [ButtonGroup · Pinned filters](https://aureauds.dev/pattern-buttongroup-pinned-filters.md): Many-of-many is a ToggleGroup with multiple: each button is its own toggle, so two can be on at once.
 - [ButtonGroup · View switch](https://aureauds.dev/pattern-buttongroup-view-switch.md): One-of-many is not this component: SegmentedControl carries one value and one tab stop.
 - [ButtonGroup · Share actions](https://aureauds.dev/pattern-buttongroup-share-actions.md): Glyph-only set at the end of a card: one name for the group, one for each action.
 - [Calendar · Date picker](https://aureauds.dev/pattern-calendar-date-picker.md): There is no DatePicker component: a picker is a trigger plus a popover plus this calendar. Three parts you already have, and the trigger is what names the field.
@@ -309,7 +309,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [HoverCard · Previewing what a link leads to](https://aureauds.dev/pattern-hovercard-previewing-what-a-link-leads-to.md): `side="top"` when the trigger sits low in the viewport and a card below it would be cut off. The rest is unchanged: the preview saves a navigation, it does not replace one.
 - [IconButton · Row actions](https://aureauds.dev/pattern-iconbutton-row-actions.md): The trio at the end of a table row: open, edit, delete — quiet until the row matters.
 - [IconButton · Card header action](https://aureauds.dev/pattern-iconbutton-card-header-action.md): One glyph in the corner of a surface: the title keeps the space, the action keeps the reach.
-- [IconButton · Starred row](https://aureauds.dev/pattern-iconbutton-starred-row.md): State that survives the click: aria-pressed keeps it visible and audible.
+- [IconButton · Starred row](https://aureauds.dev/pattern-iconbutton-starred-row.md): State that survives the click is a Toggle with only an icon: aria-pressed keeps it visible and audible.
 - [IconButton · Canvas controls](https://aureauds.dev/pattern-iconbutton-canvas-controls.md): Zoom and fit in a toolbar: one tab stop for the set, a name for each glyph.
 - [IconButton · Dismiss a banner](https://aureauds.dev/pattern-iconbutton-dismiss-a-banner.md): The close of a notice: destructive ghost, so removing is available without being the point.
 - [Input · Email and password](https://aureauds.dev/pattern-input-email-and-password.md): The sign-in pair, with the autoComplete tokens the browser actually looks for.
@@ -463,6 +463,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.76.0](https://aureauds.dev/release-v0-76-0.md): The old names marked to leave before 1.0 are removed. Each one has a replacement, listed on the Migration page.
 - [v0.75.0](https://aureauds.dev/release-v0-75-0.md): The selected underline starts with the text, secondary tabs underline edge to edge, and six inner dividers come back.
 - [v0.74.0](https://aureauds.dev/release-v0-74-0.md): List items start where the corner curve ends — ListBox, the menus and NavList now line up with Sidebar.
 - [v0.73.0](https://aureauds.dev/release-v0-73-0.md): onPress on the web, and layout pieces that keep their size anywhere — alone, in a Stack, a Cluster or a Grid.

@@ -94,18 +94,6 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>,Ref
    *  chegavam ao `<a>` em tempo de execução, mas o tipo não os aceitava, e `target="_blank"` não
    *  compilava. */
   target?:React.HTMLAttributeAnchorTarget;rel?:string;download?:boolean|string;
-  /**
-   * @deprecated Use `<Toggle>` instead. Pesquisado em 18/08/2026 nas doze referências (entre
-   * elas o motor Base UI e o APG): **nenhuma** põe o estado de pressionado no botão comum — todas têm um
-   * componente separado, e o nosso é o `Toggle`. Manter os dois é dois caminhos para a mesma
-   * coisa, que é o "qual eu uso?" que denuncia recurso duplicado.
-   * A diferença de verdade: aqui VOCÊ guarda o estado e isto só pinta e anuncia; o `Toggle`
-   * guarda o estado (motor Base UI), devolve `onPressedChange` e cobra nome acessível quando
-   * é só ícone.
-   * @deprecatedSince 0.4.0 — sai na `1.0`. A Aurea está em `0.x`, onde o semver permite
-   * quebrar, e por isso este é o momento mais barato que vai existir.
-   */
-  pressed?:boolean;
   /** O atalho, à mostra e anunciado. Texto: uma caixinha só ("⌘K"). LISTA (15/10/2026): uma caixinha por tecla, como
    *  a busca da referência (`["Ctrl", "K"]`), e o leitor de tela recebe a combinação (`Control+K`). */
   kbd?:string|readonly string[];
@@ -176,12 +164,11 @@ const NOME_DA_TECLA:Record<string,string>={ctrl:"Control",control:"Control","⌃
   shift:"Shift","⇧":"Shift",alt:"Alt",option:"Alt","⌥":"Alt",enter:"Enter","↵":"Enter",esc:"Escape",escape:"Escape"};
 const atalhoAnunciado=(kbd:string|readonly string[]|undefined)=>typeof kbd==="string"?(kbd||undefined)
   :kbd&&kbd.length>0?kbd.map(k=>NOME_DA_TECLA[k.toLowerCase()]??k).join("+"):undefined;
-export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant:variantPedida,appearance,tone,size:sizePedido,quiet,loading,leadingIcon,trailingIcon,className,children,disabled:disabledPedido,type="button",href,fullWidth,grow,target,rel,download,pressed,kbd,onPress,onClick:onClickPedido,onClickCapture,"aria-disabled":ariaDisabled,render,share,glow,ring,...props},ref){
+export const Button=forwardRef<HTMLButtonElement,ButtonProps>(function Button({variant:variantPedida,appearance,tone,size:sizePedido,quiet,loading,leadingIcon,trailingIcon,className,children,disabled:disabledPedido,type="button",href,fullWidth,grow,target,rel,download,kbd,onPress,onClick:onClickPedido,onClickCapture,"aria-disabled":ariaDisabled,render,share,glow,ring,...props},ref){
 const grupo=React.useContext(GrupoDeBotoesContext);
 const onClick=juntarToque(onPress,onClickPedido);
-// O botão de ligar (`pressed`) sem tom continua o neutro de antes da 0.71.0: o ligado é que é amarelo, e o desligado
-// amarelo também ficaria igual a ele. O `Toggle` da referência também é neutro por padrão.
-const variant=variantPedida??grupo?.variant??(pressed!==undefined&&appearance===undefined&&tone===undefined?"tertiary":undefined);
+// O `pressed` saiu do Button no 1.0-A (0.76.0): o botão que fica ligado é o `Toggle`, que guarda o estado.
+const variant=variantPedida??grupo?.variant;
 const size=sizePedido??grupo?.size??"md";
 const disabled=disabledPedido??grupo?.disabled;
 // G-AXIS-04 — `size` aceita valor simples, responsivo por viewport ou adaptativo por container.
@@ -239,9 +226,9 @@ const eventos=(off||inerte)?{onClick:bloqueia,onClickCapture:bloqueia}:{onClick:
 // o bloqueio vem POR ÚLTIMO: nenhum `onClick` do elemento passa.
 if(render){const dele=(render.props??{}) as Record<string,unknown>;return cloneElement(render as ReactElement<Record<string,unknown>>,{ref,...shared,...props,...dele,className:cx(cls,dele.className as string|undefined),...((off||inerte)?{"aria-disabled":true,onClick:bloqueia,onClickCapture:bloqueia}:{onClick:dele.onClick??onClick,onClickCapture:dele.onClickCapture??onClickCapture}),children:inner})}
 if(href!==undefined)return <a ref={ref as unknown as React.Ref<HTMLAnchorElement>} className={cls} target={target} rel={rel} download={download} {...shared} {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>&RefAttributes<HTMLAnchorElement>)} {...(off?{"aria-disabled":true}:{href})} {...eventos}>{inner}</a>;
-return <button ref={ref} type={type} className={cls} disabled={off} aria-disabled={inerte||undefined} aria-pressed={pressed} {...shared} {...marcaDoShare} {...(inerte?{onClick:bloqueia as unknown as React.MouseEventHandler<HTMLButtonElement>,onClickCapture:bloqueia as unknown as React.MouseEventHandler<HTMLButtonElement>}:{onClick:aoClicarNoShare,onClickCapture})} {...props}>{inner}</button>});
+return <button ref={ref} type={type} className={cls} disabled={off} aria-disabled={inerte||undefined} {...shared} {...marcaDoShare} {...(inerte?{onClick:bloqueia as unknown as React.MouseEventHandler<HTMLButtonElement>,onClickCapture:bloqueia as unknown as React.MouseEventHandler<HTMLButtonElement>}:{onClick:aoClicarNoShare,onClickCapture})} {...props}>{inner}</button>});
 
-// Toggle (Lote 1 do BUILDING.md). NÃO é o `pressed` do Button: aquele só ANUNCIA o estado e
+// Toggle (Lote 1 do BUILDING.md). NÃO era o `pressed` do Button (que saiu no 1.0-A, 0.76.0): aquele só ANUNCIAVA o estado e
 // quem controla é o consumidor; este é o controle de dois estados de verdade — o Base UI
 // mantém o estado, entrega `data-pressed` e o `aria-pressed` correto, e suporta não-controlado.
 // A pele reusa o idioma que a Aurea já tem para "isto está selecionado": o mesmo par de tokens
@@ -294,7 +281,7 @@ return itens.some(item=>{
   return temConteudoVisivel(p.children);
 });
 }
-// ESTE é o toggle da Aurea. O `pressed` do `Button` está DEPRECIADO em favor dele (0.4.0,
+// ESTE é o toggle da Aurea. O `pressed` do `Button` foi DEPRECIADO em favor dele (0.4.0) e saiu no 1.0-A (0.76.0,
 // sai na 1.0): as doze referências pesquisadas em 18/08/2026 têm componente separado, e
 // nenhuma põe o estado no botão comum.
 // E a REGRA QUE FALTAVA ESTAR ESCRITA AQUI, de uma das referências e do APG: **o rótulo não muda
@@ -334,7 +321,7 @@ export const IconButton=forwardRef<HTMLButtonElement,IconButtonProps>(function I
 // dela). O nome acessível vem sozinho ("Close"/"Fechar"), e quem fecha outra coisa diz o quê
 // (`label="Fechar aviso"`). No toque, a área continua de 44 (`--target-min`) sem o círculo crescer.
 // Fechado como o dela: sem cor, tamanho nem ícone de fora — `children` troca o X, como lá.
-export interface CloseButtonProps extends Omit<ButtonProps,"quiet"|"variant"|"appearance"|"tone"|"size"|"loading"|"leadingIcon"|"trailingIcon"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"fullWidth"|"grow"|"pressed"|"share"|"glow"|"ring">{
+export interface CloseButtonProps extends Omit<ButtonProps,"quiet"|"variant"|"appearance"|"tone"|"size"|"loading"|"leadingIcon"|"trailingIcon"|"href"|"target"|"rel"|"download"|"render"|"kbd"|"fullWidth"|"grow"|"share"|"glow"|"ring">{
   /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
   label?:string}
 export const CloseButton=forwardRef<HTMLButtonElement,CloseButtonProps>(function CloseButton({label,className,children,...props},ref){
@@ -417,9 +404,12 @@ export function ToolbarSeparator({className,...props}:HTMLAttributes<HTMLDivElem
 // Sem `share` (GAR-14): o caminho pelo motor da barra não foi provado — entra quando for medido.
 // Interface com nome (e não o `Omit` solto no tipo): é o que o gerador da superfície da API lê.
 export interface ToolbarButtonProps extends Omit<ButtonProps,"share">{
+  /** Ligado ou desligado, anunciado como `aria-pressed`: o botão de uma barra de formatação (negrito, itálico). Era o
+   *  `pressed` do `Button`, que saiu no 1.0-A (0.76.0); aqui ele continua, igual. */
+  pressed?:boolean;
   /** A cor do ligado (ADR-0084): `brand` (o padrão), `neutral` ou `contrast`. Vale quando o botão está ligado (`aria-pressed`). */
   pressedStyle?:TogglePressedStyle}
-export const ToolbarButton=forwardRef<HTMLButtonElement,ToolbarButtonProps>(function ToolbarButton({variant="ghost",pressedStyle,...props},ref){return <BaseToolbar.Button ref={ref} disabled={props.disabled} render={<Button variant={variant} data-pressed-style={pressedStyle} {...props}/>}/>});
+export const ToolbarButton=forwardRef<HTMLButtonElement,ToolbarButtonProps>(function ToolbarButton({variant="ghost",pressedStyle,pressed,...props},ref){return <BaseToolbar.Button ref={ref} disabled={props.disabled} render={<Button variant={variant} data-pressed-style={pressedStyle} aria-pressed={pressed} {...props}/>}/>});
 
 // TOGGLE GROUP — vários Toggle com estado compartilhado e navegação por seta entre eles.
 //

@@ -23,7 +23,7 @@ const ICONES = criarRegistroDeIcones({
   "calendar": Glifo as never, "plus": Glifo as never, "minus": Glifo as never, "check": Check as never,
 });
 // Uma família por peso, como no aparelho: é a família que diz o peso no nativo, não o `fontWeight`.
-const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, editorial: {}, code: {}};
+const FONTES = {ui: {"400": "Ui400", "500": "Ui500", "600": "Ui600", "700": "Ui700"}, code: {}};
 type Estilo = Record<string, unknown>;
 const plano = (s: unknown) => (StyleSheet.flatten(s as never) ?? {}) as Estilo;
 const montar = (no: React.ReactNode, density: "compact" | "comfortable" | "spacious" = "comfortable") => {

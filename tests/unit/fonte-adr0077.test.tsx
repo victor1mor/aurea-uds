@@ -142,10 +142,10 @@ describe("ADR-0077 · os arquivos, lidos por dentro", () => {
 });
 
 describe("ADR-0077 · os tokens e a regra dos títulos", () => {
-  test("texto Inter, título Sora, código IBM Plex Mono; o editorial é apelido do texto", () => {
+  test("texto Inter, título Sora, código IBM Plex Mono; o editorial saiu (1.0-A, 0.76.0)", () => {
     expect(tokens).toContain("--font-ui:Inter,");
     expect(tokens).toContain("--font-heading:Sora,Inter,");
-    expect(tokens).toContain("--font-editorial:Inter,");
+    expect(tokens).not.toContain("--font-editorial");
     expect(tokens).toContain('--font-code:"IBM Plex Mono",');
     expect(tokens).not.toMatch(/Atkinson/);
   });

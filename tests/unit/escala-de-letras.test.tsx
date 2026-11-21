@@ -15,9 +15,8 @@ describe("ADR-0050 · a escala de letras é a da referência", () => {
       valor("text-xs"), valor("text-sm"), valor("text-base"), valor("text-lg"), valor("text-xl"),
       valor("text-2xl"), valor("text-3xl"), valor("text-4xl"), valor("text-5xl"),
     ]).toEqual(["0.75rem", "0.875rem", "1rem", "1.125rem", "1.25rem", "1.5rem", "1.875rem", "2.25rem", "3rem"]);
-    // `md` não existe na escala da referência. Desde a R-10 (01/10/2026) ele é APELIDO do `sm` (14), e não
-    // um número próprio que coincidia: cada nome da escala, um tamanho. Sai na 1.0.
-    expect(valor("text-md")).toBe("var(--text-sm)");
+    // `md` não existe na escala da referência. Foi apelido do `sm` desde a R-10 (01/10/2026) e saiu no 1.0-A (0.76.0).
+    expect(valor("text-md")).toBeUndefined();
   });
 
   test("web: a peça é 14 e o apoio 12; o botão pequeno NÃO desce para 12 (na referência ele é 14)", () => {

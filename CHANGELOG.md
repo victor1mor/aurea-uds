@@ -382,6 +382,36 @@ como deveria funcionar"*.
 
 ---
 
+## [0.76.0] — 2026-11-20
+
+**O 1.0-A: os nomes marcados para sair saem** — o *"pode, faça o 1.0-A"* do Victor (20/11/2026), com a lista do
+levantamento de 19/11/2026 e o `pressed` decidido: *"Sai na 1.0, usar o Toggle"*. Saem na 0.76.0, antes da 1.0, como o
+plano manda (Fase 3). A página Migration diz o que fica no lugar de cada um.
+
+### ⚠ Pode quebrar a compilação
+
+- **`pressed` sai do `Button` e do `IconButton` (web)** — e, com eles, do `ThemeToggle`, que o herdava. O botão que fica
+  ligado é o `Toggle`. O `ToolbarButton` continua com o `pressed` dele, igual (agora é dele, e não do `Button`).
+- **`--text-md`** (CSS) e **`textMd`** (nativo) saem; o `--text-sm` e o `textSm` são os mesmos 14.
+- **`--font-editorial`** (CSS) e o papel **`editorial`** do nativo saem: `font.editorial` nos tokens, `font="editorial"` no
+  `Text` (o `AureaTextFont`) e `fontFamilies.editorial` no `AureaProvider` (o `AureaFontFamilies`). O `ui` é a mesma Inter.
+- **`FONT_FAMILIES.editorial`** sai do `@aurea-uds/fonts/native` (e o `"editorial"` do `AureaFontRole`).
+- **`--brand-yellow-foreground`** e **`--brand-yellow-text`** saem. No lugar: `--brand-yellow-ink` e `--foreground`.
+
+### Site
+
+- **Os cinco exemplos que usavam o `pressed`** (o filtro do `Button`, os filtros do `ButtonGroup`, a estrela do
+  `IconButton` nas Patterns e o "Toggle" da página do `IconButton`) passam ao `Toggle` e ao `ToggleGroup`. Medidos
+  antes e depois, pixel a pixel, no escuro e no claro: iguais (os só de ícone com `variant="ghost"`, o fundo de antes).
+- **A página Migration** fala da 0.76.0 (*"saem na 1.0"* e *"ainda funcionam na 0.x"* eram do lote 091, de antes do
+  1.0-A), e a tabela ganha o `Text`, o `fontFamilies` e o `FONT_FAMILIES` do nativo.
+- **A página de cores** e a de tokens deixam de listar o que saiu; a do `Text` do nativo também.
+
+### Quem cobra
+
+- `tests/unit/lote-092-nomes-que-saem.test.tsx` — reprova 8 de 9 no código da 0.75.0 (medido); o nono prova que o
+  `ToolbarButton` continua ligando.
+
 ## [0.75.0] — 2026-11-19
 
 ✅ **Publicada em 20/11/2026, entre 06:40 e 07:01 (Brasília, medido no npm: seis pacotes entre 06:40 e 06:53 e o `native`

@@ -16,16 +16,13 @@ pnpm add @aurea-uds/fonts
 import "@aurea-uds/fonts/css";  // BEFORE @aurea-uds/core/css
 ```
 
-Order matters: the core only declares `--font-ui`, `--font-heading`, `--font-editorial` and `--font-code`,
+Order matters: the core only declares `--font-ui`, `--font-heading` and `--font-code`,
 and this package is what points those names to real files. Import the core first and the first paint
 falls back to a system font.
 
 Headings get Sora on their own: the core applies `--font-heading` to every `h1` to `h6` through a
 zero-specificity rule. A font you set on the heading itself wins over it; a font the heading only
 inherits from its parent (`body{font-family:…}`) loses.
-
-⚠ `--font-editorial` has no font of its own: it points to the text font (Inter today). It still exists
-only so that code using it does not break; it is removed in `1.0`.
 
 ## In React Native
 

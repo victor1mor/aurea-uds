@@ -41,18 +41,6 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Re
     target?: React.HTMLAttributeAnchorTarget;
     rel?: string;
     download?: boolean | string;
-    /**
-     * @deprecated Use `<Toggle>` instead. Pesquisado em 18/08/2026 nas doze referências (entre
-     * elas o motor Base UI e o APG): **nenhuma** põe o estado de pressionado no botão comum — todas têm um
-     * componente separado, e o nosso é o `Toggle`. Manter os dois é dois caminhos para a mesma
-     * coisa, que é o "qual eu uso?" que denuncia recurso duplicado.
-     * A diferença de verdade: aqui VOCÊ guarda o estado e isto só pinta e anuncia; o `Toggle`
-     * guarda o estado (motor Base UI), devolve `onPressedChange` e cobra nome acessível quando
-     * é só ícone.
-     * @deprecatedSince 0.4.0 — sai na `1.0`. A Aurea está em `0.x`, onde o semver permite
-     * quebrar, e por isso este é o momento mais barato que vai existir.
-     */
-    pressed?: boolean;
     /** O atalho, à mostra e anunciado. Texto: uma caixinha só ("⌘K"). LISTA (15/10/2026): uma caixinha por tecla, como
      *  a busca da referência (`["Ctrl", "K"]`), e o leitor de tela recebe a combinação (`Control+K`). */
     kbd?: string | readonly string[];
@@ -124,7 +112,7 @@ export interface IconButtonProps extends Omit<ButtonProps, "children"> {
     icon: AureaIcon;
 }
 export declare const IconButton: React.ForwardRefExoticComponent<Omit<IconButtonProps, "ref"> & RefAttributes<HTMLButtonElement>>;
-export interface CloseButtonProps extends Omit<ButtonProps, "quiet" | "variant" | "appearance" | "tone" | "size" | "loading" | "leadingIcon" | "trailingIcon" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "fullWidth" | "grow" | "pressed" | "share" | "glow" | "ring"> {
+export interface CloseButtonProps extends Omit<ButtonProps, "quiet" | "variant" | "appearance" | "tone" | "size" | "loading" | "leadingIcon" | "trailingIcon" | "href" | "target" | "rel" | "download" | "render" | "kbd" | "fullWidth" | "grow" | "share" | "glow" | "ring"> {
     /** O nome que o leitor de tela anuncia. Padrão: a frase `close` ("Close"/"Fechar"). */
     label?: string;
 }
@@ -162,6 +150,9 @@ export declare function ToolbarGroup({ label, className, ...props }: HTMLAttribu
 }): React.JSX.Element;
 export declare function ToolbarSeparator({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;
 export interface ToolbarButtonProps extends Omit<ButtonProps, "share"> {
+    /** Ligado ou desligado, anunciado como `aria-pressed`: o botão de uma barra de formatação (negrito, itálico). Era o
+     *  `pressed` do `Button`, que saiu no 1.0-A (0.76.0); aqui ele continua, igual. */
+    pressed?: boolean;
     /** A cor do ligado (ADR-0084): `brand` (o padrão), `neutral` ou `contrast`. Vale quando o botão está ligado (`aria-pressed`). */
     pressedStyle?: TogglePressedStyle;
 }

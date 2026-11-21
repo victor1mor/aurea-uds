@@ -30,7 +30,7 @@ export type AureaTextSize =
 /** Os pesos que o pacote de fontes entrega (o 800 desde a 0.28.0, GAR-16). Ver ADR-0039: cada peso é uma FAMÍLIA. */
 export type AureaTextWeight = 400 | 500 | 600 | 700 | 800;
 /** Papel de tipografia — os `--font-*` da Aurea (o `heading` desde a 0.28.0). */
-export type AureaTextFont = "ui" | "editorial" | "code" | "heading";
+export type AureaTextFont = "ui" | "code" | "heading";
 /** O que a cor SIGNIFICA. Mesmo vocabulário do `tone` do Button (ADR-0044). */
 export type AureaTextTone =
   "default" | "muted" | "subtle" | "primary" | "link" | "danger" | "success" | "warning" | "info";

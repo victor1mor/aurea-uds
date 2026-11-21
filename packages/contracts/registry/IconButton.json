@@ -230,12 +230,6 @@
       "description": "The element drawn instead of the <button>/<a> — your router's link, e.g. render={<Link href=\"/reports\" />}. It receives the button's skin, content (icons, label, shortcut) and attributes; the destination is its own. Disabled or loading, its click is blocked too, like the disabled link."
     },
     {
-      "name": "pressed",
-      "type": "boolean",
-      "default": "—",
-      "description": "Deprecated, removed in 1.0: paints and announces aria-pressed while YOU keep the state. Use Toggle, which keeps the state and demands an accessible name when it is icon-only."
-    },
-    {
       "name": "share",
       "type": "{ url?: string; title?: string; text?: string }",
       "default": "—",

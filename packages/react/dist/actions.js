@@ -111,12 +111,11 @@ const NOME_DA_TECLA = { ctrl: "Control", control: "Control", "⌃": "Control", c
     shift: "Shift", "⇧": "Shift", alt: "Alt", option: "Alt", "⌥": "Alt", enter: "Enter", "↵": "Enter", esc: "Escape", escape: "Escape" };
 const atalhoAnunciado = (kbd) => typeof kbd === "string" ? (kbd || undefined)
     : kbd && kbd.length > 0 ? kbd.map(k => NOME_DA_TECLA[k.toLowerCase()] ?? k).join("+") : undefined;
-export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, quiet, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, pressed, kbd, onPress, onClick: onClickPedido, onClickCapture, "aria-disabled": ariaDisabled, render, share, glow, ring, ...props }, ref) {
+export const Button = forwardRef(function Button({ variant: variantPedida, appearance, tone, size: sizePedido, quiet, loading, leadingIcon, trailingIcon, className, children, disabled: disabledPedido, type = "button", href, fullWidth, grow, target, rel, download, kbd, onPress, onClick: onClickPedido, onClickCapture, "aria-disabled": ariaDisabled, render, share, glow, ring, ...props }, ref) {
     const grupo = React.useContext(GrupoDeBotoesContext);
     const onClick = juntarToque(onPress, onClickPedido);
-    // O botão de ligar (`pressed`) sem tom continua o neutro de antes da 0.71.0: o ligado é que é amarelo, e o desligado
-    // amarelo também ficaria igual a ele. O `Toggle` da referência também é neutro por padrão.
-    const variant = variantPedida ?? grupo?.variant ?? (pressed !== undefined && appearance === undefined && tone === undefined ? "tertiary" : undefined);
+    // O `pressed` saiu do Button no 1.0-A (0.76.0): o botão que fica ligado é o `Toggle`, que guarda o estado.
+    const variant = variantPedida ?? grupo?.variant;
     const size = sizePedido ?? grupo?.size ?? "md";
     const disabled = disabledPedido ?? grupo?.disabled;
     // G-AXIS-04 — `size` aceita valor simples, responsivo por viewport ou adaptativo por container.
@@ -181,7 +180,7 @@ export const Button = forwardRef(function Button({ variant: variantPedida, appea
     }
     if (href !== undefined)
         return _jsx("a", { ref: ref, className: cls, target: target, rel: rel, download: download, ...shared, ...props, ...(off ? { "aria-disabled": true } : { href }), ...eventos, children: inner });
-    return _jsx("button", { ref: ref, type: type, className: cls, disabled: off, "aria-disabled": inerte || undefined, "aria-pressed": pressed, ...shared, ...marcaDoShare, ...(inerte ? { onClick: bloqueia, onClickCapture: bloqueia } : { onClick: aoClicarNoShare, onClickCapture }), ...props, children: inner });
+    return _jsx("button", { ref: ref, type: type, className: cls, disabled: off, "aria-disabled": inerte || undefined, ...shared, ...marcaDoShare, ...(inerte ? { onClick: bloqueia, onClickCapture: bloqueia } : { onClick: aoClicarNoShare, onClickCapture }), ...props, children: inner });
 });
 function temConteudoVisivel(children) {
     const itens = React.Children.toArray(children);
@@ -204,7 +203,7 @@ function temConteudoVisivel(children) {
         return temConteudoVisivel(p.children);
     });
 }
-// ESTE é o toggle da Aurea. O `pressed` do `Button` está DEPRECIADO em favor dele (0.4.0,
+// ESTE é o toggle da Aurea. O `pressed` do `Button` foi DEPRECIADO em favor dele (0.4.0) e saiu no 1.0-A (0.76.0,
 // sai na 1.0): as doze referências pesquisadas em 18/08/2026 têm componente separado, e
 // nenhuma põe o estado no botão comum.
 // E a REGRA QUE FALTAVA ESTAR ESCRITA AQUI, de uma das referências e do APG: **o rótulo não muda
@@ -283,7 +282,7 @@ export function Toolbar({ orientation, label, className, pressedStyle, tone = "d
 }
 export function ToolbarGroup({ label, className, ...props }) { return _jsx(BaseToolbar.Group, { "aria-label": label, className: cx("toolbar-group", className), ...props }); }
 export function ToolbarSeparator({ className, ...props }) { return _jsx(BaseToolbar.Separator, { className: cx("toolbar-sep", className), ...props }); }
-export const ToolbarButton = forwardRef(function ToolbarButton({ variant = "ghost", pressedStyle, ...props }, ref) { return _jsx(BaseToolbar.Button, { ref: ref, disabled: props.disabled, render: _jsx(Button, { variant: variant, "data-pressed-style": pressedStyle, ...props }) }); });
+export const ToolbarButton = forwardRef(function ToolbarButton({ variant = "ghost", pressedStyle, pressed, ...props }, ref) { return _jsx(BaseToolbar.Button, { ref: ref, disabled: props.disabled, render: _jsx(Button, { variant: variant, "data-pressed-style": pressedStyle, "aria-pressed": pressed, ...props }) }); });
 export function ToggleGroup({ value, defaultValue, onValueChange, multiple, orientation, disabled, label, className, children, size, fullWidth, detached, pressedStyle }) {
     const ancora = useRef(null);
     const resolvida = useValorResponsivo(orientation, "horizontal", ancora);

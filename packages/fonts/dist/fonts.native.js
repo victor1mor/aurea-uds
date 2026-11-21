@@ -58,13 +58,6 @@ const FONT_FAMILIES = {
     "400": "IBMPlexMono",
     "500": "IBMPlexMono-Medm",
     "600": "IBMPlexMono-SmBld"
-  },
-  "editorial": {
-    "400": "Inter-Regular",
-    "500": "Inter-Medium",
-    "600": "Inter-SemiBold",
-    "700": "Inter-Bold",
-    "800": "Inter-ExtraBold"
   }
 };
 

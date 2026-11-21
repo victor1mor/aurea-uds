@@ -56,7 +56,7 @@ describe("Text — a primitiva que a web não precisou ter", () => {
     const mapa = {
       ui: {"400": "Ui-Regular", "500": "Ui-Medium", "600": "Ui-SemiBold", "700": "Ui-Bold",
            "400i": "Ui-Italic"},
-      editorial: {"500": "Ed-Medium"}, code: {"400": "Co-Regular"},
+      code: {"400": "Co-Regular"},
     };
     render(
       <AureaProvider fontFamilies={mapa}>
@@ -87,7 +87,7 @@ describe("Text — a primitiva que a web não precisou ter", () => {
 
   // DEFEITO: inclinar o desenho reto em vez de usar o itálico DESENHADO.
   it("italic usa a fonte itálica, não fontStyle", () => {
-    const mapa = {ui: {"400": "Ui-Regular", "400i": "Ui-Italic"}, editorial: {}, code: {}};
+    const mapa = {ui: {"400": "Ui-Regular", "400i": "Ui-Italic"}, code: {}};
     render(<AureaProvider fontFamilies={mapa}><Text italic>x</Text></AureaProvider>);
     const s = estilo("Text");
     expect(s.fontFamily).toBe("Ui-Italic");

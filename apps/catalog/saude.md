@@ -12,7 +12,7 @@ What the library promises, measured. The site is rebuilt from the measurement, a
 | … as the default value, which every example without the prop shows | 104 |  |
 | … in a pattern of the same component | 33 |  |
 | Every piece the native package exports has a page | 79 of 79 | OK |
-| Every value of the native props is shown in an example | 484 of 484 | OK |
+| Every value of the native props is shown in an example | 483 of 483 | OK |
 
 ## The last 30 checks
 

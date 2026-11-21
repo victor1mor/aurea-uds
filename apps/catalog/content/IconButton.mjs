@@ -1,5 +1,5 @@
 import {createElement as h} from "react";
-import {IconButton, Tooltip, ButtonGroup} from "../../../packages/react/dist/index.js";
+import {IconButton, Tooltip, ButtonGroup, Toggle} from "../../../packages/react/dist/index.js";
 import {cada} from "./_eixos.mjs";
 
 // A fileira que quebra centraliza cada linha, como a do `_eixos.mjs` (bloco 1, 23/10/2026).
@@ -18,7 +18,7 @@ export default {
     "label is required, not optional: the API refuses to let you ship a nameless control.",
     "Square target — the width follows the same density token as the height, at every size.",
     "Softly squared, not pill: a round-ended square would read as a dot next to a text button.",
-    "Every Button variant and state applies, including loading, href and pressed.",
+    "Every Button variant and state applies, including loading and href.",
     "Pair it with Tooltip when the glyph alone is not obvious; the tooltip repeats the label.",
   ],
 
@@ -71,14 +71,14 @@ export default {
     },
     {
       title: "Toggle",
-      description: "aria-pressed works here too: a pinned view, a muted channel, a starred row.",
+      description: "An icon button that stays on (a pinned view, a muted channel, a starred row) is a Toggle with only an icon.",
       code: [
-        '<IconButton icon="star" label="Star" pressed />',
-        '<IconButton icon="push-pin" label="Pin" pressed={false} />',
+        '<Toggle icon="star" label="Star" variant="ghost" defaultPressed />',
+        '<Toggle icon="push-pin" label="Pin" variant="ghost" />',
       ].join("\n"),
       render: () => h("div", {style: row},
-        h(IconButton, {icon: "star", label: "Star", pressed: true}),
-        h(IconButton, {icon: "push-pin", label: "Pin", pressed: false})),
+        h(Toggle, {icon: "star", label: "Star", variant: "ghost", defaultPressed: true}),
+        h(Toggle, {icon: "push-pin", label: "Pin", variant: "ghost"})),
     },
     {
       title: "Loading and disabled",
