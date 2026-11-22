@@ -234,6 +234,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.73.0` | O `onPress` na web, com o mesmo nome do nativo (o `onClick` continua, como apelido), no `Button`, no `IconButton`, no `ToolbarButton`, no `CloseButton`, no `Card` e nos itens de oito peças de navegação e menu — o DOC-11; e as peças de leiaute independentes: a `Sidebar` fora do `AppShell` com a largura dela, o `SegmentedControl` do tamanho do conteúdo numa coluna e o `TableOfContents` que estica sem empurrar o vizinho — o PV-14, pedido #146. **Publicada em 18/11/2026** (entre 17:41 e 17:51, Brasília, medido no npm), pelo terminal do Victor |
 | `0.74.0` | Onde os itens de lista começam (o achado 1 do 2-D): a `ListBox`, o menu e a `NavList` começam a 16 da borda, como a `Sidebar`, nos dois lados, no fim da curva de 18; o título da seção e a marca do escolhido acompanham; no nativo, o item do `DropdownMenu` também — pedido #148. **Publicada em 19/11/2026** (entre 21:29 e 21:39, Brasília, medido no npm), pelo terminal do Victor |
 | `0.75.0` | O traço do escolhido e as divisões de dentro: o traço de baixo do escolhido começa a 16, com o texto, e nas `Tabs` `secondary` vai de ponta a ponta (web e nativo); seis divisões de dentro voltam com a linha clara (o `hr`, as fileiras e a citação do `Prose`, o cabeçalho da `NotificationCenter`, a parte legal da `Section variant="footer"` e as ações do menu do celular do `Header`) — o achado 2 do 2-D e o resto da ADR-0072, pedido #149. **Publicada em 20/11/2026** (entre 06:40 e 07:01, Brasília, medido no npm), pelo terminal do Victor |
+| `0.76.0` | O 1.0-A: os nomes marcados para sair saem — o `pressed` do `Button` e do `IconButton` (o botão que fica ligado é o `Toggle`; o `ToolbarButton` fica com o dele), `--text-md`/`textMd`, `--font-editorial` e o papel `editorial` do nativo, `--brand-yellow-foreground` e `--brand-yellow-text`; a página Migration diz o que fica no lugar — pedido #152. **Publicada em 22/11/2026** (entre 09:00 e 09:37, Brasília, medido no npm), a primeira pela publicação em etapa (pedido #153): a CI manda os sete para a área de espera e o Victor aprova no npm |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -1057,6 +1058,21 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    antes de repetir. **Publicada em 20/11/2026** (entre 06:40 e 07:01, Brasília, medido no npm), pelo terminal do Victor, da
    junção do pedido #149. O registro entrou no lote seguinte (o 090, a página de versões).
 
+73. **`0.76.0`, o 1.0-A, feita em 20/11/2026** (*"pode, faça o 1.0-A"*; a bancada viva, *"aprovado"* e *"Pode"*) — os
+   nomes marcados para sair saem antes da 1.0, e a página Migration (o lote 091) diz o que fica no lugar de cada um; os
+   exemplos do site que usavam o `pressed` passam ao `Toggle`, iguais pixel a pixel. ⚠ **A regra nova:** a publicação é
+   EM ETAPA (o lote 093, pedido #153): o `release.yml` manda os sete para a área de espera do npm (`npm stage publish`),
+   e o Victor aprova em npmjs.com → Staged Packages, com o segundo fator. ⚠ **As lições:** (1) a foto não é bancada
+   (*"imagens não serve"*) — a aprovação é na página viva, no painel à vista, com os endereços de antes e de depois;
+   (2) o publicador confiável do `contracts` não tinha sido criado, e a rodada parou no meio, com quatro na espera; a
+   versão que já está na espera não vai de novo, e a rodada pula só a que está PÚBLICA — o caminho foi aprovar os quatro
+   e rodar de novo; (3) o npm faz uma revisão automática ("Validating") antes de deixar aprovar — o `native` esperou
+   uns minutos; (4) a suíte do Chromium no Windows tem 17 reprovações que já existem na 0.75.0 (as fotos do Windows
+   paradas desde a 0.65.0, o crachá da Ember, o `NavList` e o A13 com medidas antigas) — medidas na cópia da versão
+   anterior antes de culpar o lote. **Publicada em 22/11/2026** (entre 09:00 e 09:37, Brasília, medido no npm), pela
+   publicação em etapa, da junção do pedido #153 (que leva a #152). O registro entrou no lote seguinte (o 094, só de
+   registro, sem versão).
+
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
 continua só com ele (o npm pede o segundo fator).
@@ -1131,6 +1147,12 @@ no git.
   - **A trava** (ordem do Victor, 01/10/2026): o site é feito **só com a Aurea**. O check 45
     reprova importação de fora (vale o que o `@aurea-uds/react` declara) e recurso de outro
     endereço. Peça que falta no site se cria **na Aurea**, nunca no site.
+- **Desde a 0.76.0, a publicação é EM ETAPA** (o D18 e o 1.0-C, *"Sim, seguir"*, 19/11/2026; a primeira em 22/11/2026):
+  Actions → Release → Run workflow, com PUBLICAR; o `release.yml` manda os sete para a área de espera do npm, e o Victor
+  os aprova em npmjs.com → Staged Packages, com o segundo fator. O publicador confiável de cada pacote (`victor1mor` /
+  `aurea-uds` / `release.yml` / ambiente `npm`, sem "Allow npm publish") vence se não publicar em 2 dias depois de criado.
+  A rodada pula o pacote já público, não o que está na espera: se ela parar no meio, aprovar os que esperam e rodar de
+  novo. O comando abaixo continua como caminho de reserva.
 - **Publicar é um comando, da raiz: `node scripts/publicar.mjs`.** Com `--dry-run` ele confere
   tudo e não publica. O `npm login` e o publish são do Victor; agente roda só o `--dry-run`.
   - O script empacota com `pnpm` (que traduz o `workspace:` das dependências internas) e publica o
