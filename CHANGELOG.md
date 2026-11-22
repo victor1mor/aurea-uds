@@ -17,6 +17,14 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.76.0 (22/11/2026)
+
+- **A 0.76.0 publicada em 22/11/2026, entre 09:00 e 09:37** (Brasília, medido no npm), a primeira pela publicação em
+  etapa, da junção do pedido #153 (`fde7ec37`, que leva a #152): o `released-surface.json` desse commit. O CHANGELOG
+  ([0.76.0] publicada), o CLAUDE.md (a linha na tabela, o item 73 e o caminho novo na seção 4) e a release `v0.76.0` no
+  GitHub.
+- Não muda nenhum pacote publicado.
+
 ### A publicação em etapa (21/11/2026)
 
 - **O `release.yml` manda os sete para a área de espera do npm** (`npm stage publish`), em vez de publicar: eles só
@@ -394,6 +402,11 @@ como deveria funcionar"*.
 ---
 
 ## [0.76.0] — 2026-11-20
+
+✅ **Publicada em 22/11/2026, entre 09:00 e 09:37 (Brasília, medido no npm: `tokens`, `core`, `fonts` e `icons` às 09:00,
+depois `native` às 09:31 e `react` e `contracts` às 09:36 e 09:37), pela publicação em etapa — o `release.yml` mandou os
+sete para a área de espera do npm e o Victor os aprovou em npmjs.com, com o segundo fator —, da junção do pedido #153**
+(`fde7ec37`, que leva a #152).
 
 **O 1.0-A: os nomes marcados para sair saem** — o *"pode, faça o 1.0-A"* do Victor (20/11/2026), com a lista do
 levantamento de 19/11/2026 e o `pressed` decidido: *"Sai na 1.0, usar o Toggle"*. Saem na 0.76.0, antes da 1.0, como o
