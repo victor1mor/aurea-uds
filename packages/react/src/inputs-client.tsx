@@ -1158,7 +1158,10 @@ return <BaseOTPField.Root id={id} length={length} value={value} defaultValue={de
 export type SegmentedControlSelectedStyle="current"|"neutral"|"contrast"|"brand"|"ring"|"dot"|"emphasis";
 // O SITE B (aprovado pela bancada em 01/11/2026, os itens 3 e 8): `items[].icon` (o escolhido troca sozinho para a forma
 // cheia), `size="2xl"` (segmento de 48), `wrap` (quebra linha, o trilho com canto 22) e `orientation="vertical"` (em pé).
-export function SegmentedControl({items,value,onChange,label,fullWidth,size="md",selectedStyle,wrap,orientation="horizontal",className}:{items:Array<{value:string;label:ReactNode;href?:string;icon?:IconName}>;value:string;onChange?:(v:string)=>void;label?:string;fullWidth?:boolean;size?:"sm"|"md"|"lg"|"xl"|"2xl";selectedStyle?:SegmentedControlSelectedStyle;wrap?:boolean;orientation?:"horizontal"|"vertical";className?:string}){
+export function SegmentedControl({items,value,onChange,label,fullWidth,size="md",selectedStyle,wrap,orientation="horizontal",className}:{items:Array<{value:string;label:ReactNode;href?:string;icon?:IconName;
+  /** O segmento indisponível (o AUD-1, parte 4 — 22/11/2026): apagado e sem escolha; as setas o pulam, como em todo grupo de
+   *  rádio. Com `href`, vira `<button aria-disabled>`, como a linha indisponível do `NavList`. O mesmo nome do nativo. */
+  disabled?:boolean}>;value:string;onChange?:(v:string)=>void;label?:string;fullWidth?:boolean;size?:"sm"|"md"|"lg"|"xl"|"2xl";selectedStyle?:SegmentedControlSelectedStyle;wrap?:boolean;orientation?:"horizontal"|"vertical";className?:string}){
 const s=useAureaStrings();
 // S-04 (05/11/2026): o escolhido DESLIZA de um segmento ao outro, em vez de pular (`useDeslize`, no `internal`). Só na
 // escolha: com `href` a troca é de página, e a página nova já nasce com o escolhido no lugar.
@@ -1167,9 +1170,9 @@ useDeslize(fila,".active",value);
 const classe=cx("segmented",fullWidth&&"segmented-full",size==="sm"&&"segmented-sm",size==="lg"&&"segmented-lg",size==="xl"&&"segmented-xl",size==="2xl"&&"segmented-2xl",
   wrap&&orientation!=="vertical"&&"segmented-wrap",orientation==="vertical"&&"segmented-vertical",className);
 const miolo=(i:{value:string;label:ReactNode;icon?:IconName})=>i.icon?<><Icon name={i.icon} weight={i.value===value?"fill":"regular"}/>{i.label}</>:i.label;
-if(items.length>0&&items.every(i=>i.href!=null))return <nav className={classe} data-segment-style={selectedStyle} aria-label={label??s.optionsLabel}>{items.map(i=><a key={i.value} href={i.href} className={i.value===value?"active":undefined} aria-current={i.value===value?"page":undefined}>{miolo(i)}</a>)}</nav>;
+if(items.length>0&&items.every(i=>i.href!=null))return <nav className={classe} data-segment-style={selectedStyle} aria-label={label??s.optionsLabel}>{items.map(i=>i.disabled?<button key={i.value} type="button" aria-disabled="true">{miolo(i)}</button>:<a key={i.value} href={i.href} className={i.value===value?"active":undefined} aria-current={i.value===value?"page":undefined}>{miolo(i)}</a>)}</nav>;
 return <BaseRadioGroup ref={fila} className={classe} data-segment-style={selectedStyle} aria-label={label??s.optionsLabel} aria-orientation={orientation==="vertical"?"vertical":undefined} value={value} onValueChange={v=>onChange?.(String(v))}>
-{items.map(i=><BaseRadio.Root key={i.value} value={i.value} className={i.value===value?"active":undefined} nativeButton render={<button type="button"/>}>{miolo(i)}</BaseRadio.Root>)}
+{items.map(i=><BaseRadio.Root key={i.value} value={i.value} className={i.value===value?"active":undefined} disabled={i.disabled} nativeButton render={<button type="button"/>}>{miolo(i)}</BaseRadio.Root>)}
 </BaseRadioGroup>}
 
 

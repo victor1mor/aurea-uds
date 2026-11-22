@@ -17,7 +17,9 @@
   "states": [
     "default",
     "selected",
-    "focus"
+    "focus",
+    "hover",
+    "disabled"
   ],
   "tokens": [
     "--foreground",

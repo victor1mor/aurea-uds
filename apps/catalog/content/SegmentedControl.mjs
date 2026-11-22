@@ -34,6 +34,17 @@ export default {
           items: [{value: "list", label: "List"}, {value: "board", label: "Board"}]})),
     },
     {
+      title: "A segment you cannot choose",
+      description: "disabled on an item dims that segment and it does not take the choice; the arrows skip it. With the pointer over a segment that is not chosen, its label takes the text colour.",
+      code: [
+        '<SegmentedControl label="View" value={view} onChange={setView}',
+        '  items={[{value: "list", label: "List"}, {value: "board", label: "Board"}, {value: "map", label: "Map", disabled: true}]} />',
+      ].join("\n"),
+      render: () => h("div", {style: stack},
+        h(ComValor, {componente: SegmentedControl, label: "View with an unavailable segment", value: "board",
+          items: [{value: "list", label: "List"}, {value: "board", label: "Board"}, {value: "map", label: "Map", disabled: true}]})),
+    },
+    {
       title: "Time range",
       description: "Three spans over the same chart — the classic dashboard header.",
       code: [

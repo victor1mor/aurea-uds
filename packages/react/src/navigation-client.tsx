@@ -97,7 +97,10 @@ export type TabsPanel="card"|"plain";
 // sem trilho, um fio embaixo da lista, e a escolhida marcada pelo fio da casa (o mesmo do item
 // escolhido e do `Tabs variant="secondary"` do nativo, R-12). Era a peça que o nativo tinha e a web não.
 export type TabsVariant="primary"|"secondary";
-export function Tabs({tabs,value,onChange,label,orientation,activateOnFocus=true,loopFocus,panel="card",variant="primary"}:{tabs:Array<{id:string;label:ReactNode;content:ReactNode}>;value:string;onChange:(id:string)=>void;label?:string;orientation?:Responsive<TabsOrientation>;activateOnFocus?:boolean;loopFocus?:boolean;panel?:TabsPanel;variant?:TabsVariant}){const s=useAureaStrings();const ancora=useRef<HTMLDivElement|null>(null);const resolvida=useValorResponsivo(orientation,"horizontal",ancora);const lista=useRef<HTMLDivElement|null>(null);useDeslize(lista,".tab[data-active]",value);return <BaseTabs.Root ref={ancora} value={value} onValueChange={v=>onChange(String(v))} orientation={resolvida} className="tabs-root"><BaseTabs.List ref={lista} className={cx("tabs",variant==="secondary"&&"tabs-secondary")} aria-label={label??s.tabsLabel} activateOnFocus={activateOnFocus} loopFocus={loopFocus}>{tabs.map(t=><BaseTabs.Tab key={t.id} value={t.id} className="tab">{t.label}</BaseTabs.Tab>)}</BaseTabs.List>{tabs.map(t=><BaseTabs.Panel key={t.id} value={t.id} className={panel==="plain"?"tabs-panel":"card card-inset"} tabIndex={0}>{t.content}</BaseTabs.Panel>)}</BaseTabs.Root>}
+export function Tabs({tabs,value,onChange,label,orientation,activateOnFocus=true,loopFocus,panel="card",variant="primary"}:{tabs:Array<{id:string;label:ReactNode;content:ReactNode;
+  /** A aba indisponível (o AUD-1, parte 4 — 22/11/2026): apagada, não escolhe, e continua alcançável pelas setas (o motor a
+   *  mantém focável), como no nativo. O mesmo nome do `AureaTabItem` do nativo. */
+  disabled?:boolean}>;value:string;onChange:(id:string)=>void;label?:string;orientation?:Responsive<TabsOrientation>;activateOnFocus?:boolean;loopFocus?:boolean;panel?:TabsPanel;variant?:TabsVariant}){const s=useAureaStrings();const ancora=useRef<HTMLDivElement|null>(null);const resolvida=useValorResponsivo(orientation,"horizontal",ancora);const lista=useRef<HTMLDivElement|null>(null);useDeslize(lista,".tab[data-active]",value);return <BaseTabs.Root ref={ancora} value={value} onValueChange={v=>onChange(String(v))} orientation={resolvida} className="tabs-root"><BaseTabs.List ref={lista} className={cx("tabs",variant==="secondary"&&"tabs-secondary")} aria-label={label??s.tabsLabel} activateOnFocus={activateOnFocus} loopFocus={loopFocus}>{tabs.map(t=><BaseTabs.Tab key={t.id} value={t.id} className="tab" disabled={t.disabled}>{t.label}</BaseTabs.Tab>)}</BaseTabs.List>{tabs.map(t=><BaseTabs.Panel key={t.id} value={t.id} className={panel==="plain"?"tabs-panel":"card card-inset"} tabIndex={0}>{t.content}</BaseTabs.Panel>)}</BaseTabs.Root>}
 // PAGINATION (0.32.0) — a da referência: os NÚMEROS das páginas (32, em cápsula, peso médio), as
 // reticências quando são muitas, "anterior" e "próxima" com a seta, e o resumo opcional à esquerda
 // ("1 a 5 de 50"). A página atual leva o "clarinho" da Aurea — a receita do selo suave (decisão do
@@ -381,7 +384,11 @@ export interface SidebarItem{id:string;label:ReactNode;href?:string;icon?:IconNa
   /** Só no GRUPO (item com `items` e sem destino): o nome vira um botão que dobra a lista (4-D). */
   collapsible?:boolean;
   /** Com `collapsible`: o grupo começa aberto. Padrão: aberto. */
-  defaultOpen?:boolean}
+  defaultOpen?:boolean;
+  /** O item indisponível (o AUD-1, parte 4 — 22/11/2026): apagado, não navega nem chama o toque. Como a linha indisponível do
+   *  `NavList`, vira `<button aria-disabled>` — link desabilitado não existe em HTML, e o `aria-disabled` o deixa no Tab, para
+   *  quem usa teclado saber que ele existe. */
+  disabled?:boolean}
 /** A lista da lateral: os itens e, entre eles, `"separator"` — a divisória entre seções (4-E). Sem linha (ADR-0072): é um vão.
  *  A lista se parte nela em duas, como os grupos da referência, que se separam fora da lista. */
 export type SidebarEntry=SidebarItem|"separator";
@@ -408,7 +415,9 @@ if(filhos&&!it.href&&!juntarToque(it.onPress,it.onClick)&&!it.render)return <Sid
 const ativo=it.id===ctx.current;
 // O item escolhido desenha o ícone CHEIO (ADR-0053). Com `avatar`, a foto toma o lugar do ícone (4-E).
 const miolo=<>{it.avatar?<Avatar src={it.avatar.src} fallback={it.avatar.fallback} className="sidebar-avatar"/>:it.icon&&<Icon name={it.icon} weight={ativo?"fill":undefined}/>}<span className={cx("sidebar-label",ctx.collapsed&&"sr-only")}>{it.label}</span>{it.badge!=null&&oculto(it.badge)}</>;
-const alvo=it.render
+const alvo=it.disabled
+?<button id={lid} type="button" className="sidebar-item" aria-disabled="true">{miolo}</button>
+:it.render
 ?fundirRender(it.render,{id:lid,className:"sidebar-item","aria-current":ativo?"page":undefined,onClick:juntarToque(it.onPress,it.onClick),children:miolo},"a")
 :it.href
 ?<a id={lid} href={it.href} className="sidebar-item" aria-current={ativo?"page":undefined} onClick={juntarToque(it.onPress,it.onClick)}>{miolo}</a>

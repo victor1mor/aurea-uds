@@ -37,5 +37,12 @@ export default {
       code: '<Tabs variant="secondary" label="Report" value={tab} onChange={setTab} tabs={tabs} panel="plain" />',
       render: () => h("div", {style: wide}, h(ComValor, {componente: Tabs, variant: "secondary", label: "Report secondary", value: "detail", tabs: ABAS, panel: "plain"})),
     },
+    {
+      title: "A tab you cannot choose",
+      description: "disabled on a tab dims it and it does not open; the arrows still reach it, so it can be found. With the pointer over a tab that is not chosen, its label takes the text colour.",
+      code: '<Tabs label="Report" value={tab} onChange={setTab} tabs={[...tabs, {id: "archive", label: "Archive", content: "…", disabled: true}]} />',
+      render: () => h("div", {style: wide}, h(ComValor, {componente: Tabs, label: "Report with an unavailable tab", value: "overview",
+        tabs: [...ABAS, {id: "archive", label: "Archive", content: "Not available yet.", disabled: true}]})),
+    },
   ],
 };

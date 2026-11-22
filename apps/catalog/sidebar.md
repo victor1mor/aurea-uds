@@ -150,6 +150,15 @@ No background, no line, no shadow: the items sit loose on the page, in the float
 <Sidebar variant="plain" label="Components" current="button" items={items} />
 ```
 
+### An item you cannot open
+
+disabled on an item dims it, and it neither navigates nor runs its press; it stays in the Tab order, so keyboard users know it is there.
+
+```tsx
+<Sidebar label="Components" current="button"
+  items={[...items, {id: "billing", label: "Billing", icon: "credit-card", href: "../billing.html", disabled: true}]} />
+```
+
 ### On the right
 
 placement="right" puts the sidebar on the other side of the screen, with the content before it. It is the AppShell's aside column.

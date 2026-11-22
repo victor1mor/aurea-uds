@@ -622,8 +622,10 @@ export function SegmentedControl({ items, value, onChange, label, disabled, just
             boxShadow: [...(pele.aro ? [aroDoEstilo(t, pele.aro)] : []), ...(pele.sombra ? t.shadowLayers.shadowSm : [])] }];
     return (_jsx(FilaRolante, { justify: justify, fill: fullWidth, children: _jsxs(View, { accessibilityRole: "radiogroup", accessibilityLabel: label ?? campo?.label, style: [s.segmentada, fullWidth && s.segmentadaCheia, inativo && s.desabilitado, style], ...marcaDoEstilo("segmentStyle", selectedStyle), ...rest, children: [_jsx(IndicadorQueDesliza, { alvo: fila.alvo, aoFicarPronto: fila.aoFicarPronto, style: [canto(t.size.radiusControl), pinturaDoAceso] }), items.map((it) => {
                     const ativo = it.value === value;
-                    return (_jsxs(Pressable, { onLayout: fila.medir(it.value), onPress: inativo ? undefined : () => onChange?.(it.value), disabled: inativo, accessibilityRole: "radio", ...estadoAcessivel({ checked: ativo, disabled: !!inativo }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, fullWidth && s.segmentoCheio, ativo && !fila.pronto && pinturaDoAceso,
-                            pele?.ponto && s.segmentoComPonto], children: [pele?.ponto && _jsx(View, { collapsable: false, style: [s.pontoDoSegmento, ativo && { backgroundColor: t.color.primary }] }), typeof it.label === "string"
+                    // Indisponível sozinho (o item) ou com o grupo (o controle). Com o controle, o apagado já vem da fila inteira.
+                    const fora = inativo || it.disabled;
+                    return (_jsxs(Pressable, { onLayout: fila.medir(it.value), onPress: fora ? undefined : () => onChange?.(it.value), disabled: fora, accessibilityRole: "radio", ...estadoAcessivel({ checked: ativo, disabled: !!fora }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [s.segmento, fullWidth && s.segmentoCheio, ativo && !fila.pronto && pinturaDoAceso,
+                            pele?.ponto && s.segmentoComPonto, it.disabled && !inativo && { opacity: t.size.opacityDisabled }], children: [pele?.ponto && _jsx(View, { collapsable: false, style: [s.pontoDoSegmento, ativo && { backgroundColor: t.color.primary }] }), typeof it.label === "string"
                                 ? _jsx(Text, { size: "sm", weight: ativo ? 600 : 400, 
                                     // 🔴 ERA `foreground`, E ISSO QUEBRAVA A LINGUAGEM DE SELECIONADO.
                                     // Achado pelo consumidor em 17/09/2026. A web pinta o escolhido com a

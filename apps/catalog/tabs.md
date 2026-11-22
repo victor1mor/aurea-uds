@@ -30,6 +30,14 @@ No track: a line under the list, and the chosen tab marked by the selected line.
 <Tabs variant="secondary" label="Report" value={tab} onChange={setTab} tabs={tabs} panel="plain" />
 ```
 
+### A tab you cannot choose
+
+disabled on a tab dims it and it does not open; the arrows still reach it, so it can be found. With the pointer over a tab that is not chosen, its label takes the text colour.
+
+```tsx
+<Tabs label="Report" value={tab} onChange={setTab} tabs={[...tabs, {id: "archive", label: "Archive", content: "…", disabled: true}]} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

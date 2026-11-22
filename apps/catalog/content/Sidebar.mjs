@@ -323,6 +323,17 @@ export default {
       render: () => moldura({label: "Components", variant: "plain", current: "button", items: ITENS}),
     },
     {
+      title: "An item you cannot open",
+      description: "disabled on an item dims it, and it neither navigates nor runs its press; it stays in the Tab order, so "
+        + "keyboard users know it is there.",
+      code: `<Sidebar label="Components" current="button"
+  items={[...items, {id: "billing", label: "Billing", icon: "credit-card", href: "../billing.html", disabled: true}]} />`,
+      embed: true,
+      layoutProprio: true,
+      render: () => moldura({label: "Components", current: "button",
+        items: [...ITENS, {id: "billing", label: "Billing", icon: "credit-card", href: "../billing.html", disabled: true}]}),
+    },
+    {
       title: "On the right",
       description: "placement=\"right\" puts the sidebar on the other side of the screen, with the content before it. "
         + "It is the AppShell's aside column.",

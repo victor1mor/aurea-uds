@@ -25,6 +25,15 @@ import {SegmentedControl} from "@aurea-uds/react";
 
 ## Examples
 
+### A segment you cannot choose
+
+disabled on an item dims that segment and it does not take the choice; the arrows skip it. With the pointer over a segment that is not chosen, its label takes the text colour.
+
+```tsx
+<SegmentedControl label="View" value={view} onChange={setView}
+  items={[{value: "list", label: "List"}, {value: "board", label: "Board"}, {value: "map", label: "Map", disabled: true}]} />
+```
+
 ### Time range
 
 Three spans over the same chart — the classic dashboard header.

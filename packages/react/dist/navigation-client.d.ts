@@ -38,6 +38,9 @@ export declare function Tabs({ tabs, value, onChange, label, orientation, activa
         id: string;
         label: ReactNode;
         content: ReactNode;
+        /** A aba indisponível (o AUD-1, parte 4 — 22/11/2026): apagada, não escolhe, e continua alcançável pelas setas (o motor a
+         *  mantém focável), como no nativo. O mesmo nome do `AureaTabItem` do nativo. */
+        disabled?: boolean;
     }>;
     value: string;
     onChange: (id: string) => void;
@@ -120,6 +123,10 @@ export interface SidebarItem {
     collapsible?: boolean;
     /** Com `collapsible`: o grupo começa aberto. Padrão: aberto. */
     defaultOpen?: boolean;
+    /** O item indisponível (o AUD-1, parte 4 — 22/11/2026): apagado, não navega nem chama o toque. Como a linha indisponível do
+     *  `NavList`, vira `<button aria-disabled>` — link desabilitado não existe em HTML, e o `aria-disabled` o deixa no Tab, para
+     *  quem usa teclado saber que ele existe. */
+    disabled?: boolean;
 }
 /** A lista da lateral: os itens e, entre eles, `"separator"` — a divisória entre seções (4-E). Sem linha (ADR-0072): é um vão.
  *  A lista se parte nela em duas, como os grupos da referência, que se separam fora da lista. */
