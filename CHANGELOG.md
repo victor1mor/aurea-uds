@@ -17,6 +17,17 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### A publicação em etapa (21/11/2026)
+
+- **O `release.yml` manda os sete para a área de espera do npm** (`npm stage publish`), em vez de publicar: eles só
+  ficam públicos quando o Victor aprova, com 2FA, em npmjs.com → Staged Packages. O D18 e o 1.0-C, decididos pelo
+  Victor em 19/11/2026 (*"Sim, seguir"*), e o caminho novo para a 0.76.0 (*"Sim, pelo caminho novo"*, 20/11/2026).
+- **Sem cache na montagem que publica** (`package-manager-cache: false`), como a documentação do npm manda.
+- **O último passo** deixa de conferir o registro (o que está na espera não aparece no `npm view` antes da aprovação)
+  e escreve no resumo da rodada a lista do que foi para a espera.
+- **O ambiente `npm`** foi criado no GitHub em 21/11/2026, sem aprovador (*"Pode, sem aprovador"*): a aprovação é a
+  do npm. Nenhum pacote publicado muda.
+
 ### A página Migration (20/11/2026)
 
 - **O site:** a área Getting Started ganha a página Migration, no fim do Overview, depois da Versioning (a área Migration
