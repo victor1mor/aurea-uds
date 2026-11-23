@@ -408,6 +408,39 @@ como deveria funcionar"*.
 
 ---
 
+## [0.78.0] — 2026-11-23
+
+**O AUD-1, parte 5: a dica como a maioria das referências** — a auditoria peça a peça comparou a janela, o popover e a
+dica com 11 referências. O popover batia em tudo; na janela e na dica, a Aurea ficava com a minoria em três pontos. O
+Victor viu a bancada viva, em Gold e Ember, claro e escuro, e decidiu: *"1 invertida, 2 a da maioria, 3 como é hoje, 4
+com X"* (23/11/2026) — a dica muda; a janela fica como está (o fundo que escurece e embaça, e o X). Junto, o empate que a
+parte 4 deixou (apertar o item da lateral), decidido no mesmo dia: *"Escurece ao apertar"*, e *"Sim, junto"*.
+
+### Mudado
+
+- **A dica (`Tooltip`) é invertida**: a cor do texto vira o fundo (`--foreground`) e a cor da página vira a letra
+  (`--background`) — no claro, o balão escuro; no escuro, o claro. A seta vai inteira na cor do balão. Vale também para a
+  dica da lateral recolhida. 9 de 11 referências invertem, a nº 1 inclusive. Na Ember também. O balão do gráfico
+  (`Chart`, a classe `.chart-tooltip`) NÃO muda: é um cartão de dados, e a nº 1 também não o inverte.
+- **A dica espera 0,1 s para abrir e 0,1 s para fechar** (os padrões de `delay` e `closeDelay`; eram 1,5 s e 0,5 s, o da
+  referência nº 2). 9 de 11 abrem em 0,3 s ou menos; a mediana é 0,1 s nas duas pontas. Pelo teclado continua abrindo na
+  hora. Quem passa `delay` ou `closeDelay` não muda nada.
+- **O item da `Sidebar` escurece ao apertar** — o empate da parte 4 (4 referências mudam o item apertado, 4 não),
+  decidido pelo Victor na bancada viva: *"Escurece ao apertar"* (23/11/2026). Ao apertar (mouse, toque ou caneta), o fundo
+  é o da lateral misturado com 10% do texto dela, um pouco mais escuro que o do passar o mouse; no toque, onde não há
+  "passar o mouse", é o que mostra o item respondendo. O item atual e o indisponível não mudam. Na Ember também.
+
+### Quem cobra
+
+- `tests/unit/lote-q-janelas.test.tsx` — a espera de 0,1 s nas duas pontas; reprova com 1,5 s e 0,5 s, e também só com o
+  0,5 s de fechar (medido).
+- `tests/visual/aud1-dica-invertida.spec.ts` — no navegador, nos dois temas e na Ember: o fundo, a letra e a seta da
+  dica invertidos, e o balão do gráfico na cor da superfície; reprova no CSS da 0.77.0 (medido).
+- `tests/visual/aud1-lateral-apertar.spec.ts` — no navegador, apertando o botão do mouse, nos dois temas e na Ember: o
+  item escurece; o atual e o indisponível não mudam; reprova no CSS da 0.77.0 (medido).
+
+---
+
 ## [0.77.0] — 2026-11-22
 
 ✅ **Publicada em 23/11/2026, entre 05:30 e 05:31 (Brasília, medido no npm: `native` às 05:30, depois `react`,

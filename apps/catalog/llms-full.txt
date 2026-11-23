@@ -11642,7 +11642,7 @@ import {ToolPermission} from "@aurea-uds/react";
 <page url="https://aureauds.dev/tooltip.html">
 # Tooltip
 
-Brief label revealed on hover or focus.
+Brief label revealed on hover or focus, inverted: dark on a light page, light on a dark one.
 
 ## Usage
 
@@ -11681,9 +11681,9 @@ Which side of the trigger it opens on. When there is no room on that side, it fl
 | `children` | `ReactElement` | — | The trigger, as a single element. It receives aria-describedby pointing at the popup — that reference is what makes the hint exist for a screen reader instead of only for the eye. When the element is not focusable on its own (a <span>, a Badge), it becomes focusable, as a button — as in the reference library — so the tip opens from the keyboard too. |
 | `content` | `ReactNode` | — | The hint. Short, and never the only place the information lives: a tooltip is a description, and it must hold nothing focusable. |
 | `side` | `top \| right \| bottom \| left` | top | Preferred side; it flips when there is no room. |
-| `arrow` | `boolean` | false | The arrow, off by default as in the reference library. Our own curve, 12 × 6, with the surface fill and the border line. |
-| `delay` | `number` | 1500 | Milliseconds the pointer rests before it opens — the reference library's 1.5 s (the engine's own is 0.6 s). From the keyboard it opens at once, and once one is open its neighbours open without waiting. |
-| `closeDelay` | `number` | 500 | Milliseconds before it closes after the pointer leaves — the reference library's 0.5 s. |
+| `arrow` | `boolean` | false | The arrow, off by default as in the reference library. Our own curve, 12 × 6, all in the colour of the hint. |
+| `delay` | `number` | 100 | Milliseconds the pointer rests before it opens — 0.1 s, as most libraries do (the engine's own is 0.6 s). From the keyboard it opens at once, and once one is open its neighbours open without waiting. |
+| `closeDelay` | `number` | 100 | Milliseconds before it closes after the pointer leaves — 0.1 s. |
 </page>
 
 <page url="https://aureauds.dev/topbar.html">
@@ -18944,6 +18944,32 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-78-0.html">
+# v0.78.0
+
+Tooltip is inverted and opens and closes after 0.1 s; a Sidebar item darkens while pressed.
+
+## Changed
+
+- **`Tooltip` is inverted.** The text color becomes the background and the page color becomes the text: dark on a light page, light on a dark one. The arrow takes the same color. This includes the tooltips of a collapsed `Sidebar`. The `Chart` hover card does not change.
+- **`Tooltip` waits 0.1 s to open and 0.1 s to close.** These are the new defaults of `delay` and `closeDelay` (they were 1.5 s and 0.5 s). From the keyboard it still opens at once. If you pass `delay` or `closeDelay`, nothing changes for you.
+- **A `Sidebar` item darkens while pressed**, with the mouse, touch or a pen: its background becomes a little darker than on hover. On touch screens, where there is no hover, this is how the item shows it responded. The current item and a disabled item do not change.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.78.0 @aurea-uds/core@0.78.0 @aurea-uds/fonts@0.78.0 @aurea-uds/icons@0.78.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.78.0
 ```
 </page>
 

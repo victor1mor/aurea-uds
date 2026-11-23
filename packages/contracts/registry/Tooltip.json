@@ -3,7 +3,7 @@
   "category": "Overlays",
   "layer": "Component",
   "maturity": "Stable",
-  "summary": "Brief label revealed on hover or focus.",
+  "summary": "Brief label revealed on hover or focus, inverted: dark on a light page, light on a dark one.",
   "icon": "question",
   "platforms": {
     "web": "stable",
@@ -16,6 +16,7 @@
     "closed"
   ],
   "tokens": [
+    "--background",
     "--border",
     "--foreground",
     "--leading-normal",
@@ -68,19 +69,19 @@
       "name": "arrow",
       "type": "boolean",
       "default": "false",
-      "description": "The arrow, off by default as in the reference library. Our own curve, 12 × 6, with the surface fill and the border line."
+      "description": "The arrow, off by default as in the reference library. Our own curve, 12 × 6, all in the colour of the hint."
     },
     {
       "name": "delay",
       "type": "number",
-      "default": "1500",
-      "description": "Milliseconds the pointer rests before it opens — the reference library's 1.5 s (the engine's own is 0.6 s). From the keyboard it opens at once, and once one is open its neighbours open without waiting."
+      "default": "100",
+      "description": "Milliseconds the pointer rests before it opens — 0.1 s, as most libraries do (the engine's own is 0.6 s). From the keyboard it opens at once, and once one is open its neighbours open without waiting."
     },
     {
       "name": "closeDelay",
       "type": "number",
-      "default": "500",
-      "description": "Milliseconds before it closes after the pointer leaves — the reference library's 0.5 s."
+      "default": "100",
+      "description": "Milliseconds before it closes after the pointer leaves — 0.1 s."
     }
   ],
   "axes": {

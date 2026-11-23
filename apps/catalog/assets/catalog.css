@@ -3262,6 +3262,11 @@ img,svg { display:block; }
    desativado dos outros controles; com o mouse em cima, nada muda. É `<button aria-disabled>`, como a linha do `NavList`. */
 .sidebar-item[aria-disabled="true"] { opacity:var(--opacity-disabled); cursor:not-allowed; }
 @media (hover:hover) and (pointer:fine) { .sidebar-item[aria-disabled="true"]:hover { background:transparent; color:color-mix(in oklab, var(--sidebar-foreground) 68%, transparent); } }
+/* APERTAR O ITEM (o empate da parte 4 da AUD-1 — 4 referências mudam, 4 não —, decidido pelo Victor na bancada viva em
+   23/11/2026: *"Escurece ao apertar"*): ao apertar, o fundo fica um pouco mais escuro que o do passar o mouse — o da
+   lateral misturado com o texto dela. Sem a pergunta do mouse: no toque não existe "passar o mouse", e é ao apertar que o
+   dedo vê o item responder. O item atual (que já tem o fundo dele) e o indisponível não mudam. */
+.sidebar-item:not([aria-current],[aria-disabled="true"]):active { background:color-mix(in oklab, var(--sidebar-accent), var(--sidebar-foreground) 10%); }
 /* A-05 (24/09/2026), decisão do Victor: o item atual da lateral passa a usar a MARCA DA CASA para
    "selecionado" — fundo, texto na cor da marca e o fio de 2px embaixo —, que o `Toggle`, o
    `SegmentedControl`, o `Button variant="nav"` e a navegação do catálogo (`.doc-nav`) já usavam.
@@ -6544,6 +6549,13 @@ button.tag-main { cursor:pointer; }
 .tooltip[data-starting-style],.tooltip[data-ending-style],.popover[data-starting-style],.popover[data-ending-style] { opacity:0; scale:.9; }
 .tooltip[data-ending-style],.popover[data-ending-style] { transition-duration:var(--duration-fast); }
 .tooltip[data-instant] { transition:none; }
+/* A DICA INVERTIDA (AUD-1, parte 5 — o Victor na bancada, 23/11/2026: "1 invertida"). 9 de 11 referências invertem a
+   dica, a nº 1 inclusive: a cor do texto vira o fundo e a cor da página vira a letra — no claro, o balão escuro; no
+   escuro, o claro. A seta vai junto, inteira na cor do balão (a linha da seta some nele). O balão do gráfico
+   (`.chart-tooltip`) usa a mesma classe e NÃO muda: é um cartão de dados, e lá a nº 1 também não inverte. */
+.tooltip:not(.chart-tooltip) { background:var(--foreground); color:var(--background); }
+.tooltip:not(.chart-tooltip) :is(.overlay-arrow-fill,.overlay-arrow-line) { fill:var(--foreground); stroke:var(--foreground); }
+.tooltip:not(.chart-tooltip) .overlay-arrow-line { fill:none; }
 .popover { z-index:var(--z-modal); min-width:220px; max-width:min(360px,calc(100vw - 32px)); padding:16px; border:1px solid transparent; border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); font-size:var(--text-sm); box-shadow:var(--shadow-lg); display:grid; gap:10px; transform-origin:var(--transform-origin,center); transition:opacity var(--duration-base) var(--ease-standard),scale var(--duration-base) var(--ease-standard); }
 .popover-title { font-weight:var(--weight-medium); }
 /* A SETA (0.32.0): o desenho é nosso — uma curva de 12 × 6 —, com o fundo da janela e a linha da borda,

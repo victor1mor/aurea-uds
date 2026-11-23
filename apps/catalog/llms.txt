@@ -162,7 +162,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [ToolbarGroup](https://aureauds.dev/toolbargroup.md): Structural grouping of toolbar items.
 - [ToolbarSeparator](https://aureauds.dev/toolbarseparator.md): Visual divider between toolbar groups.
 - [ToolPermission](https://aureauds.dev/toolpermission.md): What each tool may do, without asking again.
-- [Tooltip](https://aureauds.dev/tooltip.md): Brief label revealed on hover or focus.
+- [Tooltip](https://aureauds.dev/tooltip.md): Brief label revealed on hover or focus, inverted: dark on a light page, light on a dark one.
 - [Topbar](https://aureauds.dev/topbar.md): The old name of Header. Same component, still works the same; use Header.
 - [TraceTimeline](https://aureauds.dev/tracetimeline.md): How long each step took, as a waterfall.
 - [TreeView](https://aureauds.dev/treeview.md): Hierarchical, expandable tree of items.
@@ -463,6 +463,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.78.0](https://aureauds.dev/release-v0-78-0.md): Tooltip is inverted and opens and closes after 0.1 s; a Sidebar item darkens while pressed.
 - [v0.77.0](https://aureauds.dev/release-v0-77-0.md): Tabs, SegmentedControl and Sidebar items can be disabled, and tabs and segments respond to the pointer.
 - [v0.76.0](https://aureauds.dev/release-v0-76-0.md): The old names marked to leave before 1.0 are removed. Each one has a replacement, listed on the Migration page.
 - [v0.75.0](https://aureauds.dev/release-v0-75-0.md): The selected underline starts with the text, secondary tabs underline edge to edge, and six inner dividers come back.

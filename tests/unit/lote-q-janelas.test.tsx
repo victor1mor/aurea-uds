@@ -111,19 +111,26 @@ describe("Tooltip — o gatilho focável (C-11), a seta e o atraso", () => {
     const dica = await screen.findByRole("tooltip");
     expect(dica.querySelector(".overlay-arrow svg")).not.toBeNull();
   });
-  test("o mouse espera 1,5 s (o tempo da referência), e não os 0,6 do motor", async () => {
+  // AUD-1, parte 5 (o Victor na bancada, 23/11/2026: "2 a da maioria"): 0,1 s para abrir e 0,1 s para fechar, a mediana
+  // das 11 referências. Até a 0.77.0 eram 1,5 s e 0,5 s — com eles, este teste reprova nas duas pontas (fechada aos 150 ms
+  // depois de entrar; ainda aberta aos 400 ms depois de sair).
+  test("o mouse espera 0,1 s para abrir e 0,1 s para fechar (a maioria das referências), e não os 0,6 do motor", async () => {
     vi.useFakeTimers();
     try {
-      wrap(<Tooltip content="Devagar"><button type="button">alvo</button></Tooltip>);
+      wrap(<Tooltip content="Rápida"><button type="button">alvo</button></Tooltip>);
       const alvo = screen.getByText("alvo");
       fireEvent.pointerEnter(alvo, {pointerType: "mouse"});
       fireEvent.mouseEnter(alvo);
       fireEvent.pointerMove(alvo, {pointerType: "mouse"});
       fireEvent.mouseMove(alvo);
-      await act(async () => { vi.advanceTimersByTime(1000); });
+      await act(async () => { vi.advanceTimersByTime(50); });
       expect(screen.queryByRole("tooltip")).toBeNull();
-      await act(async () => { vi.advanceTimersByTime(600); });
+      await act(async () => { vi.advanceTimersByTime(100); });
       expect(screen.queryByRole("tooltip")).not.toBeNull();
+      fireEvent.pointerLeave(alvo, {pointerType: "mouse"});
+      fireEvent.mouseLeave(alvo);
+      await act(async () => { vi.advanceTimersByTime(400); });
+      expect(screen.queryByRole("tooltip")).toBeNull();
     } finally { vi.useRealTimers(); }
   });
 });
