@@ -235,6 +235,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.74.0` | Onde os itens de lista começam (o achado 1 do 2-D): a `ListBox`, o menu e a `NavList` começam a 16 da borda, como a `Sidebar`, nos dois lados, no fim da curva de 18; o título da seção e a marca do escolhido acompanham; no nativo, o item do `DropdownMenu` também — pedido #148. **Publicada em 19/11/2026** (entre 21:29 e 21:39, Brasília, medido no npm), pelo terminal do Victor |
 | `0.75.0` | O traço do escolhido e as divisões de dentro: o traço de baixo do escolhido começa a 16, com o texto, e nas `Tabs` `secondary` vai de ponta a ponta (web e nativo); seis divisões de dentro voltam com a linha clara (o `hr`, as fileiras e a citação do `Prose`, o cabeçalho da `NotificationCenter`, a parte legal da `Section variant="footer"` e as ações do menu do celular do `Header`) — o achado 2 do 2-D e o resto da ADR-0072, pedido #149. **Publicada em 20/11/2026** (entre 06:40 e 07:01, Brasília, medido no npm), pelo terminal do Victor |
 | `0.76.0` | O 1.0-A: os nomes marcados para sair saem — o `pressed` do `Button` e do `IconButton` (o botão que fica ligado é o `Toggle`; o `ToolbarButton` fica com o dele), `--text-md`/`textMd`, `--font-editorial` e o papel `editorial` do nativo, `--brand-yellow-foreground` e `--brand-yellow-text`; a página Migration diz o que fica no lugar — pedido #152. **Publicada em 22/11/2026** (entre 09:00 e 09:37, Brasília, medido no npm), a primeira pela publicação em etapa (pedido #153): a CI manda os sete para a área de espera e o Victor aprova no npm |
+| `0.77.0` | O AUD-1, parte 4: a navegação como a maioria das referências — com o mouse em cima, a aba e o segmento não escolhidos vão à cor do texto; o item indisponível (`disabled`) na aba do `Tabs`, no segmento do `SegmentedControl` (web e nativo) e no item da `Sidebar`, apagado, que não muda com o mouse e segue no Tab como o da `NavList` — pedido #155. **Publicada em 23/11/2026** (entre 05:30 e 05:31, Brasília, medido no npm), pela publicação em etapa |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -1072,6 +1073,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    anterior antes de culpar o lote. **Publicada em 22/11/2026** (entre 09:00 e 09:37, Brasília, medido no npm), pela
    publicação em etapa, da junção do pedido #153 (que leva a #152). O registro entrou no lote seguinte (o 094, só de
    registro, sem versão).
+74. **`0.77.0`, o AUD-1 parte 4, feita em 22/11/2026** (a navegação contra 11 referências; *"Aprovo as duas"* e *"Pode,
+   com o nativo"*) — onde a maioria das referências fazia diferente, a Aurea passou a fazer igual: com o mouse em cima, a
+   letra da aba e do segmento não escolhidos vai à cor do texto (9 de 11 e 8 de 10 mudam); e o item que não se pode
+   escolher existe na aba, no segmento (web e nativo) e na lateral. As partes 2 (o passar o mouse no campo) e 3 (a chave
+   apertada) fecharam sem mudança: *"Como é hoje"* e *"Fica como é hoje"*. ⚠ **A regra seguida:** o item indisponível da
+   Aurea é o da `NavList` (13/08/2026) — `aria-disabled`, continua no Tab e não age; a sessão tinha dito ao Victor que ele
+   sairia do Tab, e corrigiu antes de construir. ⚠ **As lições:** (1) o `\n` escrito por heredoc virou quebra de linha de
+   verdade num exemplo do site e parou a montagem — texto com barra se grava pelo editor (a lição da `0.54.0`, de novo);
+   (2) as 19 reprovações da suíte do Chromium no Windows já existiam na 0.76.0 — medido rodando os mesmos seis arquivos na
+   pasta principal, antes do lote; (3) "trilha" foi jargão na bancada da chave: a palavra é "o fundo da chave".
+   **Publicada em 23/11/2026** (entre 05:30 e 05:31, Brasília, medido no npm), pela publicação em etapa, da junção do
+   pedido #155. O registro entrou no lote seguinte (o 096, só de registro, sem versão).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
