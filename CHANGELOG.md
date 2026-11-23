@@ -17,6 +17,16 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O manual de construção reescrito (23/11/2026)
+
+- **O `docs/BUILDING.md` é o processo de hoje, passo a passo** (o Victor: *"pode reescrever o BUILDING.md"*, depois de
+  perguntar se outra IA construiria do mesmo jeito): medir a Aurea, comparar com as referências pela maioria, mostrar na
+  bancada viva antes de construir, construir com a Ember e o outro alvo, provar com teste que reprova o defeito, a
+  versão, a conferência, enviar, publicar e registrar. A versão de 07/10/2026 descrevia uma pasta de referências e uma
+  trava que não existem mais, e não falava de bancada, da maioria das referências nem da Ember.
+- O `AGENTS.md` (o arquivo que outras IAs leem primeiro) aponta para ele.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.77.0 (23/11/2026)
 
 - **A 0.77.0 publicada em 23/11/2026, entre 05:30 e 05:31** (Brasília, medido no npm), pela publicação em etapa, da
