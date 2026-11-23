@@ -100,15 +100,17 @@ export function AccessGate({ allowed, children, ...resto }) {
 //     A dica com seta se afasta 8 do gatilho (`--space-2`: os 6 da seta e 2 de folga); sem
 //     seta, 4 (`--space-1`) — a referência usa 7 e 3, que não são da nossa escala. O popover fica
 //     sempre a 8, com ou sem seta, como o dela.
-//   • O ATRASO da dica é o dela: 1,5 s para abrir e 0,5 s para fechar (o motor abre em 0,6 s e
-//     fecha na hora). Pelo teclado ela abre já, e depois da primeira as vizinhas abrem sem esperar
-//     — é o grupo do `Tooltip.Provider` do `AureaProvider`.
+//   • O ATRASO da dica é o da MAIORIA das referências: 0,1 s para abrir e 0,1 s para fechar (AUD-1,
+//     parte 5 — o Victor na bancada, 23/11/2026: "2 a da maioria"; 9 de 11 abrem em 0,3 s ou menos,
+//     a mediana é 0,1 s nas duas pontas). Até a 0.77.0 era o da nº 2, 1,5 s e 0,5 s; o motor abre em
+//     0,6 s e fecha na hora. Pelo teclado ela abre já, e depois da primeira as vizinhas abrem sem
+//     esperar — é o grupo do `Tooltip.Provider` do `AureaProvider`.
 //   • O GATILHO FOCÁVEL (C-11): a dica em cima de um texto só abria pelo teclado se o app pusesse
 //     `tabIndex`. A referência resolve no gatilho, que sai focável como botão; aqui também — o que
 //     não é focável sozinho (um `<span>`, um selo) ganha `tabIndex=0` e `role="button"`. Na
 //     marcação, quando o filho é uma tag; e, quando é um componente, no nó de verdade, depois de
 //     montado, porque só o DOM sabe o que o componente desenhou.
-const ATRASO_DA_DICA = 1500, ATRASO_PARA_FECHAR_A_DICA = 500;
+const ATRASO_DA_DICA = 100, ATRASO_PARA_FECHAR_A_DICA = 100;
 function Seta() { return _jsxs("svg", { viewBox: "0 0 12 12", "aria-hidden": "true", children: [_jsx("path", { className: "overlay-arrow-fill", d: "M0 0Q6 12 12 0Z" }), _jsx("path", { className: "overlay-arrow-line", d: "M0 0Q6 12 12 0", fill: "none" })] }); }
 const FOCAVEIS_POR_NATUREZA = new Set(["button", "input", "select", "textarea", "summary", "iframe", "audio", "video"]);
 function focavelNaMarcacao(el) {

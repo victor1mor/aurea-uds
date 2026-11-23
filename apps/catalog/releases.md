@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.78.0
+
+November 23, 2026
+
+Tooltip is inverted and opens and closes after 0.1 s; a Sidebar item darkens while pressed.
+
+[Read full release notes →](https://aureauds.dev/release-v0-78-0.md)
+
 ## v0.77.0
 
 November 22, 2026

@@ -18,6 +18,7 @@
   "states": [
     "default",
     "item-hover",
+    "item-pressed",
     "item-focus",
     "item-current",
     "collapsed",
