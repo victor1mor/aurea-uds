@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.77.0 (23/11/2026)
+
+- **A 0.77.0 publicada em 23/11/2026, entre 05:30 e 05:31** (Brasília, medido no npm), pela publicação em etapa, da
+  junção do pedido #155 (`c1fc389b`): o `released-surface.json` desse commit. O CHANGELOG ([0.77.0] publicada), o
+  CLAUDE.md (a linha na tabela e o item 74) e a release `v0.77.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.76.0 (22/11/2026)
 
 - **A 0.76.0 publicada em 22/11/2026, entre 09:00 e 09:37** (Brasília, medido no npm), a primeira pela publicação em
@@ -402,6 +409,11 @@ como deveria funcionar"*.
 ---
 
 ## [0.77.0] — 2026-11-22
+
+✅ **Publicada em 23/11/2026, entre 05:30 e 05:31 (Brasília, medido no npm: `native` às 05:30, depois `react`,
+`contracts`, `core`, `fonts`, `icons` e `tokens` até as 05:31), pela publicação em etapa — o `release.yml` mandou os sete
+para a área de espera do npm e o Victor os aprovou em npmjs.com, com o segundo fator —, da junção do pedido #155**
+(`c1fc389b`).
 
 **O AUD-1, parte 4: a navegação como a maioria das referências** — a auditoria peça a peça (aprovada em 08–09/10/2026)
 comparou as abas, o segmento e a lateral com 11 referências, e a Aurea ficava com a minoria em dois pontos. O Victor viu
