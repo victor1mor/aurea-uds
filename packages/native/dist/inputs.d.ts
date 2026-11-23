@@ -374,9 +374,14 @@ export interface SwitchProps extends ControleProps {
  */
 export declare function Switch({ label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align, }: SwitchProps): React.JSX.Element;
 export interface SegmentedControlProps extends ViewProps {
+    /**
+     * `disabled` no item (o AUD-1, parte 4 — 22/11/2026): só aquele segmento fica indisponível, apagado e sem escolha, e o leitor
+     * de tela o ouve como indisponível — como a aba do `Tabs` e o segmento da web. O `disabled` do controle continua apagando todos.
+     */
     items: Array<{
         value: string;
         label: React.ReactNode;
+        disabled?: boolean;
     }>;
     value?: string;
     onChange?: (v: string) => void;

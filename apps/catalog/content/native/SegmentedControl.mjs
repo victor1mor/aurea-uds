@@ -32,6 +32,12 @@ export default {
       code: `${ITENS_CODIGO}\n\n<SegmentedControl label="Period" items={periods} value={period} onChange={setPeriod} />`,
       render: () => h(Segmentos),
     },
+    {
+      title: "A segment you cannot choose",
+      description: "disabled on an item dims only that segment; it takes no touch, and the screen reader hears it as unavailable. disabled on the control still dims all of them.",
+      code: `<SegmentedControl label="Period" value={period} onChange={setPeriod}\n  items={[...periods, {value: "year", label: "Year", disabled: true}]} />`,
+      render: () => h(Segmentos, {label: "Period with an unavailable segment", items: [...PERIODOS, {value: "year", label: "Year", disabled: true}]}),
+    },
     cada({titulo: "Justify", descricao: "Where the control sits when it fits in the row.",
       valores: ["start", "center", "end"], estilo: larga,
       codigo: v => `<SegmentedControl justify="${v}" label="Period" items={periods} value={period} onChange={setPeriod} />`,

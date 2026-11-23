@@ -1206,7 +1206,11 @@ export function Switch({
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
 export interface SegmentedControlProps extends ViewProps {
-  items: Array<{value: string; label: React.ReactNode}>;
+  /**
+   * `disabled` no item (o AUD-1, parte 4 — 22/11/2026): só aquele segmento fica indisponível, apagado e sem escolha, e o leitor
+   * de tela o ouve como indisponível — como a aba do `Tabs` e o segmento da web. O `disabled` do controle continua apagando todos.
+   */
+  items: Array<{value: string; label: React.ReactNode; disabled?: boolean}>;
   value?: string;
   onChange?: (v: string) => void;
   /** Nome do grupo para o leitor de tela. */
@@ -1275,17 +1279,19 @@ export function SegmentedControl({
         <IndicadorQueDesliza alvo={fila.alvo} aoFicarPronto={fila.aoFicarPronto} style={[canto(t.size.radiusControl), pinturaDoAceso]} />
         {items.map((it) => {
           const ativo = it.value === value;
+          // Indisponível sozinho (o item) ou com o grupo (o controle). Com o controle, o apagado já vem da fila inteira.
+          const fora = inativo || it.disabled;
           return (
             <Pressable
               key={it.value}
               onLayout={fila.medir(it.value)}
-              onPress={inativo ? undefined : () => onChange?.(it.value)}
-              disabled={inativo}
+              onPress={fora ? undefined : () => onChange?.(it.value)}
+              disabled={fora}
               accessibilityRole="radio"
-              {...estadoAcessivel({checked: ativo, disabled: !!inativo})}
+              {...estadoAcessivel({checked: ativo, disabled: !!fora})}
               accessibilityLabel={typeof it.label === "string" ? it.label : undefined}
               style={[s.segmento, fullWidth && s.segmentoCheio, ativo && !fila.pronto && pinturaDoAceso,
-                pele?.ponto && s.segmentoComPonto]}>
+                pele?.ponto && s.segmentoComPonto, it.disabled && !inativo && {opacity: t.size.opacityDisabled}]}>
             {/* O ponto do `dot`: o lugar existe em todos os segmentos, e só o aceso o pinta. `collapsable={false}`: caixa
                 só com raio que ganha cor depois de montada sai QUADRADA no Android (react-native#52415, a regra do
                 `native-capsula-android.test.tsx`). */}

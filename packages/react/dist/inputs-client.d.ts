@@ -334,6 +334,9 @@ export declare function SegmentedControl({ items, value, onChange, label, fullWi
         label: ReactNode;
         href?: string;
         icon?: IconName;
+        /** O segmento indisponível (o AUD-1, parte 4 — 22/11/2026): apagado e sem escolha; as setas o pulam, como em todo grupo de
+         *  rádio. Com `href`, vira `<button aria-disabled>`, como a linha indisponível do `NavList`. O mesmo nome do nativo. */
+        disabled?: boolean;
     }>;
     value: string;
     onChange?: (v: string) => void;

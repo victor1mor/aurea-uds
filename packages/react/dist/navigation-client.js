@@ -43,7 +43,7 @@ export function Stepper({ items, label, variant = "default", orientation = "hori
 // separador 180°): o ícone sai pela direção do provedor, como no grupo que dobra da `Sidebar` — e não por `:dir()`,
 // que o empacotador do app reescreve (13/11/2026).
 export function Breadcrumb({ items, label }) { const s = useAureaStrings(); const rtl = useDirection() === "rtl"; return _jsx("nav", { className: "breadcrumb", "aria-label": label ?? s.breadcrumbLabel, children: items.map((i, n) => _jsxs(React.Fragment, { children: [n > 0 && _jsx(Icon, { name: rtl ? "caret-left" : "caret-right", size: "sm" }), " ", i.render ? fundirRender(i.render, { children: i.label }, "a") : i.href ? _jsx("a", { href: i.href, children: i.label }) : _jsx("strong", { "aria-current": "page", children: i.label })] }, n)) }); }
-export function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus = true, loopFocus, panel = "card", variant = "primary" }) { const s = useAureaStrings(); const ancora = useRef(null); const resolvida = useValorResponsivo(orientation, "horizontal", ancora); const lista = useRef(null); useDeslize(lista, ".tab[data-active]", value); return _jsxs(BaseTabs.Root, { ref: ancora, value: value, onValueChange: v => onChange(String(v)), orientation: resolvida, className: "tabs-root", children: [_jsx(BaseTabs.List, { ref: lista, className: cx("tabs", variant === "secondary" && "tabs-secondary"), "aria-label": label ?? s.tabsLabel, activateOnFocus: activateOnFocus, loopFocus: loopFocus, children: tabs.map(t => _jsx(BaseTabs.Tab, { value: t.id, className: "tab", children: t.label }, t.id)) }), tabs.map(t => _jsx(BaseTabs.Panel, { value: t.id, className: panel === "plain" ? "tabs-panel" : "card card-inset", tabIndex: 0, children: t.content }, t.id))] }); }
+export function Tabs({ tabs, value, onChange, label, orientation, activateOnFocus = true, loopFocus, panel = "card", variant = "primary" }) { const s = useAureaStrings(); const ancora = useRef(null); const resolvida = useValorResponsivo(orientation, "horizontal", ancora); const lista = useRef(null); useDeslize(lista, ".tab[data-active]", value); return _jsxs(BaseTabs.Root, { ref: ancora, value: value, onValueChange: v => onChange(String(v)), orientation: resolvida, className: "tabs-root", children: [_jsx(BaseTabs.List, { ref: lista, className: cx("tabs", variant === "secondary" && "tabs-secondary"), "aria-label": label ?? s.tabsLabel, activateOnFocus: activateOnFocus, loopFocus: loopFocus, children: tabs.map(t => _jsx(BaseTabs.Tab, { value: t.id, className: "tab", disabled: t.disabled, children: t.label }, t.id)) }), tabs.map(t => _jsx(BaseTabs.Panel, { value: t.id, className: panel === "plain" ? "tabs-panel" : "card card-inset", tabIndex: 0, children: t.content }, t.id))] }); }
 function paginasVisiveis(page, total, siblings) {
     if (total <= 5 + siblings * 2)
         return Array.from({ length: total }, (_, i) => i + 1);
@@ -277,11 +277,13 @@ function sidebarEntry(it, ctx) {
     const ativo = it.id === ctx.current;
     // O item escolhido desenha o ícone CHEIO (ADR-0053). Com `avatar`, a foto toma o lugar do ícone (4-E).
     const miolo = _jsxs(_Fragment, { children: [it.avatar ? _jsx(Avatar, { src: it.avatar.src, fallback: it.avatar.fallback, className: "sidebar-avatar" }) : it.icon && _jsx(Icon, { name: it.icon, weight: ativo ? "fill" : undefined }), _jsx("span", { className: cx("sidebar-label", ctx.collapsed && "sr-only"), children: it.label }), it.badge != null && oculto(it.badge)] });
-    const alvo = it.render
-        ? fundirRender(it.render, { id: lid, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo }, "a")
-        : it.href
-            ? _jsx("a", { id: lid, href: it.href, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo })
-            : _jsx("button", { id: lid, type: "button", className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo });
+    const alvo = it.disabled
+        ? _jsx("button", { id: lid, type: "button", className: "sidebar-item", "aria-disabled": "true", children: miolo })
+        : it.render
+            ? fundirRender(it.render, { id: lid, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo }, "a")
+            : it.href
+                ? _jsx("a", { id: lid, href: it.href, className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo })
+                : _jsx("button", { id: lid, type: "button", className: "sidebar-item", "aria-current": ativo ? "page" : undefined, onClick: juntarToque(it.onPress, it.onClick), children: miolo });
     // NO TRILHO O NOME SÓ EXISTE NO TOOLTIP. Recolhida, a lateral manda o rótulo para `.sr-only`: quem
     // usa leitor de tela continua ouvindo, e quem ENXERGA fica com um ícone mudo. A referência resolve
     // isso com tooltip no botão de navegação dela, e é o que falta para um trilho de ícone não virar adivinhação.

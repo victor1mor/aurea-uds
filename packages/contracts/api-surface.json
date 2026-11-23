@@ -7299,7 +7299,7 @@
             {
               "name": "items",
               "optional": false,
-              "type": "Array<{ value: string; label: ReactNode; href?: string; icon?: IconName; }>",
+              "type": "Array<{ value: string; label: ReactNode; href?: string; icon?: IconName; disabled?: boolean; }>",
               "values": null
             },
             {
@@ -10657,7 +10657,7 @@
             {
               "name": "tabs",
               "optional": false,
-              "type": "Array<{ id: string; label: ReactNode; content: ReactNode; }>",
+              "type": "Array<{ id: string; label: ReactNode; content: ReactNode; disabled?: boolean; }>",
               "values": null
             },
             {

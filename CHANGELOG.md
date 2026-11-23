@@ -401,6 +401,42 @@ como deveria funcionar"*.
 
 ---
 
+## [0.77.0] — 2026-11-22
+
+**O AUD-1, parte 4: a navegação como a maioria das referências** — a auditoria peça a peça (aprovada em 08–09/10/2026)
+comparou as abas, o segmento e a lateral com 11 referências, e a Aurea ficava com a minoria em dois pontos. O Victor viu
+as duas propostas na bancada viva, em Gold e Ember, claro e escuro: *"Aprovo as duas"*; e o nativo junto: *"Pode, com o
+nativo"* (22/11/2026).
+
+### Adicionado
+
+- **`disabled` no item do `Tabs`** (web): a aba indisponível fica apagada (`--opacity-disabled`, o cursor de proibido) e
+  não escolhe; as setas continuam chegando nela (o motor a mantém focável). O mesmo nome do `AureaTabItem` do nativo,
+  que já tinha.
+- **`disabled` no item do `SegmentedControl`** (web e nativo): só aquele segmento fica indisponível. Na web as setas o
+  pulam, como em todo grupo de rádio; com `href`, ele vira `<button aria-disabled>`, como a linha indisponível do
+  `NavList`. No nativo, o leitor de tela o ouve indisponível; o `disabled` do controle continua apagando todos.
+- **`disabled` no item da `Sidebar`** (web): vira `<button aria-disabled>` — não navega nem chama o toque, e continua no
+  Tab, para quem usa teclado saber que ele existe (a regra do `NavList`, medida em 13/08/2026).
+
+### Mudado
+
+- **Com o mouse em cima, a letra da aba e do segmento que não estão escolhidos vai à cor do texto** (`--foreground`) —
+  o jeito da referência nº 1, e o mesmo que a lateral da Aurea já fazia. Só com mouse (`hover:hover` e `pointer:fine`),
+  como a lateral. Na Ember também. 9 de 11 referências mudam a aba com o mouse em cima, e 8 de 10 o segmento.
+
+### Quem cobra
+
+- `tests/unit/aud1-navegacao.test.tsx` — a aba, o segmento (com e sem `href`) e o item da lateral indisponíveis; reprova
+  os quatro no código da 0.76.0 (medido).
+- `tests/unit/native-aud1-segmento.test.tsx` — o segmento do nativo indisponível; reprova no código da 0.76.0 (medido).
+- `tests/visual/aud1-navegacao.spec.ts` — no navegador, nos dois temas e na Ember: a letra com o mouse em cima e o
+  apagado do indisponível, que não muda com o mouse; reprova com o `aurea.css` da 0.76.0 (medido).
+
+### Site
+
+- Um exemplo novo em cada peça: a aba, o segmento (web e nativo) e o item da lateral indisponíveis.
+
 ## [0.76.0] — 2026-11-20
 
 ✅ **Publicada em 22/11/2026, entre 09:00 e 09:37 (Brasília, medido no npm: `tokens`, `core`, `fonts` e `icons` às 09:00,

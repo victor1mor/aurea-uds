@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.77.0
+
+November 22, 2026
+
+Tabs, SegmentedControl and Sidebar items can be disabled, and tabs and segments respond to the pointer.
+
+[Read full release notes →](https://aureauds.dev/release-v0-77-0.md)
+
 ## v0.76.0
 
 November 20, 2026

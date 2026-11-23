@@ -463,6 +463,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.77.0](https://aureauds.dev/release-v0-77-0.md): Tabs, SegmentedControl and Sidebar items can be disabled, and tabs and segments respond to the pointer.
 - [v0.76.0](https://aureauds.dev/release-v0-76-0.md): The old names marked to leave before 1.0 are removed. Each one has a replacement, listed on the Migration page.
 - [v0.75.0](https://aureauds.dev/release-v0-75-0.md): The selected underline starts with the text, secondary tabs underline edge to edge, and six inner dividers come back.
 - [v0.74.0](https://aureauds.dev/release-v0-74-0.md): List items start where the corner curve ends — ListBox, the menus and NavList now line up with Sidebar.

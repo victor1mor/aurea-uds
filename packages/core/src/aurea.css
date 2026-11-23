@@ -725,6 +725,10 @@ img,svg { display:block; }
    claro; na marca `ember`, 7,8:1 e 5,6:1 — o branco de antes era 14,5:1. */
 .sidebar-item:not([aria-current]) { color:color-mix(in oklab, var(--sidebar-foreground) 68%, transparent); }
 @media (hover:hover) and (pointer:fine) { .sidebar-item:hover { background:var(--sidebar-accent); } .sidebar-item:not([aria-current]):hover { color:var(--sidebar-foreground); } }
+/* O ITEM INDISPONÍVEL da lateral (o AUD-1, parte 4 — aprovado na bancada em 22/11/2026, *"Aprovo as duas"*): a aparência de
+   desativado dos outros controles; com o mouse em cima, nada muda. É `<button aria-disabled>`, como a linha do `NavList`. */
+.sidebar-item[aria-disabled="true"] { opacity:var(--opacity-disabled); cursor:not-allowed; }
+@media (hover:hover) and (pointer:fine) { .sidebar-item[aria-disabled="true"]:hover { background:transparent; color:color-mix(in oklab, var(--sidebar-foreground) 68%, transparent); } }
 /* A-05 (24/09/2026), decisão do Victor: o item atual da lateral passa a usar a MARCA DA CASA para
    "selecionado" — fundo, texto na cor da marca e o fio de 2px embaixo —, que o `Toggle`, o
    `SegmentedControl`, o `Button variant="nav"` e a navegação do catálogo (`.doc-nav`) já usavam.
@@ -2168,6 +2172,11 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    trilho mede 40 como o das abas — sem o desconto, 42 (a geometria pegou). */
 .segmented { display:inline-flex; gap:0; padding:calc(var(--space-1) - var(--border-width)); border-radius:var(--radius-control); background:var(--muted); border:var(--border-width) solid transparent; box-shadow:none; }
 .segmented :is(button,a) { min-block-size:var(--control-h-sm); padding:0 var(--space-4); border:0; border-radius:var(--radius-control); color:var(--muted-foreground); background:transparent; font-weight:var(--weight-medium); cursor:pointer; }
+/* O AUD-1, parte 4 (aprovado na bancada em 22/11/2026, *"Aprovo as duas"*): com o mouse em cima, a letra apagada do segmento vai à
+   cor do texto (o jeito da referência nº 1 — e o da lateral da Aurea); e o segmento indisponível, com a aparência de desativado
+   dos outros controles. */
+@media (hover:hover) and (pointer:fine) { .segmented :is(button,a):not(.active):not(:disabled,[data-disabled],[aria-disabled="true"]):hover { color:var(--foreground); } }
+.segmented :is(button,a):is(:disabled,[data-disabled],[aria-disabled="true"]) { opacity:var(--opacity-disabled); cursor:not-allowed; }
 .segmented :is(button,a).active { color:var(--foreground); background:var(--segment); box-shadow:var(--shadow-sm); border:0; }
 /* `fullWidth` (A5, 06/10/2026): ocupa a linha, e cada segmento cresce a partir do rótulo sem
    encolher abaixo dele — o mesmo desenho do nativo. `1 0 auto` e não `1` (= `1 1 0%`): base zero
@@ -2628,6 +2637,11 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .tabs[data-orientation="vertical"] .tab { text-align:start; }
 .tab { position:relative; min-block-size:var(--control-h-sm); padding:0 var(--space-4); border:0; border-radius:var(--radius-control); background:transparent; color:var(--muted-foreground); font-weight:var(--weight-medium); cursor:pointer; }
 .tab.active,.tab[data-active] { color:var(--foreground); background:var(--segment); box-shadow:var(--shadow-sm); } .tab.active:after,.tab[data-active]:after { display:none; }
+/* O AUD-1, parte 4 (aprovado na bancada em 22/11/2026, *"Aprovo as duas"*): com o mouse em cima, a letra apagada da aba vai à cor
+   do texto (o jeito da referência nº 1); e a aba indisponível (`disabled` no item: o motor põe `data-disabled`), com a aparência
+   de desativado dos outros controles. */
+@media (hover:hover) and (pointer:fine) { .tab:not(.active,[data-active],[data-disabled],[aria-disabled="true"]):hover { color:var(--foreground); } }
+.tab:is([data-disabled],[aria-disabled="true"]) { opacity:var(--opacity-disabled); cursor:not-allowed; }
 /* `variant="secondary"` (0.32.0): a aba secundária da referência — sem trilho e sem cápsula, um fio
    embaixo da lista, a escolhida com a letra normal e o fio da casa (a regra do "selecionado", mais
    abaixo). */

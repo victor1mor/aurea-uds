@@ -21,7 +21,8 @@
     "item-focus",
     "item-current",
     "collapsed",
-    "drawer"
+    "drawer",
+    "item-disabled"
   ],
   "tokens": [
     "--background",
