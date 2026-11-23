@@ -236,6 +236,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.75.0` | O traço do escolhido e as divisões de dentro: o traço de baixo do escolhido começa a 16, com o texto, e nas `Tabs` `secondary` vai de ponta a ponta (web e nativo); seis divisões de dentro voltam com a linha clara (o `hr`, as fileiras e a citação do `Prose`, o cabeçalho da `NotificationCenter`, a parte legal da `Section variant="footer"` e as ações do menu do celular do `Header`) — o achado 2 do 2-D e o resto da ADR-0072, pedido #149. **Publicada em 20/11/2026** (entre 06:40 e 07:01, Brasília, medido no npm), pelo terminal do Victor |
 | `0.76.0` | O 1.0-A: os nomes marcados para sair saem — o `pressed` do `Button` e do `IconButton` (o botão que fica ligado é o `Toggle`; o `ToolbarButton` fica com o dele), `--text-md`/`textMd`, `--font-editorial` e o papel `editorial` do nativo, `--brand-yellow-foreground` e `--brand-yellow-text`; a página Migration diz o que fica no lugar — pedido #152. **Publicada em 22/11/2026** (entre 09:00 e 09:37, Brasília, medido no npm), a primeira pela publicação em etapa (pedido #153): a CI manda os sete para a área de espera e o Victor aprova no npm |
 | `0.77.0` | O AUD-1, parte 4: a navegação como a maioria das referências — com o mouse em cima, a aba e o segmento não escolhidos vão à cor do texto; o item indisponível (`disabled`) na aba do `Tabs`, no segmento do `SegmentedControl` (web e nativo) e no item da `Sidebar`, apagado, que não muda com o mouse e segue no Tab como o da `NavList` — pedido #155. **Publicada em 23/11/2026** (entre 05:30 e 05:31, Brasília, medido no npm), pela publicação em etapa |
+| `0.78.0` | O AUD-1, parte 5: a dica como a maioria das referências — o `Tooltip` invertido (a cor do texto como fundo, a seta junto; o balão do `Chart` não muda), a dica que abre e fecha em 0,1 s (`delay` e `closeDelay`; eram 1,5 s e 0,5 s) e o item da `Sidebar` que escurece ao apertar; a janela fica como era — pedido #158. **Publicada em 23/11/2026** (entre 16:37 e 16:38, Brasília, medido no npm), pela publicação em etapa |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -1085,6 +1086,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    pasta principal, antes do lote; (3) "trilha" foi jargão na bancada da chave: a palavra é "o fundo da chave".
    **Publicada em 23/11/2026** (entre 05:30 e 05:31, Brasília, medido no npm), pela publicação em etapa, da junção do
    pedido #155. O registro entrou no lote seguinte (o 096, só de registro, sem versão).
+75. **`0.78.0`, o AUD-1 parte 5, feita em 23/11/2026** (a janela, o popover e a dica contra 11 referências; *"1 invertida,
+   2 a da maioria, 3 como é hoje, 4 com X"*, *"Escurece ao apertar"* e *"Sim, junto"*) — a dica (`Tooltip`) invertida,
+   com a seta junto (9 de 11 invertem; o balão do `Chart` não muda), a dica que abre e fecha em 0,1 s (era 1,5 s e 0,5 s;
+   a mediana das referências) e o item da `Sidebar` que escurece ao apertar (o empate da parte 4). A janela ficou como
+   era. ⚠ **As lições:** (1) o `check-pack` chamado como `powershell -Command` de dentro do Git Bash herda o `tar` do Git
+   e reprova à toa — roda no PowerShell de verdade (a lição de sempre, por outro caminho); (2) com a conta ativa do `gh`
+   de outro trabalho, o Auto-fix não liga (ele só liga com a conta autora do pedido) — a CI se acompanha com o
+   `gh run watch`, e o `gh release create` leva o `GH_TOKEN` da `victor1mor` no comando; (3) a cópia de trabalho com
+   `node_modules` não se apaga pelo `git worktree remove` no Windows (caminho longo demais), e as travas recusam o apagar
+   forçado — a pasta sobra no temporário, sem as duas listas locais. **Publicada em 23/11/2026** (entre 16:37 e 16:38,
+   Brasília, medido no npm), pela publicação em etapa, da junção do pedido #158. O registro entrou no lote seguinte (o
+   099, só de registro, sem versão).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

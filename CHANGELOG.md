@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.78.0 (23/11/2026)
+
+- **A 0.78.0 publicada em 23/11/2026, entre 16:37 e 16:38** (Brasília, medido no npm), pela publicação em etapa, da
+  junção do pedido #158 (`5ef4702c`): o `released-surface.json` desse commit. O CHANGELOG ([0.78.0] publicada), o
+  CLAUDE.md (a linha na tabela e o item 75) e a release `v0.78.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O manual de construção reescrito (23/11/2026)
 
 - **O `docs/BUILDING.md` é o processo de hoje, passo a passo** (o Victor: *"pode reescrever o BUILDING.md"*, depois de
@@ -419,6 +426,11 @@ como deveria funcionar"*.
 ---
 
 ## [0.78.0] — 2026-11-23
+
+✅ **Publicada em 23/11/2026, entre 16:37 e 16:38 (Brasília, medido no npm: `native` às 16:37, depois `react`, `core`,
+`contracts`, `tokens` e `fonts`, e `icons` às 16:38), pela publicação em etapa — o `release.yml` mandou os sete para a
+área de espera do npm e o Victor os aprovou em npmjs.com, com o segundo fator —, da junção do pedido #158**
+(`5ef4702c`).
 
 **O AUD-1, parte 5: a dica como a maioria das referências** — a auditoria peça a peça comparou a janela, o popover e a
 dica com 11 referências. O popover batia em tudo; na janela e na dica, a Aurea ficava com a minoria em três pontos. O
