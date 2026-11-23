@@ -1,7 +1,12 @@
 # Aurea — regras do projeto
 
-As regras deste repositório (identidade visual intocável, nomes privados proibidos,
-workflow por fases, toolchain e decisões já tomadas) vivem em **um único arquivo**:
+Para criar ou mudar um componente, siga o passo a passo:
+
+→ **[docs/BUILDING.md](docs/BUILDING.md)** — como se constrói uma peça da Aurea, das referências à aprovação, aos
+testes, à versão e ao registro.
+
+As regras deste repositório (identidade visual intocável, nomes privados proibidos, autorizações, ferramentas e
+decisões já tomadas) vivem em **um único arquivo**:
 
 → **[CLAUDE.md](CLAUDE.md)**
 
