@@ -15,13 +15,13 @@
 //   `href`      — não há navegação por documento no RN; link é `Linking.openURL`, do app;
 //   `type`      — `submit`/`reset` são de `<form>`, que não existe;
 //   `kbd`       — atalho de teclado impresso no botão não faz sentido no toque;
-//   `loading`   — precisa do `Spinner`, que é Lote 2. Entra lá, não aqui, e é melhor faltar do
-//                 que nascer com um giro desenhado à mão que o Lote 2 teria de substituir;
+//   ~~`loading`~~ — entrou na 0.80.0 (o Victor, 24/11/2026: *"Igual à web"*), com o anel do `Spinner` (`giro.tsx`);
 //   `appearance:"nav"` — é a pele do item de navegação, e quem a consome é o `BottomNav`/`NavList`
 //                 do Lote 3. Aparência sem consumidor é a ADR-0034 ("ter a variante não é usar").
 import * as React from "react";
 import {AccessibilityInfo, Platform, Pressable, Share, View, type GestureResponderEvent, type PressableProps} from "react-native";
 import {aroDoEstilo, brilhoDoBotao, canto, comOpacidade, criarFolha, fioDoAcabamento, misturaOpaca, preenchimento, REACAO_AO_TOQUE, estadoAcessivel} from "./estilos.js";
+import {AnelQueGira} from "./giro.js";
 import {Icon, type AureaIconRegistry, type AureaIcon, type IconWeight} from "./icon.js";
 import {Text} from "./text.js";
 import {AvisosContext, useAltoContraste, useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca, type SobreAMarcaValor} from "./theme.js";
@@ -60,6 +60,11 @@ const FONTE: Record<AureaButtonSize, "xs" | "base" | "lg"> = {
 // Era 16 até o `md` e 20 no `lg` e no `xl`, quando o `md` tinha 36.
 const ICONE: Record<AureaButtonSize, "sm" | "md" | "lg"> = {
   xs: "sm", sm: "sm", md: "md", lg: "lg", xl: "lg",
+};
+
+// O lado do ícone em cada degrau — o mesmo da escala do `Icon` —, para a rodinha do ocupado ter o tamanho do ícone.
+const LADO_DO_ICONE: Record<"sm" | "md" | "lg", (t: AureaTokens) => number> = {
+  sm: (t) => t.size.iconSm, md: (t) => t.size.iconMd, lg: (t) => t.size.iconLg,
 };
 
 /** Par (fundo, texto, borda) por tom, para cada aparência. Tudo de token, nada cru. */
@@ -212,6 +217,13 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
   /** Registro de ícones, quando não há um em contexto. Ver `criarRegistroDeIcones`. */
   icons?: AureaIconRegistry;
   fullWidth?: boolean;
+  /**
+   * OCUPADO (0.80.0, o mesmo da web — o Victor, 24/11/2026: *"Igual à web"*): a rodinha do `Spinner` toma o lugar do
+   * ícone da frente, o texto FICA, o toque é travado e o leitor de tela ouve "ocupado" (`busy`). A rodinha tem a cor e o
+   * tamanho do ícone do botão. É o jeito da maioria das referências do celular que têm a prop (a rodinha no lugar do
+   * ícone, o texto fica), e trava o toque como a web.
+   */
+  loading?: boolean;
   /** Estado de alternância, anunciado ao leitor de tela como `checked`. */
   pressed?: boolean;
   /**
@@ -322,8 +334,10 @@ function acabamentoDoBotao(t: AureaTokens, glow: boolean | undefined, ring: bool
 function CorpoDoBotao({
   children, appearance: aparenciaPedida, tone: tomPedido, size = "md",
   leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed,
-  disabled, accessibilityLabel, semRecuo = false, share, glow, ring, onPress, ...rest
+  disabled: desativadoPedido, loading = false, accessibilityLabel, semRecuo = false, share, glow, ring, onPress, ...rest
 }: ButtonProps & {semRecuo?: boolean}) {
+  // Ocupado trava o toque como desativado, igual à web (`off = disabled || loading`), e o leitor ouve os dois.
+  const disabled = !!desativadoPedido || loading;
   // 0.71.0 (o D3, como a web e a referência): sem `appearance` nem `tone`, o botão é o principal (cheio, na marca). Quem
   // pede um dos eixos continua com o outro no de antes (cheio, neutro) — `appearance="ghost"` sozinho não vira amarelo.
   const appearance: AureaButtonAppearance = aparenciaPedida ?? "solid";
@@ -368,15 +382,22 @@ function CorpoDoBotao({
       onPress={aoTocar}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      {...estadoAcessivel({disabled: !!disabled, pressed})}
+      {...estadoAcessivel({disabled: !!disabled, pressed, ...(loading ? {busy: true} : null)})}
       style={({pressed: tocando}) => [
         s.alvo, fullWidth && s.alvoLargura,
         tocando && s.pressionado, disabled && s.inerte,
       ]}
       {...rest}>
       <View style={[s.caixa, caixa, acabamento]} {...marcaDoAcabamento}>
-        {leading ?? null}
-        {leadingIcon ? <Icon name={leadingIcon} size={ICONE[size]} color={corDoTexto} icons={icons} /> : null}
+        {/* Ocupado, a rodinha toma o lugar do que vem na frente (o ícone, ou o desenho do app) — troca, não acrescenta,
+            como a web. Ela é decorativa: quem diz "ocupado" é o botão. */}
+        {loading
+          ? <AnelQueGira lado={LADO_DO_ICONE[ICONE[size]](t)} cor={corDoTexto}
+              acessibilidade={{accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants"}} />
+          : <>
+            {leading ?? null}
+            {leadingIcon ? <Icon name={leadingIcon} size={ICONE[size]} color={corDoTexto} icons={icons} /> : null}
+          </>}
         {typeof children === "string"
           // E1 (25/09/2026): entrelinha NORMAL (1,5), como o rótulo do botão da referência
           // (a folha do botão dela usa a entrelinha de cada degrau da escala). Era `none` (1,0), e a letra
@@ -405,7 +426,7 @@ function CorpoDoBotao({
 // perde o recuo. ⚠ Como todo `Button`, ele obedece o pai (E2): numa coluna que estica, o texto vai
 // para o meio; encostado na margem é `Stack align="start"`.
 
-export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth" | "glow" | "ring"> {}
+export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth" | "glow" | "ring" | "loading"> {}
 
 /** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` da referência. */
 export function LinkButton(props: LinkButtonProps) {
@@ -415,7 +436,9 @@ export function LinkButton(props: LinkButtonProps) {
 // Sem `leading` e `trailing` (bloco 1, 24/10/2026): o botão só de ícone não tem onde pôr peça antes ou depois do glifo, e as
 // duas props chegavam pelo `ButtonProps`, apareciam na ficha e não desenhavam nada. O desenho próprio do app vai no `name`
 // (R-11: toda prop de ícone aceita o `AureaIcon`). O `ThemeToggle` herda daqui.
-export interface IconButtonBase extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "leading" | "trailing" | "fullWidth"> {
+// Sem `loading` (0.80.0): ele entrou só no `Button`; o botão só de ícone não desenha a rodinha, e a prop não aparece onde
+// não desenha nada.
+export interface IconButtonBase extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "leading" | "trailing" | "fullWidth" | "loading"> {
   /** **Obrigatório**: um botão que só tem glifo não tem texto para o leitor de tela anunciar. */
   label: string;
 }

@@ -172,7 +172,7 @@
       "name": "loading",
       "type": "boolean",
       "default": "false",
-      "description": "Shows the spinner, sets aria-busy and blocks interaction. The label stays."
+      "description": "Shows the spinner in place of the leading icon, sets aria-busy and blocks interaction. The label stays. On native the same: the spinner takes the icon colour and size, the press is blocked and the screen reader hears busy."
     },
     {
       "name": "disabled",

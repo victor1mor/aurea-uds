@@ -70,6 +70,14 @@ Inside a Field with error, the drop area turns red like every other field and a 
 </Field>
 ```
 
+### Disabled
+
+disabled fades the drop area, keeps the file picker closed and refuses a dropped file. A screen reader hears the file input as unavailable.
+
+```tsx
+<FileInput label="Attachments" hint="Available after you save the draft" disabled />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -85,6 +93,7 @@ Inside a Field with error, the drop area turns red like every other field and a 
 | `onQueueChange` | `(queue: FileQueueItem[]) => void` | — | Fires on every change to the queue, in serialisable form. Where you persist it — local storage, a server, nowhere — is yours, the same boundary the grid draws for its URL state. |
 | `preview` | `boolean` | false | Shows a thumbnail for image files, in the same slot the document icon occupies — the row does not change height because of it. Only images: generating an object URL for a 40 MB PDF shows nothing. The URL is revoked whenever the item LEAVES the queue — removed, replaced in single mode, or replaced by a name conflict — and any survivor is revoked on unmount. The browser holds the bytes until someone says otherwise, and until 2026-08-12 only the remove path revoked (AUD-0009). |
 | `checksum` | `boolean` | false | Computes SHA-256 of each file with the Web Crypto API — no dependency — shows the first eight digits and puts the whole value in the queue. Opt-in and not the default for two measured reasons: `crypto.subtle` only exists in a secure context (https or localhost), and the digest needs the WHOLE file in memory, because Web Crypto has no streaming hash. If your `upload` resolves with `{checksum}`, the two are compared and a mismatch fails the item: bytes that differ are not a detail. |
+| `disabled` | `boolean` | false | The drop area is half faded, does not open the file picker and refuses a dropped file. The file input carries the HTML disabled, so a screen reader hears it as unavailable. On native, the add button and the remove buttons turn off as well. |
 | `aria-invalid` | `boolean \| "true" \| "false"` | — | The drop area turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own. A refused file turns it red with or without it. Web only. |
 | `aria-labelledby` | `string` | — | The label it points to comes before the text of the drop area ("Proof of address Drag files here or click to select"). Inside a Field it arrives on its own, pointing at the Field label. Web only. |
 | `aria-describedby` | `string` | — | Goes to the file input, together with the reason of a refused file. Inside a Field it arrives on its own, pointing at the hint and the error message. Web only. |

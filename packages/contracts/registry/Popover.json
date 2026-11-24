@@ -81,7 +81,7 @@
       "name": "arrow",
       "type": "boolean",
       "default": "false",
-      "description": "The arrow, off by default as in the reference library. Our own curve, 12 × 6, with the surface fill and the border line."
+      "description": "The arrow, off by default as in the reference library. A fine point, 12 × 6 (two straight sides), with the surface fill and the border line."
     }
   ]
 }

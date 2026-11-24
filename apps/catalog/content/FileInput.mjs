@@ -93,5 +93,12 @@ export default {
       render: () => h("div", {style: stack},
         h(Field, {label: "Proof of address", error: "Attach a document"}, h(FileInput, {accept: ".pdf"}))),
     },
+    {
+      title: "Disabled",
+      description: "disabled fades the drop area, keeps the file picker closed and refuses a dropped file. A screen reader hears the file input as unavailable.",
+      code: '<FileInput label="Attachments" hint="Available after you save the draft" disabled />',
+      render: () => h("div", {style: stack},
+        h(FileInput, {label: "Attachments", hint: "Available after you save the draft", disabled: true})),
+    },
   ],
 };

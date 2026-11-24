@@ -56,7 +56,8 @@ describe("HER-01 · todo raio do nativo passa por `canto()`", () => {
         .filter((l) => l.includes(`"circular"`) && !l.includes("curva:"))
         .map((l) => `${f}: ${l.trim()}`));
     expect(circulares).toHaveLength(1);
-    expect(circulares[0]).toMatch(/^feedback\.tsx: anel:/);
+    // Desde a 0.80.0 o anel mora no `giro.tsx`: o `Spinner` e a rodinha do `Button` ocupado usam o mesmo.
+    expect(circulares[0]).toMatch(/^giro\.tsx: canto\(t\.size\.radiusFull, "circular"\)/);
   });
 });
 

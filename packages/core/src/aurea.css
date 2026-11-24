@@ -4018,7 +4018,7 @@ button.tag-main { cursor:pointer; }
 .tooltip:not(.chart-tooltip) .overlay-arrow-line { fill:none; }
 .popover { z-index:var(--z-modal); min-width:220px; max-width:min(360px,calc(100vw - 32px)); padding:16px; border:1px solid transparent; border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); font-size:var(--text-sm); box-shadow:var(--shadow-lg); display:grid; gap:10px; transform-origin:var(--transform-origin,center); transition:opacity var(--duration-base) var(--ease-standard),scale var(--duration-base) var(--ease-standard); }
 .popover-title { font-weight:var(--weight-medium); }
-/* A SETA (0.32.0): o desenho é nosso — uma curva de 12 × 6 —, com o fundo da janela e a linha da borda,
+/* A SETA (0.32.0): o desenho é nosso — ~~uma curva de 12 × 6~~ → a ponta fina de 12 × 6, desde a 0.80.0 —, com o fundo da janela e a linha da borda,
    e ela entra 1 por cima da borda da janela para a linha dar a volta sem emenda. O motor põe a seta
    no ponto certo do lado; aqui só se diz em que lado ela encosta e para onde aponta. */
 .overlay-arrow { display:flex; inline-size:var(--space-3); block-size:var(--space-3); }
@@ -4070,6 +4070,11 @@ button.tag-main { cursor:pointer; }
    `aria-activedescendant`), o item nunca tem `:focus-visible`, e o destaque continua sendo o fundo. */
 .menu-item:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:calc(-1 * var(--focus-width)); }
 .menu-item[data-disabled] { opacity:var(--opacity-disabled); cursor:not-allowed; }
+/* O ITEM DE PERIGO (o Victor, 24/11/2026: *"Ganha o vermelho"*, como o do nativo): o texto e os ícones no vermelho da frase de
+   erro (`--danger-400`, que passa de 4,5:1 nos dois temas) e, em destaque, o fundo suave do perigo — o mesmo do toque no
+   nativo (`dangerBg`). 7 de 15 referências da web têm o item, e as duas primeiras pintam o texto e o ícone. */
+.menu-item-destructive,.menu-item-destructive > .menu-item-trailing { color:var(--danger-400); }
+.menu-item-destructive[data-highlighted],.menu-item-destructive:hover:not([data-disabled]) { background:var(--danger-bg); }
 /* CommandPalette (M6): a lista dentro da paleta. Reusa `.menu` e `.menu-item` — a paleta nao
    inventa uma segunda pele de lista, que e o defeito que a `.table-region` cobrou caro. O que se
    acrescenta e o teto de altura (a lista rola, a caixa nao cresce sem fim) e a linha do item,
@@ -4252,6 +4257,9 @@ button.tag-main { cursor:pointer; }
 .dropzone strong { color:var(--foreground); }
 .dropzone-icon { color:var(--primary); }
 .dropzone-hint { font-size:var(--text-xs); }
+/* DESATIVADA (0.80.0, o DS-370: *"Ganha o desativado"*): meio apagada, como todo controle desativado da Aurea, e o cursor
+   de proibido. O clique não abre nada porque o campo de dentro leva o `disabled`. */
+.dropzone[data-disabled] { opacity:var(--opacity-disabled); cursor:not-allowed; }
 .file-list { display:flex; flex-direction:column; gap:var(--space-2); margin-top:var(--space-3); padding:0; list-style:none; }
 .file-item { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-2) var(--space-3); background:var(--surface-2); border:1px solid transparent; border-radius:var(--radius-md); }
 .file-progress { flex-basis:var(--space-20); flex-shrink:0; } /* largura fixa da barra de upload (auditoria 18/07, M14) */

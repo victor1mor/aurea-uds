@@ -264,6 +264,7 @@ function useCamada(trigger: React.ReactElement, aoFecharTambem?: () => void): Ca
 // ─────────────────────────────────────────────────────────────────────────────────────────────
 
 const SEM_RECUO: Recuo = {top: 0, right: 0, bottom: 0, left: 0};
+type Retrato = {pos: ReturnType<typeof posicionar>; ancora: Retangulo; tamanho: Tamanho};
 
 interface CamadaProps {
   c: Camada;
@@ -278,7 +279,15 @@ interface CamadaProps {
 /**
  * A entrada é a da referência: o painel nasce invisível, é MEDIDO, vai para o lugar e só então
  * aparece — opacidade de 0 a 1, escala de 0,97 a 1 e um passo de 8 vindo do gatilho, no `durationBase`
- * (a dela é 200; a escala de duração da Aurea tem 180). A saída é imediata: o `Modal` some na hora.
+ * (a dela é 200; a escala de duração da Aurea tem 180).
+ *
+ * A SAÍDA SE APAGA (o Victor, 24/11/2026: *"Se apaga rápido"*, como a web — `.menu[data-ending-style]` e
+ * `.popover[data-ending-style]`): o painel volta a 0 de opacidade e a 0,97 de escala no `durationFast`, e só então o
+ * `Modal` some. Antes, ele sumia na hora. ⚠ **Esperar a animação não pode deixar uma camada invisível prendendo o
+ * toque** (o cuidado anotado em outubro): (1) durante a saída nada dentro dela recebe toque (`pointerEvents="none"`);
+ * (2) o `Modal` some no fim da animação OU no relógio de garantia (`durationBase`, maior que a saída), o que vier
+ * primeiro — se o fim da animação não chegar, o relógio fecha; (3) com "reduzir movimento" (ou sem resposta do
+ * sistema), some na hora, como antes; (4) reabrir no meio da saída cancela a saída.
  */
 function CamadaPresa({c, side, seta = false, menu = false, label, testID, children}: CamadaProps) {
   // A camada sai do fluxo: o FUNDO é pintado com os tokens do APP (ADR-0063 — ver `useTokensDoApp`).
@@ -298,20 +307,56 @@ function CamadaPresa({c, side, seta = false, menu = false, label, testID, childr
   // do `Popover` da web. Com a seta, a altura dela: a ponta encosta no gatilho, sem passar por cima.
   const distancia = seta ? alturaDaSeta(tf) : tf.size.space2;
   const pronto = c.aberto && c.ancora != null && c.tamanho != null;
-  const pos = pronto ? posicionar(c.ancora!, c.tamanho!, W, H, recuo, distancia, side) : null;
+  const posAberto = pronto ? posicionar(c.ancora!, c.tamanho!, W, H, recuo, distancia, side) : null;
+
+  // O último lugar em que o painel apareceu: é nele que ele se apaga, depois que a camada já fechou.
+  const retrato = React.useRef<Retrato | null>(null);
+  if (posAberto) retrato.current = {pos: posAberto, ancora: c.ancora!, tamanho: c.tamanho!};
+  const [saida, setSaida] = React.useState<Retrato | null>(null);
+  // A saída começa NO MESMO desenho em que a camada fecha, e não num efeito depois: com o efeito, houve um desenho com o
+  // `Modal` invisível entre o fechar e o apagar — no navegador o painel sumia de vez, e no aparelho a janela fecharia e
+  // reabriria (medido na página do nativo do site, 24/11/2026). É o "estado que acompanha a prop" do React: mudar o
+  // estado durante o desenho, comparando com o que se viu da última vez.
+  const [abertoVisto, setAbertoVisto] = React.useState(c.aberto);
+  if (abertoVisto !== c.aberto) {
+    setAbertoVisto(c.aberto);
+    const r = retrato.current;
+    // Sem lugar guardado (nunca apareceu) ou sem movimento (`!== false`: sem resposta do sistema também): some na hora.
+    setSaida(!c.aberto && r != null && reduzir === false ? r : null);
+    if (!c.aberto) retrato.current = null;
+  }
+  const saindo = !c.aberto && saida != null;
+  const pos = posAberto ?? (saindo ? saida.pos : null);
+  const ancora = c.ancora ?? (saindo ? saida.ancora : null);
+  const tamanho = c.tamanho ?? (saindo ? saida.tamanho : null);
 
   const progresso = React.useRef(new Animated.Value(0)).current;
   React.useEffect(() => {
-    if (!pronto) { progresso.setValue(0); return; }
-    // `!== false`, e não `=== true`: enquanto o sistema não respondeu, não anima (ver `movimento.ts`).
-    if (reduzir !== false) { progresso.setValue(1); return; }
+    if (c.aberto) {
+      if (!pronto) { progresso.setValue(0); return; }
+      // `!== false`, e não `=== true`: enquanto o sistema não respondeu, não anima (ver `movimento.ts`).
+      if (reduzir !== false) { progresso.setValue(1); return; }
+      const laco = Animated.timing(progresso, {
+        toValue: 1, duration: tf.size.durationBase, useNativeDriver: driverNativo(),
+        easing: Easing.bezier(...tf.easing.easeStandard),
+      });
+      laco.start();
+      return () => laco.stop();
+    }
+    // Fechado. Sem saída em curso, nada a apagar; o "reduzir movimento" ligado no meio da saída encerra na hora.
+    if (!saindo) { progresso.setValue(0); return; }
+    if (reduzir !== false) { progresso.setValue(0); setSaida(null); return; }
+    let feito = false;
+    const terminar = () => { if (feito) return; feito = true; progresso.setValue(0); setSaida(null); };
     const laco = Animated.timing(progresso, {
-      toValue: 1, duration: tf.size.durationBase, useNativeDriver: driverNativo(),
+      toValue: 0, duration: tf.size.durationFast, useNativeDriver: driverNativo(),
       easing: Easing.bezier(...tf.easing.easeStandard),
     });
-    laco.start();
-    return () => laco.stop();
-  }, [pronto, reduzir, progresso, tf.size.durationBase, tf.easing.easeStandard]);
+    laco.start((fim?: {finished?: boolean}) => { if (fim?.finished) terminar(); });
+    // O relógio de garantia: o `Modal` sai mesmo que o fim da animação não chegue.
+    const relogio = setTimeout(terminar, tf.size.durationBase);
+    return () => { laco.stop(); clearTimeout(relogio); };
+  }, [c.aberto, pronto, saindo, reduzir, progresso, tf.size.durationBase, tf.size.durationFast, tf.easing.easeStandard]);
 
   // O passo vem do lado do gatilho: abaixo dele, o painel desce; acima, sobe. O da referência é a
   // distância, no máximo 12.
@@ -331,19 +376,19 @@ function CamadaPresa({c, side, seta = false, menu = false, label, testID, childr
 
   return (
     <ForaDaMarca>
-    <Modal visible={c.aberto} transparent animationType="none" statusBarTranslucent
+    <Modal visible={c.aberto || saindo} transparent animationType="none" statusBarTranslucent
            navigationBarTranslucent onRequestClose={c.fechar} testID={testID}>
-      {c.aberto ? (
-        <View style={s.camada}>
+      {c.aberto || saindo ? (
+        <View style={s.camada} pointerEvents={saindo ? "none" : "auto"}>
           {/* O fundo é transparente, como o da referência: o painel não escurece a tela. Ele só
               recebe o toque de fora — irmão do painel, não ancestral (`overlays.tsx`). */}
-          <Pressable style={s.fundoDeToque} onPress={c.fechar} accessible={false}
+          <Pressable style={s.fundoDeToque} onPress={saindo ? undefined : c.fechar} accessible={false}
                      testID={testID ? `${testID}-fundo` : undefined} />
           <Animated.View
             testID={testID ? `${testID}-painel` : undefined}
-            onLayout={c.aoMedirPainel}
-            onAccessibilityEscape={c.fechar}
-            pointerEvents={pos ? "auto" : "none"}
+            onLayout={saindo ? undefined : c.aoMedirPainel}
+            onAccessibilityEscape={saindo ? undefined : c.fechar}
+            pointerEvents={pos && !saindo ? "auto" : "none"}
             accessibilityRole={menu ? "menu" : undefined}
             accessibilityLabel={label}
             style={[
@@ -352,8 +397,8 @@ function CamadaPresa({c, side, seta = false, menu = false, label, testID, childr
                maxWidth: W - recuo.left - recuo.right, maxHeight: H - recuo.top - recuo.bottom},
               entrada,
             ]}>
-            {seta && pos && c.ancora && c.tamanho
-              ? <Seta tf={tf} lado={pos.lado} ancora={c.ancora} painel={{...c.tamanho, x: pos.left, y: pos.top}} />
+            {seta && pos && ancora && tamanho
+              ? <Seta tf={tf} lado={pos.lado} ancora={ancora} painel={{...tamanho, x: pos.left, y: pos.top}} />
               : null}
             {children}
           </Animated.View>
@@ -366,7 +411,8 @@ function CamadaPresa({c, side, seta = false, menu = false, label, testID, childr
 
 /**
  * A seta: a medida e o lugar da referência (20 × 12, apontando para o MEIO do gatilho, a 12 das
- * pontas do painel); o desenho é o da seta da web, uma curva só, e não um triângulo de bico.
+ * pontas do painel); o desenho é o da seta da web: a PONTA FINA, dois lados retos que se encontram num bico (o Victor,
+ * 24/11/2026: *"Ponta fina"*, web e celular; era uma curva só, de ponta redonda).
  * O fundo cobre a borda do painel embaixo dela, e o traço continua a borda.
  */
 function Seta({tf, lado, ancora, painel}: {tf: AureaTokens; lado: AureaOverlaySide; ancora: Retangulo; painel: Retangulo}) {
@@ -379,12 +425,12 @@ function Seta({tf, lado, ancora, painel}: {tf: AureaTokens; lado: AureaOverlaySi
   const ao = vertical
     ? preso(ancora.x + ancora.width / 2 - painel.x - b - w / 2, tf.size.space3, painel.width - 2 * b - w - tf.size.space3)
     : preso(ancora.y + ancora.height / 2 - painel.y - b - w / 2, tf.size.space3, painel.height - 2 * b - w - tf.size.space3);
-  // A curva: o ponto de controle a DUAS profundidades da base deixa o bico exatamente na ponta.
+  // Os dois lados retos: o bico fica a meio traço da ponta da caixa, para o traço não ser cortado.
   const linha =
-    lado === "bottom" ? `M0 ${h} Q${w / 2} ${2 * meio - h} ${w} ${h}`        // painel embaixo: aponta para cima
-    : lado === "top" ? `M0 0 Q${w / 2} ${2 * (h - meio)} ${w} 0`             // painel em cima: para baixo
-    : lado === "right" ? `M${h} 0 Q${2 * meio - h} ${w / 2} ${h} ${w}`       // painel à direita: para a esquerda
-    : `M0 0 Q${2 * (h - meio)} ${w / 2} 0 ${w}`;                             // painel à esquerda: para a direita
+    lado === "bottom" ? `M0 ${h} L${w / 2} ${meio} L${w} ${h}`        // painel embaixo: aponta para cima
+    : lado === "top" ? `M0 0 L${w / 2} ${h - meio} L${w} 0`           // painel em cima: para baixo
+    : lado === "right" ? `M${h} 0 L${meio} ${w / 2} L${h} ${w}`       // painel à direita: para a esquerda
+    : `M0 0 L${h - meio} ${w / 2} L0 ${w}`;                           // painel à esquerda: para a direita
   const lugar =
     lado === "bottom" ? {top: -h, left: ao}
     : lado === "top" ? {bottom: -h, left: ao}
@@ -396,7 +442,7 @@ function Seta({tf, lado, ancora, painel}: {tf: AureaTokens; lado: AureaOverlaySi
       <Svg width={vertical ? w : h} height={vertical ? h : w}>
         <Path d={`${linha} Z`} fill={tf.color.popover} />
         <Path d={linha} fill="none" stroke={tf.color.border} strokeWidth={b}
-              strokeLinecap="round" strokeLinejoin="round" />
+              strokeLinecap="round" strokeLinejoin="miter" />
       </Svg>
     </View>
   );
@@ -458,8 +504,8 @@ export interface MenuActionDef extends MenuItemBase {
   kind?: "item";
   onClick?: () => void;
   /**
-   * Só do nativo: o item que DESTRÓI dado, com o texto e o toque no tom de perigo — o `danger` do
-   * item da referência. A web ainda não tem o campo.
+   * O item que DESTRÓI dado, com o texto e o toque no tom de perigo — o `danger` do item da
+   * referência. A web tem o mesmo campo desde a 0.80.0.
    */
   destructive?: boolean;
 }

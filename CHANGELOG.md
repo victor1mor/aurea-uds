@@ -17,6 +17,13 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.79.0 (24/11/2026)
+
+- **A 0.79.0 publicada em 24/11/2026, entre 10:12 e 10:13** (Brasília, medido no npm), pela publicação em etapa, da
+  junção do pedido #160 (`2201ef9a`): o `released-surface.json` desse commit. O CHANGELOG ([0.79.0] publicada), o
+  CLAUDE.md (a linha na tabela e o item 76) e a release `v0.79.0` no GitHub.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.78.0 (23/11/2026)
 
 - **A 0.78.0 publicada em 23/11/2026, entre 16:37 e 16:38** (Brasília, medido no npm), pela publicação em etapa, da
@@ -425,7 +432,59 @@ como deveria funcionar"*.
 
 ---
 
+## [0.80.0] — 2026-11-24
+
+**Os detalhes do menu, o botão ocupado do nativo e a área de arquivo desativada** — o Victor decidiu olhando as bancadas
+vivas de 24/11/2026, cada ponto com a conta das referências: os detalhes do menu (*"Ganha o vermelho"*, *"Se apaga
+rápido"*, *"Fecha, nos dois"*, *"Ponta fina"*), o `Button` do nativo com `loading` (*"Igual à web"*) e o `FileInput` da
+web com `disabled` (*"Ganha o desativado"*). Ficam como estão: o menu do nativo vira de lado quando não cabe e o submenu
+do nativo abre no lugar.
+
+### Adicionado
+
+- **O item de perigo no menu da web** — `destructive` no item de ação do `DropdownMenu`, do `ContextMenu` e do `Menubar`
+  (o mesmo renderizador), com o nome e o desenho do nativo: o texto e os ícones no vermelho da frase de erro
+  (`--danger-400`) e, em destaque, o fundo suave do perigo (`--danger-bg`), o mesmo do toque no nativo. A classe
+  `menu-item-destructive`. 7 de 15 referências da web têm o item; no celular, 5 de 8.
+- **`loading` no `Button` do nativo**, como o da web: a rodinha do `Spinner` toma o lugar do ícone da frente, na cor do
+  texto e no tamanho do ícone do botão; o texto fica; o toque trava (`disabled`) e o leitor de tela ouve "ocupado"
+  (`busy`). Não entra no `IconButton` nem no `LinkButton` do nativo. O desenho do anel saiu do `Spinner` para um arquivo
+  só dele (`giro.tsx`), usado pelos dois — o `Spinner` não muda.
+- **`disabled` no `FileInput` da web** (o DS-370; o nativo já tinha, e a ficha já prometia): a área de soltar fica meio
+  apagada (`--opacity-disabled`) com o cursor de proibido, não abre a janela de escolher e recusa o arquivo solto nela; o
+  campo de arquivo leva o `disabled` do HTML.
+
+### Mudado
+
+- **Escolher uma opção de "uma só" fecha o menu na web** (o `radiogroup` do `DropdownMenu`, do `ContextMenu` e do
+  `Menubar`): a escolha está feita, como em 10 de 13 referências da web e no nativo, que já fechava. O motor deixava aberto.
+  A caixa de marcar continua deixando aberto.
+- **O menu e o `Popover` do nativo se apagam ao fechar**, como na web: o painel volta a 0 de opacidade no `durationFast`, e
+  só então a janela some — antes, sumia na hora. Durante a saída nada nela recebe toque; a janela sai no fim da animação ou
+  no relógio de garantia (`durationBase`), o que vier primeiro; com "reduzir movimento", some na hora, como antes; reabrir
+  no meio da saída cancela a saída.
+- **A seta do `Popover` e da `Tooltip` tem a ponta fina**, na web e no nativo: dois lados retos que se encontram num bico
+  (12 × 6 na web, 20 × 12 no nativo, as mesmas medidas) — era uma curva de ponta redonda. Na web, 8 de 14 referências com
+  seta têm a ponta fina e 3 quase fina; no celular, 2 de 3.
+
+### Quem cobra
+
+- `tests/unit/lote-101.test.tsx` — o item de perigo, o rádio que fecha e a caixa que não fecha, a seta nos dois alvos, a
+  área de arquivo desativada, a saída do menu do nativo (o relógio de garantia, o fim da animação, o "reduzir movimento" e
+  o reabrir no meio, e a janela que não pisca entre o fechar e o apagar) e o botão ocupado. Com o código da 0.79.0, 10 de 15
+  reprovam; os 5 que passam são os que dizem "o que não muda" (a caixa de marcar, o soltar sem `disabled`, o botão sem
+  `loading`, o "reduzir movimento" e o reabrir).
+- `tests/unit/native-lote-q-9b-menu.test.tsx` — os testes de fechar esperam a saída terminar.
+- `tests/unit/native-canto-continuo.test.tsx` — o único canto `circular` continua sendo o anel, agora no `giro.tsx`.
+
+---
+
 ## [0.79.0] — 2026-11-23
+
+✅ **Publicada em 24/11/2026, entre 10:12 e 10:13 (Brasília, medido no npm: `native` às 10:12, depois `react`,
+`contracts`, `core` e `fonts`, e `icons` e `tokens` às 10:13), pela publicação em etapa — o `release.yml` mandou os sete
+para a área de espera do npm e o Victor os aprovou em npmjs.com, com o segundo fator —, da junção do pedido #160**
+(`2201ef9a`).
 
 **A Rodada 1 das decisões em bloco** — para acelerar o caminho até a 1.0, as 50 perguntas que esperavam o Victor foram
 separadas em rodadas. Na primeira, ele viu na bancada viva, ao lado da referência nº 1, em Gold e Ember, claro e escuro,

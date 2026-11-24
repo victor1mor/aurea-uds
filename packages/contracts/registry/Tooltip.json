@@ -69,7 +69,7 @@
       "name": "arrow",
       "type": "boolean",
       "default": "false",
-      "description": "The arrow, off by default as in the reference library. Our own curve, 12 × 6, all in the colour of the hint."
+      "description": "The arrow, off by default as in the reference library. A fine point, 12 × 6 (two straight sides), all in the colour of the hint."
     },
     {
       "name": "delay",

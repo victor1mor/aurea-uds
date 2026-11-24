@@ -60,6 +60,9 @@ const texto = (conteudo: string) => {
   return {...p, e: plano(p.style)};
 };
 const tocar = async (p: Props | undefined) => { await act(async () => { (p!.onPress as () => void)(); }); };
+// 0.80.0: fechar APAGA o painel no `durationFast`, e o `Modal` some no fim dele — ou no relógio de garantia
+// (`durationBase`), que é o que o dublê deixa chegar: a animação dele nunca termina.
+const esperarASaida = () => act(async () => { await new Promise((r) => setTimeout(r, ESCURO.size.durationBase + 1)); });
 
 type Ret = {x: number; y: number; width: number; height: number};
 /** Abre como o aparelho: mede o gatilho, toca, e o painel se mede. */
@@ -126,6 +129,7 @@ describe("abrir e fechar", () => {
     montar(umPopover());
     await abrir();
     await tocar(ultimo("Pressable", "m-fundo"));
+    await esperarASaida();
     expect(modal().visible).toBe(false);
   });
 
@@ -133,6 +137,7 @@ describe("abrir e fechar", () => {
     montar(umPopover());
     await abrir();
     await act(async () => { (modal().onRequestClose as () => void)(); });
+    await esperarASaida();
     expect(modal().visible).toBe(false);
   });
 
@@ -140,6 +145,7 @@ describe("abrir e fechar", () => {
     montar(umPopover());
     await abrir();
     await act(async () => { (painel().onAccessibilityEscape as () => void)(); });
+    await esperarASaida();
     expect(modal().visible).toBe(false);
   });
 
@@ -335,6 +341,7 @@ describe("DropdownMenu · o painel e o item da referência", () => {
     await abrir();
     await tocar(linha("Editar"));
     expect(onClick).toHaveBeenCalledTimes(1);
+    await esperarASaida();
     expect(modal().visible).toBe(false);
   });
 
@@ -378,6 +385,7 @@ describe("DropdownMenu · o painel e o item da referência", () => {
     expect(linha("Ajuda")?.accessibilityRole).toBe("link");
     await tocar(linha("Ajuda"));
     expect(__chamadasDeSistema).toContain("openURL:https://exemplo.dev/ajuda");
+    await esperarASaida();
     expect(modal().visible).toBe(false);
   });
 
@@ -438,6 +446,7 @@ describe("DropdownMenu · o que alterna e a escolha única", () => {
       .toEqual([ESCURO.size.space2, ESCURO.color.mutedForeground, ESCURO.size.radiusFull, "continuous"]); // D4
     await tocar(linha("Data"));
     expect(onValueChange).toHaveBeenCalledWith("data");
+    await esperarASaida();
     expect(modal().visible).toBe(false);
     // Sem controle, a escolha fica para a próxima vez que o menu abrir.
     await abrir();
@@ -493,6 +502,7 @@ describe("DropdownMenu · o submenu abre no lugar", () => {
     await tocar(linha("Compartilhar"));
     await tocar(linha("Copiar link"));
     expect(onClick).toHaveBeenCalledTimes(1);
+    await esperarASaida();
     expect(modal().visible).toBe(false);
     // Reabre do começo: o submenu fechou junto.
     await abrir();

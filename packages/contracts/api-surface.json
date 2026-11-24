@@ -5740,6 +5740,12 @@
               "optional": true,
               "type": "string",
               "values": null
+            },
+            {
+              "name": "disabled",
+              "optional": true,
+              "type": "boolean",
+              "values": null
             }
           ]
         }

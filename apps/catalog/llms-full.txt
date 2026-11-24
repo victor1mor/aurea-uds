@@ -3848,7 +3848,7 @@ nav is an appearance of its own, not a tone: a navigation item, muted at rest. v
 | `tone` | `neutral \| brand \| danger \| success \| warning \| info` | neutral | What the colour means. Every tone works with every appearance, filled included — each has its own colour and text pair per theme. |
 | `size` | `xs \| sm \| md \| lg \| xl` | md | Height comes from the density tokens; the pill radius never changes. |
 | `href` | `string` | — | Renders an <a> with the same skin. A button that navigates is a link. |
-| `loading` | `boolean` | false | Shows the spinner, sets aria-busy and blocks interaction. The label stays. |
+| `loading` | `boolean` | false | Shows the spinner in place of the leading icon, sets aria-busy and blocks interaction. The label stays. On native the same: the spinner takes the icon colour and size, the press is blocked and the screen reader hears busy. |
 | `disabled` | `boolean` | false | Native disabled: the control leaves the tab order entirely. With href it becomes aria-disabled, since a link has no disabled state. USE IT WHEN THERE IS NOTHING TO EXPLAIN — measured on 2026-08-13, a disabled button cannot be focused, so a Tooltip hung on it is never read by anyone navigating with a keyboard, and wrapping it in a span (what other libraries document) fixes the pointer and not the keyboard, because the span comes in at tabIndex -1. |
 | `aria-disabled` | `boolean` | — | Inert but REACHABLE: the control keeps its place in the tab order and announces itself as disabled, and this component blocks activation — the attribute is semantics only, so leaving it to the browser would announce "disabled" on a button that still acts. Use it when there IS a why to tell, and put the why in a Tooltip, which now reaches. There is no permission component in Aurea and there will not be one: hiding an action is {can ? … : …} in your own code, and hiding a button is not security. |
 | `leadingIcon` | `AureaIcon` | — | Glyph before the label — a name from the allowlist, or the app’s own drawing (a component that returns its <svg>), as Icon and IconButton take. |
@@ -5715,7 +5715,7 @@ import {ContextMenu} from "@aurea-uds/react";
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `children` | `ReactNode` | — | The region that answers the right button. It is rendered focusable (tabIndex 0) on purpose: the keyboard route into a context menu is Shift+F10 or the Menu key, and the browser only fires those over a FOCUSED element. Without that, the menu is mouse-only. |
-| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onPress?, onClick?, disabled?, leadingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. Each item can carry a description (a line under the label) and a trailingIcon (an icon at the end), as in DropdownMenu. |
+| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onPress?, onClick?, disabled?, leadingIcon?, destructive?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. Each item can carry a description (a line under the label) and a trailingIcon (an icon at the end), as in DropdownMenu. destructive turns an item that deletes something red, and picking a radiogroup option closes the menu, as in DropdownMenu. |
 | `label` | `string` | — | Names both the trigger region and the menu. A right-click target with no name is announced as nothing at all. |
 | `className` | `string` | — | Goes on the trigger region, which is the element you can see. |
 </page>
@@ -6302,6 +6302,26 @@ How the menu lines up with the trigger. end puts the menu's edge on the trigger'
 <DropdownMenu label="Align end" align="end" trigger={<Button variant="outline">Align end</Button>} items={[{label: "Duplicate"}, {label: "Rename"}]} />
 ```
 
+### Destructive item and a single choice
+
+destructive paints an item that deletes something in the red of an error message — the label, the icon and, when highlighted, a soft red background, the same as on native. Picking an option of a radiogroup closes the menu; a checkbox item keeps it open.
+
+```tsx
+<DropdownMenu
+  label="File actions"
+  trigger={<Button variant="outline" trailingIcon="caret-down">File</Button>}
+  items={[
+    {kind: "radiogroup", label: "Sort by", defaultValue: "date", items: [
+      {value: "date", label: "Date"},
+      {value: "name", label: "Name"},
+    ]},
+    {kind: "checkbox", label: "Show hidden files"},
+    "separator",
+    {label: "Delete", leadingIcon: "trash", destructive: true, onPress: remove},
+  ]}
+/>
+```
+
 ### Descriptions and an end icon
 
 description puts a line under the label, in the small muted text; trailingIcon sits at the end — arrow-square-out says a link opens another site.
@@ -6324,7 +6344,7 @@ description puts a line under the label, in the small muted text; trailingIcon s
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `trigger` | `ReactElement` | — | The element that opens the menu. Usually a Button or an IconButton. |
-| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onPress?, onClick?, disabled?, leadingIcon?, description?, trailingIcon?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. description is a line under the label, in the small muted text; trailingIcon sits at the end of the item (for example, arrow-square-out on a link that opens another site). On native, a link item opens only https:, mailto: and tel: addresses; any other scheme is ignored. |
+| `items` | `Array<MenuItemDef \| "separator">` | — | The menu, as data: {label, onPress?, onClick?, disabled?, leadingIcon?, description?, trailingIcon?, destructive?}. The literal string "separator" draws a rule — a separator is not an item, so it never takes focus. description is a line under the label, in the small muted text; trailingIcon sits at the end of the item (for example, arrow-square-out on a link that opens another site). On native, a link item opens only https:, mailto: and tel: addresses; any other scheme is ignored. destructive marks an item that deletes or destroys something: the label and its icons turn the red of an error message, and the highlighted item takes the soft danger background, as on native. Picking an option of a radiogroup closes the menu (a single choice is done); a checkbox item keeps it open. |
 | `side` | `top \| right \| bottom \| left` | bottom | Preferred side; it flips when there is no room. |
 | `align` | `start \| center \| end` | center | How the menu lines up with the trigger along that side. end puts the menu's edge on the trigger's edge, as on a split button. |
 | `label` | `string` | — | Accessible name of the menu itself. Worth setting when a page has more than one — otherwise a screen reader lists several menus with nothing to tell them apart. |
@@ -6581,6 +6601,14 @@ Inside a Field with error, the drop area turns red like every other field and a 
 </Field>
 ```
 
+### Disabled
+
+disabled fades the drop area, keeps the file picker closed and refuses a dropped file. A screen reader hears the file input as unavailable.
+
+```tsx
+<FileInput label="Attachments" hint="Available after you save the draft" disabled />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
@@ -6596,6 +6624,7 @@ Inside a Field with error, the drop area turns red like every other field and a 
 | `onQueueChange` | `(queue: FileQueueItem[]) => void` | — | Fires on every change to the queue, in serialisable form. Where you persist it — local storage, a server, nowhere — is yours, the same boundary the grid draws for its URL state. |
 | `preview` | `boolean` | false | Shows a thumbnail for image files, in the same slot the document icon occupies — the row does not change height because of it. Only images: generating an object URL for a 40 MB PDF shows nothing. The URL is revoked whenever the item LEAVES the queue — removed, replaced in single mode, or replaced by a name conflict — and any survivor is revoked on unmount. The browser holds the bytes until someone says otherwise, and until 2026-08-12 only the remove path revoked (AUD-0009). |
 | `checksum` | `boolean` | false | Computes SHA-256 of each file with the Web Crypto API — no dependency — shows the first eight digits and puts the whole value in the queue. Opt-in and not the default for two measured reasons: `crypto.subtle` only exists in a secure context (https or localhost), and the digest needs the WHOLE file in memory, because Web Crypto has no streaming hash. If your `upload` resolves with `{checksum}`, the two are compared and a mismatch fails the item: bytes that differ are not a detail. |
+| `disabled` | `boolean` | false | The drop area is half faded, does not open the file picker and refuses a dropped file. The file input carries the HTML disabled, so a screen reader hears it as unavailable. On native, the add button and the remove buttons turn off as well. |
 | `aria-invalid` | `boolean \| "true" \| "false"` | — | The drop area turns red like the other fields, and a screen reader hears "invalid". Inside a Field with error it arrives on its own. A refused file turns it red with or without it. Web only. |
 | `aria-labelledby` | `string` | — | The label it points to comes before the text of the drop area ("Proof of address Drag files here or click to select"). Inside a Field it arrives on its own, pointing at the Field label. Web only. |
 | `aria-describedby` | `string` | — | Goes to the file input, together with the reason of a refused file. Inside a Field it arrives on its own, pointing at the hint and the error message. Web only. |
@@ -8690,7 +8719,7 @@ Which side of the trigger it opens on. When there is no room on that side, it fl
 | `title` | `ReactNode` | — | Optional heading inside the panel, rendered as a <strong>. |
 | `children` | `ReactNode` | — | The content. This is the overlay that may hold focus and interactive elements; a Tooltip may not. |
 | `side` | `top \| right \| bottom \| left` | bottom | Preferred side. It flips on its own when there is no room, so this is a preference, not a promise. |
-| `arrow` | `boolean` | false | The arrow, off by default as in the reference library. Our own curve, 12 × 6, with the surface fill and the border line. |
+| `arrow` | `boolean` | false | The arrow, off by default as in the reference library. A fine point, 12 × 6 (two straight sides), with the surface fill and the border line. |
 </page>
 
 <page url="https://aureauds.dev/progress.html">
@@ -11695,7 +11724,7 @@ Which side of the trigger it opens on. When there is no room on that side, it fl
 | `children` | `ReactElement` | — | The trigger, as a single element. It receives aria-describedby pointing at the popup — that reference is what makes the hint exist for a screen reader instead of only for the eye. When the element is not focusable on its own (a <span>, a Badge), it becomes focusable, as a button — as in the reference library — so the tip opens from the keyboard too. |
 | `content` | `ReactNode` | — | The hint. Short, and never the only place the information lives: a tooltip is a description, and it must hold nothing focusable. |
 | `side` | `top \| right \| bottom \| left` | top | Preferred side; it flips when there is no room. |
-| `arrow` | `boolean` | false | The arrow, off by default as in the reference library. Our own curve, 12 × 6, all in the colour of the hint. |
+| `arrow` | `boolean` | false | The arrow, off by default as in the reference library. A fine point, 12 × 6 (two straight sides), all in the colour of the hint. |
 | `delay` | `number` | 100 | Milliseconds the pointer rests before it opens — 0.1 s, as most libraries do (the engine's own is 0.6 s). From the keyboard it opens at once, and once one is open its neighbours open without waiting. |
 | `closeDelay` | `number` | 100 | Milliseconds before it closes after the pointer leaves — 0.1 s. |
 </page>
@@ -18958,6 +18987,38 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-80-0.html">
+# v0.80.0
+
+A destructive menu item on the web; a radio choice closes the menu; menus fade out on React Native; finer arrows; a busy native Button; a disabled FileInput.
+
+## Added
+
+- **A destructive item in web menus.** `destructive` on an action item of `DropdownMenu`, `ContextMenu` and `Menubar`, the same field React Native already had: the label and its icons turn the red of an error message (`--danger-400`), and the highlighted item takes the soft danger background (`--danger-bg`). Asking for confirmation before deleting is still up to your app.
+- **`loading` on the React Native `Button`**, the same as on the web: the spinner takes the place of the leading icon, in the button's colour and the icon's size; the label stays, the press is blocked and the screen reader hears "busy". `IconButton` and `LinkButton` do not take it.
+- **`disabled` on the web `FileInput`**: the drop area fades (`--opacity-disabled`), the file picker does not open and a dropped file is refused. The file input carries the HTML `disabled`. React Native already had it.
+
+## Changed
+
+- **Picking an option of a `radiogroup` closes the menu** on the web (`DropdownMenu`, `ContextMenu`, `Menubar`), as React Native already did. A `checkbox` item still keeps the menu open.
+- **Menus and popovers fade out on React Native** (`DropdownMenu`, `Popover`), the same as on the web, in `durationFast`; they used to vanish at once. Nothing inside takes a touch while it fades, and with reduced motion it still closes at once.
+- **The arrow of `Popover` and `Tooltip` has a fine point**, on the web and on React Native: two straight sides meeting at a tip, at the same size as before. It used to be a rounded curve.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.80.0 @aurea-uds/core@0.80.0 @aurea-uds/fonts@0.80.0 @aurea-uds/icons@0.80.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.80.0
 ```
 </page>
 

@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.80.0
+
+November 24, 2026
+
+A destructive menu item on the web; a radio choice closes the menu; menus fade out on React Native; finer arrows; a busy native Button; a disabled FileInput.
+
+[Read full release notes →](https://aureauds.dev/release-v0-80-0.md)
+
 ## v0.79.0
 
 November 23, 2026
