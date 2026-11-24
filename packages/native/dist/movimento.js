@@ -3,8 +3,8 @@
 // ── POR QUE ISTO EXISTE, E NÃO É ZELO ────────────────────────────────────────────────────────
 // A web já respeita isso, e de graça: o `aurea.css` tem, na linha 2128, uma regra global que
 // zera `animation-duration`, `transition-duration` e `scroll-behavior` sob
-// `@media (prefers-reduced-motion: reduce)`. Um `.spinner` ou um `.skeleton` da web param
-// sozinhos, sem o componente saber de nada.
+// `@media (prefers-reduced-motion: reduce)`. Um `.skeleton` da web para sozinho, sem o componente saber de nada
+// (a rodinha, desde a 0.81.0, gira devagar: os laços continuam).
 //
 // **No React Native não existe essa regra global**, porque não existe folha em cascata: cada
 // `Animated.loop` roda até alguém mandar parar. Se o alvo nativo não perguntar, ele fica MENOS

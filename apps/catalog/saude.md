@@ -6,7 +6,7 @@ What the library promises, measured. The site is rebuilt from the measurement, a
 
 | What | Count | Result |
 |---|---|---|
-| Every name the web package exports has a page | 137 of 137 | OK |
+| Every name the web package exports has a page | 138 of 138 | OK |
 | Every variation value in the specs is shown in an example | 947 of 947 | OK |
 | … in an example on the component's page | 810 |  |
 | … as the default value, which every example without the prop shows | 104 |  |

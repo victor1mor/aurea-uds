@@ -529,7 +529,7 @@ export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, { Item: ItemDoGrupoD
  * ⚠ **E ele respeita "menos movimento"**: com a preferência ligada, o polegar salta em vez de
  * deslizar. O estado continua o mesmo — o que some é a animação, não a informação.
  */
-export function Switch({ label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align = "center", }) {
+export function Switch({ label, description, checked, onChange, onCheckedChange, disabled, size, style, testID, accessibilityLabel, align = "center", }) {
     const t = useAureaTokens();
     const maisContraste = useMaisContraste();
     const s = folha(t);
@@ -566,7 +566,7 @@ export function Switch({ label, description, checked, onChange, disabled, size, 
         a.start();
         return () => a.stop();
     }, [checked, pos, reduzir]);
-    return (_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : () => onChange?.(!checked), disabled: inativo, accessibilityRole: "switch", ...estadoAcessivel({ checked: !!checked, disabled: !!inativo }), 
+    return (_jsxs(Pressable, { testID: testID, onPress: inativo ? undefined : () => { onCheckedChange?.(!checked); onChange?.(!checked); }, disabled: inativo, accessibilityRole: "switch", ...estadoAcessivel({ checked: !!checked, disabled: !!inativo }), 
         // O `accessibilityLabel` de fora vence o `label` escrito — ver a prop, em `ControleProps`.
         accessibilityLabel: accessibilityLabel ?? (typeof label === "string" ? label : campo?.label), 
         // Mesma regra do `ControleMarcado`: a descrição vira DICA quando é texto. Sem isto ela

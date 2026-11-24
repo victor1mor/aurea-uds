@@ -7,7 +7,7 @@
     "componentes": 92,
     "hooks": 19,
     "aliasesLiterais": 69,
-    "propsDistintas": 218
+    "propsDistintas": 219
   },
   "aliases": {
     "AureaButtonAppearance": {
@@ -5532,6 +5532,12 @@
               "name": "accessibilityLabel",
               "optional": true,
               "type": "string",
+              "values": null
+            },
+            {
+              "name": "onCheckedChange",
+              "optional": true,
+              "type": "(checked: boolean) => void",
               "values": null
             }
           ]

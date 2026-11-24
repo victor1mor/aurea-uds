@@ -432,6 +432,51 @@ como deveria funcionar"*.
 
 ---
 
+## [0.81.0] — 2026-11-24
+
+**O formulário, o interruptor, o nome em inglês, a rodinha com menos movimento e as ferramentas da CI** — o que o Victor
+decidiu em 24/11/2026 (o bloco de sim ou não e a separação dos defeitos) e aprovou antes do pedido (*"Pode seguir"*). Só a
+rodinha muda na tela, e só para quem pediu menos movimento ao sistema.
+
+### Adicionado
+
+- **`onCheckedChange` no `Switch`, na web e no nativo** (DOC-11, *"Sim, os dois jeitos"*): avisa o app com verdadeiro ou
+  falso — o nome do item de marcar do menu, nos dois alvos. Na web o `onChange` de sempre continua recebendo o evento do
+  campo; com os dois, os dois rodam, o `onCheckedChange` primeiro. No nativo o `onChange` continua recebendo o valor.
+- **`name`, `required` e `defaultValue` no `Combobox` e no `MultiCombobox` da web** (um defeito da separação de 24/11):
+  num `<form>` comum o que a pessoa escolheu não ia junto. Com `name`, o motor cria o campo escondido com o `value` da
+  opção (um por opção no `MultiCombobox`); `required` não deixa enviar vazio e o campo diz "obrigatório" ao leitor de tela;
+  `defaultValue` começa com a opção escolhida. O `required` do `Field` passa a chegar ao `Combobox` (o `Field` já mandava; a
+  peça jogava fora). No nativo não há formulário.
+- **`useResponsiveValue`**, o nome em inglês do resolvedor do `Responsive<T>`, como os outros hooks públicos (*"Sim, com o
+  antigo"*). O `useValorResponsivo` continua, como apelido do mesmo hook (a ficha dele vira "Deprecated", como a do
+  `Topbar`); a página Migration o lista entre os nomes antigos que ficam.
+- **O robô de atualização, só para as Actions da CI** (`.github/dependabot.yml`, *"Atualizar e ligar o robô"*): uma vez
+  por semana, num pedido só, e só com versão publicada há 7 dias ou mais. Os pacotes ficam de fora — o Dependabot não lê o
+  `pnpm-lock.yaml` de dois documentos do pnpm 12 —, e para eles vale a auditoria da CI.
+
+### Mudado
+
+- **Com menos movimento, a rodinha e o círculo sem fim giram devagar, em vez de parar** (um defeito da separação de 24/11;
+  a regra de movimento do projeto: os laços continuam). O `Spinner` (web e nativo) a 2,1 s a volta (era 0,7 s) e o
+  `ProgressCircle` sem `value` a 3 s (era 1 s) — a regra global de `prefers-reduced-motion` dava uma volta de 0,01 ms e
+  parava, e a do círculo (3 s) nunca valia. O resto continua parado: a barra sem fim vira a trilha inteira apagada e o
+  esqueleto não pulsa.
+- **As Actions da CI nas versões novas**, presas por SHA com a versão no comentário: `actions/checkout` 7.0.1,
+  `actions/setup-node` 7.1.0, `actions/setup-python` 7.1.0 e `actions/upload-artifact` 7.0.2 — o `setup-python` 5 e o
+  `upload-artifact` 4 rodavam no Node 20, que o GitHub desligou em 23/09/2026. Lidas as notas de cada versão principal: o
+  `checkout` 7 recusa a cópia de um fork em `pull_request_target`/`workflow_run` (o `site.yml` só roda no `push` do
+  `main`), o `setup-python` 7 tira o `pip-install` (não usado). O `download-artifact` não é usado em nenhum fluxo.
+
+### Quem cobra
+
+- `tests/unit/lote-102.test.tsx` — as Actions presas e nas versões novas e o robô só para elas; o nome novo e o apelido;
+  o `Switch` nos dois alvos (o valor, o evento que continua, o controlado sem aviso do React); o formulário do `Combobox` e
+  do `MultiCombobox` (o valor enviado, o obrigatório, o `required` do `Field`); a regra da rodinha e do círculo; a volta
+  do `Spinner` do nativo. Com o código da 0.80.0, 15 de 18 reprovam; os 3 que passam dizem o que não muda.
+- `tests/visual/giro-com-menos-movimento.spec.ts` — no navegador, com "menos movimento" emulado: a rodinha e o círculo
+  girando (2,1 s e 3 s, sem fim), o tempo de sempre sem a preferência e a barra sem fim parada.
+
 ## [0.80.0] — 2026-11-24
 
 **Os detalhes do menu, o botão ocupado do nativo e a área de arquivo desativada** — o Victor decidiu olhando as bancadas

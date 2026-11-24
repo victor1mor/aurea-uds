@@ -68,10 +68,11 @@ This popover now only fades. See [Styling](./docs-styling.html) for the other st
 
 ## Reduced motion
 
-Aurea follows the system setting. When the user turns on "reduce motion", the media query `prefers-reduced-motion: reduce` matches, and the stylesheet acts on its own. It has eight rules for it:
+Aurea follows the system setting. When the user turns on "reduce motion", the media query `prefers-reduced-motion: reduce` matches, and the stylesheet acts on its own:
 
 - **One global rule.** It cuts every animation and every transition on the page to almost zero, plays each animation once, and turns smooth scrolling off.
-- **Seven rules for single parts.** They remove the transition of the slider thumb, the color area thumb, the color swatch, the progress circle fill and the accordion chevron. The skeleton stops pulsing.
+- **The spinners keep turning, slower.** The `Spinner` and the indeterminate `ProgressCircle` turn at a third of their speed, without end. Stopped, they would read as nothing loading.
+- **Rules for single parts.** They remove the transition of the slider thumb, the color area thumb, the color swatch, the progress circle fill and the accordion chevron. The skeleton stops pulsing.
 - **The indeterminate progress bar** does not freeze as a short piece, which would read as a value. It shows the whole bar, dimmed.
 
 CSS cannot reach motion you start from JavaScript. Check the same setting before you animate:
@@ -82,7 +83,7 @@ const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 ## React Native
 
-React Native has no stylesheet cascade, so there is no global rule. The native components that animate ask the system first, and stay still when the user asked for less movement ("Reduce Motion" on iOS, "Remove animations" on Android).
+React Native has no stylesheet cascade, so there is no global rule. The native components that animate ask the system first, and stay still when the user asked for less movement ("Reduce Motion" on iOS, "Remove animations" on Android). The `Spinner` is the exception, as on the web: it keeps turning, at a third of its speed.
 
 The same question is public for your own animations: `useReduceMotion()`. It returns `true`, `false`, or `null` while the system has not answered yet. Wait for the answer, so not even one frame plays for someone who asked for none. The durations come from the tokens, as numbers in milliseconds.
 

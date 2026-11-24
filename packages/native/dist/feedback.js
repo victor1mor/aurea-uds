@@ -86,10 +86,8 @@ const folha = criarFolha((t) => ({
 /**
  * O anel que gira. **700 ms, linear** — o mesmo `.7s linear` do `aurea.css:670`.
  *
- * ⚠ **Ele para quando a pessoa pede menos movimento.** Na web a regra global de
- * `prefers-reduced-motion` já fazia isso; aqui é o componente que pergunta, porque não há
- * cascata para fazê-lo por ele. Parado, o anel continua desenhado — quem precisa da informação
- * "algo está acontecendo" continua vendo o rótulo.
+ * ⚠ **Com menos movimento ele gira devagar, a um terço (2,1 s a volta)** — desde a 0.81.0; até a 0.80.0 parava. Como na
+ * web. O giro mora no `AnelQueGira` (`giro.tsx`).
  */
 export function Spinner({ size = "md", label, decorative, style, testID }) {
     const t = useAureaTokens();

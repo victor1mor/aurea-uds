@@ -53,6 +53,16 @@ const items = [
 <MultiCombobox label="Components" items={items} value={picked} onValueChange={setPicked} />
 ```
 
+### In a form
+
+With a name, each chosen option goes out with the form as its own value; required stops a submit with none; defaultValue starts with chips, with no state in the app.
+
+```tsx
+<form action="/label">
+  <MultiCombobox label="Tags" name="tags" required items={tags} defaultValue={[tags[0]]} />
+</form>
+```
+
 ### Disabled
 
 The chips stay readable, and nothing can be added or removed.
@@ -68,6 +78,9 @@ The chips stay readable, and nothing can be added or removed.
 | `items` | `ComboboxOption[] \| ComboboxOptGroup[]` | — | Flat options or groups with headings. |
 | `value` | `ComboboxOption[]` | — | The selected options, as chips inside the field. |
 | `onValueChange` | `(v) => void` | — | Fires with the new selection. |
+| `defaultValue` | `ComboboxOption[]` | — | The options chosen at the start, without state in the app (uncontrolled). Use value + onValueChange to control it instead. |
+| `name` | `string` | — | Identifies the field when a form is submitted: each chosen option goes out as its own value, under this name. |
+| `required` | `boolean` | false | The form cannot be submitted with no option chosen, and the field is announced as required. Inside a Field with required, it arrives on its own. |
 | `onInputChange` | `(text: string) => void` | — | For a remote search: you filter, the component only shows. |
 | `loading` | `boolean` | false | Announces "Loading…" while your search is in flight. |
 | `label` | `string` | — | Accessible name of the field. |

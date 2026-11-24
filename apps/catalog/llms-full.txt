@@ -661,9 +661,11 @@ With `pressed`, the button only paints the on state and you keep the state yours
 These names are older than the current ones but are not deprecated for removal. They keep working in 1.0, and you do not need to change them:
 
 - `Topbar`, the old name of `Header`, on the web and in React Native;
+- `useValorResponsivo`, the old name of `useResponsiveValue`;
 - `MenuItemDef`, the old type of a menu item, now `MenuEntry`;
 - the `BottomNav` variants `flat`, `surface`, `pill` and `dock`, now `variant` with `indicator`;
-- `onClick` on the web, which works the same as `onPress`.
+- `onClick` on the web, which works the same as `onPress`;
+- `onChange` on the web `Switch`, which still receives the input event; `onCheckedChange` receives true or false, on the web and in React Native.
 
 ## After 1.0
 
@@ -1573,10 +1575,11 @@ This popover now only fades. See [Styling](./docs-styling.html) for the other st
 
 ## Reduced motion
 
-Aurea follows the system setting. When the user turns on "reduce motion", the media query `prefers-reduced-motion: reduce` matches, and the stylesheet acts on its own. It has eight rules for it:
+Aurea follows the system setting. When the user turns on "reduce motion", the media query `prefers-reduced-motion: reduce` matches, and the stylesheet acts on its own:
 
 - **One global rule.** It cuts every animation and every transition on the page to almost zero, plays each animation once, and turns smooth scrolling off.
-- **Seven rules for single parts.** They remove the transition of the slider thumb, the color area thumb, the color swatch, the progress circle fill and the accordion chevron. The skeleton stops pulsing.
+- **The spinners keep turning, slower.** The `Spinner` and the indeterminate `ProgressCircle` turn at a third of their speed, without end. Stopped, they would read as nothing loading.
+- **Rules for single parts.** They remove the transition of the slider thumb, the color area thumb, the color swatch, the progress circle fill and the accordion chevron. The skeleton stops pulsing.
 - **The indeterminate progress bar** does not freeze as a short piece, which would read as a value. It shows the whole bar, dimmed.
 
 CSS cannot reach motion you start from JavaScript. Check the same setting before you animate:
@@ -1587,7 +1590,7 @@ const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 ## React Native
 
-React Native has no stylesheet cascade, so there is no global rule. The native components that animate ask the system first, and stay still when the user asked for less movement ("Reduce Motion" on iOS, "Remove animations" on Android).
+React Native has no stylesheet cascade, so there is no global rule. The native components that animate ask the system first, and stay still when the user asked for less movement ("Reduce Motion" on iOS, "Remove animations" on Android). The `Spinner` is the exception, as on the web: it keeps turning, at a third of its speed.
 
 The same question is public for your own animations: `useReduceMotion()`. It returns `true`, `false`, or `null` while the system has not answered yet. Wait for the answer, so not even one frame plays for someone who asked for none. The durations come from the tokens, as numbers in milliseconds.
 
@@ -5437,6 +5440,18 @@ The Field names the question; the Combobox holds the answer.
 </Field>
 ```
 
+### In a form
+
+With a name, the chosen option goes out with the form as its value; required stops an empty submit and is announced; defaultValue starts it chosen, with no state in the app.
+
+```tsx
+<form action="/assign">
+  <Field label="Assignee" required>
+    <Combobox name="assignee" items={people} defaultValue={people[1]} />
+  </Field>
+</form>
+```
+
 ### Disabled
 
 The field and both buttons go down together — a locked field that still opens is not locked.
@@ -5452,6 +5467,9 @@ The field and both buttons go down together — a locked field that still opens 
 | `items` | `ComboboxOption[] \| ComboboxOptGroup[]` | — | The options, as data: {value, label} — or groups of them, {label, items}. Grouping is the engine's own shape: the same `items` prop takes either, and the kind is read from the first element. Do not mix flat with grouped. |
 | `value` | `ComboboxOption \| null` | — | The selected option, or null. |
 | `onValueChange` | `(v) => void` | — | Fires with the chosen option. |
+| `defaultValue` | `ComboboxOption \| null` | — | The option chosen at the start, without state in the app (uncontrolled). Use value + onValueChange to control it instead. |
+| `name` | `string` | — | Identifies the field when a form is submitted: the chosen option goes out as its value, under this name. |
+| `required` | `boolean` | false | The form cannot be submitted empty, and the field is announced as required. Inside a Field with required, it arrives on its own. |
 | `placeholder` | `string` | — | Shown while nothing is selected. |
 | `label` | `string` | — | Accessible name of the field. |
 | `disabled` | `boolean` | false | Turns off the field and both buttons at once. |
@@ -8189,6 +8207,16 @@ const items = [
 <MultiCombobox label="Components" items={items} value={picked} onValueChange={setPicked} />
 ```
 
+### In a form
+
+With a name, each chosen option goes out with the form as its own value; required stops a submit with none; defaultValue starts with chips, with no state in the app.
+
+```tsx
+<form action="/label">
+  <MultiCombobox label="Tags" name="tags" required items={tags} defaultValue={[tags[0]]} />
+</form>
+```
+
 ### Disabled
 
 The chips stay readable, and nothing can be added or removed.
@@ -8204,6 +8232,9 @@ The chips stay readable, and nothing can be added or removed.
 | `items` | `ComboboxOption[] \| ComboboxOptGroup[]` | — | Flat options or groups with headings. |
 | `value` | `ComboboxOption[]` | — | The selected options, as chips inside the field. |
 | `onValueChange` | `(v) => void` | — | Fires with the new selection. |
+| `defaultValue` | `ComboboxOption[]` | — | The options chosen at the start, without state in the app (uncontrolled). Use value + onValueChange to control it instead. |
+| `name` | `string` | — | Identifies the field when a form is submitted: each chosen option goes out as its own value, under this name. |
+| `required` | `boolean` | false | The form cannot be submitted with no option chosen, and the field is announced as required. Inside a Field with required, it arrives on its own. |
 | `onInputChange` | `(text: string) => void` | — | For a remote search: you filter, the component only shows. |
 | `loading` | `boolean` | false | Announces "Loading…" while your search is in flight. |
 | `label` | `string` | — | Accessible name of the field. |
@@ -10494,6 +10525,16 @@ The muted line under the name, and indicatorPlacement="end" to put the switch af
   indicatorPlacement="end" />
 ```
 
+### Controlled, with true or false
+
+onCheckedChange hands the app the new value, true or false — the same name on the web and in React Native. onChange still works and still receives the input event.
+
+```tsx
+const [alerts, setAlerts] = useState(true);
+
+<Switch label="Price alerts" checked={alerts} onCheckedChange={setAlerts} />
+```
+
 ### Without a visible label
 
 When the name is already on screen beside it, labelHidden keeps it for the screen reader only.
@@ -10530,6 +10571,7 @@ The system's size step — sm, md and lg, the same scale as the fields beside it
 | `description` | `ReactNode` | — | A muted line under the label, as the Checkbox and the reference — then the label is set in bold. |
 | `indicatorPlacement` | `"start" \| "end"` | "start" | Where the switch sits: before the label (the default) or after it, with the label and description on the left — the same name as the native RadioGroup. |
 | `checked / defaultChecked` | `boolean` | — | Controlled or uncontrolled. role="switch" is set for you. |
+| `onCheckedChange` | `(checked: boolean) => void` | — | Called with the new value, true or false — the same name as in React Native. onChange still works and still receives the input event; with both, both run, onCheckedChange first. |
 | `disabled` | `boolean` | false | Native disabled. |
 | `className` | `string` | — | Extra classes. Switch applies immediately; a Checkbox waits for the form to be submitted. |
 | `size` | `Responsive<FieldSize>` | md | The system's size step. |
@@ -11967,6 +12009,26 @@ const {itens, aoSoltar, propsDoItem} = useReorder(lista, setLista);
 ```
 </page>
 
+<page url="https://aureauds.dev/useresponsivevalue.html">
+# useResponsiveValue
+
+Resolves a Responsive<T> into the single value that applies right now — by viewport, by container, or not at all.
+
+## Usage
+
+```tsx
+import {useResponsiveValue} from "@aurea-uds/react";
+```
+
+```tsx
+const orientation = useResponsiveValue(
+  {base: "vertical", container: {sm: "horizontal"}},
+  "horizontal",
+  anchorRef,
+);
+```
+</page>
+
 <page url="https://aureauds.dev/usesidebar.html">
 # useSidebar
 
@@ -12067,7 +12129,7 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
 <page url="https://aureauds.dev/usevalorresponsivo.html">
 # useValorResponsivo
 
-Resolves a Responsive<T> into the single value that applies right now — by viewport, by container, or not at all.
+The old name of useResponsiveValue. Same hook, still works the same; use useResponsiveValue.
 
 ## Usage
 
@@ -18987,6 +19049,40 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-81-0.html">
+# v0.81.0
+
+Switch reports true or false; Combobox and MultiCombobox submit with the form; useResponsiveValue is the new name of useValorResponsivo; spinners keep turning, slower, with reduced motion.
+
+## Added
+
+- **`onCheckedChange` on `Switch`**, on the web and in React Native: called with the new value, `true` or `false`. It is the same name the checkbox item of the menu already uses. On the web, `onChange` still works and still receives the input event; with both, both run, `onCheckedChange` first. In React Native, `onChange` keeps receiving the value.
+- **`name`, `required` and `defaultValue` on `Combobox` and `MultiCombobox`** (web). With a `name`, the chosen option goes out with the form as its `value` (one value per chip on `MultiCombobox`); `required` stops an empty submit and is announced; `defaultValue` starts with an option chosen, with no state in the app. The `required` of a surrounding `Field` now reaches the `Combobox` too.
+- **`useResponsiveValue`**: the English name of the hook that resolves a `Responsive<T>`, like the other public hooks.
+
+## Changed
+
+- **With reduced motion, `Spinner` and the indeterminate `ProgressCircle` keep turning**, at a third of their speed (2.1 s and 3 s a turn), instead of stopping — stopped, they read as nothing loading. In React Native, the `Spinner` does the same. Every other animation still stops, and the indeterminate `Progress` bar still shows whole and dimmed.
+
+## Deprecated
+
+- **`useValorResponsivo`** is now the old name of `useResponsiveValue`. It is the same hook and keeps working in 1.0; you do not need to change it.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.81.0 @aurea-uds/core@0.81.0 @aurea-uds/fonts@0.81.0 @aurea-uds/icons@0.81.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.81.0
 ```
 </page>
 

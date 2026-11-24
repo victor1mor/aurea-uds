@@ -50,6 +50,18 @@ The Field names the question; the Combobox holds the answer.
 </Field>
 ```
 
+### In a form
+
+With a name, the chosen option goes out with the form as its value; required stops an empty submit and is announced; defaultValue starts it chosen, with no state in the app.
+
+```tsx
+<form action="/assign">
+  <Field label="Assignee" required>
+    <Combobox name="assignee" items={people} defaultValue={people[1]} />
+  </Field>
+</form>
+```
+
 ### Disabled
 
 The field and both buttons go down together — a locked field that still opens is not locked.
@@ -65,6 +77,9 @@ The field and both buttons go down together — a locked field that still opens 
 | `items` | `ComboboxOption[] \| ComboboxOptGroup[]` | — | The options, as data: {value, label} — or groups of them, {label, items}. Grouping is the engine's own shape: the same `items` prop takes either, and the kind is read from the first element. Do not mix flat with grouped. |
 | `value` | `ComboboxOption \| null` | — | The selected option, or null. |
 | `onValueChange` | `(v) => void` | — | Fires with the chosen option. |
+| `defaultValue` | `ComboboxOption \| null` | — | The option chosen at the start, without state in the app (uncontrolled). Use value + onValueChange to control it instead. |
+| `name` | `string` | — | Identifies the field when a form is submitted: the chosen option goes out as its value, under this name. |
+| `required` | `boolean` | false | The form cannot be submitted empty, and the field is announced as required. Inside a Field with required, it arrives on its own. |
 | `placeholder` | `string` | — | Shown while nothing is selected. |
 | `label` | `string` | — | Accessible name of the field. |
 | `disabled` | `boolean` | false | Turns off the field and both buttons at once. |

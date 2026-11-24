@@ -5,15 +5,15 @@
 //   4. o `Combobox` e o `MultiCombobox` vão junto com o formulário: `name`, `required`, `defaultValue` (defeito de 24/11);
 //   5. a rodinha e o círculo sem fim giram mais devagar com "menos movimento", em vez de parar (defeito de 24/11).
 // Provado contra o defeito: com o código da 0.80.0, cada `it` abaixo reprova.
-import {fireEvent, render} from "@testing-library/react";
+import {act, fireEvent, render} from "@testing-library/react";
 import {readFileSync, existsSync, readdirSync} from "node:fs";
 import * as React from "react";
 import {describe, expect, it, vi} from "vitest";
 import * as Web from "../../packages/react/src/index.js";
 import {Switch} from "../../packages/react/src/markup.js";
 import {Combobox, MultiCombobox, Field} from "../../packages/react/src/inputs-client.js";
-import {__instancias, __limpar} from "./native-stubs/react-native";
-import {AureaProvider, Switch as SwitchNativo, criarRegistroDeIcones} from "../../packages/native/src/index.js";
+import {__configsDeAnimacao, __definirReduceMotion, __instancias, __limpar} from "./native-stubs/react-native";
+import {AureaProvider, Spinner as SpinnerNativo, Switch as SwitchNativo, criarRegistroDeIcones} from "../../packages/native/src/index.js";
 
 describe("1 · as Actions da CI e o robô", () => {
   const fluxos = readdirSync(".github/workflows").filter((f) => f.endsWith(".yml"))
@@ -147,4 +147,21 @@ describe("5 · com menos movimento, a rodinha e o círculo sem fim giram devagar
       expect(r).toContain("animation-iteration-count:infinite!important");
     });
   }
+});
+
+describe("5b · no celular, a rodinha também gira devagar com menos movimento", () => {
+  const Glifo = () => null;
+  const volta = async (reduzir: boolean) => {
+    __limpar();
+    __definirReduceMotion(reduzir);
+    render(<AureaProvider theme="light" icons={criarRegistroDeIcones({"x": Glifo})}><SpinnerNativo label="Carregando" /></AureaProvider>);
+    await act(async () => {});
+    return __configsDeAnimacao().map((c) => c.duration);
+  };
+  it("com menos movimento: o laço começa, com 2,1 s a volta (antes não começava)", async () => {
+    expect(await volta(true)).toEqual([2100]);
+  });
+  it("sem a preferência: 0,7 s, como sempre", async () => {
+    expect(await volta(false)).toEqual([700]);
+  });
 });

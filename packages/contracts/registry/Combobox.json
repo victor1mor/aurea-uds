@@ -92,6 +92,24 @@
       "description": "Fires with the chosen option."
     },
     {
+      "name": "defaultValue",
+      "type": "ComboboxOption | null",
+      "default": "—",
+      "description": "The option chosen at the start, without state in the app (uncontrolled). Use value + onValueChange to control it instead."
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "default": "—",
+      "description": "Identifies the field when a form is submitted: the chosen option goes out as its value, under this name."
+    },
+    {
+      "name": "required",
+      "type": "boolean",
+      "default": "false",
+      "description": "The form cannot be submitted empty, and the field is announced as required. Inside a Field with required, it arrives on its own."
+    },
+    {
       "name": "placeholder",
       "type": "string",
       "default": "—",

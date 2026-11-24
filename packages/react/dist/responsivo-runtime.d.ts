@@ -17,4 +17,7 @@ export declare function ContainerScope({ children, className, ...props }: {
  *  re-renderiza com o do cliente —, e o contêiner só é medido depois da montagem, quando existe
  *  elemento para medir. Valor simples não assina nada: nem `matchMedia`, nem observer, nem
  *  estado que dependa de hidratação. */
-export declare function useValorResponsivo<T extends string>(valor: Responsive<T> | undefined, padrao: T, ancora?: RefObject<HTMLElement | null>): T;
+export declare function useResponsiveValue<T extends string>(valor: Responsive<T> | undefined, padrao: T, ancora?: RefObject<HTMLElement | null>): T;
+/** O nome antigo de `useResponsiveValue` (o nome em inglês desde a 0.81.0, como os outros hooks públicos).
+ *  Continua funcionando igual — é o mesmo hook. */
+export declare const useValorResponsivo: typeof useResponsiveValue;

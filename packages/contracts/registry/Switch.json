@@ -88,6 +88,12 @@
       "description": "Controlled or uncontrolled. role=\"switch\" is set for you."
     },
     {
+      "name": "onCheckedChange",
+      "type": "(checked: boolean) => void",
+      "default": "—",
+      "description": "Called with the new value, true or false — the same name as in React Native. onChange still works and still receives the input event; with both, both run, onCheckedChange first."
+    },
+    {
       "name": "disabled",
       "type": "boolean",
       "default": "false",

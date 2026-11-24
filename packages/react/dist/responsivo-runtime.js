@@ -166,7 +166,7 @@ const semAssinatura = () => () => { };
  *  re-renderiza com o do cliente —, e o contêiner só é medido depois da montagem, quando existe
  *  elemento para medir. Valor simples não assina nada: nem `matchMedia`, nem observer, nem
  *  estado que dependa de hidratação. */
-export function useValorResponsivo(valor, padrao, ancora) {
+export function useResponsiveValue(valor, padrao, ancora) {
     const base = (valorBase(valor) ?? padrao);
     const porViewport = typeof valor === "object" && valor !== null && valor.viewport ? valor.viewport : null;
     const porContainer = typeof valor === "object" && valor !== null && valor.container ? valor.container : null;
@@ -200,3 +200,13 @@ export function useValorResponsivo(valor, padrao, ancora) {
         return base;
     }, [porViewport, porContainer, pontoVp, largura, base]);
 }
+/* A ÂNCORA não virou hook. Era açúcar de uma linha (`useRef`), e todo `export` deste pacote é
+   superfície pública — o check 11 cobra ficha, preview e starter de cada uma. Um `useRef` no
+   próprio componente diz a mesma coisa sem inventar API.
+
+   O que ela precisa ser: uma ref presa ao ELEMENTO RAIZ do componente. Sem um nó no documento o
+   caminho de busca não tem de onde subir, e o valor fica no base para sempre, em silêncio — foi
+   exatamente o defeito da primeira versão deste arquivo. */
+/** O nome antigo de `useResponsiveValue` (o nome em inglês desde a 0.81.0, como os outros hooks públicos).
+ *  Continua funcionando igual — é o mesmo hook. */
+export const useValorResponsivo = useResponsiveValue;

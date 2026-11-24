@@ -1,5 +1,5 @@
 // O Spinner do nativo no site (bloco 1, o 5-A — 23/10/2026). Todo valor das props do tipo em exemplo. A página parada
-// mostra o anel quieto; ele gira quando a parte viva acende, e para se a pessoa pediu menos movimento.
+// mostra o anel quieto; ele gira quando a parte viva acende, e gira devagar se a pessoa pediu menos movimento (0.81.0).
 import {createElement as h} from "react";
 import {View} from "react-native";
 import {Spinner, Text} from "../../../../packages/native/dist/index.js";
@@ -17,7 +17,7 @@ export default {
   examples: [
     {
       title: "Usage",
-      description: "A wait with no known end. It turns in 700 ms, linear, and stops when the person asked for less motion — the ring stays drawn.",
+      description: "A wait with no known end. It turns in 700 ms, linear; when the person asked for less motion it keeps turning, at a third of the speed (2.1 s).",
       code: `<Spinner label="Loading the report" />`,
       render: () => h(Spinner, {label: "Loading the report"}),
     },

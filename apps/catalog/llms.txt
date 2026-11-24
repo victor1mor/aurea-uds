@@ -174,11 +174,12 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [useDeslize](https://aureauds.dev/usedeslize.md): Slides the selected item of SegmentedControl and Tabs from the previous position to the new one, copying its paint onto a passing indicator; instant under reduced motion.
 - [usePortalContainer](https://aureauds.dev/useportalcontainer.md): The node every Aurea popup is mounted into, as configured once on AureaProvider.
 - [useReorder](https://aureauds.dev/usereorder.md): The accessible drag-and-drop reordering protocol, shared by SortableList and BlockEditor.
+- [useResponsiveValue](https://aureauds.dev/useresponsivevalue.md): Resolves a Responsive<T> into the single value that applies right now — by viewport, by container, or not at all.
 - [useSidebar](https://aureauds.dev/usesidebar.md): The sidebar state — collapsed, setCollapsed, toggle — inside Sidebar.Provider or an AppShell with sidebarCollapsible.
 - [useSpriteUrl](https://aureauds.dev/usespriteurl.md): Read where the provider is loading icon glyphs from.
 - [useTheme](https://aureauds.dev/usetheme.md): Read the current theme and switch it, from anywhere inside AureaProvider.
 - [useToast](https://aureauds.dev/usetoast.md): Raise a transient notification from anywhere inside AureaProvider.
-- [useValorResponsivo](https://aureauds.dev/usevalorresponsivo.md): Resolves a Responsive<T> into the single value that applies right now — by viewport, by container, or not at all.
+- [useValorResponsivo](https://aureauds.dev/usevalorresponsivo.md): The old name of useResponsiveValue. Same hook, still works the same; use useResponsiveValue.
 
 ## Patterns
 - [Accordion · Questions on a marketing page](https://aureauds.dev/pattern-accordion-questions-on-a-marketing-page.md): The title is the question in the reader's own words, not a category. An accordion earns its place when the reader wants one answer, not all of them — otherwise plain headings read faster.
@@ -463,6 +464,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.81.0](https://aureauds.dev/release-v0-81-0.md): Switch reports true or false; Combobox and MultiCombobox submit with the form; useResponsiveValue is the new name of useValorResponsivo; spinners keep turning, slower, with reduced motion.
 - [v0.80.0](https://aureauds.dev/release-v0-80-0.md): A destructive menu item on the web; a radio choice closes the menu; menus fade out on React Native; finer arrows; a busy native Button; a disabled FileInput.
 - [v0.79.0](https://aureauds.dev/release-v0-79-0.md): Tooltip corners are 12; OTPField digits use the text font; upright MediaEmbed posters show whole; Ember fields in high contrast are outlined in orange.
 - [v0.78.0](https://aureauds.dev/release-v0-78-0.md): Tooltip is inverted and opens and closes after 0.1 s; a Sidebar item darkens while pressed.

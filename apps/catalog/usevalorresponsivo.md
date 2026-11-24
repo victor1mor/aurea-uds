@@ -1,6 +1,6 @@
 # useValorResponsivo
 
-Resolves a Responsive<T> into the single value that applies right now — by viewport, by container, or not at all.
+The old name of useResponsiveValue. Same hook, still works the same; use useResponsiveValue.
 
 ## Usage
 
