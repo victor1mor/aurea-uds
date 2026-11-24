@@ -72,7 +72,9 @@ export const fundoDeCampo = (t, _naSuperficie, maisContraste = false) => ({
     ...(t.theme === "light"
         ? { backgroundColor: t.color.card, boxShadow: [...t.shadowLayers.shadowSm] }
         : { backgroundColor: preenchimento(t, 2) }),
-    ...(maisContraste ? { borderColor: t.color.inputStrong } : null),
+    // Na Ember, o contorno é o laranja dela (`primary`), como na web — a Rodada 1 das decisões em bloco, 23/11/2026 (o Victor:
+    // "No laranja da Ember"). Só o campo: o cartão e o botão continuam no `inputStrong`.
+    ...(maisContraste ? { borderColor: t.brand === "ember" ? t.color.primary : t.color.inputStrong } : null),
 });
 /**
  * O CAMPO COM ERRO (ADR-0094, 11/11/2026 — o Victor: "B como a referencia e Ember entra"): o fundo do campo NÃO muda; a

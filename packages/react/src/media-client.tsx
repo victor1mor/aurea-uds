@@ -160,13 +160,21 @@ export function MediaEmbed({src,title,poster,ratio="16/9",href,autoplay=true,cla
   const [clicou,setClicou]=React.useState(false);
   const frameRef=React.useRef<HTMLIFrameElement>(null);
   React.useEffect(()=>{if(clicou)frameRef.current?.focus()},[clicou]);
+  // A CAPA EM PÉ (a Rodada 1 das decisões em bloco, 23/11/2026 — o Victor: "Inteira, capa desfocada atrás"): a capa mais
+  // alta que larga aparece inteira, e uma cópia dela, desfocada, preenche a caixa por trás. A capa deitada continua
+  // preenchendo a caixa, como antes. A medida é a da imagem carregada (a que já veio do cache também).
+  const [emPe,setEmPe]=React.useState(false);
+  const capaRef=React.useRef<HTMLImageElement>(null);
+  const medirCapa=React.useCallback((img:HTMLImageElement|null)=>{if(img&&img.naturalWidth>0)setEmPe(img.naturalHeight>img.naturalWidth)},[]);
+  React.useEffect(()=>{const img=capaRef.current;if(img?.complete)medirCapa(img)},[poster,medirCapa]);
   const endereco=clicou&&autoplay?comAutoplay(src):src;
   return <div className={cx("media-embed",className)} style={style}>
     <div className="media-embed-frame" style={{aspectRatio:ratio}}>
       {!soHttps(src)?null:ativo
         ?<iframe ref={frameRef} src={endereco} title={title} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowFullScreen {...rest}/>
-        :<button type="button" className="media-embed-facade" aria-label={`${s.mediaPlay}: ${title}`} onClick={()=>{setAtivo(true);setClicou(true)}}>
-          <img src={poster} alt="" loading="lazy" decoding="async"/>
+        :<button type="button" className="media-embed-facade" data-portrait={emPe?"":undefined} aria-label={`${s.mediaPlay}: ${title}`} onClick={()=>{setAtivo(true);setClicou(true)}}>
+          {emPe&&<img className="media-embed-backdrop" src={poster} alt="" decoding="async"/>}
+          <img ref={capaRef} src={poster} alt="" loading="lazy" decoding="async" onLoad={(e)=>medirCapa(e.currentTarget)}/>
           <span className="media-embed-play" aria-hidden="true"><Icon name="play-circle" weight="fill"/></span>
         </button>}
     </div>

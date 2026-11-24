@@ -224,6 +224,14 @@ const CAPA = "data:image/svg+xml," + encodeURIComponent(
   + '<path d="M0 180 L90 90 L150 140 L220 60 L320 160 L320 180 Z" fill="#52525b"/>'
   + '<circle cx="262" cy="42" r="16" fill="#a1a1aa"/></svg>');
 
+// A capa EM PÉ (0.79.0, a Rodada 1 das decisões em bloco): a mesma cena neutra, de 9 por 16, para o exemplo do vídeo
+// gravado em pé — a capa aparece inteira, com a cópia desfocada atrás.
+const CAPA_EM_PE = "data:image/svg+xml," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="180" height="320">'
+  + '<rect width="180" height="320" fill="#27272a"/>'
+  + '<path d="M0 320 L40 190 L90 250 L130 150 L180 230 L180 320 Z" fill="#52525b"/>'
+  + '<circle cx="132" cy="62" r="16" fill="#a1a1aa"/></svg>');
+
 const MES_FIXO = new Date(2026, 7, 1);
 
 export default {
@@ -1261,6 +1269,20 @@ export function Actions() {
     render: () => h("div", {style: {width: "min(28rem,100%)"}},
       h(A.MediaEmbed, {src: "https://www.youtube.com/embed/VIDEO_ID", title: "Official trailer",
         poster: CAPA, href: "https://www.youtube.com/watch?v=VIDEO_ID"})),
+    examples: [
+      {
+        title: "An upright video",
+        description: "A poster taller than it is wide — a video shot upright on a phone — is shown whole, with a blurred "
+          + "copy of it filling the frame behind. A landscape poster fills the frame.",
+        code: `<MediaEmbed
+  src="https://www.youtube.com/embed/VIDEO_ID"
+  title="Behind the scenes"
+  poster="/shorts/cover.jpg"
+/>`,
+        render: () => h("div", {style: {width: "min(28rem,100%)"}},
+          h(A.MediaEmbed, {src: "https://www.youtube.com/embed/VIDEO_ID", title: "Behind the scenes", poster: CAPA_EM_PE})),
+      },
+    ],
   },
   MediaPlayerShell: {
     description: "The frame of a player, without the player: the dark canvas, the clipping, the "

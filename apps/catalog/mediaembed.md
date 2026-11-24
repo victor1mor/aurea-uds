@@ -17,13 +17,27 @@ import {MediaEmbed} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### An upright video
+
+A poster taller than it is wide — a video shot upright on a phone — is shown whole, with a blurred copy of it filling the frame behind. A landscape poster fills the frame.
+
+```tsx
+<MediaEmbed
+  src="https://www.youtube.com/embed/VIDEO_ID"
+  title="Behind the scenes"
+  poster="/shorts/cover.jpg"
+/>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `src` | `string` | — | The provider's EMBED address, e.g. https://www.youtube.com/embed/<id>. Any other <iframe> attribute is accepted and forwarded, and wins over the defaults. Only https: addresses are embedded; with any other scheme the frame stays empty. |
 | `title` | `string` | — | Required. The accessible name of the frame — an unnamed iframe fails axe, so the type refuses to compile without it. |
-| `poster` | `string` | — | Still image for the facade. With it, nothing from the provider loads until the play button is pressed; without it, the frame loads lazily right away. |
+| `poster` | `string` | — | Still image for the facade. With it, nothing from the provider loads until the play button is pressed; without it, the frame loads lazily right away. A poster taller than it is wide (a video shot upright) is shown whole, with a blurred copy of it filling the frame behind. |
 | `ratio` | `string` | 16/9 | Box proportion in CSS syntax. Reserved before anything loads, so the page does not jump. |
 | `href` | `string` | — | The video on its own site. Shown as a link under the frame — the way out when the owner blocks embedding, which the page cannot detect. Only https: addresses are shown. |
 | `autoplay` | `boolean` | true | With a poster, start playing after the click by adding autoplay=1 to the address (YouTube and Vimeo read the same key). The person already asked to play. |

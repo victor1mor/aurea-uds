@@ -25,7 +25,7 @@
   "tokens": [
     "--space-2",
     "--control-h-md",
-    "--font-code",
+    "--font-ui",
     "--field-bg",
     "--border-strong",
     "--radius-control"

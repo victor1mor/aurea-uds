@@ -308,7 +308,9 @@ export function Toast({toast, onClose}: {toast: AureaToast; onClose: () => void}
           <Text size="base" weight={500} style={{color: corDoIcone}}>{toast.title}</Text>
           {toast.description != null
             ? (typeof toast.description === "string"
-                ? <Text size="sm" tone="muted">{toast.description}</Text>
+                // A descrição é 14 (`xs`, que no telefone é o `textSm`), igual à web — a Rodada 1 das decisões em bloco,
+                // 23/11/2026 (o Victor: "Igual à web (14)"; 2 de 3 referências do celular). Era 16.
+                ? <Text size="xs" tone="muted">{toast.description}</Text>
                 : toast.description)
             : null}
         </View>

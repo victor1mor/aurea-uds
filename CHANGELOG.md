@@ -425,6 +425,51 @@ como deveria funcionar"*.
 
 ---
 
+## [0.79.0] — 2026-11-23
+
+**A Rodada 1 das decisões em bloco** — para acelerar o caminho até a 1.0, as 50 perguntas que esperavam o Victor foram
+separadas em rodadas. Na primeira, ele viu na bancada viva, ao lado da referência nº 1, em Gold e Ember, claro e escuro,
+dez itens de uma vez e decidiu os dez (23/11/2026): seis mudam aqui; três fecharam sem mudança (o `Select` e o `Combobox`
+vazios já eram iguais, medido; o `Combobox` continua sem largura mínima, como 9 de 10 referências; o vão do `Button`
+fica 6 · 8 · 8 · 8 · 10 — a anotação antiga dizia "fixo em 8", e não era).
+
+### Adicionado
+
+- **`--tooltip-radius`** (12): o canto da dica, um token só dela (o Victor: *"Um token só da dica"*). Não é degrau da
+  escala `--radius-*`, que continua 6 · 8 · 10 · 16 · 22 · 32.
+
+### Mudado
+
+- **O canto da dica (`Tooltip`) é 12** (era 10, o `--radius-md`) — o 12 da referência nº 2, escolhido olhando a bancada; as referências não têm
+  maioria (8 em 4 de 11, 4 em outras 4; a nº 1, 8). O balão do gráfico (`.chart-tooltip`) continua com o canto de antes,
+  como continua com a cor.
+- **O dígito do `OTPField` da web usa a letra do texto** (`--font-ui`; era a de código, `--font-code`) — *"A letra do
+  texto"*: 8 de 8 referências usam a letra do texto, e o nativo já usava. O tamanho (18) e o peso continuam.
+- **A capa em pé do `MediaEmbed` aparece inteira**, com uma cópia dela desfocada preenchendo a caixa por trás — *"Inteira,
+  capa desfocada atrás"*. Vale para a capa mais alta que larga (um vídeo gravado em pé); a capa deitada continua
+  preenchendo a caixa. O desfoque é o do topo desfocado (`--space-4`).
+- **No alto contraste, o contorno dos campos da Ember é o laranja dela** (`--primary`; era o cinza do `--input-strong`) —
+  *"No laranja da Ember"*, na web (`data-contrast="high"`) e no nativo (`highContrast`). Só os campos: o cartão e o botão
+  continuam no cinza. No escuro, o laranja mede 5,0:1 sobre o fundo do campo (o cinza media 2,3); no claro, 3,08:1 sobre o
+  campo e 2,94:1 sobre a página da Ember.
+- **A descrição do `Toast` do nativo é 14** (era 16) — *"Igual à web (14)"*: 2 de 3 referências do celular, e a web já
+  era 14. O título continua 16.
+
+### Removido
+
+- **As cores velhas do painel de saúde** (`.health-cell.warn`, `.bad` e `.off`) — *"Apagar as cores velhas"*. O
+  `HealthMatrix` nunca produziu essas classes (ele desenha o cartão neutro com o `Status`); a regra só servia a quem as
+  escrevia à mão, e a letra sobre o amarelo media 2,41:1 no escuro. A peça não muda.
+
+### Quem cobra
+
+- `tests/unit/rodada1-decisoes.test.tsx` — os seis, cada um reprovando com o código da 0.78.0 (medido: 9 de 10 reprovam;
+  o que passa é "a capa deitada não muda", que tem de passar nos dois).
+- `tests/visual/paleta-passo-a.spec.ts` — a célula escrita com a classe velha é o cartão de sempre, nos dois temas.
+- `tests/visual/ember-congelada.spec.ts` — a quarta mudança permitida da Ember: só a célula velha do painel, só no fundo.
+
+---
+
 ## [0.78.0] — 2026-11-23
 
 ✅ **Publicada em 23/11/2026, entre 16:37 e 16:38 (Brasília, medido no npm: `native` às 16:37, depois `react`, `core`,

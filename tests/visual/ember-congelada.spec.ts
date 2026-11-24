@@ -87,7 +87,12 @@ for (const marca of ["ember"]) for (const tema of ["light", "dark"]) {
     const linkDaEmber = (antes: string, depois: string) =>
       (tema === "dark" && antes === "oklch(0.795 0.184 86.047)" && depois === "oklch(0.72 0.19 48)")
       || (tema === "light" && antes === "oklch(0.52 0.106 86.047)" && depois === "oklch(0.682 0.197 44.5)");
-    let permitidas = 0, sombras = 0, links = 0;
+    // A QUARTA (a Rodada 1 das decisões em bloco, 23/11/2026, o Victor: "Apagar as cores velhas"): a regra órfã
+    // `.health-cell.warn/.bad/.off` saiu do núcleo — o `HealthMatrix` nunca a produzia. Só a célula do banco escrita com
+    // `warn` à mão muda, só no fundo, e só deixando o laranja de atenção da 0.44.0.
+    const celulaVelha = (chave: string, prop: string, antes: string) =>
+      chave.endsWith("li[saude-atencao]") && prop === "background-color" && antes === "oklch(0.727 0.149 60)";
+    let permitidas = 0, sombras = 0, links = 0, celulas = 0;
     for (const [chave, linha] of Object.entries(ref)) {
       const hoje = agora[chave];
       if (!hoje) { diferencas.push(`${chave}: sumiu`); continue; }
@@ -96,6 +101,7 @@ for (const marca of ["ember"]) for (const tema of ["light", "dark"]) {
         if (marcaDoControle(valor, hoje[prop])) { permitidas++; continue; }
         if (sombraDoEscuro(prop, valor, hoje[prop])) { sombras++; continue; }
         if (linkDaEmber(valor, hoje[prop])) { links++; continue; }
+        if (celulaVelha(chave, prop, valor)) { celulas++; continue; }
         diferencas.push(`${chave} ${prop}: ${valor} → ${hoje[prop]}`);
       }
     }
@@ -103,6 +109,7 @@ for (const marca of ["ember"]) for (const tema of ["light", "dark"]) {
     if (tema === "dark") expect(permitidas, "as marcas brancas do escuro estão lá").toBe(9);
     if (tema === "dark") expect(sombras, "a sombra pequena do escuro está lá").toBe(3);
     expect(links, "o link no laranja da Ember está lá").toBeGreaterThan(0);
+    expect(celulas, "a célula velha do painel saiu").toBe(1);
     expect(Object.keys(agora).length, "o banco tem as mesmas peças").toBe(Object.keys(ref).length);
   });
 }

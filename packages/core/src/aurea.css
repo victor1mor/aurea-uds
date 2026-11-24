@@ -1743,7 +1743,7 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    mesmo que qualquer campo ao lado dela; o padding zera porque o dígito é centralizado. */
 .otp-field { display:inline-flex; align-items:center; gap:var(--space-2); }
 /* 0.32.0: a casa da referência — 38 × 40, o número 18 em seminegrito (era 36 × 36, letra 14). */
-.otp-slot { width:calc(var(--space-10) - var(--space-05)); block-size:var(--space-10); padding:0; text-align:center; font-family:var(--font-code); font-size:var(--text-lg); font-weight:var(--weight-semibold); }
+.otp-slot { width:calc(var(--space-10) - var(--space-05)); block-size:var(--space-10); padding:0; text-align:center; font-family:var(--font-ui); font-size:var(--text-lg); font-weight:var(--weight-semibold); }
 /* O tracinho entre os grupos (15/10/2026): o da referência, 6 × 2 com a ponta arredondada. Só desenho — o leitor de
    tela segue de caixa em caixa. */
 .otp-separator { flex:none; inline-size:calc(var(--space-1) + var(--space-05)); block-size:var(--space-05); border-radius:var(--radius-sm); background:var(--border-strong); }
@@ -3405,7 +3405,7 @@ button.tag-main { cursor:pointer; }
    deliberado e é o que o check 29 exige de quem não declara o token. */
 /* A célula de saúde é superfície PREENCHIDA, e por isso fica no degrau da escala (`-500`) e não
    no papel semântico: o papel é para TEXTO, onde a conta de contraste é outra. */
-.chart { width:100%; height:var(--chart-h,220px); } .chart-bar.alt { fill:var(--chart-1); } .health-cell.warn { background:var(--warning-500); } .health-cell.bad { background:var(--danger-500); } .health-cell.off { background:var(--surface-3); }
+.chart { width:100%; height:var(--chart-h,220px); } .chart-bar.alt { fill:var(--chart-1); }
 /* Chart (Lote 3) — a pele do desenho que o Recharts emite. Os seletores são de ELEMENTO, nunca
    `.recharts-*`: nome de classe de terceiro dentro do core reprovaria o check 15 (o core só
    declara classe que a Aurea produz), e é a mesma razão pela qual a pele do CodeEditor vem pelo
@@ -3591,6 +3591,10 @@ button.tag-main { cursor:pointer; }
 .media-embed-frame>iframe { position:absolute; inset:0; inline-size:100%; block-size:100%; border:0; }
 .media-embed-facade { position:absolute; inset:0; display:grid; place-items:center; padding:0; border:0; border-radius:inherit; background:var(--media-canvas); color:var(--media-foreground); cursor:pointer; }
 .media-embed-facade>img { position:absolute; inset:0; inline-size:100%; block-size:100%; object-fit:cover; }
+/* A capa em pé (Rodada 1 das decisões em bloco, 23/11/2026): inteira, com uma cópia desfocada dela por trás — o desfoque é o
+   do topo desfocado (`--space-4`), e a cópia passa da borda da caixa para o desfoque não mostrar a beirada. */
+.media-embed-facade[data-portrait]>img:not(.media-embed-backdrop) { object-fit:contain; }
+.media-embed-facade>.media-embed-backdrop { inset:calc(var(--space-8) * -1); inline-size:calc(100% + var(--space-8) * 2); block-size:calc(100% + var(--space-8) * 2); object-fit:cover; filter:blur(var(--space-4)); opacity:.6; }
 .media-embed-play { position:relative; display:grid; place-items:center; inline-size:var(--control-h-lg); block-size:var(--control-h-lg); border-radius:var(--radius-full); background:var(--primary); color:var(--primary-mark); box-shadow:var(--shadow-lg); }
 .media-embed-facade:hover .media-embed-play { transform:scale(1.06); }
 .media-embed-link { display:inline-flex; align-items:center; gap:var(--space-1); justify-self:start; color:var(--muted-foreground); font-size:var(--text-sm); }
@@ -4007,7 +4011,9 @@ button.tag-main { cursor:pointer; }
    dica, a nº 1 inclusive: a cor do texto vira o fundo e a cor da página vira a letra — no claro, o balão escuro; no
    escuro, o claro. A seta vai junto, inteira na cor do balão (a linha da seta some nele). O balão do gráfico
    (`.chart-tooltip`) usa a mesma classe e NÃO muda: é um cartão de dados, e lá a nº 1 também não inverte. */
-.tooltip:not(.chart-tooltip) { background:var(--foreground); color:var(--background); }
+/* O canto da dica é 12 (`--tooltip-radius`, a Rodada 1 das decisões em bloco, 23/11/2026); o balão do gráfico fica com o
+   `--radius-md` de antes, como fica com a cor. */
+.tooltip:not(.chart-tooltip) { border-radius:var(--tooltip-radius); background:var(--foreground); color:var(--background); }
 .tooltip:not(.chart-tooltip) :is(.overlay-arrow-fill,.overlay-arrow-line) { fill:var(--foreground); stroke:var(--foreground); }
 .tooltip:not(.chart-tooltip) .overlay-arrow-line { fill:none; }
 .popover { z-index:var(--z-modal); min-width:220px; max-width:min(360px,calc(100vw - 32px)); padding:16px; border:1px solid transparent; border-radius:var(--radius-card); background:var(--popover); color:var(--popover-foreground); font-size:var(--text-sm); box-shadow:var(--shadow-lg); display:grid; gap:10px; transform-origin:var(--transform-origin,center); transition:opacity var(--duration-base) var(--ease-standard),scale var(--duration-base) var(--ease-standard); }
@@ -5366,6 +5372,10 @@ button.graph-node-body { cursor:pointer; }
   --muted-foreground:color-mix(in oklab, var(--foreground) 80%, var(--background));
   --control-thumb:var(--brand-yellow-ink); --control-selected-foreground:var(--brand-yellow-ink); --control-selected-dot:var(--brand-yellow-ink); }
 [data-contrast="high"] :is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary) { border-color:var(--input-strong); }
+/* Na Ember, o contorno dos campos no alto contraste é o laranja dela (`--primary`, a cor do botão, do sistema de origem) — a
+   Rodada 1 das decisões em bloco, 23/11/2026 (o Victor, olhando a bancada: "No laranja da Ember"). Só os campos: o cartão
+   e o botão continuam no `--input-strong`. Pesa o mesmo que a regra do inválido abaixo, que vem depois e continua vermelha. */
+:is([data-brand="ember"][data-contrast="high"],[data-brand="ember"] [data-contrast="high"],[data-contrast="high"] [data-brand="ember"]) :is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary) { border-color:var(--primary); }
 [data-contrast="high"] .input-group > :is(.input,.select,.textarea) { border:0; }
 /* O inválido (ADR-0094) continua vermelho no alto contraste: o contorno de 3:1 acima vem depois e pesa o mesmo, e
    apagava o vermelho do campo com erro. */

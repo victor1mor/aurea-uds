@@ -123,10 +123,19 @@ export function MediaEmbed({ src, title, poster, ratio = "16/9", href, autoplay 
     const frameRef = React.useRef(null);
     React.useEffect(() => { if (clicou)
         frameRef.current?.focus(); }, [clicou]);
+    // A CAPA EM PÉ (a Rodada 1 das decisões em bloco, 23/11/2026 — o Victor: "Inteira, capa desfocada atrás"): a capa mais
+    // alta que larga aparece inteira, e uma cópia dela, desfocada, preenche a caixa por trás. A capa deitada continua
+    // preenchendo a caixa, como antes. A medida é a da imagem carregada (a que já veio do cache também).
+    const [emPe, setEmPe] = React.useState(false);
+    const capaRef = React.useRef(null);
+    const medirCapa = React.useCallback((img) => { if (img && img.naturalWidth > 0)
+        setEmPe(img.naturalHeight > img.naturalWidth); }, []);
+    React.useEffect(() => { const img = capaRef.current; if (img?.complete)
+        medirCapa(img); }, [poster, medirCapa]);
     const endereco = clicou && autoplay ? comAutoplay(src) : src;
     return _jsxs("div", { className: cx("media-embed", className), style: style, children: [_jsx("div", { className: "media-embed-frame", style: { aspectRatio: ratio }, children: !soHttps(src) ? null : ativo
                     ? _jsx("iframe", { ref: frameRef, src: endereco, title: title, loading: "lazy", referrerPolicy: "strict-origin-when-cross-origin", allow: "autoplay; encrypted-media; fullscreen; picture-in-picture", allowFullScreen: true, ...rest })
-                    : _jsxs("button", { type: "button", className: "media-embed-facade", "aria-label": `${s.mediaPlay}: ${title}`, onClick: () => { setAtivo(true); setClicou(true); }, children: [_jsx("img", { src: poster, alt: "", loading: "lazy", decoding: "async" }), _jsx("span", { className: "media-embed-play", "aria-hidden": "true", children: _jsx(Icon, { name: "play-circle", weight: "fill" }) })] }) }), soHttps(href) && _jsxs("a", { className: "media-embed-link", href: href, target: "_blank", rel: "noopener", children: [_jsx(Icon, { name: "arrow-square-out" }), s.mediaEmbedOpen] })] });
+                    : _jsxs("button", { type: "button", className: "media-embed-facade", "data-portrait": emPe ? "" : undefined, "aria-label": `${s.mediaPlay}: ${title}`, onClick: () => { setAtivo(true); setClicou(true); }, children: [emPe && _jsx("img", { className: "media-embed-backdrop", src: poster, alt: "", decoding: "async" }), _jsx("img", { ref: capaRef, src: poster, alt: "", loading: "lazy", decoding: "async", onLoad: (e) => medirCapa(e.currentTarget) }), _jsx("span", { className: "media-embed-play", "aria-hidden": "true", children: _jsx(Icon, { name: "play-circle", weight: "fill" }) })] }) }), soHttps(href) && _jsxs("a", { className: "media-embed-link", href: href, target: "_blank", rel: "noopener", children: [_jsx(Icon, { name: "arrow-square-out" }), s.mediaEmbedOpen] })] });
 }
 export function Image({ ratio, fit, alt, className, style, render, onError, frame, srcDark, ...props }) {
     const [quebrou, setQuebrou] = React.useState(false);

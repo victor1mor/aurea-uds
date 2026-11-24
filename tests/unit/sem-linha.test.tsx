@@ -111,6 +111,10 @@ const LINHA_PERMITIDA_CSS: {seletor: string; prop: string; valor?: string; media
   // mais o cartão e o botão (por dentro). Só sob `[data-contrast="high"]`, cada uma só no seletor e na cor dela.
   {seletor: '[data-contrast="high"] :is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary)',
     prop: "border-color", valor: "var(--input-strong)"},
+  // Na Ember, o contorno dos campos no alto contraste é o laranja dela (a Rodada 1 das decisões em bloco, 23/11/2026, o
+  // Victor: "No laranja da Ember") — a mesma linha de cima, só no seletor da Ember e só com o `--primary`.
+  {seletor: ':is([data-brand="ember"][data-contrast="high"],[data-brand="ember"] [data-contrast="high"],[data-contrast="high"] [data-brand="ember"]) :is(.input,.textarea,.select,.input-group,.combobox-multi,.input-secondary,.textarea-secondary)',
+    prop: "border-color", valor: "var(--primary)"},
   {seletor: '[data-contrast="high"] .card', prop: "border-color", valor: "var(--input-strong)"},
   {seletor: '[data-contrast="high"] .btn', prop: "box-shadow", valor: "inset 0 0 0 var(--border-width) var(--input-strong)"},
   {seletor: '[data-contrast="high"] .btn.btn-primary', prop: "box-shadow", valor: "inset 0 0 0 var(--border-width) var(--primary-foreground)"},
@@ -203,6 +207,9 @@ export function linhasNoNativo(fonte: string, origem: string): string[] {
     // E o contorno de 3:1 que SÓ o "aumentar contraste" acende (ADR-0083, a mesma exceção da web): só no `estilos.ts`, só
     // com o `inputStrong`, e só dentro da condição `maisContraste` do `fundoDeCampo`.
     const linhaInteira = limpo.slice(limpo.lastIndexOf("\n", m.index!) + 1, limpo.indexOf("\n", m.index!));
+    // Na Ember, o laranja dela (a Rodada 1 das decisões em bloco, 23/11/2026): a mesma condição, só com esta escolha.
+    if (origem === "estilos.ts" && valor === 't.brand === "ember" ? t.color.primary : t.color.inputStrong'
+      && /maisContraste \? \{borderColor: t\.brand === "ember" \? t\.color\.primary : t\.color\.inputStrong\}/.test(linhaInteira)) continue;
     if (origem === "estilos.ts" && valor === "t.color.inputStrong" && /maisContraste \? \{borderColor: t\.color\.inputStrong\}/.test(linhaInteira)) continue;
     // O contorno do ERRO (ADR-0094): só nasce no `contornoDeErro` do `estilos.ts`, na cor da frase de erro.
     if (origem === "estilos.ts" && valor === "t.color.danger400 ?? t.color.destructive" && /^export const contornoDeErro = /.test(linhaInteira)) continue;
@@ -299,6 +306,8 @@ describe("sem linha — nenhuma peça da Aurea desenha borda (ADR-0072)", () => 
     expect(linhasNoNativo("{borderColor: t.color.border, borderTopColor: cor, borderColor: t.color.focusStrong, borderColor: \"transparent\"}", "x")).toHaveLength(2);
     // O contorno do "aumentar contraste" no nativo vale SÓ no `fundoDeCampo` do `estilos.ts`, sob a condição.
     expect(linhasNoNativo("  ...(maisContraste ? {borderColor: t.color.inputStrong} : null),", "estilos.ts")).toEqual([]);
+    expect(linhasNoNativo('  ...(maisContraste ? {borderColor: t.brand === "ember" ? t.color.primary : t.color.inputStrong} : null),', "estilos.ts")).toEqual([]);
+    expect(linhasNoNativo('  ...(maisContraste ? {borderColor: t.brand === "ember" ? t.color.primary : t.color.inputStrong} : null),', "inputs.tsx")).toHaveLength(1);
     expect(linhasNoNativo("  {borderColor: t.color.inputStrong},", "estilos.ts")).toHaveLength(1);
     expect(linhasNoNativo("  ...(maisContraste ? {borderColor: t.color.inputStrong} : null),", "inputs.tsx")).toHaveLength(1);
     expect(linhasNoNativo("focado && {borderColor: focoDoCampo(t, maisContraste)},", "x")).toEqual([]);

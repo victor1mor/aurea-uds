@@ -7827,13 +7827,27 @@ import {MediaEmbed} from "@aurea-uds/react";
 />
 ```
 
+## Examples
+
+### An upright video
+
+A poster taller than it is wide — a video shot upright on a phone — is shown whole, with a blurred copy of it filling the frame behind. A landscape poster fills the frame.
+
+```tsx
+<MediaEmbed
+  src="https://www.youtube.com/embed/VIDEO_ID"
+  title="Behind the scenes"
+  poster="/shorts/cover.jpg"
+/>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `src` | `string` | — | The provider's EMBED address, e.g. https://www.youtube.com/embed/<id>. Any other <iframe> attribute is accepted and forwarded, and wins over the defaults. Only https: addresses are embedded; with any other scheme the frame stays empty. |
 | `title` | `string` | — | Required. The accessible name of the frame — an unnamed iframe fails axe, so the type refuses to compile without it. |
-| `poster` | `string` | — | Still image for the facade. With it, nothing from the provider loads until the play button is pressed; without it, the frame loads lazily right away. |
+| `poster` | `string` | — | Still image for the facade. With it, nothing from the provider loads until the play button is pressed; without it, the frame loads lazily right away. A poster taller than it is wide (a video shot upright) is shown whole, with a blurred copy of it filling the frame behind. |
 | `ratio` | `string` | 16/9 | Box proportion in CSS syntax. Reserved before anything loads, so the page does not jump. |
 | `href` | `string` | — | The video on its own site. Shown as a link under the frame — the way out when the owner blocks embedding, which the page cannot detect. Only https: addresses are shown. |
 | `autoplay` | `boolean` | true | With a poster, start playing after the click by adding autoplay=1 to the address (YouTube and Vimeo read the same key). The person already asked to play. |
@@ -18944,6 +18958,42 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-79-0.html">
+# v0.79.0
+
+Tooltip corners are 12; OTPField digits use the text font; upright MediaEmbed posters show whole; Ember fields in high contrast are outlined in orange.
+
+## Added
+
+- **`--tooltip-radius`** (12 px): the corner of the tooltip, a token of its own. The `--radius-*` scale does not change.
+
+## Changed
+
+- **`Tooltip` corners are 12 px** (they were 10). The `Chart` hover card keeps its corner.
+- **`OTPField` digits use the text font** on the web (`--font-ui`; they used the code font). React Native already did. Size and weight do not change.
+- **An upright `MediaEmbed` poster shows whole.** A poster taller than it is wide (a video shot upright) is no longer cropped: it is shown entire, with a blurred copy of it filling the frame behind. Landscape posters still fill the frame.
+- **In high contrast, Ember fields are outlined in Ember orange** (`--primary`), on the web (`data-contrast="high"`) and in React Native (`highContrast`). Cards and buttons keep the gray outline. Other brands do not change.
+- **The `Toast` description is 14 px in React Native** (it was 16), the same as on the web. The title stays 16.
+
+## Removed
+
+- **The unused `.health-cell.warn`, `.bad` and `.off` rules.** `HealthMatrix` never produced these classes, so the component does not change. If you wrote them by hand, the cells now look like every other cell.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.79.0 @aurea-uds/core@0.79.0 @aurea-uds/fonts@0.79.0 @aurea-uds/icons@0.79.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.79.0
 ```
 </page>
 

@@ -154,9 +154,13 @@ test("a linha do tempo da ember também passa por baixo dos pontos, com a cor de
   }
 });
 
-test("a cor que já reprovava: a célula de atenção do painel, no claro, mede 3:1 na página", async ({page: p}) => {
-  await abrir(p, "light");
-  expect(await estilo(p, "saude-atencao", "background-color")).toBe(await token(p, "#d07612"));
+// A Rodada 1 das decisões em bloco (23/11/2026, o Victor: "Apagar as cores velhas"): a regra órfã `.health-cell.warn/.bad/.off`
+// saiu — o `HealthMatrix` nunca a produzia. A célula escrita com `warn` à mão é agora a célula de sempre, o cartão.
+test("a célula do painel escrita com a classe velha é o cartão de sempre (a regra órfã saiu)", async ({page: p}) => {
+  for (const tema of ["light", "dark"] as const) {
+    await abrir(p, tema);
+    expect(await estilo(p, "saude-atencao", "background-color"), tema).toBe(await token(p, "var(--card)"));
+  }
 });
 
 test("aumentar contraste: o contorno de 3:1 nos campos, as marcas na tinta e o foco do campo no grafite", async ({browser}) => {

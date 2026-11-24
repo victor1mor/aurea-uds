@@ -213,7 +213,9 @@ export function Toast({ toast, onClose }) {
                         }) }] },
         ], testID: `toast-${toast.id}`, children: [_jsxs(View, { accessible: true, ...(tipo === "danger" ? { accessibilityRole: "alert" } : null), style: s.grupo, children: [glifo ? _jsx(Icon, { name: glifo, size: "md", color: corDoIcone, weight: toast.icon ? undefined : "fill" }) : null, _jsxs(View, { style: s.texto, children: [_jsx(Text, { size: "base", weight: 500, style: { color: corDoIcone }, children: toast.title }), toast.description != null
                                 ? (typeof toast.description === "string"
-                                    ? _jsx(Text, { size: "sm", tone: "muted", children: toast.description })
+                                    // A descrição é 14 (`xs`, que no telefone é o `textSm`), igual à web — a Rodada 1 das decisões em bloco,
+                                    // 23/11/2026 (o Victor: "Igual à web (14)"; 2 de 3 referências do celular). Era 16.
+                                    ? _jsx(Text, { size: "xs", tone: "muted", children: toast.description })
                                     : toast.description)
                                 : null] })] }), toast.action, _jsx(CloseButton, { label: strings.dismissNotification, onPress: onClose })] }));
 }
