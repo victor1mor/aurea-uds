@@ -76,6 +76,19 @@ export default {
         h(MultiCombobox, {label: "Components", placeholder: "Add a component…", items: grouped})),
     },
     {
+      title: "In a form",
+      description: "With a name, each chosen option goes out with the form as its own value; required stops a submit "
+        + "with none; defaultValue starts with chips, with no state in the app.",
+      code: [
+        '<form action="/label">',
+        '  <MultiCombobox label="Tags" name="tags" required items={tags} defaultValue={[tags[0]]} />',
+        "</form>",
+      ].join("\n"),
+      render: () => h("form", {style: stack, action: "#", onSubmit: (e) => e.preventDefault()},
+        h(MultiCombobox, {label: "Tags", name: "tags", required: true, items: tags, defaultValue: [tags[0]],
+          placeholder: "Add a tag…"})),
+    },
+    {
       title: "Disabled",
       description: "The chips stay readable, and nothing can be added or removed.",
       code: '<MultiCombobox label="Tags" items={tags} value={picked} disabled />',

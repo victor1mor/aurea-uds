@@ -47,9 +47,11 @@ With `pressed`, the button only paints the on state and you keep the state yours
 These names are older than the current ones but are not deprecated for removal. They keep working in 1.0, and you do not need to change them:
 
 - `Topbar`, the old name of `Header`, on the web and in React Native;
+- `useValorResponsivo`, the old name of `useResponsiveValue`;
 - `MenuItemDef`, the old type of a menu item, now `MenuEntry`;
 - the `BottomNav` variants `flat`, `surface`, `pill` and `dock`, now `variant` with `indicator`;
-- `onClick` on the web, which works the same as `onPress`.
+- `onClick` on the web, which works the same as `onPress`;
+- `onChange` on the web `Switch`, which still receives the input event; `onCheckedChange` receives true or false, on the web and in React Native.
 
 ## After 1.0
 

@@ -7,7 +7,7 @@ import {Separator as BaseSeparator} from "@base-ui/react/separator";
 import {useDirection} from "@base-ui/react/direction-provider";
 import {cx, useAureaStrings} from "./internal.js";
 import {type Orientation, type Responsive} from "./pure.js";
-import {useValorResponsivo} from "./responsivo-runtime.js";
+import {useResponsiveValue} from "./responsivo-runtime.js";
 import {ESCALA} from "./escala.js";
 import {IconButton, type IconButtonProps} from "./actions.js";
 import {Tooltip} from "./overlays.js";
@@ -319,7 +319,7 @@ AppShell.SidebarToggle=AppShellSidebarToggle;
 export type SeparatorSpacing="none"|"tight"|"normal"|"loose";
 export function Separator({orientation,spacing="none",className,...props}:HTMLAttributes<HTMLHRElement>&RefAttributes<HTMLHRElement>&{orientation?:Responsive<Orientation>;spacing?:SeparatorSpacing}){
 const ancora=useRef<HTMLHRElement|null>(null);
-const resolvida=useValorResponsivo(orientation,"horizontal",ancora);
+const resolvida=useResponsiveValue(orientation,"horizontal",ancora);
 // O elenco existe porque o tipo do motor descreve os manipuladores sobre `HTMLDivElement` — ele
 // não sabe que o `render` troca o elemento. O tipo PÚBLICO desta função é o certo: quem passar um
 // `ref` recebe o <hr> que está de fato no DOM.

@@ -1223,7 +1223,11 @@ const listaCombobox=(items:ComboboxOption[]|ComboboxOptGroup[])=><BaseCombobox.L
 // `disabled` vai na ROOT, não no Input: `Input`, `Trigger`, `Clear` e `ChipRemove` leem todos o
 // mesmo `selectors.disabled` do store do Base UI (@base-ui/react 1.6.0). Desabilitar o Input
 // deixaria os dois botões vivos — abrir a lista de um campo desabilitado é o defeito, não o texto.
-export function Combobox({items,value,onValueChange,placeholder,label,empty,disabled,size,id,className,"aria-describedby":descrito,"aria-invalid":invalido,"aria-label":rotulo}:{items:ComboboxOption[]|ComboboxOptGroup[];empty?:ReactNode;value?:ComboboxOption|null;onValueChange?:(v:ComboboxOption|null)=>void;placeholder?:string;label?:ReactNode;disabled?:boolean;size?:Responsive<FieldSize>;id?:string;className?:string;"aria-describedby"?:string;"aria-invalid"?:boolean|"true"|"false";
+export function Combobox({items,value,defaultValue,onValueChange,name,required,placeholder,label,empty,disabled,size,id,className,"aria-describedby":descrito,"aria-invalid":invalido,"aria-label":rotulo}:{items:ComboboxOption[]|ComboboxOptGroup[];empty?:ReactNode;value?:ComboboxOption|null;defaultValue?:ComboboxOption|null;onValueChange?:(v:ComboboxOption|null)=>void;
+  /** O formulário (0.81.0; um defeito medido em 24/11/2026: num `<form>` comum o que a pessoa escolheu não ia junto).
+   *  `name` cria o campo escondido do motor com o `value` da opção; `required` não deixa enviar vazio (e o leitor de
+   *  tela ouve "obrigatório"); `defaultValue` é a opção do começo, sem estado no app. */
+  name?:string;required?:boolean;placeholder?:string;label?:ReactNode;disabled?:boolean;size?:Responsive<FieldSize>;id?:string;className?:string;"aria-describedby"?:string;"aria-invalid"?:boolean|"true"|"false";
   /** C-01 (24/09/2026): nome para o leitor de tela quando não há `label` visível — um filtro numa
    *  grade sem rótulos. Vai direto para o campo. Com `label`, prefira o `label`. */
   "aria-label"?:string}){
@@ -1231,7 +1235,7 @@ export function Combobox({items,value,onValueChange,placeholder,label,empty,disa
   const portal=usePortalContainer();
   const autoId=React.useId();
   const inputId=id??autoId;
-  return <BaseCombobox.Root items={items} value={value} onValueChange={soOValor(onValueChange)} disabled={disabled} itemToStringLabel={(i:ComboboxOption)=>i.label}>
+  return <BaseCombobox.Root items={items} value={value} defaultValue={defaultValue} onValueChange={soOValor(onValueChange)} name={name} required={required} disabled={disabled} itemToStringLabel={(i:ComboboxOption)=>i.label} itemToStringValue={(i:ComboboxOption)=>i.value}>
     <div className={cx("field",className)}>
       {/* <label> nativo, não Combobox.Label: este associa ao TRIGGER, deixando o
           input sem nome acessível e sobrescrevendo o aria-label do botão. */}
@@ -1260,7 +1264,11 @@ export function Combobox({items,value,onValueChange,placeholder,label,empty,disa
 //   (filter={null}) e o consumidor troca os items conforme a busca retorna.
 //   loading só troca o texto do vazio para não piscar "Nenhum resultado".
 
-export function MultiCombobox({items,value,onValueChange,onInputChange,loading,placeholder,label,empty,disabled,id,className,"aria-describedby":descrito,"aria-invalid":invalido,"aria-label":rotulo}:{items:ComboboxOption[]|ComboboxOptGroup[];empty?:ReactNode;value?:ComboboxOption[];onValueChange?:(v:ComboboxOption[])=>void;onInputChange?:(query:string)=>void;loading?:boolean;placeholder?:string;label?:ReactNode;disabled?:boolean;id?:string;className?:string;"aria-describedby"?:string;"aria-invalid"?:boolean|"true"|"false";
+export function MultiCombobox({items,value,defaultValue,onValueChange,name,required,onInputChange,loading,placeholder,label,empty,disabled,id,className,"aria-describedby":descrito,"aria-invalid":invalido,"aria-label":rotulo}:{items:ComboboxOption[]|ComboboxOptGroup[];empty?:ReactNode;value?:ComboboxOption[];defaultValue?:ComboboxOption[];onValueChange?:(v:ComboboxOption[])=>void;
+  /** O formulário (0.81.0; um defeito medido em 24/11/2026: num `<form>` comum o que a pessoa escolheu não ia junto).
+   *  `name` cria, pelo motor, um campo escondido por opção escolhida, cada um com o `value` dela; `required` não deixa
+   *  enviar sem nenhuma (e o leitor de tela ouve "obrigatório"); `defaultValue` são as opções do começo, sem estado no app. */
+  name?:string;required?:boolean;onInputChange?:(query:string)=>void;loading?:boolean;placeholder?:string;label?:ReactNode;disabled?:boolean;id?:string;className?:string;"aria-describedby"?:string;"aria-invalid"?:boolean|"true"|"false";
   /** C-01 (24/09/2026): nome para o leitor de tela quando não há `label` visível — um filtro numa
    *  grade sem rótulos. Vai direto para o campo. Com `label`, prefira o `label`. */
   "aria-label"?:string}){
@@ -1268,7 +1276,7 @@ export function MultiCombobox({items,value,onValueChange,onInputChange,loading,p
   const portal=usePortalContainer();
   const autoId=React.useId();
   const inputId=id??autoId;
-  return <BaseCombobox.Root multiple items={items} value={value} onValueChange={soOValor(onValueChange)} disabled={disabled} itemToStringLabel={(i:ComboboxOption)=>i.label} filter={onInputChange?null:undefined} onInputValueChange={onInputChange?((v:string,d:{reason:string})=>{if(d.reason!=="item-press")onInputChange(v)}):undefined}>
+  return <BaseCombobox.Root multiple items={items} value={value} defaultValue={defaultValue} onValueChange={soOValor(onValueChange)} name={name} required={required} disabled={disabled} itemToStringLabel={(i:ComboboxOption)=>i.label} itemToStringValue={(i:ComboboxOption)=>i.value} filter={onInputChange?null:undefined} onInputValueChange={onInputChange?((v:string,d:{reason:string})=>{if(d.reason!=="item-press")onInputChange(v)}):undefined}>
     <div className={cx("field",className)}>
       {label&&<label className="label" htmlFor={inputId}>{label}</label>}
       <BaseCombobox.InputGroup className="combobox-multi">

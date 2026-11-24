@@ -47,13 +47,13 @@ jobs:
             else echo "A rodada falhou ($CONCLUSAO): o site é o do último verde, $verde; só a saúde traz a rodada nova."; fi
             echo "sha=$verde" >> "$GITHUB_OUTPUT"
           fi
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # o commit que a CI aprovou (ou o último verde), não o que o `main` virou depois
           ref: ${{ steps.commit.outputs.sha }}
           # o passo de publicar não precisa da chave do git
           persist-credentials: false
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
       - name: Montar site-dist (só o catálogo gerado; recusa recurso de fora)

@@ -15,7 +15,7 @@ import {PreviewCard as BasePreviewCard} from "@base-ui/react/preview-card";
 import {cx, useAureaStrings, usePortalContainer} from "./internal.js";
 import {useDirection} from "@base-ui/react/direction-provider";
 import {juntarToque, type Responsive} from "./pure.js";
-import {useValorResponsivo} from "./responsivo-runtime.js";
+import {useResponsiveValue} from "./responsivo-runtime.js";
 import {Icon, type IconName} from "./system.js";
 import {Button, CloseButton} from "./actions.js";
 
@@ -399,7 +399,7 @@ export type MenubarOrientation="horizontal"|"vertical";
 export function Menubar({menus,label,modal,disabled,loopFocus,orientation,className}:{menus:Array<{label:ReactNode;items:MenuEntry[];disabled?:boolean}>;label?:string;modal?:boolean;disabled?:boolean;loopFocus?:boolean;orientation?:Responsive<MenubarOrientation>;className?:string}){
   const portal=usePortalContainer();
   const ancora=useRef<HTMLDivElement|null>(null);
-  const resolvida=useValorResponsivo(orientation,"horizontal",ancora);
+  const resolvida=useResponsiveValue(orientation,"horizontal",ancora);
   const vertical=resolvida==="vertical";
   const ids=React.useId();
   return <BaseMenubar ref={ancora} modal={modal} disabled={disabled} loopFocus={loopFocus} orientation={resolvida} aria-label={label} className={cx("menubar",className)}>

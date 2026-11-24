@@ -73,6 +73,10 @@ que é o mensurável certo e não exige medir elemento nenhum.
 ela, mas qualquer eixo comportamental futuro usa o mesmo. Foi o que o Victor pediu ao recusar um
 `useResponsiveOrientation`.
 
+> **24/11/2026, na 0.81.0:** o resolvedor ganhou o nome em inglês, `useResponsiveValue`, como os
+> outros hooks públicos (decisão do Victor, *"Sim, com o antigo"*). O `useValorResponsivo` continua
+> exportado, como apelido do mesmo hook.
+
 **O mecanismo muda com a natureza do valor:**
 
 ```text
