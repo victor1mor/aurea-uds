@@ -27,7 +27,7 @@ export declare function matchesAccept(file: {
     type: string;
 }, accept?: string): boolean;
 export declare function formatSize(bytes: number): string;
-export declare function FileInput({ accept, maxSize, multiple, onFilesChange, upload, label, hint, id, className, initialQueue, onQueueChange, preview, checksum, "aria-invalid": invalido, "aria-labelledby": rotuladoPor, "aria-describedby": descritoPor }: {
+export declare function FileInput({ accept, maxSize, multiple, onFilesChange, upload, label, hint, id, className, initialQueue, onQueueChange, preview, checksum, disabled, "aria-invalid": invalido, "aria-labelledby": rotuladoPor, "aria-describedby": descritoPor }: {
     accept?: string;
     maxSize?: number;
     multiple?: boolean;
@@ -47,5 +47,9 @@ export declare function FileInput({ accept, maxSize, multiple, onFilesChange, up
     /** A ligação ao rótulo e à frase de fora (0.68.0): dentro de um `Field`, chega sozinha. O rótulo SOMA ao texto da área ("Proof of address Drag files here…"). */
     "aria-labelledby"?: string;
     "aria-describedby"?: string;
+    /** DESATIVADO (0.80.0, o DS-370 — o Victor, 24/11/2026: *"Ganha o desativado"*; o nativo já tinha, e a ficha já
+     *  prometia): a área de soltar fica meio apagada (`--opacity-disabled`), não abre a janela de escolher e não aceita
+     *  arquivo solto nela. O campo de arquivo leva o `disabled` do HTML, e o leitor de tela ouve "indisponível". */
+    disabled?: boolean;
 }): React.JSX.Element;
 export {};

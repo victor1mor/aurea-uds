@@ -38,6 +38,13 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
     /** Registro de ícones, quando não há um em contexto. Ver `criarRegistroDeIcones`. */
     icons?: AureaIconRegistry;
     fullWidth?: boolean;
+    /**
+     * OCUPADO (0.80.0, o mesmo da web — o Victor, 24/11/2026: *"Igual à web"*): a rodinha do `Spinner` toma o lugar do
+     * ícone da frente, o texto FICA, o toque é travado e o leitor de tela ouve "ocupado" (`busy`). A rodinha tem a cor e o
+     * tamanho do ícone do botão. É o jeito da maioria das referências do celular que têm a prop (a rodinha no lugar do
+     * ícone, o texto fica), e trava o toque como a web.
+     */
+    loading?: boolean;
     /** Estado de alternância, anunciado ao leitor de tela como `checked`. */
     pressed?: boolean;
     /**
@@ -74,11 +81,11 @@ export interface AureaShareData {
  * lida por ninguém. Aqui não há o dilema, então não há o par `aria-disabled` — um só basta.
  */
 export declare function Button(props: ButtonProps): React.JSX.Element;
-export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth" | "glow" | "ring"> {
+export interface LinkButtonProps extends Omit<ButtonProps, "appearance" | "fullWidth" | "glow" | "ring" | "loading"> {
 }
 /** Botão-texto sem recuo nem caixa, alinhado com o texto em volta. O `LinkButton` da referência. */
 export declare function LinkButton(props: LinkButtonProps): React.JSX.Element;
-export interface IconButtonBase extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "leading" | "trailing" | "fullWidth"> {
+export interface IconButtonBase extends Omit<ButtonProps, "children" | "leadingIcon" | "trailingIcon" | "leading" | "trailing" | "fullWidth" | "loading"> {
     /** **Obrigatório**: um botão que só tem glifo não tem texto para o leitor de tela anunciar. */
     label: string;
 }

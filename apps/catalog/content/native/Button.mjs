@@ -52,6 +52,16 @@ export default {
         h(Button, {key: 3, appearance: "outline", tone: "success", ring: true}, "Approve")]),
     },
     {
+      title: "Loading",
+      description: "Busy, the same as the web: the spinner takes the place of the leading icon, in the button's colour and the "
+        + "icon's size; the label stays, the press is blocked and the screen reader hears busy.",
+      code: `<Button tone="brand" leadingIcon="floppy-disk" loading onPress={save}>Saving</Button>
+<Button appearance="outline" loading onPress={sync}>Syncing</Button>`,
+      render: () => emLinha([
+        h(Button, {key: 1, tone: "brand", leadingIcon: "floppy-disk", loading: true}, "Saving"),
+        h(Button, {key: 2, appearance: "outline", loading: true}, "Syncing")]),
+    },
+    {
       title: "Full width",
       description: "Stretched to the container for a form footer or a sign-in screen — only the width changes: each size keeps "
         + "its height.",

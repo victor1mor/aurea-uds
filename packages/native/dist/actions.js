@@ -1,4 +1,4 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Aurea nativo — `Button` e `IconButton`, sobre `Pressable`.
 //
 // ── A API: DOIS EIXOS, e o atalho da web NÃO atravessa ───────────────────────────────────────
@@ -16,13 +16,13 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 //   `href`      — não há navegação por documento no RN; link é `Linking.openURL`, do app;
 //   `type`      — `submit`/`reset` são de `<form>`, que não existe;
 //   `kbd`       — atalho de teclado impresso no botão não faz sentido no toque;
-//   `loading`   — precisa do `Spinner`, que é Lote 2. Entra lá, não aqui, e é melhor faltar do
-//                 que nascer com um giro desenhado à mão que o Lote 2 teria de substituir;
+//   ~~`loading`~~ — entrou na 0.80.0 (o Victor, 24/11/2026: *"Igual à web"*), com o anel do `Spinner` (`giro.tsx`);
 //   `appearance:"nav"` — é a pele do item de navegação, e quem a consome é o `BottomNav`/`NavList`
 //                 do Lote 3. Aparência sem consumidor é a ADR-0034 ("ter a variante não é usar").
 import * as React from "react";
 import { AccessibilityInfo, Platform, Pressable, Share, View } from "react-native";
 import { aroDoEstilo, brilhoDoBotao, canto, comOpacidade, criarFolha, fioDoAcabamento, misturaOpaca, preenchimento, REACAO_AO_TOQUE, estadoAcessivel } from "./estilos.js";
+import { AnelQueGira } from "./giro.js";
 import { Icon } from "./icon.js";
 import { Text } from "./text.js";
 import { AvisosContext, useAltoContraste, useAureaStrings, useAureaTheme, useAureaTokens, useSobreAMarca } from "./theme.js";
@@ -42,6 +42,10 @@ const FONTE = {
 // Era 16 até o `md` e 20 no `lg` e no `xl`, quando o `md` tinha 36.
 const ICONE = {
     xs: "sm", sm: "sm", md: "md", lg: "lg", xl: "lg",
+};
+// O lado do ícone em cada degrau — o mesmo da escala do `Icon` —, para a rodinha do ocupado ter o tamanho do ícone.
+const LADO_DO_ICONE = {
+    sm: (t) => t.size.iconSm, md: (t) => t.size.iconMd, lg: (t) => t.size.iconLg,
 };
 /** Par (fundo, texto, borda) por tom, para cada aparência. Tudo de token, nada cru. */
 function pintar(t, tone) {
@@ -237,7 +241,9 @@ function acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDoTexto
     return { acabamento, marcaDoAcabamento };
 }
 /** O corpo do `Button`. `semRecuo` é só do `LinkButton`: sem recuo, sem borda e sem altura. */
-function CorpoDoBotao({ children, appearance: aparenciaPedida, tone: tomPedido, size = "md", leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed, disabled, accessibilityLabel, semRecuo = false, share, glow, ring, onPress, ...rest }) {
+function CorpoDoBotao({ children, appearance: aparenciaPedida, tone: tomPedido, size = "md", leadingIcon, trailingIcon, leading, trailing, icons, fullWidth = false, pressed, disabled: desativadoPedido, loading = false, accessibilityLabel, semRecuo = false, share, glow, ring, onPress, ...rest }) {
+    // Ocupado trava o toque como desativado, igual à web (`off = disabled || loading`), e o leitor ouve os dois.
+    const disabled = !!desativadoPedido || loading;
     // 0.71.0 (o D3, como a web e a referência): sem `appearance` nem `tone`, o botão é o principal (cheio, na marca). Quem
     // pede um dos eixos continua com o outro no de antes (cheio, neutro) — `appearance="ghost"` sozinho não vira amarelo.
     const appearance = aparenciaPedida ?? "solid";
@@ -273,10 +279,12 @@ function CorpoDoBotao({ children, appearance: aparenciaPedida, tone: tomPedido, 
     const corDoTexto = appearance === "solid" ? cor.texto : corDaLetra(t, tone, appearance, marca, cor.sobre);
     const alto = useAltoContraste();
     const { acabamento, marcaDoAcabamento } = acabamentoDoBotao(t, glow, ring, appearance, tone, disabled, corDoTexto, alto && !semRecuo);
-    return (_jsx(Pressable, { disabled: disabled, onPress: aoTocar, accessibilityRole: "button", accessibilityLabel: accessibilityLabel, ...estadoAcessivel({ disabled: !!disabled, pressed }), style: ({ pressed: tocando }) => [
+    return (_jsx(Pressable, { disabled: disabled, onPress: aoTocar, accessibilityRole: "button", accessibilityLabel: accessibilityLabel, ...estadoAcessivel({ disabled: !!disabled, pressed, ...(loading ? { busy: true } : null) }), style: ({ pressed: tocando }) => [
             s.alvo, fullWidth && s.alvoLargura,
             tocando && s.pressionado, disabled && s.inerte,
-        ], ...rest, children: _jsxs(View, { style: [s.caixa, caixa, acabamento], ...marcaDoAcabamento, children: [leading ?? null, leadingIcon ? _jsx(Icon, { name: leadingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null, typeof children === "string"
+        ], ...rest, children: _jsxs(View, { style: [s.caixa, caixa, acabamento], ...marcaDoAcabamento, children: [loading
+                    ? _jsx(AnelQueGira, { lado: LADO_DO_ICONE[ICONE[size]](t), cor: corDoTexto, acessibilidade: { accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants" } })
+                    : _jsxs(_Fragment, { children: [leading ?? null, leadingIcon ? _jsx(Icon, { name: leadingIcon, size: ICONE[size], color: corDoTexto, icons: icons }) : null] }), typeof children === "string"
                     // E1 (25/09/2026): entrelinha NORMAL (1,5), como o rótulo do botão da referência
                     // (a folha do botão dela usa a entrelinha de cada degrau da escala). Era `none` (1,0), e a letra
                     // precisa de 1,3 em para caber inteira — a IBM Plex subia 1,025 e descia 0,275; a

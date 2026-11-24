@@ -16,7 +16,7 @@ export default {
   install: 'import {DropdownMenu} from "@aurea-uds/native";',
   api: {
     trigger: "The element that opens the menu — usually a Button or an IconButton. It is cloned with the tap that opens, the ref that measures it and the expanded state; its own onPress still runs.",
-    items: "The menu, as data — the web's union: actions {label, onClick?, disabled?, leadingIcon?, destructive?}, {kind: \"checkbox\"}, {kind: \"radiogroup\"}, {kind: \"submenu\"}, {kind: \"group\"}, {kind: \"link\", href} and the string \"separator\". destructive is native only: the item that destroys data, in the danger tone.",
+    items: "The menu, as data — the web's union: actions {label, onClick?, disabled?, leadingIcon?, destructive?}, {kind: \"checkbox\"}, {kind: \"radiogroup\"}, {kind: \"submenu\"}, {kind: \"group\"}, {kind: \"link\", href} and the string \"separator\". destructive: the item that destroys data, in the danger tone — the web has the same field.",
     testID: "Test id of the menu's panel.",
   },
   examples: [

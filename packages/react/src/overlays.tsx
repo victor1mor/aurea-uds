@@ -178,8 +178,8 @@ export type OverlaySide="top"|"right"|"bottom"|"left";
 // pela tecnologia assistiva, então não precisa acompanhar o estado.
 //
 // 0.32.0, a dica e o popover da referência:
-//   • A SETA (`arrow`), desligada por padrão como lá. O desenho é nosso (uma curva de 12 × 6, sem a
-//     ponta afiada); ela tem o fundo da janela e a linha da borda, então a borda dá a volta nela.
+//   • A SETA (`arrow`), desligada por padrão como lá. O desenho é nosso (~~uma curva de 12 × 6, sem a
+//     ponta afiada~~ → desde a 0.80.0, a PONTA FINA, 12 × 6); ela tem o fundo da janela e a linha da borda, então a borda dá a volta nela.
 //     A dica com seta se afasta 8 do gatilho (`--space-2`: os 6 da seta e 2 de folga); sem
 //     seta, 4 (`--space-1`) — a referência usa 7 e 3, que não são da nossa escala. O popover fica
 //     sempre a 8, com ou sem seta, como o dela.
@@ -194,7 +194,9 @@ export type OverlaySide="top"|"right"|"bottom"|"left";
 //     marcação, quando o filho é uma tag; e, quando é um componente, no nó de verdade, depois de
 //     montado, porque só o DOM sabe o que o componente desenhou.
 const ATRASO_DA_DICA=100, ATRASO_PARA_FECHAR_A_DICA=100;
-function Seta(){return <svg viewBox="0 0 12 12" aria-hidden="true"><path className="overlay-arrow-fill" d="M0 0Q6 12 12 0Z"/><path className="overlay-arrow-line" d="M0 0Q6 12 12 0" fill="none"/></svg>}
+// A seta tem a PONTA FINA (o Victor, 24/11/2026: *"Ponta fina"*, na web e no celular): dois lados retos que se encontram
+// num bico, 12 de largura e 6 de fundo — como 8 de 14 referências da web; era uma curva só, de ponta redonda.
+function Seta(){return <svg viewBox="0 0 12 12" aria-hidden="true"><path className="overlay-arrow-fill" d="M0 0L6 6L12 0Z"/><path className="overlay-arrow-line" d="M0 0L6 6L12 0" fill="none"/></svg>}
 const FOCAVEIS_POR_NATUREZA=new Set(["button","input","select","textarea","summary","iframe","audio","video"]);
 function focavelNaMarcacao(el:ReactElement):boolean|undefined{
   if(typeof el.type!=="string")return undefined;
@@ -253,7 +255,11 @@ interface MenuItemBase{label:ReactNode;disabled?:boolean;leadingIcon?:IconName;
 export interface MenuActionDef extends MenuItemBase{kind?:"item";/** O toque (DOC-11): o mesmo nome do nativo. O `onClick` continua valendo, como apelido; com os dois, rodam os dois. */onPress?:()=>void;onClick?:()=>void;
   /** O elemento que MATERIALIZA o item, no idioma `render` da casa (o mesmo do `Card`). Para
    *  navegação prefira `href`, que usa o `LinkItem` do motor. */
-  render?:ReactElement}
+  render?:ReactElement;
+  /** O item que APAGA ou destrói algo ("Excluir"): o texto e o ícone no vermelho da frase de erro, e o fundo suave do
+   *  perigo quando o item está em destaque — a mesma prop e o mesmo desenho do nativo (o Victor, 24/11/2026: *"Ganha o
+   *  vermelho"*). Só muda a cor: quem pede confirmação antes de apagar continua sendo o app. */
+  destructive?:boolean}
 /** Item que é um link de verdade: `<a href>`, com o `LinkItem` do motor por trás.
  *  NÃO estende `MenuItemBase`, e a ausência é a informação: **link não tem `disabled`** — o HTML
  *  não desabilita âncora, e o motor não aceita a prop. Um destino indisponível é um item de ação
@@ -322,7 +328,10 @@ function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null,ids=""):Reac
       return <BaseMenu.RadioGroup key={i} value={g.value}
         defaultValue={g.defaultValue} onValueChange={v=>g.onValueChange?.(String(v))}>
         {g.label&&<BaseMenu.GroupLabel className="menu-label">{g.label}</BaseMenu.GroupLabel>}
-        {g.items.map((r,j)=><BaseMenu.RadioItem key={j} className="menu-item" value={r.value}
+        {/* ESCOLHER FECHA O MENU (o Victor, 24/11/2026: *"Fecha, nos dois"*): a escolha de uma só está feita, como em 10
+            de 13 referências da web e no nativo. O motor deixa aberto por padrão (`closeOnClick` falso no `RadioItem`);
+            a caixa de marcar continua deixando aberto — ali se marca mais de uma. */}
+        {g.items.map((r,j)=><BaseMenu.RadioItem key={j} className="menu-item" value={r.value} closeOnClick
           disabled={r.disabled} {...nomeDoItem(r,`${id}-${j}`)}>
           {/* O PONTO DO RÁDIO É FORMA, NÃO ÍCONE — desenhado em CSS, como o `.control-mark` do
               `Radio` já faz. Pôr um glifo aqui daria duas linguagens para a mesma marca: o rádio
@@ -362,7 +371,7 @@ function renderMenuItems(items:MenuEntry[],portal?:HTMLElement|null,ids=""):Reac
     }
     default:{
       const a=it as MenuActionDef;
-      return <BaseMenu.Item key={i} className="menu-item" disabled={a.disabled}
+      return <BaseMenu.Item key={i} className={a.destructive?"menu-item menu-item-destructive":"menu-item"} disabled={a.disabled}
         onClick={juntarToque(a.onPress,a.onClick)} render={a.render} {...nomeDoItem(a,id)}>{dentro(a)}</BaseMenu.Item>;
     }
   }
