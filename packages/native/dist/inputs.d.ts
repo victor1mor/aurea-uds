@@ -360,6 +360,11 @@ export declare const RadioGroup: typeof RaizDoGrupoDeRadio & {
  * mexer nela deve fechar a diferença em vez de reabrir esta.
  */
 export interface SwitchProps extends ControleProps {
+    /**
+     * O mesmo aviso do `onChange` (verdadeiro/falso), com o nome que o `Switch` da web também tem desde a 0.81.0 (DOC-11)
+     * — o do item de marcar do menu, nos dois alvos. Com os dois, os dois rodam, o `onCheckedChange` primeiro.
+     */
+    onCheckedChange?: (checked: boolean) => void;
 }
 /**
  * O interruptor.
@@ -372,7 +377,7 @@ export interface SwitchProps extends ControleProps {
  * ⚠ **E ele respeita "menos movimento"**: com a preferência ligada, o polegar salta em vez de
  * deslizar. O estado continua o mesmo — o que some é a animação, não a informação.
  */
-export declare function Switch({ label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align, }: SwitchProps): React.JSX.Element;
+export declare function Switch({ label, description, checked, onChange, onCheckedChange, disabled, size, style, testID, accessibilityLabel, align, }: SwitchProps): React.JSX.Element;
 export interface SegmentedControlProps extends ViewProps {
     /**
      * `disabled` no item (o AUD-1, parte 4 — 22/11/2026): só aquele segmento fica indisponível, apagado e sem escolha, e o leitor

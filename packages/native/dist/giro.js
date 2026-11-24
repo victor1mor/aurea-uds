@@ -3,7 +3,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 //
 // Saiu do `feedback.tsx` quando o `Button` ganhou o `loading` (o Victor, 24/11/2026: *"Igual à web"*): o botão põe a
 // rodinha no lugar do ícone, na COR DO TEXTO dele — o `.spinner` da web pinta com `currentColor` —, e o `Spinner`
-// público pinta com a cor do texto da página. O desenho, o giro e a parada com "reduzir movimento" são um só; a cor e o
+// público pinta com a cor do texto da página. O desenho, o giro e o ritmo com "reduzir movimento" são um só; a cor e o
 // tamanho vêm de quem usa. Morar aqui evita a volta `actions` ↔ `feedback` (o `feedback` já importa o `Button`).
 import * as React from "react";
 import { Animated, Easing } from "react-native";
@@ -14,20 +14,23 @@ import { useAureaTokens } from "./theme.js";
 /**
  * O anel que gira. **700 ms, linear** — o mesmo `.7s linear` do `.spinner` da web.
  *
- * ⚠ **Ele para quando a pessoa pede menos movimento.** Na web a regra global de `prefers-reduced-motion` já fazia isso;
- * aqui é o componente que pergunta, porque não há cascata para fazê-lo por ele. Parado, o anel continua desenhado.
+ * ⚠ **Com menos movimento ele gira DEVAGAR, a um terço: 2,1 s a volta** (0.81.0; até a 0.80.0 parava). É um laço, e a
+ * regra de movimento do projeto manda os laços continuarem — parado, ele lia como "nada está carregando". A web faz o
+ * mesmo (`.spinner` com 2,1 s sob `prefers-reduced-motion`). Aqui é o componente que pergunta, porque não há cascata.
  */
+/** Uma volta, em ms: o `.7s linear` do `.spinner` da web; com menos movimento, um terço da velocidade (o 2,1 s da web). */
+const VOLTA = 700;
+const VOLTA_DEVAGAR = 2100;
 export function AnelQueGira({ lado, cor, acessibilidade, style, testID }) {
     const t = useAureaTokens();
     const reduzir = useReduceMotion();
     const giro = React.useRef(new Animated.Value(0)).current;
     React.useEffect(() => {
-        // `!== false` e não `!reduzir`: enquanto é `null` o sistema ainda não respondeu, e
-        // animar nesse vão é animar na cara de quem talvez tenha pedido que não.
-        if (reduzir !== false)
+        // `null` = o sistema ainda não respondeu: espera, para não girar no ritmo errado nem um quadro.
+        if (reduzir === null)
             return;
         const laco = Animated.loop(Animated.timing(giro, {
-            toValue: 1, duration: 700, easing: Easing.linear, useNativeDriver: driverNativo(),
+            toValue: 1, duration: reduzir ? VOLTA_DEVAGAR : VOLTA, easing: Easing.linear, useNativeDriver: driverNativo(),
         }));
         laco.start();
         // Sem o `stop` o laço sobrevive à desmontagem e continua acordando o JS — o vazamento

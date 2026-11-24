@@ -1961,12 +1961,14 @@ if API_SURFACE.is_file() and _ARQ_ARIA.is_file():
                     f"{_nome}: responsive.{_prop} está como 'visual' e o componente {_porque} — "
                     f"prop responsiva que altera comportamento ou semântica NÃO pode ser resolvida "
                     f"só pela camada CSS (G-AXIS-06 / ADR-0047): resolva em runtime com "
-                    f"useValorResponsivo e mande o valor resolvido ao motor")
-            if _modo == "behavioral" and "useValorResponsivo" not in _corpo:
+                    f"useResponsiveValue e mande o valor resolvido ao motor")
+            # o resolvedor tem dois nomes desde a 0.81.0: `useResponsiveValue` e o antigo, `useValorResponsivo`
+            _resolve = "useResponsiveValue" in _corpo or "useValorResponsivo" in _corpo
+            if _modo == "behavioral" and not _resolve:
                 errors.append(
                     f"{_nome}: responsive.{_prop} está como 'behavioral' e o componente não chama "
-                    f"useValorResponsivo — a ficha promete resolução em runtime e o código não faz")
-            if _modo == "visual" and "useValorResponsivo" in _corpo:
+                    f"useResponsiveValue — a ficha promete resolução em runtime e o código não faz")
+            if _modo == "visual" and _resolve:
                 errors.append(
                     f"{_nome}: responsive.{_prop} está como 'visual' e o componente resolve em "
                     f"runtime — ou a ficha está errada, ou o componente paga um observer que a "

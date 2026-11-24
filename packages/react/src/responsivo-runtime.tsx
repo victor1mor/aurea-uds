@@ -160,7 +160,7 @@ const semAssinatura = () => () => {};
  *  re-renderiza com o do cliente —, e o contêiner só é medido depois da montagem, quando existe
  *  elemento para medir. Valor simples não assina nada: nem `matchMedia`, nem observer, nem
  *  estado que dependa de hidratação. */
-export function useValorResponsivo<T extends string>(valor: Responsive<T> | undefined, padrao: T,
+export function useResponsiveValue<T extends string>(valor: Responsive<T> | undefined, padrao: T,
   ancora?: RefObject<HTMLElement | null>): T {
   const base = (valorBase(valor) ?? padrao) as T;
   const porViewport = typeof valor === "object" && valor !== null && valor.viewport ? valor.viewport : null;
@@ -206,3 +206,7 @@ export function useValorResponsivo<T extends string>(valor: Responsive<T> | unde
    O que ela precisa ser: uma ref presa ao ELEMENTO RAIZ do componente. Sem um nó no documento o
    caminho de busca não tem de onde subir, e o valor fica no base para sempre, em silêncio — foi
    exatamente o defeito da primeira versão deste arquivo. */
+
+/** O nome antigo de `useResponsiveValue` (o nome em inglês desde a 0.81.0, como os outros hooks públicos).
+ *  Continua funcionando igual — é o mesmo hook. */
+export const useValorResponsivo = useResponsiveValue;

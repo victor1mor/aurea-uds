@@ -52,15 +52,15 @@ jobs:
           echo "::error::A confirmação não foi escrita. Nada foi publicado."
           exit 1
 
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
-      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           # SEM CACHE (lote 093): a documentação do npm manda nunca usar cache na montagem que publica — um cache
           # envenenado por outra rodada iria para o pacote. O `false` desliga também o cache automático do setup-node.
           package-manager-cache: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.x"
 

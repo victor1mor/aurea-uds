@@ -20,6 +20,7 @@ export default {
     description: "A muted line under the label. As text it is also the hint the screen reader reads.",
     checked: "Whether it is on. Controlled: the screen keeps the state.",
     onChange: "Called with the new value on every touch.",
+    onCheckedChange: "The same as onChange, with the name the web Switch also has: called with the new value, true or false.",
     disabled: "Dims the row; the touch does nothing and it is announced as disabled.",
     size: "The size step: the track is the control height wide and half of it tall.",
     align: "Where the track sits against the text: center (the default) on the middle of the block; start on the middle of the first line, for a long label.",

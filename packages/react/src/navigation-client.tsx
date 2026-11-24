@@ -8,7 +8,7 @@ import {useDirection} from "@base-ui/react/direction-provider";
 import {Autocomplete as BaseAutocomplete} from "@base-ui/react/autocomplete";
 import {Dialog as BaseDialog} from "@base-ui/react/dialog";
 import {Popover as BasePopover} from "@base-ui/react/popover";
-import {useValorResponsivo} from "./responsivo-runtime.js";
+import {useResponsiveValue} from "./responsivo-runtime.js";
 import {juntarToque, type Responsive} from "./pure.js";
 import {cx, fundirRender, useAureaStrings, usePortalContainer, useDeslize} from "./internal.js";
 import {Kbd, ProgressCircle} from "./markup.js";
@@ -100,7 +100,7 @@ export type TabsVariant="primary"|"secondary";
 export function Tabs({tabs,value,onChange,label,orientation,activateOnFocus=true,loopFocus,panel="card",variant="primary"}:{tabs:Array<{id:string;label:ReactNode;content:ReactNode;
   /** A aba indisponível (o AUD-1, parte 4 — 22/11/2026): apagada, não escolhe, e continua alcançável pelas setas (o motor a
    *  mantém focável), como no nativo. O mesmo nome do `AureaTabItem` do nativo. */
-  disabled?:boolean}>;value:string;onChange:(id:string)=>void;label?:string;orientation?:Responsive<TabsOrientation>;activateOnFocus?:boolean;loopFocus?:boolean;panel?:TabsPanel;variant?:TabsVariant}){const s=useAureaStrings();const ancora=useRef<HTMLDivElement|null>(null);const resolvida=useValorResponsivo(orientation,"horizontal",ancora);const lista=useRef<HTMLDivElement|null>(null);useDeslize(lista,".tab[data-active]",value);return <BaseTabs.Root ref={ancora} value={value} onValueChange={v=>onChange(String(v))} orientation={resolvida} className="tabs-root"><BaseTabs.List ref={lista} className={cx("tabs",variant==="secondary"&&"tabs-secondary")} aria-label={label??s.tabsLabel} activateOnFocus={activateOnFocus} loopFocus={loopFocus}>{tabs.map(t=><BaseTabs.Tab key={t.id} value={t.id} className="tab" disabled={t.disabled}>{t.label}</BaseTabs.Tab>)}</BaseTabs.List>{tabs.map(t=><BaseTabs.Panel key={t.id} value={t.id} className={panel==="plain"?"tabs-panel":"card card-inset"} tabIndex={0}>{t.content}</BaseTabs.Panel>)}</BaseTabs.Root>}
+  disabled?:boolean}>;value:string;onChange:(id:string)=>void;label?:string;orientation?:Responsive<TabsOrientation>;activateOnFocus?:boolean;loopFocus?:boolean;panel?:TabsPanel;variant?:TabsVariant}){const s=useAureaStrings();const ancora=useRef<HTMLDivElement|null>(null);const resolvida=useResponsiveValue(orientation,"horizontal",ancora);const lista=useRef<HTMLDivElement|null>(null);useDeslize(lista,".tab[data-active]",value);return <BaseTabs.Root ref={ancora} value={value} onValueChange={v=>onChange(String(v))} orientation={resolvida} className="tabs-root"><BaseTabs.List ref={lista} className={cx("tabs",variant==="secondary"&&"tabs-secondary")} aria-label={label??s.tabsLabel} activateOnFocus={activateOnFocus} loopFocus={loopFocus}>{tabs.map(t=><BaseTabs.Tab key={t.id} value={t.id} className="tab" disabled={t.disabled}>{t.label}</BaseTabs.Tab>)}</BaseTabs.List>{tabs.map(t=><BaseTabs.Panel key={t.id} value={t.id} className={panel==="plain"?"tabs-panel":"card card-inset"} tabIndex={0}>{t.content}</BaseTabs.Panel>)}</BaseTabs.Root>}
 // PAGINATION (0.32.0) — a da referência: os NÚMEROS das páginas (32, em cápsula, peso médio), as
 // reticências quando são muitas, "anterior" e "próxima" com a seta, e o resumo opcional à esquerda
 // ("1 a 5 de 50"). A página atual leva o "clarinho" da Aurea — a receita do selo suave (decisão do

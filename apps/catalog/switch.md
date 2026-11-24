@@ -46,6 +46,16 @@ The muted line under the name, and indicatorPlacement="end" to put the switch af
   indicatorPlacement="end" />
 ```
 
+### Controlled, with true or false
+
+onCheckedChange hands the app the new value, true or false — the same name on the web and in React Native. onChange still works and still receives the input event.
+
+```tsx
+const [alerts, setAlerts] = useState(true);
+
+<Switch label="Price alerts" checked={alerts} onCheckedChange={setAlerts} />
+```
+
 ### Without a visible label
 
 When the name is already on screen beside it, labelHidden keeps it for the screen reader only.
@@ -82,6 +92,7 @@ The system's size step — sm, md and lg, the same scale as the fields beside it
 | `description` | `ReactNode` | — | A muted line under the label, as the Checkbox and the reference — then the label is set in bold. |
 | `indicatorPlacement` | `"start" \| "end"` | "start" | Where the switch sits: before the label (the default) or after it, with the label and description on the left — the same name as the native RadioGroup. |
 | `checked / defaultChecked` | `boolean` | — | Controlled or uncontrolled. role="switch" is set for you. |
+| `onCheckedChange` | `(checked: boolean) => void` | — | Called with the new value, true or false — the same name as in React Native. onChange still works and still receives the input event; with both, both run, onCheckedChange first. |
 | `disabled` | `boolean` | false | Native disabled. |
 | `className` | `string` | — | Extra classes. Switch applies immediately; a Checkbox waits for the form to be submitted. |
 | `size` | `Responsive<FieldSize>` | md | The system's size step. |

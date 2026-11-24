@@ -356,11 +356,17 @@ export interface ComboboxOptGroup {
     label: string;
     items: ComboboxOption[];
 }
-export declare function Combobox({ items, value, onValueChange, placeholder, label, empty, disabled, size, id, className, "aria-describedby": descrito, "aria-invalid": invalido, "aria-label": rotulo }: {
+export declare function Combobox({ items, value, defaultValue, onValueChange, name, required, placeholder, label, empty, disabled, size, id, className, "aria-describedby": descrito, "aria-invalid": invalido, "aria-label": rotulo }: {
     items: ComboboxOption[] | ComboboxOptGroup[];
     empty?: ReactNode;
     value?: ComboboxOption | null;
+    defaultValue?: ComboboxOption | null;
     onValueChange?: (v: ComboboxOption | null) => void;
+    /** O formulário (0.81.0; um defeito medido em 24/11/2026: num `<form>` comum o que a pessoa escolheu não ia junto).
+     *  `name` cria o campo escondido do motor com o `value` da opção; `required` não deixa enviar vazio (e o leitor de
+     *  tela ouve "obrigatório"); `defaultValue` é a opção do começo, sem estado no app. */
+    name?: string;
+    required?: boolean;
     placeholder?: string;
     label?: ReactNode;
     disabled?: boolean;
@@ -373,11 +379,17 @@ export declare function Combobox({ items, value, onValueChange, placeholder, lab
      *  grade sem rótulos. Vai direto para o campo. Com `label`, prefira o `label`. */
     "aria-label"?: string;
 }): React.JSX.Element;
-export declare function MultiCombobox({ items, value, onValueChange, onInputChange, loading, placeholder, label, empty, disabled, id, className, "aria-describedby": descrito, "aria-invalid": invalido, "aria-label": rotulo }: {
+export declare function MultiCombobox({ items, value, defaultValue, onValueChange, name, required, onInputChange, loading, placeholder, label, empty, disabled, id, className, "aria-describedby": descrito, "aria-invalid": invalido, "aria-label": rotulo }: {
     items: ComboboxOption[] | ComboboxOptGroup[];
     empty?: ReactNode;
     value?: ComboboxOption[];
+    defaultValue?: ComboboxOption[];
     onValueChange?: (v: ComboboxOption[]) => void;
+    /** O formulário (0.81.0; um defeito medido em 24/11/2026: num `<form>` comum o que a pessoa escolheu não ia junto).
+     *  `name` cria, pelo motor, um campo escondido por opção escolhida, cada um com o `value` dela; `required` não deixa
+     *  enviar sem nenhuma (e o leitor de tela ouve "obrigatório"); `defaultValue` são as opções do começo, sem estado no app. */
+    name?: string;
+    required?: boolean;
     onInputChange?: (query: string) => void;
     loading?: boolean;
     placeholder?: string;

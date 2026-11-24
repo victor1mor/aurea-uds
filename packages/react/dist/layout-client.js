@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import { Separator as BaseSeparator } from "@base-ui/react/separator";
 import { useDirection } from "@base-ui/react/direction-provider";
 import { cx, useAureaStrings } from "./internal.js";
-import { useValorResponsivo } from "./responsivo-runtime.js";
+import { useResponsiveValue } from "./responsivo-runtime.js";
 import { ESCALA } from "./escala.js";
 import { IconButton } from "./actions.js";
 import { Tooltip } from "./overlays.js";
@@ -252,7 +252,7 @@ export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, 
 AppShell.SidebarToggle = AppShellSidebarToggle;
 export function Separator({ orientation, spacing = "none", className, ...props }) {
     const ancora = useRef(null);
-    const resolvida = useValorResponsivo(orientation, "horizontal", ancora);
+    const resolvida = useResponsiveValue(orientation, "horizontal", ancora);
     // O elenco existe porque o tipo do motor descreve os manipuladores sobre `HTMLDivElement` — ele
     // não sabe que o `render` troca o elemento. O tipo PÚBLICO desta função é o certo: quem passar um
     // `ref` recebe o <hr> que está de fato no DOM.

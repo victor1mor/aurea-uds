@@ -5565,7 +5565,8 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .progress-circle-danger { --progress-circle-fill:var(--danger-400); }
 .progress-circle-info { --progress-circle-fill:var(--info-400); }
 .progress-circle-indeterminate > svg { animation:spin 1s linear infinite; }
-@media (prefers-reduced-motion:reduce) { .progress-circle-indeterminate > svg { animation-duration:3s; } .progress-circle-fill { transition:none; } }
+/* o giro sem fim com menos movimento (3 s) mora junto da regra global de `prefers-reduced-motion`, que ele precisa vencer */
+@media (prefers-reduced-motion:reduce) { .progress-circle-fill { transition:none; } }
 /* TAGGROUP (0.32.0): as etiquetas da referência — 24 de altura (sm 20, lg 32), 8 dos lados (lg 10), letra
    de 12 peso médio (lg 14), ícone de 12, 4 entre as partes, 6 entre as etiquetas; o fundo neutro (ou o de
    cartão, `surface`), a escolhida no clarinho. O canto é a cápsula da Aurea. O anel de foco vai na
@@ -7435,6 +7436,12 @@ button.graph-node-body { cursor:pointer; }
    coluna com a gaveta acima. Sai junto com aquela página (achado M13). */
 @media (max-width:40em) { :root { --card-pad:16px; --section-gap:16px; } .doc-actions .select { flex:1; width:auto!important; min-width:0; } .doc-actions>.btn-primary { width:var(--control-h-md); padding:0; font-size:0; } .doc-actions>.btn-primary .mono { display:none; } .tabs,.pagination,.segmented { max-width:100%; overflow-x:auto; } .step:nth-child(3):before { display:none; } .alert { grid-template-columns:auto minmax(0,1fr); } .alert>:last-child { grid-column:2; justify-self:start; } .log-line { grid-template-columns:70px 58px minmax(0,1fr); gap:6px; } .queue-item>.badge { grid-column:2; justify-self:start; } .event-row>.badge { grid-column:3; justify-self:start; } .message { grid-template-columns:1fr; } .media-player { min-height:330px; aspect-ratio:auto; } .media-overlay-title { top:12px; left:12px; right:12px; } .media-controls { padding:10px; } .media-control-row { align-items:flex-start; flex-direction:column; gap:8px; } .media-control-row>.media-control-group { width:100%; justify-content:space-between; } .media-optional,.media-volume { display:none; } .media-time { padding:0 4px; font-size:11px; } .toast-stack { inset-inline:12px; bottom:12px; } .toast { width:100%; min-width:0; grid-template-columns:minmax(0,1fr) auto; } .drawer { width:100%; padding:20px; } .dialog { padding:20px; } }
 @media (prefers-reduced-motion:reduce) { *,*:before,*:after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
+/* Os LAÇOS continuam, mais devagar (0.81.0; a regra de movimento do CLAUDE.md: "os laços mantêm o tempo próprio"). A
+   regra de cima parava a rodinha (`.spinner`) e o círculo sem fim (`ProgressCircle` sem `value`): parados, eles liam
+   como "nada está carregando". Aqui giram a um terço da velocidade (0,7 s → 2,1 s; 1 s → 3 s), sem fim. O `!important`
+   com uma classe ganha do da regra de cima, que só tem o `*`. A barra sem fim (`.progress-indeterminate`) e o esqueleto
+   NÃO entram: com menos movimento a barra vira a trilha inteira apagada (nunca um pedaço parado) e o esqueleto não pulsa. */
+@media (prefers-reduced-motion:reduce) { .spinner { animation-duration:2.1s!important; animation-iteration-count:infinite!important; } .progress-circle-indeterminate > svg { animation-duration:3s!important; animation-iteration-count:infinite!important; } }
 
 /* Padrões compostos Aurea 1.7: blocos de operação, não widgets de domínio. */
 .operational-grid .demo{min-height:0}@media(max-width:40em){.operational-grid .demo{grid-column:span 12}}

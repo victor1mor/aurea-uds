@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.81.0
+
+November 24, 2026
+
+Switch reports true or false; Combobox and MultiCombobox submit with the form; useResponsiveValue is the new name of useValorResponsivo; spinners keep turning, slower, with reduced motion.
+
+[Read full release notes →](https://aureauds.dev/release-v0-81-0.md)
+
 ## v0.80.0
 
 November 24, 2026

@@ -35,10 +35,11 @@ export { useAureaStrings, useSpriteUrl, useTheme, useDensity } from "./internal.
 // computação de string, e o servidor precisa dela para emitir a classe certa no HTML.
 export { ESCALA, ESCALA_CONTAINER } from "./pure.js";
 // O contêiner Aurea como PRIMITIVE, e o resolvedor genérico. `ContainerScope` é público porque
-// quem monta o layout precisa declarar o contêiner; `useValorResponsivo` é público porque o
+// quem monta o layout precisa declarar o contêiner; `useResponsiveValue` é público porque o
 // eixo comportamental é reutilizável fora dos cinco componentes que o estrearam. Estes DOIS têm
-// a diretiva de propósito: observam o documento.
-export { ContainerScope, useValorResponsivo } from "./responsivo-runtime.js";
+// a diretiva de propósito: observam o documento. O `useValorResponsivo` é o nome antigo do
+// resolvedor (até a 0.80.0) e continua como apelido.
+export { ContainerScope, useResponsiveValue, useValorResponsivo } from "./responsivo-runtime.js";
 // ── A LINHA DO ITEM O1, e ela é o item inteiro ───────────────────────────────────────────────
 // Estes 22 vêm do `markup.js`, que NÃO tem a diretiva, e por isso chegam como componentes de
 // SERVIDOR. Vinham dos módulos de categoria abaixo, e de lá chegavam como cliente: `Card` é uma

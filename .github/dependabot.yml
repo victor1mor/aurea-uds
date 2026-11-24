@@ -1,0 +1,19 @@
+# O robô de atualização: SÓ as Actions da CI (decisão do Victor, 24/11/2026, "Atualizar e ligar o robô").
+# Os pacotes ficam de fora: o Dependabot não lê o `pnpm-lock.yaml` de dois documentos do pnpm 12, e
+# para eles vale a auditoria da CI (`pnpm audit --audit-level=high`, no passo `build`).
+# As Actions continuam presas por SHA com o comentário da versão; o robô troca os dois juntos.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # uma versão nova só entra depois de 7 dias publicada (dá tempo de um defeito ou ataque aparecer)
+    cooldown:
+      default-days: 7
+    # todas as Actions num pedido só, para a CI rodar uma vez
+    groups:
+      actions:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 5

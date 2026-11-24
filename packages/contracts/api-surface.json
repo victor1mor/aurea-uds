@@ -5,9 +5,9 @@
   "totals": {
     "modulos": 40,
     "componentes": 145,
-    "hooks": 11,
+    "hooks": 12,
     "aliasesLiterais": 119,
-    "propsDistintas": 411
+    "propsDistintas": 412
   },
   "aliases": {
     "ButtonVariant": {
@@ -6597,9 +6597,27 @@
               "values": null
             },
             {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "ComboboxOption | null",
+              "values": null
+            },
+            {
               "name": "onValueChange",
               "optional": true,
               "type": "(v: ComboboxOption | null) => void",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
               "values": null
             },
             {
@@ -6848,9 +6866,27 @@
               "values": null
             },
             {
+              "name": "defaultValue",
+              "optional": true,
+              "type": "ComboboxOption[]",
+              "values": null
+            },
+            {
               "name": "onValueChange",
               "optional": true,
               "type": "(v: ComboboxOption[]) => void",
+              "values": null
+            },
+            {
+              "name": "name",
+              "optional": true,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "required",
+              "optional": true,
+              "type": "boolean",
               "values": null
             },
             {
@@ -9629,6 +9665,12 @@
                 "md",
                 "lg"
               ]
+            },
+            {
+              "name": "onCheckedChange",
+              "optional": true,
+              "type": "(checked: boolean) => void",
+              "values": null
             }
           ]
         },
@@ -11374,6 +11416,7 @@
         }
       ],
       "hooks": [
+        "useResponsiveValue",
         "useValorResponsivo"
       ],
       "clientDirective": false

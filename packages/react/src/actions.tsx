@@ -4,7 +4,7 @@
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, {useRef, forwardRef, cloneElement, type ButtonHTMLAttributes, type HTMLAttributes, type ReactElement, type RefAttributes} from "react";
 import {classesResponsivas, ehResponsivo, juntarToque, peleDoEixo, soOValor, valorBase, type Orientation, type Responsive} from "./pure.js";
-import {useValorResponsivo} from "./responsivo-runtime.js";
+import {useResponsiveValue} from "./responsivo-runtime.js";
 import {Toolbar as BaseToolbar} from "@base-ui/react/toolbar";
 import {Toggle as BaseToggle} from "@base-ui/react/toggle";
 import {ToggleGroup as BaseToggleGroup} from "@base-ui/react/toggle-group";
@@ -397,7 +397,7 @@ export function Toolbar({orientation,label,className,pressedStyle,tone="default"
   tone?:"default"|"brand"}){
 const s=useAureaStrings();
 const ancora=useRef<HTMLDivElement|null>(null);
-const resolvida=useValorResponsivo(orientation,"horizontal",ancora);
+const resolvida=useResponsiveValue(orientation,"horizontal",ancora);
 return <BaseToolbar.Root ref={ancora} orientation={resolvida} aria-label={label??s.toolbarLabel} data-pressed-style={pressedStyle} className={cx("toolbar",tone==="brand"&&"toolbar-brand",className)} {...props}/>}
 export function ToolbarGroup({label,className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>&{label?:string}){return <BaseToolbar.Group aria-label={label} className={cx("toolbar-group",className)} {...props}/>}
 export function ToolbarSeparator({className,...props}:HTMLAttributes<HTMLDivElement>&RefAttributes<HTMLDivElement>){return <BaseToolbar.Separator className={cx("toolbar-sep",className)} {...props}/>}
@@ -435,7 +435,7 @@ export interface ToggleGroupProps{value?:string[];defaultValue?:string[];onValue
   pressedStyle?:TogglePressedStyle}
 export function ToggleGroup({value,defaultValue,onValueChange,multiple,orientation,disabled,label,className,children,size,fullWidth,detached,pressedStyle}:ToggleGroupProps){
   const ancora=useRef<HTMLDivElement|null>(null);
-  const resolvida=useValorResponsivo(orientation,"horizontal",ancora);
+  const resolvida=useResponsiveValue(orientation,"horizontal",ancora);
   const grupo=React.useMemo(()=>({size}),[size]);
   return <GrupoDeBotoesContext.Provider value={grupo}><BaseToggleGroup ref={ancora} value={value} defaultValue={defaultValue} onValueChange={soOValor(onValueChange)} multiple={multiple} orientation={resolvida} disabled={disabled} aria-label={label} data-pressed-style={pressedStyle} className={cx("toggle-group",detached&&"toggle-group-detached",fullWidth&&"toggle-group-full",className)}>{children}</BaseToggleGroup></GrupoDeBotoesContext.Provider>;
 }

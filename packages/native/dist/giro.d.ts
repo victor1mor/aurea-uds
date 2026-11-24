@@ -10,10 +10,4 @@ export interface AnelQueGiraProps {
     style?: StyleProp<ViewStyle>;
     testID?: string;
 }
-/**
- * O anel que gira. **700 ms, linear** — o mesmo `.7s linear` do `.spinner` da web.
- *
- * ⚠ **Ele para quando a pessoa pede menos movimento.** Na web a regra global de `prefers-reduced-motion` já fazia isso;
- * aqui é o componente que pergunta, porque não há cascata para fazê-lo por ele. Parado, o anel continua desenhado.
- */
 export declare function AnelQueGira({ lado, cor, acessibilidade, style, testID }: AnelQueGiraProps): React.JSX.Element;

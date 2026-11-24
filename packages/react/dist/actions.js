@@ -5,7 +5,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, { useRef, forwardRef, cloneElement } from "react";
 import { classesResponsivas, ehResponsivo, juntarToque, peleDoEixo, soOValor, valorBase } from "./pure.js";
-import { useValorResponsivo } from "./responsivo-runtime.js";
+import { useResponsiveValue } from "./responsivo-runtime.js";
 import { Toolbar as BaseToolbar } from "@base-ui/react/toolbar";
 import { Toggle as BaseToggle } from "@base-ui/react/toggle";
 import { ToggleGroup as BaseToggleGroup } from "@base-ui/react/toggle-group";
@@ -277,7 +277,7 @@ export function ButtonGroup({ label, orientation, variant, size, fullWidth, disa
 export function Toolbar({ orientation, label, className, pressedStyle, tone = "default", ...props }) {
     const s = useAureaStrings();
     const ancora = useRef(null);
-    const resolvida = useValorResponsivo(orientation, "horizontal", ancora);
+    const resolvida = useResponsiveValue(orientation, "horizontal", ancora);
     return _jsx(BaseToolbar.Root, { ref: ancora, orientation: resolvida, "aria-label": label ?? s.toolbarLabel, "data-pressed-style": pressedStyle, className: cx("toolbar", tone === "brand" && "toolbar-brand", className), ...props });
 }
 export function ToolbarGroup({ label, className, ...props }) { return _jsx(BaseToolbar.Group, { "aria-label": label, className: cx("toolbar-group", className), ...props }); }
@@ -285,7 +285,7 @@ export function ToolbarSeparator({ className, ...props }) { return _jsx(BaseTool
 export const ToolbarButton = forwardRef(function ToolbarButton({ variant = "ghost", pressedStyle, pressed, ...props }, ref) { return _jsx(BaseToolbar.Button, { ref: ref, disabled: props.disabled, render: _jsx(Button, { variant: variant, "data-pressed-style": pressedStyle, "aria-pressed": pressed, ...props }) }); });
 export function ToggleGroup({ value, defaultValue, onValueChange, multiple, orientation, disabled, label, className, children, size, fullWidth, detached, pressedStyle }) {
     const ancora = useRef(null);
-    const resolvida = useValorResponsivo(orientation, "horizontal", ancora);
+    const resolvida = useResponsiveValue(orientation, "horizontal", ancora);
     const grupo = React.useMemo(() => ({ size }), [size]);
     return _jsx(GrupoDeBotoesContext.Provider, { value: grupo, children: _jsx(BaseToggleGroup, { ref: ancora, value: value, defaultValue: defaultValue, onValueChange: soOValor(onValueChange), multiple: multiple, orientation: resolvida, disabled: disabled, "aria-label": label, "data-pressed-style": pressedStyle, className: cx("toggle-group", detached && "toggle-group-detached", fullWidth && "toggle-group-full", className), children: children }) });
 }

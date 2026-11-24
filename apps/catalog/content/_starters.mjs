@@ -1914,7 +1914,24 @@ export function Actions() {
           h(A.Button, null, "Save"), h(A.Button, null, "Discard"))))),
   },
 
+  useResponsiveValue: {
+    code: `const orientation = useResponsiveValue(
+  {base: "vertical", container: {sm: "horizontal"}},
+  "horizontal",
+  anchorRef,
+);`,
+    // O hook resolve; quem mostra o resultado é o componente que o consome. O preview mostra o
+    // efeito, que é o que se pode ver — o valor em si é um string.
+    render: () => h("div", {style: {display: "flex", flexWrap: "wrap", gap: "var(--space-4)", alignItems: "flex-start", justifyContent: "center"}},
+      ...[220, 480].map((w) => h(A.ContainerScope, {key: w, style: {inlineSize: w, padding: "var(--space-3)",
+        background: "var(--surface-2)", borderRadius: "var(--radius-lg)"}},
+        h(A.ToggleGroup, {label: `Align, ${w}`, orientation: {base: "vertical", container: {sm: "horizontal"}}},
+          h(A.Toggle, {value: "e"}, "Left"), h(A.Toggle, {value: "c"}, "Center"))))),
+  },
+
   useValorResponsivo: {
+    description: "The old name of useResponsiveValue (renamed in 0.81.0, like the other public hooks). Same hook, "
+      + "still works the same; use useResponsiveValue.",
     code: `const orientation = useValorResponsivo(
   {base: "vertical", container: {sm: "horizontal"}},
   "horizontal",

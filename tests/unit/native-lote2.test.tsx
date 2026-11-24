@@ -10,7 +10,7 @@ import {render, act} from "@testing-library/react";
 import {describe, expect, it, vi} from "vitest";
 import * as React from "react";
 import {
-  StyleSheet, __animacoes, __definirReduceMotion, __instancias, __limpar,
+  StyleSheet, __animacoes, __configsDeAnimacao, __definirReduceMotion, __instancias, __limpar,
 } from "./native-stubs/react-native";
 
 import {
@@ -51,14 +51,16 @@ describe("Spinner — o anel, e a preferência de movimento", () => {
     expect(__animacoes()).toHaveLength(1);
   });
 
-  // DEFEITO GRAVE, E SILENCIOSO: na web a regra global de `prefers-reduced-motion` (aurea.css:2128)
-  // para toda animação sem o componente saber. No RN não existe cascata, então um componente que
-  // não pergunta fica MENOS acessível que a mesma peça na web — e nada acusa.
-  it("NÃO anima quando a pessoa pediu menos movimento", async () => {
+  // DEFEITO GRAVE, E SILENCIOSO: no RN não existe cascata, então um componente que não pergunta pela preferência fica
+  // diferente da mesma peça na web — e nada acusa. ~~Com menos movimento, NÃO anima~~ → desde a 0.81.0 o anel é um
+  // LAÇO e continua, a um terço da velocidade (2,1 s a volta), como o `.spinner` da web: parado, lia como "nada está
+  // carregando" (a separação dos defeitos de 24/11/2026). A volta exata mora no `lote-102.test.tsx`.
+  it("com menos movimento, continua girando, mais devagar", async () => {
     __definirReduceMotion(true);
     render(<Envolve><Spinner /></Envolve>);
     await assentar();
-    expect(__animacoes()).toHaveLength(0);
+    expect(__animacoes()).toHaveLength(1);
+    expect(__configsDeAnimacao().map((c) => c.duration)).toEqual([2100]);
   });
 
   // DEFEITO: um anel sem rótulo é um nó anônimo para quem usa leitor de tela.

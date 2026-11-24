@@ -1092,7 +1092,13 @@ export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, {Item: ItemDoGrupoDe
  * `Radio` **não**, e o `Switch` **não**. Aqui os três têm. A dívida passa a ser da web, e quem
  * mexer nela deve fechar a diferença em vez de reabrir esta.
  */
-export interface SwitchProps extends ControleProps {}
+export interface SwitchProps extends ControleProps {
+  /**
+   * O mesmo aviso do `onChange` (verdadeiro/falso), com o nome que o `Switch` da web também tem desde a 0.81.0 (DOC-11)
+   * — o do item de marcar do menu, nos dois alvos. Com os dois, os dois rodam, o `onCheckedChange` primeiro.
+   */
+  onCheckedChange?: (checked: boolean) => void;
+}
 
 /**
  * O interruptor.
@@ -1106,7 +1112,7 @@ export interface SwitchProps extends ControleProps {}
  * deslizar. O estado continua o mesmo — o que some é a animação, não a informação.
  */
 export function Switch({
-  label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel,
+  label, description, checked, onChange, onCheckedChange, disabled, size, style, testID, accessibilityLabel,
   align = "center",
 }: SwitchProps) {
   const t = useAureaTokens();
@@ -1147,7 +1153,7 @@ export function Switch({
   return (
     <Pressable
       testID={testID}
-      onPress={inativo ? undefined : () => onChange?.(!checked)}
+      onPress={inativo ? undefined : () => { onCheckedChange?.(!checked); onChange?.(!checked); }}
       disabled={inativo}
       accessibilityRole="switch"
       {...estadoAcessivel({checked: !!checked, disabled: !!inativo})}

@@ -16,7 +16,7 @@ import { PreviewCard as BasePreviewCard } from "@base-ui/react/preview-card";
 import { cx, useAureaStrings, usePortalContainer } from "./internal.js";
 import { useDirection } from "@base-ui/react/direction-provider";
 import { juntarToque } from "./pure.js";
-import { useValorResponsivo } from "./responsivo-runtime.js";
+import { useResponsiveValue } from "./responsivo-runtime.js";
 import { Icon } from "./system.js";
 import { Button, CloseButton } from "./actions.js";
 function IconeDaJanela({ icon, tone }) {
@@ -225,7 +225,7 @@ export function ContextMenu({ children, items, label, className }) { const porta
 export function Menubar({ menus, label, modal, disabled, loopFocus, orientation, className }) {
     const portal = usePortalContainer();
     const ancora = useRef(null);
-    const resolvida = useValorResponsivo(orientation, "horizontal", ancora);
+    const resolvida = useResponsiveValue(orientation, "horizontal", ancora);
     const vertical = resolvida === "vertical";
     const ids = React.useId();
     return _jsx(BaseMenubar, { ref: ancora, modal: modal, disabled: disabled, loopFocus: loopFocus, orientation: resolvida, "aria-label": label, className: cx("menubar", className), children: menus.map((m, i) => _jsxs(BaseMenu.Root, { disabled: m.disabled, children: [_jsx(BaseMenu.Trigger, { className: "menubar-trigger", children: m.label }), _jsx(BaseMenu.Portal, { container: portal, children: _jsx(BaseMenu.Positioner, { className: "positioner", side: vertical ? "inline-end" : "bottom", align: "start", sideOffset: 4, children: _jsx(BaseMenu.Popup, { className: "menu", children: renderMenuItems(m.items, portal, `${ids}-${i}`) }) }) })] }, i)) });

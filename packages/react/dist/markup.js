@@ -36,7 +36,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // PARA QUEM VIER: componente novo só entra aqui se não chamar hook, não prender manipulador e não
 // tocar motor. Na dúvida, ele NÃO entra — cliente a mais é lento, servidor a mais é quebrado.
 import React, { forwardRef } from "react";
-import { cx, fundirRender, juntarToque, peleDoEixo } from "./pure.js";
+import { cx, fundirRender, juntarMarcado, juntarToque, peleDoEixo } from "./pure.js";
 // As contas de cor são funções puras, sem estado e sem navegador (ADR-0069): o `ColorSwatch` usa a do contraste.
 import { contrastingInk, hsbToRgb, parseColor } from "./color.js";
 export function Card({ variant = "base", padding = "normal", orientation = "vertical", accent, lift, fill, className, render, onPress, onClick, ...props }) {
@@ -287,7 +287,10 @@ export function Radio({ label, labelHidden, description, size, className, ...pro
 // `indicatorPlacement` (15/10/2026, o Victor: "A sim"): a chave no FIM, como o "Allow notifications" da vitrine da
 // referência — o nome e a descrição à esquerda. O mesmo nome do `RadioGroup` do nativo. Muda só a ordem do DESENHO: o
 // campo escondido continua logo antes da chave (o CSS do estado depende disso), e o rótulo é um só para o leitor.
-export function Switch({ label, labelHidden, description, indicatorPlacement = "start", size, className, ...props }) { return _jsxs("label", { className: cx("switch", labelHidden && "switch-bare", indicatorPlacement === "end" && "switch-end", className), children: [_jsx("input", { type: "checkbox", role: "switch", ...props }), _jsx("span", { className: cx("switch-track", peleDoEixo("switch-track", size)) }), _jsx("span", { className: labelHidden ? "sr-only" : undefined, children: comDescricao(label, description) })] }); }
+// `onCheckedChange` (0.81.0, DOC-11; o Victor: "Sim, os dois jeitos"): avisa o app com verdadeiro/falso, como o `Switch`
+// do nativo — o mesmo nome do item de marcar do menu, nos dois alvos. O `onChange` de sempre (o evento do campo) continua;
+// com os dois, os dois rodam, o `onCheckedChange` primeiro (`juntarMarcado`, no `pure.tsx`).
+export function Switch({ label, labelHidden, description, indicatorPlacement = "start", size, className, onChange, onCheckedChange, ...props }) { const campo = { ...props, onChange: juntarMarcado(onCheckedChange, onChange) }; return _jsxs("label", { className: cx("switch", labelHidden && "switch-bare", indicatorPlacement === "end" && "switch-end", className), children: [_jsx("input", { type: "checkbox", role: "switch", ...campo }), _jsx("span", { className: cx("switch-track", peleDoEixo("switch-track", size)) }), _jsx("span", { className: labelHidden ? "sr-only" : undefined, children: comDescricao(label, description) })] }); }
 export function Range({ orientation, className, ...props }) { return _jsx("input", { className: cx("range", peleDoEixo("range", orientation, "horizontal", "range"), className), type: "range", ...props }); }
 // `md` é a classe base — não existe `.input-md`, como não existe `.btn-md`. O prefixo é escrito
 // literal em cada chamada (`input-${size}`, e não `${base}-${size}`) porque é assim que o check 15

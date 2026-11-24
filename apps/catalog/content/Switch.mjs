@@ -1,10 +1,17 @@
-import {createElement as h} from "react";
+import {createElement as h, useState} from "react";
 import {Switch, Card} from "../../../packages/react/dist/index.js";
 
 // `maxWidth`, e não `width` (21/10/2026): a caixa encolhe até a peça e o painel a centraliza (ver o Checkbox.mjs).
 const stack = {display: "grid", gap: "var(--space-3)", maxWidth: "min(420px, 100%)"};
 // Os três tamanhos, cada um com o nome próprio: o código e o desenho saem desta lista.
 const TAMANHOS = [["sm", "Compact mode"], ["md", "Sound effects"], ["lg", "Large text"]];
+
+// DOC-11 (0.81.0): o aviso com verdadeiro/falso, como no nativo — a tela guarda o estado.
+function Controlado() {
+  const [alerts, setAlerts] = useState(true);
+  return h("div", {style: stack},
+    h(Switch, {label: "Price alerts", description: alerts ? "On" : "Off", checked: alerts, onCheckedChange: setAlerts}));
+}
 
 export default {
   description:
@@ -64,6 +71,15 @@ export default {
         h(Switch, {label: "Allow notifications", description: "Receive push notifications", defaultChecked: true}),
         h(Switch, {label: "Allow notifications", description: "Receive push notifications", defaultChecked: true,
           indicatorPlacement: "end"})),
+    },
+    {
+      title: "Controlled, with true or false",
+      description: "onCheckedChange hands the app the new value, true or false — the same name on the web and in "
+        + "React Native. onChange still works and still receives the input event.",
+      code: `const [alerts, setAlerts] = useState(true);
+
+<Switch label="Price alerts" checked={alerts} onCheckedChange={setAlerts} />`,
+      render: () => h(Controlado),
     },
     {
       title: "Without a visible label",

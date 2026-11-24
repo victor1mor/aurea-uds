@@ -34,9 +34,9 @@
 //
 // PARA QUEM VIER: componente novo só entra aqui se não chamar hook, não prender manipulador e não
 // tocar motor. Na dúvida, ele NÃO entra — cliente a mais é lento, servidor a mais é quebrado.
-import React, {forwardRef, type AnchorHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactElement,
+import React, {forwardRef, type AnchorHTMLAttributes, type ChangeEvent, type HTMLAttributes, type InputHTMLAttributes, type ReactElement,
   type ReactNode, type RefAttributes, type SelectHTMLAttributes, type TextareaHTMLAttributes} from "react";
-import {cx, fundirRender, juntarToque, peleDoEixo, type Responsive} from "./pure.js";
+import {cx, fundirRender, juntarMarcado, juntarToque, peleDoEixo, type Responsive} from "./pure.js";
 // As contas de cor são funções puras, sem estado e sem navegador (ADR-0069): o `ColorSwatch` usa a do contraste.
 import {contrastingInk, hsbToRgb, parseColor} from "./color.js";
 // TIPO apenas: `import type` some na emissão, então isto não faz o `markup` depender de um
@@ -828,7 +828,10 @@ export function Radio({label,labelHidden,description,size,className,...props}:Om
 // `indicatorPlacement` (15/10/2026, o Victor: "A sim"): a chave no FIM, como o "Allow notifications" da vitrine da
 // referência — o nome e a descrição à esquerda. O mesmo nome do `RadioGroup` do nativo. Muda só a ordem do DESENHO: o
 // campo escondido continua logo antes da chave (o CSS do estado depende disso), e o rótulo é um só para o leitor.
-export function Switch({label,labelHidden,description,indicatorPlacement="start",size,className,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;indicatorPlacement?:"start"|"end";size?:Responsive<FieldSize>}){return <label className={cx("switch",labelHidden&&"switch-bare",indicatorPlacement==="end"&&"switch-end",className)}><input type="checkbox" role="switch" {...props}/><span className={cx("switch-track",peleDoEixo("switch-track",size))}/><span className={labelHidden?"sr-only":undefined}>{comDescricao(label,description)}</span></label>}
+// `onCheckedChange` (0.81.0, DOC-11; o Victor: "Sim, os dois jeitos"): avisa o app com verdadeiro/falso, como o `Switch`
+// do nativo — o mesmo nome do item de marcar do menu, nos dois alvos. O `onChange` de sempre (o evento do campo) continua;
+// com os dois, os dois rodam, o `onCheckedChange` primeiro (`juntarMarcado`, no `pure.tsx`).
+export function Switch({label,labelHidden,description,indicatorPlacement="start",size,className,onChange,onCheckedChange,...props}:Omit<InputHTMLAttributes<HTMLInputElement>,"size">&RefAttributes<HTMLInputElement>&{label:ReactNode;labelHidden?:boolean;description?:ReactNode;indicatorPlacement?:"start"|"end";size?:Responsive<FieldSize>;onCheckedChange?:(checked:boolean)=>void}){const campo={...props,onChange:juntarMarcado<ChangeEvent<HTMLInputElement>>(onCheckedChange,onChange)};return <label className={cx("switch",labelHidden&&"switch-bare",indicatorPlacement==="end"&&"switch-end",className)}><input type="checkbox" role="switch" {...campo}/><span className={cx("switch-track",peleDoEixo("switch-track",size))}/><span className={labelHidden?"sr-only":undefined}>{comDescricao(label,description)}</span></label>}
 // `orientation` no `<input type=range>` NATIVO — a vertical não exige trocar de motor, e isso foi
 // medido nos três navegadores. Sem `aria-orientation`: o papel `slider` é implícito do elemento e
 // o navegador já anuncia a orientação a partir do writing-mode; pôr o atributo à mão criaria uma

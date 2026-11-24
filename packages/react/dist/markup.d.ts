@@ -440,12 +440,13 @@ export declare function Radio({ label, labelHidden, description, size, className
     description?: ReactNode;
     size?: Responsive<FieldSize>;
 }): React.JSX.Element;
-export declare function Switch({ label, labelHidden, description, indicatorPlacement, size, className, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
+export declare function Switch({ label, labelHidden, description, indicatorPlacement, size, className, onChange, onCheckedChange, ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & RefAttributes<HTMLInputElement> & {
     label: ReactNode;
     labelHidden?: boolean;
     description?: ReactNode;
     indicatorPlacement?: "start" | "end";
     size?: Responsive<FieldSize>;
+    onCheckedChange?: (checked: boolean) => void;
 }): React.JSX.Element;
 export type RangeOrientation = "horizontal" | "vertical";
 export declare function Range({ orientation, className, ...props }: InputHTMLAttributes<HTMLInputElement> & RefAttributes<HTMLInputElement> & {

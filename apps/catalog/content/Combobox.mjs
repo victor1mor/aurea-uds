@@ -78,6 +78,21 @@ export default {
           h(Combobox, {items: people, placeholder: "Search…"}))),
     },
     {
+      title: "In a form",
+      description: "With a name, the chosen option goes out with the form as its value; required stops an empty submit "
+        + "and is announced; defaultValue starts it chosen, with no state in the app.",
+      code: [
+        '<form action="/assign">',
+        '  <Field label="Assignee" required>',
+        '    <Combobox name="assignee" items={people} defaultValue={people[1]} />',
+        "  </Field>",
+        "</form>",
+      ].join("\n"),
+      render: () => h("form", {style: stack, action: "#", onSubmit: (e) => e.preventDefault()},
+        h(Field, {label: "Assignee", required: true},
+          h(Combobox, {name: "assignee", items: people, defaultValue: people[1], placeholder: "Search…"}))),
+    },
+    {
       title: "Disabled",
       description: "The field and both buttons go down together — a locked field that still opens is not locked.",
       code: '<Combobox label="Component" placeholder="Search…" items={items} disabled />',

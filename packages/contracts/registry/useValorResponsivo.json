@@ -3,8 +3,8 @@
   "kind": "hook",
   "category": "Utilities",
   "layer": "Foundation",
-  "maturity": "Ready",
-  "summary": "Resolves a Responsive<T> into the single value that applies right now — by viewport, by container, or not at all.",
+  "maturity": "Deprecated",
+  "summary": "The old name of useResponsiveValue. Same hook, still works the same; use useResponsiveValue.",
   "icon": "faders",
   "platforms": {
     "web": "stable",
@@ -30,6 +30,7 @@
   },
   "related": {
     "components": [
+      "useResponsiveValue",
       "ContainerScope",
       "Tabs",
       "Toolbar"

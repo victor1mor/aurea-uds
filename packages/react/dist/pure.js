@@ -31,6 +31,14 @@ export function juntarToque(onPress, onClick) {
         return onPress;
     return (e) => { onPress(e); onClick(e); };
 }
+// O `onCheckedChange` do `Switch` da web (0.81.0, DOC-11: *"Sim, os dois jeitos"*): o aviso com verdadeiro/falso, como o
+// nativo, ao lado do `onChange` de sempre, que recebe o evento do campo. Os dois juntos rodam os dois, o `onCheckedChange`
+// primeiro — a ordem do `juntarToque`. Sem nenhum, nada: o campo continua sem dono, como antes.
+export function juntarMarcado(onCheckedChange, onChange) {
+    if (!onCheckedChange)
+        return onChange;
+    return (e) => { onCheckedChange(e.currentTarget.checked); onChange?.(e); };
+}
 // ── `render`: a superfície é da Aurea, o ELEMENTO é de quem consome ───────────────────────────
 //
 // Nasceu do `G-A11Y-11`. O `Card` oferecia `variant="interactive"` — ponteiro de mão, elevação
