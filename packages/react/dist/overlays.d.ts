@@ -89,6 +89,10 @@ export interface MenuActionDef extends MenuItemBase {
     /** O elemento que MATERIALIZA o item, no idioma `render` da casa (o mesmo do `Card`). Para
      *  navegação prefira `href`, que usa o `LinkItem` do motor. */
     render?: ReactElement;
+    /** O item que APAGA ou destrói algo ("Excluir"): o texto e o ícone no vermelho da frase de erro, e o fundo suave do
+     *  perigo quando o item está em destaque — a mesma prop e o mesmo desenho do nativo (o Victor, 24/11/2026: *"Ganha o
+     *  vermelho"*). Só muda a cor: quem pede confirmação antes de apagar continua sendo o app. */
+    destructive?: boolean;
 }
 /** Item que é um link de verdade: `<a href>`, com o `LinkItem` do motor por trás.
  *  NÃO estende `MenuItemBase`, e a ausência é a informação: **link não tem `disabled`** — o HTML

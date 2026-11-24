@@ -40,4 +40,4 @@ Which side of the trigger it opens on. When there is no room on that side, it fl
 | `title` | `ReactNode` | — | Optional heading inside the panel, rendered as a <strong>. |
 | `children` | `ReactNode` | — | The content. This is the overlay that may hold focus and interactive elements; a Tooltip may not. |
 | `side` | `top \| right \| bottom \| left` | bottom | Preferred side. It flips on its own when there is no room, so this is a preference, not a promise. |
-| `arrow` | `boolean` | false | The arrow, off by default as in the reference library. Our own curve, 12 × 6, with the surface fill and the border line. |
+| `arrow` | `boolean` | false | The arrow, off by default as in the reference library. A fine point, 12 × 6 (two straight sides), with the surface fill and the border line. |

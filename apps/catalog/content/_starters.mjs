@@ -1050,6 +1050,32 @@ export function Actions() {
         peca: v => h(A.DropdownMenu, {label: `Align ${v}`, align: v, trigger: h(A.Button, {variant: "outline"}, `Align ${v}`),
           items: [{label: "Duplicate"}, {label: "Rename"}]})}),
       {
+        title: "Destructive item and a single choice",
+        description: "destructive paints an item that deletes something in the red of an error message — the label, the icon and, "
+          + "when highlighted, a soft red background, the same as on native. Picking an option of a radiogroup closes the menu; "
+          + "a checkbox item keeps it open.",
+        code: `<DropdownMenu
+  label="File actions"
+  trigger={<Button variant="outline" trailingIcon="caret-down">File</Button>}
+  items={[
+    {kind: "radiogroup", label: "Sort by", defaultValue: "date", items: [
+      {value: "date", label: "Date"},
+      {value: "name", label: "Name"},
+    ]},
+    {kind: "checkbox", label: "Show hidden files"},
+    "separator",
+    {label: "Delete", leadingIcon: "trash", destructive: true, onPress: remove},
+  ]}
+/>`,
+        render: () => h(A.DropdownMenu, {label: "File actions",
+          trigger: h(A.Button, {variant: "outline", trailingIcon: "caret-down"}, "File"),
+          items: [
+            {kind: "radiogroup", label: "Sort by", defaultValue: "date", items: [{value: "date", label: "Date"}, {value: "name", label: "Name"}]},
+            {kind: "checkbox", label: "Show hidden files"},
+            "separator",
+            {label: "Delete", leadingIcon: "trash", destructive: true}]}),
+      },
+      {
         title: "Descriptions and an end icon",
         description: "description puts a line under the label, in the small muted text; trailingIcon sits at the end — arrow-square-out says a link opens another site.",
         code: `<DropdownMenu

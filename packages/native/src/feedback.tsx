@@ -22,10 +22,10 @@
 import * as React from "react";
 import {Animated, Easing, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
 import {Button, CloseButton} from "./actions.js";
-import Svg, {Circle} from "react-native-svg";
 import {canto, criarFolha, estadoAcessivel, letraDoToken} from "./estilos.js";
 import {Icon, type IconName, type AureaIcon} from "./icon.js";
 import {IconeEmMoldura} from "./moldura.js";
+import {AnelQueGira} from "./giro.js";
 import {useReduceMotion, driverNativo} from "./movimento.js";
 import {gravidadeDoEstado, type AureaUniversalState} from "./strings.js";
 import {Text} from "./text.js";
@@ -34,15 +34,8 @@ import type {AureaTokens} from "./tokens.js";
 
 const folha = criarFolha((t: AureaTokens) => ({
   // ── Spinner ────────────────────────────────────────────────────────────────────────────────
-  // Um ANEL, e não o `ActivityIndicator` do React Native. Não é preferência: o `ActivityIndicator`
-  // desenha a rosquinha do sistema no Android e a coroa do iOS — duas aparências que não são a
-  // Aurea, e o `CLAUDE.md` proíbe a primeira como aparência em voz alta. O anel é reprodutível
-  // com borda, e `borderRightColor: transparent` existe no RN igual ao CSS.
-  // HER-01: a ÚNICA peça com o canto `circular`, declarada. O anel GIRA, e um contorno que não
-  // seja círculo perfeito balança ao girar. A referência também deixa o `Spinner` de
-  // fora das 24 peças com canto contínuo.
-  anel: {...canto(t.size.radiusFull, "circular")},
-
+  // Um ANEL, e não o `ActivityIndicator` do React Native: o `ActivityIndicator` desenha a rosquinha do sistema no Android e
+  // a coroa do iOS — duas aparências que não são a Aurea. O anel mora no `giro.tsx` (0.80.0).
   // ── Skeleton ───────────────────────────────────────────────────────────────────────────────
   // O raio 7 é cru no CSS (`aurea.css:1111`) e entra aqui **como está**: inventar um token para
   // ele faria o nativo e a web desenharem cantos diferentes para a mesma peça.
@@ -126,51 +119,14 @@ export interface SpinnerProps {
  */
 export function Spinner({size = "md", label, decorative, style, testID}: SpinnerProps) {
   const t = useAureaTokens();
-  const s = folha(t);
   const strings = useAureaStrings();
-  const reduzir = useReduceMotion();
-  const giro = React.useRef(new Animated.Value(0)).current;
-
-  React.useEffect(() => {
-    // `!== false` e não `!reduzir`: enquanto é `null` o sistema ainda não respondeu, e
-    // animar nesse vão é animar na cara de quem talvez tenha pedido que não.
-    if (reduzir !== false) return;
-    const laco = Animated.loop(Animated.timing(giro, {
-      toValue: 1, duration: 700, easing: Easing.linear, useNativeDriver: driverNativo(),
-    }));
-    laco.start();
-    // Sem o `stop` o laço sobrevive à desmontagem e continua acordando o JS — o vazamento
-    // clássico de `Animated.loop`.
-    return () => laco.stop();
-  }, [giro, reduzir]);
-
   const lado = size === "lg" ? t.size.iconXl : size === "md" ? t.size.iconLg : t.size.iconSm;
   const acessibilidade = decorative
     ? {accessibilityElementsHidden: true, importantForAccessibility: "no-hide-descendants" as const}
     : {accessible: true, accessibilityRole: "progressbar" as const,
        accessibilityLabel: label ?? strings.loading};
-
-  // Sem linha (16/10/2026): o anel era BORDA (3/4 da volta). Agora é o mesmo arco desenhado, como a
-  // máscara da web — 2 de espessura em qualquer tamanho, por isso a conta em unidades do desenho.
-  const traco = (2 * 16) / lado;
-  const raio = 8 - traco / 2;
-  const volta = 2 * Math.PI * raio;
-  return (
-    <Animated.View
-      testID={testID}
-      {...acessibilidade}
-      style={[
-        s.anel,
-        {width: lado, height: lado},
-        {transform: [{rotate: giro.interpolate({inputRange: [0, 1], outputRange: ["0deg", "360deg"]}) }]},
-        style,
-      ]}>
-      <Svg width={lado} height={lado} viewBox="0 0 16 16">
-        <Circle cx={8} cy={8} r={raio} fill="none" stroke={t.color.foreground} strokeWidth={traco}
-                strokeDasharray={`${volta * 0.75} ${volta * 0.25}`} />
-      </Svg>
-    </Animated.View>
-  );
+  // O desenho e o giro moram no `giro.tsx` desde a 0.80.0 (o `Button` com `loading` usa o mesmo anel, na cor dele).
+  return <AnelQueGira lado={lado} cor={t.color.foreground} acessibilidade={acessibilidade} style={style} testID={testID} />;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────

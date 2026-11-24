@@ -3,11 +3,11 @@
   "_regra": "Quando isto e a ficha do registry discordam, isto ganha: veio do compilador. O check 26 do validate.py reprova a divergência.",
   "schemaVersion": "1.0",
   "totals": {
-    "modulos": 34,
-    "componentes": 91,
+    "modulos": 35,
+    "componentes": 92,
     "hooks": 19,
     "aliasesLiterais": 69,
-    "propsDistintas": 215
+    "propsDistintas": 218
   },
   "aliases": {
     "AureaButtonAppearance": {
@@ -2410,6 +2410,12 @@
               "values": null
             },
             {
+              "name": "loading",
+              "optional": true,
+              "type": "boolean",
+              "values": null
+            },
+            {
               "name": "pressed",
               "optional": true,
               "type": "boolean",
@@ -4579,6 +4585,49 @@
       "hooks": [
         "usePulsoDoEsqueleto"
       ],
+      "clientDirective": false
+    },
+    "giro": {
+      "components": [
+        {
+          "name": "AnelQueGira",
+          "kind": "function",
+          "propsType": "AnelQueGiraProps",
+          "props": [
+            {
+              "name": "lado",
+              "optional": false,
+              "type": "number",
+              "values": null
+            },
+            {
+              "name": "cor",
+              "optional": false,
+              "type": "string",
+              "values": null
+            },
+            {
+              "name": "acessibilidade",
+              "optional": false,
+              "type": "object",
+              "values": null
+            },
+            {
+              "name": "style",
+              "optional": true,
+              "type": "StyleProp<ViewStyle>",
+              "values": null
+            },
+            {
+              "name": "testID",
+              "optional": true,
+              "type": "string",
+              "values": null
+            }
+          ]
+        }
+      ],
+      "hooks": [],
       "clientDirective": false
     },
     "icon-names": {

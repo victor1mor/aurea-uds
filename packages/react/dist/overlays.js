@@ -95,8 +95,8 @@ export function AccessGate({ allowed, children, ...resto }) {
 // pela tecnologia assistiva, então não precisa acompanhar o estado.
 //
 // 0.32.0, a dica e o popover da referência:
-//   • A SETA (`arrow`), desligada por padrão como lá. O desenho é nosso (uma curva de 12 × 6, sem a
-//     ponta afiada); ela tem o fundo da janela e a linha da borda, então a borda dá a volta nela.
+//   • A SETA (`arrow`), desligada por padrão como lá. O desenho é nosso (~~uma curva de 12 × 6, sem a
+//     ponta afiada~~ → desde a 0.80.0, a PONTA FINA, 12 × 6); ela tem o fundo da janela e a linha da borda, então a borda dá a volta nela.
 //     A dica com seta se afasta 8 do gatilho (`--space-2`: os 6 da seta e 2 de folga); sem
 //     seta, 4 (`--space-1`) — a referência usa 7 e 3, que não são da nossa escala. O popover fica
 //     sempre a 8, com ou sem seta, como o dela.
@@ -111,7 +111,9 @@ export function AccessGate({ allowed, children, ...resto }) {
 //     marcação, quando o filho é uma tag; e, quando é um componente, no nó de verdade, depois de
 //     montado, porque só o DOM sabe o que o componente desenhou.
 const ATRASO_DA_DICA = 100, ATRASO_PARA_FECHAR_A_DICA = 100;
-function Seta() { return _jsxs("svg", { viewBox: "0 0 12 12", "aria-hidden": "true", children: [_jsx("path", { className: "overlay-arrow-fill", d: "M0 0Q6 12 12 0Z" }), _jsx("path", { className: "overlay-arrow-line", d: "M0 0Q6 12 12 0", fill: "none" })] }); }
+// A seta tem a PONTA FINA (o Victor, 24/11/2026: *"Ponta fina"*, na web e no celular): dois lados retos que se encontram
+// num bico, 12 de largura e 6 de fundo — como 8 de 14 referências da web; era uma curva só, de ponta redonda.
+function Seta() { return _jsxs("svg", { viewBox: "0 0 12 12", "aria-hidden": "true", children: [_jsx("path", { className: "overlay-arrow-fill", d: "M0 0L6 6L12 0Z" }), _jsx("path", { className: "overlay-arrow-line", d: "M0 0L6 6L12 0", fill: "none" })] }); }
 const FOCAVEIS_POR_NATUREZA = new Set(["button", "input", "select", "textarea", "summary", "iframe", "audio", "video"]);
 function focavelNaMarcacao(el) {
     if (typeof el.type !== "string")
@@ -182,7 +184,7 @@ function renderMenuItems(items, portal, ids = "") {
             }
             case "radiogroup": {
                 const g = it;
-                return _jsxs(BaseMenu.RadioGroup, { value: g.value, defaultValue: g.defaultValue, onValueChange: v => g.onValueChange?.(String(v)), children: [g.label && _jsx(BaseMenu.GroupLabel, { className: "menu-label", children: g.label }), g.items.map((r, j) => _jsxs(BaseMenu.RadioItem, { className: "menu-item", value: r.value, disabled: r.disabled, ...nomeDoItem(r, `${id}-${j}`), children: [marca(_jsx(BaseMenu.RadioItemIndicator, { className: "menu-ponto" })), dentro(r, `${id}-${j}`)] }, j))] }, i);
+                return _jsxs(BaseMenu.RadioGroup, { value: g.value, defaultValue: g.defaultValue, onValueChange: v => g.onValueChange?.(String(v)), children: [g.label && _jsx(BaseMenu.GroupLabel, { className: "menu-label", children: g.label }), g.items.map((r, j) => _jsxs(BaseMenu.RadioItem, { className: "menu-item", value: r.value, closeOnClick: true, disabled: r.disabled, ...nomeDoItem(r, `${id}-${j}`), children: [marca(_jsx(BaseMenu.RadioItemIndicator, { className: "menu-ponto" })), dentro(r, `${id}-${j}`)] }, j))] }, i);
             }
             case "submenu": {
                 const sm = it;
@@ -205,7 +207,7 @@ function renderMenuItems(items, portal, ids = "") {
             }
             default: {
                 const a = it;
-                return _jsx(BaseMenu.Item, { className: "menu-item", disabled: a.disabled, onClick: juntarToque(a.onPress, a.onClick), render: a.render, ...nomeDoItem(a, id), children: dentro(a) }, i);
+                return _jsx(BaseMenu.Item, { className: a.destructive ? "menu-item menu-item-destructive" : "menu-item", disabled: a.disabled, onClick: juntarToque(a.onPress, a.onClick), render: a.render, ...nomeDoItem(a, id), children: dentro(a) }, i);
             }
         }
     });

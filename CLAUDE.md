@@ -237,6 +237,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.76.0` | O 1.0-A: os nomes marcados para sair saem — o `pressed` do `Button` e do `IconButton` (o botão que fica ligado é o `Toggle`; o `ToolbarButton` fica com o dele), `--text-md`/`textMd`, `--font-editorial` e o papel `editorial` do nativo, `--brand-yellow-foreground` e `--brand-yellow-text`; a página Migration diz o que fica no lugar — pedido #152. **Publicada em 22/11/2026** (entre 09:00 e 09:37, Brasília, medido no npm), a primeira pela publicação em etapa (pedido #153): a CI manda os sete para a área de espera e o Victor aprova no npm |
 | `0.77.0` | O AUD-1, parte 4: a navegação como a maioria das referências — com o mouse em cima, a aba e o segmento não escolhidos vão à cor do texto; o item indisponível (`disabled`) na aba do `Tabs`, no segmento do `SegmentedControl` (web e nativo) e no item da `Sidebar`, apagado, que não muda com o mouse e segue no Tab como o da `NavList` — pedido #155. **Publicada em 23/11/2026** (entre 05:30 e 05:31, Brasília, medido no npm), pela publicação em etapa |
 | `0.78.0` | O AUD-1, parte 5: a dica como a maioria das referências — o `Tooltip` invertido (a cor do texto como fundo, a seta junto; o balão do `Chart` não muda), a dica que abre e fecha em 0,1 s (`delay` e `closeDelay`; eram 1,5 s e 0,5 s) e o item da `Sidebar` que escurece ao apertar; a janela fica como era — pedido #158. **Publicada em 23/11/2026** (entre 16:37 e 16:38, Brasília, medido no npm), pela publicação em etapa |
+| `0.79.0` | A Rodada 1 das decisões em bloco: o canto da dica em 12 (`--tooltip-radius`, um token só dela), a descrição do `Toast` do nativo em 14, o dígito do `OTPField` da web na letra do texto, a capa em pé do `MediaEmbed` inteira com a capa desfocada atrás, o contorno dos campos da Ember no laranja dela no alto contraste e as cores velhas do painel de saúde que saem — pedido #160. **Publicada em 24/11/2026** (entre 10:12 e 10:13, Brasília, medido no npm), pela publicação em etapa |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -1098,6 +1099,16 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    forçado — a pasta sobra no temporário, sem as duas listas locais. **Publicada em 23/11/2026** (entre 16:37 e 16:38,
    Brasília, medido no npm), pela publicação em etapa, da junção do pedido #158. O registro entrou no lote seguinte (o
    099, só de registro, sem versão).
+76. **`0.79.0`, a Rodada 1 das decisões em bloco, feita em 23/11/2026** (para acelerar a 1.0, as perguntas que esperavam o
+   Victor separadas em rodadas; na primeira, dez itens vistos de uma vez na bancada viva, ao lado da referência nº 1, em
+   Gold e Ember, claro e escuro; *"Aprovado, pode seguir"*) — seis mudam: o canto da dica em 12 (*"Um token só da dica"*),
+   a descrição do `Toast` do nativo em 14, o dígito do `OTPField` na letra do texto, a capa em pé do `MediaEmbed` inteira,
+   o contorno dos campos da Ember no laranja dela no alto contraste e a regra órfã do painel de saúde; três fecharam sem
+   mudança. ⚠ **As lições:** (1) a montagem parou uma vez com "UNKNOWN: unknown error, open …aurea.tokens.css" — um
+   arquivo preso no Windows — e passou rodada de novo, sem mudar nada; (2) a suíte do Chromium teve as mesmas 19
+   reprovações de sempre, já medidas na 0.76.0; (3) das fotos do Linux, só as duas `index` mudaram (o selo da versão).
+   **Publicada em 24/11/2026** (entre 10:12 e 10:13, Brasília, medido no npm), pela publicação em etapa, da junção do
+   pedido #160. O registro entrou no lote seguinte (o 101, a 0.80.0).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar

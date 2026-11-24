@@ -34,8 +34,8 @@ export interface MenuActionDef extends MenuItemBase {
     kind?: "item";
     onClick?: () => void;
     /**
-     * Só do nativo: o item que DESTRÓI dado, com o texto e o toque no tom de perigo — o `danger` do
-     * item da referência. A web ainda não tem o campo.
+     * O item que DESTRÓI dado, com o texto e o toque no tom de perigo — o `danger` do item da
+     * referência. A web tem o mesmo campo desde a 0.80.0.
      */
     destructive?: boolean;
 }

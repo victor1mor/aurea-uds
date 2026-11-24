@@ -98,12 +98,16 @@ export function formatSize(bytes:number):string{
   while(n>=1024&&i<units.length-1){n/=1024;i++}
   return `${n<10?n.toFixed(1):Math.round(n)} ${units[i]}`;
 }
-export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hint,id,className,initialQueue,onQueueChange,preview,checksum,"aria-invalid":invalido,"aria-labelledby":rotuladoPor,"aria-describedby":descritoPor}:{accept?:string;maxSize?:number;multiple?:boolean;onFilesChange?:(files:File[])=>void;upload?:UploadFn;label?:ReactNode;hint?:ReactNode;id?:string;className?:string;initialQueue?:FileQueueItem[];onQueueChange?:(queue:FileQueueItem[])=>void;preview?:boolean;checksum?:boolean;
+export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hint,id,className,initialQueue,onQueueChange,preview,checksum,disabled,"aria-invalid":invalido,"aria-labelledby":rotuladoPor,"aria-describedby":descritoPor}:{accept?:string;maxSize?:number;multiple?:boolean;onFilesChange?:(files:File[])=>void;upload?:UploadFn;label?:ReactNode;hint?:ReactNode;id?:string;className?:string;initialQueue?:FileQueueItem[];onQueueChange?:(queue:FileQueueItem[])=>void;preview?:boolean;checksum?:boolean;
   /** O inválido (0.67.0): a área de soltar fica vermelha como os outros campos e o leitor de tela ouve "inválido". Dentro
    *  de um `Field` com `error`, chega sozinho. Arquivo recusado continua deixando a área vermelha, com ou sem ele. */
   "aria-invalid"?:boolean|"true"|"false";
   /** A ligação ao rótulo e à frase de fora (0.68.0): dentro de um `Field`, chega sozinha. O rótulo SOMA ao texto da área ("Proof of address Drag files here…"). */
   "aria-labelledby"?:string;"aria-describedby"?:string;
+  /** DESATIVADO (0.80.0, o DS-370 — o Victor, 24/11/2026: *"Ganha o desativado"*; o nativo já tinha, e a ficha já
+   *  prometia): a área de soltar fica meio apagada (`--opacity-disabled`), não abre a janela de escolher e não aceita
+   *  arquivo solto nela. O campo de arquivo leva o `disabled` do HTML, e o leitor de tela ouve "indisponível". */
+  disabled?:boolean;
 }){
   const s=useAureaStrings();
   const autoId=React.useId();
@@ -264,10 +268,12 @@ export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hi
   const reciboTexto=recibo.map(r=>[r.name,r.status,r.finishedAt??""].join(TAB)).join(NL);
   return <div className={cx("field",className)}>
     {label&&<label className="label" htmlFor={inputId}>{label}</label>}
-    <label className="dropzone" data-dragging={dragging||undefined}
-      onDragOver={e=>{e.preventDefault();setDragging(true)}}
+    {/* Desativada, a área não se acende ao arrastar e o soltar é recusado: sem o `preventDefault` do arrastar por cima, o
+        navegador mostra o cursor de proibido; o do soltar fica, para ele não abrir o arquivo no lugar da página. */}
+    <label className="dropzone" data-dragging={dragging||undefined} data-disabled={disabled||undefined}
+      onDragOver={e=>{if(disabled)return;e.preventDefault();setDragging(true)}}
       onDragLeave={e=>{if(!e.currentTarget.contains(e.relatedTarget as Node|null))setDragging(false)}}
-      onDrop={e=>{e.preventDefault();setDragging(false);add(e.dataTransfer.files)}}>
+      onDrop={e=>{e.preventDefault();setDragging(false);if(!disabled)add(e.dataTransfer.files)}}>
       {/* input dentro do label: associação implícita + :focus-within acende o
           anel na zona visível (o input real fica sr-only mas focável). */}
       {/* G-STATE-02 — a REJEIÇÃO é o inválido deste campo, e até 28/08/2026 ela só existia como
@@ -276,7 +282,7 @@ export function FileInput({accept,maxSize,multiple,onFilesChange,upload,label,hi
           core, que reage ao `.dropzone:has([aria-invalid])`) e diz ao leitor de tela que o valor
           é inválido; `aria-describedby` liga o motivo, que é o mesmo idioma do `Field` — ali o
           erro também descreve em vez de virar parte do nome. */}
-      <input id={inputId} type="file" className="sr-only" accept={accept} multiple={multiple}
+      <input id={inputId} type="file" className="sr-only" accept={accept} multiple={multiple} disabled={disabled}
         aria-invalid={rejected.length>0?true:invalido}
         aria-labelledby={rotuladoPor?[rotuladoPor,`${inputId}-prompt`,hint?`${inputId}-hint`:""].filter(Boolean).join(" "):undefined}
         aria-describedby={[descritoPor,...rejected.map((_,n)=>`${inputId}-rejeitado-${n}`)].filter(Boolean).join(" ")||undefined}

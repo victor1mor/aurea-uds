@@ -86,6 +86,8 @@
       "dist/exibicao.js",
       "dist/feedback.d.ts",
       "dist/feedback.js",
+      "dist/giro.d.ts",
+      "dist/giro.js",
       "dist/icon-names.d.ts",
       "dist/icon-names.js",
       "dist/icon.d.ts",
