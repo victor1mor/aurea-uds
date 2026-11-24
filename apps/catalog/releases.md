@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.79.0
+
+November 23, 2026
+
+Tooltip corners are 12; OTPField digits use the text font; upright MediaEmbed posters show whole; Ember fields in high contrast are outlined in orange.
+
+[Read full release notes →](https://aureauds.dev/release-v0-79-0.md)
+
 ## v0.78.0
 
 November 23, 2026

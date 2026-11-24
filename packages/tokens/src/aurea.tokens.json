@@ -419,6 +419,14 @@
         "unit": "px"
       }
     },
+    "tooltip-radius": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$description": "O canto do balão da dica (Tooltip) — a Rodada 1 das decisões em bloco, 23/11/2026: o Victor escolheu o 12 olhando a bancada (o 12 da referência nº 2; as referências sem maioria) e, como o 12 não existe na escala de cantos, um token só da dica (\"Um token só da dica\"). Não é degrau da escala radius-*: nenhuma outra peça usa esta linha."
+    },
     "accent-width": {
       "$type": "dimension",
       "$value": {

@@ -1,6 +1,6 @@
 # Tokens
 
-1041 tokens in DTCG format ($value / $type). The CSS is one output of this file, not the origin.
+1042 tokens in DTCG format ($value / $type). The CSS is one output of this file, not the origin.
 
 Color roles: `--background`, `--foreground`, `--card`, `--secondary`, `--muted-foreground`, `--primary`, `--primary-foreground`, `--link`, `--destructive`, `--destructive-foreground`, `--border`, `--brand-yellow-ink`
 

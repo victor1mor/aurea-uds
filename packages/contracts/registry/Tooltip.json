@@ -20,7 +20,7 @@
     "--border",
     "--foreground",
     "--leading-normal",
-    "--radius-md",
+    "--tooltip-radius",
     "--shadow-md",
     "--surface-inset",
     "--text-xs",

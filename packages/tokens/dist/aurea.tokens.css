@@ -51,6 +51,7 @@
   --radius-control:999px;
   --radius-full:var(--radius-control);
   --border-width:1px;
+  --tooltip-radius:12px;
   --accent-width:4px;
   --focus-width:2px;
   --focus-offset:2px;
