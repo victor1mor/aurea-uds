@@ -238,6 +238,8 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.77.0` | O AUD-1, parte 4: a navegação como a maioria das referências — com o mouse em cima, a aba e o segmento não escolhidos vão à cor do texto; o item indisponível (`disabled`) na aba do `Tabs`, no segmento do `SegmentedControl` (web e nativo) e no item da `Sidebar`, apagado, que não muda com o mouse e segue no Tab como o da `NavList` — pedido #155. **Publicada em 23/11/2026** (entre 05:30 e 05:31, Brasília, medido no npm), pela publicação em etapa |
 | `0.78.0` | O AUD-1, parte 5: a dica como a maioria das referências — o `Tooltip` invertido (a cor do texto como fundo, a seta junto; o balão do `Chart` não muda), a dica que abre e fecha em 0,1 s (`delay` e `closeDelay`; eram 1,5 s e 0,5 s) e o item da `Sidebar` que escurece ao apertar; a janela fica como era — pedido #158. **Publicada em 23/11/2026** (entre 16:37 e 16:38, Brasília, medido no npm), pela publicação em etapa |
 | `0.79.0` | A Rodada 1 das decisões em bloco: o canto da dica em 12 (`--tooltip-radius`, um token só dela), a descrição do `Toast` do nativo em 14, o dígito do `OTPField` da web na letra do texto, a capa em pé do `MediaEmbed` inteira com a capa desfocada atrás, o contorno dos campos da Ember no laranja dela no alto contraste e as cores velhas do painel de saúde que saem — pedido #160. **Publicada em 24/11/2026** (entre 10:12 e 10:13, Brasília, medido no npm), pela publicação em etapa |
+| `0.80.0` | Os detalhes do menu, o botão ocupado do nativo e a área de arquivo desativada: o item de perigo no menu da web (`destructive`), a escolha de "uma só" que fecha o menu da web, o menu e o popover do nativo que se apagam ao fechar, a seta de ponta fina (web e nativo), `loading` no `Button` do nativo e `disabled` no `FileInput` da web — pedido #161. **Publicada em 24/11/2026** (entre 18:02 e 18:03, Brasília, medido no npm), pela publicação em etapa |
+| `0.81.0` | O formulário, o interruptor, o nome em inglês e a rodinha com menos movimento: `onCheckedChange` no `Switch` (web e nativo), `name`, `required` e `defaultValue` no `Combobox` e no `MultiCombobox` da web, `useResponsiveValue` (o `useValorResponsivo` fica como apelido), a rodinha e o círculo sem fim que giram devagar com menos movimento, e as Actions da CI nas versões novas com o robô de atualização só para elas — pedido #162. **Publicada em 24/11/2026** (entre 21:57 e 21:58, Brasília, medido no npm), pela publicação em etapa |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -1109,6 +1111,26 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    reprovações de sempre, já medidas na 0.76.0; (3) das fotos do Linux, só as duas `index` mudaram (o selo da versão).
    **Publicada em 24/11/2026** (entre 10:12 e 10:13, Brasília, medido no npm), pela publicação em etapa, da junção do
    pedido #160. O registro entrou no lote seguinte (o 101, a 0.80.0).
+77. **`0.80.0`, os detalhes do menu, feita em 24/11/2026** (as bancadas vivas, cada ponto com a conta das referências:
+   *"Ganha o vermelho"*, *"Se apaga rápido"*, *"Fecha, nos dois"*, *"Ponta fina"*, *"Igual à web"*, *"Ganha o desativado"*;
+   e *"Aprovado, pode"*) — o item de perigo do menu da web, a escolha de "uma só" que fecha o menu, o menu e o popover do
+   nativo que se apagam ao fechar, a seta de ponta fina, o `loading` do `Button` do nativo (o anel saiu do `Spinner` para
+   o `giro.tsx`, usado pelos dois) e o `disabled` do `FileInput` da web. ⚠ **As lições:** (1) a primeira versão do menu
+   do nativo que se apaga piscava a janela — achado no navegador, e a camada não fica presa por um relógio de garantia;
+   (2) o arquivo novo do nativo (`giro`) entrou no pacote, e a lista do `check-pack` foi regravada junto; (3) a suíte
+   do Chromium teve as mesmas 19 reprovações de sempre, e das fotos do Linux só as duas `index` mudaram (o selo).
+   **Publicada em 24/11/2026** (entre 18:02 e 18:03, Brasília, medido no npm), pela publicação em etapa, da junção do
+   pedido #161. O registro entrou no lote 103 (com a 0.81.0).
+78. **`0.81.0`, o formulário, o interruptor e a rodinha, feita em 24/11/2026** (o bloco de sim ou não e a separação dos
+   defeitos de 24/11; a bancada da rodinha, *"Pode seguir"*) — `onCheckedChange` no `Switch` (web e nativo), o formulário
+   do `Combobox` e do `MultiCombobox`, `useResponsiveValue`, a rodinha e o círculo sem fim que giram devagar com menos
+   movimento (era parar), e as Actions da CI presas por SHA nas versões novas, com o robô de atualização só para elas.
+   ⚠ **As lições:** (1) o aviso do `Switch` estava escrito no `markup.tsx` e o validador cobrou a fronteira entre servidor
+   e cliente — foi para o `juntarMarcado`, no `pure.tsx`; (2) o teste antigo `native-lote2` cobrava que a rodinha NÃO
+   anima com menos movimento — a regra mudou, e o teste mudou junto; (3) o lote dependia do anel do 101 (`giro.tsx`) e
+   só abriu o pedido depois de o 101 juntar; (4) o `linux-cmp.py` precisa do PIL: roda sem o `-I`, de dentro do
+   repositório. **Publicada em 24/11/2026** (entre 21:57 e 21:58, Brasília, medido no npm), pela publicação em etapa, da
+   junção do pedido #162. O registro entrou no lote seguinte (o 103).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
@@ -1563,7 +1585,11 @@ sessão não chega à outra; este arquivo chega. O que já estava nas seções a
 - **A suíte inteira roda UMA vez, no fim do lote** (ordem do Victor, 01/11/2026: *"precisa de todos esses suites? a toda
   hora?"* e *"pare de rodar tantas CI, deixe pra fazer depois que aprovo"*): durante o trabalho, só os testes do que mudou;
   nada de suíte antes de o Victor aprovar olhando; no fim, uma rodada da suíte do Chromium com o código final; o que
-  reprovar, consertar e rodar de novo SÓ o que reprovou. Depois, a CI roda tudo nos três navegadores.
+  reprovar, consertar e rodar de novo SÓ o que reprovou. ~~Depois, a CI roda tudo nos três navegadores.~~ → **A CI NÃO
+  roda tudo** (medido em 25/11/2026, o UDS-A1): dos 104 arquivos de teste do navegador (`tests/visual/*.spec.ts`), ela roda
+  6 — a varredura do catálogo, a geometria, a direita para a esquerda e a prova do app de cliente nos três navegadores, e
+  as duas de fotos (`matrix`, `catalog`) só no Chromium. Os outros 98 só rodam na suíte local; por isso a suíte do fim do
+  lote não se pula. Levar essas provas à CI é o item aprovado "As specs fora da CI" (`STATUS-1.0.md`).
 - **Qualidade extrema, sem refazer** (06/10/2026): prazo curto encolhe o ESCOPO, nunca a verificação.
   Se não cabe tudo, dizer quanto cabe, com números, e ele escolhe.
 - **Muitas opções: o esboço vem antes da bancada** (decisão do Victor, 29/10/2026, *"Sim, para explorar"*): quando uma

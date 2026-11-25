@@ -1,8 +1,8 @@
 {
   "name": "Aurea — Universal Design System",
-  "version": "0.81.0",
+  "version": "0.81.1",
   "status": "organized-source-of-truth",
-  "language": "pt-BR",
+  "language": "en",
   "fonts": {
     "ui": "Inter",
     "heading": "Sora",
@@ -161,7 +161,7 @@
       24,
       32
     ],
-    "rule": "Use somente nomes presentes no registro deste arquivo. Não desenhar SVG avulso."
+    "rule": "Use only the names in this file's registry. Do not draw standalone SVGs."
   },
   "themes": [
     "dark",
@@ -182,18 +182,18 @@
       "@aurea-uds/react",
       "@aurea-uds/native"
     ],
-    "rule": "Artefatos derivam dos pacotes do monorepo; não editar manualmente fora deles.",
+    "rule": "Artifacts come from the monorepo packages; do not edit them by hand outside those packages.",
     "mode": "workspace-packages",
     "commands": {
       "verify": "pnpm validate"
     },
     "consumption": {
-      "contract": "importar @aurea-uds/contracts/contract",
-      "tokens": "para consumir só tokens, importar @aurea-uds/tokens/css uma vez; @aurea-uds/core/css já os inclui",
-      "icons": "embutir o sprite de @aurea-uds/icons/sprite uma vez e referenciar símbolos por id",
-      "css": "importar @aurea-uds/core/css",
-      "react": "importar componentes de @aurea-uds/react",
-      "native": "alvo React Native: importar AureaProvider/useAureaTokens de @aurea-uds/native, as fontes .ttf de @aurea-uds/fonts/native, e cada icone pelo caminho profundo @aurea-uds/native/icons/<nome> — o barril nao e' a forma documentada (ADR-0038)"
+      "contract": "import @aurea-uds/contracts/contract",
+      "tokens": "to use only the tokens, import @aurea-uds/tokens/css once; @aurea-uds/core/css already includes them",
+      "icons": "embed the @aurea-uds/icons/sprite sprite once and reference its symbols by id",
+      "css": "import @aurea-uds/core/css",
+      "react": "import components from @aurea-uds/react",
+      "native": "React Native target: import AureaProvider/useAureaTokens from @aurea-uds/native, the .ttf fonts from @aurea-uds/fonts/native, and each icon by its deep path @aurea-uds/native/icons/<name> — the barrel is not the documented form (ADR-0038)"
     }
   },
   "breakpoints": {
@@ -339,22 +339,22 @@
     ]
   },
   "hardRules": [
-    "Consultar este arquivo antes de qualquer alteração de interface.",
-    "Usar somente tokens semânticos definidos neste arquivo.",
-    "O amarelo primário oklch(0.795 0.184 86.047) é invariável nos temas dark e light.",
-    "Botões textuais usam formato cápsula; botões só de ícone são redondos: largura igual à altura e o raio da cápsula (ADR-0052).",
-    "Inputs e selects usam formato cápsula; textareas usam raio de 16px.",
-    "Cards, dialogs, toasts, demos e painéis usam raio de 22px e superfícies sólidas.",
-    "A sidebar é um único painel arredondado com menu accent subtle.",
-    "Não usar paletas alternativas nem cores hardcoded. A única paleta além da semântica são as oito cores de CATEGORIA do Badge (category-red a category-pink, ADR-0060): marcam grupo, não estado; não mudam com a marca; e nunca vão sozinhas, sem palavra.",
-    "A escala chart-1 a chart-5 é a única escala categórica/sequencial azul.",
-    "Inter (texto), Sora (títulos, todo h1 a h6), IBM Plex Mono (código e valores: o numeric e o número do KPI) e Phosphor Regular (ícones; Fill no item escolhido) são overrides deliberados (ADR-0077 para as fontes, ADR-0053 para os ícones); não trocar sem atualizar este contrato. No React Native, as mesmas três famílias, em TTF estático por peso (@aurea-uds/fonts/native).",
-    "Consumidores usam somente os pacotes @aurea-uds do monorepo; cópias manuais são proibidas.",
-    "Quando faltar um padrão, atualizar primeiro este arquivo e depois a aplicação.",
-    "Players usam exclusivamente os tokens --media-*; controles permanecem escuros e legíveis nos dois temas.",
+    "Read this file before any interface change.",
+    "Use only the semantic tokens defined in this file.",
+    "The primary yellow oklch(0.795 0.184 86.047) does not change between the dark and light themes.",
+    "Text buttons are pill-shaped; icon-only buttons are round: the width equals the height, with the pill radius (ADR-0052).",
+    "Inputs and selects are pill-shaped; textareas use a 16px radius.",
+    "Cards, dialogs, toasts, demos and panels use a 22px radius and solid surfaces.",
+    "The sidebar is a single rounded panel with a subtle accent menu.",
+    "Do not use alternative palettes or hardcoded colors. The only palette besides the semantic one is the eight CATEGORY colors of the Badge (category-red to category-pink, ADR-0060): they mark a group, not a state; they do not change with the brand; and they never appear alone, without a word.",
+    "The chart-1 to chart-5 scale is the only categorical/sequential scale, in blue.",
+    "Inter (text), Sora (headings, every h1 to h6), IBM Plex Mono (code and values: numeric and the KPI number) and Phosphor Regular (icons; Fill on the selected item) are deliberate overrides (ADR-0077 for the fonts, ADR-0053 for the icons); do not swap them without updating this contract. In React Native, the same three families, as static TTF files, one per weight (@aurea-uds/fonts/native).",
+    "Consumers use only the @aurea-uds packages from the monorepo; manual copies are not allowed.",
+    "When a pattern is missing, update this file first and the application after.",
+    "Media players use only the --media-* tokens; their controls stay dark and readable in both themes.",
     "Composed application patterns are optional recipes over generic components, never product-specific widgets.",
     "Every composed pattern defines regions, actions, variants, states, transitions, behavior, event payloads, and accessibility.",
-    "WCAG 2.2 AA, 320 CSS pixel reflow, visible focus, reduced motion, and keyboard parity are release gates.",
+    "The accessibility target is WCAG 2.2 AA. Today the automated sweep checks the WCAG 2.0 and 2.1 A and AA rules on every page, in both themes and three browser engines; checking the WCAG 2.2 rules comes before 1.0. The known gaps are listed at https://aureauds.dev/docs-accessibility.html. 320 CSS pixel reflow, visible focus, reduced motion, and keyboard parity are release gates.",
     "Any drag interaction has a single-pointer and keyboard alternative."
   ],
   "referencePreset": {
@@ -398,12 +398,12 @@
       "picture-in-picture",
       "fullscreen"
     ],
-    "theme": "A superfície de mídia e seus controles permanece escura nos temas dark e light.",
+    "theme": "The media surface and its controls stay dark in the dark and light themes.",
     "accessibility": [
-      "Controles de ícone exigem nome acessível.",
-      "Controles permanecem visíveis durante foco e navegação por teclado.",
-      "Hover nunca é o único meio de descobrir um controle.",
-      "No mobile, controles opcionais migram para o menu sem remover a função."
+      "Icon controls require an accessible name.",
+      "Controls stay visible during focus and keyboard navigation.",
+      "Hover is never the only way to discover a control.",
+      "On mobile, optional controls move into the menu without losing their function."
     ]
   },
   "operationalPatterns": {
@@ -1269,7 +1269,7 @@
         "CollectionWorkbench"
       ]
     },
-    "rule": "São composições opcionais sobre fundamentos genéricos; nomes de produtos não criam componentes novos."
+    "rule": "They are optional compositions over generic foundations; product names do not create new components."
   },
   "patternContract": {
     "requiredFields": [
@@ -3609,6 +3609,8 @@
   "universalCapabilities": {
     "accessibility": {
       "target": "WCAG 2.2 AA",
+      "measuredToday": "WCAG 2.0 and 2.1, A and AA (automated sweep); the WCAG 2.2 rules are checked before 1.0",
+      "knownGaps": "https://aureauds.dev/docs-accessibility.html",
       "requirements": [
         "semantic HTML before ARIA",
         "visible focus is never fully obscured",

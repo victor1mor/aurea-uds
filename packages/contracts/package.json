@@ -1,7 +1,7 @@
 {
   "name": "@aurea-uds/contracts",
-  "version": "0.81.0",
-  "description": "O contrato do projeto Aurea UDS, em JSON legível por máquina.",
+  "version": "0.81.1",
+  "description": "The Aurea UDS project contract, as machine-readable JSON.",
   "keywords": [
     "aurea",
     "design-system",

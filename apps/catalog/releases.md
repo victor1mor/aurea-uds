@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.81.1
+
+November 25, 2026
+
+The published contract and the package descriptions are in English, the accessibility promise says what is measured today, and the tokens file no longer lists gradients as forbidden.
+
+[Read full release notes →](https://aureauds.dev/release-v0-81-1.md)
+
 ## v0.81.0
 
 November 24, 2026
