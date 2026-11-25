@@ -273,8 +273,14 @@ test.describe("catálogo · varredura de todas as páginas", () => {
         }
         await page.addScriptTag({path: AXE});
         const v = await page.evaluate(async () => {
+          // UDS-A3 (lote 104, 25/11/2026 — o Victor, 24/11/2026: "2.2 AA, e medir na 2.2"): as marcas da WCAG 2.2 entram.
+          // O que elas trazem, medido no `axe-core` 4.10.2 do repositório (e igual no 4.14.1, o mais novo no npm em
+          // 25/11/2026): UMA regra, o `target-size` (2.5.8, o alvo de toque de no mínimo 24 × 24), que o axe deixa
+          // desligada por padrão e a marca liga; o `wcag22a` não tem regra nenhuma. Os outros critérios novos da 2.2 AA (o
+          // foco que não fica escondido, o arrastar com alternativa, a ajuda no mesmo lugar, não pedir de novo o que já se
+          // digitou, o login sem teste de memória) o axe não mede: ver o documento de decisões do lote 104.
           const r = await (window as any).axe.run(document, {
-            runOnly: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"],
+            runOnly: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22a", "wcag22aa", "best-practice"],
           });
           // ~~ADR-0073 (18/10/2026): no tema claro, a letra de destaque era o amarelo da marca (1,76:1), e a
           // varredura aceitava SÓ essa acusação.~~ A ADR-0076 (20/10/2026) trocou a letra de destaque do claro
