@@ -8,8 +8,7 @@
         "preserve-current-visual-language",
         "semantic-tokens-only",
         "floating-surfaces",
-        "pill-controls",
-        "no-gradients"
+        "pill-controls"
       ],
       "selectors": {
         "base": ":root",

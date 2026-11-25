@@ -50,7 +50,7 @@ errors = []
 #   css:--duration-*      as declarações dos tokens que casam (o CSS dos tokens e do core, todos os temas)
 #   ts:AureaProvider      a assinatura da peça ou do gancho (props, tipos e valores), lida do contrato da API
 #   pkg:core              as portas (`exports`) e as dependências de par do pacote
-#   file:AGENTS.md        o arquivo inteiro (só quando a página descreve um arquivo)
+#   file:skills/aurea-uds/SKILL.md   o arquivo inteiro (só quando a página descreve um arquivo)
 #   none                  a página não descreve código (o Roadmap, a vitrine)
 # A impressão de cada trecho mora em `scripts/vigia-das-paginas.json` (gerado). Trecho mudou → a página reprova até
 # alguém relê-la e rodar `python scripts/validate.py --vigia-revisar <página>` (ou `todas`) — o "revisei" fica no diff.

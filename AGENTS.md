@@ -1,15 +1,15 @@
-# Aurea — regras do projeto
+# Aurea — for AI agents working on this repository
 
-Para criar ou mudar um componente, siga o passo a passo:
+**Using Aurea in your own app?** This file is not for you. Put the Aurea rules in your project instead:
+https://aureauds.dev/aurea-agents.md — how to install it is on https://aureauds.dev/docs-agents-md.html.
 
-→ **[docs/BUILDING.md](docs/BUILDING.md)** — como se constrói uma peça da Aurea, das referências à aprovação, aos
-testes, à versão e ao registro.
-
-As regras deste repositório (identidade visual intocável, nomes privados proibidos, autorizações, ferramentas e
-decisões já tomadas) vivem em **um único arquivo**:
+**Working on Aurea itself?** The rules of this repository (the visual identity, the names that must never appear,
+what needs approval, the tools and the decisions already taken) live in one file:
 
 → **[CLAUDE.md](CLAUDE.md)**
 
-Este arquivo existia como cópia e divergiu do original — o caminho do `launch.json`
-apontava para uma pasta que não existe mais. Duas fontes para a mesma regra é como
-uma delas fica errada; agora é ponteiro, não cópia.
+To build or change a component, follow **[docs/BUILDING.md](docs/BUILDING.md)**, from the references to the approval,
+the tests, the version and the record.
+
+Both are written in Portuguese, the project's working language. This file is a pointer, not a copy, so each rule has
+one source.

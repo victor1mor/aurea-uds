@@ -43,7 +43,7 @@ On the web, the interactive behavior comes from [Base UI](https://base-ui.com): 
 | `@aurea-uds/native` | The React Native components |
 | `@aurea-uds/contracts` | The contract and the API surface of every component |
 
-All seven packages are released together, with the same version number. What changed in each release is in the [changelog](https://github.com/victor1mor/aurea-uds/blob/main/CHANGELOG.md).
+All seven packages are released together, with the same version number. What changed in each release is in the [release notes](./releases.html).
 
 ## FAQ
 
@@ -51,7 +51,7 @@ All seven packages are released together, with the same version number. What cha
 Yes. It is open source under the Apache License 2.0, free for everyone. The fonts are under the SIL Open Font License 1.1 and the icons under MIT.
 
 **Is it stable?**
-Aurea is still in `0.x`. A minor release can break the API, and every break is written in the changelog. The road to `1.0` is on the [Roadmap](./docs-roadmap.html).
+Aurea is still in `0.x`. A minor release can break the API, and every break is written in the release notes. The road to `1.0` is on the [Roadmap](./docs-roadmap.html).
 
 **Can I use it without React?**
 Yes. Install `@aurea-uds/core` and `@aurea-uds/fonts` and use the CSS classes in plain HTML. See [Frameworks](./docs-frameworks.html).

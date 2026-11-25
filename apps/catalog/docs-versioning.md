@@ -12,7 +12,7 @@ Aurea follows [Semantic Versioning](https://semver.org): `major.minor.patch`. Al
 
 ## Before 1.0
 
-Versions `0.x` can change anything, and every change is written in the [changelog](https://github.com/victor1mor/aurea-uds/blob/main/CHANGELOG.md). From `1.0.0` on, the rules below apply.
+Versions `0.x` can change anything, and every change is written in the [release notes](./releases.html). From `1.0.0` on, the rules below apply.
 
 ## What is documented
 

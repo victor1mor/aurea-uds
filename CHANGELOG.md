@@ -17,6 +17,15 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.80.0 e da 0.81.0 (25/11/2026)
+
+- **A 0.80.0 publicada em 24/11/2026, entre 18:02 e 18:03** (Brasília, medido no npm), pela publicação em etapa, da
+  junção do pedido #161 (`5bbb3eb2`); **a 0.81.0, no mesmo dia, entre 21:57 e 21:58**, da junção do pedido #162
+  (`fd61f606`). O `released-surface.json` regravado dos dois commits, nessa ordem (fica na 0.81.0: entra o nome
+  `useResponsiveValue`). O CHANGELOG ([0.80.0] e [0.81.0] publicadas), o CLAUDE.md (as duas linhas na tabela e os itens 77
+  e 78); as releases `v0.80.0` e `v0.81.0` no GitHub já existiam.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.79.0 (24/11/2026)
 
 - **A 0.79.0 publicada em 24/11/2026, entre 10:12 e 10:13** (Brasília, medido no npm), pela publicação em etapa, da
@@ -432,7 +441,48 @@ como deveria funcionar"*.
 
 ---
 
+## [0.81.1] — 2026-11-25
+
+**As promessas públicas dizem a verdade** — o UDS-A1, as contradições que o relatório "a Aurea como UDS completo" achou
+entre o que a Aurea promete em público e o que ela prova (decidido pelo Victor em 24/11/2026, *"Sim, os 5"*; o texto
+aprovado em 25/11/2026, *"Pode, como recomendado"*). Nenhuma peça, valor de token ou estilo muda.
+
+### Mudado
+
+- **O contrato publicado (`@aurea-uds/contracts`) em inglês**: `"language": "en"` (era `pt-BR`) e as 27 frases que
+  estavam em português (as regras duras, as de mídia, as de distribuição e de ícone) — tudo que é público é em inglês
+  (07/11/2026). O sentido das regras não muda.
+- **A promessa de acessibilidade diz o que se mede**: a meta continua a WCAG 2.2 AA (o UDS-A3); a regra que a chamava de
+  trava de versão passa a dizer que hoje a varredura automática confere as regras da 2.0 e da 2.1 (A e AA), que conferir
+  as da 2.2 vem antes da 1.0, e onde estão as lacunas declaradas. Dois campos novos em
+  `universalCapabilities.accessibility`: `measuredToday` e `knownGaps`.
+- **O degradê é permitido também no arquivo de tokens**: o princípio `no-gradients` sai de `$extensions.ui.aurea.principles`
+  (o ADR-0091 o revogou em 05/11/2026, e ele tinha ficado lá).
+- **As descrições dos sete pacotes em inglês** (o texto da página de cada um no npm).
+
+### Fora dos pacotes
+
+- **O site**: o Roadmap com o que é verdade hoje — as 13 marcas em "já pronto", o degradê fora da lista do que não se faz,
+  e a lista "antes da 1.0" com o que o `STATUS-1.0.md` diz que falta, sem data; o Roadmap, a Introduction e a Versioning
+  levam à página de versões em inglês, e não ao histórico em português do GitHub.
+- **O `AGENTS.md` da raiz em inglês**, com duas portas: quem usa a Aurea vai às regras públicas do site; quem trabalha na
+  Aurea, ao `CLAUDE.md` e ao `docs/BUILDING.md`.
+- **A página AGENTS.md do site vigiava o arquivo errado** (o `AGENTS.md` da raiz); ela descreve o `aurea-agents.md`, que
+  sai da skill, e passa a vigiar o `skills/aurea-uds/SKILL.md`.
+- **O `CLAUDE.md` deixa de dizer que a CI roda tudo**: ela roda 6 dos 104 arquivos de teste do navegador.
+
+### Quem cobra
+
+- `tests/unit/lote-103.test.tsx` — o `no-gradients` fora; o contrato e as descrições sem português; a meta 2.2 AA com o
+  que se mede hoje, lido da própria varredura (quando ela passar a rodar as regras da 2.2, o teste cobra que o contrato
+  diga); a vigia da página AGENTS.md lida da montagem; o `AGENTS.md` da raiz; o Roadmap e os links do histórico. Com os
+  arquivos da 0.81.0, os 10 reprovam.
+
 ## [0.81.0] — 2026-11-24
+
+✅ **Publicada em 24/11/2026, entre 21:57 e 21:58 (Brasília, medido no npm: `native`, `react` e `contracts` às 21:57,
+depois `core`, `fonts`, `icons` e `tokens` às 21:58), pela publicação em etapa — o `release.yml` mandou os sete para a área
+de espera do npm e o Victor os aprovou em npmjs.com, com o segundo fator —, da junção do pedido #162** (`fd61f606`).
 
 **O formulário, o interruptor, o nome em inglês, a rodinha com menos movimento e as ferramentas da CI** — o que o Victor
 decidiu em 24/11/2026 (o bloco de sim ou não e a separação dos defeitos) e aprovou antes do pedido (*"Pode seguir"*). Só a
@@ -478,6 +528,10 @@ rodinha muda na tela, e só para quem pediu menos movimento ao sistema.
   girando (2,1 s e 3 s, sem fim), o tempo de sempre sem a preferência e a barra sem fim parada.
 
 ## [0.80.0] — 2026-11-24
+
+✅ **Publicada em 24/11/2026, entre 18:02 e 18:03 (Brasília, medido no npm: `native` às 18:02, depois `react`,
+`contracts`, `core`, `fonts`, `icons` e `tokens` às 18:03), pela publicação em etapa — o `release.yml` mandou os sete para
+a área de espera do npm e o Victor os aprovou em npmjs.com, com o segundo fator —, da junção do pedido #161** (`5bbb3eb2`).
 
 **Os detalhes do menu, o botão ocupado do nativo e a área de arquivo desativada** — o Victor decidiu olhando as bancadas
 vivas de 24/11/2026, cada ponto com a conta das referências: os detalhes do menu (*"Ganha o vermelho"*, *"Se apaga
