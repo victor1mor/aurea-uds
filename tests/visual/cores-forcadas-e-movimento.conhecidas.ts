@@ -18,7 +18,8 @@ export const CONHECIDAS_CORES_FORCADAS: readonly string[] = [
   "native-screen.html · foco · div.css-g5y9jx.r-150rngu \"FuelTollsParkingLunchHot\"",
   "radiogroup.html · foco · input",
   "taggroup.html · foco · button.tag-main \"News\"",
-  // O ESTADO que some no alto contraste: ligado × desligado, escolhido × não (49).
+  // O ESTADO que some no alto contraste: ligado × desligado, escolhido × não (48; o segmento do `SegmentedControl`, o 49º,
+  // mora nas intermitentes, abaixo).
   "automationcard.html · estado · input[role=switch]",
   "gallery.html · estado · button.gallery-tile \"Back\"",
   "gallery.html · estado · button.gallery-tile \"In use\"",
@@ -66,7 +67,6 @@ export const CONHECIDAS_CORES_FORCADAS: readonly string[] = [
   "native-taggroup.html · estado · button.css-g5y9jx.r-1loqt21[role=button] \"Writing\"",
   "radio.html · estado · input",
   "radiogroup.html · estado · input",
-  "segmentedcontrol.html · estado · button.active[role=radio] \"Map\"",
   "switch.html · estado · input[role=switch]",
 ];
 // "Menos movimento": nenhuma reprovação no dia em que a varredura nasceu.
@@ -77,7 +77,12 @@ export const CONHECIDAS_MOVIMENTO: readonly string[] = [];
 // mesmo anel, e o foco na opção escolhida não se vê. Qual opção está escolhida quando o Tab chega depende de quando a parte
 // viva do site termina de carregar — com a máquina folgada, 4 rodadas de 4 sem a reprovação; com o validador rodando ao
 // lado, ela voltou (25/11/2026). O defeito está na lista do Victor como as outras; a lista só diminui com o conserto dele.
+// O SEGMENTO escolhido de um dos estilos do `SegmentedControl`: o defeito é o mesmo nos segmentos do exemplo, mas qual deles
+// dá a foto IGUAL pixel a pixel muda com o desenho da letra de cada sistema — no Windows o "Map", no Linux da CI o "Grid"
+// (25/11/2026). Fica nas duas pontas por nome; o defeito está na lista do Victor, contado como um.
 export const INTERMITENTES: readonly string[] = [
   "aureaprovider.html · foco · input.theme-switch-input \"Dark\"",
   "themetoggle.html · foco · input.theme-switch-input \"Dark\"",
+  "segmentedcontrol.html · estado · button.active[role=radio] \"Map\"",
+  "segmentedcontrol.html · estado · button.active[role=radio] \"Grid\"",
 ];

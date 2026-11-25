@@ -337,7 +337,11 @@ test.describe("menos movimento", () => {
     conferir(medidas, CONHECIDAS_MOVIMENTO.filter((c) => !c.includes(" · desliza · ")), "movimento com \"menos movimento\" ligado", PAGINAS);
   });
 
-  test("trocar de aba ou de segmento não desliza", async ({page: p}) => {
+  test("trocar de aba ou de segmento não desliza", async ({page: p, browserName}) => {
+    // Só no Chromium. Quem decide se o escolhido desliza é o JavaScript do pacote (`reduzMovimento()`, que pergunta ao
+    // navegador por "menos movimento") — o mesmo código nos três; e a transição de CSS de toda página já é cobrada nos três
+    // pelo teste de cima. No Firefox da CI este passeio por todas as prévias passou de 22 minutos (pedido #165).
+    test.skip(browserName !== "chromium", "o deslizar é decidido pelo JavaScript do pacote, igual nos três navegadores");
     await p.emulateMedia({reducedMotion: "reduce"});
     const medidas = new Set<string>();
     let trocas = 0;
