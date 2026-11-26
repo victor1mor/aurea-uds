@@ -2,6 +2,8 @@
 // O texto é o do `content/docs/versioning.md`, seção por seção; a página o arruma com as peças que a Roadmap já usa: o
 // palco com as peças que flutuam, os três números em cartões, as duas notas lado a lado, o que quebra (o aviso vermelho)
 // e o que não quebra (o visto verde), e os dois passos de um nome que sai. O arranjo está em `site-b/css/versioning.css`.
+// O lote 107 (26/11/2026, a ADR-0095, a regra de estabilidade da 1.0): o que é público e o que não é (cartões com
+// ladrilho, como o que quebra), os quatro passos de um nome que sai e a nota dos consertos de versões antigas.
 import {ferramentas} from "./_getting-started/comum.mjs";
 
 export default function versioning(site, doc) {
@@ -25,7 +27,7 @@ export default function versioning(site, doc) {
   const partes = item => {
     const forte = item.find(x => x.strong !== undefined);
     const resto = item.filter(x => x !== forte);
-    if (resto[0]?.t) resto[0] = {t: resto[0].t.replace(/^\s*—\s*/, "")};
+    if (resto[0]?.t) resto[0] = {t: resto[0].t.replace(/^\s*[—:]\s*/, "")};
     return {titulo: forte ? forte.strong : "", resto: maiuscula(resto)};
   };
 
@@ -33,7 +35,7 @@ export default function versioning(site, doc) {
     g.capsula(g.amarela("major.minor.patch"), "vs-peca-semver"),
     g.numerao("7", "packages", "one version"),
     g.cartao([h("span", {key: "k", className: "intro-mini"}, "Old names"),
-      h("span", {key: "t", className: "intro-mini intro-forte"}, "Deprecated first, removed only in a major.")], "gs-coluna vs-peca-nomes"),
+      h("span", {key: "t", className: "intro-mini intro-forte"}, "Kept six months at least, removed in a major.")], "gs-coluna vs-peca-nomes"),
     g.capsula(h("span", {className: "gs-mono"}, "1.0 · SemVer"))]);
 
   // OS TRÊS NÚMEROS: a cápsula do número (a de "major" no amarelo) e o que ele quer dizer.
@@ -43,33 +45,41 @@ export default function versioning(site, doc) {
         h("span", {className: "vs-versao", "data-v": e.titulo.toLowerCase()}, e.titulo.toLowerCase()),
         h("p", null, ...site.pedacos(e.resto, `nu${n}`))))));
 
-  // AS DUAS NOTAS: o que vale antes da 1.0 (no fundo do palco) e o que a regra protege (no cartão).
-  const notas = g.secao("scope", "Scope", "When and what the rules cover",
-    h("div", {className: "gs-grade-2"},
-      h(A.Card, {variant: "inset", className: "vs-nota", id: s("Before 1.0").id}, h("b", null, s("Before 1.0").rotulo),
-        ...g.corpo(s("Before 1.0").blocos, {chave: "an"})),
-      h(A.Card, {className: "vs-nota", id: s("What is documented").id}, h("b", null, s("What is documented").rotulo),
-        ...g.corpo(s("What is documented").blocos, {chave: "do"}))));
+  // AS DUAS NOTAS: o que vale antes da 1.0 (no fundo do palco) e os consertos das versões antigas (no cartão).
+  const nota = (rotulo, chave, variant) => h(A.Card, {variant, className: "vs-nota", id: s(rotulo).id}, h("b", null, s(rotulo).rotulo),
+    ...g.corpo(s(rotulo).blocos, {chave}));
+  const notas = g.secao("scope", "Scope", "When the rules apply",
+    h("div", {className: "gs-grade-2"}, nota("Before 1.0", "an", "inset"), nota("Fixes for older versions", "fx")));
 
-  // O QUE QUEBRA e O QUE NÃO QUEBRA: a frase de abertura da seção e um cartão por item, com o ladrilho.
-  const lista = (rotulo, olho, icone, cor, chave) => g.secao(s(rotulo).id, olho, rotulo,
-    ...g.corpo(s(rotulo).blocos, {chave, pular: ["ul"]}),
-    h("div", {className: "gs-grade-2 vs-itens"}, ...primeiro(rotulo, "ul").itens.map((it, n) => h(A.Card, {key: n, className: "vs-item"},
-      site.blocoDeTile(icone, cor, "vs-item-tile"), h("span", null, ...site.pedacos(ponto(maiuscula(it)), `${chave}${n}`))))));
+  // O QUE É PÚBLICO, O QUE NÃO É, O QUE QUEBRA e O QUE NÃO QUEBRA: o texto antes da lista, um cartão por item, com o
+  // ladrilho, e o texto depois da lista (o do selo, no "What is public").
+  const lista = (rotulo, olho, icone, cor, chave) => {
+    const blocos = s(rotulo).blocos;
+    const i = blocos.indexOf(primeiro(rotulo, "ul"));
+    return g.secao(s(rotulo).id, olho, rotulo,
+      ...g.corpo(blocos.slice(0, i), {chave}),
+      h("div", {className: "gs-grade-2 vs-itens"}, ...blocos[i].itens.map((it, n) => h(A.Card, {key: n, className: "vs-item"},
+        site.blocoDeTile(icone, cor, "vs-item-tile"), h("span", null, ...site.pedacos(ponto(maiuscula(it)), `${chave}${n}`))))),
+      ...g.corpo(blocos.slice(i + 1), {chave: `${chave}d`}));
+  };
+  const publico = lista("What is public", "Protected", "shield-check", "blue", "pu");
+  const naoPublico = lista("What is not public", "Can change anytime", "wrench", "teal", "np");
   const quebra = lista("What is a breaking change", "Major only", "warning", "red", "qb");
   const naoQuebra = lista("What is not a breaking change", "Minor or patch", "check", "green", "nq");
 
-  // OS DOIS PASSOS DE UM NOME QUE SAI: o número grande e o texto, lado a lado.
+  // OS PASSOS DE UM NOME QUE SAI: o número grande e o texto, dois por fila; depois, o texto do nome que fica.
   const passos = g.secao(s("How old names leave").id, "Deprecation", "How old names leave",
     h("div", {className: "gs-grade-2 vs-passos"}, ...primeiro("How old names leave", "ol").itens.map((it, n) =>
       h(A.Card, {key: n, className: "vs-passo"},
         h("span", {className: "vs-passo-n", "aria-hidden": "true"}, String(n + 1).padStart(2, "0")),
-        h("p", null, ...site.pedacos(it, `pa${n}`))))));
+        h("p", null, ...site.pedacos(it, `pa${n}`))))),
+    ...g.corpo(s("How old names leave").blocos, {chave: "pd", pular: ["ol"]}));
 
   const node = g.pagina(doc, abertura,
     ...g.corpo(sec.antes, {chave: "a"}),
-    numeros, notas, quebra, naoQuebra, passos);
-  const toc = [{id: s("What each number means").id, label: "What each number means"}, {id: "scope", label: "When and what the rules cover"},
+    numeros, notas, publico, naoPublico, quebra, naoQuebra, passos);
+  const toc = [{id: s("What each number means").id, label: "What each number means"}, {id: "scope", label: "When the rules apply"},
+    {id: s("What is public").id, label: "What is public"}, {id: s("What is not public").id, label: "What is not public"},
     {id: s("What is a breaking change").id, label: "What is a breaking change"},
     {id: s("What is not a breaking change").id, label: "What is not a breaking change"},
     {id: s("How old names leave").id, label: "How old names leave"}];
