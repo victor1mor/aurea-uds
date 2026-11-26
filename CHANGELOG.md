@@ -602,6 +602,28 @@ escolheu o Shift+clique como hoje (*"vou aceitar sua sugestão de como hoje"*, 2
   `lote3`, `saude-rodadas`, `seguranca-tabelas-e-cor`, `setas-rtl`, `tabela-mnt38-s10`, `meio-marcado`, `lote-q-dados`,
   `lote-102`, `sem-linha`).
 
+### Corrigido — o clique com Shift na caixinha, no rádio e na chave
+
+Um defeito antigo, achado na bancada da `DataGrid`: segurar Shift e clicar na marca desenhada não marcava nada no
+Chromium e no Firefox — o navegador só selecionava o texto. Aprovado pelo Victor na bancada viva, o de hoje ao lado do
+consertado (*"Pode"*, 26/11/2026). A aparência não muda: medida pixel a pixel nos dois temas, com a Gold e com a Ember.
+
+- **`Checkbox`, `CheckboxGroup`, `Radio`, `RadioGroup`, `Switch` e a coluna de seleção da `DataGrid` marcam com
+  Shift+clique** (web, e o HTML puro com `.checkbox`, `.radio` e `.switch`). O campo de verdade, invisível, passa a cobrir
+  o rótulo inteiro e recebe o clique — o mesmo jeito da chave de tema e da amostra de cor. Antes ele não recebia clique
+  (`pointer-events:none`), e o clique chegava pelo `<label>`: com Shift, o Chromium e o Firefox estendem a seleção de texto
+  em vez de ativar o rótulo. Medido com clique de verdade, em 12 peças: antes, 0 marcavam no Chromium e no Firefox (12 no
+  WebKit); agora, 12 nos três. As referências nº 1 e nº 2 marcam com Shift.
+- **Link ou botão dentro do nome** (*"I accept the terms"*) fica por cima do campo e continua sendo clicado, sem marcar a
+  caixa.
+- Um efeito: o texto do nome não se seleciona mais com o mouse.
+- O nativo não muda: no celular não há Shift. Rodando no navegador, a caixa do nativo marca com Shift no Chromium e não
+  no Firefox (medido em 26/11/2026; o clique comum funciona) — fica anotado, sem lote.
+- Quem cobra: `tests/visual/shift-na-caixinha.spec.ts` — o Shift+clique na caixinha, na cápsula, na caixa da grade, no
+  rádio e na chave; o clique comum no desenho e no nome; o link dentro do nome; o campo que ocupa o rótulo e o anel do
+  foco pelo teclado. Nos três navegadores. Provado contra o defeito: com o CSS de antes, o do Shift reprova no Chromium e
+  no Firefox. E `tests/visual/parte-viva.spec.ts` passa a clicar no ponto da marca pelo mouse (o campo fica por cima dela).
+
 ## [0.81.1] — 2026-11-25
 
 **As promessas públicas dizem a verdade** — o UDS-A1, as contradições que o relatório "a Aurea como UDS completo" achou
