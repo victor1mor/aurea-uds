@@ -1,4 +1,5 @@
 import {defineConfig, devices} from "@playwright/test";
+import {FORA_DA_CI} from "./tests/visual/fora-da-ci";
 
 // Visual regression sobre o CATÁLOGO GERADO. Era sobre `apps/docs`, que saiu na Parte D
 // do PLANO-1.0 (08/08/2026): 682 KB de HTML escrito à mão, e o catálogo prova o mesmo
@@ -25,6 +26,8 @@ const NOUTRO_JOB = [
   "**/rtl.spec.ts",
 ];
 const PROVAS = !!process.env.AUREA_PROVAS;
+// E as que ficam fora com motivo (reprovam também na máquina do Victor e esperam decisão dele).
+const FORA = FORA_DA_CI.map((f) => f.titulo);
 
 export default defineConfig({
   testDir: "tests/visual",
@@ -74,7 +77,7 @@ export default defineConfig({
   // Então: os sete specs de medição rodam nos três motores; os dois de captura, num só.
   // Se um dia a Aurea quiser pixel por motor, isso é decisão nova e cara — não é este item.
   projects: [
-    {name: "chromium", testIgnore: PROVAS ? NOUTRO_JOB : undefined, use: {...devices["Desktop Chrome"]}},
+    {name: "chromium", testIgnore: PROVAS ? NOUTRO_JOB : undefined, grepInvert: PROVAS ? FORA : undefined, use: {...devices["Desktop Chrome"]}},
     {name: "firefox", testIgnore: PIXEL, use: {...devices["Desktop Firefox"]}},
     {name: "webkit", testIgnore: PIXEL, use: {...devices["Desktop Safari"]}},
   ],

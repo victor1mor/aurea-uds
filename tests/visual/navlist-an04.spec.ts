@@ -40,7 +40,8 @@ test("NavList: a foto no começo, os sinais antes do valor, e o nome inteiro par
       corValor: getComputedStyle(linha.querySelector(".nav-list-value")!).color,
     };
   });
-  expect(m.fotoNoComeco, "a foto encosta no recheio da linha (space-3)").toBe(12);
+  // 16 desde a 0.74.0: a `NavList` começa a 16 da borda, como a `Sidebar` (`--space-4`; era o `--space-3`, 12).
+  expect(m.fotoNoComeco, "a foto encosta no recheio da linha (space-4)").toBe(16);
   expect(Math.abs(m.centroFoto)).toBeLessThanOrEqual(0.5);
   // 40: o avatar médio da referência, desde o passo 6 da 0.32.0 (era 36, a altura do botão — aprovado pelo
   // Victor: "o avatar médio passa de 36 para 40"). O token é `--space-10`.
