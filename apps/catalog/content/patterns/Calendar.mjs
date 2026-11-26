@@ -1,11 +1,10 @@
 import {createElement as h} from "react";
-import {Button, Popover, Field, Input} from "../../../../packages/react/dist/index.js";
-import {Calendar} from "../../../../packages/react/dist/calendar.js";
+import {Button, Popover, Field} from "../../../../packages/react/dist/index.js";
+import {Calendar, DatePicker} from "../../../../packages/react/dist/calendar.js";
 
-// SELETOR DE DATA. Não existe componente `DatePicker` na Aurea, e é decisão, não falta: é a
-// composição de duas peças que já existem, e a biblioteca de referência para "como envelopar
-// biblioteca de terceiro" também não tem componente-raiz para isso, pelo mesmo motivo.
-// Aqui é onde a composição fica escrita.
+// SELETOR DE DATA. Desde a 0.32.0 (ADR-0068) existe o `DatePicker` da web, o campo que abre este calendário; o
+// primeiro padrão mostra a composição por baixo dele, para quando o gatilho não é um campo. E desde o lote 109
+// (26/11/2026) o site não manda mais preferir o calendário do navegador: a data de um campo é o `DatePicker`.
 //
 // O mês é FIXO em todo preview, e `today` junto — os DOIS. Página estática que muda sozinha faz
 // o gate de pixel reprovar todo dia 1º. Congelar só o mês não bastou: `data-today` continuava
@@ -18,8 +17,8 @@ export default [
   {
     variant: "Picker",
     name: "Date picker",
-    description: "There is no DatePicker component: a picker is a trigger plus a popover plus "
-      + "this calendar. Three parts you already have, and the trigger is what names the field.",
+    description: "In a form, DatePicker is this already. Underneath it is a trigger plus a popover plus "
+      + "this calendar: compose them yourself when the trigger is not a field, like this button.",
     uses: ["Button", "Popover", "Calendar"],
     code: `<Popover trigger={<Button leadingIcon="calendar">12 August 2026</Button>}>
   <Calendar mode="single" selected={date} onSelect={setDate} />
@@ -31,8 +30,8 @@ export default [
   {
     variant: "Picker",
     name: "Booking with days closed",
-    description: "The reason this component exists. A native date input cannot say \"not before "
-      + "Thursday, and never a Sunday\" — everything else about a plain date, it does better.",
+    description: "The reason this component exists: a native date input cannot say \"not before "
+      + "Thursday, and never a Sunday\". The calendar can, and DatePicker takes the same rules.",
     uses: ["Calendar"],
     code: `<Calendar
   mode="range"
@@ -44,13 +43,14 @@ export default [
       disabled: [{before: new Date(2026, 7, 6)}, {dayOfWeek: [0]}]}),
   },
   {
-    variant: "Native",
-    name: "When the native input wins",
-    description: "One plain date, no closed days: the native picker is smaller, knows every "
-      + "locale, and is the one the person already knows how to use on their phone.",
-    uses: ["Field", "Input"],
-    code: '<Field label="Invoice date"><Input type="date" /></Field>',
+    variant: "Field",
+    name: "One date in a field",
+    description: "One plain date in a form: DatePicker is the field that opens this calendar, in "
+      + "every theme and brand. Pass locale for the language; name sends the date as yyyy-mm-dd.",
+    uses: ["Field", "DatePicker"],
+    code: '<Field label="Invoice date"><DatePicker defaultValue={new Date(2026, 7, 12)} name="invoice" /></Field>',
+    embed: true,
     render: () => h("div", {style: {width: "min(260px,100%)"}},
-      h(Field, {label: "Invoice date"}, h(Input, {type: "date", defaultValue: "2026-08-12"}))),
+      h(Field, {label: "Invoice date"}, h(DatePicker, {defaultValue: new Date(2026, 7, 12), name: "invoice"}))),
   },
 ];

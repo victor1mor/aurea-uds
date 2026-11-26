@@ -311,7 +311,8 @@ const folha = criarFolha((t: AureaTokens) => ({
     paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
   },
   fioDaAba: fioDoEscolhido(t),
-  painel: {marginTop: t.size.space3},
+  // O vão entre a fila e o painel é o da referência, 8 (o lote 109, aprovado pelo Victor em 26/11/2026), igual à web.
+  painel: {marginTop: t.size.space2},
 
   // ── Stepper ────────────────────────────────────────────────────────────────────────────────
   trilha: {flexDirection: "row"},

@@ -47,7 +47,7 @@ describe("C9 · `Tabs panel` na web (a MNT-05)", () => {
     const painel = container.querySelector("[role=tabpanel]");
     expect(painel).toHaveClass("tabs-panel");
     expect(painel).not.toHaveClass("card");
-    expect(regra(".tabs-root:not([data-orientation=\"vertical\"])>.tabs-panel")).toContain("padding-block-start:var(--space-3)");
+    expect(regra(".tabs-root:not([data-orientation=\"vertical\"])>.tabs-panel")).toContain("padding-block-start:var(--space-2)"); // o vão da referência (o lote 109, 26/11/2026; era o `space-3`)
   });
 
   test("sem caixa, o painel continua alcançável pelo teclado", () => {

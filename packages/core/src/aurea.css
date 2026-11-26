@@ -1678,6 +1678,10 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 [data-theme="light"] .select:where(:not([data-theme="dark"] *),[data-theme="dark"] [data-theme="light"] *) { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23505050' stroke-width='1.6'/%3E%3C/svg%3E"); }
 /* Widgets nativos dos campos (calendário do type=date, dropdown do select, scrollbar do textarea) seguem o tema */
 .input,.textarea,.select { color-scheme:dark; font-size:var(--step-fs,inherit); }
+/* A HORA SÓ SE DIGITA (o lote 109, aprovado pelo Victor em 26/11/2026): como a referência, o campo de hora não mostra o
+   botão do relógio do navegador, e nada do navegador abre; a hora se digita (as setas sobem e descem cada parte). A peça de
+   hora da Aurea fica para depois da 1.0 (decisão de 24/11/2026). */
+.input[type="time"]::-webkit-calendar-picker-indicator { display:none; }
 /* ESCALA DA REFERÊNCIA (ADR-0050, 24/09/2026): no computador o texto digitado é 14, como toda peça;
    no telefone ele sobe para 16. É a regra dela (a troca é em 640px), e a razão
    é do Safari do iPhone: campo com letra menor que 16 faz a página AMPLIAR sozinha ao ganhar foco. */
@@ -2629,7 +2633,10 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    `align-items:start` para a lista não crescer até a altura do painel; `min-inline-size` no
    painel porque `minmax(0,1fr)` sozinho deixa conteúdo largo (uma tabela) empurrar a coluna
    de rótulos para fora. */
-.tabs-root[data-orientation="vertical"] { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:start; gap:var(--space-4); }
+/* O VÃO ENTRE A FILA E O PAINEL (o lote 109, aprovado pelo Victor em 26/11/2026, *"Aprovo as quatro"*): o da referência, 8
+   (`--space-2`), nas duas orientações e nos dois painéis — a raiz das abas dela é `gap-2`, a do celular também. Deitada, o
+   cartão encostava na fila (0), e o painel sem caixa tinha 12; em pé, 16. */
+.tabs-root[data-orientation="vertical"] { display:grid; grid-template-columns:auto minmax(0,1fr); align-items:start; gap:var(--space-2); }
 .tabs[data-orientation="vertical"] { flex-direction:column; align-items:stretch; gap:var(--space-1); min-height:0; }
 /* o rótulo alinha ao INÍCIO da linha: centrado, uma coluna de abas de larguras diferentes
    sai serrilhada, que é o mesmo defeito que o `.btn-group-vertical` resolve com `stretch`. */
@@ -2674,9 +2681,11 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 :is(.segmented :is(button,a),.tab)[data-sliding]::after { visibility:hidden; }
 /* `panel="plain"` (MNT-05 e C9, 06/10/2026): o painel sem caixa, como o painel de abas da
    referência. Sem recheio dos lados — o conteúdo começa na linha do que está fora do `Tabs` —, e o
-   espaço de cima é o mesmo `space-3` do painel do nativo. Na vertical, quem separa é o `gap` da
+   espaço de cima é o vão da referência, `space-2`, o mesmo do painel do nativo (era `space-3` até o lote 109). Na vertical, quem separa é o `gap` da
    grade da raiz, então o espaço de cima não entra. */
-.tabs-panel { min-width:0; } .tabs-root:not([data-orientation="vertical"])>.tabs-panel { padding-block-start:var(--space-3); }
+.tabs-panel { min-width:0; } .tabs-root:not([data-orientation="vertical"])>.tabs-panel { padding-block-start:var(--space-2); }
+/* O cartão (o painel padrão) com o mesmo vão da referência (o lote 109, acima). */
+.tabs-root:not([data-orientation="vertical"])>.card { margin-block-start:var(--space-2); }
 /* 0.32.0 — a trilha da referência: vão 6, link 14 PESO MÉDIO esmaecido (sublinhado com o mouse, como o
    dela), a página atual na cor do texto e em peso médio (era negrito), e o separador de 12 (era 16). */
 .breadcrumb { display:flex; align-items:center; flex-wrap:wrap; gap:calc(var(--space-1) + var(--space-05)); color:var(--muted-foreground); font-size:var(--text-sm); font-weight:var(--weight-medium); }

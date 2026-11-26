@@ -28,7 +28,7 @@
     "--radius-control",
     "--segment",
     "--shadow-sm",
-    "--space-3"
+    "--space-2"
   ],
   "a11y": {
     "role": "tablist",
@@ -101,7 +101,7 @@
       "name": "panel",
       "type": "'card' | 'plain'",
       "default": "card",
-      "description": "The panel. `card` is an inset card. `plain` drops the box, like the reference library's panel: the content starts on the same line as what is outside the Tabs, with only the space-3 gap above it. Use it when the content already has a frame (Table, DataGrid, a list of cards), which would otherwise be a box inside a box. The same prop on native."
+      "description": "The panel. `card` is an inset card. `plain` drops the box, like the reference library's panel: the content starts on the same line as what is outside the Tabs, with only the space-2 gap above it. Both panels sit space-2 below the tabs, as in the reference. Use it when the content already has a frame (Table, DataGrid, a list of cards), which would otherwise be a box inside a box. The same prop on native."
     },
     {
       "name": "variant",

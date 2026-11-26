@@ -69,7 +69,7 @@
       "name": "type",
       "type": "string",
       "default": "text",
-      "description": "Native type. date, time, color and file use the browser's own widget, themed by tokens."
+      "description": "Native type. For a date, use DatePicker (the field that opens the Aurea calendar); time is typed, with no browser picker; color and file use the browser's own widget, themed by tokens."
     },
     {
       "name": "value / defaultValue",

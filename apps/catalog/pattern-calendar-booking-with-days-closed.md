@@ -1,6 +1,6 @@
 # Booking with days closed
 
-The reason this component exists. A native date input cannot say "not before Thursday, and never a Sunday" — everything else about a plain date, it does better.
+The reason this component exists: a native date input cannot say "not before Thursday, and never a Sunday". The calendar can, and DatePicker takes the same rules.
 
 ## Usage
 

@@ -7411,7 +7411,7 @@ import {Input} from "@aurea-uds/react";
 
 - `size` is ours, not the HTML attribute: sm, md, lg — the same steps as Button.
 
-- type="date", "time", "color" and "file" use the browser's own widget — themed by tokens, not rebuilt.
+- For a date, use DatePicker: the field that opens the Aurea calendar. type="time" is typed, with no browser picker; "color" and "file" use the browser's own widget, themed by tokens.
 
 - No internal state: controlled or uncontrolled is your call, as in plain React.
 
@@ -7451,11 +7451,11 @@ Email, password and number, all native — the keyboard on a phone changes with 
 
 ### Date and time
 
-The browser's own picker, wearing our tokens. Rebuilding a calendar would mean rebuilding every locale with it.
+The date is DatePicker, the field that opens the Aurea calendar. The time is typed: the arrows step each part, and no browser window opens.
 
 ```tsx
-<Field label="Starts"><Input type="date" /></Field>
-<Field label="At"><Input type="time" /></Field>
+<Field label="Starts"><DatePicker defaultValue={new Date(2026, 6, 24)} /></Field>
+<Field label="At"><Input type="time" defaultValue="09:00" /></Field>
 ```
 
 ### Formatting a plate or a document
@@ -7486,7 +7486,7 @@ Disabled is not submitted and is skipped by the keyboard; read-only is submitted
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `type` | `string` | text | Native type. date, time, color and file use the browser's own widget, themed by tokens. |
+| `type` | `string` | text | Native type. For a date, use DatePicker (the field that opens the Aurea calendar); time is typed, with no browser picker; color and file use the browser's own widget, themed by tokens. |
 | `value / defaultValue` | `string \| number` | — | Controlled or uncontrolled, as in plain React. The component adds no state of its own. |
 | `placeholder` | `string` | — | An example of the value, never a substitute for the label. |
 | `disabled` | `boolean` | false | Native disabled: skipped by the keyboard and not submitted. |
@@ -10792,7 +10792,7 @@ disabled on a tab dims it and it does not open; the arrows still reach it, so it
 | `orientation` | `Responsive<'horizontal' \| 'vertical'>` | horizontal | Resolved at runtime and handed to the engine, which publishes data-orientation/aria-orientation and adapts the arrow keys. |
 | `activateOnFocus` | `boolean` | true | Automatic activation: the arrow switches the panel along with focus. Set false for the APG's manual pattern — the arrow moves focus and Enter/Space activates. Use false when switching a tab is expensive. |
 | `loopFocus` | `boolean` | true | Whether the arrow wraps from the last tab back to the first. |
-| `panel` | `'card' \| 'plain'` | card | The panel. `card` is an inset card. `plain` drops the box, like the reference library's panel: the content starts on the same line as what is outside the Tabs, with only the space-3 gap above it. Use it when the content already has a frame (Table, DataGrid, a list of cards), which would otherwise be a box inside a box. The same prop on native. |
+| `panel` | `'card' \| 'plain'` | card | The panel. `card` is an inset card. `plain` drops the box, like the reference library's panel: the content starts on the same line as what is outside the Tabs, with only the space-2 gap above it. Both panels sit space-2 below the tabs, as in the reference. Use it when the content already has a frame (Table, DataGrid, a list of cards), which would otherwise be a box inside a box. The same prop on native. |
 | `variant` | `primary \| secondary` | primary | secondary is the reference's secondary tabs: no track, a hairline under the list, the chosen tab marked by the Aurea selected line. Laid flat, the tabs fill the row and share it equally (never narrower than their label; when they do not fit, the row scrolls), as in the reference library. |
 </page>
 
@@ -13410,7 +13410,7 @@ import {ButtonGroup, IconButton} from "@aurea-uds/react";
 <page url="https://aureauds.dev/pattern-calendar-date-picker.html">
 # Date picker
 
-There is no DatePicker component: a picker is a trigger plus a popover plus this calendar. Three parts you already have, and the trigger is what names the field.
+In a form, DatePicker is this already. Underneath it is a trigger plus a popover plus this calendar: compose them yourself when the trigger is not a field, like this button.
 
 ## Usage
 
@@ -13428,7 +13428,7 @@ import {Button, Popover, Calendar} from "@aurea-uds/react";
 <page url="https://aureauds.dev/pattern-calendar-booking-with-days-closed.html">
 # Booking with days closed
 
-The reason this component exists. A native date input cannot say "not before Thursday, and never a Sunday" — everything else about a plain date, it does better.
+The reason this component exists: a native date input cannot say "not before Thursday, and never a Sunday". The calendar can, and DatePicker takes the same rules.
 
 ## Usage
 
@@ -13445,19 +13445,19 @@ import {Calendar} from "@aurea-uds/react";
 ```
 </page>
 
-<page url="https://aureauds.dev/pattern-calendar-when-the-native-input-wins.html">
-# When the native input wins
+<page url="https://aureauds.dev/pattern-calendar-one-date-in-a-field.html">
+# One date in a field
 
-One plain date, no closed days: the native picker is smaller, knows every locale, and is the one the person already knows how to use on their phone.
+One plain date in a form: DatePicker is the field that opens this calendar, in every theme and brand. Pass locale for the language; name sends the date as yyyy-mm-dd.
 
 ## Usage
 
 ```tsx
-import {Field, Input} from "@aurea-uds/react";
+import {Field, DatePicker} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Field label="Invoice date"><Input type="date" /></Field>
+<Field label="Invoice date"><DatePicker defaultValue={new Date(2026, 7, 12)} name="invoice" /></Field>
 ```
 </page>
 
@@ -14985,20 +14985,21 @@ import {Field, Input} from "@aurea-uds/react";
 ```
 </page>
 
-<page url="https://aureauds.dev/pattern-input-native-date-range.html">
-# Native date range
+<page url="https://aureauds.dev/pattern-input-date-range-in-one-field.html">
+# Date range in one field
 
-For one plain date the native picker still wins: every locale and every screen reader for free, and it is the one people already know. Reach for Calendar when you need a visible grid, a range, or days closed.
+From and to in ONE field: DatePicker with range opens the Aurea calendar, the first pick is one end and the second the other. Pass locale for the language; name sends the range as yyyy-mm-dd/yyyy-mm-dd.
 
 ## Usage
 
 ```tsx
-import {Field, Input} from "@aurea-uds/react";
+import {Field, DatePicker} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Field label="From"><Input type="date" /></Field>
-<Field label="To"><Input type="date" /></Field>
+<Field label="Period">
+  <DatePicker range defaultValue={{from: new Date(2026, 6, 1), to: new Date(2026, 6, 24)}} name="period" />
+</Field>
 ```
 </page>
 

@@ -37,7 +37,8 @@ describe("C9 · o painel do `Tabs`", () => {
       const e = painel();
       expect([e.padding, e.paddingHorizontal, e.paddingLeft]).toEqual([undefined, undefined, undefined]);
       expect([e.backgroundColor, e.borderWidth]).toEqual([undefined, undefined]);
-      expect(e.marginTop).toBe(t.size.space3);
+      // O vão da referência, 8 (o lote 109, 26/11/2026; era o `space3`).
+      expect(e.marginTop).toBe(t.size.space2);
     });
 
   it("sem caixa, o conteúdo continua lá, e só o da aba aberta", () => {
