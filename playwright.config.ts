@@ -77,7 +77,7 @@ export default defineConfig({
   // Então: os sete specs de medição rodam nos três motores; os dois de captura, num só.
   // Se um dia a Aurea quiser pixel por motor, isso é decisão nova e cara — não é este item.
   projects: [
-    {name: "chromium", testIgnore: PROVAS ? NOUTRO_JOB : undefined, grepInvert: PROVAS ? FORA : undefined, use: {...devices["Desktop Chrome"]}},
+    {name: "chromium", testIgnore: PROVAS ? NOUTRO_JOB : undefined, grepInvert: PROVAS && FORA.length ? FORA : undefined, use: {...devices["Desktop Chrome"]}},
     {name: "firefox", testIgnore: PIXEL, use: {...devices["Desktop Firefox"]}},
     {name: "webkit", testIgnore: PIXEL, use: {...devices["Desktop Safari"]}},
   ],
