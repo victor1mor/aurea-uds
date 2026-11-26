@@ -204,6 +204,18 @@ jobs:
       - name: RTL — eixo inline espelha; glifos e mapa não
         run: pnpm exec playwright test tests/visual/rtl.spec.ts
 
+      # O inválido do NATIVO (lote 104, 25/11/2026): cada campo do nativo desenhado pelo `react-native-web` sem e com erro,
+      # nas 13 marcas e nos dois temas, na regra da ADR-0094. Mede cor calculada — gate DURO. Só o Chromium mede (o
+      # desenho é o mesmo nos três; ver o topo do arquivo); os outros dois se declaram pulados.
+      - name: Inválido do nativo (13 marcas × 2 temas, ADR-0094)
+        run: pnpm exec playwright test tests/visual/invalido-nativo.spec.ts
+
+      # WEB-48 (lote 104), a primeira metade: o FOCO de toda peça com as cores forçadas (o alto contraste do Windows). Mora
+      # aqui, e não no job `varredura`, para dividir o tempo: a varredura inteira das cores forçadas levou 22 min no Chromium daqui (25/11/2026). A
+      # outra metade (o estado e o "menos movimento") roda no `varredura`.
+      - name: Cores forçadas — o foco de toda peça (WEB-48)
+        run: pnpm exec playwright test tests/visual/cores-forcadas-e-movimento.spec.ts --project=chromium -g "o foco de toda peça"
+
       # A varredura do catálogo saiu daqui para o job `varredura`, abaixo: um job por navegador,
       # ao mesmo tempo (03/10/2026).
 
@@ -274,8 +286,11 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build
         run: pnpm build
-      - name: Varredura do catálogo (overflow, headings, console, axe × 2 temas)
-        run: pnpm exec playwright test tests/visual/catalog-sweep.spec.ts --project=${{ matrix.navegador }}
+      # O axe confere a WCAG 2.2 AA desde o lote 104 (UDS-A3). E, no mesmo job, a WEB-48: o estado de toda peça com as cores
+      # forçadas (o alto contraste do Windows; só no Chromium, os outros dois se declaram pulados) e "menos movimento" (nos
+      # três). O foco com as cores forçadas roda no job `visual`.
+      - name: Varredura do catálogo (overflow, headings, console, axe × 2 temas, cores forçadas, menos movimento)
+        run: pnpm exec playwright test tests/visual/catalog-sweep.spec.ts tests/visual/cores-forcadas-e-movimento.spec.ts --project=${{ matrix.navegador }} --grep-invert "o foco de toda peça"
       - name: Publicar relatório em caso de falha
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

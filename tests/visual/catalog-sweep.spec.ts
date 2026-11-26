@@ -258,6 +258,14 @@ test.describe("catálogo · varredura de todas as páginas", () => {
     expect([...new Set(falhas)], `erros de página:\n${[...new Set(falhas)].join("\n")}`).toEqual([]);
   });
 
+  // A ÚNICA acusação do alvo de toque (WCAG 2.2, `target-size`) que existia quando a regra entrou (lote 104, 25/11/2026),
+  // achada pela CI no Linux: no exemplo do bloco "Device control", o botão "Revert to default" fica 2 abaixo da trilha de
+  // calibração (o `Range`, de 16 de altura), e o círculo de 24 em volta do meio da trilha o alcança. No Windows a mesma
+  // página passa por pouco (o botão termina 13 à esquerda do meio da trilha). Consertar muda o desenho do exemplo do site,
+  // e isso vai ao Victor com a bancada; até lá, só essa acusação, nessa página, é aceita — qualquer outra reprova.
+  const ALVO_CONHECIDO: readonly (readonly [string, string])[] = [
+    ["block-device-control.html", 'target-size · <input class="range" min="-2" max="2" step="0.1"'],
+  ];
   for (const theme of ["dark", "light"] as const) {
     test(`axe sem violação em todas as páginas · tema ${theme}`, async ({page}) => {
       test.setTimeout(ORCAMENTO_AXE);
@@ -273,8 +281,14 @@ test.describe("catálogo · varredura de todas as páginas", () => {
         }
         await page.addScriptTag({path: AXE});
         const v = await page.evaluate(async () => {
+          // UDS-A3 (lote 104, 25/11/2026 — o Victor, 24/11/2026: "2.2 AA, e medir na 2.2"): as marcas da WCAG 2.2 entram.
+          // O que elas trazem, medido no `axe-core` 4.10.2 do repositório (e igual no 4.14.1, o mais novo no npm em
+          // 25/11/2026): UMA regra, o `target-size` (2.5.8, o alvo de toque de no mínimo 24 × 24), que o axe deixa
+          // desligada por padrão e a marca liga; o `wcag22a` não tem regra nenhuma. Os outros critérios novos da 2.2 AA (o
+          // foco que não fica escondido, o arrastar com alternativa, a ajuda no mesmo lugar, não pedir de novo o que já se
+          // digitou, o login sem teste de memória) o axe não mede: ver o documento de decisões do lote 104.
           const r = await (window as any).axe.run(document, {
-            runOnly: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"],
+            runOnly: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22a", "wcag22aa", "best-practice"],
           });
           // ~~ADR-0073 (18/10/2026): no tema claro, a letra de destaque era o amarelo da marca (1,76:1), e a
           // varredura aceitava SÓ essa acusação.~~ A ADR-0076 (20/10/2026) trocou a letra de destaque do claro
@@ -288,7 +302,7 @@ test.describe("catálogo · varredura de todas as páginas", () => {
           return r.violations.flatMap((x: any) => x.nodes.filter((n: any) => !daEmber(x, n))
             .map((n: any) => `${x.id} · ${n.html.slice(0, 60)}`));
         });
-        for (const one of v) falhas.push(`${f}: ${one}`);
+        for (const one of v) if (!ALVO_CONHECIDO.some(([p, ini]) => f === p && one.startsWith(ini))) falhas.push(`${f}: ${one}`);
       }
       expect(falhas, `violações axe (${theme}):\n${falhas.join("\n")}`).toEqual([]);
     });

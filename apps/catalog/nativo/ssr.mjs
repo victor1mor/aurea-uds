@@ -36,6 +36,18 @@ export function desenhar(nome, indice, tema) {
   return {html, css};
 }
 
+// O BANCO DO INVÁLIDO (lote 104, 25/11/2026): não entra no site. Mora aqui porque só este arquivo sabe trocar o
+// `react-native` pelo `react-native-web` no Node; quem o usa é o `tests/visual/invalido-nativo.spec.ts`, que desenha cada
+// caso com e sem erro, em cada marca e tema, por `desenharPeca`.
+export {CASOS_DO_INVALIDO, SEM_CASO_NO_NATIVO} from "./bancada-do-invalido.mjs";
+export {resolverTokens};
+export function desenharPeca(elemento, tema, marca) {
+  const chave = `aurea-nativo-peca-${n++}`;
+  AppRegistry.registerComponent(chave, () => () => h(Moldura, {tema, marca}, elemento));
+  const {element, getStyleElement} = AppRegistry.getApplication(chave, {});
+  return {html: renderToString(element), css: renderToStaticMarkup(getStyleElement())};
+}
+
 // A folha do `react-native-web` depois de TODOS os desenhos (ela acumula: as classes são as mesmas que a parte viva gera,
 // porque o nome de cada uma é o resumo da regra). Só as regras das peças: a folha dele traz também uma limpeza GLOBAL
 // (`body{margin:0}`, `html{…}`, `input…`) que mexeria no site inteiro — essa fica de fora.
