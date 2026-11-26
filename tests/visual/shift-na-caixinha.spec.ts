@@ -14,6 +14,11 @@ const MARCACAO = `
   <label class="checkbox checkbox-bare" data-caso="grade"><input type="checkbox" tabindex="-1"><span class="control-mark"></span><span class="sr-only">Select row</span></label>
   <label class="radio" data-caso="radio"><input type="radio" name="plano"><span class="control-mark"></span>Monthly</label>
   <label class="switch" data-caso="switch"><input type="checkbox" role="switch"><span class="switch-track"></span>Allow notifications</label>
+  <fieldset class="kpi-bars-wrap" data-caso="kpi" style="max-inline-size:320px"><div class="kpi-bars" style="--kpi-bars:3">
+    <label class="kpi-bar"><input type="radio" class="kpi-bar-input" name="kpi" aria-label="Mon 4"><span class="kpi-bar-fill" style="--kpi-bar-h:40%"></span><span class="kpi-bar-reading" aria-hidden="true">Mon 4</span></label>
+    <label class="kpi-bar"><input type="radio" class="kpi-bar-input" name="kpi" aria-label="Tue 8"><span class="kpi-bar-fill" style="--kpi-bar-h:80%"></span><span class="kpi-bar-reading" aria-hidden="true">Tue 8</span></label>
+    <label class="kpi-bar"><input type="radio" class="kpi-bar-input" name="kpi" aria-label="Wed 6"><span class="kpi-bar-fill" style="--kpi-bar-h:60%"></span><span class="kpi-bar-reading" aria-hidden="true">Wed 6</span></label>
+  </div></fieldset>
   <label class="checkbox" data-caso="link"><input type="checkbox"><span class="control-mark"></span><span><strong>I accept the <a href="#terms">terms</a></strong></span></label>
 </main>`;
 
@@ -39,6 +44,20 @@ test("Shift+clique na marca desenhada marca, como o clique comum", async ({page}
     await cliqueComShift(page, caso, alvo);
     await expect(campo, `${caso} marca com Shift`).toBeChecked();
   }
+});
+
+// A barra do KPI tem o conserto parcial (o Victor: "Conserto parcial"): sem a seleção de texto, o Chromium e o WebKit
+// marcam com Shift; o Firefox não ativa o rótulo com Shift, e o campo da barra não pode cobri-la sem tirar do lugar o
+// número de cima. Provado contra o defeito: sem o `user-select:none` da `.kpi-bar`, reprova no Chromium.
+test("Shift+clique na barra do KPI escolhe a barra", async ({page, browserName}) => {
+  test.skip(browserName === "firefox", "no Firefox a barra do KPI continua sem marcar com Shift (decisão de 26/11/2026)");
+  await abrir(page);
+  const barra = page.locator('[data-caso="kpi"] .kpi-bar').nth(1);
+  const caixa = await barra.boundingBox();
+  await page.keyboard.down("Shift");
+  await page.mouse.click(caixa!.x + caixa!.width / 2, caixa!.y + caixa!.height - 3);
+  await page.keyboard.up("Shift");
+  await expect(barra.locator("input")).toBeChecked();
 });
 
 test("o clique comum, no desenho e no nome, continua trocando", async ({page}) => {

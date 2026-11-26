@@ -3100,6 +3100,11 @@ button.tag-main { cursor:pointer; }
 .kpi-bars { display:grid; grid-template-columns:repeat(var(--kpi-bars,6),minmax(0,1fr)); gap:var(--space-2); align-items:end; block-size:calc(2 * var(--space-16)); }
 .kpi-bar { display:flex; flex-direction:column; justify-content:flex-end; align-items:center; block-size:100%; color:inherit; cursor:pointer; border-radius:var(--radius-xs); }
 .kpi-bar > .kpi-bar-input { position:absolute; opacity:0; pointer-events:none; }
+/* O clique com Shift na barra (26/11/2026, o Victor: "Conserto parcial"). O campo da barra não pode cobrir o rótulo,
+   como o da caixinha: o número de cima (`.kpi-bar-reading`) se posiciona pelo gráfico inteiro, e sairia do lugar. Sem
+   a seleção de texto na barra, o Chromium ativa o rótulo com Shift (medido: antes não marcava; agora marca). O Firefox
+   continua sem marcar com Shift — a escolha foi esta, sem mudar a aparência. */
+.kpi-bar { -webkit-user-select:none; user-select:none; }
 .kpi-bar:has(> input:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 .kpi-bar-fill { inline-size:100%; max-inline-size:var(--space-8); block-size:var(--kpi-bar-h,0%); border-radius:var(--radius-full) var(--radius-full) var(--radius-xs) var(--radius-xs);
   background:var(--fill-3); transition:background-color var(--duration-base); }

@@ -617,10 +617,14 @@ consertado (*"Pode"*, 26/11/2026). A aparência não muda: medida pixel a pixel 
 - **Link ou botão dentro do nome** (*"I accept the terms"*) fica por cima do campo e continua sendo clicado, sem marcar a
   caixa.
 - Um efeito: o texto do nome não se seleciona mais com o mouse.
+- **A barra do `KPI` (`bars`) escolhe com Shift+clique no Chromium e no WebKit** — o conserto parcial (o Victor:
+  *"Conserto parcial"*): a barra deixa de selecionar texto (`user-select:none`). O campo dela não pode cobrir a barra
+  como o da caixinha: o número de cima se posiciona pelo gráfico inteiro, e sairia do lugar. No Firefox a barra continua
+  sem marcar com Shift.
 - O nativo não muda: no celular não há Shift. Rodando no navegador, a caixa do nativo marca com Shift no Chromium e não
   no Firefox (medido em 26/11/2026; o clique comum funciona) — fica anotado, sem lote.
 - Quem cobra: `tests/visual/shift-na-caixinha.spec.ts` — o Shift+clique na caixinha, na cápsula, na caixa da grade, no
-  rádio e na chave; o clique comum no desenho e no nome; o link dentro do nome; o campo que ocupa o rótulo e o anel do
+  rádio e na chave; a barra do `KPI` (fora do Firefox); o clique comum no desenho e no nome; o link dentro do nome; o campo que ocupa o rótulo e o anel do
   foco pelo teclado. Nos três navegadores. Provado contra o defeito: com o CSS de antes, o do Shift reprova no Chromium e
   no Firefox. E `tests/visual/parte-viva.spec.ts` passa a clicar no ponto da marca pelo mouse (o campo fica por cima dela).
 
