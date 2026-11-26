@@ -1,4 +1,5 @@
 import {test, expect} from "@playwright/test";
+import {escalaDoCanto} from "./canto";
 import {createElement as h, type CSSProperties} from "react";
 import {renderToStaticMarkup} from "react-dom/server";
 import * as A from "../../packages/react/dist/index.js";
@@ -653,17 +654,21 @@ for (const theme of ["dark", "light"] as const) {
     await p.goto(url, {waitUntil: "networkidle"});
     await p.evaluate(() => document.fonts.ready);
 
+    const K = await escalaDoCanto(p);
     const m = await p.evaluate(() => {
       const cs = (s: string) => getComputedStyle(document.querySelector(s)!);
       const box = (s: string) => document.querySelector(s)!.getBoundingClientRect();
       // resolve token em px, como o geometry.spec: sobrevive a troca de unidade.
+      // O CANTO CONTÍNUO (lote 106, 0.82.0): onde o navegador desenha o `corner-shape`, o raio de superfície (não o da
+      // cápsula) sai 1,5 × o token. O raio de token lido aqui já vem nessa escala, e a peça medida compara com ele.
+      const K = CSS.supports("corner-shape: superellipse(2)") ? 1.5 : 1;
       const emPx = (token: string, prop = "height") => {
         const sonda = document.createElement("div");
         sonda.style.cssText = `position:absolute;visibility:hidden;${prop}:var(${token})`;
         document.body.append(sonda);
         const v = parseFloat(getComputedStyle(sonda)[prop as "height"]);
         sonda.remove();
-        return v;
+        return /^--radius-(?!control|full)/.test(token) ? v * K : v;
       };
       const cards = [...document.querySelectorAll(".grid > .card")].map(e => Math.round(e.getBoundingClientRect().top));
       const dt = box(".data-list dt"), dd = box(".data-list dd");
@@ -932,8 +937,10 @@ for (const theme of ["dark", "light"] as const) {
           let declaracaoSafeArea = "";
           const varrer = (regras: CSSRuleList) => {
             for (const r of [...regras]) {
+              // Todas as regras `.bottom-nav` somadas: desde o canto contínuo (0.82.0) a última é a cópia dentro do
+              // `@supports (corner-shape…)`, que só traz o canto.
               if (r instanceof CSSStyleRule && r.selectorText === ".bottom-nav") {
-                declaracaoSafeArea = r.cssText;
+                declaracaoSafeArea += r.cssText;
               } else if ("cssRules" in r) {
                 varrer((r as CSSGroupingRule).cssRules);
               }
@@ -1261,7 +1268,8 @@ for (const theme of ["dark", "light"] as const) {
                 raioDaLinha: +efetivo.toFixed(1),
                 padDoPainel: parseFloat(cs.paddingLeft),
                 raioDoPainel: parseFloat(cs.borderTopLeftRadius),
-                erro: +(efetivo + parseFloat(cs.paddingLeft) - parseFloat(cs.borderTopLeftRadius)).toFixed(1),
+                // A conta é no raio do token (o do canto contínuo é 1,5 × ele, nos dois lados).
+                erro: +(efetivo / K + parseFloat(cs.paddingLeft) - parseFloat(cs.borderTopLeftRadius) / K).toFixed(1),
               };
             })(),
             painelPadding: parseFloat(getComputedStyle(lista.parentElement!).paddingLeft),
@@ -2104,7 +2112,7 @@ for (const theme of ["dark", "light"] as const) {
     // 3. O overlay da paleta cobre a janela, e a paleta é superfície flutuante Aurea.
     expect(m.overlay.pos, "sem a regra o .command-overlay fica no fluxo (static)").toBe("fixed");
     expect(m.overlay.bg, "o overlay escurece o fundo").not.toBe("rgba(0, 0, 0, 0)");
-    expect(m.palette.raio, "a paleta usa --radius-card (22px)").toBe(m.palette.radiusCard);
+    expect(m.palette.raio, "a paleta usa --radius-card (22px; 1,5 × com o canto contínuo)").toBe(m.palette.radiusCard);
     expect(m.palette.bg, "a paleta tem superfície própria").not.toBe("rgba(0, 0, 0, 0)");
     expect(m.palette.w, "a paleta não ocupa a janela inteira").toBeLessThanOrEqual(680);
 
@@ -2675,13 +2683,13 @@ for (const theme of ["dark", "light"] as const) {
       .toBe("vertical");
     expect(e.marca.w, "a marca de controle é quadrada e visível").toBeGreaterThan(0);
     expect(e.marca.h, "a marca de controle tem altura").toBe(e.marca.w);
-    expect(e.marca.raio, "a do Checkbox é arredondada, não redonda").toBeLessThan(e.marca.w / 2);
+    expect(e.marca.raio / K, "a do Checkbox é arredondada, não redonda (no raio do token)").toBeLessThan(e.marca.w / 2);
     expect(e.marca.radioRedondo, "a do Radio é REDONDA (50% resolve acima da metade da largura)")
       .toBeGreaterThanOrEqual(e.marca.radioW / 2);
     expect(e.switchT.pilula, "o trilho do Switch é pílula").toBe(true);
     // 0.32.0, as medidas da referência
     expect([e.marca.w, e.marca.h], "a marca tem 16").toEqual([16, 16]);
-    expect(e.marca.raio, "o canto da caixa é o 6 dela (--radius-xs)").toBe(6);
+    expect(e.marca.raio, "o canto da caixa é o 6 dela (--radius-xs)").toBe(6 * K);
     expect(e.marca.vao, "12 entre a marca e o texto").toBe(12);
     expect(e.marca.peso, "o texto da caixa é peso médio").toBe("500");
     expect([e.switchT.w, e.switchT.h], "o trilho do Switch tem 40 × 20").toEqual([40, 20]);
@@ -2700,7 +2708,7 @@ for (const theme of ["dark", "light"] as const) {
     // 16 desde a 0.74.0: a `ListBox` começa a 16 da borda, como a `Sidebar` (`--space-4`; era 8).
     expect(e.listBox.lados, "16 dos lados").toBe(16);
     // 18 desde a 0.70.0, o canto do item do menu ("B (igual à referência)"): a cápsula virava 24,5 no item de duas linhas.
-    expect(e.listBox.raio, "o item tem o canto do item do menu (18)").toBe(18);
+    expect(e.listBox.raio, "o item tem o canto do item do menu (18)").toBe(18 * K);
     expect(e.listBox.visto, "o visto do escolhido tem 16").toBeCloseTo(16, 0);
     expect(e.select.alt, "o Select mede --control-h-md, como os outros controles")
       .toBe(e.select.controlMd);
@@ -2728,7 +2736,7 @@ for (const theme of ["dark", "light"] as const) {
     // (lidas no CSS publicado dela, 3.2.6).
     const p12 = e.passo12;
     expect([p12.area.w, p12.area.h], "ColorArea: quadrada, até 224").toEqual([224, 224]);
-    expect(p12.area.raio, "canto 16 (--radius-lg)").toBe(16);
+    expect(p12.area.raio, "canto 16 (--radius-lg)").toBe(16 * K);
     expect(p12.area.pintada, "a pintura chega pela variável").toMatch(/^linear-gradient/);
     // Sem linha (ADR-0072): o pino era um aro branco de 3; agora é desenho cheio — o branco por baixo e a cor numa
     // bolinha por cima, com sombra. A medida (16) não muda.
@@ -2790,7 +2798,7 @@ for (const theme of ["dark", "light"] as const) {
     expect(p6.caixaExemplo.abasLargura, "o segmentado ocupa a largura da caixa (menos o recheio de 8)").toBe(p6.caixaExemplo.caixaLargura - 2 - 16);
     expect(p6.caixaExemplo.previaFundo, "a prévia no fundo afundado").toBe(p6.caixaExemplo.afundado);
     expect(p6.caixaExemplo.codigoEscondido, "o código começa escondido").toBe("none");
-    expect(p6.caixaExemplo.raio, "o cartão da Aurea").toBe(22);
+    expect(p6.caixaExemplo.raio, "o cartão da Aurea").toBe(22 * K);
     expect(p6.textoTom.cor, "Text tone=\"link\" é a cor de link").toBe(p6.textoTom.link);
     expect([p6.avatar.letra, p6.avatar.peso], "letra 12, 14, 16 em peso médio").toEqual([[12, 14, 16], "500"]);
     expect(e.btnGroup.naLinha, "o ButtonGroup alinha os botões numa fila").toBe(true);
@@ -2829,7 +2837,7 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.tabela.molduraRecheio, "a moldura: 0 em cima, 4 dos lados e embaixo").toEqual([0, 4, 4]);
     expect(e.tabela.celPad, "a célula: 12 em cima e embaixo, 16 dos lados").toEqual([12, 16]);
     expect(e.tabela.celLetra, "letra de 14/20").toEqual([14, 20]);
-    expect(e.tabela.celCanto, "o canto da casa: o da moldura menos a folga").toBe(e.tabela.raio - 4);
+    expect(e.tabela.celCanto, "o canto da casa: o da moldura menos a folga").toBe((e.tabela.raio / K - 4) * K);
     expect([e.tabela.cabecAlt, e.tabela.cabecFs, e.tabela.cabecPeso, e.tabela.cabecCaixa],
       "o cabeçalho: 36, letra 12 peso médio, sem caixa-alta").toEqual([36, 12, "500", "none"]);
     expect(e.tabela.fioColuna, "o fio de 16 entre as colunas do cabeçalho").toBe(16);
@@ -3595,7 +3603,7 @@ test("pele: as 11 da auditoria externa fazem o que a pele promete", async ({page
   // `inline-flex` no CSS, `flex` medido: filho de um contêiner flex vira bloco (a regra do CSS, não defeito da pele)
   expect([m.iga.display, m.iga.cor, m.iga.gap]).toEqual(["flex", m.iga.corToken, m.iga.gapToken]);
   expect([m.lb.display, m.lb.fs, m.lb.peso]).toEqual(["flex", m.lb.fsToken, m.lb.pesoToken]);
-  expect(m.me.raio, "MediaEmbed: o canto do cartão").toBe(m.me.raioToken);
+  expect(m.me.raio, "MediaEmbed: o canto do cartão").toBe(`${parseFloat(m.me.raioToken) * await escalaDoCanto(p)}px`);
   expect(m.me.h, "MediaEmbed: 16/9 sem o padding-top de 2015").toBeCloseTo(m.me.w * 9 / 16, 0);
   expect(m.me.iframeCobre, "o iframe cobre a moldura").toBe(true);
   expect([m.mb.display, m.mb.gap, m.mb.alturaGatilho, m.mb.recheio]).toEqual(["flex", m.mb.gapToken, m.mb.alturaToken, m.mb.recheioToken]);

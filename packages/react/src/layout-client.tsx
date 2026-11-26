@@ -4,13 +4,11 @@
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, {useEffect, useRef, useState, useSyncExternalStore, type HTMLAttributes, type RefAttributes, type ReactNode} from "react";
 import {Separator as BaseSeparator} from "@base-ui/react/separator";
-import {useDirection} from "@base-ui/react/direction-provider";
 import {cx, useAureaStrings} from "./internal.js";
 import {type Orientation, type Responsive} from "./pure.js";
 import {useResponsiveValue} from "./responsivo-runtime.js";
 import {ESCALA} from "./escala.js";
 import {IconButton, type IconButtonProps} from "./actions.js";
-import {Tooltip} from "./overlays.js";
 import {Icon} from "./system.js";
 import {Sidebar, Header, type HeaderVariant, type HeaderTab, type SidebarVariant, type SidebarScrollbar, type SidebarEntry, type SidebarCollapsible, type SidebarIndicator} from "./navigation.js";
 
@@ -238,9 +236,14 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
   /** O texto grande no app inteiro (o MNT-30, ADR-0090): cada letra 2 acima e o controle médio a 44. `data-text="lg"` no
    *  `AppShell` e na raiz da página, pela mesma razão do `highContrast`. */
   textSize?:"md"|"lg"}){const s=useAureaStrings();useModoNaRaiz("data-contrast",highContrast?"high":undefined);useModoNaRaiz("data-text",textSize==="lg"?"lg":undefined);const docs=layout==="docs",lateral=layout==="sidebar";useGavetaFechaNoDesktop(docs);
+  // SEM ITENS, SEM LATERAL (SYL-01, decidido pelo Victor na bancada de 24/11/2026; 0 de 8 referências desenham lateral
+  // vazia). Sem `navItems`, sem `navigation` e sem `sidebarFooter`, a lateral era uma caixa vazia ao lado do conteúdo. Agora
+  // ela não se desenha, nem o botão da gaveta nem o de recolher (não há o que abrir), e o conteúdo ocupa a largura. No
+  // `layout="sidebar"` a lateral leva a marca, e por isso continua.
+  const semLateral=!lateral&&navigation==null&&!navItems?.length&&sidebarFooter==null;
   const controlado=sidebarCollapsed!==undefined;
   // O jeito de recolher (4-A): `true` é a trilha de sempre.
-  const forma:SidebarCollapsible|undefined=sidebarCollapsible===true?"icon":sidebarCollapsible||undefined;
+  const forma:SidebarCollapsible|undefined=semLateral?undefined:sidebarCollapsible===true?"icon":sidebarCollapsible||undefined;
   const recolhe=!!forma;
   // `null` = ninguém escolheu, e vale a largura.
   const [escolha,setEscolha]=useState<boolean|null>(defaultSidebarCollapsed??null);
@@ -260,33 +263,29 @@ export function AppShell({brand,navigation,navItems,currentNavId,navLabel,topbar
     mq.addEventListener?.("change",aoCruzar);
     return ()=>mq.removeEventListener?.("change",aoCruzar);
   },[recolhe,controlado]);
-  // QUEM MUDA O ESTADO: o botão da junção, o `Sidebar.Toggle` em qualquer lugar e o Ctrl+B passam todos por aqui (4-B).
+  // QUEM MUDA O ESTADO: o botão da barra de cima, o `Sidebar.Toggle` em qualquer lugar e o Ctrl+B passam todos por aqui (4-B).
   // Abaixo de 1024 a lateral é a gaveta: recolher ali é abrir ou fechar a gaveta, como o "mobile" da referência.
   const definir=(nova:boolean)=>{
     if(estreita){try{document.getElementById(SHELL_NAV_ID)?.togglePopover()}catch{/* motor sem popover */}return}
     if(!controlado)setEscolha(nova);onSidebarCollapsedChange?.(nova)};
-  const alternar=()=>definir(!recolhida);
-  const rotulo=efetiva?s.sidebarExpand:s.sidebarCollapse;
-  // A seta aponta para onde a lateral vai: recolher é para o começo da linha, abrir é para o fim. Na
-  // escrita da direita para a esquerda o começo é a direita — pela direção do provedor, e não por
-  // `:dir(rtl)` na folha (ver a nota do `.sidebar-toggle` no core).
-  // A condição vai escrita no `icon=` do botão, e não numa variável: é ali que o check 46 lê os
-  // ícones que o shell desenha.
-  const paraOComeco=!efetiva, direita=useDirection()==="rtl";
+  // O BOTÃO DE RECOLHER NA BARRA DE CIMA (a troca da ADR-0056, decidida pelo Victor na bancada de 24/11/2026: "Na barra de
+  // cima"; 7 de 8 referências o põem ali, nenhuma na junção). A bolinha de seta que ficava na junção da lateral com o
+  // conteúdo saiu: o botão é o `Sidebar.Toggle` (o desenho de lateral, sem fundo), antes da marca, como já era no
+  // `layout="sidebar"`. Abaixo de 1024 ele some, e quem abre a gaveta é o botão da gaveta.
   // O BOTÃO DA GAVETA. No `layout="docs"` ele vai para o FIM da barra, depois das ações, como o da documentação da
   // referência no celular (o "Open Sidebar" à direita, 19/10/2026): ali ele vem por último também na ordem do Tab, e a
   // gaveta abre pelo mesmo lado (a folha). No shell de sempre, continua antes da marca.
   // No arranjo, o topo é o pequeno (`size="sm"`), e o botão também: com o tamanho de sempre ele ficava 4 maior que os
   // vizinhos e fora da linha deles (medido a 375, sem toque; com toque, todos sobem para 44).
   const botaoDaGaveta=<IconButton className="nav-toggle" icon="list" label={s.navigationToggle} popoverTarget={SHELL_NAV_ID} {...(docs?{size:"sm" as const}:{})}/>;
-  return <div data-contrast={highContrast?"high":undefined} data-text={textSize==="lg"?"lg":undefined} className={cx("app-shell",layout==="docs"&&"app-shell-docs",lateral&&"app-shell-lateral",!lateral&&topbarVariant==="flush"&&"app-shell-flush",!lateral&&topbarVariant==="pill"&&"app-shell-pill",recolhe&&"app-shell-collapsible",aside!=null&&"app-shell-with-aside",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
+  return <div data-contrast={highContrast?"high":undefined} data-text={textSize==="lg"?"lg":undefined} className={cx("app-shell",layout==="docs"&&"app-shell-docs",lateral&&"app-shell-lateral",!lateral&&topbarVariant==="flush"&&"app-shell-flush",!lateral&&topbarVariant==="pill"&&"app-shell-pill",recolhe&&"app-shell-collapsible",semLateral&&"app-shell-no-sidebar",aside!=null&&"app-shell-with-aside",className)} {...props}>{/* O LINK DE PULAR, reportado no merge de 28/08/2026. Ele existia na outra linhagem e sumiu
     quando este arquivo entrou da `main`; quem denunciou foi o gate da fronteira do core, com
     `.skip-link` no CSS sem ninguém a emitir.
     É requisito de acessibilidade, não enfeite (WCAG 2.4.1, "pular blocos"): sem ele, quem navega
     por teclado atravessa a barra e a lateral inteiras antes de chegar ao conteúdo, em TODA página.
     O `<main>` ganha `id` e `tabIndex={-1}` porque um alvo de âncora que não é focável recebe a
     rolagem e não o FOCO — o leitor de tela continuaria lendo de onde estava. */}
-<ProvedorDaLateral ligado={recolhe} collapsed={efetiva} onCollapsedChange={definir} collapsible={forma} shortcut={sidebarShortcut}><a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a>{!lateral&&<Header variant={topbarVariant} divider={topbarDivider} tabs={topbarTabs} currentTab={topbarCurrentTab} tabsLabel={topbarTabsLabel} tabsEnd={topbarTabsEnd} {...(docs?{maxWidth:"docs" as const,...(topbarVariant==="pill"?{}:{size:"sm" as const})}:topbarVariant==="pill"?{maxWidth:"full" as const}:{})} blurred={topbarBlurred} brand={docs?brand:<>{botaoDaGaveta}{brand}</>} actions={topbarActions!=null?<>{topbarActions}{docs&&botaoDaGaveta}</>:undefined}>{topbar}{docs&&topbarActions==null&&botaoDaGaveta}</Header>}{recolhe&&!lateral&&sidebarToggle!=="none"&&<div className="sidebar-toggle-slot"><Tooltip content={rotulo} side="right"><IconButton className="sidebar-toggle" size="xs" icon={paraOComeco===direita?"caret-right":"caret-left"} label={rotulo} aria-expanded={!efetiva} aria-controls={SHELL_NAV_ID} onClick={alternar}/></Tooltip></div>}<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} scrollbar={sidebarScrollbar} collapsed={efetiva} collapsible={forma} indicator={sidebarIndicator} panel={sidebarPanel} contrast={sidebarContrast} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta} header={lateral?brand:undefined} footer={sidebarFooter}>{navigation}</Sidebar>{docs&&aside!=null&&<div className="docs-toc-bar"><button type="button" className="docs-toc-toggle" popoverTarget={SHELL_TOC_ID}><Icon name="list-bullets"/><span className="docs-toc-current" data-toc-current="">{asideLabel??s.tocLabel}</span><Icon name="caret-down"/></button></div>}{lateral
+<ProvedorDaLateral ligado={recolhe} collapsed={efetiva} onCollapsedChange={definir} collapsible={forma} shortcut={sidebarShortcut}><a className="skip-link" href={`#${SHELL_MAIN_ID}`}>{s.skipToContent}</a>{!lateral&&<Header variant={topbarVariant} divider={topbarDivider} tabs={topbarTabs} currentTab={topbarCurrentTab} tabsLabel={topbarTabsLabel} tabsEnd={topbarTabsEnd} {...(docs?{maxWidth:"docs" as const,...(topbarVariant==="pill"?{}:{size:"sm" as const})}:topbarVariant==="pill"?{maxWidth:"full" as const}:{})} blurred={topbarBlurred} brand={<>{!docs&&!semLateral&&botaoDaGaveta}{recolhe&&sidebarToggle!=="none"&&<AppShellSidebarToggle {...(docs?{size:"sm" as const}:{})}/>}{brand}</>} actions={topbarActions!=null?<>{topbarActions}{docs&&!semLateral&&botaoDaGaveta}</>:undefined}>{topbar}{docs&&!semLateral&&topbarActions==null&&botaoDaGaveta}</Header>}{!semLateral&&<Sidebar id={SHELL_NAV_ID} popover="auto" variant={sidebarVariant} scrollbar={sidebarScrollbar} collapsed={efetiva} collapsible={forma} indicator={sidebarIndicator} panel={sidebarPanel} contrast={sidebarContrast} items={navItems} current={currentNavId} label={navLabel} onToggle={focoDaGaveta} header={lateral?brand:undefined} footer={sidebarFooter}>{navigation}</Sidebar>}{docs&&aside!=null&&<div className="docs-toc-bar"><button type="button" className="docs-toc-toggle" popoverTarget={SHELL_TOC_ID}><Icon name="list-bullets"/><span className="docs-toc-current" data-toc-current="">{asideLabel??s.tocLabel}</span><Icon name="caret-down"/></button></div>}{lateral
 ?<div className="app-shell-column">{topbar!=null||topbarActions!=null
   ?<Header variant="flush" size="sm" divider={topbarDivider} brand={<>{botaoDaGaveta}{sidebarToggle!=="none"&&<AppShellSidebarToggle/>}</>} actions={topbarActions}>{topbar}</Header>
   :<div className="app-shell-narrow-bar">{botaoDaGaveta}{brand}</div>}{<main id={SHELL_MAIN_ID} tabIndex={-1} className={cx("content",contentVariant==="plain"&&"content-plain")}>{children}</main>}</div>

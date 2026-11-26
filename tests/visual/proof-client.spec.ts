@@ -1,4 +1,5 @@
 import {test, expect} from "@playwright/test";
+import {cantoContinuo} from "./canto";
 
 // Item A4 do PLANO-1.0 — a metade CLIENTE da prova da fronteira, e a que o A3 não cobre.
 //
@@ -28,7 +29,7 @@ test("prova A4: o SPA monta, e monta com a pele da Aurea", async ({page}) => {
   // Pele: a classe sozinha não prova nada (o check 18 já ensinou isso), então mede-se o EFEITO.
   await expect(page.locator("#do-cliente")).toHaveClass(/\bcard\b/);
   const raio = await page.locator("#do-cliente").evaluate(el => getComputedStyle(el).borderRadius);
-  expect(raio).toBe("22px"); // --radius-card, a identidade do CLAUDE.md
+  expect(raio).toBe(await cantoContinuo(page, 22)); // --radius-card, a identidade do CLAUDE.md (com o canto contínuo, 1,5 × no Chromium)
   expect(erros).toEqual([]);
 });
 

@@ -29,9 +29,11 @@ describe("Sidebar variant=plain e scrollbar", () => {
   });
 });
 
+// Desde o lote 106 (o SYL-01), o shell sem menu não desenha a lateral: os testes da lateral passam um menu.
+const MENU = <nav aria-label="Menu">menu</nav>;
 describe("AppShell asideVariant e sidebarScrollbar", () => {
   test("asideVariant=plain tira a caixa SÓ da coluna da direita", () => {
-    const {getByRole, container} = wrap(<AppShell brand="Aurea" aside={<p>sumário</p>} asideVariant="plain">conteúdo</AppShell>);
+    const {getByRole, container} = wrap(<AppShell brand="Aurea" navigation={MENU} aside={<p>sumário</p>} asideVariant="plain">conteúdo</AppShell>);
     expect(getByRole("complementary", {name: "On this page"})).toHaveClass("app-shell-aside", "sidebar-plain");
     expect(container.querySelector("#aurea-shell-nav")).not.toHaveClass("sidebar-plain");
   });
@@ -42,9 +44,9 @@ describe("AppShell asideVariant e sidebarScrollbar", () => {
     expect(lado).not.toHaveClass("sidebar-plain");
   });
   test("sidebarScrollbar=visible vai para a lateral da esquerda; sem ele, a barra padrão (clara, ao passar)", () => {
-    const {container, rerender} = wrap(<AppShell brand="Aurea" sidebarScrollbar="visible">conteúdo</AppShell>);
+    const {container, rerender} = wrap(<AppShell brand="Aurea" navigation={MENU} sidebarScrollbar="visible">conteúdo</AppShell>);
     expect(container.querySelector("#aurea-shell-nav")).toHaveClass("sidebar-scrollbar-visible");
-    rerender(<AureaProvider><AppShell brand="Aurea">conteúdo</AppShell></AureaProvider>);
+    rerender(<AureaProvider><AppShell brand="Aurea" navigation={MENU}>conteúdo</AppShell></AureaProvider>);
     expect(container.querySelector("#aurea-shell-nav")).not.toHaveClass("sidebar-scrollbar-visible");
   });
 });

@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.82.0
+
+November 26, 2026
+
+Continuous corners on the web, the collapse button in the top bar, no empty sidebar, bash commands highlighted, and how to keep a currency with its number.
+
+[Read full release notes →](https://aureauds.dev/release-v0-82-0.md)
+
 ## v0.81.1
 
 November 25, 2026

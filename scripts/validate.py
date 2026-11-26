@@ -587,13 +587,14 @@ if missing:
 # valor base. JS ainda é cópia.
 # O D16 (0.72.0): o core passa pelo `scripts/tema-implicito.mjs` (as cópias das regras de tema para a página sem
 # `data-theme`). O validador chama o MESMO conversor pelo node, em vez de reescrevê-lo aqui — duas cópias da conversão
-# seriam duas verdades.
+# seriam duas verdades. Desde o lote 106 (0.82.0), também o `scripts/canto-continuo.mjs` (o canto contínuo da web).
 import subprocess
 _core_convertido = subprocess.run(
     ["node", "--input-type=module", "-e",
      "import {readFileSync} from 'node:fs';"
      "import {temaImplicito} from './scripts/tema-implicito.mjs';"
-     "process.stdout.write(temaImplicito(readFileSync('packages/core/src/aurea.css','utf8')));"],
+     "import {cantoContinuo} from './scripts/canto-continuo.mjs';"
+     "process.stdout.write(cantoContinuo(temaImplicito(readFileSync('packages/core/src/aurea.css','utf8'))));"],
     cwd=root, capture_output=True, check=True).stdout.decode("utf-8")
 expected_css = (
     "@layer aurea{\n"
@@ -3994,7 +3995,7 @@ PROVA_DO_ESTADO49 = {
     ("AgentCard", "with-state"): (r"state&&<AgentStatus", "conteúdo opcional: o selo só com `state`"),
     ("AgentCard", "with-capabilities"): (r"capabilities\?\.length&&<ul className=\"agent-caps\"", "conteúdo opcional: a lista só com `capabilities`"),
     ("AgentInspector", "with-sections"): (r"sections\?\.map\(", "conteúdo opcional: as seções de `sections`"),
-    ("AppShell", "nav-expanded"): (r"aria-expanded=\{!efetiva\}", "aberta é a ausência da recolhida: `aria-expanded` no botão, e `.sidebar-collapsed` só quando recolhida"),
+    ("AppShell", "nav-expanded"): (r"collapsed=\{efetiva\}", "aberta é a ausência da recolhida: o shell passa `collapsed={efetiva}` à lateral e ao provedor dela, o `Sidebar.Toggle` da barra de cima diz `aria-expanded` (desde o lote 106), e `.sidebar-collapsed` só vem quando recolhida"),
     ("AutomationCard", "disabled"): (r"\.automation:not\(\[data-enabled\]\)", "desligada é sem `data-enabled` (o atributo só sai ligada), e a regra a faz recuar"),
     ("AutomationCard", "succeeded"): (r"lastResult\?:\"success\"\|\"failure\"", "o resultado da última execução, `lastResult=\"success\"`, dito pelo `Status`"),
     ("AutomationCard", "failed"): (r"lastResult\?:\"success\"\|\"failure\"", "o resultado da última execução, `lastResult=\"failure\"`, dito pelo `Status`"),

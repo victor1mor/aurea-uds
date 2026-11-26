@@ -2827,7 +2827,7 @@ highContrast draws an outline on fields, cards and buttons, darkens the supporti
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `brand` | `ReactNode` | — | Logotype and product name. Lives in the topbar, beside the navigation toggle. With layout="sidebar" it lives at the top of the sidebar instead (a Sidebar.Brand fits there). |
-| `navigation` | `ReactNode` | — | The sidebar content, usually a <nav>. The shell never invents one, so the landmark and its label are yours. |
+| `navigation` | `ReactNode` | — | The sidebar content, usually a <nav>. The shell never invents one, so the landmark and its label are yours. With no navigation, no navItems and no sidebarFooter, the shell draws no sidebar at all (no empty panel, no drawer or collapse button) and the content takes the full width — except in layout="sidebar", where the sidebar holds the brand. |
 | `navItems` | `SidebarEntry[]` | — | The sidebar list, handed to the Sidebar the shell already creates — same shape as Sidebar items. Use this instead of passing a second <Sidebar> as navigation: that nests two panels, two borders and two 22px radii, and the inner one clips its text. When navigation is also given, the list comes first. |
 | `currentNavId` | `string` | — | The id of the current item in navItems. Marked with aria-current="page" and the selected skin. |
 | `navLabel` | `string` | — | Accessible name of the <nav> built from navItems. Falls back to the sidebarLabel string. |
@@ -2839,8 +2839,8 @@ highContrast draws an outline on fields, cards and buttons, darkens the supporti
 | `sidebarFooter` | `ReactNode` | — | The fixed bottom of the sidebar (Sidebar footer): the person and the sign-out (Sidebar.User), a short list (Sidebar.Nav). Only the list in the middle scrolls. Works in every layout. |
 | `AppShell.SidebarToggle` | `component` | — | The collapse button of layout="sidebar": the bare icon button with the sidebar glyph, placed 12 from the page title. With a topbar the shell puts it first in the bar; without one, place it beside your own title. It renders nothing without sidebarCollapsible, and hides below 1024, where the drawer button opens the sidebar. |
 | `sidebarCollapsed` | `boolean` | false | Narrows the sidebar panel to --sidebar-rail. A floating panel keeps its two outer margins in the grid track; flush uses the token as the raw track width. Controlled by you, like the palette's open: the shell does not decide when to collapse. Without sidebarCollapsible it draws no button; with it, the button calls onSidebarCollapsedChange and you decide. Below 1024px the drawer is never a rail, controlled or not: collapsed inside the drawer it was a column of unnamed icons. |
-| `sidebarCollapsible` | `boolean \| "icon" \| "capsule" \| "offcanvas"` | false | Draws the collapse button at the top of the junction between the sidebar and the content — centred on the gap, level with the first item, sticky with the sidebar — and turns the sidebar into the rail on its own between 1024 and 1279px. Off by default: without it the shell is exactly the one before, and an app that already drives sidebarCollapsed with its own button does not get a second one. Behaviour read from the sidebar that one of the references uses (the main reference library has no app frame). It also names HOW the sidebar collapses: true or "icon" (the rail), "capsule" (the rail with the capsule radius) or "offcanvas" (the sidebar leaves the screen and the track goes to zero). The shell then puts the sidebar in a Sidebar.Provider, so Sidebar.Toggle and useSidebar work anywhere inside it. |
-| `sidebarToggle` | `"edge" \| "none"` | edge | Where the shell puts its collapse button. edge: at the seam between the sidebar and the content (in layout="sidebar", at the start of the content bar). none: the shell puts none, and the app places Sidebar.Toggle where it wants — inside the sidebar next to the brand, or as a row at the bottom. |
+| `sidebarCollapsible` | `boolean \| "icon" \| "capsule" \| "offcanvas"` | false | Draws the collapse button in the top bar, before the brand (the same Sidebar.Toggle as in layout="sidebar"; hidden below 1024px, where the drawer button opens the sidebar), and turns the sidebar into the rail on its own between 1024 and 1279px. Off by default: without it the shell is exactly the one before, and an app that already drives sidebarCollapsed with its own button does not get a second one. Behaviour read from the sidebar that one of the references uses (the main reference library has no app frame). It also names HOW the sidebar collapses: true or "icon" (the rail), "capsule" (the rail with the capsule radius) or "offcanvas" (the sidebar leaves the screen and the track goes to zero). The shell then puts the sidebar in a Sidebar.Provider, so Sidebar.Toggle and useSidebar work anywhere inside it. |
+| `sidebarToggle` | `"edge" \| "none"` | edge | Where the shell puts its collapse button. edge: in the top bar, before the brand (in layout="sidebar", at the start of the content bar). none: the shell puts none, and the app places Sidebar.Toggle where it wants — inside the sidebar next to the brand, or as a row at the bottom. |
 | `sidebarShortcut` | `boolean` | true | Ctrl+B (Cmd+B on a Mac) collapses and expands the sidebar; below 1024 it opens and closes the drawer. On with sidebarCollapsible, as in the reference. It does not act while the person is typing in a field. |
 | `sidebarIndicator` | `"brand" \| "segment" \| "segment-dot" \| "segment-line" \| "subtle"` | brand | How the current item of the sidebar is drawn — the indicator of the Sidebar: brand (the default), segment, segment-dot, segment-line or subtle. |
 | `sidebarPanel` | `"docked" \| "overlay"` | — | Sections with a panel — the panel of the Sidebar: the first level of navItems becomes sections. docked puts the list beside the rail (collapsing hides the list); overlay opens it over the page. |
@@ -7672,7 +7672,7 @@ variant="brand" is the yellow card; bars puts a bar per period under the number.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `label` | `ReactNode` | — | What is being measured. Sits above the number, in muted text. |
-| `value` | `ReactNode` | — | The number itself, already formatted — the component does not format. |
+| `value` | `ReactNode` | — | The number itself, already formatted — the component does not format. To keep a currency symbol on the same line as the number in a narrow column, join them with a no-break space (U+00A0): `value={"R$\u00a012,400"}`. `Intl.NumberFormat` with `style: "currency"` already puts one there. |
 | `trend` | `ReactNode` | — | The change, as a node and not a number: the sign, the unit and the wording belong to the domain, not to a card. |
 | `direction` | `up \| down \| flat` | — | Where the number went. Draws the arrow (trend-up, trend-down, minus), colours the trend and puts a word in front of it for screen readers — so the direction never depends on colour alone. |
 | `tone` | `success \| danger \| neutral` | from direction | The colour of the trend. By default up is success, down is danger and flat is neutral; set it when going up is bad (cost, errors). Without direction it paints nothing: colour never travels alone. |
@@ -15184,6 +15184,22 @@ import {KPI} from "@aurea-uds/react";
 ```
 </page>
 
+<page url="https://aureauds.dev/pattern-kpi-a-currency-that-stays-with-its-number.html">
+# A currency that stays with its number
+
+In a narrow column, an ordinary space lets the currency symbol sit on one line and the number on the next. Join them with a no-break space (U+00A0) and they wrap together. `Intl.NumberFormat` with `style: "currency"` already puts one there.
+
+## Usage
+
+```tsx
+import {KPI} from "@aurea-uds/react";
+```
+
+```tsx
+<KPI label="Revenue" value={"R$\u00a012,400"} trend="+8% vs last month" />
+```
+</page>
+
 <page url="https://aureauds.dev/pattern-kpi-the-direction-not-just-the-sign.html">
 # The direction, not just the sign
 
@@ -19055,6 +19071,37 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-82-0.html">
+# v0.82.0
+
+Continuous corners on the web, the collapse button in the top bar, no empty sidebar, bash commands highlighted, and how to keep a currency with its number.
+
+## Changed
+
+- **Continuous corners on the web.** Where the browser draws `corner-shape` (Chromium today), cards, dialogs, sheets, menus and every other rounded surface get the continuous corner the native package already has on iOS. The curve is `superellipse(1.65)` with the radius at 1.5 × the token (a card goes from 22 to 33), so it follows the same line as the iOS continuous corner of radius 22. Capsules and circles stay round. Where the browser does not draw `corner-shape`, nothing changes. The radius tokens do not change, so your own boxes that use `--radius-card` look as before.
+- **`AppShell`: the collapse button is in the top bar, before the brand.** With `sidebarCollapsible`, the round arrow button at the seam between the sidebar and the content is gone; the shell draws `Sidebar.Toggle` at the start of the top bar instead, as `layout="sidebar"` already did. It is hidden below 1024px, where the drawer button opens the sidebar. The `.sidebar-toggle-slot` and `.sidebar-toggle` classes are removed from the stylesheet.
+- **`AppShell`: no menu, no sidebar.** Without `navItems` (or with an empty list), `navigation` and `sidebarFooter`, the shell no longer draws an empty sidebar, nor the drawer or collapse button, and the content takes the full width. In `layout="sidebar"` the sidebar holds the brand, so it stays.
+- **`CodeBlock`: bash commands are highlighted.** `highlightCode` gives the first word of every bash command (at the start of a line and after `|`, `&&`, `||`, `;`, `&` and `(`) the `tok-function` class, bold in the text colour. A variable assignment before the command, the `$` prompt and a continued line are not commands.
+
+## Documented
+
+- **`KPI`: keep a currency with its number.** The component does not change. The `value` description and a new example show how to join the currency symbol and the number with a no-break space (U+00A0) so they wrap together in a narrow column. `Intl.NumberFormat` with `style: "currency"` already puts one there.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.82.0 @aurea-uds/core@0.82.0 @aurea-uds/fonts@0.82.0 @aurea-uds/icons@0.82.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.82.0
 ```
 </page>
 

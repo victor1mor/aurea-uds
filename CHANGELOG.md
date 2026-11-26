@@ -441,6 +441,52 @@ como deveria funcionar"*.
 
 ---
 
+## [0.82.0] — 2026-11-26
+
+**O lote 106: cinco decisões das bancadas de 24/11/2026, construídas** — cada uma decidida pelo Victor na bancada viva, com
+a conta das referências, e o lote aprovado na bancada com o código de antes ao lado do novo (*"Aprovo os cinco"*,
+26/11/2026), na Gold e na Ember.
+
+### Mudado
+
+- **O canto contínuo na web** (o HER-01 na web, *"Entra mesmo assim"*, 24/11/2026). Onde o navegador desenha o
+  `corner-shape` (o Chromium), o cartão, a janela, a folha de baixo, o menu e toda peça de canto arredondado ganham o canto
+  do iPhone — o que o nativo tem desde a `0.20.0`. A forma é a "do tamanho do iPhone", escolhida na bancada: a curva
+  `superellipse(1.65)` com o raio 1,5 × o token (o cartão vai de 22 a 33), que passa nos mesmos pontos do canto contínuo
+  do iPhone de raio 22. Com o mesmo raio, o canto contínuo parecia menor. **A cápsula e o círculo ficam redondos**
+  (`corner-shape: round`): com o canto contínuo a cápsula fica quadrada nas pontas, e no iPhone ela é redonda. Onde o
+  navegador não desenha (hoje, o Firefox e o Safari), nada muda. É feito na montagem (`scripts/canto-continuo.mjs`): cada
+  regra de canto do `aurea.css` ganha, logo depois dela, a cópia dentro de `@supports (corner-shape: superellipse(2))`. Os
+  tokens não mudam — o CSS do app que usa `--radius-card` nas próprias caixas fica como está.
+- **`AppShell`: o botão de recolher fica na barra de cima, antes da marca** (a troca da
+  [ADR-0056](decisions/0056-a-lateral-recolhe-pelo-botao-na-juncao.md), *"Na barra de cima"* — 7 de 8 referências o põem
+  ali, nenhuma na junção). Com `sidebarCollapsible`, a bolinha de seta da junção da lateral com o conteúdo sai; no lugar
+  dela, o `Sidebar.Toggle` (o desenho de lateral, sem fundo) que o `layout="sidebar"` já usava. Abaixo de 1024 ele some, e
+  quem abre a gaveta é o botão da gaveta. Saem do `aurea.css` as classes `.sidebar-toggle-slot` e `.sidebar-toggle`.
+- **`AppShell`: sem itens, sem lateral** (o SYL-01, *"Sem itens, sem lateral"* — 0 de 8 referências desenham lateral
+  vazia). Sem `navItems` (ou com a lista vazia), sem `navigation` e sem `sidebarFooter`, o shell não desenha a lateral, nem
+  o botão da gaveta nem o de recolher, e o conteúdo ocupa a largura (`.app-shell-no-sidebar`). No `layout="sidebar"` a
+  lateral leva a marca, e continua.
+- **`CodeBlock`: o nome do comando no bash em destaque** (o item 98, *"Em destaque"* — 3 de 4 referências destacam). O
+  `highlightCode` dá à primeira palavra de cada comando do bash (no começo da linha e depois de `|`, `&&`, `||`, `;`, `&` e
+  `(`) a classe `tok-function`: o negrito na cor do texto. Não é comando: a atribuição antes dele (`FOO=1 node`), o `$` do
+  prompt e a linha que continua a de cima.
+
+### Documentado
+
+- **`KPI`: a moeda que não se separa do número** (*"A ficha ensina o espaço"* — 0 de 4 referências impedem a quebra). O
+  `KPI` não muda; a ficha do `value` e um exemplo novo do site ensinam o espaço que não quebra (U+00A0) entre a moeda e o
+  número, e que o `Intl.NumberFormat` com `style: "currency"` já o põe.
+
+### Quem cobra
+
+- `tests/unit/canto-continuo.test.tsx` (a transformação e a folha publicada) e `tests/visual/canto-continuo.spec.ts` (no
+  navegador: o cartão com a curva e 33, a cápsula redonda com 999). A folha de antes reprova os dois.
+- `tests/unit/appshell-an01.test.tsx` (o botão na barra, antes da marca; o SYL-01) e `tests/visual/appshell-an01.spec.ts`
+  (o lugar do botão nas três variantes, rolada e da direita para a esquerda). O código de antes reprova.
+- `tests/unit/codigo-com-cores.test.tsx` (o comando do bash). O código de antes reprova.
+- O `validate.py` (check 6) refaz a folha montada chamando o mesmo `canto-continuo.mjs`.
+
 ## [0.81.1] — 2026-11-25
 
 **As promessas públicas dizem a verdade** — o UDS-A1, as contradições que o relatório "a Aurea como UDS completo" achou

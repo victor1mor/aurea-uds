@@ -19,13 +19,15 @@ function janela(largura: number) {
 }
 afterEach(() => { vi.unstubAllGlobals(); });
 const shell = (props: Record<string, unknown>) =>
-  render(<AureaProvider><AppShell brand="Aurea" navItems={ITENS} {...props}>conteúdo</AppShell></AureaProvider>);
+  render(<AureaProvider><AppShell brand={<strong data-marca="">Aurea</strong>} navItems={ITENS} {...props}>conteúdo</AppShell></AureaProvider>);
+// O botão de recolher: desde o lote 106 (a troca da ADR-0056), o `Sidebar.Toggle` na barra de cima.
+const BOTAO = ".topbar .sidebar-collapse-trigger";
 
 describe("AppShell · AN-01", () => {
   it("sem `sidebarCollapsible`, o shell é o de antes: sem botão e sem classe nova", () => {
     janela(1508);
     const {container} = shell({sidebarCollapsed: true});
-    expect(container.querySelector(".sidebar-toggle, .sidebar-toggle-slot")).toBeNull();
+    expect(container.querySelector(".sidebar-collapse-trigger, .sidebar-toggle-slot")).toBeNull();
     expect(container.querySelector(".app-shell")!.className).toBe("app-shell");
     expect(container.querySelector(".sidebar")).toHaveClass("sidebar-collapsed");
   });
@@ -42,7 +44,7 @@ describe("AppShell · AN-01", () => {
     janela(1508);
     const aviso = vi.fn();
     const {container} = shell({sidebarCollapsible: true, onSidebarCollapsedChange: aviso});
-    const botao = container.querySelector(".sidebar-toggle")!;
+    const botao = container.querySelector(BOTAO)!;
     expect(botao).toHaveAttribute("aria-controls", container.querySelector(".sidebar")!.id);
     expect(botao).toHaveAttribute("aria-expanded", "true");
     fireEvent.click(botao);
@@ -61,8 +63,54 @@ describe("AppShell · AN-01", () => {
     janela(1508);
     const aviso = vi.fn();
     const {container} = shell({sidebarCollapsible: true, sidebarCollapsed: false, onSidebarCollapsedChange: aviso});
-    fireEvent.click(container.querySelector(".sidebar-toggle")!);
+    fireEvent.click(container.querySelector(BOTAO)!);
     expect(aviso).toHaveBeenCalledWith(true);
     expect(container.querySelector(".sidebar")).not.toHaveClass("sidebar-collapsed");
+  });
+
+  // A troca da ADR-0056 (lote 106, 26/11/2026, "Na barra de cima"): o botão saiu da junção da lateral com o conteúdo e foi
+  // para a barra de cima, ANTES da marca. Provado contra o defeito: com o código de antes, o botão morava num
+  // `.sidebar-toggle-slot` fora da barra, e este teste reprova.
+  it("o botão de recolher fica na barra de cima, antes da marca, e a junção não tem botão", () => {
+    janela(1508);
+    const {container} = shell({sidebarCollapsible: true});
+    const botao = container.querySelector(BOTAO)!;
+    expect(botao).not.toBeNull();
+    expect(container.querySelector(".sidebar-toggle-slot")).toBeNull();
+    const marca = container.querySelector(".topbar [data-marca]")!;
+    expect(botao.compareDocumentPosition(marca) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+});
+
+// SYL-01 (lote 106, 26/11/2026, "Sem itens, sem lateral"): o app que não passa menu nenhum não ganha uma lateral vazia, nem
+// o botão da gaveta, nem o de recolher. Provado contra o defeito: com o código de antes, a `.sidebar` vazia aparecia.
+describe("AppShell · SYL-01", () => {
+  const sem = (props: Record<string, unknown> = {}) =>
+    render(<AureaProvider><AppShell brand="Aurea" {...props}>conteúdo</AppShell></AureaProvider>);
+  it("sem itens, sem navegação e sem pé: nenhuma lateral, e o conteúdo com a largura", () => {
+    janela(1508);
+    const {container} = sem({sidebarCollapsible: true});
+    expect(container.querySelector(".sidebar")).toBeNull();
+    expect(container.querySelector(".nav-toggle, .sidebar-collapse-trigger")).toBeNull();
+    expect(container.querySelector(".app-shell")).toHaveClass("app-shell-no-sidebar");
+  });
+  it("com uma lista vazia de itens, também não", () => {
+    janela(1508);
+    const {container} = sem({navItems: []});
+    expect(container.querySelector(".sidebar")).toBeNull();
+  });
+  it("com navegação, com itens ou com o pé, a lateral continua", () => {
+    janela(1508);
+    for (const props of [{navigation: <nav>menu</nav>}, {navItems: ITENS}, {sidebarFooter: <span>pé</span>}]) {
+      const {container, unmount} = sem(props);
+      expect(container.querySelector(".sidebar"), Object.keys(props)[0]).not.toBeNull();
+      expect(container.querySelector(".app-shell")).not.toHaveClass("app-shell-no-sidebar");
+      unmount();
+    }
+  });
+  it("no `layout=\"sidebar\"` a lateral leva a marca, e continua", () => {
+    janela(1508);
+    const {container} = sem({layout: "sidebar"});
+    expect(container.querySelector(".sidebar")).not.toBeNull();
   });
 });

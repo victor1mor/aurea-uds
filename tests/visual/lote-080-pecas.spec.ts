@@ -1,4 +1,5 @@
 import {test, expect, type Page} from "@playwright/test";
+import {cantoContinuo} from "./canto";
 import {createElement as h} from "react";
 import {renderToStaticMarkup} from "react-dom/server";
 import * as A from "../../packages/react/dist/index.js";
@@ -108,7 +109,8 @@ const LISTA = `<div class="list-box" role="listbox" aria-label="L">
 test("ListBox · o canto do item é o do menu (18), também no item de duas linhas; a linha clara entre os grupos", async ({page: p, baseURL}) => {
   await abrir(p, baseURL, "listbox", `<div style="inline-size:280px">${LISTA}</div>`);
   const cantos = await p.evaluate(() => ["#um", "#dois"].map((s) => getComputedStyle(document.querySelector(s)!).borderTopLeftRadius));
-  expect(cantos).toEqual(["18px", "18px"]);
+  const dezoito = await cantoContinuo(p, 18);
+  expect(cantos).toEqual([dezoito, dezoito]);
   expect(await alfa(p, `return getComputedStyle(document.querySelector("#b"), "::before").borderTopColor`)).toBeGreaterThan(0);
   await abrir(p, baseURL, "listbox-ember", `<div style="inline-size:280px">${LISTA}</div>`, {marca: "ember"});
   expect(await alfa(p, `return getComputedStyle(document.querySelector("#b"), "::before").borderTopColor`), "na Ember também").toBeGreaterThan(0);
