@@ -106,10 +106,13 @@ test("as três que o Victor achou vazias aparecem, e a caixa responde ao clique"
   // A caixa é VIVA: o Checkbox da primeira caixa marca ao clicar (antes, o HTML pronto não mudava).
   await page.goto("/apps/catalog/checkbox.html");
   await acenderTudo(page);
-  // Clica onde a pessoa clica: a marca desenhada (o `input` fica por baixo dela).
+  // Clica onde a pessoa clica: a marca desenhada. Desde 26/11/2026 o `input` invisível cobre o rótulo inteiro e recebe o
+  // clique (o Shift+clique na caixinha), então o clique vai ao ponto da marca pelo mouse, e não pelo elemento dela.
   const campo = page.locator("[data-vivo='Checkbox:0'] input[type=checkbox]").first();
   const antes = await campo.isChecked();
-  await page.locator("[data-vivo='Checkbox:0'] .control-mark").first().click();
+  await page.locator("[data-vivo='Checkbox:0'] .control-mark").first().scrollIntoViewIfNeeded();
+  const marca = await page.locator("[data-vivo='Checkbox:0'] .control-mark").first().boundingBox();
+  await page.mouse.click(marca!.x + marca!.width / 2, marca!.y + marca!.height / 2);
   await expect(campo).toBeChecked({checked: !antes});
 
   // O exemplo CONTROLADO guarda o valor (content/_estado.mjs): com o aviso vazio, a aba clicada não trocava.
