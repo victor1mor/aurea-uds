@@ -241,6 +241,13 @@ test.describe("marca · o crachá semântico se lê em toda combinação", () =>
           return fora;
         }, SEMANTICAS as unknown as string[]);
         for (const sem of SEMANTICAS) {
+          // A ÚNICA EXCEÇÃO (lote 106, 26/11/2026): o crachá `danger` cheio da Ember no claro mede 4,03:1 — as cores do
+          // sistema de origem dela, aceitas pelo Victor desde a 0.33.0 (CLAUDE.md, item 30). Só esse par exato, e com o
+          // número exato: se a cor mudar, para mais ou para menos, a prova reprova e a pergunta volta ao Victor.
+          if (nome === "ember" && tema === "light" && sem === "danger") {
+            expect.soft(razoes[sem], "ember/light: o crachá `danger` cheio fica no 4,03:1 aceito pelo Victor").toBe(4.03);
+            continue;
+          }
           expect.soft(razoes[sem], `${nome}/${tema}: o crachá \`${sem}\` contra o fundo dele — ` +
             "-1 quer dizer que a página não tem esse crachá, e aí não é aprovação, é cegueira")
             .toBeGreaterThanOrEqual(AA);

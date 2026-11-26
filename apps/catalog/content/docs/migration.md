@@ -55,4 +55,4 @@ These names are older than the current ones but are not deprecated for removal. 
 
 ## After 1.0
 
-The [versioning rules](./docs-versioning.html) apply: a name is deprecated in a minor release first and removed only in the next major one.
+The [versioning rules](./docs-versioning.html) apply: a name is deprecated in a minor release first, keeps working for at least six months, and is removed only in a major release. Each major release that removes names gets its own section on this page.
