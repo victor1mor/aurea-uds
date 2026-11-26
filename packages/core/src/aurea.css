@@ -5487,13 +5487,13 @@ button.graph-node-body { cursor:pointer; }
     .gallery-tile.is-selected)
     { forced-color-adjust:none; background:Highlight; color:HighlightText; box-shadow:none; }
   /* Dentro do escolhido, fora da troca, a letra de TODA parte é a cor sobre o destaque: a descrição apagada do item da
-     `ListBox` (a cor dela, cinza) ficava escura sobre o destaque. O selo, a ficha e a foto de pessoa voltam à troca do
+     `ListBox` (a cor dela, cinza) ficava escura sobre o destaque. O selo (também o do `Chip`) e a foto de pessoa voltam à troca do
      sistema — têm fundo próprio, e fora dela ficariam com a cor da marca. */
   :is(.segmented :is(button,a).active,.tab[data-active],.btn[aria-pressed="true"],.btn.toggle[data-pressed],.tag[data-selected],
     .list-box-item[aria-selected="true"],.calendar td[data-selected] button,tr[data-selected] > :is(td,th),.gallery-tile.is-selected) * { color:inherit; }
   :is(.segmented :is(button,a).active,.tab[data-active],.btn[aria-pressed="true"],.btn.toggle[data-pressed],.tag[data-selected],
     .list-box-item[aria-selected="true"],.calendar td[data-selected] button,tr[data-selected] > :is(td,th),.gallery-tile.is-selected)
-    :is(.badge,.chip,.avatar,.kbd) { forced-color-adjust:auto; color:CanvasText; }
+    :is(.badge,.avatar,.kbd) { forced-color-adjust:auto; color:CanvasText; }
   /* O ponto do `Carousel` é FUNDO (o `::before`), e a troca apagava TODOS — não só o atual. Saem da troca: os outros na cor
      do texto, o atual no destaque. */
   .carousel-dot::before { forced-color-adjust:none; background:CanvasText; }

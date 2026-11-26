@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.83.0
+
+November 26, 2026
+
+DataGrid runs on TanStack Table 9; nothing disappears in Windows high contrast; Shift-click checks boxes; tabs keep an 8px gap; the sidebar brand and user sit on the icon rail.
+
+[Read full release notes →](https://aureauds.dev/release-v0-83-0.md)
+
 ## v0.82.0
 
 November 26, 2026

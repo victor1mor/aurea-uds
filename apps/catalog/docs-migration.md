@@ -1,6 +1,6 @@
 # Migration
 
-The old names removed in 0.76.0, ahead of 1.0, what replaces each one, and how to move before you upgrade.
+The old names removed in 0.76.0 and the DataGrid move to TanStack Table 9 in 0.83.0, ahead of 1.0, and how to move before you upgrade.
 
 Version 0.76.0 removes a short list of old names, ahead of 1.0. Each one had been deprecated for several versions and has a replacement. They all still work in 0.75.0 and earlier, so you can move to the new names first and then upgrade without anything breaking.
 
@@ -38,6 +38,28 @@ With `pressed`, the button only paints the on state and you keep the state yours
 ## The yellow text color
 
 `--brand-yellow-text` has no direct replacement: in the light theme, yellow is never a text color. Use the text color, `--foreground`, and let the yellow mark the element as a background, an underline or an indicator.
+
+## DataGrid on TanStack Table 9 (0.83.0)
+
+From 0.83.0, `DataGrid` runs on TanStack Table 9 instead of 8. The grid looks and behaves the same. What changes is the engine your column definitions are typed against.
+
+1. Replace the engine: install `@tanstack/react-table@^9.3.1` and remove version 8. It is an optional peer dependency of `@aurea-uds/react`, needed only for `@aurea-uds/react/data-grid`.
+2. If you import `ColumnDef` from `@aurea-uds/react/data-grid`, keep writing `ColumnDef<Row>`: the grid's feature set is already inside the type.
+3. If you import types straight from `@tanstack/react-table`, version 9 asks for the feature set first. Use `DataGridFeatures`, exported by `@aurea-uds/react/data-grid`:
+
+| Version 8 | Version 9 with DataGrid |
+|---|---|
+| `ColumnDef<Row>` from the engine | `ColumnDef<Row>` from `@aurea-uds/react/data-grid` |
+| `createColumnHelper<Row>()` | `createColumnHelper<DataGridFeatures, Row>()` |
+| `FilterFn<Row>` | `FilterFn<DataGridFeatures, Row>` |
+| `sortingFn` on a column | `sortFn` |
+| `SortingFn<Row>` | `SortFn<DataGridFeatures, Row>` |
+| `VisibilityState` from the engine | `VisibilityState` from `@aurea-uds/react/data-grid` (same shape) |
+
+4. Each row must be an object or an array. A grid of plain strings or numbers no longer compiles: wrap each value, for example `{value: "a"}`.
+5. If a cell or header you render reads `table.getIsSomeRowsSelected()`, it now means "at least one row", including when every row is selected. For a mixed state, add `&& !table.getIsAllRowsSelected()`. The grid's own "select all" box already does this.
+
+Shift-clicking a row's box still selects only that row, as before.
 
 ## Old names that stay
 

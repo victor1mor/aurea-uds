@@ -3576,7 +3576,14 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .theme-switch-option:has(:disabled) { opacity:var(--opacity-disabled); cursor:not-allowed; }
 .theme-switch-input { position:absolute; inset:0; z-index:1; margin:0; opacity:0; cursor:inherit; }
 @media (pointer:coarse) { .theme-switch-option { inline-size:var(--target-min); block-size:var(--target-min); } }
-@media (forced-colors:active) { .theme-switch-option:has(:checked) { outline:var(--focus-width) solid Highlight; outline-offset:calc(var(--border-width) * -2); } }
+/* No alto contraste do Windows, a escolhida no destaque do sistema, como a aba e o segmento (a forma "B" de 06/11/2026), e
+   sem a placa que o navegador põe atrás do desenho. Era um anel no destaque — o MESMO anel do foco, e o foco na escolhida
+   não se via (a conferência WEB-48; lote 110, 26/11/2026, *"Sim, siga a regra"*). O foco fica o anel na cor do texto. O
+   `.theme-switch` à frente pesa mais que a regra do sol amarelo, logo acima. */
+@media (forced-colors:active) {
+  .theme-switch .theme-switch-option:has(:checked[value]) { forced-color-adjust:none; background:Highlight; color:HighlightText; }
+  .theme-switch .theme-switch-option:has(:focus-visible) { outline:var(--focus-width) solid CanvasText; outline-offset:var(--focus-offset); }
+}
 /* GRUPOS COLADOS (0.32.0) — o `ButtonGroup` e o `ToggleGroup` da referência: os botões COLADOS numa
    cápsula só (vão 0), canto só nas pontas, um fio entre eles (a cor do texto a 15%, metade da
    altura), sem o encolher ao apertar (o grupo é uma peça só), e o contorno que não dobra entre
@@ -4002,7 +4009,15 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .radio-group-indicator-none > .radio-group-cards > .radio > .control-mark { display:none; }
 @media (prefers-reduced-motion:reduce) { .radio-group-cards > .radio:has(input:checked) { translate:none; } }
 .checkbox > span > .muted { font-size:var(--text-xs); font-weight:var(--weight-regular); line-height:var(--space-4); }
-.checkbox input,.radio input { position:absolute; opacity:0; pointer-events:none; }
+/* O CLIQUE COM SHIFT (26/11/2026, aprovado pelo Victor na bancada: "Pode"). O campo de verdade é invisível e cobre o
+   rótulo inteiro, e o clique cai NELE — como já faziam a chave de tema e a amostra de cor (`.theme-switch-input`,
+   `.color-swatch-input`). Antes ele era surdo (`pointer-events:none`) e o clique chegava pelo `<label>`: com Shift, o
+   Chromium e o Firefox estendem a seleção de texto em vez de ativar o rótulo, e nada marcava (medido com clique real:
+   0 de 12 peças no Chromium e no Firefox; 12 de 12 no WebKit; com o conserto, 12 de 12 nos três). A aparência não muda.
+   Link ou botão dentro do nome ("Aceito os termos") fica POR CIMA do campo, para continuar sendo clicado. */
+.checkbox,.radio,.switch { position:relative; }
+.checkbox input,.radio input,.switch input { position:absolute; inset:0; z-index:1; inline-size:100%; block-size:100%; margin:0; opacity:0; cursor:inherit; }
+:is(.checkbox,.radio,.switch) :is(a[href],button,select,textarea) { position:relative; z-index:2; }
 /* A MARCA DE SELEÇÃO acompanha a densidade, e antes não acompanhava. Era `18px` cru: em
    `comfortable` casava com metade da altura de controle por coincidência, e em `compact` e
    `spacious` ficava do mesmo tamanho enquanto o resto da linha do formulário mudava — o mesmo
@@ -4056,7 +4071,7 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .checkbox.checkbox-pill input:focus-visible + .control-mark,.checkbox.checkbox-pill input:focus-visible:checked + .control-mark { outline:none; }
 .checkbox-pill[data-tone="success"]:has(input:checked) { background:color-mix(in oklab,var(--success-400) 18%,transparent); color:var(--success-400); }
 .checkbox-pill[data-tone="success"] input:is(:checked,:indeterminate) + .control-mark { background:var(--success-400); color:var(--background); }
-.switch { display:inline-flex; align-items:center; gap:var(--space-3); font-size:var(--text-sm); font-weight:var(--weight-medium); cursor:pointer; } .switch input { position:absolute; opacity:0; }
+.switch { display:inline-flex; align-items:center; gap:var(--space-3); font-size:var(--text-sm); font-weight:var(--weight-medium); cursor:pointer; }
 /* O TRILHO DO SWITCH (0.32.0): o da referência, 40 × 20 (sm 32 × 16, lg 48 × 24) — a largura é o
    dobro da altura. Era 42 × 24. A altura é a de controle MENOS 16: dá exatamente os três dela
    (32 · 36 · 40 → 16 · 20 · 24), continua andando com a densidade e passa pela `--step-h`, que é o
@@ -5117,6 +5132,11 @@ button.tag-main { cursor:pointer; }
 .kpi-bars { display:grid; grid-template-columns:repeat(var(--kpi-bars,6),minmax(0,1fr)); gap:var(--space-2); align-items:end; block-size:calc(2 * var(--space-16)); }
 .kpi-bar { display:flex; flex-direction:column; justify-content:flex-end; align-items:center; block-size:100%; color:inherit; cursor:pointer; border-radius:var(--radius-xs); }@supports (corner-shape: superellipse(2)){.kpi-bar{corner-shape:superellipse(1.65);border-radius:calc(var(--radius-xs) * 1.5)}}
 .kpi-bar > .kpi-bar-input { position:absolute; opacity:0; pointer-events:none; }
+/* O clique com Shift na barra (26/11/2026, o Victor: "Conserto parcial"). O campo da barra não pode cobrir o rótulo,
+   como o da caixinha: o número de cima (`.kpi-bar-reading`) se posiciona pelo gráfico inteiro, e sairia do lugar. Sem
+   a seleção de texto na barra, o Chromium ativa o rótulo com Shift (medido: antes não marcava; agora marca). O Firefox
+   continua sem marcar com Shift — a escolha foi esta, sem mudar a aparência. */
+.kpi-bar { -webkit-user-select:none; user-select:none; }
 .kpi-bar:has(> input:focus-visible) { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 .kpi-bar-fill { inline-size:100%; max-inline-size:var(--space-8); block-size:var(--kpi-bar-h,0%); border-radius:var(--radius-full) var(--radius-full) var(--radius-xs) var(--radius-xs);
   background:var(--fill-3); transition:background-color var(--duration-base); }@supports (corner-shape: superellipse(2)){.kpi-bar-fill{corner-shape:round}}
@@ -6963,6 +6983,38 @@ button.graph-node-body { cursor:pointer; }
      cor do texto), e o glifo pinta na cor do texto. */
   .accordion-plus .accordion-chevron, .accordion-plus .accordion-item[open] > summary .accordion-chevron { background:transparent; }
   .accordion-plus .accordion-chevron::before { forced-color-adjust:none; background:CanvasText; }
+  /* A CHAVE E O RÁDIO MARCADOS (lote 110, 26/11/2026 — o grupo 1 da conferência WEB-48, aprovado pelo Victor na bancada:
+     *"entendi, aprovado"*, a forma "no destaque do sistema"). O recheio da chave ligada e do rádio marcado, a bolinha que
+     anda e o ponto do meio são FUNDO, que a troca apaga: ligado e desligado ficavam iguais. O recheio vai ao destaque do
+     sistema (`Highlight`, cor do sistema, que a troca respeita); a bolinha e o ponto saem da troca, na cor do texto
+     (desligada) e na cor sobre o destaque (ligada). É o que fazem as três bibliotecas grandes que tratam esse modo, lidas
+     no código publicado (a chave e o rádio marcados no destaque); as duas primeiras da fila não o tratam. A caixa de
+     marcar fica como estava (o visto na cor do texto, acima). Quem cobra: `tests/visual/cores-forcadas-e-movimento.spec.ts`. */
+  .switch input:checked + .switch-track,.radio input:checked + .control-mark { background:Highlight; }
+  .switch-track::after { forced-color-adjust:none; background:CanvasText; }
+  .switch input:checked + .switch-track::after,.radio input:checked + .control-mark::after { forced-color-adjust:none; background:HighlightText; }
+  /* O CARTÃO ESCOLHIDO do `RadioGroup variant="card"`: o escolhido era só o fundo e a sombra, e sem a marca
+     (`indicatorPlacement="none"`) os cartões ficavam iguais. O cartão inteiro vai ao destaque, como o item escolhido da
+     `ListBox` (a forma "B", mais abaixo), fora da troca e com toda letra na cor sobre ele; a marca, quando existe, inverte. */
+  .radio-group-cards > .radio:has(input:checked) { forced-color-adjust:none; background:Highlight; color:HighlightText; box-shadow:none; }
+  .radio-group-cards > .radio:has(input:checked) * { color:inherit; }
+  .radio-group-cards > .radio input:checked + .control-mark { background:HighlightText; }
+  .radio-group-cards > .radio input:checked + .control-mark::after { background:Highlight; }
+  /* AS BARRAS DO KPI (lote 110, o grupo 2): eram só fundo, e sumiam inteiras. Saem da troca na cor do texto; a escolhida e
+     a do mouse, no destaque — a mesma lógica das regras de cima, que mudam a cor da barra e não a forma. O `!important` é
+     porque as regras do escolhido e do mouse, lá em cima, combinam até seis seletores; aqui a ordem é só esta. */
+  .kpi-bar-fill { forced-color-adjust:none; background:CanvasText!important; }
+  .kpi-bar:is(:has(> input:checked),:hover) .kpi-bar-fill { background:Highlight!important; }
+  .kpi-bars:has(.kpi-bar:hover) .kpi-bar:not(:hover) .kpi-bar-fill { background:CanvasText!important; }
+  /* O FOCO QUE A CAIXA CORTAVA (lote 110, o grupo 3 — *"Sim, siga a regra"*): a regra do foco, no começo deste bloco, põe o
+     anel FORA da peça; nestas três, a caixa em volta corta o que passa da borda (`overflow:hidden`) e o anel sumia. Aqui o
+     anel vai para DENTRO, como o da tabela (`.table-region`). E o botão de tocar da capa, que no modo normal mostra o
+     foco mudando de cor (fundo, que a troca apaga), vai ao destaque. */
+  :is(.accordion-horizontal > .accordion-item > summary,.code-block,.media-embed-facade):focus-visible { outline-offset:calc(-1 * var(--focus-width)); }
+  .media-embed-facade:focus-visible .media-embed-play { forced-color-adjust:none; background:Highlight; color:HighlightText; }
+  /* O FOCO NA COR DO ESCOLHIDO (lote 110, o grupo 3): o anel desenhado no pai (`:has(:focus-visible)`) pega a cor da letra
+     dele, e na etiqueta escolhida a letra é a cor sobre o destaque — o anel ficava claro sobre a tela clara. Pelo nome. */
+  .tag:has(> .tag-main:focus-visible),.radio-group-cards > .radio:has(input:focus-visible) { outline-color:CanvasText; }
   /* O ESCOLHIDO SE VÊ (06/11/2026, a auditoria externa A-015 — a forma "B" do desenho no FigCraft, aprovada pelo Victor:
      *"o alto contraste aprovo a B"*). O segmento e a aba escolhidos se distinguiam só pelo FUNDO, que a troca apaga: ficavam
      iguais aos outros. Agora o fundo é o destaque do sistema (Highlight) e a letra a cor sobre ele (HighlightText) — as
@@ -7467,18 +7519,38 @@ button.graph-node-body { cursor:pointer; }
    `[data-theme] …`, que pesa o mesmo que elas: antes, a do claro (mais forte) ganhava e a letra ficava preta sobre o
    ciano. A Ember recebe também (o Victor, 06/11/2026: *"Ember entra"*). */
 @media (forced-colors:active) {
-  :is(.segmented :is(button,a).active,.tab[data-active]),
-  [data-theme] :is(.segmented :is(button,a).active,.tab[data-active])
-    { background:Highlight; color:HighlightText; }
+  /* A LETRA QUE SUMIA (lote 110, 26/11/2026, o grupo 2 da conferência WEB-48 — *"vou aceitar"*): no alto contraste, o
+     navegador põe uma placa na cor da TELA atrás de todo texto; com o fundo no destaque e a letra na cor sobre ele, a letra
+     ficava clara sobre a placa clara, e o escolhido virava uma cápsula vazia (o "Components" do topo do site). Aqui as
+     peças saem da troca (`forced-color-adjust:none`) com as mesmas cores do sistema, escritas pelo nome — e sem a sombra,
+     que fora da troca voltaria. Os seis estilos do segmento (`selectedStyle`, ADR-0084) pintavam por cima com mais peso
+     (`.segmented[data-segment-style]…`): o segmento escolhido ficava igual aos outros; o seletor repetido pesa o mesmo e
+     vem depois. O enfeite de cada estilo (o fio, o ponto) acompanha a letra. */
+  :is(.segmented :is(button,a).active,.segmented[data-segment-style][data-segment-style] :is(button,a).active,.tab[data-active]),
+  [data-theme] :is(.segmented :is(button,a).active,.segmented[data-segment-style][data-segment-style] :is(button,a).active,.tab[data-active])
+    { forced-color-adjust:none; background:Highlight; color:HighlightText; box-shadow:none; }
+  .segmented[data-segment-style][data-segment-style] :is(button,a).active::before,.segmented[data-segment-style][data-segment-style] :is(button,a).active::after,
+  .segmented :is(button,a).active::before,.segmented :is(button,a).active::after,.tab[data-active]::before,.tab[data-active]::after,
+  .gallery-tile.is-selected::before,.gallery-tile.is-selected::after { background:HighlightText; box-shadow:none; }
   /* E as outras sete que a pergunta "quem mais?" achou (06/11/2026, o Victor: "vamos fazer logo todas agora"), a mesma
      forma B: o botão ligado (`Toggle`, `ToggleGroup`, o filtro fixo — o `toggle-area` entra na lista para o `:is()` pesar
      o que ele pesa), a etiqueta escolhida do `TagGroup`, o item escolhido da `ListBox` (lá o visto já aparecia; fica a
-     mesma forma), o dia escolhido do `Calendar` e do `DatePicker`, e a linha escolhida da `Table`/`DataGrid`. */
+     mesma forma), o dia escolhido do `Calendar` e do `DatePicker`, e a linha escolhida da `Table`/`DataGrid`. E a foto
+     escolhida da `Gallery` (lote 110: era só um fundo e um fio, e as duas sumiam). Fora da troca, como as de cima. */
   :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed],.btn.toggle.toggle-area[aria-pressed="true"],.tag[data-selected],
-    .list-box-item[aria-selected="true"],.calendar td[data-selected] button,tr[data-selected] > :is(td,th)),
+    .list-box-item[aria-selected="true"],.calendar td[data-selected] button,tr[data-selected] > :is(td,th),.gallery-tile.is-selected),
   [data-theme] :is(.btn[aria-pressed="true"],.btn.toggle[data-pressed],.btn.toggle.toggle-area[aria-pressed="true"],
-    .tag[data-selected],.list-box-item[aria-selected="true"],.calendar td[data-selected] button,tr[data-selected] > :is(td,th))
-    { background:Highlight; color:HighlightText; }
+    .tag[data-selected],.list-box-item[aria-selected="true"],.calendar td[data-selected] button,tr[data-selected] > :is(td,th),
+    .gallery-tile.is-selected)
+    { forced-color-adjust:none; background:Highlight; color:HighlightText; box-shadow:none; }
+  /* Dentro do escolhido, fora da troca, a letra de TODA parte é a cor sobre o destaque: a descrição apagada do item da
+     `ListBox` (a cor dela, cinza) ficava escura sobre o destaque. O selo (também o do `Chip`) e a foto de pessoa voltam à troca do
+     sistema — têm fundo próprio, e fora dela ficariam com a cor da marca. */
+  :is(.segmented :is(button,a).active,.tab[data-active],.btn[aria-pressed="true"],.btn.toggle[data-pressed],.tag[data-selected],
+    .list-box-item[aria-selected="true"],.calendar td[data-selected] button,tr[data-selected] > :is(td,th),.gallery-tile.is-selected) * { color:inherit; }
+  :is(.segmented :is(button,a).active,.tab[data-active],.btn[aria-pressed="true"],.btn.toggle[data-pressed],.tag[data-selected],
+    .list-box-item[aria-selected="true"],.calendar td[data-selected] button,tr[data-selected] > :is(td,th),.gallery-tile.is-selected)
+    :is(.badge,.avatar,.kbd) { forced-color-adjust:auto; color:CanvasText; }
   /* O ponto do `Carousel` é FUNDO (o `::before`), e a troca apagava TODOS — não só o atual. Saem da troca: os outros na cor
      do texto, o atual no destaque. */
   .carousel-dot::before { forced-color-adjust:none; background:CanvasText; }

@@ -656,7 +656,7 @@ Fixes, security fixes included, ship in the newest version only. To get one, upg
 <page url="https://aureauds.dev/docs-migration.html">
 # Migration
 
-The old names removed in 0.76.0, ahead of 1.0, what replaces each one, and how to move before you upgrade.
+The old names removed in 0.76.0 and the DataGrid move to TanStack Table 9 in 0.83.0, ahead of 1.0, and how to move before you upgrade.
 
 Version 0.76.0 removes a short list of old names, ahead of 1.0. Each one had been deprecated for several versions and has a replacement. They all still work in 0.75.0 and earlier, so you can move to the new names first and then upgrade without anything breaking.
 
@@ -694,6 +694,28 @@ With `pressed`, the button only paints the on state and you keep the state yours
 ## The yellow text color
 
 `--brand-yellow-text` has no direct replacement: in the light theme, yellow is never a text color. Use the text color, `--foreground`, and let the yellow mark the element as a background, an underline or an indicator.
+
+## DataGrid on TanStack Table 9 (0.83.0)
+
+From 0.83.0, `DataGrid` runs on TanStack Table 9 instead of 8. The grid looks and behaves the same. What changes is the engine your column definitions are typed against.
+
+1. Replace the engine: install `@tanstack/react-table@^9.3.1` and remove version 8. It is an optional peer dependency of `@aurea-uds/react`, needed only for `@aurea-uds/react/data-grid`.
+2. If you import `ColumnDef` from `@aurea-uds/react/data-grid`, keep writing `ColumnDef<Row>`: the grid's feature set is already inside the type.
+3. If you import types straight from `@tanstack/react-table`, version 9 asks for the feature set first. Use `DataGridFeatures`, exported by `@aurea-uds/react/data-grid`:
+
+| Version 8 | Version 9 with DataGrid |
+|---|---|
+| `ColumnDef<Row>` from the engine | `ColumnDef<Row>` from `@aurea-uds/react/data-grid` |
+| `createColumnHelper<Row>()` | `createColumnHelper<DataGridFeatures, Row>()` |
+| `FilterFn<Row>` | `FilterFn<DataGridFeatures, Row>` |
+| `sortingFn` on a column | `sortFn` |
+| `SortingFn<Row>` | `SortFn<DataGridFeatures, Row>` |
+| `VisibilityState` from the engine | `VisibilityState` from `@aurea-uds/react/data-grid` (same shape) |
+
+4. Each row must be an object or an array. A grid of plain strings or numbers no longer compiles: wrap each value, for example `{value: "a"}`.
+5. If a cell or header you render reads `table.getIsSomeRowsSelected()`, it now means "at least one row", including when every row is selected. For a mixed state, add `&& !table.getIsAllRowsSelected()`. The grid's own "select all" box already does this.
+
+Shift-clicking a row's box still selects only that row, as before.
 
 ## Old names that stay
 
@@ -19105,6 +19127,76 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-83-0.html">
+# v0.83.0
+
+DataGrid runs on TanStack Table 9; nothing disappears in Windows high contrast; Shift-click checks boxes; tabs keep an 8px gap; the sidebar brand and user sit on the icon rail.
+
+## ⚠ May break
+
+- **`DataGrid` needs `@tanstack/react-table` 9** (`^9.3.1`), not 8. It is still an optional peer dependency, needed only for `@aurea-uds/react/data-grid`.
+- **Column types written straight against the engine change.** `ColumnDef` from `@aurea-uds/react/data-grid` is written the same (`ColumnDef<Row>`). Types imported from `@tanstack/react-table` now take the grid's feature set first: `createColumnHelper<DataGridFeatures, Row>()`, `FilterFn<DataGridFeatures, Row>`. On a column, `sortingFn` is now `sortFn`.
+- **Each row must be an object or an array.** A grid of plain strings or numbers no longer compiles.
+- **In a cell or header you render, `table.getIsSomeRowsSelected()` now means "at least one row"**, including when every row is selected.
+
+The [Migration](./docs-migration.html) page has the table of old and new names.
+
+## Added
+
+- **`DataGridFeatures`**, the engine's feature set that `DataGrid` registers, for typing columns with the engine's own helpers.
+
+## Changed
+
+- **`DataGrid` runs on TanStack Table 9.3.1.** Sorting, search, column filters, facets, pagination, selection, hiding and resizing columns work as before. The "select all" box still shows the mixed mark only when some rows, not all, are selected, and Shift-clicking a row's box still selects only that row.
+- **Tabs sit 8px above their panel** (`--space-2`), on web and native. On the web, the default card panel used to touch the tab list; the plain panel (`panel="plain"`) goes from 12px to 8px, and vertical tabs from 16px to 8px. On native, the panel goes from 12px to 8px. Every brand gets it.
+- **The time field is typed.** `Input type="time"` no longer shows the browser's clock button (only Chromium drew it), so no browser window opens; the arrow keys step each part of the time.
+
+## Fixed
+
+- **`Sidebar` with `panel`** (docked open or overlay): `Sidebar.Brand` and `Sidebar.User` are centred on the icon rail, as on the collapsed sidebar. The logo was 8px right of the icons; the user's sign-out button fell outside the rail.
+- **Shift-click on `Checkbox`, `CheckboxGroup`, `Radio`, `RadioGroup`, `Switch` and the `DataGrid` selection column now works** in Chrome, Edge and Firefox, as it already did in Safari. Before, holding Shift and clicking the box selected text instead of checking it. The hidden input now covers the whole label and takes the click. Nothing changes on screen. The same applies to plain HTML with the `.checkbox`, `.radio` and `.switch` classes.
+- **A link or button inside the label** ("I accept the terms") still works as a link and does not check the box.
+- **Shift-click on a `KPI` bar now picks it** in Chrome, Edge and Safari. In Firefox, Shift-click on a bar still does nothing; a plain click works everywhere.
+
+### Nothing disappears in Windows high contrast
+
+When Windows high contrast is on (`forced-colors: active`), the browser replaces every color with the few the person chose. Anything a component showed only with a background or a shadow used to disappear. Selected and checked states now use the system highlight (`Highlight`), and whatever sits on it uses the matching text color (`HighlightText`). Outside high contrast, nothing changes.
+
+- **Switches and radios** (`Switch`, `Radio`, `RadioGroup`, and the switch in `AutomationCard`), on the web and in `@aurea-uds/native`: on and off looked the same. The checked fill now uses the highlight, and the thumb and the dot stay visible. The native `Checkbox` matches the web one: the check mark uses the text color.
+- **The selected card** of `RadioGroup variant="card"` uses the highlight.
+- **Selected labels are readable.** Selected segments, tabs, tags, `ListBox` items and the other selected states showed an empty capsule, because the browser draws a plate behind the text. Their label now reads on the highlight.
+- **All seven `selectedStyle` values of `SegmentedControl`** show the selected segment.
+- **The selected `Gallery` photo** gets a highlight frame.
+- **`KPI` bars** no longer disappear: they use the text color, and the selected or hovered bar uses the highlight.
+- **Focus rings that were clipped** in the side `Accordion`, the `CodeBlock` and the `MediaEmbed` cover now draw inside the component.
+- **Focus rings on selected items** (`TagGroup`, the `RadioGroup` card) use the text color, so they stay visible.
+- **`ThemeToggle`**: the selected option uses the highlight, and the focus ring stays visible on it.
+- **Native components in the browser** (`Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Tabs`, `TagGroup`) follow the same rule through a small stylesheet added once to the page. Nothing changes on phones.
+
+## Site
+
+- **Dates use DatePicker.** The "Date and time" example on the Input page, the date-range pattern (now "Date range in one field") and the single-date pattern on the Calendar page (now "One date in a field") open the Aurea calendar instead of the browser's. The Calendar patterns no longer say that there is no DatePicker.
+- **The Migration page** has a new section, "DataGrid on TanStack Table 9 (0.83.0)".
+
+## Known issues
+
+- The focus of the native `DatePicker`, `OTPField` and `Screen` in the browser is not visible, with or without high contrast. It will be fixed in a later version.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.83.0 @aurea-uds/core@0.83.0 @aurea-uds/fonts@0.83.0 @aurea-uds/icons@0.83.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.83.0
 ```
 </page>
 
