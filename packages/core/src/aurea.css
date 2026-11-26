@@ -793,11 +793,14 @@ img,svg { display:block; }
 /* A pessoa: numa caixinha do texto a 6% (`--fill-1`), com o canto do item da lateral. */
 .sidebar-user { display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) var(--space-3) var(--space-1); border-radius:calc(var(--radius-card) - var(--space-1)); background:var(--fill-1); }
 /* Recolhida: a marca vira só o quadrinho, e a pessoa, a foto e a ação empilhadas, sem a caixinha. Os nomes vão para o
-   leitor de tela (o React troca a classe por `.sr-only`, como o rótulo do item). */
-.sidebar-collapsed .sidebar-brand { justify-content:center; padding-inline:0; }
+   leitor de tela (o React troca a classe por `.sr-only`, como o rótulo do item).
+   A TRILHA DA LATERAL COM PAINEL (`.sidebar-rail-box`, 0.82.1) é recolhida também: lá o React já esconde os nomes, mas a
+   lateral não leva `.sidebar-collapsed` com o painel aberto nem com o painel por cima, e a marca ficava a 8 à direita dos
+   ícones (o app mediu: 42 contra 34), a pessoa e o sair fora da trilha. Aprovado na bancada pelo Victor em 26/11/2026. */
+:is(.sidebar-collapsed,.sidebar-rail-box) .sidebar-brand { justify-content:center; padding-inline:0; }
 /* A marca com a ação (0.44.0): o botão de recolher ao lado do nome; recolhida, ele desce para baixo do logo. */
-.sidebar-collapsed .sidebar-brand-with-action { flex-direction:column; gap:var(--space-2); }
-.sidebar-collapsed .sidebar-user { flex-direction:column; padding-inline:0; background:transparent; }
+:is(.sidebar-collapsed,.sidebar-rail-box) .sidebar-brand-with-action { flex-direction:column; gap:var(--space-2); }
+:is(.sidebar-collapsed,.sidebar-rail-box) .sidebar-user { flex-direction:column; padding-inline:0; background:transparent; }
 /* O BLOCO 2 DA LATERAL (25/10/2026) — o que faltava das quinze laterais que o Victor aprovou em 21/10/2026 (item 107), como
    variação: o padrão de hoje não muda. A referência principal não tem lateral; a anatomia e o comportamento são os da
    segunda da fila (o provedor, o atalho, os jeitos de recolher, a ação do grupo e do item), com a aparência da Aurea.
