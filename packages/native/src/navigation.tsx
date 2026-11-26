@@ -36,6 +36,7 @@ import {SafeAreaInsetsContext, initialWindowMetrics} from "react-native-safe-are
 import {useAnotarBottomNav} from "./barranav.js";
 import {Avatar, Badge} from "./display.js";
 import {canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca, aroDoEstilo, fundoDaPele, marcaDoEstilo, peleDoAtual, preenchimento, type PeleDoAtual} from "./estilos.js";
+import {marcaHC, useRegraDoAltoContraste} from "./altocontraste.js";
 import {NaSuperficie} from "./superficie.js";
 import {Icon, type AureaIcon} from "./icon.js";
 import {Card} from "./layout.js";
@@ -1067,6 +1068,7 @@ export function Tabs({
   tabs, value, onChange, label, justify, variant = "primary", panel = "card", style, ...rest
 }: TabsProps) {
   const t = useAureaTokens();
+  useRegraDoAltoContraste();
   const s = folha(t);
   const strings = useAureaStrings();
   const aberta = tabs.find((it) => it.id === value);
@@ -1098,6 +1100,7 @@ export function Tabs({
             return (
               <Pressable
                 key={it.id}
+                {...marcaHC(ativa ? "escolhida" : "desligada")}
                 onLayout={fila.medir(it.id)}
                 onPress={it.disabled ? undefined : () => onChange?.(it.id)}
                 disabled={it.disabled}

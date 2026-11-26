@@ -18,6 +18,7 @@ import {
 import {canto, criarFolha, estadoAcessivel, fundoDeCampo, focoDoCampo, marcaDoControle, contornoDeErro} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
 import {useMaisContraste} from "./contraste.js";
+import {marcaHC, useRegraDoAltoContraste} from "./altocontraste.js";
 import {Icon, type AureaIcon, type AureaIconRegistry} from "./icon.js";
 import {Label, useCampo} from "./inputs.js";
 import {driverNativo, useReduceMotion} from "./movimento.js";
@@ -677,6 +678,7 @@ export function TagGroup({
   defaultSelectedKeys, onSelectionChange, onRemove, size = "md", variant = "default", icons, style, testID,
 }: TagGroupProps) {
   const t = useAureaTokens();
+  useRegraDoAltoContraste();
   const s = folha(t);
   const strings = useAureaStrings();
   const [proprio, setProprio] = React.useState<readonly string[]>(defaultSelectedKeys ?? []);
@@ -723,6 +725,7 @@ export function TagGroup({
             <View
               key={it.id}
               role="listitem"
+              {...marcaHC(escolhida ? "escolhida" : "desligada")}
               testID={testID ? `${testID}-${it.id}` : undefined}
               style={[
                 s.etiqueta,

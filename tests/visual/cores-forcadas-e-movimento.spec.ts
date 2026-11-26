@@ -95,6 +95,13 @@ function regiao(el: Element): Regiao | null {
   }
   el = alvo;
   const rs = [el.getBoundingClientRect()];
+  // O campo INVISÍVEL dentro de um rótulo (o rádio do cartão do `RadioGroup`): quem desenha o foco é o rótulo inteiro, com
+  // o anel em volta do cartão. Sem ele, a foto pegava só o pedaço do texto ao lado do campo e acusava um foco que se vê
+  // (lote 110, 26/11/2026 — medido na foto grande: o anel do cartão aparece).
+  if (getComputedStyle(el).opacity === "0") {
+    const r = el.closest("label")?.getBoundingClientRect();
+    if (r && r.width <= 640 && r.height <= 320) rs.push(r);
+  }
   if (el.nextElementSibling) rs.push(el.nextElementSibling.getBoundingClientRect());
   const pai = el.parentElement, r0 = rs[0];
   if (pai) {

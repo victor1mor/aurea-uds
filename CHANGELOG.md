@@ -441,6 +441,60 @@ como deveria funcionar"*.
 
 ---
 
+## [0.83.0] — 2026-11-26
+
+**Nada some no alto contraste do Windows** — o lote 110: as 63 reprovações que a conferência WEB-48 (lote 104) achou com
+o `forced-colors: active`. O Windows troca toda cor pelas poucas que a pessoa escolheu, e o que a peça só mostrava com
+fundo ou sombra sumia. A regra, nos dois alvos: o ligado e o escolhido no DESTAQUE do sistema (`Highlight`), o que fica em
+cima dele na cor sobre o destaque (`HighlightText`) — o que fazem as três bibliotecas grandes que tratam esse modo, lidas
+no código publicado (as duas primeiras da fila de referências não o tratam), e a forma "B" que o Victor já tinha aprovado
+para a aba e o segmento (06/11/2026). Aprovado na bancada viva, com o alto contraste simulado pelo navegador, nos dois
+temas do Windows, nas 13 marcas e com a Ember: o grupo 1 (*"entendi, aprovado"*), o grupo 2 (*"vou aceitar"*), os grupos
+3 a 5 pela mesma regra (*"Sim, siga a regra"*) e a bancada final (*"Pode"*). **Fora do alto contraste, nada muda**: toda
+regra nova mora dentro do `@media (forced-colors: active)`.
+
+### Consertado
+
+- **A chave e o rádio** (`Switch`, `Radio`, `RadioGroup`, e a chave do `AutomationCard`), web e nativo: ligado e desligado
+  ficavam iguais. O recheio ligado vai ao destaque; a bolinha da chave e o ponto do rádio, à cor do texto (desligada) e à
+  cor sobre o destaque (ligada). A caixa de marcar do nativo fica como a da web: o visto na cor do texto.
+- **O cartão escolhido** do `RadioGroup variant="card"`: era só o fundo e a sombra; vai inteiro ao destaque.
+- **O nome do escolhido se lê.** No alto contraste o navegador põe uma placa na cor da tela atrás de todo texto; com o
+  fundo no destaque, a letra ficava clara sobre a placa clara — o segmento, a aba, a etiqueta, o item da `ListBox` e os
+  outros da forma "B" viravam cápsulas vazias (o "Components" do topo do site). Essas peças saem da troca do sistema
+  (`forced-color-adjust: none`) com as mesmas cores do sistema, pelo nome; dentro delas, toda letra na cor sobre o
+  destaque; o selo, a ficha, a foto de pessoa e a tecla voltam à troca.
+- **Os sete estilos do segmento** (`selectedStyle`): só o padrão mostrava alguma coisa; os outros seis pintavam por cima da
+  regra do alto contraste. Agora os sete mostram o escolhido igual, com o fio e o ponto na cor sobre o destaque.
+- **A foto escolhida da `Gallery`**: ganha a moldura no destaque.
+- **As barras do `KPI`**: sumiam inteiras. Ficam na cor do texto; a escolhida e a do mouse, no destaque.
+- **O foco que a caixa cortava** — o `Accordion` lateral, o `CodeBlock` e a capa do `MediaEmbed`: o anel do alto contraste
+  ia para fora da peça, e a caixa em volta o cortava. Vai para dentro, como o da tabela; o botão de tocar da capa vai ao
+  destaque com o foco.
+- **O foco na cor do escolhido** — a etiqueta escolhida do `TagGroup` e o cartão escolhido do `RadioGroup`: o anel pegava a
+  cor da letra (clara) e sumia na tela clara. Na cor do texto, pelo nome.
+- **A chave de tema** (`ThemeToggle`): a escolhida e o foco eram o mesmo anel, e o foco na escolhida não se via. A
+  escolhida vai ao destaque, como a aba; o foco fica o anel na cor do texto.
+- **O nativo no navegador** (`Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Tabs`, `TagGroup`): o React Native não conhece
+  as cores do sistema, então a peça leva uma marca só do navegador (`data-aurea-hc`, pelo `dataSet`, que o aparelho
+  ignora) e a regra mora numa folha pequena que entra no `<head>` uma vez (`altocontraste.tsx`). No celular, nada muda.
+
+### Fora dos pacotes
+
+- **A conferência WEB-48 mede o foco do campo invisível pelo rótulo inteiro**: o foco do `RadioGroup` em cartão aparecia,
+  e a foto pegava só o texto ao lado do campo (medido na foto grande).
+
+### Quem cobra
+
+- `tests/visual/cores-forcadas-e-movimento.spec.ts` — a lista de reprovações conhecidas caiu de 63 para 7, e a das que
+  apareciam às vezes ficou vazia. A varredura reprova a reprovação nova e a conhecida que deixou de reprovar; com o CSS e
+  o nativo de antes, as 56 voltam como reprovação nova.
+
+### Ainda não consertado
+
+- **O foco de três peças do nativo no navegador** — o `DatePicker`, o `OTPField` e o `Screen` (as 7 que ficam na lista):
+  não aparece nem fora do alto contraste. Consertar muda o modo normal; vai ao Victor com imagem, num lote à parte.
+
 ## [0.81.1] — 2026-11-25
 
 **As promessas públicas dizem a verdade** — o UDS-A1, as contradições que o relatório "a Aurea como UDS completo" achou
