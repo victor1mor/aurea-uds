@@ -1585,11 +1585,15 @@ sessão não chega à outra; este arquivo chega. O que já estava nas seções a
 - **A suíte inteira roda UMA vez, no fim do lote** (ordem do Victor, 01/11/2026: *"precisa de todos esses suites? a toda
   hora?"* e *"pare de rodar tantas CI, deixe pra fazer depois que aprovo"*): durante o trabalho, só os testes do que mudou;
   nada de suíte antes de o Victor aprovar olhando; no fim, uma rodada da suíte do Chromium com o código final; o que
-  reprovar, consertar e rodar de novo SÓ o que reprovou. ~~Depois, a CI roda tudo nos três navegadores.~~ → **A CI NÃO
-  roda tudo** (medido em 25/11/2026, o UDS-A1): dos 104 arquivos de teste do navegador (`tests/visual/*.spec.ts`), ela roda
-  6 — a varredura do catálogo, a geometria, a direita para a esquerda e a prova do app de cliente nos três navegadores, e
-  as duas de fotos (`matrix`, `catalog`) só no Chromium. Os outros 98 só rodam na suíte local; por isso a suíte do fim do
-  lote não se pula. Levar essas provas à CI é o item aprovado "As specs fora da CI" (`STATUS-1.0.md`).
+  reprovar, consertar e rodar de novo SÓ o que reprovou. ~~Depois, a CI roda tudo nos três navegadores.~~ → ~~**A CI NÃO
+  roda tudo** (medido em 25/11/2026, o UDS-A1): dos 104 arquivos, ela roda 6; os outros 98 só rodam na suíte local.~~ →
+  **A CI RODA TODA PROVA DE NAVEGADOR NO CHROMIUM** (o lote 105, 25/11/2026, o item "As specs fora da CI", *"Sim, no
+  Chrome primeiro"*): o job `provas` roda, em 4 partes ao mesmo tempo, tudo de `tests/visual/` que nenhum outro job roda
+  (`AUREA_PROVAS=1` no `playwright.config.ts` — spec nova entra sozinha); o job `test` espera o `provas` e reprova se ele
+  reprovou, e é por ele que a regra do `main` o cobra. Ficam fora, com o motivo, só as provas do
+  `tests/visual/fora-da-ci.ts` (decisões do Victor). No Firefox e no WebKit a CI roda só a varredura do catálogo, a
+  geometria, a direita para a esquerda, a prova do app de cliente e o "menos movimento". A suíte do fim do lote continua
+  (ela mede antes do pedido, e nos três navegadores quando a mudança é de largura).
 - **Qualidade extrema, sem refazer** (06/10/2026): prazo curto encolhe o ESCOPO, nunca a verificação.
   Se não cabe tudo, dizer quanto cabe, com números, e ele escolhe.
 - **Muitas opções: o esboço vem antes da bancada** (decisão do Victor, 29/10/2026, *"Sim, para explorar"*): quando uma

@@ -137,6 +137,10 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    # Espera o job `provas` e reprova se ele reprovou (o último passo). O `!cancelled()` faz este job rodar MESMO com
+    # o `provas` vermelho: um job pulado conta como aprovado na regra do `main`, e a trava sumiria calada.
+    needs: provas
+    if: ${{ !cancelled() }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
@@ -149,6 +153,16 @@ jobs:
 
       - name: Testes de interação (teclado, foco, ARIA)
         run: pnpm test
+
+      - name: As provas de navegador (job provas) passaram
+        env:
+          RESULTADO: ${{ needs.provas.result }}
+        run: |
+          if [ "$RESULTADO" != "success" ]; then
+            echo "::error::O job provas terminou com '$RESULTADO'. As falhas estão nas partes do job provas, logo acima."
+            exit 1
+          fi
+          echo "provas: $RESULTADO"
 
   # Gate visual em push/PR: SÓ compara, nunca regenera. A regeneração é o job
   # separado abaixo, exclusivo do workflow_dispatch (auditoria 18/07/2026, ALTO 4:
@@ -296,6 +310,53 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: playwright-report-varredura-${{ matrix.navegador }}
+          path: test-results/
+          retention-days: 7
+
+  # As provas de navegador que nenhum outro job roda (lote 105, 25/11/2026 — decisão do Victor, *"Sim, no Chrome
+  # primeiro"*). Até aqui, 98 dos 106 arquivos de `tests/visual/` só rodavam na máquina dele. Com `AUREA_PROVAS=1`, o
+  # `playwright.config.ts` deixa no Chromium tudo MENOS o que outro job já roda — spec nova entra aqui sozinha. Só o
+  # Chromium: o desenho é o mesmo nos três navegadores, e a varredura do catálogo já mede o Firefox e o WebKit.
+  #
+  # Em PARTES (`--shard`), ao mesmo tempo, para não alongar a CI: o caminho mais longo dela é a varredura do WebKit.
+  # Mede propriedade, não pixel — gate DURO. A obrigação vem pelo job `test`, que espera este e reprova se ele reprovou
+  # (assim a regra do `main`, que cobra os seis de sempre, cobra este também, sem mudar a lista dela).
+  provas:
+    name: provas (${{ matrix.parte }}/4)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        parte: [1, 2, 3, 4]
+    # A mesma imagem do `visual` (ver o porquê lá).
+    container:
+      image: mcr.microsoft.com/playwright:v1.61.1-noble
+      options: --user 1001
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.x"
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm build
+      - name: As provas fora dos outros jobs (Chromium, parte ${{ matrix.parte }} de 4)
+        env:
+          AUREA_PROVAS: "1"
+          PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/provas-${{ matrix.parte }}.json
+        run: pnpm exec playwright test --project=chromium --shard=${{ matrix.parte }}/4 --reporter=github,json
+      # O JSON tem o tempo de cada teste: é dele que sai a conta de minutos de cada parte.
+      - name: Publicar o resultado
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: provas-${{ matrix.parte }}
           path: test-results/
           retention-days: 7
 

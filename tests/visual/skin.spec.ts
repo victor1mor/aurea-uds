@@ -1525,7 +1525,7 @@ for (const theme of ["dark", "light"] as const) {
                   visto: getComputedStyle(esc, "::after").scale, tinta: getComputedStyle(esc, "::after").backgroundColor,
                   botaoInvisivel: getComputedStyle(esc.querySelector("input")!).opacity};
               })(),
-              campoCor: {alt: caixa(".cfd-campo .input").height, input: caixa(".cfd-input").height,
+              campoCor: {alt: caixa(".cfd-campo").height, input: caixa(".cfd-input").height,
                          amostra: caixa(".cfd-campo .color-swatch").width, xadrez: est(".cfd-campo .color-swatch").backgroundImage,
                          fundoSec: est(".cfd-sec").backgroundColor, fundoInputSec: est(".cfd-input-sec").backgroundColor,
                          bordaSec: est(".cfd-sec").borderTopColor, bordaInputSec: est(".cfd-input-sec").borderTopColor, fundoPrim: est(".cfd-campo").backgroundColor},
@@ -2164,13 +2164,14 @@ for (const theme of ["dark", "light"] as const) {
     expect(m.numberField.align, "número centrado, senão a vírgula dança ao digitar").toBe("center");
     expect(m.numberField.w, "campo de quantidade não é caixa de texto").toBeLessThan(120);
 
-    // 10. OTPField: uma caixa por dígito, quadrada, em fonte de largura fixa.
+    // 10. OTPField: uma caixa por dígito. Desde a 0.79.0 o dígito usa a letra do texto (`--font-ui`; era a de código):
+    // 8 de 8 referências usam a letra do texto, e o nativo já usava.
     expect(m.otp.display, "a fila de dígitos fica em linha").toBe("inline-flex");
     expect(m.otp.slots, "uma caixa por dígito").toBe(4);
     // 0.32.0: a casa da referência, 38 × 40, com o número de 18 (era quadrada, 36).
     expect([Math.round(m.otp.lado), Math.round(m.otp.alt)], "a casa do dígito tem 38 × 40").toEqual([38, 40]);
     expect(m.otp.letra, "o número tem 18").toBe(18);
-    expect(m.otp.fonte, "dígito em fonte de largura fixa, senão a fila treme").toContain("Mono");
+    expect(m.otp.fonte, "o dígito na letra do texto (--font-ui), desde a 0.79.0").toContain("Inter");
 
     // 11. HoverCard: superfície flutuante do sistema, com largura de leitura.
     expect(m.hoverCard.raio, "usa o raio de card da Aurea").toBe(m.hoverCard.radiusCard);
@@ -2696,8 +2697,10 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.slider.cheio, "o preenchimento tem cor própria").not.toBe(e.slider.trilhoCor);
     expect(e.grupoCaixas.antes, "16 antes de cada caixa do grupo").toBe(16);
     expect(e.listBox.itemAlt, "o item da lista tem 36").toBeCloseTo(36, 0);
-    expect(e.listBox.lados, "8 dos lados").toBe(8);
-    expect(e.listBox.raio, "o item é cápsula").toBe(e.listBox.radiusControl);
+    // 16 desde a 0.74.0: a `ListBox` começa a 16 da borda, como a `Sidebar` (`--space-4`; era 8).
+    expect(e.listBox.lados, "16 dos lados").toBe(16);
+    // 18 desde a 0.70.0, o canto do item do menu ("B (igual à referência)"): a cápsula virava 24,5 no item de duas linhas.
+    expect(e.listBox.raio, "o item tem o canto do item do menu (18)").toBe(18);
     expect(e.listBox.visto, "o visto do escolhido tem 16").toBeCloseTo(16, 0);
     expect(e.select.alt, "o Select mede --control-h-md, como os outros controles")
       .toBe(e.select.controlMd);
@@ -2743,7 +2746,8 @@ for (const theme of ["dark", "light"] as const) {
     expect([p12.amostras.encolhe, p12.amostras.visto], "a escolhida encolhe a 77% e mostra o visto").toEqual(["0.77", "1"]);
     expect(p12.amostras.tinta, "o visto no amarelo é preto (o contraste)").toBe("rgb(0, 0, 0)");
     expect(Number(p12.amostras.botaoInvisivel), "o botão de opção nativo fica invisível").toBe(0);
-    expect(p12.campoCor.alt, "ColorField: a altura do Input").toBe(p12.campoCor.input);
+    // Desde a 0.70.0 quem tem a altura do `Input` é o GRUPO (a caixa que se vê); o campo de dentro fica 2 menor, pela borda.
+    expect(p12.campoCor.alt, "ColorField: o grupo tem a altura do Input").toBe(p12.campoCor.input);
     expect(p12.campoCor.amostra, "a amostra na frente, sm (24)").toBe(24);
     expect(p12.campoCor.xadrez, "a cor transparente mostra o xadrez").toContain("svg");
     // O `secondary` do campo vale para o grupo, que é quem desenha a caixa (medido na bancada em 14/10/2026: saía
@@ -2799,8 +2803,9 @@ for (const theme of ["dark", "light"] as const) {
     expect(e.toolbar.grupoGap, "o ToolbarGroup usa --space-1 — era `gap:4px` cru até o item E12")
       .toBe(e.toolbar.space1);
     expect(e.toolbar.sepW, "o separador é uma linha de 1px").toBeGreaterThan(0);
-    expect(e.toolbar.sepH, "e ele ATRAVESSA a barra — sem align-self:stretch mede 0")
-      .toBeGreaterThan(20);
+    // Desde a 0.70.0 o separador tem a METADE da altura do botão, no meio ("Pode (Recomendado)"); antes atravessava a
+    // barra. Sem altura própria ele mede 0 — é isso que esta linha pega.
+    expect(e.toolbar.sepH, "o separador tem a metade da altura do botão (18 no md)").toBeCloseTo(18, 0);
     expect(e.toolbar.sepCor, "e tem cor, senão é um espaço em branco").not.toBe("rgba(0, 0, 0, 0)");
     expect(e.pagination.alinha, "a Pagination centraliza verticalmente").toBe("center");
     expect(e.pagination.naLinha, "anterior, números e próxima ficam na mesma fila").toBe(true);
