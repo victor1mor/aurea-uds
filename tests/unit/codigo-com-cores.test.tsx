@@ -25,7 +25,24 @@ describe("highlightCode", () => {
     expect(marcado(".x { padding: 16px; }", "css")).toEqual([".[tok-keyword:x] { [tok-property:padding]: [tok-number:16px]; }"]);
     expect(marcado('<div class="a">oi</div>', "html")).toEqual(['<[tok-keyword:div] [tok-property:class]=[tok-string:"a"]>oi</[tok-keyword:div]>']);
     expect(marcado('{"a": 1}', "json")).toEqual(['{[tok-property:"a"]: [tok-number:1]}']);
-    expect(marcado("# instalar\npnpm add x", "bash")).toEqual(["[tok-comment:# instalar]", "pnpm add x"]);
+    expect(marcado("# instalar\npnpm add x", "bash")).toEqual(["[tok-comment:# instalar]", "[tok-function:pnpm] add x"]);
+  });
+  // O item 98 (24/11/2026, "Em destaque"): o nome do comando no bash sai com o destaque de função. Antes, `pnpm add x` saía
+  // inteiro sem cor — este teste reprova o código de antes.
+  test("bash: a primeira palavra de cada comando sai em destaque", () => {
+    expect(marcado("npm install @aurea-uds/react", "bash")).toEqual(["[tok-function:npm] install @aurea-uds/react"]);
+    expect(marcado("pnpm add x && git status | grep a; cd pasta", "sh")).toEqual([
+      "[tok-function:pnpm] add x && [tok-function:git] status | [tok-function:grep] a; [tok-function:cd] pasta"]);
+    // A atribuição antes do comando e o `$` do prompt não são o comando.
+    expect(marcado("FOO=1 node x.mjs", "bash")).toEqual(["FOO=[tok-number:1] [tok-function:node] x.mjs"]);
+    expect(marcado("$ npx vitest run", "shell")).toEqual(["$ [tok-function:npx] vitest run"]);
+    // A palavra-chave tem a cor dela, e o comando depois dela é o destacado.
+    expect(marcado("if test -f x; then echo oi; fi", "bash")).toEqual([
+      "[tok-keyword:if] [tok-function:test] [tok-property:-f] x; [tok-keyword:then] [tok-function:echo] oi; [tok-keyword:fi]"]);
+    // A linha que continua a de cima (terminada em barra invertida) não começa comando.
+    expect(marcado(["apt install \\", "  curl"].join("\n"), "bash")).toEqual(["[tok-function:apt] install \\", "  curl"]);
+    // Só no bash: nas outras línguas nada muda.
+    expect(marcado("pnpm add x", "ts")?.join("")).not.toContain("tok-function:pnpm");
   });
   test("língua desconhecida devolve null, e a lista diz quais existem", () => {
     expect(highlightCode("fn main(){}", "rust")).toBeNull();

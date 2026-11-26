@@ -1,4 +1,5 @@
 import {test, expect} from "@playwright/test";
+import {cantoContinuo} from "./canto";
 import {readdirSync, readFileSync} from "node:fs";
 import {join} from "node:path";
 // O MESMO dado que o gerador consome (ADR-0001, Fase 7). Um gate que declarasse suas próprias
@@ -651,7 +652,7 @@ test.describe("catálogo · contratos do modelo de página", () => {
           const c = getComputedStyle(document.querySelector(s)!);
           return {fundo: c.backgroundColor, linha: c.borderTopColor, sombra: c.boxShadow, canto: c.borderTopLeftRadius}; })};
       });
-      const bloco = {fundo: r.palco, linha: "rgba(0, 0, 0, 0)", sombra: "none", canto: "22px"};
+      const bloco = {fundo: r.palco, linha: "rgba(0, 0, 0, 0)", sombra: "none", canto: await cantoContinuo(page, 22)};
       expect(r.caixas, tema).toEqual([bloco, bloco]);
     }
   });

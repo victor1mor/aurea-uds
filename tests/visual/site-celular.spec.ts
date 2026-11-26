@@ -1,4 +1,5 @@
 import {test, expect, type Page} from "@playwright/test";
+import {cantoContinuo} from "./canto";
 
 // O ARRANJO DE DOCUMENTAÇÃO NO CELULAR E NO TABLET (lote U, 19/10/2026 — o Victor: "tudo como ela"), medido na página da
 // documentação da referência a 375, 768 e 1100 e repetido aqui como número: o topo do celular em duas linhas, com os botões
@@ -66,7 +67,7 @@ test("375: a folha do menu sobe de baixo, com a chave de tema e a lista da área
   const f = await caixa(page, ".drawer-bottom");
   perto(f.x, 0, "de ponta a ponta");
   perto(f.w, 375, "de ponta a ponta");
-  expect(await folha.evaluate((e) => getComputedStyle(e).borderTopLeftRadius), "o canto da folha").toBe("32px");
+  expect(await folha.evaluate((e) => getComputedStyle(e).borderTopLeftRadius), "o canto da folha").toBe(await cantoContinuo(page, 32));
   await expect(folha.locator(".segmented-2xl"), "a chave de tema com ícone").toBeVisible();
   await expect(folha.locator('.nav-list-lg a[aria-current="page"]')).toContainText("Components");
   await expect(folha.locator(".site-menu-area .sidebar-nav")).toHaveCount(1);

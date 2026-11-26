@@ -6,12 +6,15 @@ import {readFileSync, writeFileSync, copyFileSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 import {dirname, join} from "node:path";
 import {temaImplicito} from "./tema-implicito.mjs";
+import {cantoContinuo} from "./canto-continuo.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const tokensCss = readFileSync(join(root, "packages/tokens/dist/aurea.tokens.css"), "utf8");
 // O D16: as regras de tema do core ganham a cópia para a página sem `data-theme` (`tema-implicito.mjs`). Os tokens já
 // chegam convertidos do `build-tokens.mjs`.
-const coreSrc = temaImplicito(readFileSync(join(root, "packages/core/src/aurea.css"), "utf8"));
+// E o canto contínuo da web (HER-01, lote 106): cada regra de canto ganha a cópia com `corner-shape`, só onde o navegador
+// a desenha (`canto-continuo.mjs`).
+const coreSrc = cantoContinuo(temaImplicito(readFileSync(join(root, "packages/core/src/aurea.css"), "utf8")));
 
 // @layer aurea (Fase 6, achado M16): sem camada, o CSS do consumidor briga por
 // especificidade com a biblioteca e perde para qualquer seletor nosso mais específico. Regra

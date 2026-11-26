@@ -62,7 +62,7 @@
       "name": "value",
       "type": "ReactNode",
       "default": "—",
-      "description": "The number itself, already formatted — the component does not format."
+      "description": "The number itself, already formatted — the component does not format. To keep a currency symbol on the same line as the number in a narrow column, join them with a no-break space (U+00A0): `value={\"R$\\u00a012,400\"}`. `Intl.NumberFormat` with `style: \"currency\"` already puts one there."
     },
     {
       "name": "trend",

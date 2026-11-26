@@ -1,4 +1,5 @@
 import {test, expect, type Page} from "@playwright/test";
+import {cantoContinuo} from "./canto";
 
 // O BLOCO 2 (0.44.0) — a lateral inteira, medida montada: `apps/keyboard-probe/lateral.html` (o banco do bloco 2, construído
 // pelo `pnpm build`), na tela do Victor (1280 × 663). As quinze laterais aprovadas pelo Victor em 21/10/2026 e as quatro
@@ -53,7 +54,7 @@ test("4-A · a cápsula: recolhida, o canto é o do controle; aberta, o do cart�
   const lateral = ".sidebar";
   const estaRecolhida = await p.locator(lateral).first().evaluate((e) => e.classList.contains("sidebar-collapsed"));
   if (estaRecolhida) await p.locator(".sidebar-collapse-trigger").click();
-  expect((await caixa(p, lateral)).raio).toBe("22px");
+  expect((await caixa(p, lateral)).raio).toBe(await cantoContinuo(p, 22));
   await p.locator(".sidebar-collapse-trigger").click();
   const recolhida = await caixa(p, lateral);
   expect(recolhida.raio).toBe("999px");

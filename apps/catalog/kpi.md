@@ -41,7 +41,7 @@ variant="brand" is the yellow card; bars puts a bar per period under the number.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `label` | `ReactNode` | — | What is being measured. Sits above the number, in muted text. |
-| `value` | `ReactNode` | — | The number itself, already formatted — the component does not format. |
+| `value` | `ReactNode` | — | The number itself, already formatted — the component does not format. To keep a currency symbol on the same line as the number in a narrow column, join them with a no-break space (U+00A0): `value={"R$\u00a012,400"}`. `Intl.NumberFormat` with `style: "currency"` already puts one there. |
 | `trend` | `ReactNode` | — | The change, as a node and not a number: the sign, the unit and the wording belong to the domain, not to a card. |
 | `direction` | `up \| down \| flat` | — | Where the number went. Draws the arrow (trend-up, trend-down, minus), colours the trend and puts a word in front of it for screen readers — so the direction never depends on colour alone. |
 | `tone` | `success \| danger \| neutral` | from direction | The colour of the trend. By default up is success, down is danger and flat is neutral; set it when going up is bad (cost, errors). Without direction it paints nothing: colour never travels alone. |

@@ -88,9 +88,50 @@ export function highlightCode(code:string,language:string):CodeLine[]|null{
   colorirArvore(texto,arvore,destaque,
     (pedaco,classes)=>{linhas[linhas.length-1]!.push(classes?{text:pedaco,className:classes}:{text:pedaco})},
     ()=>{linhas.push([])},de,de+code.length);
-  return linhas;
+  return BASH.has(language.toLowerCase())?comandosDoBash(linhas):linhas;
 }
 const JSX=new Set(["jsx","tsx"]);
+const BASH=new Set(["bash","sh","shell"]);
+// O NOME DO COMANDO NO BASH (o item 98, decidido pelo Victor na bancada de 24/11/2026: "Em destaque"). O modo antigo do
+// CodeMirror não marca o comando — `pnpm add x` saía inteiro na cor do texto. Como a maioria das referências, a primeira
+// palavra de cada comando sai com o destaque de função (`tok-function`): no começo da linha e depois de `|`, `&&`, `||`,
+// `;`, `&` e `(` (o `$(…)` também; e a crase). Não é comando: a atribuição antes dele (`FOO=1 node …` destaca o `node`), o `$` do
+// prompt e a linha que continua a de cima (a que terminou em barra invertida). A palavra-chave (`if`, `then`) já tem cor e deixa o
+// comando seguinte ser o destacado.
+// As duas expressões vão como texto (`new RegExp`), e a crase como `\x60`: escritas entre barras, o `(`, o `[` e a crase
+// de dentro parecem sem par para quem lê o arquivo (o check 46 do validador).
+const SEPARA=new RegExp("[|&;(\\x60]");
+const PALAVRA=new RegExp("^([\\s|&;(\\x60]*)([^\\s|&;()\\x60<>]*)");
+function comandosDoBash(linhas:CodeLine[]):CodeLine[]{
+  let continua=false;
+  return linhas.map((linha)=>{
+    let espera=!continua,valor=false;
+    const nova:CodeLine=[];
+    for(const p of linha){
+      // O valor da atribuição (`FOO=1`) vem num pedaço com cor própria: depois dele, o comando ainda está por vir.
+      if(p.className){nova.push(p);if(valor)valor=false;else if(p.className!=="tok-keyword"&&p.className!=="tok-comment")espera=false;continue}
+      valor=false;
+      let resto=p.text;
+      while(resto){
+        if(!espera){
+          const i=resto.search(SEPARA);
+          if(i<0){nova.push({text:resto});resto="";break}
+          nova.push({text:resto.slice(0,i+1)});resto=resto.slice(i+1);espera=true;continue;
+        }
+        const m=PALAVRA.exec(resto)!;
+        if(m[1])nova.push({text:m[1]});
+        const palavra=m[2]!;
+        resto=resto.slice(m[0].length);
+        if(!palavra){if(resto){nova.push({text:resto[0]!});resto=resto.slice(1);espera=false}continue}
+        if(palavra==="$"||/^[A-Za-z_]\w*=/.test(palavra)){nova.push({text:palavra});valor=!resto&&palavra.endsWith("=");continue}
+        nova.push({text:palavra,className:"tok-function"});espera=false;
+      }
+    }
+    const fim=nova.length?nova[nova.length-1]!:undefined;
+    continua=!!fim&&!fim.className&&/\\\s*$/.test(fim.text);
+    return nova;
+  });
+}
 // Quantos nós de erro a leitura deixou: é a régua para escolher entre a leitura direta e a do fragmento.
 function erros(arvore:ReturnType<typeof js.parse>):number{
   let n=0;

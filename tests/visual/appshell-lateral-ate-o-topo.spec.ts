@@ -87,11 +87,13 @@ test("MNT-34 · a 800 × 450: a faixa (ou a barra) com o botão da gaveta; o de 
   }
 });
 
-test("MNT-34 · o arranjo de sempre não muda: a barra atravessa a tela, a lateral a 96, a bolinha da junção", async ({page: p, baseURL}) => {
+// A bolinha da junção saiu no lote 106 (0.82.0, a troca da ADR-0056): o botão de recolher fica na barra de cima.
+test("MNT-34 · o arranjo de sempre: a barra atravessa a tela, a lateral a 96, o botão de recolher dentro da barra", async ({page: p, baseURL}) => {
   await abrir(p, baseURL, "hoje");
   const m = await medir(p);
   expect(m.barra, JSON.stringify(m)).toMatchObject({x: 16, y: 16, h: 64});
   expect(m.lateral!.y).toBe(96);
-  expect(m.bolinha).not.toBeNull();
-  expect(m.botao).toBeNull();
+  expect(m.bolinha, "sem a bolinha da junção").toBeNull();
+  expect(m.botao, "o botão de recolher").not.toBeNull();
+  expect(m.botao!.y >= m.barra!.y && m.botao!.y + m.botao!.h <= m.barra!.y + m.barra!.h, "dentro da barra de cima").toBe(true);
 });
