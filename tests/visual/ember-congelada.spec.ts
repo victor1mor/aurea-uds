@@ -5,17 +5,20 @@ import {readFileSync, writeFileSync, existsSync} from "node:fs";
 // vai só mudar de nome (Aurea Ember, no passo C). Os tokens dela foram congelados na fonte, e toda regra nova leva a
 // exclusão dela. Este teste prova no navegador: no banco da paleta (`apps/keyboard-probe/paleta.html`, as peças que a
 // paleta toca), com `data-brand="ember"`, nos dois temas, a cor de CADA elemento — letra, fundo, borda, contorno, sombra,
-// sublinhado, e o `::before`/`::after` — é a mesma da 0.44.0.
+// sublinhado, e o `::before`/`::after` — é a mesma da fotografia gravada (abaixo).
 //
-// A referência (`ember-0.44.0.json`) foi gravada com a folha da 0.44.0 no lugar da de hoje, pelo MESMO código abaixo:
-//   EMBER_GRAVAR=<caminho do aurea.css da 0.44.0> npx playwright test tests/visual/ember-congelada.spec.ts --project=chromium
+// A REFERÊNCIA MUDOU (lote 106, 26/11/2026, o Victor: *"Sim, ajustar"*): desde 14/11/2026 a Ember recebe o que cada lote faz,
+// e a fotografia da 0.44.0 — com as quatro mudanças aceitas escritas como exceção — tinha ficado velha (7 cores no claro e
+// 73 no escuro diferentes, todas de lotes aprovados). A referência agora é a de HOJE, a 0.81.1 (`ember-0.81.1.json`), e as
+// exceções saíram: estão dentro dela. Quem faz esta prova reprovar é qualquer cor da Ember que mude sem o Victor ver.
+// Quando um lote mudar a Ember de propósito, o Victor aprova olhando a dela, e a fotografia se regrava com a folha de hoje:
+//   EMBER_GRAVAR=hoje npx playwright test tests/visual/ember-congelada.spec.ts --project=chromium
+// (ou com o caminho de um `aurea.css` antigo, para gravar a fotografia de outra versão.)
 // Só cor e enfeite entram na comparação, não medida: um lote que mude o espaço de uma peça não mexe aqui.
 // A exceção: o desenho da LINHA DO TEMPO (os `::before`), que o conserto de 27/10/2026 refez em todas as marcas — o defeito
 // era geral (o Victor). A cor da linha da ember é provada no `paleta-passo-a.spec.ts`.
-// Provado contra o defeito (27/10/2026): sem o congelamento dos tokens da ember, reprova (a tinta e a letra do aviso); sem
-// a exclusão nas regras novas, reprova (o link, o campo, o botão ligado, a linha do tempo).
 const APP = "/apps/keyboard-probe/out/paleta.html";
-const REF = "tests/visual/ember-0.44.0.json";
+const REF = "tests/visual/ember-0.81.1.json";
 const GRAVAR = process.env.EMBER_GRAVAR;
 
 const PROPS = ["color", "background-color", "background-image", "border-top-color", "border-right-color", "border-bottom-color",
@@ -26,7 +29,7 @@ const PSEUDO = ["content", "background-color", "background-image", "box-shadow",
 type Foto = Record<string, Record<string, string>>;
 
 async function fotografar(p: Page, tema: string, marca = "ember"): Promise<Foto> {
-  if (GRAVAR) {
+  if (GRAVAR && GRAVAR !== "hoje") {
     const antiga = readFileSync(GRAVAR, "utf8");
     await p.route(/\/assets\/aurea-[^/]+\.css$/, (r) => r.fulfill({status: 200, contentType: "text/css", body: antiga}));
   }
@@ -40,6 +43,10 @@ async function fotografar(p: Page, tema: string, marca = "ember"): Promise<Foto>
       const chave = `${i}:${el.tagName.toLowerCase()}${el.getAttribute("data-prova") ? `[${el.getAttribute("data-prova")}]` : ""}`;
       const cs = getComputedStyle(el);
       const linha: Record<string, string> = {};
+      // O que está escondido para o olho (o recorte a zero do motor, como a entrada do `Slider`) não tem cor da Aurea: a
+      // dele é a padrão do navegador, que muda do Windows para o Linux (lote 106: o campo de dentro do `Slider` dava
+      // `rgb(16, 16, 16)` no Windows e `rgb(157, 150, 142)` na CI). Fica só o nome, para a contagem de peças valer.
+      if (cs.clipPath === "inset(50%)") { out[chave] = linha; return; }
       for (const prop of PROPS) linha[prop] = cs.getPropertyValue(prop);
       for (const pseudo of ["::before", "::after"]) {
         if (el.closest(".timeline")) continue;
@@ -54,11 +61,8 @@ async function fotografar(p: Page, tema: string, marca = "ember"): Promise<Foto>
   }, {PROPS, PSEUDO});
 }
 
-// O NOME NOVO (passo C, 28/10/2026): a `ember` passou a se chamar Aurea Ember (`ember`), e o nome antigo vale por uma versão.
-// Os dois nomes têm de sair com as MESMAS cores da 0.44.0 — só o nome mudou. Provado contra o defeito: com a marca renomeada
-// nos tokens e o core ainda escrevendo só `ember`, a `ember` reprova (as regras novas da paleta a alcançam).
 for (const marca of ["ember"]) for (const tema of ["light", "dark"]) {
-  test(`a ${marca} no ${tema === "light" ? "claro" : "escuro"} sai com as cores da 0.44.0`, async ({page: p}, info) => {
+  test(`a ${marca} no ${tema === "light" ? "claro" : "escuro"} sai com as cores gravadas na 0.81.1`, async ({page: p}, info) => {
     test.skip(info.project.name !== "chromium", "a referência foi gravada no Chromium");
     const agora = await fotografar(p, tema, marca);
     expect(Object.keys(agora).length, "o banco tem peças").toBeGreaterThan(200);
@@ -70,46 +74,14 @@ for (const marca of ["ember"]) for (const tema of ["light", "dark"]) {
     }
     const ref: Foto = JSON.parse(readFileSync(REF, "utf8"))[tema];
     const diferencas: string[] = [];
-    // A ÚNICA MUDANÇA PERMITIDA (passo C, 28/10/2026, o Victor: "Brancos, como as outras"): no escuro, as marcas dos
-    // controles — a bolinha do Switch, a alça do Slider, o visto e o ponto do Radio — saíam no quase preto do fundo dela
-    // (`oklch(0.16 0.02 250)`) e passaram ao branco, como nas outras marcas e na referência. Medido: 9 propriedades, em 4
-    // peças, só no escuro.
-    const marcaDoControle = (antes: string, depois: string) => tema === "dark" && antes === "oklch(0.16 0.02 250)" && depois === "oklch(1 0 0)";
-    // A SEGUNDA (site B, 01/11/2026, o Victor: "adicione sombra na ember também"): no escuro, a sombra pequena
-    // (`--shadow-sm`) que aparece — a do `theme.dark`, uma camada a 45% — no lugar das três camadas a 4–6%, que sumiam no
-    // fundo escuro. Medido: 3 peças (a cápsula escolhida, o botão e a caixa com a sombra), só no escuro.
-    const SOMBRA_ANTIGA = "rgba(0, 0, 0, 0.04) 0px 2px 4px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px, rgba(0, 0, 0, 0.06) 0px 0px 1px 0px";
-    const sombraDoEscuro = (prop: string, antes: string, depois: string) => tema === "dark" && prop.endsWith("box-shadow")
-      && antes === SOMBRA_ANTIGA && depois === "rgba(0, 0, 0, 0.45) 0px 1px 3px 0px";
-    // A TERCEIRA (0.55.0, 04/11/2026, o Victor: "A" no escuro, "Como na origem" no claro): o link herdava o amarelo da
-    // Gold; agora é o laranja do botão nos dois temas, como no sistema de origem da Ember. Vale para a letra do link e
-    // tudo que a pinta com `currentColor` (a borda transparente não muda: só a cor guardada nela).
-    const linkDaEmber = (antes: string, depois: string) =>
-      (tema === "dark" && antes === "oklch(0.795 0.184 86.047)" && depois === "oklch(0.72 0.19 48)")
-      || (tema === "light" && antes === "oklch(0.52 0.106 86.047)" && depois === "oklch(0.682 0.197 44.5)");
-    // A QUARTA (a Rodada 1 das decisões em bloco, 23/11/2026, o Victor: "Apagar as cores velhas"): a regra órfã
-    // `.health-cell.warn/.bad/.off` saiu do núcleo — o `HealthMatrix` nunca a produzia. Só a célula do banco escrita com
-    // `warn` à mão muda, só no fundo, e só deixando o laranja de atenção da 0.44.0.
-    const celulaVelha = (chave: string, prop: string, antes: string) =>
-      chave.endsWith("li[saude-atencao]") && prop === "background-color" && antes === "oklch(0.727 0.149 60)";
-    let permitidas = 0, sombras = 0, links = 0, celulas = 0;
     for (const [chave, linha] of Object.entries(ref)) {
       const hoje = agora[chave];
       if (!hoje) { diferencas.push(`${chave}: sumiu`); continue; }
       for (const [prop, valor] of Object.entries(linha)) {
-        if (hoje[prop] === valor) continue;
-        if (marcaDoControle(valor, hoje[prop])) { permitidas++; continue; }
-        if (sombraDoEscuro(prop, valor, hoje[prop])) { sombras++; continue; }
-        if (linkDaEmber(valor, hoje[prop])) { links++; continue; }
-        if (celulaVelha(chave, prop, valor)) { celulas++; continue; }
-        diferencas.push(`${chave} ${prop}: ${valor} → ${hoje[prop]}`);
+        if (hoje[prop] !== valor) diferencas.push(`${chave} ${prop}: ${valor} → ${hoje[prop]}`);
       }
     }
     expect(diferencas.slice(0, 40), `${diferencas.length} diferenças`).toEqual([]);
-    if (tema === "dark") expect(permitidas, "as marcas brancas do escuro estão lá").toBe(9);
-    if (tema === "dark") expect(sombras, "a sombra pequena do escuro está lá").toBe(3);
-    expect(links, "o link no laranja da Ember está lá").toBeGreaterThan(0);
-    expect(celulas, "a célula velha do painel saiu").toBe(1);
     expect(Object.keys(agora).length, "o banco tem as mesmas peças").toBe(Object.keys(ref).length);
   });
 }
