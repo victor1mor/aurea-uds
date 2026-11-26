@@ -17606,7 +17606,7 @@ const actions = allowedFrom(device.state);   // online -> ["update", "calibrate"
         current value, and the way back is a button that exists even when the device does not
         answer — whoever mis-calibrated should not have to wait for the equipment */}
     <div role="group" aria-label="Calibration">
-      <Field label="Head temperature offset (°C)"
+      <Field label="Head temperature offset (°C)" style={{marginBlockEnd:"var(--space-2)"}}
         hint={`Now ${cal.current} · default ${cal.default}`}>
         <Range min={-2} max={2} step={0.1} value={cal.value} onChange={setOffset}
           aria-label="Head temperature offset in degrees Celsius" />

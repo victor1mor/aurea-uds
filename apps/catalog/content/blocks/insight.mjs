@@ -895,7 +895,9 @@ export function deviceControl(state) {
       // — e quem achou isso foi a prova contra o defeito, não a leitura.
       regiao("Calibration",
         responde
-          ? h(Field, {label: "Head temperature offset (°C)",
+          // O `--space-2` embaixo do campo (o Victor, 25/11/2026, "Pode afastar"): sem ele, o "Revert to default" ficava 2
+          // abaixo da trilha, e o alvo de toque da WCAG 2.2 (24 × 24 em volta do meio da trilha) o alcançava.
+          ? h(Field, {label: "Head temperature offset (°C)", style: {marginBlockEnd: "var(--space-2)"},
               hint: `Now ${CALIBRACAO.atual} · default ${CALIBRACAO.padrao}`},
               h(Range, {min: -2, max: 2, step: 0.1, defaultValue: 0.4, "aria-label": "Head temperature offset in degrees Celsius"}))
           : h("div", null,
@@ -1581,7 +1583,7 @@ const actions = allowedFrom(device.state);   // online -> ["update", "calibrate"
         current value, and the way back is a button that exists even when the device does not
         answer — whoever mis-calibrated should not have to wait for the equipment */}
     <div role="group" aria-label="Calibration">
-      <Field label="Head temperature offset (°C)"
+      <Field label="Head temperature offset (°C)" style={{marginBlockEnd:"var(--space-2)"}}
         hint={\`Now \${cal.current} · default \${cal.default}\`}>
         <Range min={-2} max={2} step={0.1} value={cal.value} onChange={setOffset}
           aria-label="Head temperature offset in degrees Celsius" />
