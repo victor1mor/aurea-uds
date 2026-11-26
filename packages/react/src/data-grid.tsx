@@ -5,7 +5,7 @@
 // SUBPATH PRÓPRIO (ver ./qrcode): é o único componente que precisa do @tanstack/react-table,
 // que é peer OPCIONAL. Table, DataList, KPI e Timeline ficam em /data-display sem essa conta.
 import React, {type InputHTMLAttributes, type RefAttributes} from "react";
-import {useReactTable, getCoreRowModel, getSortedRowModel, getFilteredRowModel, getPaginationRowModel, getFacetedRowModel, getFacetedUniqueValues, flexRender, type Column, type ColumnDef, type FilterFn, type SortingState, type RowSelectionState, type ColumnFiltersState, type VisibilityState, type ColumnSizingState, type PaginationState, type Updater} from "@tanstack/react-table";
+import {useTable, tableFeatures, rowSortingFeature, columnFilteringFeature, globalFilteringFeature, columnFacetingFeature, rowPaginationFeature, rowSelectionFeature, columnVisibilityFeature, columnSizingFeature, columnResizingFeature, createSortedRowModel, createFilteredRowModel, createPaginatedRowModel, createFacetedRowModel, createFacetedUniqueValues, filterFns, sortFns, flexRender, type Column, type ColumnDef as ColumnDefDoMotor, type FilterFn, type RowData, type SortingState, type RowSelectionState, type ColumnFiltersState, type ColumnVisibilityState, type ColumnSizingState, type PaginationState, type Updater} from "@tanstack/react-table";
 import {cx, useAureaStrings, stateSeverity, type UniversalState} from "./internal.js";
 import {useDirection} from "@base-ui/react/direction-provider";
 import {proprio} from "./pure.js";
@@ -19,9 +19,34 @@ import {IconButton} from "./actions.js";
 
 // Reexportados pelo mesmo motivo que ColumnDef: quem controla o estado de fora
 // precisa TIPAR esse estado, e não deve ter de instalar o motor para isso.
-export type {ColumnDef, SortingState, RowSelectionState, ColumnFiltersState, VisibilityState, ColumnSizingState} from "@tanstack/react-table";
+export type {SortingState, RowSelectionState, ColumnFiltersState, ColumnSizingState} from "@tanstack/react-table";
+// A 9 chama este de `ColumnVisibilityState`; o nome que a Aurea publicou fica, com a mesma forma (`Record<string, boolean>`).
+export type VisibilityState=ColumnVisibilityState;
 
-// DataGrid (Fase 4): TanStack Table v8 (8.21.3) headless + pele Aurea — sort,
+// C-14 (o lote 111, 26/11/2026): o motor passou da TanStack Table 8 para a 9 (9.3.1), antes da 1.0, porque o `ColumnDef`
+// dele é fronteira pública da grade. Na 9 cada tabela diz QUAIS recursos usa (`tableFeatures`), e os tipos levam esse
+// conjunto como primeiro parâmetro (`ColumnDef<TFeatures, TData, TValue>`). O conjunto da grade é UM só e fixo — é o que
+// ela usava na 8, recurso por recurso —, e o `ColumnDef` que a Aurea entrega já vem com ele: o app continua escrevendo
+// `ColumnDef<Linha>`. Os registros inteiros de `filterFns` e `sortFns` entram porque, na 9, uma função escolhida pelo
+// NOME só existe se estiver registrada: o `"auto"` do filtro de coluna (medido: sem o registro, o filtro de texto não
+// deixa passar nada) e todo nome que o app escreve na coluna (`filterFn: "equals"`, `sortFn: "alphanumeric"`).
+//
+// A paginação e as facetas ficam SEMPRE registradas: o conjunto não pode mudar entre uma renderização e outra. Sem
+// `pageSize`, a grade diz ao motor `manualPagination` (ele devolve as linhas sem cortar), que é o que a 8 fazia sem o
+// `getPaginationRowModel`. A faceta só varre os dados quando uma coluna pede a contagem.
+const recursosDaGrade=tableFeatures({
+  columnFilteringFeature,globalFilteringFeature,columnFacetingFeature,rowSortingFeature,rowPaginationFeature,
+  rowSelectionFeature,columnVisibilityFeature,columnSizingFeature,columnResizingFeature,
+  filteredRowModel:createFilteredRowModel(),sortedRowModel:createSortedRowModel(),paginatedRowModel:createPaginatedRowModel(),
+  facetedRowModel:createFacetedRowModel(),facetedUniqueValues:createFacetedUniqueValues(),
+  filterFns,sortFns,
+});
+/** O conjunto de recursos do motor que a `DataGrid` registra — para quem tipa colunas com o `createColumnHelper` do motor. */
+export type DataGridFeatures=typeof recursosDaGrade;
+/** A definição de coluna da `DataGrid`: o `ColumnDef` da TanStack Table 9 com os recursos da grade já escolhidos. */
+export type ColumnDef<TData extends RowData,TValue=any>=ColumnDefDoMotor<DataGridFeatures,TData,TValue>;
+
+// DataGrid (Fase 4): TanStack Table headless (a 8.21.3 até a 0.82; a 9.3.1 desde a 0.83.0, o lote 111) + pele Aurea — sort,
 // filtro global, paginação e seleção por checkbox. A pele reusa .table-wrap/th/td.
 //
 // PLANO-1.0 Parte F, itens F1 e F2 (08/08/2026): o estado deixou de ser SÓ interno.
@@ -90,8 +115,8 @@ export interface GridFilterSpec{column:string;label:string;facet?:boolean;option
 // fábrica faz "valor da célula ∈ selecionados": `arrIncludes`/`arrIncludesSome`
 // esperam a célula array (medido em filterFns.ts:45,67). É uma linha, e mora aqui
 // para o consumidor não repeti-la em cada coluna, que é o que a referência obriga.
-const facetFilterFn:FilterFn<any>=(row,columnId,value)=>!Array.isArray(value)||!value.length||value.includes(String(row.getValue(columnId)));
-function GridFilter<T>({col,spec,name}:{col:Column<T,unknown>;spec:GridFilterSpec;name:string}){
+const facetFilterFn:FilterFn<DataGridFeatures,any>=(row,columnId,value)=>!Array.isArray(value)||!value.length||value.includes(String(row.getValue(columnId)));
+function GridFilter<T extends RowData>({col,spec,name}:{col:Column<DataGridFeatures,T,unknown>;spec:GridFilterSpec;name:string}){
   if(!spec.facet)return <Input value={(col.getFilterValue() as string)??""} onChange={e=>col.setFilterValue(e.target.value||undefined)} aria-label={name}/>;
   const counts=new Map([...col.getFacetedUniqueValues()].map(([k,n])=>[String(k),n]));
   // `options` explícitas mantêm na lista um valor que NENHUMA linha tem agora —
@@ -167,7 +192,7 @@ function usePresoNaPagina(ligado:boolean,grade:React.RefObject<HTMLTableElement|
   // `montagem`: a linha aberta do painel de detalhe muda o lugar da tabela na árvore, e a tabela nasce de novo.
   },[ligado,grade,montagem]);
 }
-export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,onSelectionChange,getRowId,className,sorting:sortingProp,onSortingChange,globalFilter:globalFilterProp,onGlobalFilterChange,page,onPageChange,rowSelection:rowSelectionProp,onRowSelectionChange,manualSorting,manualFiltering,manualPagination,rowCount,filters,columnFilters:columnFiltersProp,onColumnFiltersChange,bulkActions,stickyHeader,dividers,fit,hideableColumns,columnVisibility:columnVisibilityProp,onColumnVisibilityChange,resizableColumns,columnSizing:columnSizingProp,onColumnSizingChange,state,stateMessage,renderDetail,detailRowId:detailRowIdProp,onDetailRowIdChange,onExport}:{data:T[];columns:Array<ColumnDef<T,any>>;label?:string;filterable?:boolean;pageSize?:number;selectable?:boolean;onSelectionChange?:(rows:T[])=>void;getRowId?:(row:T,index:number)=>string;className?:string;sorting?:SortingState;onSortingChange?:(sorting:SortingState)=>void;globalFilter?:string;onGlobalFilterChange?:(filter:string)=>void;page?:number;onPageChange?:(page:number)=>void;rowSelection?:RowSelectionState;onRowSelectionChange?:(selection:RowSelectionState)=>void;manualSorting?:boolean;manualFiltering?:boolean;manualPagination?:boolean;rowCount?:number;filters?:GridFilterSpec[];columnFilters?:ColumnFiltersState;onColumnFiltersChange?:(filters:ColumnFiltersState)=>void;bulkActions?:Array<{id:string;label:string;icon?:IconName;onAction:(rows:T[],clear:()=>void)=>void}>;stickyHeader?:boolean|"page";dividers?:boolean;fit?:boolean;hideableColumns?:boolean;columnVisibility?:VisibilityState;onColumnVisibilityChange?:(v:VisibilityState)=>void;resizableColumns?:boolean;columnSizing?:ColumnSizingState;onColumnSizingChange?:(s:ColumnSizingState)=>void;state?:"loading"|"error"|UniversalState;stateMessage?:string;renderDetail?:(row:T)=>React.ReactNode;detailRowId?:string|null;onDetailRowIdChange?:(id:string|null)=>void;onExport?:(rows:T[],scope:{count:number;filtered:boolean;selected:boolean})=>void}){
+export function DataGrid<T extends RowData>({data,columns,label,filterable,pageSize,selectable,onSelectionChange,getRowId,className,sorting:sortingProp,onSortingChange,globalFilter:globalFilterProp,onGlobalFilterChange,page,onPageChange,rowSelection:rowSelectionProp,onRowSelectionChange,manualSorting,manualFiltering,manualPagination,rowCount,filters,columnFilters:columnFiltersProp,onColumnFiltersChange,bulkActions,stickyHeader,dividers,fit,hideableColumns,columnVisibility:columnVisibilityProp,onColumnVisibilityChange,resizableColumns,columnSizing:columnSizingProp,onColumnSizingChange,state,stateMessage,renderDetail,detailRowId:detailRowIdProp,onDetailRowIdChange,onExport}:{data:T[];columns:Array<ColumnDef<T,any>>;label?:string;filterable?:boolean;pageSize?:number;selectable?:boolean;onSelectionChange?:(rows:T[])=>void;getRowId?:(row:T,index:number)=>string;className?:string;sorting?:SortingState;onSortingChange?:(sorting:SortingState)=>void;globalFilter?:string;onGlobalFilterChange?:(filter:string)=>void;page?:number;onPageChange?:(page:number)=>void;rowSelection?:RowSelectionState;onRowSelectionChange?:(selection:RowSelectionState)=>void;manualSorting?:boolean;manualFiltering?:boolean;manualPagination?:boolean;rowCount?:number;filters?:GridFilterSpec[];columnFilters?:ColumnFiltersState;onColumnFiltersChange?:(filters:ColumnFiltersState)=>void;bulkActions?:Array<{id:string;label:string;icon?:IconName;onAction:(rows:T[],clear:()=>void)=>void}>;stickyHeader?:boolean|"page";dividers?:boolean;fit?:boolean;hideableColumns?:boolean;columnVisibility?:VisibilityState;onColumnVisibilityChange?:(v:VisibilityState)=>void;resizableColumns?:boolean;columnSizing?:ColumnSizingState;onColumnSizingChange?:(s:ColumnSizingState)=>void;state?:"loading"|"error"|UniversalState;stateMessage?:string;renderDetail?:(row:T)=>React.ReactNode;detailRowId?:string|null;onDetailRowIdChange?:(id:string|null)=>void;onExport?:(rows:T[],scope:{count:number;filtered:boolean;selected:boolean})=>void}){
   const s=useAureaStrings();
   // O botão do detalhe aponta para o lado onde o detalhe abre, que na escrita da direita para a esquerda é a esquerda
   // (a direção do provedor, como o `Breadcrumb` — 13/11/2026).
@@ -205,9 +230,11 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
   const allColumns=React.useMemo<Array<ColumnDef<T,any>>>(()=>{
     const comFn:Array<ColumnDef<T,any>>=columns.map(c=>{const id=(c as {id?:string;accessorKey?:string}).id??(c as {accessorKey?:string}).accessorKey;
       return id&&facetIds.has(id)?{...c,filterFn:facetFilterFn}:c});
+    // O tracinho é "alguma, mas não todas". Na 9, `getIsSomeRowsSelected` quer dizer "pelo menos uma" (com todas
+    // marcadas também), e sozinho ele punha o tracinho por cima do visto — o `&&!getIsAllRowsSelected()` volta à 8.
     return selectable?[{
       id:"select",enableSorting:false,
-      header:({table})=><GridCheck label={s.dataGridSelectAll} checked={table.getIsAllRowsSelected()} indeterminate={table.getIsSomeRowsSelected()} onChange={table.getToggleAllRowsSelectedHandler()}/>,
+      header:({table})=><GridCheck label={s.dataGridSelectAll} checked={table.getIsAllRowsSelected()} indeterminate={table.getIsSomeRowsSelected()&&!table.getIsAllRowsSelected()} onChange={table.getToggleAllRowsSelectedHandler()}/>,
       cell:({row})=><GridCheck label={s.dataGridSelectRow} checked={row.getIsSelected()} disabled={!row.getCanSelect()} onChange={row.getToggleSelectedHandler()}/>,
     },...comFn]:comFn;
   },[selectable,columns,s,facetIds]);
@@ -221,7 +248,7 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
   }]:allColumns,[allColumns,renderDetail,detailRowId,s,rtl]);
   // A função acima precisa da tabela, e a tabela é o que esta chamada devolve: a referência fecha o
   // círculo. Ela é lida só quando o motor filtra, que é sempre depois da primeira montagem.
-  const tabelaRef=React.useRef<ReturnType<typeof useReactTable<T>>|null>(null);
+  const tabelaRef=React.useRef<ReturnType<typeof useTable<DataGridFeatures,T>>|null>(null);
   // Um nome de coluna que vem de fora (o link, `?sort=constructor`) e é nome do `Object.prototype` derrubava o motor, que
   // procura a coluna num objeto comum (31/10/2026, a auditoria de segurança). Do estado que o motor recebe sai só o que
   // é um desses nomes E não é coluna declarada; o nome que não existe continua com o aviso do próprio motor.
@@ -236,8 +263,8 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
   },[colunas]);
   const sortingDoMotor=React.useMemo(()=>sorting.filter(o=>idsDeclarados.has(o.id)||!(o.id in Object.prototype)),[sorting,idsDeclarados]);
   const filtrosDoMotor=React.useMemo(()=>columnFilters.filter(f=>idsDeclarados.has(f.id)||!(f.id in Object.prototype)),[columnFilters,idsDeclarados]);
-  const table=useReactTable({
-    data,columns:colunas,getRowId,
+  const table=useTable({
+    features:recursosDaGrade,data,columns:colunas,getRowId,
     state:{sorting:sortingDoMotor,globalFilter,rowSelection,columnFilters:filtrosDoMotor,columnVisibility,columnSizing,...(paginated?{pagination}:{})},
     onSortingChange:setSorting,
     onGlobalFilterChange:setGlobalFilter,
@@ -247,10 +274,11 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
     enableColumnResizing:!!resizableColumns,columnResizeMode:"onChange",
     onPaginationChange:setPagination,
     // F2: os três curto-circuitam o modelo de linha correspondente dentro do
-    // motor — medido no fonte instalado (RowSorting.ts:535, ColumnFiltering.ts:408,
-    // RowPagination.ts:376). Por isso os getters abaixo seguem ligados sem
-    // condição: sob `manual` o motor simplesmente não os chama.
-    manualSorting,manualFiltering,manualPagination,rowCount,
+    // motor — medido no fonte instalado da 8 (RowSorting.ts:535, ColumnFiltering.ts:408,
+    // RowPagination.ts:376), e a 9 faz o mesmo. Por isso os modelos de linha seguem
+    // registrados sem condição: sob `manual` o motor simplesmente não os chama.
+    // Sem `pageSize` a paginação é sempre `manual`: ver `recursosDaGrade`, acima.
+    manualSorting,manualFiltering,manualPagination:paginated?manualPagination:true,rowCount,
     // emite as linhas ORIGINAIS já aqui (não em effect): getPreFilteredRowModel
     // ignora filtro/página, então a seleção sobrevive a ambos.
     onRowSelectionChange:updater=>{
@@ -258,9 +286,6 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
       setRowSelection(next);
       onSelectionChange?.(table.getPreFilteredRowModel().flatRows.filter(r=>next[r.id]).map(r=>r.original));
     },
-    getCoreRowModel:getCoreRowModel(),
-    getSortedRowModel:getSortedRowModel(),
-    getFilteredRowModel:getFilteredRowModel(),
     // A BUSCA NÃO DEPENDE DE QUEM VEM PRIMEIRO (A-11, 23/09/2026). A regra do motor (TanStack v8,
     // `GlobalFiltering.js`, `getColumnCanGlobalFilter`) olha SÓ a primeira linha: se o valor dela
     // não for texto nem número, a coluna sai da busca. Medido num app com 298 endereços: o primeiro
@@ -277,13 +302,10 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
       return false;
     },
     enableRowSelection:!!selectable,
-    ...(paginated?{getPaginationRowModel:getPaginationRowModel()}:{}),
-    // só quando há faceta: os dois varrem os dados para montar o mapa de valores
-    // únicos, e ninguém paga por isso sem ter pedido.
-    // <T> explícito: chamados sem argumento de tipo, os dois fixam TData em
-    // `unknown` e derrubam a inferência do useReactTable inteiro — o erro sai
-    // longe daqui, em `columns` e em `row.original`.
-    ...(facetIds.size?{getFacetedRowModel:getFacetedRowModel<T>(),getFacetedUniqueValues:getFacetedUniqueValues<T>()}:{}),
+    // O Shift+clique na caixa de uma linha: na 9 o motor passou a marcar a FAIXA desde a última linha clicada (na 8,
+    // marcava só a linha). Fica como na 8 — decisão do Victor na bancada do lote 111 (26/11/2026, "como hoje"), o mesmo
+    // que faz a referência nº 1 (a caixa marca só a linha dela).
+    enableRowRangeSelection:false,
   });
   tabelaRef.current=table;
   const rows=table.getRowModel().rows;
@@ -491,7 +513,7 @@ export function DataGrid<T>({data,columns,label,filterable,pageSize,selectable,o
         })}</tr>)}
         {!!filters?.length&&<tr className="datagrid-filters">{table.getVisibleLeafColumns().map(col=>{
           const spec=filters.find(f=>f.column===col.id);
-          return <th key={col.id} className={col.id==="select"?"datagrid-selcol":undefined}>{spec?<GridFilter col={col as Column<T,unknown>} spec={spec} name={`${s.dataGridFilter} ${spec.label}`}/>:null}</th>;
+          return <th key={col.id} className={col.id==="select"?"datagrid-selcol":undefined}>{spec?<GridFilter col={col as Column<DataGridFeatures,T,unknown>} spec={spec} name={`${s.dataGridFilter} ${spec.label}`}/>:null}</th>;
         })}</tr>}</thead>
         <tbody>
           {/* `aria-selected` na LINHA só existe quando a grade é selecionável: numa grade sem

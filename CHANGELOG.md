@@ -541,6 +541,67 @@ a conta das referências, e o lote aprovado na bancada com o código de antes ao
 - `tests/unit/codigo-com-cores.test.tsx` (o comando do bash). O código de antes reprova.
 - O `validate.py` (check 6) refaz a folha montada chamando o mesmo `canto-continuo.mjs`.
 
+**A `DataGrid` na TanStack Table 9** — o C-14, aprovado pelo Victor em 24/11/2026 (*"Sim, antes da 1.0"*): o `ColumnDef`
+do motor é fronteira pública da grade, e depois da 1.0 a troca seria quebra. A grade fica igual na tela e no
+comportamento — medida na bancada viva, a de hoje ao lado da nova, nos dois temas e com a Ember: a marcação das duas é
+idêntica, e continua idêntica depois de ordenar, buscar e passar de página. O Victor olhou (*"não vi diferença alguma"*) e
+escolheu o Shift+clique como hoje (*"vou aceitar sua sugestão de como hoje"*, 26/11/2026).
+
+### ⚠ Pode quebrar a compilação
+
+- **O `@tanstack/react-table` (dependência de par opcional, só do `@aurea-uds/react/data-grid`) passa a `^9.3.1`**; com
+  a 8 instalada, a grade não monta (o motor 9 não tem `useReactTable` nem `getCoreRowModel`).
+- **Os tipos escritos direto contra o motor levam o conjunto de recursos da grade primeiro**: `createColumnHelper<Linha>()`
+  vira `createColumnHelper<DataGridFeatures, Linha>()`, `FilterFn<Linha>` vira `FilterFn<DataGridFeatures, Linha>`, e
+  `SortingFn` vira `SortFn<DataGridFeatures, Linha>`. Na coluna, `sortingFn` vira `sortFn`. Quem importa o `ColumnDef`
+  da grade (`@aurea-uds/react/data-grid`) continua escrevendo `ColumnDef<Linha>`.
+- **`DataGrid<T extends RowData>`**: a linha tem de ser objeto ou lista (a regra da 9); grade de texto ou número solto
+  não compila mais.
+- **`table.getIsSomeRowsSelected()`**, para quem o lê numa célula ou cabeçalho próprio, passa a querer dizer "pelo menos
+  uma" — também com todas marcadas.
+
+### Adicionado
+
+- **`DataGridFeatures`** (`@aurea-uds/react/data-grid`): o conjunto de recursos do motor que a grade registra, para tipar
+  colunas com o `createColumnHelper` do motor.
+
+### Mudado
+
+- **A `DataGrid` roda na TanStack Table 9.3.1** (`useTable` com `tableFeatures`: filtro de coluna, busca geral, facetas,
+  ordem, paginação, seleção, colunas que se escondem e que mudam de largura, e os registros `filterFns` e `sortFns`).
+  Conferido no npm em 26/11/2026: a 9.3.1 é a última, e não há alerta de segurança na `react-table` nem na `table-core`.
+  Os três pontos em que a 9 mudaria a grade sem ninguém pedir ficam como na 8:
+  - o "selecionar todos" com todas marcadas mostra o visto, sem o tracinho (na 9, `getIsSomeRowsSelected` é verdadeiro
+    também com todas; o meio-marcado da 0.64.0 agora é `algumas && !todas`);
+  - sem `pageSize`, todas as linhas aparecem (a paginação fica sempre registrada, e sem `pageSize` a grade diz ao motor
+    `manualPagination`; sem isso, a 9 cortaria em 10);
+  - o Shift+clique na caixa de uma linha marca só aquela linha (`enableRowRangeSelection: false`; a 9 marcaria a faixa
+    desde a última clicada) — a escolha do Victor, como a referência nº 1.
+- **O `VisibilityState` continua publicado**, agora como apelido do `ColumnVisibilityState` da 9 (a mesma forma).
+
+### Site
+
+- **A página Migration** ganha a seção "DataGrid on TanStack Table 9 (0.83.0)": o que o app muda, em cinco passos e numa
+  tabela de nomes da 8 e da 9.
+
+### Fora dos pacotes
+
+- O `pnpm-lock.yaml` troca a 8.21.3 pela 9.3.1 (e entram a `@tanstack/react-store` e a `@tanstack/store`, de que a 9
+  depende); na mesma instalação, o pnpm juntou o `@babel/*` 7.29.8 nas versões 7.29.13 e 7.29.11, que já estavam no
+  arquivo.
+
+### Quem cobra
+
+- `tests/unit/datagrid-tanstack9.test.tsx` — 9 testes: o "selecionar todos" sem o tracinho com todas marcadas (pelo
+  clique e pelo estado de fora), todas as linhas sem `pageSize`, o corte com `pageSize`, a ordem de número, a busca, o
+  filtro de texto da coluna, o Shift+clique e o `VisibilityState`. Provados contra o defeito em 26/11/2026, desfazendo
+  uma linha por vez: sem o `&&!getIsAllRowsSelected()` reprovam os dois do tracinho; sem o `manualPagination` das linhas
+  sem página, o das linhas; sem o registro `filterFns`, o do filtro da coluna; com a faixa ligada, o do Shift. (A ordem e
+  a busca passaram sem os registros: na 9 elas acham a função sozinhas; os dois testes ficam como guarda.)
+- Os testes da `DataGrid` que já existiam passam sem mudança (`components`, `composition`, `consumidores-lote1`,
+  `lote3`, `saude-rodadas`, `seguranca-tabelas-e-cor`, `setas-rtl`, `tabela-mnt38-s10`, `meio-marcado`, `lote-q-dados`,
+  `lote-102`, `sem-linha`).
+
 ## [0.81.1] — 2026-11-25
 
 **As promessas públicas dizem a verdade** — o UDS-A1, as contradições que o relatório "a Aurea como UDS completo" achou

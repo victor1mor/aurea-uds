@@ -58,7 +58,7 @@
   },
   "frameworks": {
     "pkg:core": "d3ffb7033c64dc05",
-    "pkg:react": "e8e2943e9c489cd6",
+    "pkg:react": "bbea34297f0e78f8",
     "pkg:native": "6d31dc8bbb4227f6"
   },
   "icons": {
@@ -66,7 +66,7 @@
     "pkg:icons": "d494420044625115"
   },
   "introduction": {
-    "pkg:react": "e8e2943e9c489cd6",
+    "pkg:react": "bbea34297f0e78f8",
     "pkg:core": "d3ffb7033c64dc05",
     "pkg:fonts": "fc077430a51b432a",
     "pkg:icons": "d494420044625115",
@@ -78,7 +78,7 @@
   "migration": {},
   "quick-start": {
     "ts:AureaProvider": "ad097572574ac140",
-    "pkg:react": "e8e2943e9c489cd6",
+    "pkg:react": "bbea34297f0e78f8",
     "pkg:core": "d3ffb7033c64dc05",
     "pkg:fonts": "fc077430a51b432a",
     "pkg:native": "6d31dc8bbb4227f6"
