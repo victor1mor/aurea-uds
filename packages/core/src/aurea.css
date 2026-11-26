@@ -836,13 +836,11 @@ img,svg { display:block; }
 .sidebar-flush:not(.app-shell > *):not(.sidebar-panel-docked,.sidebar-panel-overlay) { max-inline-size:100%; }
 /* 4-A — a trilha em cápsula: recolhida, o canto é o do controle, e não o do cartão. */
 .sidebar-collapse-capsule.sidebar-collapsed { border-radius:var(--radius-control); }
-/* 4-A — a que sai da tela: recolhida, ela some, e a trilha do shell vai a zero. O botão da junção fica dentro da tela, a 16
-   da borda (ele ficaria cortado ao meio na borda da janela). */
+/* 4-A — a que sai da tela: recolhida, ela some, e a trilha do shell vai a zero. */
 .sidebar-collapse-offcanvas.sidebar-collapsed { display:none; }
 /* `.sidebar` repetido na regra de propósito: a da rente recolhida (`.app-shell:has(> .sidebar-collapsed.sidebar-flush)`) vem
    depois na folha, com a mesma força, e deixava a trilha em 68 na rente que sai da tela (o teste do bloco 2 achou). */
 .app-shell:has(> .sidebar.sidebar-collapsed.sidebar-collapse-offcanvas) { --sidebar-track:0px; }
-.app-shell-collapsible:has(> .sidebar.sidebar-collapsed.sidebar-collapse-offcanvas) > .sidebar-toggle-slot { --toggle-x:calc(var(--space-4) + var(--control-h-xs) / 2); }
 /* 4-H — o item atual nas alternativas do item 101. Todas tiram o fio da casa (o `segment-line` o põe de volta, no amarelo).
    `segment`: a cápsula da aba escolhida (ADR-0059), a letra na cor do texto e o peso normal, como a referência. Os tokens
    são os da PÁGINA (`--segment` e `--foreground`), aos pares: sob uma marca de lateral escura, a cápsula clara continua
@@ -896,33 +894,19 @@ img,svg { display:block; }
    nada. Gate nenhum via, porque `sidebar.html` não tem baseline de pixel. */
 .app-shell:has(> .sidebar-collapsed) { --sidebar-track:calc(var(--sidebar-rail) + var(--space-4)*2); }
 .app-shell:has(> .sidebar-collapsed.sidebar-flush) { --sidebar-track:var(--sidebar-rail); }
-/* AN-01 (03/10/2026): O BOTÃO DE RECOLHER, no alto da junção do menu com o conteúdo — o lugar que o
-   Victor marcou. Só com `sidebarCollapsible`, e por isso mora sob `.app-shell-collapsible`: o
-   `.app-shell` cru (o catálogo escrito à mão o usa como raiz) não muda.
-   O botão é um item da grade na MESMA célula da lateral, e por isso a lateral e o conteúdo ganham
-   lugar escrito: sem ele, o posicionamento automático da grade empurraria a lateral para a coluna
-   do conteúdo. A caixa do botão é de tamanho zero na borda da coluna e copia da lateral a margem de
-   cima e o `--shell-top`, então gruda junto quando a página rola; o botão se centra nela.
-   No alto: o centro do botão na altura do centro do primeiro item da lateral (borda + `space-1` +
-   metade do `control-h-md`). Na junção: no meio do vão de `space-4` entre as duas caixas, ou em cima
-   do fio, na lateral rente. */
+/* AN-01 (03/10/2026): com `sidebarCollapsible`, a lateral e o conteúdo ganham lugar escrito na grade. Mora sob
+   `.app-shell-collapsible`: o `.app-shell` cru (o catálogo escrito à mão o usa como raiz) não muda.
+   ~~O botão de recolher, no alto da junção do menu com o conteúdo~~ → desde o lote 106 (26/11/2026, a troca da ADR-0056,
+   *"Na barra de cima"*), o botão é o `Sidebar.Toggle`, na barra de cima, antes da marca; a bolinha da junção saiu. */
 .app-shell-collapsible > .sidebar { grid-column:1; grid-row:2; }
 .app-shell-collapsible > .content { grid-column:2; grid-row:2; }
-.sidebar-toggle-slot { --toggle-top:calc(var(--topbar-height) + var(--space-4)*2); --toggle-x:calc(var(--space-4) / -2); --toggle-edge:var(--border-width);
-  grid-column:1; grid-row:2; justify-self:end; align-self:start; position:sticky; top:var(--toggle-top); z-index:var(--z-sticky); width:0; height:0; margin-block-start:var(--space-4); }
-.app-shell-flush > .sidebar-toggle-slot { --toggle-top:calc(var(--topbar-height) + var(--space-05)); margin-block-start:var(--space-05); }
-.app-shell-collapsible:has(> .sidebar-flush) > .sidebar-toggle-slot { --toggle-top:var(--topbar-height); --toggle-x:0px; --toggle-edge:0px; margin-block-start:0; }
-/* O botão se centra por conta, com o lado dele escrito, e não por `translate` — que é físico e pede
-   `:dir(rtl)` para virar, e o empacotador do app reescreve `:dir()` (medido no Vite, 03/10/2026).
-   Com as margens lógicas ele vira sozinho. O lado é o `control-h-xs` do `IconButton size="xs"`, e o
-   alvo de toque com o dedo (`target-min`, a mesma troca do `.btn-icon` lá embaixo). A seta, quem
-   vira é o React, pela direção do provedor. */
-.sidebar-toggle-slot > .btn.sidebar-toggle { --toggle-size:var(--control-h-xs); --btn-bg:var(--card); --btn-border:var(--border-strong); position:absolute; inline-size:var(--toggle-size); block-size:var(--toggle-size); min-inline-size:0; min-block-size:0;
-  inset-block-start:calc(var(--toggle-edge) + var(--space-1) + var(--control-h-md) / 2 - var(--toggle-size) / 2); inset-inline-start:calc(var(--toggle-x) - var(--toggle-size) / 2); }
-@media (pointer:coarse) { .sidebar-toggle-slot > .btn.sidebar-toggle { --toggle-size:var(--target-min); } }
 @media (max-width:63.9375em) {
-  .sidebar-toggle-slot { display:none; }
   .app-shell-collapsible > .sidebar, .app-shell-collapsible > .content { grid-column:auto; grid-row:auto; } }
+/* SEM ITENS, SEM LATERAL (SYL-01, lote 106, 26/11/2026): o app que não passa menu fica sem a coluna da lateral; o conteúdo
+   ocupa a largura, com a mesma margem dos dois lados. */
+.app-shell-no-sidebar { --sidebar-track:0px; }
+.app-shell-no-sidebar > .content { margin-inline-start:var(--space-4); }
+@media (min-width:64em) { .app-shell-no-sidebar > .content { grid-column:2; } }
 /* A LATERAL ATÉ O TOPO (MNT-34, `AppShell layout="sidebar"`, 23/10/2026) — o pedido do app de rede (*"sidebar de canto e
    que vá até o topo"*) e o PV-04 de um segundo app, na bancada aprovada pelo Victor (*"mantenha o atual e faça também os
    outros 4"*). A marca mora no topo da lateral (o `header` da `Sidebar`, 4-C); a barra de cima só existe se o app passar

@@ -78,14 +78,17 @@ describe("MNT-34 · a lateral até o topo", () => {
     expect(sem.container.querySelector(".sidebar-collapse-trigger")).toBeNull();
   });
 
-  it("o arranjo de sempre não muda: a barra atravessa a tela com a marca, e a bolinha da junção continua", () => {
+  // Desde o lote 106 (a troca da ADR-0056, 26/11/2026): no arranjo de sempre a bolinha da junção saiu, e o botão de
+  // recolher é o mesmo daqui, no começo da barra de cima, antes da marca.
+  it("o arranjo de sempre: a barra atravessa a tela com a marca, e o botão de recolher vai nela, sem bolinha na junção", () => {
     janela(1508);
     const {container} = shell({sidebarCollapsible: true, topbar: <strong>x</strong>});
     const raiz = container.querySelector(".app-shell")!;
     expect(raiz).not.toHaveClass("app-shell-lateral");
     expect(raiz.querySelector(":scope > .topbar .brand .sidebar-brand")).not.toBeNull();
-    expect(raiz.querySelector(":scope > .sidebar-toggle-slot")).not.toBeNull();
-    expect(raiz.querySelector(".app-shell-column, .sidebar-collapse-trigger")).toBeNull();
+    expect(raiz.querySelector(":scope > .sidebar-toggle-slot")).toBeNull();
+    expect(raiz.querySelector(":scope > .topbar .sidebar-collapse-trigger")).not.toBeNull();
+    expect(raiz.querySelector(".app-shell-column")).toBeNull();
   });
 
   it("`sidebarFooter` vale em qualquer arranjo (o pé fixo da lateral, 4-C)", () => {

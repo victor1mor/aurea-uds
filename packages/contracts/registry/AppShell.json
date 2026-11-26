@@ -24,7 +24,7 @@
     {
       "name": "navigation",
       "type": "ReactNode",
-      "description": "The sidebar content, usually a <nav>. The shell never invents one, so the landmark and its label are yours."
+      "description": "The sidebar content, usually a <nav>. The shell never invents one, so the landmark and its label are yours. With no navigation, no navItems and no sidebarFooter, the shell draws no sidebar at all (no empty panel, no drawer or collapse button) and the content takes the full width — except in layout=\"sidebar\", where the sidebar holds the brand."
     },
     {
       "name": "navItems",
@@ -92,13 +92,13 @@
       "name": "sidebarCollapsible",
       "type": "boolean | \"icon\" | \"capsule\" | \"offcanvas\"",
       "default": "false",
-      "description": "Draws the collapse button at the top of the junction between the sidebar and the content — centred on the gap, level with the first item, sticky with the sidebar — and turns the sidebar into the rail on its own between 1024 and 1279px. Off by default: without it the shell is exactly the one before, and an app that already drives sidebarCollapsed with its own button does not get a second one. Behaviour read from the sidebar that one of the references uses (the main reference library has no app frame). It also names HOW the sidebar collapses: true or \"icon\" (the rail), \"capsule\" (the rail with the capsule radius) or \"offcanvas\" (the sidebar leaves the screen and the track goes to zero). The shell then puts the sidebar in a Sidebar.Provider, so Sidebar.Toggle and useSidebar work anywhere inside it."
+      "description": "Draws the collapse button in the top bar, before the brand (the same Sidebar.Toggle as in layout=\"sidebar\"; hidden below 1024px, where the drawer button opens the sidebar), and turns the sidebar into the rail on its own between 1024 and 1279px. Off by default: without it the shell is exactly the one before, and an app that already drives sidebarCollapsed with its own button does not get a second one. Behaviour read from the sidebar that one of the references uses (the main reference library has no app frame). It also names HOW the sidebar collapses: true or \"icon\" (the rail), \"capsule\" (the rail with the capsule radius) or \"offcanvas\" (the sidebar leaves the screen and the track goes to zero). The shell then puts the sidebar in a Sidebar.Provider, so Sidebar.Toggle and useSidebar work anywhere inside it."
     },
     {
       "name": "sidebarToggle",
       "type": "\"edge\" | \"none\"",
       "default": "edge",
-      "description": "Where the shell puts its collapse button. edge: at the seam between the sidebar and the content (in layout=\"sidebar\", at the start of the content bar). none: the shell puts none, and the app places Sidebar.Toggle where it wants — inside the sidebar next to the brand, or as a row at the bottom."
+      "description": "Where the shell puts its collapse button. edge: in the top bar, before the brand (in layout=\"sidebar\", at the start of the content bar). none: the shell puts none, and the app places Sidebar.Toggle where it wants — inside the sidebar next to the brand, or as a row at the bottom."
     },
     {
       "name": "sidebarShortcut",
@@ -248,8 +248,6 @@
     "engine": null,
     "icons": [
       "caret-down",
-      "caret-left",
-      "caret-right",
       "list",
       "list-bullets"
     ]

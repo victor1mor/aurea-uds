@@ -5,12 +5,10 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 // internal → system → actions → feedback → inputs → navigation → layout → data-display → resto.
 import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Separator as BaseSeparator } from "@base-ui/react/separator";
-import { useDirection } from "@base-ui/react/direction-provider";
 import { cx, useAureaStrings } from "./internal.js";
 import { useResponsiveValue } from "./responsivo-runtime.js";
 import { ESCALA } from "./escala.js";
 import { IconButton } from "./actions.js";
-import { Tooltip } from "./overlays.js";
 import { Icon } from "./system.js";
 import { Sidebar, Header } from "./navigation.js";
 // ── Auxiliar de topo: mora ANTES do primeiro export, e a posição é obrigatória ───────────────
@@ -190,9 +188,14 @@ export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, 
     useModoNaRaiz("data-text", textSize === "lg" ? "lg" : undefined);
     const docs = layout === "docs", lateral = layout === "sidebar";
     useGavetaFechaNoDesktop(docs);
+    // SEM ITENS, SEM LATERAL (SYL-01, decidido pelo Victor na bancada de 24/11/2026; 0 de 8 referências desenham lateral
+    // vazia). Sem `navItems`, sem `navigation` e sem `sidebarFooter`, a lateral era uma caixa vazia ao lado do conteúdo. Agora
+    // ela não se desenha, nem o botão da gaveta nem o de recolher (não há o que abrir), e o conteúdo ocupa a largura. No
+    // `layout="sidebar"` a lateral leva a marca, e por isso continua.
+    const semLateral = !lateral && navigation == null && !navItems?.length && sidebarFooter == null;
     const controlado = sidebarCollapsed !== undefined;
     // O jeito de recolher (4-A): `true` é a trilha de sempre.
-    const forma = sidebarCollapsible === true ? "icon" : sidebarCollapsible || undefined;
+    const forma = semLateral ? undefined : sidebarCollapsible === true ? "icon" : sidebarCollapsible || undefined;
     const recolhe = !!forma;
     // `null` = ninguém escolheu, e vale a largura.
     const [escolha, setEscolha] = useState(defaultSidebarCollapsed ?? null);
@@ -215,7 +218,7 @@ export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, 
         mq.addEventListener?.("change", aoCruzar);
         return () => mq.removeEventListener?.("change", aoCruzar);
     }, [recolhe, controlado]);
-    // QUEM MUDA O ESTADO: o botão da junção, o `Sidebar.Toggle` em qualquer lugar e o Ctrl+B passam todos por aqui (4-B).
+    // QUEM MUDA O ESTADO: o botão da barra de cima, o `Sidebar.Toggle` em qualquer lugar e o Ctrl+B passam todos por aqui (4-B).
     // Abaixo de 1024 a lateral é a gaveta: recolher ali é abrir ou fechar a gaveta, como o "mobile" da referência.
     const definir = (nova) => {
         if (estreita) {
@@ -229,21 +232,17 @@ export function AppShell({ brand, navigation, navItems, currentNavId, navLabel, 
             setEscolha(nova);
         onSidebarCollapsedChange?.(nova);
     };
-    const alternar = () => definir(!recolhida);
-    const rotulo = efetiva ? s.sidebarExpand : s.sidebarCollapse;
-    // A seta aponta para onde a lateral vai: recolher é para o começo da linha, abrir é para o fim. Na
-    // escrita da direita para a esquerda o começo é a direita — pela direção do provedor, e não por
-    // `:dir(rtl)` na folha (ver a nota do `.sidebar-toggle` no core).
-    // A condição vai escrita no `icon=` do botão, e não numa variável: é ali que o check 46 lê os
-    // ícones que o shell desenha.
-    const paraOComeco = !efetiva, direita = useDirection() === "rtl";
+    // O BOTÃO DE RECOLHER NA BARRA DE CIMA (a troca da ADR-0056, decidida pelo Victor na bancada de 24/11/2026: "Na barra de
+    // cima"; 7 de 8 referências o põem ali, nenhuma na junção). A bolinha de seta que ficava na junção da lateral com o
+    // conteúdo saiu: o botão é o `Sidebar.Toggle` (o desenho de lateral, sem fundo), antes da marca, como já era no
+    // `layout="sidebar"`. Abaixo de 1024 ele some, e quem abre a gaveta é o botão da gaveta.
     // O BOTÃO DA GAVETA. No `layout="docs"` ele vai para o FIM da barra, depois das ações, como o da documentação da
     // referência no celular (o "Open Sidebar" à direita, 19/10/2026): ali ele vem por último também na ordem do Tab, e a
     // gaveta abre pelo mesmo lado (a folha). No shell de sempre, continua antes da marca.
     // No arranjo, o topo é o pequeno (`size="sm"`), e o botão também: com o tamanho de sempre ele ficava 4 maior que os
     // vizinhos e fora da linha deles (medido a 375, sem toque; com toque, todos sobem para 44).
     const botaoDaGaveta = _jsx(IconButton, { className: "nav-toggle", icon: "list", label: s.navigationToggle, popoverTarget: SHELL_NAV_ID, ...(docs ? { size: "sm" } : {}) });
-    return _jsx("div", { "data-contrast": highContrast ? "high" : undefined, "data-text": textSize === "lg" ? "lg" : undefined, className: cx("app-shell", layout === "docs" && "app-shell-docs", lateral && "app-shell-lateral", !lateral && topbarVariant === "flush" && "app-shell-flush", !lateral && topbarVariant === "pill" && "app-shell-pill", recolhe && "app-shell-collapsible", aside != null && "app-shell-with-aside", className), ...props, children: _jsxs(ProvedorDaLateral, { ligado: recolhe, collapsed: efetiva, onCollapsedChange: definir, collapsible: forma, shortcut: sidebarShortcut, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), !lateral && _jsxs(Header, { variant: topbarVariant, divider: topbarDivider, tabs: topbarTabs, currentTab: topbarCurrentTab, tabsLabel: topbarTabsLabel, tabsEnd: topbarTabsEnd, ...(docs ? { maxWidth: "docs", ...(topbarVariant === "pill" ? {} : { size: "sm" }) } : topbarVariant === "pill" ? { maxWidth: "full" } : {}), blurred: topbarBlurred, brand: docs ? brand : _jsxs(_Fragment, { children: [botaoDaGaveta, brand] }), actions: topbarActions != null ? _jsxs(_Fragment, { children: [topbarActions, docs && botaoDaGaveta] }) : undefined, children: [topbar, docs && topbarActions == null && botaoDaGaveta] }), recolhe && !lateral && sidebarToggle !== "none" && _jsx("div", { className: "sidebar-toggle-slot", children: _jsx(Tooltip, { content: rotulo, side: "right", children: _jsx(IconButton, { className: "sidebar-toggle", size: "xs", icon: paraOComeco === direita ? "caret-right" : "caret-left", label: rotulo, "aria-expanded": !efetiva, "aria-controls": SHELL_NAV_ID, onClick: alternar }) }) }), _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, scrollbar: sidebarScrollbar, collapsed: efetiva, collapsible: forma, indicator: sidebarIndicator, panel: sidebarPanel, contrast: sidebarContrast, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, header: lateral ? brand : undefined, footer: sidebarFooter, children: navigation }), docs && aside != null && _jsx("div", { className: "docs-toc-bar", children: _jsxs("button", { type: "button", className: "docs-toc-toggle", popoverTarget: SHELL_TOC_ID, children: [_jsx(Icon, { name: "list-bullets" }), _jsx("span", { className: "docs-toc-current", "data-toc-current": "", children: asideLabel ?? s.tocLabel }), _jsx(Icon, { name: "caret-down" })] }) }), lateral
+    return _jsx("div", { "data-contrast": highContrast ? "high" : undefined, "data-text": textSize === "lg" ? "lg" : undefined, className: cx("app-shell", layout === "docs" && "app-shell-docs", lateral && "app-shell-lateral", !lateral && topbarVariant === "flush" && "app-shell-flush", !lateral && topbarVariant === "pill" && "app-shell-pill", recolhe && "app-shell-collapsible", semLateral && "app-shell-no-sidebar", aside != null && "app-shell-with-aside", className), ...props, children: _jsxs(ProvedorDaLateral, { ligado: recolhe, collapsed: efetiva, onCollapsedChange: definir, collapsible: forma, shortcut: sidebarShortcut, children: [_jsx("a", { className: "skip-link", href: `#${SHELL_MAIN_ID}`, children: s.skipToContent }), !lateral && _jsxs(Header, { variant: topbarVariant, divider: topbarDivider, tabs: topbarTabs, currentTab: topbarCurrentTab, tabsLabel: topbarTabsLabel, tabsEnd: topbarTabsEnd, ...(docs ? { maxWidth: "docs", ...(topbarVariant === "pill" ? {} : { size: "sm" }) } : topbarVariant === "pill" ? { maxWidth: "full" } : {}), blurred: topbarBlurred, brand: _jsxs(_Fragment, { children: [!docs && !semLateral && botaoDaGaveta, recolhe && sidebarToggle !== "none" && _jsx(AppShellSidebarToggle, { ...(docs ? { size: "sm" } : {}) }), brand] }), actions: topbarActions != null ? _jsxs(_Fragment, { children: [topbarActions, docs && !semLateral && botaoDaGaveta] }) : undefined, children: [topbar, docs && !semLateral && topbarActions == null && botaoDaGaveta] }), !semLateral && _jsx(Sidebar, { id: SHELL_NAV_ID, popover: "auto", variant: sidebarVariant, scrollbar: sidebarScrollbar, collapsed: efetiva, collapsible: forma, indicator: sidebarIndicator, panel: sidebarPanel, contrast: sidebarContrast, items: navItems, current: currentNavId, label: navLabel, onToggle: focoDaGaveta, header: lateral ? brand : undefined, footer: sidebarFooter, children: navigation }), docs && aside != null && _jsx("div", { className: "docs-toc-bar", children: _jsxs("button", { type: "button", className: "docs-toc-toggle", popoverTarget: SHELL_TOC_ID, children: [_jsx(Icon, { name: "list-bullets" }), _jsx("span", { className: "docs-toc-current", "data-toc-current": "", children: asideLabel ?? s.tocLabel }), _jsx(Icon, { name: "caret-down" })] }) }), lateral
                     ? _jsxs("div", { className: "app-shell-column", children: [topbar != null || topbarActions != null
                                 ? _jsx(Header, { variant: "flush", size: "sm", divider: topbarDivider, brand: _jsxs(_Fragment, { children: [botaoDaGaveta, sidebarToggle !== "none" && _jsx(AppShellSidebarToggle, {})] }), actions: topbarActions, children: topbar })
                                 : _jsxs("div", { className: "app-shell-narrow-bar", children: [botaoDaGaveta, brand] }), _jsx("main", { id: SHELL_MAIN_ID, tabIndex: -1, className: cx("content", contentVariant === "plain" && "content-plain"), children: children })] })

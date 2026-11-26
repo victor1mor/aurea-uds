@@ -26,6 +26,20 @@ export default [
       h("div", {style: {minWidth: "160px"}},
         h(A.KPI, {label: "P95 latency", value: "1.8s", trend: "−4% vs last week"}))),
   },
+  // O "R$" que quebra (lote 106, 26/11/2026, decidido pelo Victor na bancada de 24/11/2026: "A ficha ensina o espaço"). O
+  // KPI não muda; o exemplo mostra o espaço que não quebra entre a moeda e o número.
+  {
+    variant: "Metric",
+    name: "A currency that stays with its number",
+    description: "In a narrow column, an ordinary space lets the currency symbol sit on one line and the number on the next. Join them with a no-break space (U+00A0) and they wrap together. `Intl.NumberFormat` with `style: \"currency\"` already puts one there.",
+    uses: ["KPI"],
+    code: `<KPI label="Revenue" value={"R$\\u00a012,400"} trend="+8% vs last month" />`,
+    render: () => h("div", {style: tiras},
+      h("div", {style: {inlineSize: "150px"}},
+        h(A.KPI, {label: "Revenue", value: "R$ 12,400", trend: "+8% vs last month"})),
+      h("div", {style: {inlineSize: "150px"}},
+        h(A.KPI, {label: "Revenue", value: new Intl.NumberFormat("pt-BR", {style: "currency", currency: "BRL", maximumFractionDigits: 0}).format(12400), trend: "+8% vs last month"}))),
+  },
   {
     variant: "Metric",
     name: "The direction, not just the sign",

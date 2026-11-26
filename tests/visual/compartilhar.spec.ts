@@ -1,4 +1,5 @@
 import {test, expect, type Page} from "@playwright/test";
+import {cantoContinuo} from "./canto";
 import {createElement as h, Fragment} from "react";
 import {renderToStaticMarkup} from "react-dom/server";
 import * as A from "../../packages/react/dist/index.js";
@@ -99,8 +100,8 @@ for (const tema of ["light", "dark"]) {
         return {fora: getComputedStyle(f).borderTopLeftRadius, dentro: getComputedStyle(visivel[0]).borderTopLeftRadius,
           quantas: visivel.length, src: visivel[0].getAttribute("src"), razao: r.height / r.width};
       });
-      expect(m.fora).toBe("32px");
-      expect(m.dentro).toBe("24px");
+      expect(m.fora).toBe(await cantoContinuo(page, 32));
+      expect(m.dentro).toBe(await cantoContinuo(page, 24));
       expect(m.quantas).toBe(1);
       expect(m.src).toBe(tema === "dark" ? TELA_ESCURA : TELA);
       expect(m.razao).toBeCloseTo(19.5 / 9, 1);
