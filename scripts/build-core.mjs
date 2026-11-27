@@ -42,4 +42,11 @@ writeFileSync(join(root, "packages/core/dist/aurea.css.d.ts"),
   "// Gerado por scripts/build-core.mjs. A folha de estilo não exporta nada — este arquivo\n"
   + "// existe para a condição `types` do subpath ./css do mapa `exports`.\n"
   + "export {};\n");
-console.log("build-core: wrote packages/core/dist/aurea.css (+aurea.js, +aurea.css.d.ts)");
+// E a do subpath `./js` (SOCK-03, lote 112, 27/11/2026): o `aurea.js` é um script que roda sozinho e não exporta nada
+// (ele pendura `window.Aurea`). O arquivo dá à condição `types` um alvo, como o da folha.
+writeFileSync(join(root, "packages/core/dist/aurea.js.d.ts"),
+  "// Gerado por scripts/build-core.mjs. O script não exporta nada: ao ser importado, ele liga os\n"
+  + "// comportamentos da página e pendura `window.Aurea`. Este arquivo existe para a condição `types`\n"
+  + "// do subpath ./js do mapa `exports`.\n"
+  + "export {};\n");
+console.log("build-core: wrote packages/core/dist/aurea.css (+aurea.js, +aurea.css.d.ts, +aurea.js.d.ts)");

@@ -70,8 +70,18 @@ export function cabecalhos(resumos) {
     + "  X-Frame-Options: SAMEORIGIN\n"
     + "  Referrer-Policy: strict-origin-when-cross-origin\n"
     + "  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), hid=(), fullscreen=(self), web-share=(self), clipboard-write=(self)\n"
-    + CABECALHOS.split("\n").slice(2).join("\n");
+    + CABECALHOS.split("\n").slice(2).join("\n")
+    + ASSETS_COMPRIMIDOS;
 }
+
+/** O SITE COMPRIMIDO (lote 112, 27/11/2026; decisão do Victor de 24/11, "a distribuição"). O `no-transform` da regra geral
+ *  impede a Cloudflare de comprimir — a documentação dela diz isso com essas palavras ("prevents Cloudflare from altering
+ *  compression"), e o site saía inteiro sem compressão: medido em aureauds.dev, a folha com 1,44 MB e o script das caixas
+ *  vivas com 1,86 MB, com `Accept-Encoding: br, gzip`. A injeção que o `no-transform` barra só acontece em PÁGINA (HTML);
+ *  os arquivos de apoio (`/assets/*`: CSS, JS, desenhos) perdem o `no-transform` e ganham a compressão da Cloudflare. A
+ *  regra vem DEPOIS da geral e solta o cabeçalho (`! Cache-Control`) antes de escrevê-lo de novo: na ordem inversa, os
+ *  dois valores se juntariam com vírgula (a documentação de `_headers` dos Workers, "Detach a header"). */
+export const ASSETS_COMPRIMIDOS = "/assets/*\n  ! Cache-Control\n  Cache-Control: public, max-age=0, must-revalidate\n";
 
 function arquivos(dir) {
   return readdirSync(dir).flatMap((n) => {

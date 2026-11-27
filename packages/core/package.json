@@ -1,6 +1,6 @@
 {
   "name": "@aurea-uds/core",
-  "version": "0.83.0",
+  "version": "0.83.1",
   "description": "The Aurea UDS CSS and its behavior in plain JavaScript. Import @aurea-uds/fonts/css before this one.",
   "keywords": [
     "aurea",
@@ -21,6 +21,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "files": [
     "dist"
   ],
@@ -29,6 +30,9 @@
       "types": "./dist/aurea.css.d.ts",
       "default": "./dist/aurea.css"
     },
-    "./js": "./dist/aurea.js"
+    "./js": {
+      "types": "./dist/aurea.js.d.ts",
+      "default": "./dist/aurea.js"
+    }
   }
 }

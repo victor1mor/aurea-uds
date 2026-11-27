@@ -69,7 +69,12 @@ export function Accordion({items,variant="default",multiple=false,defaultValue,i
 // (Root/Trigger/Panel) — quem quiser compor esse nível usa o motor direto.
 export function Collapsible({trigger,children,open,defaultOpen,onOpenChange,disabled,className}:{trigger:ReactNode;children:ReactNode;open?:boolean;defaultOpen?:boolean;onOpenChange?:(open:boolean)=>void;disabled?:boolean;className?:string}){
   return <BaseCollapsible.Root open={open} defaultOpen={defaultOpen} onOpenChange={soOValor(onOpenChange)} disabled={disabled} className={cx("collapsible",className)}>
-    <BaseCollapsible.Trigger className="collapsible-trigger"><Icon name="caret-down" size="sm" className="collapsible-chevron"/>{trigger}</BaseCollapsible.Trigger>
+    {/* DESATIVADO CONTINUA NO TAB (a ficha: "the trigger stays focusable and inert"). Desde a Base UI 1.9.0 o motor põe o
+        `disabled` nativo no botão, que sai do Tab e não recebe foco — medido no lote 112 (27/11/2026). O gatilho recebe
+        `disabled={false}` e a Aurea faz o inerte ela mesma: `aria-disabled` e o clique barrado antes do motor
+        (`preventBaseUIHandler`); o `data-disabled` continua vindo do estado da raiz. */}
+    <BaseCollapsible.Trigger className="collapsible-trigger" disabled={false} aria-disabled={disabled||undefined}
+      onClick={disabled?(e:React.MouseEvent<HTMLButtonElement>&{preventBaseUIHandler?:()=>void})=>{e.preventDefault();e.preventBaseUIHandler?.()}:undefined}><Icon name="caret-down" size="sm" className="collapsible-chevron"/>{trigger}</BaseCollapsible.Trigger>
     <BaseCollapsible.Panel className="collapsible-panel">{children}</BaseCollapsible.Panel>
   </BaseCollapsible.Root>;
 }
