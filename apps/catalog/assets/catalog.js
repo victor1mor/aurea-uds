@@ -854,26 +854,8 @@ if (catalogo) {
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", aplicar); else aplicar();
 })();
 
-/* O CAMPO DE FILTRAR DA LATERAL (Patterns): vai para baixo de "By component", como o desenho, e esconde os componentes
-   cujo nome não tem o que se digitou ("All components" fica sempre). Vale também nas páginas de um padrão, onde os links
-   levam à lista (`./patterns.html#filtro/…`, lote 118) — por isso o `*=` e o `$=`, e não o `^=`. */
-(function () {
-  var campo = document.querySelector("[data-site-filtro-busca]");
-  if (!campo) return;
-  var caixa = campo.closest(".site-filtro-busca");
-  var primeiro = document.querySelector('.sidebar a[href$="#filtro/all"]');
-  var grupo = primeiro && primeiro.closest("li");
-  var lista = grupo && grupo.parentElement;
-  if (caixa && lista && lista.parentElement) lista.parentElement.insertBefore(caixa, lista);
-  campo.addEventListener("input", function () {
-    var q = campo.value.trim().toLowerCase();
-    document.querySelectorAll('.sidebar a[href*="#filtro/"]').forEach(function (a) {
-      if (/#filtro\/all$/.test(a.getAttribute("href"))) return;
-      var li = a.closest("li") || a;
-      li.hidden = !!q && a.textContent.toLowerCase().indexOf(q) < 0;
-    });
-  });
-})();
+/* O campo de filtrar da lateral de Patterns SAIU (o lote 118, 27/11/2026, a "Lateral que acompanha"): a busca é uma só, a
+   do meio da lista, que procura também no nome do componente. */
 
 /* O "ON THIS PAGE" DA LATERAL (o desenho B): a âncora da seção que está na tela fica marcada enquanto a página rola. */
 (function () {

@@ -64,12 +64,6 @@ test("Lote 118: fora da página da lista, o filtro da lateral leva à lista filt
   await expect(page).toHaveURL(new RegExp(`/blocks\\.html#filtro/${area}$`));
   await expect.poll(() => page.locator(".blk-b [data-blk]").evaluateAll((els) =>
     [...new Set(els.filter((e) => !(e as HTMLElement).hidden).map((e) => (e as HTMLElement).dataset.area))])).toEqual([area]);
-
-  // O campo "Filter components" da lateral continua filtrando os nomes também na página de um padrão.
-  await page.goto(`${SITE}/pattern-accordion-questions-on-a-marketing-page.html`);
-  await page.locator("[data-site-filtro-busca]").fill("alert");
-  await expect.poll(() => page.locator('.sidebar a[href*="#filtro/"]').evaluateAll((els) =>
-    els.filter((e) => !e.closest("[hidden]")).map((e) => e.getAttribute("href")!.replace(/^.*#filtro\//, "")))).toEqual(["all", "alert"]);
 });
 
 // LOTE 118 (o Victor, 27/11/2026: "os itens do topo devem continuar no topo e não ir pra baixo"): entre 1025 e 1120 as

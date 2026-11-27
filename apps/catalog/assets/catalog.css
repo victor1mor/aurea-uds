@@ -8444,6 +8444,9 @@ a.related-card:hover { border-color:transparent; }
   border-radius:var(--radius-full); background:var(--segment); box-shadow:var(--shadow-sm); font-family:var(--font-code); font-size:var(--text-xs);
   color:var(--muted-foreground); }
 .intro-trilha b { color:var(--foreground); font-weight:var(--weight-semibold); }
+/* A trilha que leva de volta (a página de um padrão, o lote 118): o link na cor da trilha, sublinhado com o mouse em cima. */
+.intro-trilha .intro-trilha-link { color:inherit; background:none; text-decoration:none; }
+.intro-trilha .intro-trilha-link:hover { text-decoration:underline; }
 .intro-h1 { margin:var(--space-5) 0 0; font-family:var(--font-heading); font-weight:var(--weight-extrabold); font-size:clamp(var(--text-4xl), 4vw, var(--text-6xl));
   line-height:var(--leading-none); letter-spacing:calc(var(--tracking-tight) * 3); }
 .intro-lede { margin:var(--space-4) 0 0; font-size:var(--text-lg); line-height:var(--leading-relaxed); color:var(--muted-foreground); }
@@ -8608,6 +8611,13 @@ a.related-card:hover { border-color:transparent; }
 /* O nome do grupo SEM número (as áreas que não são a Getting Started) começa na linha do texto dos itens, como antes do
    site B (01/11/2026): com a margem de sempre ele ficava 6 à esquerda (medido: 40 contra 46). */
 .site-shell > .sidebar p.sidebar-group-label { margin-inline:calc(2 * (var(--space-3) + var(--space-05))) calc(var(--space-3) + var(--space-05)); }
+/* A LATERAL QUE ACOMPANHA (Patterns, o lote 118): os padrões do componente da página abertos embaixo dele, com o recuo da
+   lista de um grupo de Components; e o componente marcado (a letra do texto, forte), sem a cápsula, que é do padrão atual. */
+.site-shell .site-grupo-tile.site-item-tile { inline-size:var(--space-6); block-size:var(--space-6); margin-inline-end:calc(var(--space-2) + var(--space-05)); }
+.site-shell .site-item-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+/* O recuo dos padrões abertos é a bolinha (24) e o vão dela (10): o texto deles começa onde começa o nome do componente. */
+.site-shell > .sidebar .sidebar-sub { display:grid; gap:var(--space-05); padding-inline-start:calc(var(--space-6) + var(--space-2) + var(--space-05)); }
+.site-shell > .sidebar li:has(> .sidebar-sub .sidebar-item[aria-current]) > .sidebar-item { color:var(--foreground); font-weight:var(--weight-semibold); }
 
 /* O índice: 16 em cima e 12 nos lados e embaixo; a cabeça a 6 dos lados e 8 acima dos itens; os itens de 40, 2 entre eles. */
 .site-shell > .app-shell-aside { padding:var(--space-4) var(--space-3) var(--space-3); gap:var(--space-05); }
@@ -9079,10 +9089,6 @@ a.related-card:hover { border-color:transparent; }
 [data-theme="dark"] .sidebar-item[aria-current]:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { --muted-foreground:color-mix(in oklab, var(--foreground) 80%, var(--segment)); }
 /* Nas linhas de mês, o ponto de cor é a marca da linha (como o desenho): o ponto do item atual da lateral não se repete. */
 .sidebar-indicator-segment-dot .sidebar-item[aria-current] > .sidebar-label:has(.site-mes-n)::before { content:none; }
-/* Patterns: o campo de filtrar, na largura das cápsulas da lateral ("Campo na largura", o Victor, 27/11/2026, o lote 118):
-   com 8 de cada lado ele ficava para dentro das cápsulas, e entre 1025 e 1279 cortava o texto ("Filter 80 component"). */
-.site-filtro-busca { padding:var(--space-1) 0 var(--space-2); }
-.site-filtro-busca .search-field, .site-filtro-busca .input-group { inline-size:100%; }
 /* O número da lateral na cor do texto: apagado sobre o --fill-2, no claro, lia 4,34:1 (o axe). */
 .site-conta { display:inline-grid; place-items:center; min-inline-size:var(--space-6); block-size:var(--space-6); padding-inline:var(--space-1);
   border-radius:var(--radius-full); background:var(--fill-2); font-family:var(--font-code);

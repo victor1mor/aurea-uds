@@ -33,7 +33,8 @@ export default function patterns(site) {
   const temPagina = nome => fichas.some(f => f.name === nome);
   const node = h("div", {className: "g1-b g1-largo pat-b", "data-g1-lista": "", "data-g1-frase": "No pattern mentions"},
     cabeca,
-    buscaDaLista(site, {rotulo: "Find a pattern", dica: "Find a pattern — try “empty”, “sidebar” or “confirm”", total: todos.length, chave: "g1"}),
+    // A busca ÚNICA de Patterns (o lote 118): procura no nome do componente também — a da lateral saiu.
+    buscaDaLista(site, {rotulo: "Find a pattern or a component", dica: "Find a pattern or a component — try “alert”, “sidebar” or “confirm”", total: todos.length, chave: "g1"}),
     ...porComponente.map((g, n) => h("section", {key: g.nome, className: "g1-grupo pat-grupo", id: `pat-${slug(g.nome)}`, "data-g1-grupo": "", "data-g1-filtro": slug(g.nome),
       "data-g1-grupo-mais": n >= GRUPOS_DE_INICIO ? "" : undefined, "aria-labelledby": `pat-${slug(g.nome)}-h`},
       h("div", {className: "g1-grupo-topo"},

@@ -1767,10 +1767,24 @@ const menuTokens = (aqui = "tokens.html") => [{id: "overview", label: "Overview"
   {id: "on-this-page", label: "On this page", items: [["Color roles", "color-roles"], ["Status scales", "status-scales"], ["Brands", "brands"],
     ["Radius", "radius"], ["Space", "space"], ["Type", "type"], ["Controls and density", "controls"], ["Motion", "motion"], ["Shadow", "shadow"],
     ["Numbers", "numbers"]].map(([l, id]) => ancora(l, id))}];
-const menuPatterns = (aqui = "patterns.html") => [{id: "overview", label: "Overview", items: [item("All Patterns", "patterns.html")]},
-  {id: "by-component", label: "By component", items: [filtro("All components", "all", patterns.length, "patterns.html", aqui),
-    ...Object.entries(patternsByComponent).sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([cmp, list]) => filtro(cmp, slug(cmp), list.length, "patterns.html", aqui))]}];
+// A LATERAL QUE ACOMPANHA (o Victor, 27/11/2026, o lote 118, "ok" à proposta): um "All" só no alto ("All patterns", que
+// era o "All Patterns" do Overview e o "All components" do filtro); e, na página de um padrão, o componente dele marcado,
+// com os padrões dele abertos embaixo e o atual marcado, como a lateral de Components.
+// E cada componente com o ÍCONE DA FICHA dele na bolinha da COR DA FAMÍLIA, como a lateral de Components (o Victor, 27/11/2026:
+// "adicione icone de cores ou icone em cada opção como os sidebar dos outros").
+const comIcone = cmp => {
+  const ficha = fichas.find(f => f.name === cmp);
+  const cat = ficha?.category || "Utilities";
+  return h(Fragment, null, h("span", {className: "site-grupo-tile site-item-tile", "data-cor": corDaFamilia(cat), "aria-hidden": "true"},
+    h(A.Icon, {name: ficha?.icon || ICONE_DA_FAMILIA[cat] || "cube"})), cmp);
+};
+const menuPatterns = (aqui = "patterns.html") => {
+  const doAqui = patterns.find(p => `${p.slug}.html` === aqui);
+  return [filtro("All patterns", "all", patterns.length, "patterns.html", aqui),
+    {id: "by-component", label: "By component", items: Object.entries(patternsByComponent).sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([cmp, list]) => ({...filtro(comIcone(cmp), slug(cmp), list.length, "patterns.html", aqui),
+        ...(doAqui?.component === cmp ? {items: list.map(p => item(p.name, `${p.slug}.html`))} : {})}))}];
+};
 const menuBlocks = (aqui = "blocks.html") => [{id: "overview", label: "Overview", items: [item("All Blocks", "blocks.html")]},
   {id: "by-area", label: "By area", items: [filtro("Every area", "all", blocks.length, "blocks.html", aqui),
     ...Object.entries(blocksByCategory).map(([cat, list]) => filtro(cat, slug(cat), list.length, "blocks.html", aqui))]}];
@@ -1979,9 +1993,6 @@ function shell(activeHref, inner, section = "components") {
         ["start", "components", "native"].includes(section) ? h("div", {className: "site-plataforma"}, chavePlataforma) : null,
         h("div", {className: "site-gaveta-areas"}, h(A.NavList, {"aria-label": "Sections",
           items: areasDoSite.map(a => ({id: a.value, label: a.label, href: a.href, icon: ICONE_DA_AREA[a.value]}))})),
-        section === "patterns" ? h("div", {className: "site-filtro-busca"}, h(A.SearchField, {size: "sm",
-          placeholder: `Filter ${Object.keys(patternsByComponent).length} components`, "aria-label": "Filter components",
-          autoComplete: "off", "data-site-filtro-busca": ""})) : null,
         h(A.Sidebar.Nav, {items: menu, current: activeHref || undefined, label: "Contents"})),
       // O ÍNDICE DO SITE B: o mesmo bloco, com o anel de leitura e o item atual na cápsula levantada (as duas variações do
       // `TableOfContents`, protótipo) e o "Back to top" no pé.
@@ -2362,6 +2373,9 @@ a.related-card:hover { border-color:transparent; }
   border-radius:var(--radius-full); background:var(--segment); box-shadow:var(--shadow-sm); font-family:var(--font-code); font-size:var(--text-xs);
   color:var(--muted-foreground); }
 .intro-trilha b { color:var(--foreground); font-weight:var(--weight-semibold); }
+/* A trilha que leva de volta (a página de um padrão, o lote 118): o link na cor da trilha, sublinhado com o mouse em cima. */
+.intro-trilha .intro-trilha-link { color:inherit; background:none; text-decoration:none; }
+.intro-trilha .intro-trilha-link:hover { text-decoration:underline; }
 .intro-h1 { margin:var(--space-5) 0 0; font-family:var(--font-heading); font-weight:var(--weight-extrabold); font-size:clamp(var(--text-4xl), 4vw, var(--text-6xl));
   line-height:var(--leading-none); letter-spacing:calc(var(--tracking-tight) * 3); }
 .intro-lede { margin:var(--space-4) 0 0; font-size:var(--text-lg); line-height:var(--leading-relaxed); color:var(--muted-foreground); }
@@ -2526,6 +2540,13 @@ a.related-card:hover { border-color:transparent; }
 /* O nome do grupo SEM número (as áreas que não são a Getting Started) começa na linha do texto dos itens, como antes do
    site B (01/11/2026): com a margem de sempre ele ficava 6 à esquerda (medido: 40 contra 46). */
 .site-shell > .sidebar p.sidebar-group-label { margin-inline:calc(2 * (var(--space-3) + var(--space-05))) calc(var(--space-3) + var(--space-05)); }
+/* A LATERAL QUE ACOMPANHA (Patterns, o lote 118): os padrões do componente da página abertos embaixo dele, com o recuo da
+   lista de um grupo de Components; e o componente marcado (a letra do texto, forte), sem a cápsula, que é do padrão atual. */
+.site-shell .site-grupo-tile.site-item-tile { inline-size:var(--space-6); block-size:var(--space-6); margin-inline-end:calc(var(--space-2) + var(--space-05)); }
+.site-shell .site-item-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+/* O recuo dos padrões abertos é a bolinha (24) e o vão dela (10): o texto deles começa onde começa o nome do componente. */
+.site-shell > .sidebar .sidebar-sub { display:grid; gap:var(--space-05); padding-inline-start:calc(var(--space-6) + var(--space-2) + var(--space-05)); }
+.site-shell > .sidebar li:has(> .sidebar-sub .sidebar-item[aria-current]) > .sidebar-item { color:var(--foreground); font-weight:var(--weight-semibold); }
 
 /* O índice: 16 em cima e 12 nos lados e embaixo; a cabeça a 6 dos lados e 8 acima dos itens; os itens de 40, 2 entre eles. */
 .site-shell > .app-shell-aside { padding:var(--space-4) var(--space-3) var(--space-3); gap:var(--space-05); }
