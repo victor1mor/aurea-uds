@@ -23,8 +23,8 @@ em inglês e ficam como estão: são registro.
   junção do pedido #164 (`ffc55433`); **a 0.82.0, em 26/11/2026, entre 18:15 e 18:16**, da junção do pedido #170
   (`189bc36a`). A 0.81.1 não tinha sido registrada; o `released-surface.json` foi regravado direto do commit da 0.82.0,
   que cobre as duas (nenhum nome novo nem frase nova: 162 componentes, como na 0.81.0). O CHANGELOG ([0.81.1] e [0.82.0]
-  publicadas); as releases `v0.81.1` e `v0.82.0` no GitHub já existiam. A tabela "O que já saiu" e os itens do CLAUDE.md
-  ficam para quando o Victor disser.
+  publicadas); as releases `v0.81.1` e `v0.82.0` no GitHub já existiam. O CLAUDE.md, com o sim do Victor (*"Pode
+  registrar"*): as duas linhas da tabela "O que já saiu" e os itens 79 e 80 do "O próximo passo".
 - Não muda nenhum pacote publicado.
 
 ### O registro da 0.80.0 e da 0.81.0 (25/11/2026)

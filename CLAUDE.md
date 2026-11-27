@@ -240,6 +240,8 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.79.0` | A Rodada 1 das decisões em bloco: o canto da dica em 12 (`--tooltip-radius`, um token só dela), a descrição do `Toast` do nativo em 14, o dígito do `OTPField` da web na letra do texto, a capa em pé do `MediaEmbed` inteira com a capa desfocada atrás, o contorno dos campos da Ember no laranja dela no alto contraste e as cores velhas do painel de saúde que saem — pedido #160. **Publicada em 24/11/2026** (entre 10:12 e 10:13, Brasília, medido no npm), pela publicação em etapa |
 | `0.80.0` | Os detalhes do menu, o botão ocupado do nativo e a área de arquivo desativada: o item de perigo no menu da web (`destructive`), a escolha de "uma só" que fecha o menu da web, o menu e o popover do nativo que se apagam ao fechar, a seta de ponta fina (web e nativo), `loading` no `Button` do nativo e `disabled` no `FileInput` da web — pedido #161. **Publicada em 24/11/2026** (entre 18:02 e 18:03, Brasília, medido no npm), pela publicação em etapa |
 | `0.81.0` | O formulário, o interruptor, o nome em inglês e a rodinha com menos movimento: `onCheckedChange` no `Switch` (web e nativo), `name`, `required` e `defaultValue` no `Combobox` e no `MultiCombobox` da web, `useResponsiveValue` (o `useValorResponsivo` fica como apelido), a rodinha e o círculo sem fim que giram devagar com menos movimento, e as Actions da CI nas versões novas com o robô de atualização só para elas — pedido #162. **Publicada em 24/11/2026** (entre 21:57 e 21:58, Brasília, medido no npm), pela publicação em etapa |
+| `0.81.1` | As promessas públicas dizem a verdade (o UDS-A1): o contrato publicado e as descrições dos sete pacotes em inglês, a promessa de acessibilidade que diz o que se mede hoje (`measuredToday` e `knownGaps`) e o `no-gradients` fora do arquivo de tokens; nenhuma peça muda — pedido #164. **Publicada em 25/11/2026** (entre 19:21 e 19:22, Brasília, medido no npm), pela publicação em etapa |
+| `0.82.0` | O lote 106: o canto contínuo na web (onde o navegador desenha o `corner-shape`), o botão de recolher do `AppShell` na barra de cima (a troca da ADR-0056), o `AppShell` sem itens não desenha a lateral (SYL-01), o nome do comando do bash em destaque no `CodeBlock` e a ficha do `KPI` com o espaço que não quebra — pedido #170. **Publicada em 26/11/2026** (entre 18:15 e 18:16, Brasília, medido no npm), pela publicação em etapa |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -1131,6 +1133,22 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    só abriu o pedido depois de o 101 juntar; (4) o `linux-cmp.py` precisa do PIL: roda sem o `-I`, de dentro do
    repositório. **Publicada em 24/11/2026** (entre 21:57 e 21:58, Brasília, medido no npm), pela publicação em etapa, da
    junção do pedido #162. O registro entrou no lote seguinte (o 103).
+79. **`0.81.1`, as promessas públicas, feita em 25/11/2026** (o UDS-A1; *"Sim, os 5"* e o texto, *"Pode, como recomendado"*) — as
+   contradições entre o que a Aurea promete em público e o que ela prova: o contrato e as descrições dos pacotes em inglês,
+   a meta WCAG 2.2 AA com o que a varredura confere hoje (as regras da 2.0 e da 2.1) e as lacunas declaradas, e o
+   `no-gradients` que tinha ficado no arquivo de tokens depois da ADR-0091. ⚠ **A lição:** a CI rodava só 6 dos 104 arquivos
+   de teste do navegador, e o CLAUDE.md dizia que ela rodava tudo — o lote 105 passou toda prova de navegador para a CI, no
+   Chromium (o job `provas`). **Publicada em 25/11/2026** (entre 19:21 e 19:22, Brasília, medido no npm), pela publicação
+   em etapa, da junção do pedido #164. O registro entrou no lote 110 (a 0.83.0).
+80. **`0.82.0`, o lote 106, feita em 26/11/2026** (cinco decisões das bancadas de 24/11, cada uma pela conta das referências;
+   o lote, *"Aprovo os cinco"*, com a Gold e a Ember) — o canto contínuo na web (`scripts/canto-continuo.mjs`, na montagem:
+   a curva `superellipse(1.65)` com o raio 1,5 × o token, a cápsula e o círculo redondos; os tokens não mudam), o botão de
+   recolher na barra de cima, o `AppShell` sem lateral quando não há itens, o comando do bash em destaque e a ficha do `KPI`.
+   ⚠ **As lições:** (1) as provas que liam o raio do token escrito à mão passaram a ler o do canto contínuo
+   (`tests/visual/canto.ts`); (2) a CI do `main` na junção reprovou numa prova sem relação com o lote
+   (`responsivo.multi-motor.spec.ts`, o `setViewportSize` esgotou o tempo), e o site ficou na versão anterior até as partes
+   reprovadas rodarem de novo e o `main` ficar verde. **Publicada em 26/11/2026** (entre 18:15 e 18:16, Brasília, medido
+   no npm), pela publicação em etapa, da junção do pedido #170. O registro entrou no lote 110 (a 0.83.0).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
