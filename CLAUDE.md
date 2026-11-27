@@ -1623,8 +1623,12 @@ sessão não chega à outra; este arquivo chega. O que já estava nas seções a
   (`AUREA_PROVAS=1` no `playwright.config.ts` — spec nova entra sozinha); o job `test` espera o `provas` e reprova se ele
   reprovou, e é por ele que a regra do `main` o cobra. Ficam fora, com o motivo, só as provas do
   `tests/visual/fora-da-ci.ts` (decisões do Victor). No Firefox e no WebKit a CI roda só a varredura do catálogo, a
-  geometria, a direita para a esquerda, a prova do app de cliente e o "menos movimento". A suíte do fim do lote continua
-  (ela mede antes do pedido, e nos três navegadores quando a mudança é de largura).
+  geometria, a direita para a esquerda, a prova do app de cliente e o "menos movimento". ~~A suíte do fim do lote continua
+  (ela mede antes do pedido, e nos três navegadores quando a mudança é de largura).~~ → **A CI PODE SUBSTITUIR A SUÍTE
+  LOCAL DO FIM DO LOTE** (ordem do Victor, 27/11/2026: *"Sim, usar a CI hoje e sempre que quiser"*): o job `provas` da CI
+  roda tudo de `tests/visual/` no Chromium; o repositório é público, e as máquinas padrão do GitHub Actions são grátis em
+  repositório público. O motivo: com várias sessões ao mesmo tempo, a suíte local andou a ~2 testes por minuto (236 de 740
+  em 1h50, o lote 112). Continua: os testes do que mudou rodam aqui, e a bancada e o "pode" vêm antes do git.
 - **Qualidade extrema, sem refazer** (06/10/2026): prazo curto encolhe o ESCOPO, nunca a verificação.
   Se não cabe tudo, dizer quanto cabe, com números, e ele escolhe.
 - **Muitas opções: o esboço vem antes da bancada** (decisão do Victor, 29/10/2026, *"Sim, para explorar"*): quando uma
