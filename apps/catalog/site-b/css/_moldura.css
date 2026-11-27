@@ -14,8 +14,9 @@
 [data-theme="dark"] .sidebar-item[aria-current]:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { --muted-foreground:color-mix(in oklab, var(--foreground) 80%, var(--segment)); }
 /* Nas linhas de mês, o ponto de cor é a marca da linha (como o desenho): o ponto do item atual da lateral não se repete. */
 .sidebar-indicator-segment-dot .sidebar-item[aria-current] > .sidebar-label:has(.site-mes-n)::before { content:none; }
-/* Patterns: o campo de filtrar, na largura da lateral. */
-.site-filtro-busca { padding:var(--space-1) var(--space-2) var(--space-2); }
+/* Patterns: o campo de filtrar, na largura das cápsulas da lateral ("Campo na largura", o Victor, 27/11/2026, o lote 118):
+   com 8 de cada lado ele ficava para dentro das cápsulas, e entre 1025 e 1279 cortava o texto ("Filter 80 component"). */
+.site-filtro-busca { padding:var(--space-1) 0 var(--space-2); }
 .site-filtro-busca .search-field, .site-filtro-busca .input-group { inline-size:100%; }
 /* O número da lateral na cor do texto: apagado sobre o --fill-2, no claro, lia 4,34:1 (o axe). */
 .site-conta { display:inline-grid; place-items:center; min-inline-size:var(--space-6); block-size:var(--space-6); padding-inline:var(--space-1);

@@ -157,7 +157,10 @@ const areasDoMenu: Area[] = lugarDoMenu ? JSON.parse(lugarDoMenu.dataset.areas |
 // `AppShell`, e ele aparece desde essa largura (`celular.css`).
 const NOVA_ABA = {target: "_blank", rel: "noreferrer", "aria-describedby": "site-nova-aba"};
 // em `em`, como o CSS do site (06/11/2026, o texto a 200%): 1121px = 70.0625em, 768px = 48em
-const LARGO = lugarDoMenu?.closest(".site-home") ? "(min-width: 70.0625em)" : "(min-width: 48em)";
+// Desde o lote 118 (27/11/2026), em toda página: o menu existe enquanto as áreas não cabem na pílula (abaixo de 1121).
+const LARGO = "(min-width: 70.0625em)";
+// Com a lateral à vista (1024 para cima), a lista da área fica nela; o menu só a leva quando a lateral está escondida.
+const COM_LATERAL = "(min-width: 64em)";
 const TEMAS_DA_CHAVE = [{value: "light", label: "Light", icon: "sun"}, {value: "dark", label: "Dark", icon: "moon"},
   {value: "system", label: "System", icon: "monitor"}];
 
@@ -231,7 +234,7 @@ function MenuDoCelular() {
           // Para fora do site, em página nova, com o aviso escondido que o gerador põe na página (S-08, 05/11/2026).
           h(Button, {variant: "secondary", size: "lg", href: lugarDoMenu.dataset.repo, ...NOVA_ABA}, "GitHub"),
           h(Button, {variant: "secondary", size: "lg", href: lugarDoMenu.dataset.changelog, ...NOVA_ABA}, "Changelog")),
-        atual && h(ConteudoDaArea, {nomeDaArea: atual.label})))), lugarDoMenu);
+        atual && !lugarDoMenu.closest(".site-home") && !matchMedia(COM_LATERAL).matches && h(ConteudoDaArea, {nomeDaArea: atual.label})))), lugarDoMenu);
 }
 // As marcas vêm do lugar do botão "Theme" (o gerador escreve as 13, com a cor dos tokens).
 const marcasDoMenu: Array<{id: string; label: string; color: string}> =

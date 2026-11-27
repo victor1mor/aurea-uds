@@ -33,6 +33,69 @@ test("S-01: o filtro da lateral filtra a lista em Patterns, Releases e Tokens", 
   expect(tipos).toEqual(["shadow"]);
 });
 
+// LOTE 118 (o Victor, 27/11/2026, no site no ar): na página de UM padrão, o filtro da lateral só mudava o `#` do endereço
+// e marcava o item como atual — a página continuava no padrão. O mesmo nas páginas de um bloco e de uma nota de versão.
+// O link do filtro, fora da página da lista, leva à lista já filtrada, e nenhum filtro fica marcado onde nada se filtra.
+// Provado contra o defeito: com o gerador e o `_filtro.js` de antes (o `main` em 42594763), reprova.
+test("Lote 118: fora da página da lista, o filtro da lateral leva à lista filtrada", async ({page}) => {
+  const casos = [
+    {pagina: "pattern-accordion-questions-on-a-marketing-page.html", lista: "patterns.html", valor: "alert", grupos: "[data-g1-grupo]", esperado: ["pat-alert"]},
+    {pagina: "release-v0-83-0.html", lista: "releases.html", valor: "2026-10", grupos: "[data-g1-grupo]", esperado: ["m-2026-10"]},
+  ];
+  for (const c of casos) {
+    await page.goto(`${SITE}/${c.pagina}`);
+    const filtros = page.locator('.sidebar a[href*="#filtro/"]');
+    await expect(filtros.first()).toBeAttached();
+    // Nenhum filtro é o atual numa página que não filtra nada.
+    expect(await filtros.evaluateAll((els) => els.filter((e) => e.getAttribute("aria-current")).length), c.pagina).toBe(0);
+    await page.locator(`.sidebar a[href$="#filtro/${c.valor}"]`).click();
+    await expect(page, c.pagina).toHaveURL(new RegExp(`/${c.lista.replace(".", "\\.")}#filtro/${c.valor}$`));
+    await expect.poll(() => visiveis(page, c.grupos), c.pagina).toEqual(c.esperado);
+    await expect(page.locator(`.sidebar a[href="#filtro/${c.valor}"]`)).toHaveAttribute("aria-current", "true");
+  }
+  // Blocks: o filtro por área esconde os cartões das outras áreas.
+  await page.goto(`${SITE}/blocks.html`);
+  const area = await page.locator(".blk-b [data-blk]").first().getAttribute("data-area");
+  const outra = await page.locator(".blk-b [data-blk]").evaluateAll((els, a) => els.some((e) => (e as HTMLElement).dataset.area !== a), area);
+  expect(outra, "Blocks precisa de mais de uma área para a prova valer").toBe(true);
+  const bloco = await page.locator(".blk-b a[href$='.html'][href*='block-']").first().getAttribute("href");
+  await page.goto(`${SITE}/${bloco!.replace(/^\.\//, "")}`);
+  await page.locator(`.sidebar a[href$="#filtro/${area}"]`).click();
+  await expect(page).toHaveURL(new RegExp(`/blocks\\.html#filtro/${area}$`));
+  await expect.poll(() => page.locator(".blk-b [data-blk]").evaluateAll((els) =>
+    [...new Set(els.filter((e) => !(e as HTMLElement).hidden).map((e) => (e as HTMLElement).dataset.area))])).toEqual([area]);
+
+  // O campo "Filter components" da lateral continua filtrando os nomes também na página de um padrão.
+  await page.goto(`${SITE}/pattern-accordion-questions-on-a-marketing-page.html`);
+  await page.locator("[data-site-filtro-busca]").fill("alert");
+  await expect.poll(() => page.locator('.sidebar a[href*="#filtro/"]').evaluateAll((els) =>
+    els.filter((e) => !e.closest("[hidden]")).map((e) => e.getAttribute("href")!.replace(/^.*#filtro\//, "")))).toEqual(["all", "alert"]);
+});
+
+// LOTE 118 (o Victor, 27/11/2026: "os itens do topo devem continuar no topo e não ir pra baixo"): entre 1025 e 1120 as
+// áreas do site saíam da pílula e DESCIAM para dentro da lateral. Agora, em toda largura, a lateral nunca tem os links das
+// áreas, e o topo sempre tem as áreas (as abas) ou o botão Menu. Provado contra o defeito: com o site do `main` em
+// 42594763, a 1100 e a 1024 a lateral tem as oito áreas, e a 1100 o topo não tem nem abas nem Menu.
+test("Lote 118: as áreas do site ficam no topo (as abas ou o Menu), nunca na lateral", async ({page}) => {
+  for (const pagina of ["getting-started.html", "patterns.html"]) {
+    for (const largura of [1280, 1120, 1100, 1024, 900, 375]) {
+      await page.setViewportSize({width: largura, height: 800});
+      await page.goto(`${SITE}/${pagina}`);
+      await expect(page.locator("html[data-site-menu]")).toBeAttached();
+      const m = await page.evaluate(() => {
+        const vista = (e: Element | null) => !!e && e.getClientRects().length > 0 && getComputedStyle(e).visibility !== "hidden";
+        const nomes = ["Getting Started", "Components", "Releases", "Patterns", "Blocks", "Recipes", "Hooks", "Tokens"];
+        const lateral = document.querySelector(".site-shell > .sidebar");
+        const naLateral = lateral ? [...lateral.querySelectorAll("a")].filter((a) => vista(a) && nomes.includes(a.textContent!.trim())).map((a) => a.textContent!.trim()) : [];
+        return {naLateral, abas: vista(document.querySelector(".topbar .site-areas")), menu: vista(document.querySelector(".site-menu-botao"))};
+      });
+      expect(m.naLateral, `${pagina} a ${largura}`).toEqual([]);
+      expect(m.abas || m.menu, `${pagina} a ${largura}: ${JSON.stringify(m)}`).toBe(true);
+      expect(m.abas && m.menu, `${pagina} a ${largura}: as abas e o Menu juntos`).toBe(false);
+    }
+  }
+});
+
 // S-03: no site publicado o endereço é `/chart`, sem `.html`; o menu trocava só o `.html` e o "View as Markdown" abria a
 // própria página. O endereço sem `.html` se reproduz aqui servindo a página por ele.
 test("S-03: o View as Markdown leva ao .md da página, com e sem o .html no endereço", async ({page}) => {

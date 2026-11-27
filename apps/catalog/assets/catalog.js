@@ -855,19 +855,20 @@ if (catalogo) {
 })();
 
 /* O CAMPO DE FILTRAR DA LATERAL (Patterns): vai para baixo de "By component", como o desenho, e esconde os componentes
-   cujo nome não tem o que se digitou ("All components" fica sempre). */
+   cujo nome não tem o que se digitou ("All components" fica sempre). Vale também nas páginas de um padrão, onde os links
+   levam à lista (`./patterns.html#filtro/…`, lote 118) — por isso o `*=` e o `$=`, e não o `^=`. */
 (function () {
   var campo = document.querySelector("[data-site-filtro-busca]");
   if (!campo) return;
   var caixa = campo.closest(".site-filtro-busca");
-  var primeiro = document.querySelector('.sidebar a[href="#filtro/all"]');
+  var primeiro = document.querySelector('.sidebar a[href$="#filtro/all"]');
   var grupo = primeiro && primeiro.closest("li");
   var lista = grupo && grupo.parentElement;
   if (caixa && lista && lista.parentElement) lista.parentElement.insertBefore(caixa, lista);
   campo.addEventListener("input", function () {
     var q = campo.value.trim().toLowerCase();
-    document.querySelectorAll('.sidebar a[href^="#filtro/"]').forEach(function (a) {
-      if (a.getAttribute("href") === "#filtro/all") return;
+    document.querySelectorAll('.sidebar a[href*="#filtro/"]').forEach(function (a) {
+      if (/#filtro\/all$/.test(a.getAttribute("href"))) return;
       var li = a.closest("li") || a;
       li.hidden = !!q && a.textContent.toLowerCase().indexOf(q) < 0;
     });
@@ -876,7 +877,7 @@ if (catalogo) {
 
 /* O "ON THIS PAGE" DA LATERAL (o desenho B): a âncora da seção que está na tela fica marcada enquanto a página rola. */
 (function () {
-  var links = [].slice.call(document.querySelectorAll('.sidebar a[href^="#"]:not([href^="#filtro/"])'));
+  var links = [].slice.call(document.querySelectorAll('.sidebar a[href^="#"]:not([href*="#filtro/"])'));
   var alvos = links.map(function (a) { return document.getElementById(decodeURIComponent(a.getAttribute("href").slice(1))); });
   if (!links.length || !alvos.some(Boolean) || !("IntersectionObserver" in window)) return;
   var visiveis = new Set();

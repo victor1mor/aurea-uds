@@ -8399,7 +8399,10 @@ a.related-card:hover { border-color:transparent; }
    trilho sumia na lateral do claro. */
 .site-plataforma { padding-block-end:var(--space-3); --muted:var(--fill-2); }
 .site-gaveta-areas { display:none; padding-block-end:var(--space-3); }
-@media (max-width:79.9375em) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
+/* AS ÁREAS NUNCA ENTRAM NA LATERAL (o Victor, 27/11/2026, o lote 118: "os itens do topo devem continuar no topo e não ir pra
+   baixo"): quando não cabem na pílula (abaixo de 1121), elas vão para o botão Menu do topo, como no Início e no celular
+   (celular.css). A lista .site-gaveta-areas fica sempre escondida. */
+@media (max-width:79.9375em) { .site-areas { display:none; } }
 /* A LATERAL DO SITE B: o nome do grupo numerado, com o ícone numa bolinha na cor da categoria (o desenho aprovado). */
 .site-grupo-num { display:inline-block; inline-size:var(--space-5); margin-inline-end:var(--space-2); text-align:end; vertical-align:middle;
   font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); color:var(--muted-foreground); }
@@ -8593,16 +8596,18 @@ a.related-card:hover { border-color:transparent; }
 /* O ponto do item atual: o recuo sai do item, e não de uma margem negativa — o rótulo corta o que sai dele. */
 .site-shell > .sidebar .sidebar-item[aria-current] { padding-inline-start:calc(var(--space-2) + var(--space-05)); color:var(--foreground); font-weight:var(--weight-semibold); }
 .site-shell > .sidebar .sidebar-item[aria-current] > .sidebar-label::before { margin-inline:0 calc(var(--space-2) + var(--space-05)); }
-/* O TEXTO DO ATUAL NÃO ANDA (o achado 3 do 2-D, o Victor, 19/11/2026: *"Fundo cresce p/ esquerda"*): com o ponto, o texto
-   do item atual ia a 28 e o dos vizinhos ficava a 14. Agora o FUNDO do atual começa 14 antes (a largura cresce o mesmo),
-   o ponto cabe dentro dele, e o texto fica alinhado com os vizinhos. O atual sem ponto (o mês dos Releases) volta ao
-   recuo dos outros. */
-.site-shell > .sidebar .sidebar-item[aria-current]:not(:has(.site-mes-n)) { margin-inline-start:calc(-1 * (var(--space-3) + var(--space-05)));
-  inline-size:calc(100% + var(--space-3) + var(--space-05)); }
+/* O TEXTO DO ATUAL NÃO ANDA, E A CÁPSULA NÃO PASSA DA CHAVE ("Tudo alinhado", o Victor, 27/11/2026, olhando a bancada das
+   três formas — troca o *"Fundo cresce p/ esquerda"* do achado 3 do 2-D, de 19/11/2026): com o ponto, o texto do item
+   atual fica a 28 do começo da cápsula (10 + o ponto de 8 + 10). O fundo que crescia 14 para a esquerda passava da chave
+   Web | Native e do campo de filtro (14 contra 28, a 1280) e saía 2 da borda do painel. Agora a cápsula de todo item
+   começa onde a chave começa, e é o texto dos VIZINHOS que anda 14 (o recuo de 28), para ficar na coluna do atual; o
+   nome do grupo e o botão do grupo numerado andam o mesmo. O mês dos Releases (sem ponto) fica com o recuo de 14. */
+.site-shell > .sidebar .sidebar-item:not([aria-current]):not(:has(.site-mes-n)) { padding-inline-start:calc(2 * (var(--space-3) + var(--space-05))); }
 .site-shell > .sidebar .sidebar-item[aria-current]:has(.site-mes-n) { padding-inline-start:calc(var(--space-3) + var(--space-05)); }
+.site-shell > .sidebar .sidebar-group-toggle { padding-inline-start:calc(var(--space-1) + var(--space-05) + var(--space-3) + var(--space-05)); }
 /* O nome do grupo SEM número (as áreas que não são a Getting Started) começa na linha do texto dos itens, como antes do
    site B (01/11/2026): com a margem de sempre ele ficava 6 à esquerda (medido: 40 contra 46). */
-.site-shell > .sidebar p.sidebar-group-label { margin-inline:calc(var(--space-3) + var(--space-05)); }
+.site-shell > .sidebar p.sidebar-group-label { margin-inline:calc(2 * (var(--space-3) + var(--space-05))) calc(var(--space-3) + var(--space-05)); }
 
 /* O índice: 16 em cima e 12 nos lados e embaixo; a cabeça a 6 dos lados e 8 acima dos itens; os itens de 40, 2 entre eles. */
 .site-shell > .app-shell-aside { padding:var(--space-4) var(--space-3) var(--space-3); gap:var(--space-05); }
@@ -8676,8 +8681,8 @@ a.related-card:hover { border-color:transparent; }
   .site-shell .site-search { inline-size:var(--target-min); padding-inline:0; justify-content:center; gap:0; }
   .site-shell .site-areas .segmented a { padding-inline:calc(var(--space-2) + var(--space-05) / 2); }
 }
-@media (min-width:70.0625em) and (max-width:79.9375em) { .site-areas { display:block; } .site-gaveta-areas { display:none !important; } }
-@media (max-width:70em) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
+@media (min-width:70.0625em) and (max-width:79.9375em) { .site-areas { display:block; } }
+@media (max-width:70em) { .site-areas { display:none; } }
 /* De 1024 a 1279, sem o índice: a lateral de 248 do desenho e o conteúdo até a borda do bloco. */
 @media (min-width:64em) and (max-width:79.9375em) {
   .site-shell { --docs-sidebar-width:calc(var(--docs-toc-width) + var(--space-2)); }
@@ -9074,8 +9079,9 @@ a.related-card:hover { border-color:transparent; }
 [data-theme="dark"] .sidebar-item[aria-current]:where(:not([data-theme="light"] *),[data-theme="light"] [data-theme="dark"] *) { --muted-foreground:color-mix(in oklab, var(--foreground) 80%, var(--segment)); }
 /* Nas linhas de mês, o ponto de cor é a marca da linha (como o desenho): o ponto do item atual da lateral não se repete. */
 .sidebar-indicator-segment-dot .sidebar-item[aria-current] > .sidebar-label:has(.site-mes-n)::before { content:none; }
-/* Patterns: o campo de filtrar, na largura da lateral. */
-.site-filtro-busca { padding:var(--space-1) var(--space-2) var(--space-2); }
+/* Patterns: o campo de filtrar, na largura das cápsulas da lateral ("Campo na largura", o Victor, 27/11/2026, o lote 118):
+   com 8 de cada lado ele ficava para dentro das cápsulas, e entre 1025 e 1279 cortava o texto ("Filter 80 component"). */
+.site-filtro-busca { padding:var(--space-1) 0 var(--space-2); }
 .site-filtro-busca .search-field, .site-filtro-busca .input-group { inline-size:100%; }
 /* O número da lateral na cor do texto: apagado sobre o --fill-2, no claro, lia 4,34:1 (o axe). */
 .site-conta { display:inline-grid; place-items:center; min-inline-size:var(--space-6); block-size:var(--space-6); padding-inline:var(--space-1);
@@ -9497,9 +9503,14 @@ a.blk-chip:hover { background:var(--primary); color:var(--primary-foreground); }
   .site-menu-lugar { display:inline-flex; }
   html[data-site-menu] .site-shell .nav-toggle { display:none; }
 }
-/* NO INÍCIO (S-09, o topo único): sem a gaveta do `AppShell`, o menu é quem leva às áreas quando elas saem da pílula —
-   abaixo de 1121, a mesma largura em que elas saem nas outras páginas. */
-@media (max-width:70em) { .site-home .site-menu-lugar { display:inline-flex; } }
+/* EM TODA PÁGINA (o lote 118, 27/11/2026 — o Victor: "os itens do topo devem continuar no topo e não ir pra baixo"): o
+   menu é quem leva às áreas quando elas saem da pílula, abaixo de 1121 — como já era no Início (S-09). As áreas não descem
+   mais para a lateral, e a gaveta do lado sai na mesma largura (o Menu leva a lista da área quando a lateral não está à
+   vista). */
+@media (max-width:70em) {
+  .site-menu-lugar { display:inline-flex; }
+  html[data-site-menu] .site-shell .nav-toggle { display:none; }
+}
 .site-menu-botao { --step-h:var(--target-min); inline-size:var(--target-min); }
 
 /* A FOLHA (`Drawer side="bottom"`): o título "Menu" em Sora 24 extranegrito (a peça tem 16), os rótulos GO TO / COLOR THEME

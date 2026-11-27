@@ -85,8 +85,52 @@ test("site · o texto do item atual da lateral fica alinhado com os vizinhos", a
     return {atual: texto(cur), vizinho: texto(viz), fundo: Math.round(cur.getBoundingClientRect().left), fundoViz: Math.round(viz.getBoundingClientRect().left), ponto: ponto.content};
   });
   expect(m.atual, JSON.stringify(m)).toBe(m.vizinho);
-  expect(m.fundo, "o fundo do atual começa antes").toBeLessThan(m.fundoViz);
+  // "Tudo alinhado" (o Victor, 27/11/2026, o lote 118): o fundo do atual começa onde o dos vizinhos começa — era 14 antes.
+  expect(m.fundo, "o fundo do atual começa onde o dos vizinhos começa").toBe(m.fundoViz);
   expect(m.ponto, "o ponto continua").not.toBe("none");
+});
+
+// LOTE 118 (o Victor, 27/11/2026, no site no ar: "a caixa do All Components está desalinhada"; na bancada, *"Tudo
+// alinhado"*): a cápsula do item atual do alto da lateral passava 14 à esquerda da chave Web | Native e do campo de filtro
+// (14 contra 28, a 1280), e 2 para fora do painel. Agora começa onde eles começam, e o texto de todos fica numa coluna só.
+// Provado contra o defeito: com o site do `main` em 42594763, a cápsula fica em 14.
+test("site · a cápsula do item atual começa na chave e no campo de filtro, e o texto fica numa coluna", async ({page: p, baseURL}) => {
+  await p.setViewportSize({width: 1280, height: 800});
+  for (const [pagina, acima] of [["components.html", ".site-plataforma"], ["patterns.html", ".site-filtro-busca"]] as const) {
+    await p.goto(`${baseURL}/apps/catalog/${pagina}`, {waitUntil: "networkidle"});
+    const m = await p.evaluate((sel) => {
+      const sb = document.querySelector(".site-shell > .sidebar")!;
+      const texto = (el: Element) => { const tw = document.createTreeWalker(el.querySelector(".sidebar-label") ?? el, NodeFilter.SHOW_TEXT);
+        let n: Node | null; while ((n = tw.nextNode())) { if (n.textContent?.trim()) { const rg = document.createRange(); rg.selectNodeContents(n); return Math.round(rg.getClientRects()[0].left); } } return -1; };
+      const cur = sb.querySelector(".sidebar-item[aria-current='page']")!;
+      // Um item comum do alto da lateral (em Patterns, um filtro; em Components só há o atual no alto).
+      const comum = [...sb.querySelectorAll(".sidebar-item:not([aria-current])")].find((e) => !e.closest("[data-collapsible], .sidebar-group-list ul ul"));
+      return {cur: Math.round(cur.getBoundingClientRect().left), acima: Math.round(sb.querySelector(sel)!.getBoundingClientRect().left),
+        painel: Math.round(sb.getBoundingClientRect().left), textoCur: texto(cur), comum: comum ? Math.round(comum.getBoundingClientRect().left) : null,
+        textoComum: comum ? texto(comum) : null};
+    }, acima);
+    expect(m.cur, `${pagina}: ${JSON.stringify(m)}`).toBe(m.acima);
+    expect(m.cur, `${pagina}: dentro do painel`).toBeGreaterThanOrEqual(m.painel);
+    if (pagina === "patterns.html") {
+      expect(m.comum, `${pagina}: a cápsula do atual na dos outros`).toBe(m.cur);
+      expect(m.textoComum, `${pagina}: o texto do atual na coluna dos outros`).toBe(m.textoCur);
+    }
+  }
+});
+
+// LOTE 118 ("Campo na largura", o Victor, 27/11/2026): entre 1025 e 1279 o campo de filtro da lateral de Patterns ficava
+// 8 para dentro das cápsulas de cada lado e cortava o texto ("Filter 80 component"). Agora ele vai de ponta a ponta das
+// cápsulas. Provado contra o defeito: com o `_moldura.css` do `main` em 42594763, o campo fica 8 para dentro.
+test("site · o campo de filtro da lateral de Patterns tem a largura das cápsulas", async ({page: p, baseURL}) => {
+  for (const largura of [1100, 1280]) {
+    await p.setViewportSize({width: largura, height: 800});
+    await p.goto(`${baseURL}/apps/catalog/patterns.html`, {waitUntil: "networkidle"});
+    const m = await p.evaluate(() => {
+      const r = (e: Element) => { const b = e.getBoundingClientRect(); return [Math.round(b.left), Math.round(b.right)]; };
+      return {campo: r(document.querySelector(".site-filtro-busca .search-field")!), capsula: r(document.querySelector(".site-shell > .sidebar .sidebar-item[aria-current='true']")!)};
+    });
+    expect(m.campo, `${largura}: ${JSON.stringify(m)}`).toEqual(m.capsula);
+  }
 });
 
 test("site · em 320 o seletor de densidade vira um Select e nada sai cortado; em 1280 continuam os três botões", async ({page: p, baseURL}) => {
