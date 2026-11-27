@@ -2,6 +2,14 @@
 
 Every update to Aurea: what is new, what changed, what was fixed and what may break.
 
+## v0.84.0
+
+November 27, 2026
+
+Native Alert gets the soft appearance and an action button; web Combobox options take a description and can be disabled; web Timeline items take an icon, a tone, a trailing value and the time between.
+
+[Read full release notes →](https://aureauds.dev/release-v0-84-0.md)
+
 ## v0.83.0
 
 November 26, 2026

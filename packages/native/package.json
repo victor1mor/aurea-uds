@@ -1,6 +1,6 @@
 {
   "name": "@aurea-uds/native",
-  "version": "0.83.0",
+  "version": "0.84.0",
   "description": "Aurea UDS for React Native: the theme and density provider, the components, and the Phosphor icons on react-native-svg.",
   "keywords": [
     "aurea",

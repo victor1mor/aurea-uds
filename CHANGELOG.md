@@ -451,6 +451,32 @@ como deveria funcionar"*.
 
 ---
 
+## [0.84.0] — 2026-11-27
+
+**O lote 115, a paridade web × nativo, primeira parte** — a regra do Victor de 24/11/2026 (o que só um alvo tem vai ao outro,
+antes da 1.0). O inventário tem uns 44 itens; este lote leva as três peças que mais aparecem nos apps. Aprovadas na bancada
+viva, os dois alvos lado a lado, claro e escuro, Gold e Ember (*"Aprovo as três"*, 27/11/2026). Só acrescenta: sem as
+props novas, cada peça sai igual a antes.
+
+### Adicionado
+
+- **`Alert` do nativo: `appearance="soft"` e `action`**, os da web (a 0.54.0 e a 0.33.0). O `soft` pinta o fundo com a
+  cor do estado a 14%, sem a sombra do cartão, o título em negrito (o tom com 25% da cor do texto) e o corpo a 16 na cor do
+  texto. Na Ember, o cartão de sempre, como na web (o Victor, 02/11/2026: *"Ember no cartão"*). O `action` desce para
+  baixo do texto, na coluna dele, e fica fora do grupo que o leitor de tela lê como um (no iPhone, coisa tocável dentro
+  dele some).
+- **`Combobox` e `MultiCombobox` da web: `description` e `disabled` na opção** (`ComboboxOption`), os do nativo (a R-14). A
+  explicação é a segunda linha do item de menu com explicação (`.menu-item-description`); o nome vai por
+  `aria-labelledby` e a explicação por `aria-describedby`. A busca continua olhando só o `label`.
+- **`Timeline` da web: `icon`, `tone`, `trailing` e `between` no item**, os do nativo (a R-18): a moldura redonda de 40
+  com o glifo de 20 no lugar do ponto, o tom com o vocabulário do `Badge` (`neutral`, `primary`, `info`, `success`,
+  `warning`, `danger`), o que vai à direita do título e o que aconteceu entre um item e o próximo (no último não aparece).
+  Com uma moldura na lista, a coluna do marcador tem 40 em todo item, e o trilho vai ao centro dela, também no `time`. O
+  `icon` da web é NÓ (um `<Icon name="check"/>`), como o `leading` do `Badge`: a `Timeline` é marcação de servidor e não
+  importa o `Icon`. Tipos novos: `TimelineItem`, `TimelineTone`.
+- Os exemplos no site: "Appearance" e "With an action" na página do `Alert` do nativo; "Options with a description" na do
+  `Combobox`; "Icons, value and the time between" e "Tones" na da `Timeline`.
+
 ## [0.83.0] — 2026-11-26
 
 **Quatro lotes numa versão só** (o Victor, 26/11/2026: *"sim, junte os quatro num pedido só"*): o 108 (a marca e a pessoa no

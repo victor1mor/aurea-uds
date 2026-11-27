@@ -77,7 +77,7 @@
       "name": "items",
       "type": "ComboboxOption[] | ComboboxOptGroup[]",
       "default": "—",
-      "description": "The options, as data: {value, label} — or groups of them, {label, items}. Grouping is the engine's own shape: the same `items` prop takes either, and the kind is read from the first element. Do not mix flat with grouped."
+      "description": "The options, as data: {value, label, description?, disabled?} (description is a second, quieter line under the label, read as the option's description; disabled shows an option that cannot be picked) — or groups of them, {label, items}. Grouping is the engine's own shape: the same `items` prop takes either, and the kind is read from the first element. Do not mix flat with grouped."
     },
     {
       "name": "value",

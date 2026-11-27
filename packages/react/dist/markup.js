@@ -144,7 +144,10 @@ export function KPI({ label, value, trend, direction, tone, directionLabel, vari
         : _jsxs(Card, { className: cx("kpi", variant === "brand" && "kpi-brand", className), ...props, children: [miolo, barras] });
 }
 export function DataList({ items }) { return _jsx("dl", { className: "data-list", children: items.map((i, n) => _jsxs(React.Fragment, { children: [_jsx("dt", { children: i.term }), _jsx("dd", { children: i.value })] }, n)) }); }
-export function Timeline({ items, variant }) { return _jsx("ol", { className: "timeline", "data-timeline-style": variant, children: items.map((i, n) => _jsxs("li", { children: [_jsx("span", { className: "timeline-dot" }), _jsxs("div", { children: [_jsx("strong", { children: i.title }), i.description && _jsx("p", { children: i.description }), i.time && _jsx("small", { className: "muted", children: i.time })] })] }, n)) }); }
+export function Timeline({ items, variant }) {
+    const comMoldura = items.some(i => i.icon != null);
+    return _jsx("ol", { className: cx("timeline", comMoldura && "timeline-has-icons"), "data-timeline-style": variant, children: items.map((i, n) => _jsxs("li", { children: [i.icon != null ? _jsx("span", { className: "timeline-icon", "data-tone": i.tone && i.tone !== "neutral" ? i.tone : undefined, "aria-hidden": "true", children: i.icon }) : _jsx("span", { className: "timeline-dot" }), _jsxs("div", { children: [i.trailing != null ? _jsxs("span", { className: "timeline-title-row", children: [_jsx("strong", { children: i.title }), _jsx("span", { className: "timeline-trailing", children: i.trailing })] }) : _jsx("strong", { children: i.title }), i.description && _jsx("p", { children: i.description }), i.time && _jsx("small", { className: "muted", children: i.time }), i.between != null && n < items.length - 1 && _jsx("small", { className: "timeline-between", children: i.between })] })] }, n)) });
+}
 // Prose (item L5): UMA LINHA, e é para ser mesmo — quem transforma Markdown em elementos é o
 // consumidor. A trava do item é no CSS, escopada em `.prose`, e há prova dela no `skin.spec`.
 // Segurança, porque é o caminho de uso mais provável: quem entrega HTML de terceiro por
