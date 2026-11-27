@@ -1,7 +1,7 @@
 // O Switch do nativo no site (bloco 1, o 5-A — 23/10/2026): o interruptor da Aurea (não o do sistema), controlado —
 // cada exemplo guarda o próprio estado e responde ao toque. Todo valor das props do tipo em exemplo.
 import {createElement as h, useState} from "react";
-import {Switch} from "../../../../packages/native/dist/index.js";
+import {Card, Stack, Switch, Text} from "../../../../packages/native/dist/index.js";
 import {cada} from "../_eixos.mjs";
 
 const coluna = {display: "grid", gap: "var(--space-3)", width: "min(26rem, 100%)"};
@@ -36,6 +36,24 @@ export default {
 
 <Switch label="Price alerts" checked={alerts} onChange={setAlerts} />`,
       render: () => h(Interruptor, {inicial: true, label: "Price alerts"}),
+    },
+    {
+      // O mesmo caso da página da web ("On a surface", lote 114 — 27/11/2026): os exemplos dos dois alvos mostram os
+      // mesmos casos.
+      title: "On a surface",
+      description: "Inside a Card, with the section title above: the setting reads as part of that area.",
+      code: `<Card>
+  <Stack>
+    <Text weight={600}>Notifications</Text>
+    <Switch label="Email" checked={email} onChange={setEmail} />
+    <Switch label="Push" checked={push} onChange={setPush} />
+  </Stack>
+</Card>`,
+      render: () => h("div", {style: {width: "min(26rem, 100%)"}},
+        h(Card, null, h(Stack, null,
+          h(Text, {weight: 600}, "Notifications"),
+          h(Interruptor, {inicial: true, label: "Email"}),
+          h(Interruptor, {label: "Push"})))),
     },
     cada({titulo: "Sizes", descricao: "The touch scale: the track is as wide as the control is tall.",
       valores: ["sm", "md", "lg"], coluna: true,
