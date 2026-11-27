@@ -17,6 +17,16 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.81.1 e da 0.82.0 (26/11/2026)
+
+- **A 0.81.1 publicada em 25/11/2026, entre 19:21 e 19:22** (Brasília, medido no npm), pela publicação em etapa, da
+  junção do pedido #164 (`ffc55433`); **a 0.82.0, em 26/11/2026, entre 18:15 e 18:16**, da junção do pedido #170
+  (`189bc36a`). A 0.81.1 não tinha sido registrada; o `released-surface.json` foi regravado direto do commit da 0.82.0,
+  que cobre as duas (nenhum nome novo nem frase nova: 162 componentes, como na 0.81.0). O CHANGELOG ([0.81.1] e [0.82.0]
+  publicadas); as releases `v0.81.1` e `v0.82.0` no GitHub já existiam. O CLAUDE.md, com o sim do Victor (*"Pode
+  registrar"*): as duas linhas da tabela "O que já saiu" e os itens 79 e 80 do "O próximo passo".
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.80.0 e da 0.81.0 (25/11/2026)
 
 - **A 0.80.0 publicada em 24/11/2026, entre 18:02 e 18:03** (Brasília, medido no npm), pela publicação em etapa, da
@@ -441,7 +451,189 @@ como deveria funcionar"*.
 
 ---
 
+## [0.83.0] — 2026-11-26
+
+**Quatro lotes numa versão só** (o Victor, 26/11/2026: *"sim, junte os quatro num pedido só"*): o 108 (a marca e a pessoa no
+centro da trilha da lateral com painel), o 109 (o vão das abas, a data do site e a hora que se digita), o 110 (nada some no
+alto contraste do Windows) e o 111 (a `DataGrid` na TanStack Table 9 e o Shift+clique na caixinha). Cada um aprovado pelo
+Victor na bancada viva.
+
+### ⚠ Pode quebrar a compilação
+
+- **O `@tanstack/react-table` (dependência de par opcional, só do `@aurea-uds/react/data-grid`) passa a `^9.3.1`**; com
+  a 8 instalada, a grade não monta (o motor 9 não tem `useReactTable` nem `getCoreRowModel`).
+- **Os tipos escritos direto contra o motor levam o conjunto de recursos da grade primeiro**: `createColumnHelper<Linha>()`
+  vira `createColumnHelper<DataGridFeatures, Linha>()`, `FilterFn<Linha>` vira `FilterFn<DataGridFeatures, Linha>`, e
+  `SortingFn` vira `SortFn<DataGridFeatures, Linha>`. Na coluna, `sortingFn` vira `sortFn`. Quem importa o `ColumnDef`
+  da grade (`@aurea-uds/react/data-grid`) continua escrevendo `ColumnDef<Linha>`.
+- **`DataGrid<T extends RowData>`**: a linha tem de ser objeto ou lista (a regra da 9); grade de texto ou número solto
+  não compila mais.
+- **`table.getIsSomeRowsSelected()`**, para quem o lê numa célula ou cabeçalho próprio, passa a querer dizer "pelo menos
+  uma" — também com todas marcadas.
+
+### Adicionado
+
+- **`DataGridFeatures`** (`@aurea-uds/react/data-grid`): o conjunto de recursos do motor que a grade registra, para tipar
+  colunas com o `createColumnHelper` do motor.
+
+### Mudado
+
+**A `DataGrid` na TanStack Table 9** — o C-14, aprovado pelo Victor em 24/11/2026 (*"Sim, antes da 1.0"*): o `ColumnDef`
+do motor é fronteira pública da grade, e depois da 1.0 a troca seria quebra. A grade fica igual na tela e no
+comportamento — medida na bancada viva, a de hoje ao lado da nova, nos dois temas e com a Ember: a marcação das duas é
+idêntica, e continua idêntica depois de ordenar, buscar e passar de página. O Victor olhou (*"não vi diferença alguma"*) e
+escolheu o Shift+clique como hoje (*"vou aceitar sua sugestão de como hoje"*, 26/11/2026).
+
+- **A `DataGrid` roda na TanStack Table 9.3.1** (`useTable` com `tableFeatures`: filtro de coluna, busca geral, facetas,
+  ordem, paginação, seleção, colunas que se escondem e que mudam de largura, e os registros `filterFns` e `sortFns`).
+  Conferido no npm em 26/11/2026: a 9.3.1 é a última, e não há alerta de segurança na `react-table` nem na `table-core`.
+  Os três pontos em que a 9 mudaria a grade sem ninguém pedir ficam como na 8:
+  - o "selecionar todos" com todas marcadas mostra o visto, sem o tracinho (na 9, `getIsSomeRowsSelected` é verdadeiro
+    também com todas; o meio-marcado da 0.64.0 agora é `algumas && !todas`);
+  - sem `pageSize`, todas as linhas aparecem (a paginação fica sempre registrada, e sem `pageSize` a grade diz ao motor
+    `manualPagination`; sem isso, a 9 cortaria em 10);
+  - o Shift+clique na caixa de uma linha marca só aquela linha (`enableRowRangeSelection: false`; a 9 marcaria a faixa
+    desde a última clicada) — a escolha do Victor, como a referência nº 1.
+- **O `VisibilityState` continua publicado**, agora como apelido do `ColumnVisibilityState` da 9 (a mesma forma).
+
+**O vão das abas e a hora que se digita** — o lote 109, dois achados do Victor no site, em 26/11/2026: a fila de abas
+encostada no cartão de baixo, e o exemplo de data e hora que abria o calendário do navegador. Aprovado na bancada viva, com
+a página da referência ao lado, nas 13 marcas e nos dois temas, web e nativo (*"Aprovo as quatro"*, 26/11/2026).
+
+- **As abas ficam a 8 do painel** (`--space-2`), como nas duas referências (a da web e a do celular põem `gap-2` na raiz das
+  abas). Na web, deitada: o cartão, que é o painel padrão, encostava na fila (0) e ganha o vão; o painel sem caixa
+  (`panel="plain"`) passa de 12 a 8. Em pé, de 16 a 8. No nativo, o painel (cartão e sem caixa) passa de 12 a 8. Vale para
+  todas as marcas, a Ember junto.
+- **O campo de hora só se digita**: `Input type="time"` não mostra mais o botão do relógio do navegador (só o Chromium o
+  desenhava), e nenhuma janela do navegador abre; as setas sobem e descem cada parte, como na referência. A peça de hora
+  da Aurea continua para depois da 1.0 (decisão de 24/11/2026).
+
+### Consertado — a marca e a pessoa na trilha da lateral com painel (lote 108)
+
+Aprovado pelo Victor na bancada viva (*"Pode construir"*, 26/11/2026), nas 13 marcas e nos dois temas.
+
+- **`Sidebar` com `panel`** (aberta presa ou `overlay`): o `Sidebar.Brand` e o `Sidebar.User` ficam no centro da trilha de
+  ícones, como na lateral recolhida. Faltava ali a regra de centro que a recolhida já tinha: o logo saía 8 à direita dos
+  ícones, a foto 6, e o botão de sair da pessoa caía fora da trilha. As três regras novas são cópia das da recolhida.
+  Sem mudança: o painel recolhido, a recolhida sem painel, a `offcanvas`, a marca `plain` e os `layout` `"docs"` e `"app"`.
+  O nativo não tem lateral.
+
+### Consertado — nada some no alto contraste do Windows (lote 110)
+
+Consertadas as 63 reprovações que a conferência WEB-48 (lote 104) achou com
+o `forced-colors: active`. O Windows troca toda cor pelas poucas que a pessoa escolheu, e o que a peça só mostrava com
+fundo ou sombra sumia. A regra, nos dois alvos: o ligado e o escolhido no DESTAQUE do sistema (`Highlight`), o que fica em
+cima dele na cor sobre o destaque (`HighlightText`) — o que fazem as três bibliotecas grandes que tratam esse modo, lidas
+no código publicado (as duas primeiras da fila de referências não o tratam), e a forma "B" que o Victor já tinha aprovado
+para a aba e o segmento (06/11/2026). Aprovado na bancada viva, com o alto contraste simulado pelo navegador, nos dois
+temas do Windows, nas 13 marcas e com a Ember: o grupo 1 (*"entendi, aprovado"*), o grupo 2 (*"vou aceitar"*), os grupos
+3 a 5 pela mesma regra (*"Sim, siga a regra"*) e a bancada final (*"Pode"*). **Fora do alto contraste, nada muda**: toda
+regra nova mora dentro do `@media (forced-colors: active)`.
+
+- **A chave e o rádio** (`Switch`, `Radio`, `RadioGroup`, e a chave do `AutomationCard`), web e nativo: ligado e desligado
+  ficavam iguais. O recheio ligado vai ao destaque; a bolinha da chave e o ponto do rádio, à cor do texto (desligada) e à
+  cor sobre o destaque (ligada). A caixa de marcar do nativo fica como a da web: o visto na cor do texto.
+- **O cartão escolhido** do `RadioGroup variant="card"`: era só o fundo e a sombra; vai inteiro ao destaque.
+- **O nome do escolhido se lê.** No alto contraste o navegador põe uma placa na cor da tela atrás de todo texto; com o
+  fundo no destaque, a letra ficava clara sobre a placa clara — o segmento, a aba, a etiqueta, o item da `ListBox` e os
+  outros da forma "B" viravam cápsulas vazias (o "Components" do topo do site). Essas peças saem da troca do sistema
+  (`forced-color-adjust: none`) com as mesmas cores do sistema, pelo nome; dentro delas, toda letra na cor sobre o
+  destaque; o selo, a ficha, a foto de pessoa e a tecla voltam à troca.
+- **Os sete estilos do segmento** (`selectedStyle`): só o padrão mostrava alguma coisa; os outros seis pintavam por cima da
+  regra do alto contraste. Agora os sete mostram o escolhido igual, com o fio e o ponto na cor sobre o destaque.
+- **A foto escolhida da `Gallery`**: ganha a moldura no destaque.
+- **As barras do `KPI`**: sumiam inteiras. Ficam na cor do texto; a escolhida e a do mouse, no destaque.
+- **O foco que a caixa cortava** — o `Accordion` lateral, o `CodeBlock` e a capa do `MediaEmbed`: o anel do alto contraste
+  ia para fora da peça, e a caixa em volta o cortava. Vai para dentro, como o da tabela; o botão de tocar da capa vai ao
+  destaque com o foco.
+- **O foco na cor do escolhido** — a etiqueta escolhida do `TagGroup` e o cartão escolhido do `RadioGroup`: o anel pegava a
+  cor da letra (clara) e sumia na tela clara. Na cor do texto, pelo nome.
+- **A chave de tema** (`ThemeToggle`): a escolhida e o foco eram o mesmo anel, e o foco na escolhida não se via. A
+  escolhida vai ao destaque, como a aba; o foco fica o anel na cor do texto.
+- **O nativo no navegador** (`Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Tabs`, `TagGroup`): o React Native não conhece
+  as cores do sistema, então a peça leva uma marca só do navegador (`data-aurea-hc`, pelo `dataSet`, que o aparelho
+  ignora) e a regra mora numa folha pequena que entra no `<head>` uma vez (`altocontraste.tsx`). No celular, nada muda.
+
+### Consertado — o clique com Shift na caixinha, no rádio e na chave (lote 111)
+
+Um defeito antigo, achado na bancada da `DataGrid`: segurar Shift e clicar na marca desenhada não marcava nada no
+Chromium e no Firefox — o navegador só selecionava o texto. Aprovado pelo Victor na bancada viva, o de hoje ao lado do
+consertado (*"Pode"*, 26/11/2026). A aparência não muda: medida pixel a pixel nos dois temas, com a Gold e com a Ember.
+
+- **`Checkbox`, `CheckboxGroup`, `Radio`, `RadioGroup`, `Switch` e a coluna de seleção da `DataGrid` marcam com
+  Shift+clique** (web, e o HTML puro com `.checkbox`, `.radio` e `.switch`). O campo de verdade, invisível, passa a cobrir
+  o rótulo inteiro e recebe o clique — o mesmo jeito da chave de tema e da amostra de cor. Antes ele não recebia clique
+  (`pointer-events:none`), e o clique chegava pelo `<label>`: com Shift, o Chromium e o Firefox estendem a seleção de texto
+  em vez de ativar o rótulo. Medido com clique de verdade, em 12 peças: antes, 0 marcavam no Chromium e no Firefox (12 no
+  WebKit); agora, 12 nos três. As referências nº 1 e nº 2 marcam com Shift.
+- **Link ou botão dentro do nome** (*"I accept the terms"*) fica por cima do campo e continua sendo clicado, sem marcar a
+  caixa.
+- Um efeito: o texto do nome não se seleciona mais com o mouse.
+- **A barra do `KPI` (`bars`) escolhe com Shift+clique no Chromium e no WebKit** — o conserto parcial (o Victor:
+  *"Conserto parcial"*): a barra deixa de selecionar texto (`user-select:none`). O campo dela não pode cobrir a barra
+  como o da caixinha: o número de cima se posiciona pelo gráfico inteiro, e sairia do lugar. No Firefox a barra continua
+  sem marcar com Shift.
+- O nativo não muda: no celular não há Shift. Rodando no navegador, a caixa do nativo marca com Shift no Chromium e não
+  no Firefox (medido em 26/11/2026; o clique comum funciona) — fica anotado, sem lote.
+- Quem cobra: `tests/visual/shift-na-caixinha.spec.ts` — o Shift+clique na caixinha, na cápsula, na caixa da grade, no
+  rádio e na chave; a barra do `KPI` (fora do Firefox); o clique comum no desenho e no nome; o link dentro do nome; o campo que ocupa o rótulo e o anel do
+  foco pelo teclado. Nos três navegadores. Provado contra o defeito: com o CSS de antes, o do Shift reprova no Chromium e
+  no Firefox. E `tests/visual/parte-viva.spec.ts` passa a clicar no ponto da marca pelo mouse (o campo fica por cima dela);
+  `tests/visual/aviso-de-cookies.spec.ts` também, no nome "Analytics" da chave (achado pela CI do conjunto).
+
+### Site
+
+- **A página Migration** ganha a seção "DataGrid on TanStack Table 9 (0.83.0)": o que o app muda, em cinco passos e numa
+  tabela de nomes da 8 e da 9.
+- **O site deixa de abrir o calendário do navegador** (lote 109): a data do exemplo "Date and time" do `Input`, do padrão do
+  período (agora "Date range in one field", um `DatePicker range`) e do padrão da data única do `Calendar` (agora "One date
+  in a field") é o `DatePicker`. Os textos que mandavam preferir o calendário do navegador mudam, e o padrão do `Calendar`
+  deixa de dizer que a Aurea não tem `DatePicker` (ela tem desde a 0.32.0). A ficha do `Input` (a prop `type`) diz o mesmo.
+
+### Fora dos pacotes
+
+- **A conferência WEB-48 mede o foco do campo invisível pelo rótulo inteiro**: o foco do `RadioGroup` em cartão aparecia,
+  e a foto pegava só o texto ao lado do campo (medido na foto grande).
+- **A montagem do site apaga o `.md` de uma página que não existe mais** (lote 109): ela apagava só o `.html`, e sobravam o
+  texto dos dois padrões renomeados e o de uma página da 0.52.1 que nunca existiu.
+- O `pnpm-lock.yaml` troca a 8.21.3 pela 9.3.1 (e entram a `@tanstack/react-store` e a `@tanstack/store`, de que a 9
+  depende); na mesma instalação, o pnpm juntou o `@babel/*` 7.29.8 nas versões 7.29.13 e 7.29.11, que já estavam no
+  arquivo.
+
+### Quem cobra
+
+- `tests/visual/marca-na-trilha.spec.ts` (lote 108) — o logo, a foto, o sair e a ação da marca no centro da trilha, na
+  lateral com painel aberta e `overlay`. Provado contra o defeito: com o CSS de antes, reprova.
+- `tests/unit/lote-109-abas-data-hora.test.tsx` — as regras do vão na web, o vão do painel no nativo, nenhum exemplo do site
+  com `type="date"`, nenhum texto mandando preferir o do navegador, nenhum `.md` órfão e a regra do relógio. Provado contra o
+  defeito: com o código de antes, 8 dos 9 primeiros reprovam.
+- `tests/visual/abas-vao.spec.ts` — o vão MEDIDO nas páginas do site (o cartão e o sem caixa, em pé, o celular), no claro
+  com a Gold e no escuro com a Ember; e a imagem do campo de hora igual à do mesmo campo com o relógio escondido à força.
+  Provado contra o defeito: com o site de antes, as sete reprovam (0, 12, 16, 12 e o relógio desenhado).
+- `tests/unit/lote-i-web.test.tsx` e `tests/unit/native-c9-painel.test.tsx` guardavam o 12; passam a cobrar o 8.
+- `tests/visual/cores-forcadas-e-movimento.spec.ts` — a lista de reprovações conhecidas caiu de 63 para 7, e a das que
+  apareciam às vezes ficou vazia. A varredura reprova a reprovação nova e a conhecida que deixou de reprovar; com o CSS e
+  o nativo de antes, as 56 voltam como reprovação nova.
+- `tests/unit/datagrid-tanstack9.test.tsx` — 9 testes: o "selecionar todos" sem o tracinho com todas marcadas (pelo
+  clique e pelo estado de fora), todas as linhas sem `pageSize`, o corte com `pageSize`, a ordem de número, a busca, o
+  filtro de texto da coluna, o Shift+clique e o `VisibilityState`. Provados contra o defeito em 26/11/2026, desfazendo
+  uma linha por vez: sem o `&&!getIsAllRowsSelected()` reprovam os dois do tracinho; sem o `manualPagination` das linhas
+  sem página, o das linhas; sem o registro `filterFns`, o do filtro da coluna; com a faixa ligada, o do Shift. (A ordem e
+  a busca passaram sem os registros: na 9 elas acham a função sozinhas; os dois testes ficam como guarda.)
+- Os testes da `DataGrid` que já existiam passam sem mudança (`components`, `composition`, `consumidores-lote1`,
+  `lote3`, `saude-rodadas`, `seguranca-tabelas-e-cor`, `setas-rtl`, `tabela-mnt38-s10`, `meio-marcado`, `lote-q-dados`,
+  `lote-102`, `sem-linha`).
+
+### Ainda não consertado
+
+- **O foco de três peças do nativo no navegador** — o `DatePicker`, o `OTPField` e o `Screen` (as 7 que ficam na lista):
+  não aparece nem fora do alto contraste. Consertar muda o modo normal; vai ao Victor com imagem, num lote à parte.
+
 ## [0.82.0] — 2026-11-26
+
+✅ **Publicada em 26/11/2026, entre 18:15 e 18:16 (Brasília, medido no npm: `native` às 18:15, depois `react`,
+`contracts`, `core`, `fonts`, `icons` e `tokens` às 18:16), pela publicação em etapa — o `release.yml` mandou os sete para a área
+de espera do npm e o Victor os aprovou em npmjs.com, com o segundo fator —, da junção do pedido #170** (`189bc36a`).
 
 **O lote 106: cinco decisões das bancadas de 24/11/2026, construídas** — cada uma decidida pelo Victor na bancada viva, com
 a conta das referências, e o lote aprovado na bancada com o código de antes ao lado do novo (*"Aprovo os cinco"*,
@@ -488,6 +680,10 @@ a conta das referências, e o lote aprovado na bancada com o código de antes ao
 - O `validate.py` (check 6) refaz a folha montada chamando o mesmo `canto-continuo.mjs`.
 
 ## [0.81.1] — 2026-11-25
+
+✅ **Publicada em 25/11/2026, entre 19:21 e 19:22 (Brasília, medido no npm: `native`, `react`, `contracts`, `icons` e
+`tokens` às 19:21, depois `core` e `fonts` às 19:22), pela publicação em etapa — o `release.yml` mandou os sete para a área
+de espera do npm e o Victor os aprovou em npmjs.com, com o segundo fator —, da junção do pedido #164** (`ffc55433`).
 
 **As promessas públicas dizem a verdade** — o UDS-A1, as contradições que o relatório "a Aurea como UDS completo" achou
 entre o que a Aurea promete em público e o que ela prova (decidido pelo Victor em 24/11/2026, *"Sim, os 5"*; o texto

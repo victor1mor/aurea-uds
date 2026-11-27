@@ -18,7 +18,7 @@ import {Input} from "@aurea-uds/react";
 
 - `size` is ours, not the HTML attribute: sm, md, lg — the same steps as Button.
 
-- type="date", "time", "color" and "file" use the browser's own widget — themed by tokens, not rebuilt.
+- For a date, use DatePicker: the field that opens the Aurea calendar. type="time" is typed, with no browser picker; "color" and "file" use the browser's own widget, themed by tokens.
 
 - No internal state: controlled or uncontrolled is your call, as in plain React.
 
@@ -58,11 +58,11 @@ Email, password and number, all native — the keyboard on a phone changes with 
 
 ### Date and time
 
-The browser's own picker, wearing our tokens. Rebuilding a calendar would mean rebuilding every locale with it.
+The date is DatePicker, the field that opens the Aurea calendar. The time is typed: the arrows step each part, and no browser window opens.
 
 ```tsx
-<Field label="Starts"><Input type="date" /></Field>
-<Field label="At"><Input type="time" /></Field>
+<Field label="Starts"><DatePicker defaultValue={new Date(2026, 6, 24)} /></Field>
+<Field label="At"><Input type="time" defaultValue="09:00" /></Field>
 ```
 
 ### Formatting a plate or a document
@@ -93,7 +93,7 @@ Disabled is not submitted and is skipped by the keyboard; read-only is submitted
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `type` | `string` | text | Native type. date, time, color and file use the browser's own widget, themed by tokens. |
+| `type` | `string` | text | Native type. For a date, use DatePicker (the field that opens the Aurea calendar); time is typed, with no browser picker; color and file use the browser's own widget, themed by tokens. |
 | `value / defaultValue` | `string \| number` | — | Controlled or uncontrolled, as in plain React. The component adds no state of its own. |
 | `placeholder` | `string` | — | An example of the value, never a substitute for the label. |
 | `disabled` | `boolean` | false | Native disabled: skipped by the keyboard and not submitted. |

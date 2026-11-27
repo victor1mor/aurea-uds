@@ -52,6 +52,7 @@ import Svg, {Path} from "react-native-svg";
 import {canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, bordaDeFoco, semAnelDaWeb, marcaDoControle, aroDoEstilo, peleDoSegmento, marcaDoEstilo, contornoDeErro} from "./estilos.js";
 import {useNaSuperficie} from "./superficie.js";
 import {useMaisContraste} from "./contraste.js";
+import {marcaHC, useRegraDoAltoContraste} from "./altocontraste.js";
 import {FilaRolante, type AureaFilaJustify} from "./rolagem.js";
 import {IconButton} from "./actions.js";
 import {Icon, type AureaIconRegistry, type AureaIcon} from "./icon.js";
@@ -783,6 +784,7 @@ function ControleMarcado({
   align = "center",
 }: ControleProps & {papel: "checkbox" | "radio"}) {
   const t = useAureaTokens();
+  useRegraDoAltoContraste();
   const maisContraste = useMaisContraste();
   const s = folha(t);
   const campo = useCampo();
@@ -822,7 +824,7 @@ function ControleMarcado({
       // (ver "O ALVO DE TOQUE", no `actions.tsx`); a referência aceita isso, e a Aurea segue a referência aqui.
       hitSlop={FOLGA_DO_TOQUE(t)}
       style={[s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style]}>
-      <View style={[
+      <View {...marcaHC(papel === "checkbox" ? "caixa" : checked ? "ligada" : "desligada")} style={[
         s.marcaBase, noTopo,
         // 0.66.0: o canto da caixa é o `radiusSm` (8) — o da caixa do CELULAR da referência (24 com `radius-lg`, 8). Era
         // o `radiusXs` (6) desde a 0.32.0, copiado da web: lá a caixa tem 16, e o mesmo 6 numa caixa de 24 a deixava
@@ -837,7 +839,7 @@ function ControleMarcado({
         {checked && (papel === "radio"
           // O ponto do rádio é branco, sobre a marca já pintada (decisão do Victor, 17/10/2026).
           // 0.32.0: 10, o ponto da referência e o do `RadioGroup` (`space2 + space05`); era 8.
-          ? <View style={{width: t.size.space2 + t.size.space05, height: t.size.space2 + t.size.space05,
+          ? <View {...marcaHC("miolo")} style={{width: t.size.space2 + t.size.space05, height: t.size.space2 + t.size.space05,
                           ...canto(t.size.radiusFull), backgroundColor: marcaDoControle(t, t.color.controlSelectedDot, maisContraste)}} />
           // O visto. Era desenhado com DUAS BORDAS de um retângulo girado; sem linha (16/10/2026), ele é
           // um glifo, o mesmo da web (a máscara do `.checkbox` no `aurea.css`), sobre o `react-native-svg`
@@ -988,6 +990,7 @@ function ItemDoGrupoDeRadio({
   children, ...rest
 }: RadioGroupItemProps) {
   const t = useAureaTokens();
+  useRegraDoAltoContraste();
   const maisContraste = useMaisContraste();
   const s = folha(t);
   const grupo = React.useContext(GrupoDeRadio);
@@ -1014,13 +1017,13 @@ function ItemDoGrupoDeRadio({
     </View>
   );
   const marcaDesenhada = (
-    <View key="marca" style={[
+    <View key="marca" {...marcaHC(escolhido ? "ligada" : "desligada")} style={[
       s.marcaBase,
       {width: marca, height: marca, ...canto(t.size.radiusFull)},
       escolhido && {backgroundColor: t.color.controlSelected, borderColor: "transparent"},
       erro && contornoDeErro(t),
     ]}>
-      {escolhido && <View style={{width: ponto, height: ponto, ...canto(t.size.radiusFull),
+      {escolhido && <View {...marcaHC("miolo")} style={{width: ponto, height: ponto, ...canto(t.size.radiusFull),
                                   backgroundColor: marcaDoControle(t, t.color.controlSelectedDot, maisContraste)}} />}
     </View>
   );
@@ -1116,6 +1119,7 @@ export function Switch({
   align = "center",
 }: SwitchProps) {
   const t = useAureaTokens();
+  useRegraDoAltoContraste();
   const maisContraste = useMaisContraste();
   const s = folha(t);
   const campo = useCampo();
@@ -1180,12 +1184,12 @@ export function Switch({
         temTexto && {gap: t.size.space3},
         inativo && s.desabilitado, style,
       ]}>
-      <View style={[
+      <View {...marcaHC(checked ? "ligada" : "desligada")} style={[
         s.trilho, noTopo,
         {width: larguraDoTrilho, height: alturaDoTrilho},
         checked && {backgroundColor: t.color.controlSelected, borderColor: "transparent"},
       ]}>
-        <Animated.View style={[
+        <Animated.View {...marcaHC("miolo")} style={[
           s.polegar,
           {width: larguraDoPolegar, height: alturaDoPolegar,
            backgroundColor: checked ? marcaDoControle(t, t.color.controlThumb, maisContraste) : t.color.mutedForeground,

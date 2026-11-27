@@ -1,5 +1,6 @@
 import {createElement as h} from "react";
 import {Input, Field, Card} from "../../../packages/react/dist/index.js";
+import {DatePicker} from "../../../packages/react/dist/calendar.js";
 
 const stack = {display: "grid", gap: "var(--space-4)", width: "min(420px, 100%)"};
 
@@ -16,7 +17,7 @@ export default {
   features: [
     "Native attributes pass through: type, required, pattern, min, max, step, autoComplete, inputMode.",
     "`size` is ours, not the HTML attribute: sm, md, lg — the same steps as Button.",
-    "type=\"date\", \"time\", \"color\" and \"file\" use the browser's own widget — themed by tokens, not rebuilt.",
+    "For a date, use DatePicker: the field that opens the Aurea calendar. type=\"time\" is typed, with no browser picker; \"color\" and \"file\" use the browser's own widget, themed by tokens.",
     "No internal state: controlled or uncontrolled is your call, as in plain React.",
     "The focus ring is the system's, and it never relies on colour alone.",
     "Pair with Field for the label; alone it is a control with no name, which is a bug.",
@@ -71,13 +72,14 @@ export default {
     },
     {
       title: "Date and time",
-      description: "The browser's own picker, wearing our tokens. Rebuilding a calendar would mean rebuilding every locale with it.",
+      description: "The date is DatePicker, the field that opens the Aurea calendar. The time is typed: the arrows step each part, and no browser window opens.",
       code: [
-        '<Field label="Starts"><Input type="date" /></Field>',
-        '<Field label="At"><Input type="time" /></Field>',
+        '<Field label="Starts"><DatePicker defaultValue={new Date(2026, 6, 24)} /></Field>',
+        '<Field label="At"><Input type="time" defaultValue="09:00" /></Field>',
       ].join("\n"),
+      embed: true,
       render: () => h("div", {style: stack},
-        h(Field, {label: "Starts"}, h(Input, {type: "date", defaultValue: "2026-07-24"})),
+        h(Field, {label: "Starts"}, h(DatePicker, {defaultValue: new Date(2026, 6, 24)})),
         h(Field, {label: "At"}, h(Input, {type: "time", defaultValue: "09:00"}))),
     },
     {

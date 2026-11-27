@@ -746,7 +746,7 @@ export default {
   Calendar: {
     install: 'import {Calendar} from "@aurea-uds/react/calendar";',
     description: "Pick a range, with the days before check-in closed. This is what a native date "
-      + "input cannot do — for one plain date, prefer <Input type=\"date\" />.",
+      + "input cannot do — for one plain date in a form, DatePicker is the field that opens it.",
     code: `<Calendar
   mode="range"
   label="Stay"

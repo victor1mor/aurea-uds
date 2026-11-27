@@ -656,7 +656,7 @@ Fixes, security fixes included, ship in the newest version only. To get one, upg
 <page url="https://aureauds.dev/docs-migration.html">
 # Migration
 
-The old names removed in 0.76.0, ahead of 1.0, what replaces each one, and how to move before you upgrade.
+The old names removed in 0.76.0 and the DataGrid move to TanStack Table 9 in 0.83.0, ahead of 1.0, and how to move before you upgrade.
 
 Version 0.76.0 removes a short list of old names, ahead of 1.0. Each one had been deprecated for several versions and has a replacement. They all still work in 0.75.0 and earlier, so you can move to the new names first and then upgrade without anything breaking.
 
@@ -694,6 +694,28 @@ With `pressed`, the button only paints the on state and you keep the state yours
 ## The yellow text color
 
 `--brand-yellow-text` has no direct replacement: in the light theme, yellow is never a text color. Use the text color, `--foreground`, and let the yellow mark the element as a background, an underline or an indicator.
+
+## DataGrid on TanStack Table 9 (0.83.0)
+
+From 0.83.0, `DataGrid` runs on TanStack Table 9 instead of 8. The grid looks and behaves the same. What changes is the engine your column definitions are typed against.
+
+1. Replace the engine: install `@tanstack/react-table@^9.3.1` and remove version 8. It is an optional peer dependency of `@aurea-uds/react`, needed only for `@aurea-uds/react/data-grid`.
+2. If you import `ColumnDef` from `@aurea-uds/react/data-grid`, keep writing `ColumnDef<Row>`: the grid's feature set is already inside the type.
+3. If you import types straight from `@tanstack/react-table`, version 9 asks for the feature set first. Use `DataGridFeatures`, exported by `@aurea-uds/react/data-grid`:
+
+| Version 8 | Version 9 with DataGrid |
+|---|---|
+| `ColumnDef<Row>` from the engine | `ColumnDef<Row>` from `@aurea-uds/react/data-grid` |
+| `createColumnHelper<Row>()` | `createColumnHelper<DataGridFeatures, Row>()` |
+| `FilterFn<Row>` | `FilterFn<DataGridFeatures, Row>` |
+| `sortingFn` on a column | `sortFn` |
+| `SortingFn<Row>` | `SortFn<DataGridFeatures, Row>` |
+| `VisibilityState` from the engine | `VisibilityState` from `@aurea-uds/react/data-grid` (same shape) |
+
+4. Each row must be an object or an array. A grid of plain strings or numbers no longer compiles: wrap each value, for example `{value: "a"}`.
+5. If a cell or header you render reads `table.getIsSomeRowsSelected()`, it now means "at least one row", including when every row is selected. For a mixed state, add `&& !table.getIsAllRowsSelected()`. The grid's own "select all" box already does this.
+
+Shift-clicking a row's box still selects only that row, as before.
 
 ## Old names that stay
 
@@ -7411,7 +7433,7 @@ import {Input} from "@aurea-uds/react";
 
 - `size` is ours, not the HTML attribute: sm, md, lg — the same steps as Button.
 
-- type="date", "time", "color" and "file" use the browser's own widget — themed by tokens, not rebuilt.
+- For a date, use DatePicker: the field that opens the Aurea calendar. type="time" is typed, with no browser picker; "color" and "file" use the browser's own widget, themed by tokens.
 
 - No internal state: controlled or uncontrolled is your call, as in plain React.
 
@@ -7451,11 +7473,11 @@ Email, password and number, all native — the keyboard on a phone changes with 
 
 ### Date and time
 
-The browser's own picker, wearing our tokens. Rebuilding a calendar would mean rebuilding every locale with it.
+The date is DatePicker, the field that opens the Aurea calendar. The time is typed: the arrows step each part, and no browser window opens.
 
 ```tsx
-<Field label="Starts"><Input type="date" /></Field>
-<Field label="At"><Input type="time" /></Field>
+<Field label="Starts"><DatePicker defaultValue={new Date(2026, 6, 24)} /></Field>
+<Field label="At"><Input type="time" defaultValue="09:00" /></Field>
 ```
 
 ### Formatting a plate or a document
@@ -7486,7 +7508,7 @@ Disabled is not submitted and is skipped by the keyboard; read-only is submitted
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `type` | `string` | text | Native type. date, time, color and file use the browser's own widget, themed by tokens. |
+| `type` | `string` | text | Native type. For a date, use DatePicker (the field that opens the Aurea calendar); time is typed, with no browser picker; color and file use the browser's own widget, themed by tokens. |
 | `value / defaultValue` | `string \| number` | — | Controlled or uncontrolled, as in plain React. The component adds no state of its own. |
 | `placeholder` | `string` | — | An example of the value, never a substitute for the label. |
 | `disabled` | `boolean` | false | Native disabled: skipped by the keyboard and not submitted. |
@@ -10792,7 +10814,7 @@ disabled on a tab dims it and it does not open; the arrows still reach it, so it
 | `orientation` | `Responsive<'horizontal' \| 'vertical'>` | horizontal | Resolved at runtime and handed to the engine, which publishes data-orientation/aria-orientation and adapts the arrow keys. |
 | `activateOnFocus` | `boolean` | true | Automatic activation: the arrow switches the panel along with focus. Set false for the APG's manual pattern — the arrow moves focus and Enter/Space activates. Use false when switching a tab is expensive. |
 | `loopFocus` | `boolean` | true | Whether the arrow wraps from the last tab back to the first. |
-| `panel` | `'card' \| 'plain'` | card | The panel. `card` is an inset card. `plain` drops the box, like the reference library's panel: the content starts on the same line as what is outside the Tabs, with only the space-3 gap above it. Use it when the content already has a frame (Table, DataGrid, a list of cards), which would otherwise be a box inside a box. The same prop on native. |
+| `panel` | `'card' \| 'plain'` | card | The panel. `card` is an inset card. `plain` drops the box, like the reference library's panel: the content starts on the same line as what is outside the Tabs, with only the space-2 gap above it. Both panels sit space-2 below the tabs, as in the reference. Use it when the content already has a frame (Table, DataGrid, a list of cards), which would otherwise be a box inside a box. The same prop on native. |
 | `variant` | `primary \| secondary` | primary | secondary is the reference's secondary tabs: no track, a hairline under the list, the chosen tab marked by the Aurea selected line. Laid flat, the tabs fill the row and share it equally (never narrower than their label; when they do not fit, the row scrolls), as in the reference library. |
 </page>
 
@@ -13410,7 +13432,7 @@ import {ButtonGroup, IconButton} from "@aurea-uds/react";
 <page url="https://aureauds.dev/pattern-calendar-date-picker.html">
 # Date picker
 
-There is no DatePicker component: a picker is a trigger plus a popover plus this calendar. Three parts you already have, and the trigger is what names the field.
+In a form, DatePicker is this already. Underneath it is a trigger plus a popover plus this calendar: compose them yourself when the trigger is not a field, like this button.
 
 ## Usage
 
@@ -13428,7 +13450,7 @@ import {Button, Popover, Calendar} from "@aurea-uds/react";
 <page url="https://aureauds.dev/pattern-calendar-booking-with-days-closed.html">
 # Booking with days closed
 
-The reason this component exists. A native date input cannot say "not before Thursday, and never a Sunday" — everything else about a plain date, it does better.
+The reason this component exists: a native date input cannot say "not before Thursday, and never a Sunday". The calendar can, and DatePicker takes the same rules.
 
 ## Usage
 
@@ -13445,19 +13467,19 @@ import {Calendar} from "@aurea-uds/react";
 ```
 </page>
 
-<page url="https://aureauds.dev/pattern-calendar-when-the-native-input-wins.html">
-# When the native input wins
+<page url="https://aureauds.dev/pattern-calendar-one-date-in-a-field.html">
+# One date in a field
 
-One plain date, no closed days: the native picker is smaller, knows every locale, and is the one the person already knows how to use on their phone.
+One plain date in a form: DatePicker is the field that opens this calendar, in every theme and brand. Pass locale for the language; name sends the date as yyyy-mm-dd.
 
 ## Usage
 
 ```tsx
-import {Field, Input} from "@aurea-uds/react";
+import {Field, DatePicker} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Field label="Invoice date"><Input type="date" /></Field>
+<Field label="Invoice date"><DatePicker defaultValue={new Date(2026, 7, 12)} name="invoice" /></Field>
 ```
 </page>
 
@@ -14985,20 +15007,21 @@ import {Field, Input} from "@aurea-uds/react";
 ```
 </page>
 
-<page url="https://aureauds.dev/pattern-input-native-date-range.html">
-# Native date range
+<page url="https://aureauds.dev/pattern-input-date-range-in-one-field.html">
+# Date range in one field
 
-For one plain date the native picker still wins: every locale and every screen reader for free, and it is the one people already know. Reach for Calendar when you need a visible grid, a range, or days closed.
+From and to in ONE field: DatePicker with range opens the Aurea calendar, the first pick is one end and the second the other. Pass locale for the language; name sends the range as yyyy-mm-dd/yyyy-mm-dd.
 
 ## Usage
 
 ```tsx
-import {Field, Input} from "@aurea-uds/react";
+import {Field, DatePicker} from "@aurea-uds/react";
 ```
 
 ```tsx
-<Field label="From"><Input type="date" /></Field>
-<Field label="To"><Input type="date" /></Field>
+<Field label="Period">
+  <DatePicker range defaultValue={{from: new Date(2026, 6, 1), to: new Date(2026, 6, 24)}} name="period" />
+</Field>
 ```
 </page>
 
@@ -19104,6 +19127,76 @@ export function OnCall({incident, services, latency, events: initialEvents, tail
     </Card>
   );
 }
+```
+</page>
+
+<page url="https://aureauds.dev/release-v0-83-0.html">
+# v0.83.0
+
+DataGrid runs on TanStack Table 9; nothing disappears in Windows high contrast; Shift-click checks boxes; tabs keep an 8px gap; the sidebar brand and user sit on the icon rail.
+
+## ⚠ May break
+
+- **`DataGrid` needs `@tanstack/react-table` 9** (`^9.3.1`), not 8. It is still an optional peer dependency, needed only for `@aurea-uds/react/data-grid`.
+- **Column types written straight against the engine change.** `ColumnDef` from `@aurea-uds/react/data-grid` is written the same (`ColumnDef<Row>`). Types imported from `@tanstack/react-table` now take the grid's feature set first: `createColumnHelper<DataGridFeatures, Row>()`, `FilterFn<DataGridFeatures, Row>`. On a column, `sortingFn` is now `sortFn`.
+- **Each row must be an object or an array.** A grid of plain strings or numbers no longer compiles.
+- **In a cell or header you render, `table.getIsSomeRowsSelected()` now means "at least one row"**, including when every row is selected.
+
+The [Migration](./docs-migration.html) page has the table of old and new names.
+
+## Added
+
+- **`DataGridFeatures`**, the engine's feature set that `DataGrid` registers, for typing columns with the engine's own helpers.
+
+## Changed
+
+- **`DataGrid` runs on TanStack Table 9.3.1.** Sorting, search, column filters, facets, pagination, selection, hiding and resizing columns work as before. The "select all" box still shows the mixed mark only when some rows, not all, are selected, and Shift-clicking a row's box still selects only that row.
+- **Tabs sit 8px above their panel** (`--space-2`), on web and native. On the web, the default card panel used to touch the tab list; the plain panel (`panel="plain"`) goes from 12px to 8px, and vertical tabs from 16px to 8px. On native, the panel goes from 12px to 8px. Every brand gets it.
+- **The time field is typed.** `Input type="time"` no longer shows the browser's clock button (only Chromium drew it), so no browser window opens; the arrow keys step each part of the time.
+
+## Fixed
+
+- **`Sidebar` with `panel`** (docked open or overlay): `Sidebar.Brand` and `Sidebar.User` are centred on the icon rail, as on the collapsed sidebar. The logo was 8px right of the icons; the user's sign-out button fell outside the rail.
+- **Shift-click on `Checkbox`, `CheckboxGroup`, `Radio`, `RadioGroup`, `Switch` and the `DataGrid` selection column now works** in Chrome, Edge and Firefox, as it already did in Safari. Before, holding Shift and clicking the box selected text instead of checking it. The hidden input now covers the whole label and takes the click. Nothing changes on screen. The same applies to plain HTML with the `.checkbox`, `.radio` and `.switch` classes.
+- **A link or button inside the label** ("I accept the terms") still works as a link and does not check the box.
+- **Shift-click on a `KPI` bar now picks it** in Chrome, Edge and Safari. In Firefox, Shift-click on a bar still does nothing; a plain click works everywhere.
+
+### Nothing disappears in Windows high contrast
+
+When Windows high contrast is on (`forced-colors: active`), the browser replaces every color with the few the person chose. Anything a component showed only with a background or a shadow used to disappear. Selected and checked states now use the system highlight (`Highlight`), and whatever sits on it uses the matching text color (`HighlightText`). Outside high contrast, nothing changes.
+
+- **Switches and radios** (`Switch`, `Radio`, `RadioGroup`, and the switch in `AutomationCard`), on the web and in `@aurea-uds/native`: on and off looked the same. The checked fill now uses the highlight, and the thumb and the dot stay visible. The native `Checkbox` matches the web one: the check mark uses the text color.
+- **The selected card** of `RadioGroup variant="card"` uses the highlight.
+- **Selected labels are readable.** Selected segments, tabs, tags, `ListBox` items and the other selected states showed an empty capsule, because the browser draws a plate behind the text. Their label now reads on the highlight.
+- **All seven `selectedStyle` values of `SegmentedControl`** show the selected segment.
+- **The selected `Gallery` photo** gets a highlight frame.
+- **`KPI` bars** no longer disappear: they use the text color, and the selected or hovered bar uses the highlight.
+- **Focus rings that were clipped** in the side `Accordion`, the `CodeBlock` and the `MediaEmbed` cover now draw inside the component.
+- **Focus rings on selected items** (`TagGroup`, the `RadioGroup` card) use the text color, so they stay visible.
+- **`ThemeToggle`**: the selected option uses the highlight, and the focus ring stays visible on it.
+- **Native components in the browser** (`Checkbox`, `Radio`, `RadioGroup`, `Switch`, `Tabs`, `TagGroup`) follow the same rule through a small stylesheet added once to the page. Nothing changes on phones.
+
+## Site
+
+- **Dates use DatePicker.** The "Date and time" example on the Input page, the date-range pattern (now "Date range in one field") and the single-date pattern on the Calendar page (now "One date in a field") open the Aurea calendar instead of the browser's. The Calendar patterns no longer say that there is no DatePicker.
+- **The Migration page** has a new section, "DataGrid on TanStack Table 9 (0.83.0)".
+
+## Known issues
+
+- The focus of the native `DatePicker`, `OTPField` and `Screen` in the browser is not visible, with or without high contrast. It will be fixed in a later version.
+
+## Update
+
+On the web:
+
+```bash
+pnpm add @aurea-uds/react@0.83.0 @aurea-uds/core@0.83.0 @aurea-uds/fonts@0.83.0 @aurea-uds/icons@0.83.0
+```
+
+On React Native:
+
+```bash
+pnpm add @aurea-uds/native@0.83.0
 ```
 </page>
 

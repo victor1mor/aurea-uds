@@ -1,6 +1,6 @@
 # Date picker
 
-There is no DatePicker component: a picker is a trigger plus a popover plus this calendar. Three parts you already have, and the trigger is what names the field.
+In a form, DatePicker is this already. Underneath it is a trigger plus a popover plus this calendar: compose them yourself when the trigger is not a field, like this button.
 
 ## Usage
 

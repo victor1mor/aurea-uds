@@ -48,6 +48,7 @@ import Svg, { Path } from "react-native-svg";
 import { canto, cantosDeCima, criarFolha, estadoAcessivel, peleDoCartao, peleDoCartaoEscolhido, preenchimento, fundoDeCampo, bordaDeFoco, semAnelDaWeb, marcaDoControle, aroDoEstilo, peleDoSegmento, marcaDoEstilo, contornoDeErro } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
 import { useMaisContraste } from "./contraste.js";
+import { marcaHC, useRegraDoAltoContraste } from "./altocontraste.js";
 import { FilaRolante } from "./rolagem.js";
 import { IconButton } from "./actions.js";
 import { Icon } from "./icon.js";
@@ -397,6 +398,7 @@ export function PasswordField({ defaultVisible = false, size, disabled, autoCapi
 const FOLGA_DO_TOQUE = (t) => t.size.space1 + t.size.space05;
 function ControleMarcado({ papel, label, description, checked, onChange, disabled, size, style, testID, accessibilityLabel, align = "center", }) {
     const t = useAureaTokens();
+    useRegraDoAltoContraste();
     const maisContraste = useMaisContraste();
     const s = folha(t);
     const campo = useCampo();
@@ -426,7 +428,7 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
         // o mesmo toque a mais invisível que ela usa (6 em volta)"*. Substitui a linha com altura de 44, do mesmo dia, que
         // afastava a lista. O desenho e a medida da linha não mudam. ⚠ O leitor de tela do Android não enxerga essa folga
         // (ver "O ALVO DE TOQUE", no `actions.tsx`); a referência aceita isso, e a Aurea segue a referência aqui.
-        hitSlop: FOLGA_DO_TOQUE(t), style: [s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style], children: [_jsx(View, { style: [
+        hitSlop: FOLGA_DO_TOQUE(t), style: [s.linhaDeControle, align === "start" && s.linhaNoTopo, inativo && s.desabilitado, style], children: [_jsx(View, { ...marcaHC(papel === "checkbox" ? "caixa" : checked ? "ligada" : "desligada"), style: [
                     s.marcaBase, noTopo,
                     // 0.66.0: o canto da caixa é o `radiusSm` (8) — o da caixa do CELULAR da referência (24 com `radius-lg`, 8). Era
                     // o `radiusXs` (6) desde a 0.32.0, copiado da web: lá a caixa tem 16, e o mesmo 6 numa caixa de 24 a deixava
@@ -440,7 +442,7 @@ function ControleMarcado({ papel, label, description, checked, onChange, disable
                 ], children: checked && (papel === "radio"
                     // O ponto do rádio é branco, sobre a marca já pintada (decisão do Victor, 17/10/2026).
                     // 0.32.0: 10, o ponto da referência e o do `RadioGroup` (`space2 + space05`); era 8.
-                    ? _jsx(View, { style: { width: t.size.space2 + t.size.space05, height: t.size.space2 + t.size.space05,
+                    ? _jsx(View, { ...marcaHC("miolo"), style: { width: t.size.space2 + t.size.space05, height: t.size.space2 + t.size.space05,
                             ...canto(t.size.radiusFull), backgroundColor: marcaDoControle(t, t.color.controlSelectedDot, maisContraste) } })
                     // O visto. Era desenhado com DUAS BORDAS de um retângulo girado; sem linha (16/10/2026), ele é
                     // um glifo, o mesmo da web (a máscara do `.checkbox` no `aurea.css`), sobre o `react-native-svg`
@@ -465,6 +467,7 @@ function RaizDoGrupoDeRadio({ value, onValueChange, disabled, invalid, label, or
 }
 function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indicatorPlacement, icon, style, accessibilityLabel, children, ...rest }) {
     const t = useAureaTokens();
+    useRegraDoAltoContraste();
     const maisContraste = useMaisContraste();
     const s = folha(t);
     const grupo = React.useContext(GrupoDeRadio);
@@ -480,12 +483,12 @@ function ItemDoGrupoDeRadio({ value, label, description, disabled, invalid, indi
     const texto = (label != null || description != null || children != null) && (_jsxs(View, { style: { flex: 1, minWidth: 0 }, children: [typeof label === "string"
                 ? _jsx(Text, { size: "base", weight: 500, children: label }) : label, description != null && (typeof description === "string"
                 ? _jsx(Text, { size: "xs", tone: "muted", children: description }) : description), children != null && _jsx(View, { style: { marginTop: t.size.space3 }, children: children })] }, "texto"));
-    const marcaDesenhada = (_jsx(View, { style: [
+    const marcaDesenhada = (_jsx(View, { ...marcaHC(escolhido ? "ligada" : "desligada"), style: [
             s.marcaBase,
             { width: marca, height: marca, ...canto(t.size.radiusFull) },
             escolhido && { backgroundColor: t.color.controlSelected, borderColor: "transparent" },
             erro && contornoDeErro(t),
-        ], children: escolhido && _jsx(View, { style: { width: ponto, height: ponto, ...canto(t.size.radiusFull),
+        ], children: escolhido && _jsx(View, { ...marcaHC("miolo"), style: { width: ponto, height: ponto, ...canto(t.size.radiusFull),
                 backgroundColor: marcaDoControle(t, t.color.controlSelectedDot, maisContraste) } }) }, "marca"));
     // O ícone é decorativo: o rótulo já diz o que a opção é, e o `Icon` sem `label` sai da árvore
     // de acessibilidade. ADR-0094: no erro, o nome e o ícone da OPÇÃO ficam na cor do texto (como na web); quem fica
@@ -531,6 +534,7 @@ export const RadioGroup = Object.assign(RaizDoGrupoDeRadio, { Item: ItemDoGrupoD
  */
 export function Switch({ label, description, checked, onChange, onCheckedChange, disabled, size, style, testID, accessibilityLabel, align = "center", }) {
     const t = useAureaTokens();
+    useRegraDoAltoContraste();
     const maisContraste = useMaisContraste();
     const s = folha(t);
     const campo = useCampo();
@@ -589,11 +593,11 @@ export function Switch({ label, description, checked, onChange, onCheckedChange,
             // 0.32.0: 12 até o texto, o vão do campo de controle da referência e o do `Checkbox` (era 10).
             temTexto && { gap: t.size.space3 },
             inativo && s.desabilitado, style,
-        ], children: [_jsx(View, { style: [
+        ], children: [_jsx(View, { ...marcaHC(checked ? "ligada" : "desligada"), style: [
                     s.trilho, noTopo,
                     { width: larguraDoTrilho, height: alturaDoTrilho },
                     checked && { backgroundColor: t.color.controlSelected, borderColor: "transparent" },
-                ], children: _jsx(Animated.View, { style: [
+                ], children: _jsx(Animated.View, { ...marcaHC("miolo"), style: [
                         s.polegar,
                         { width: larguraDoPolegar, height: alturaDoPolegar,
                             backgroundColor: checked ? marcaDoControle(t, t.color.controlThumb, maisContraste) : t.color.mutedForeground,

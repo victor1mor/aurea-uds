@@ -35,6 +35,7 @@ import { SafeAreaInsetsContext, initialWindowMetrics } from "react-native-safe-a
 import { useAnotarBottomNav } from "./barranav.js";
 import { Avatar, Badge } from "./display.js";
 import { canto, comOpacidade, criarFolha, estadoAcessivel, fioDoEscolhido, misturaOpaca, aroDoEstilo, fundoDaPele, marcaDoEstilo, peleDoAtual, preenchimento } from "./estilos.js";
+import { marcaHC, useRegraDoAltoContraste } from "./altocontraste.js";
 import { NaSuperficie } from "./superficie.js";
 import { Icon } from "./icon.js";
 import { Card } from "./layout.js";
@@ -301,7 +302,8 @@ const folha = criarFolha((t) => ({
         paddingHorizontal: t.size.space3, paddingVertical: t.size.space1 + t.size.space05,
     },
     fioDaAba: fioDoEscolhido(t),
-    painel: { marginTop: t.size.space3 },
+    // O vão entre a fila e o painel é o da referência, 8 (o lote 109, aprovado pelo Victor em 26/11/2026), igual à web.
+    painel: { marginTop: t.size.space2 },
     // ── Stepper ────────────────────────────────────────────────────────────────────────────────
     trilha: { flexDirection: "row" },
     passo: { flex: 1, alignItems: "center" },
@@ -702,6 +704,7 @@ export function Stepper({ items, label, orientation = "horizontal", doneIcon = "
  */
 export function Tabs({ tabs, value, onChange, label, justify, variant = "primary", panel = "card", style, ...rest }) {
     const t = useAureaTokens();
+    useRegraDoAltoContraste();
     const s = folha(t);
     const strings = useAureaStrings();
     const aberta = tabs.find((it) => it.id === value);
@@ -711,7 +714,7 @@ export function Tabs({ tabs, value, onChange, label, justify, variant = "primary
     const fila = useFilaQueDesliza(value);
     return (_jsxs(View, { style: style, ...rest, children: [_jsx(FilaRolante, { justify: justify, fill: secundaria || undefined, style: comFio ? s.filaSecundariaComFio : undefined, marca: comFio ? { dataSet: { aureaLine: "tabs" } } : undefined, children: _jsxs(View, { accessibilityRole: "tablist", accessibilityLabel: label ?? strings.tabsLabel, style: secundaria ? [s.abasSecundarias, { flexGrow: 1 }, comFio && s.abasSecundariasSemBorda] : s.abas, children: [_jsx(IndicadorQueDesliza, { alvo: fila.alvo, aoFicarPronto: fila.aoFicarPronto, style: secundaria ? undefined : [canto(t.size.radiusControl), s.abaDeTabAtiva], children: secundaria ? _jsx(View, { style: s.fioDaAba }) : null }), tabs.map((it) => {
                             const ativa = it.id === value;
-                            return (_jsxs(Pressable, { onLayout: fila.medir(it.id), onPress: it.disabled ? undefined : () => onChange?.(it.id), disabled: it.disabled, accessibilityRole: "tab", ...estadoAcessivel({ selected: ativa, disabled: !!it.disabled }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [
+                            return (_jsxs(Pressable, { ...marcaHC(ativa ? "escolhida" : "desligada"), onLayout: fila.medir(it.id), onPress: it.disabled ? undefined : () => onChange?.(it.id), disabled: it.disabled, accessibilityRole: "tab", ...estadoAcessivel({ selected: ativa, disabled: !!it.disabled }), accessibilityLabel: typeof it.label === "string" ? it.label : undefined, style: [
                                     secundaria ? s.abaSecundaria : s.abaDeTab,
                                     ativa && !secundaria && !fila.pronto && s.abaDeTabAtiva,
                                     it.disabled && { opacity: t.size.opacityDisabled },

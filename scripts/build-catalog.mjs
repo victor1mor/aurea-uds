@@ -3175,6 +3175,13 @@ for (const [file, html] of [...paginas, ...embeds]) write(join(outDir, file), ht
     arquivosDeTexto.push([md, texto]);
   }
 }
+// O `.md` ÓRFÃO (o lote 109, 26/11/2026): a limpeza do começo apaga só os `.html`, e renomear um padrão deixava o `.md` da
+// página velha no site, com o texto antigo (os dois padrões que mandavam preferir o calendário do navegador). Sai todo
+// `.md` da raiz que esta montagem não escreve.
+{
+  const escritos = new Set(arquivosDeTexto.map(([f]) => f));
+  for (const f of readdirSync(outDir).filter(f => f.endsWith(".md") && !escritos.has(f))) unlinkSync(join(outDir, f));
+}
 for (const [file, texto] of arquivosDeTexto) write(join(outDir, file), texto);
 
 const rich = Object.keys(content).length;

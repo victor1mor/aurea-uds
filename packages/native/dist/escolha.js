@@ -15,6 +15,7 @@ import { Animated, PanResponder, Platform, Pressable, TextInput, View, } from "r
 import { canto, criarFolha, estadoAcessivel, fundoDeCampo, focoDoCampo, marcaDoControle, contornoDeErro } from "./estilos.js";
 import { useNaSuperficie } from "./superficie.js";
 import { useMaisContraste } from "./contraste.js";
+import { marcaHC, useRegraDoAltoContraste } from "./altocontraste.js";
 import { Icon } from "./icon.js";
 import { Label, useCampo } from "./inputs.js";
 import { driverNativo, useReduceMotion } from "./movimento.js";
@@ -437,6 +438,7 @@ const textoDaEtiqueta = (it) => it.textValue ?? (typeof it.label === "string" ? 
  */
 export function TagGroup({ label, labelHidden, description, errorMessage, items, selectionMode = "none", selectedKeys, defaultSelectedKeys, onSelectionChange, onRemove, size = "md", variant = "default", icons, style, testID, }) {
     const t = useAureaTokens();
+    useRegraDoAltoContraste();
     const s = folha(t);
     const strings = useAureaStrings();
     const [proprio, setProprio] = React.useState(defaultSelectedKeys ?? []);
@@ -465,7 +467,7 @@ export function TagGroup({ label, labelHidden, description, errorMessage, items,
                     const cor = escolhida ? t.color.primaryEmphasis : letra;
                     const conteudo = (_jsxs(_Fragment, { children: [it.icon != null && _jsx(Icon, { name: it.icon, size: "sm", color: cor, icons: icons }), _jsx(Text, { weight: 500, numberOfLines: 1, style: { fontSize: m.letra, lineHeight: m.linha, color: cor }, children: it.label })] }));
                     const estiloPrincipal = [s.principal, { gap: m.vao }];
-                    return (_jsxs(View, { role: "listitem", testID: testID ? `${testID}-${it.id}` : undefined, style: [
+                    return (_jsxs(View, { role: "listitem", ...marcaHC(escolhida ? "escolhida" : "desligada"), testID: testID ? `${testID}-${it.id}` : undefined, style: [
                             s.etiqueta,
                             { gap: m.vao, paddingVertical: m.vertical, paddingHorizontal: m.lados,
                                 // O fundo existe desde a montagem; escolher só troca a cor (a regra do raio no Android).

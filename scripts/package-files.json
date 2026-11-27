@@ -62,6 +62,8 @@
       "README.md",
       "dist/actions.d.ts",
       "dist/actions.js",
+      "dist/altocontraste.d.ts",
+      "dist/altocontraste.js",
       "dist/arquivo.d.ts",
       "dist/arquivo.js",
       "dist/barranav.d.ts",

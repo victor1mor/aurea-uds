@@ -67,7 +67,10 @@ test("a janela: as categorias começam desligadas, a necessária não tem chave,
   await expect(janela).toBeHidden();
   expect(await escolhas(p)).toEqual([]);
   await aviso(p).getByRole("button", {name: "Choose cookies"}).click();
-  await janela.getByText("Analytics", {exact: true}).click();
+  // O clique no nome liga a chave. Desde a 0.83.0 o campo invisível cobre o rótulo inteiro (o Shift+clique), e o
+  // clique vai pelo mouse, no ponto do texto, como a pessoa faz — o `click()` do texto recusa o campo por cima.
+  const nome = await janela.getByText("Analytics", {exact: true}).boundingBox();
+  await p.mouse.click(nome!.x + nome!.width / 2, nome!.y + nome!.height / 2);
   await expect(janela.getByRole("switch", {name: /Analytics/})).toBeChecked();
   await janela.getByRole("button", {name: "Save my choices"}).click();
   expect(await escolhas(p)).toEqual([{choice: {necessary: true, analytics: true, marketing: false}, action: "custom"}]);

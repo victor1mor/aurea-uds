@@ -1,5 +1,6 @@
 import {createElement as h} from "react";
 import {Input, Field, Button, Card, Switch, Checkbox, Select, InputGroup, InputGroupAddon, Textarea} from "../../../../packages/react/dist/index.js";
+import {DatePicker} from "../../../../packages/react/dist/calendar.js";
 
 const stack = {display: "grid", gap: "var(--space-4)", width: "min(420px, 100%)"};
 const row = {display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-2)"};
@@ -32,18 +33,18 @@ export default [
   },
   {
     variant: "Date",
-    name: "Native date range",
-    description: "For one plain date the native picker still wins: every locale and every "
-      + "screen reader for free, and it is the one people already know. Reach for Calendar "
-      + "when you need a visible grid, a range, or days closed.",
-    uses: ["Field", "Input"],
-    code: [
-      '<Field label="From"><Input type="date" /></Field>',
-      '<Field label="To"><Input type="date" /></Field>',
-    ].join("\n"),
-    render: () => h("div", {style: {...row, width: "min(420px,100%)"}},
-      h("div", {style: {flex: 1}}, h(Field, {label: "From"}, h(Input, {type: "date", defaultValue: "2026-07-01"}))),
-      h("div", {style: {flex: 1}}, h(Field, {label: "To"}, h(Input, {type: "date", defaultValue: "2026-07-24"})))),
+    name: "Date range in one field",
+    description: "From and to in ONE field: DatePicker with range opens the Aurea calendar, the "
+      + "first pick is one end and the second the other. Pass locale for the language; name sends "
+      + "the range as yyyy-mm-dd/yyyy-mm-dd.",
+    uses: ["Field", "DatePicker"],
+    code: `<Field label="Period">
+  <DatePicker range defaultValue={{from: new Date(2026, 6, 1), to: new Date(2026, 6, 24)}} name="period" />
+</Field>`,
+    embed: true,
+    render: () => h("div", {style: {width: "min(320px,100%)"}},
+      h(Field, {label: "Period"},
+        h(DatePicker, {range: true, defaultValue: {from: new Date(2026, 6, 1), to: new Date(2026, 6, 24)}, name: "period"}))),
   },
   {
     variant: "Read-only",

@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // SUBPATH PRÓPRIO (ver ./qrcode): é o único componente que precisa do @tanstack/react-table,
 // que é peer OPCIONAL. Table, DataList, KPI e Timeline ficam em /data-display sem essa conta.
 import React from "react";
-import { useReactTable, getCoreRowModel, getSortedRowModel, getFilteredRowModel, getPaginationRowModel, getFacetedRowModel, getFacetedUniqueValues, flexRender } from "@tanstack/react-table";
+import { useTable, tableFeatures, rowSortingFeature, columnFilteringFeature, globalFilteringFeature, columnFacetingFeature, rowPaginationFeature, rowSelectionFeature, columnVisibilityFeature, columnSizingFeature, columnResizingFeature, createSortedRowModel, createFilteredRowModel, createPaginatedRowModel, createFacetedRowModel, createFacetedUniqueValues, filterFns, sortFns, flexRender } from "@tanstack/react-table";
 import { cx, useAureaStrings, stateSeverity } from "./internal.js";
 import { useDirection } from "@base-ui/react/direction-provider";
 import { proprio } from "./pure.js";
@@ -17,7 +17,25 @@ import { Pagination } from "./navigation.js";
 import { Cluster } from "./layout.js";
 import { Alert, Skeleton } from "./feedback.js";
 import { IconButton } from "./actions.js";
-// DataGrid (Fase 4): TanStack Table v8 (8.21.3) headless + pele Aurea — sort,
+// C-14 (o lote 111, 26/11/2026): o motor passou da TanStack Table 8 para a 9 (9.3.1), antes da 1.0, porque o `ColumnDef`
+// dele é fronteira pública da grade. Na 9 cada tabela diz QUAIS recursos usa (`tableFeatures`), e os tipos levam esse
+// conjunto como primeiro parâmetro (`ColumnDef<TFeatures, TData, TValue>`). O conjunto da grade é UM só e fixo — é o que
+// ela usava na 8, recurso por recurso —, e o `ColumnDef` que a Aurea entrega já vem com ele: o app continua escrevendo
+// `ColumnDef<Linha>`. Os registros inteiros de `filterFns` e `sortFns` entram porque, na 9, uma função escolhida pelo
+// NOME só existe se estiver registrada: o `"auto"` do filtro de coluna (medido: sem o registro, o filtro de texto não
+// deixa passar nada) e todo nome que o app escreve na coluna (`filterFn: "equals"`, `sortFn: "alphanumeric"`).
+//
+// A paginação e as facetas ficam SEMPRE registradas: o conjunto não pode mudar entre uma renderização e outra. Sem
+// `pageSize`, a grade diz ao motor `manualPagination` (ele devolve as linhas sem cortar), que é o que a 8 fazia sem o
+// `getPaginationRowModel`. A faceta só varre os dados quando uma coluna pede a contagem.
+const recursosDaGrade = tableFeatures({
+    columnFilteringFeature, globalFilteringFeature, columnFacetingFeature, rowSortingFeature, rowPaginationFeature,
+    rowSelectionFeature, columnVisibilityFeature, columnSizingFeature, columnResizingFeature,
+    filteredRowModel: createFilteredRowModel(), sortedRowModel: createSortedRowModel(), paginatedRowModel: createPaginatedRowModel(),
+    facetedRowModel: createFacetedRowModel(), facetedUniqueValues: createFacetedUniqueValues(),
+    filterFns, sortFns,
+});
+// DataGrid (Fase 4): TanStack Table headless (a 8.21.3 até a 0.82; a 9.3.1 desde a 0.83.0, o lote 111) + pele Aurea — sort,
 // filtro global, paginação e seleção por checkbox. A pele reusa .table-wrap/th/td.
 //
 // PLANO-1.0 Parte F, itens F1 e F2 (08/08/2026): o estado deixou de ser SÓ interno.
@@ -214,9 +232,11 @@ export function DataGrid({ data, columns, label, filterable, pageSize, selectabl
             const id = c.id ?? c.accessorKey;
             return id && facetIds.has(id) ? { ...c, filterFn: facetFilterFn } : c;
         });
+        // O tracinho é "alguma, mas não todas". Na 9, `getIsSomeRowsSelected` quer dizer "pelo menos uma" (com todas
+        // marcadas também), e sozinho ele punha o tracinho por cima do visto — o `&&!getIsAllRowsSelected()` volta à 8.
         return selectable ? [{
                 id: "select", enableSorting: false,
-                header: ({ table }) => _jsx(GridCheck, { label: s.dataGridSelectAll, checked: table.getIsAllRowsSelected(), indeterminate: table.getIsSomeRowsSelected(), onChange: table.getToggleAllRowsSelectedHandler() }),
+                header: ({ table }) => _jsx(GridCheck, { label: s.dataGridSelectAll, checked: table.getIsAllRowsSelected(), indeterminate: table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected(), onChange: table.getToggleAllRowsSelectedHandler() }),
                 cell: ({ row }) => _jsx(GridCheck, { label: s.dataGridSelectRow, checked: row.getIsSelected(), disabled: !row.getCanSelect(), onChange: row.getToggleSelectedHandler() }),
             }, ...comFn] : comFn;
     }, [selectable, columns, s, facetIds]);
@@ -250,8 +270,8 @@ export function DataGrid({ data, columns, label, filterable, pageSize, selectabl
     }, [colunas]);
     const sortingDoMotor = React.useMemo(() => sorting.filter(o => idsDeclarados.has(o.id) || !(o.id in Object.prototype)), [sorting, idsDeclarados]);
     const filtrosDoMotor = React.useMemo(() => columnFilters.filter(f => idsDeclarados.has(f.id) || !(f.id in Object.prototype)), [columnFilters, idsDeclarados]);
-    const table = useReactTable({
-        data, columns: colunas, getRowId,
+    const table = useTable({
+        features: recursosDaGrade, data, columns: colunas, getRowId,
         state: { sorting: sortingDoMotor, globalFilter, rowSelection, columnFilters: filtrosDoMotor, columnVisibility, columnSizing, ...(paginated ? { pagination } : {}) },
         onSortingChange: setSorting,
         onGlobalFilterChange: setGlobalFilter,
@@ -261,10 +281,11 @@ export function DataGrid({ data, columns, label, filterable, pageSize, selectabl
         enableColumnResizing: !!resizableColumns, columnResizeMode: "onChange",
         onPaginationChange: setPagination,
         // F2: os três curto-circuitam o modelo de linha correspondente dentro do
-        // motor — medido no fonte instalado (RowSorting.ts:535, ColumnFiltering.ts:408,
-        // RowPagination.ts:376). Por isso os getters abaixo seguem ligados sem
-        // condição: sob `manual` o motor simplesmente não os chama.
-        manualSorting, manualFiltering, manualPagination, rowCount,
+        // motor — medido no fonte instalado da 8 (RowSorting.ts:535, ColumnFiltering.ts:408,
+        // RowPagination.ts:376), e a 9 faz o mesmo. Por isso os modelos de linha seguem
+        // registrados sem condição: sob `manual` o motor simplesmente não os chama.
+        // Sem `pageSize` a paginação é sempre `manual`: ver `recursosDaGrade`, acima.
+        manualSorting, manualFiltering, manualPagination: paginated ? manualPagination : true, rowCount,
         // emite as linhas ORIGINAIS já aqui (não em effect): getPreFilteredRowModel
         // ignora filtro/página, então a seleção sobrevive a ambos.
         onRowSelectionChange: updater => {
@@ -272,9 +293,6 @@ export function DataGrid({ data, columns, label, filterable, pageSize, selectabl
             setRowSelection(next);
             onSelectionChange?.(table.getPreFilteredRowModel().flatRows.filter(r => next[r.id]).map(r => r.original));
         },
-        getCoreRowModel: getCoreRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
         // A BUSCA NÃO DEPENDE DE QUEM VEM PRIMEIRO (A-11, 23/09/2026). A regra do motor (TanStack v8,
         // `GlobalFiltering.js`, `getColumnCanGlobalFilter`) olha SÓ a primeira linha: se o valor dela
         // não for texto nem número, a coluna sai da busca. Medido num app com 298 endereços: o primeiro
@@ -292,13 +310,10 @@ export function DataGrid({ data, columns, label, filterable, pageSize, selectabl
             return false;
         },
         enableRowSelection: !!selectable,
-        ...(paginated ? { getPaginationRowModel: getPaginationRowModel() } : {}),
-        // só quando há faceta: os dois varrem os dados para montar o mapa de valores
-        // únicos, e ninguém paga por isso sem ter pedido.
-        // <T> explícito: chamados sem argumento de tipo, os dois fixam TData em
-        // `unknown` e derrubam a inferência do useReactTable inteiro — o erro sai
-        // longe daqui, em `columns` e em `row.original`.
-        ...(facetIds.size ? { getFacetedRowModel: getFacetedRowModel(), getFacetedUniqueValues: getFacetedUniqueValues() } : {}),
+        // O Shift+clique na caixa de uma linha: na 9 o motor passou a marcar a FAIXA desde a última linha clicada (na 8,
+        // marcava só a linha). Fica como na 8 — decisão do Victor na bancada do lote 111 (26/11/2026, "como hoje"), o mesmo
+        // que faz a referência nº 1 (a caixa marca só a linha dela).
+        enableRowRangeSelection: false,
     });
     tabelaRef.current = table;
     const rows = table.getRowModel().rows;
