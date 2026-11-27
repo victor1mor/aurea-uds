@@ -157,6 +157,8 @@ const FORA_DO_CENTRO: Record<string, string> = {
   "Skeleton:0": "linhas de larguras diferentes, de propósito (70% e 90%)",
   "Skeleton:1": "as linhas de 70% do texto que carrega, alinhadas como texto — o mesmo motivo da de cima",
   "Tabs:1": "na referência as abas esticam até encher a fila; as nossas (secondary) não — é da peça, lote 2",
+  "Carousel:0": "as setas ficam nos lados da foto (lote 117) e os pontos embaixo são de tinta clara, que a medida não vê: ela "
+    + "conta só a foto e acusa 18 acima; o carrossel inteiro, da foto aos pontos, está no centro (108 a 241 numa caixa de 350)",
   // ~~"Prose:0"~~ saiu em 31/10/2026: na coluna do site B a caixa ficou do tamanho do texto, e ele está no centro.
 };
 const REG = join(process.cwd(), "packages/contracts/registry");

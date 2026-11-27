@@ -277,6 +277,9 @@ describe("BottomNav · congelado: nenhuma medida muda", () => {
     "View|flexDirection=row,padding=4,paddingBottom=4,margin=16,marginBottom=16,gap=4,position=absolute,right=0,bottom=0,left=0,borderRadius=999,borderWidth=1,zIndex=20",
     "View|flexDirection=row,padding=4,paddingHorizontal=0,paddingBottom=4,margin=0,gap=4,position=relative,borderRadius=0,borderWidth=0,borderTopWidth=1",
     "View|minHeight=16,flexDirection=row,paddingHorizontal=4,paddingVertical=0,gap=4,alignItems=center,justifyContent=center,borderRadius=999,borderWidth=0",
+    // O disco do `circle-bold`: no mínimo 56, do tamanho do nome, com `space2` dos lados (E15, o lote 117, 27/11/2026 — o
+    // Victor: "O disco alarga"). Era `width=56,paddingHorizontal=4`.
+    "View|minWidth=56,maxWidth=100%,paddingHorizontal=8,paddingVertical=2,gap=0,alignItems=center,justifyContent=center,borderRadius=999",
     "View|position=absolute,opacity=0",
     "View|position=absolute,top=-2,right=-2",
     "View|position=absolute,top=-2,right=12",
@@ -286,7 +289,6 @@ describe("BottomNav · congelado: nenhuma medida muda", () => {
     "View|width=28,height=28,marginVertical=-2,position=relative,alignItems=center,justifyContent=center,borderRadius=999,borderWidth=1",
     "View|width=32,height=24,position=relative,alignItems=center,justifyContent=center,borderRadius=999",
     "View|width=56,height=28,marginVertical=-2,position=relative,alignItems=center,justifyContent=center,borderRadius=999",
-    "View|width=56,paddingHorizontal=4,paddingVertical=2,gap=0,alignItems=center,justifyContent=center,borderRadius=999",
   ];
   const INDICADORES = ["none", "subtle", "pill", "circle", "circle-raised", "circle-outline", "circle-bold", "capsule", "expand"];
 
@@ -312,7 +314,7 @@ describe("BottomNav · congelado: nenhuma medida muda", () => {
     for (const indicator of ["pill", "circle-bold"]) {
       montar(<BottomNav items={ITENS} current="a" indicator={indicator as never} />, density);
       for (const p of __instancias("Pressable")) expect(plano(p.style).minHeight).toBe(d.size.controlHLg);
-      const discos = __instancias("View").map((p) => plano(p.style)).filter((e) => e.width === 56 && e.paddingVertical !== undefined);
+      const discos = __instancias("View").map((p) => plano(p.style)).filter((e) => e.minWidth === 56 && e.paddingVertical !== undefined);
       if (indicator === "circle-bold") {
         expect(discos).toHaveLength(4);
         for (const e of discos) expect(e.minHeight).toBeUndefined();

@@ -1290,9 +1290,10 @@ export function Example() {
 />`,render:()=>(0,p.createElement)(`div`,{style:IZ},(0,p.createElement)(d_,{placeholder:`Message the team…`,onSend:()=>{}}))},MessageList:{code:`<MessageList messages={[
   {id: "1", author: "Analyst", time: "09:12", body: "The sweep is green.", avatar: {fallback: "AN"}},
   {id: "2", author: "You", time: "09:14", body: "Shipping it.", status: {label: "sent", variant: "success"}},
-]} />`,render:()=>(0,p.createElement)(`div`,{style:IZ},(0,p.createElement)(u_,{messages:[{id:`1`,author:`Analyst`,time:`09:12`,body:`The sweep is green.`,avatar:{fallback:`AN`}},{id:`2`,author:`You`,time:`09:14`,body:`Shipping it.`,status:{label:`sent`,variant:`success`}}]})),examples:[{title:`In a scrolling box`,description:`When the conversation scrolls inside a box and the latest message leaves the view, a round button appears at the bottom and takes you back to it. It takes no space, so showing it never moves a message.`,code:`<div style={{blockSize: 280, overflow: "auto"}}>
+]} />`,render:()=>(0,p.createElement)(`div`,{style:IZ},(0,p.createElement)(u_,{messages:[{id:`1`,author:`Analyst`,time:`09:12`,body:`The sweep is green.`,avatar:{fallback:`AN`}},{id:`2`,author:`You`,time:`09:14`,body:`Shipping it.`,status:{label:`sent`,variant:`success`}}]})),examples:[{title:`In a scrolling box`,description:`When the conversation scrolls inside a box and the latest message leaves the view, a round button appears at the bottom and takes you back to it. It takes no space, so showing it never moves a message.`,code:`{/* A box that scrolls takes the keyboard: tabIndex and a name. */}
+<div role="region" aria-label="Conversation history" tabIndex={0} style={{blockSize: 280, overflow: "auto"}}>
   <MessageList messages={messages} />
-</div>`,render:()=>(0,p.createElement)(`div`,{style:{...IZ,blockSize:280,overflow:`auto`},"data-exemplo":`conversa-rola`},(0,p.createElement)(u_,{label:`Team conversation`,messages:Array.from({length:12},(e,t)=>({id:String(t+1),author:t%2?`You`:`Analyst`,time:`09:${String(10+t).padStart(2,`0`)}`,direction:t%2?`outgoing`:`incoming`,avatar:t%2?void 0:{fallback:`AN`},body:`Message ${t+1} of the long thread.`}))}))}]},NotificationCenter:{code:`<NotificationCenter
+</div>`,render:()=>(0,p.createElement)(`div`,{style:{...IZ,blockSize:280,overflow:`auto`},"data-exemplo":`conversa-rola`,role:`region`,"aria-label":`Conversation history`,tabIndex:0},(0,p.createElement)(u_,{label:`Team conversation`,messages:Array.from({length:12},(e,t)=>({id:String(t+1),author:t%2?`You`:`Analyst`,time:`09:${String(10+t).padStart(2,`0`)}`,direction:t%2?`outgoing`:`incoming`,avatar:t%2?void 0:{fallback:`AN`},body:`Message ${t+1} of the long thread.`}))}))}]},NotificationCenter:{code:`<NotificationCenter
   onMarkAllRead={markAll}
   items={[
     {id: "1", title: "Build passed", time: "2m", group: "Today"},
@@ -1568,7 +1569,7 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
 ]} />`,render:()=>(0,p.createElement)(`div`,{style:{width:`min(28rem, 100%)`}},(0,p.createElement)(Yl,{items:[{title:`Report sent`,icon:(0,p.createElement)(nd,{name:`upload-simple`}),time:`Oct 1`,trailing:`$1,240`,between:`6 days later`},{title:`Approved`,icon:(0,p.createElement)(nd,{name:`check-circle`}),tone:`success`,time:`Oct 7`,trailing:(0,p.createElement)(nu,{tone:`success`},`Paid`)}]}))},{title:`Tones`,description:`The colour of the icon's frame, with the Badge's words. Without an icon, tone does nothing.`,code:`<Timeline items={[
 ${[`neutral`,`primary`,`info`,`success`,`warning`,`danger`].map(e=>`  {title: "tone ${e}", icon: <Icon name="info" />, tone: "${e}"},`).join(`
 `)}
-]} />`,render:()=>(0,p.createElement)(`div`,{style:{width:`min(28rem, 100%)`}},(0,p.createElement)(Yl,{items:[`neutral`,`primary`,`info`,`success`,`warning`,`danger`].map(e=>({title:`tone ${e}`,icon:(0,p.createElement)(nd,{name:`info`}),tone:e}))}))}]},Tooltip:{code:`<Tooltip content="Copy to clipboard" side="top">
+]} />`,render:()=>(0,p.createElement)(`div`,{style:{width:`fit-content`,maxWidth:`min(28rem, 100%)`}},(0,p.createElement)(Yl,{items:[`neutral`,`primary`,`info`,`success`,`warning`,`danger`].map(e=>({title:`tone ${e}`,icon:(0,p.createElement)(nd,{name:`info`}),tone:e}))}))}]},Tooltip:{code:`<Tooltip content="Copy to clipboard" side="top">
   <IconButton icon="copy" label="Copy" />
 </Tooltip>
 

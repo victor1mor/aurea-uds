@@ -1414,10 +1414,12 @@ export function Actions() {
         title: "In a scrolling box",
         description: "When the conversation scrolls inside a box and the latest message leaves the view, a round button "
           + "appears at the bottom and takes you back to it. It takes no space, so showing it never moves a message.",
-        code: `<div style={{blockSize: 280, overflow: "auto"}}>
+        code: `{/* A box that scrolls takes the keyboard: tabIndex and a name. */}
+<div role="region" aria-label="Conversation history" tabIndex={0} style={{blockSize: 280, overflow: "auto"}}>
   <MessageList messages={messages} />
 </div>`,
-        render: () => h("div", {style: {...wide, blockSize: 280, overflow: "auto"}, "data-exemplo": "conversa-rola"},
+        render: () => h("div", {style: {...wide, blockSize: 280, overflow: "auto"}, "data-exemplo": "conversa-rola",
+          role: "region", "aria-label": "Conversation history", tabIndex: 0},
           h(A.MessageList, {label: "Team conversation", messages: Array.from({length: 12}, (_, i) => ({
             id: String(i + 1), author: i % 2 ? "You" : "Analyst", time: `09:${String(10 + i).padStart(2, "0")}`,
             direction: i % 2 ? "outgoing" : "incoming", avatar: i % 2 ? undefined : {fallback: "AN"},
@@ -2331,7 +2333,7 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
         code: `<Timeline items={[
 ${["neutral", "primary", "info", "success", "warning", "danger"].map((v) => `  {title: "tone ${v}", icon: <Icon name="info" />, tone: "${v}"},`).join("\n")}
 ]} />`,
-        render: () => h("div", {style: {width: "min(28rem, 100%)"}}, h(A.Timeline, {items: ["neutral", "primary", "info", "success", "warning", "danger"]
+        render: () => h("div", {style: {width: "fit-content", maxWidth: "min(28rem, 100%)"}}, h(A.Timeline, {items: ["neutral", "primary", "info", "success", "warning", "danger"]
           .map((v) => ({title: `tone ${v}`, icon: h(A.Icon, {name: "info"}), tone: v}))})),
       },
     ],
