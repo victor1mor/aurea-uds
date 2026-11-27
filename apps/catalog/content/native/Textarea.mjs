@@ -1,7 +1,7 @@
 // O Textarea do nativo no site (bloco 1, o grupo 1 — 23/10/2026). Todo valor das props do tipo em exemplo.
 // É o mesmo campo do Input com várias linhas, canto maior e altura mínima. O nome vem do `Field` em volta.
 import {createElement as h} from "react";
-import {Field, Textarea} from "../../../../packages/native/dist/index.js";
+import {Card, Field, Textarea} from "../../../../packages/native/dist/index.js";
 import {cada} from "../_eixos.mjs";
 
 const largura = {display: "grid", gap: "var(--space-4)", width: "min(28rem, 100%)"};
@@ -71,6 +71,16 @@ export default {
       render: () => h("div", {style: largura},
         h(Field, {label: "Notes"}, h(Textarea, {variant: "primary", rows: 2})),
         h(Field, {label: "Notes"}, h(Textarea, {variant: "secondary", rows: 2}))),
+    },
+    {
+      // O mesmo caso da página da web ("Secondary, in a card", lote 114 — 27/11/2026).
+      title: "Secondary, in a card",
+      description: "variant=\"secondary\" is the neutral fill, for a text area inside a card — the same two variants as Input.",
+      code: `<Card>
+  <Field label="Notes"><Textarea variant="secondary" rows={3} /></Field>
+</Card>`,
+      render: () => h("div", {style: {width: "min(28rem, 100%)"}},
+        h(Card, null, h(Field, {label: "Notes"}, h(Textarea, {variant: "secondary", rows: 3})))),
     },
   ],
 };
