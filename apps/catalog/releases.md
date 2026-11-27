@@ -6,7 +6,7 @@ Every update to Aurea: what is new, what changed, what was fixed and what may br
 
 November 27, 2026
 
-One-line list items are capsules again; disabled command palette items; a jump-to-latest button in MessageList; carousel arrows beside the slide; the bottom nav disc fits its label; right-to-left rules work with any language.
+One-line list items are capsules again; native Alert gets soft and action; Combobox options take a description and can be disabled; Timeline items take an icon and a tone; disabled command palette items; a jump-to-latest button in MessageList; carousel arrows beside the slide; the bottom nav disc fits its label; right-to-left rules work with any language.
 
 [Read full release notes →](https://aureauds.dev/release-v0-84-0.md)
 
