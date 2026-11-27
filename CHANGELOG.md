@@ -578,7 +578,8 @@ consertado (*"Pode"*, 26/11/2026). A aparência não muda: medida pixel a pixel 
 - Quem cobra: `tests/visual/shift-na-caixinha.spec.ts` — o Shift+clique na caixinha, na cápsula, na caixa da grade, no
   rádio e na chave; a barra do `KPI` (fora do Firefox); o clique comum no desenho e no nome; o link dentro do nome; o campo que ocupa o rótulo e o anel do
   foco pelo teclado. Nos três navegadores. Provado contra o defeito: com o CSS de antes, o do Shift reprova no Chromium e
-  no Firefox. E `tests/visual/parte-viva.spec.ts` passa a clicar no ponto da marca pelo mouse (o campo fica por cima dela).
+  no Firefox. E `tests/visual/parte-viva.spec.ts` passa a clicar no ponto da marca pelo mouse (o campo fica por cima dela);
+  `tests/visual/aviso-de-cookies.spec.ts` também, no nome "Analytics" da chave (achado pela CI do conjunto).
 
 ### Site
 
