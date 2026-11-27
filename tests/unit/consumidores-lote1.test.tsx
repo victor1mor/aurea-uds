@@ -289,10 +289,14 @@ describe("C-09 · a linha do menu segue a conta do painel", () => {
   };
   const prop = (bloco: string, p: string) => new RegExp(`(?:^|;)\\s*${p}:([^;]+)`).exec(bloco)?.[1].trim();
 
-  test("raio do item = raio do painel − respiro do painel, no menu e na lateral", () => {
-    for (const [pai, filho] of [[".menu", ".menu-item"], [".sidebar", ".sidebar-item"]] as const) {
-      const p = regra(pai), f = regra(filho);
-      expect(prop(f, "border-radius")).toBe(`calc(${prop(p, "border-radius")} - ${prop(p, "padding")})`);
-    }
+  // ~~O item inteiro seguia a conta~~ → desde o lote 117 (27/11/2026, o Victor: "Aprovo a cápsula"), o item de UMA linha é
+  // cápsula (`--radius-control`, o que o 18 da conta já dava numa linha de 36), e a conta fica só na linha ALTA, com a
+  // explicação embaixo — o canto contínuo da 0.82.0 lia a conta como canto de superfície.
+  test("a linha alta do menu segue a conta do painel; a de uma linha é cápsula", () => {
+    const p = regra(".menu");
+    const alta = /\.menu-item:has\(\.menu-item-description\)\s*\{([^}]*)\}/.exec(css)?.[1] ?? "";
+    expect(prop(alta, "border-radius")).toBe(`calc(${prop(p, "border-radius")} - ${prop(p, "padding")})`);
+    expect(prop(regra(".menu-item"), "border-radius")).toBe("var(--radius-control)");
+    expect(prop(regra(".sidebar-item"), "border-radius")).toBe("var(--radius-control)");
   });
 });

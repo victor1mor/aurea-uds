@@ -150,10 +150,36 @@ export function MessageList({messages,label,className,hasMoreBefore,hasMoreAfter
     ro.observe(el);
     return ()=>ro.disconnect();
   },[janela,medir]);
+  // O BOTÃO "IR PARA A ÚLTIMA" (o lote 117, 27/11/2026 — o Victor: "aprovo todos"; a única referência com conversa o tem):
+  // redondo, no pé da conversa, e só quando a última mensagem saiu da tela por baixo. Vale quando a conversa rola dentro
+  // de uma caixa (a lista de mensagens de um app); com a página inteira rolando não aparece, porque flutuaria sobre a
+  // página toda. Ele não ocupa lugar (a caixa dele tem altura zero e fica presa ao pé da área que rola), então aparecer
+  // e sumir não mexe a conversa. Rolar até o fim é suave, e na hora para quem pede menos movimento.
+  const [longe,setLonge]=React.useState(false);
+  React.useEffect(()=>{
+    const el=raiz.current;
+    const itens=el?.querySelectorAll<HTMLElement>("[data-message-id]");
+    const ultimo=itens?.[itens.length-1];
+    if(!el||!ultimo||typeof IntersectionObserver==="undefined"){setLonge(false);return}
+    const sc=rolador(el);
+    if(ehPagina(sc)){setLonge(false);return}
+    const obs=new IntersectionObserver(es=>{const e=es[es.length-1];if(!e)return;
+      setLonge(!e.isIntersecting&&!!e.rootBounds&&e.boundingClientRect.top>=e.rootBounds.bottom)},{root:sc});
+    obs.observe(ultimo);
+    return ()=>obs.disconnect();
+  },[messages]);
+  const irParaAUltima=()=>{
+    const el=raiz.current;if(!el)return;
+    const sc=rolador(el);
+    const menos=typeof matchMedia==="function"&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+    sc.scrollTo({top:sc.scrollHeight,behavior:menos?"auto":"smooth"});
+    // O botão some quando a última chega à tela; o foco não fica perdido: vai para a conversa.
+    el.focus({preventScroll:true});
+  };
   useVigia(topo,janela&&!!hasMoreBefore&&!loadingBefore,onReachStart,[messages.length]);
   useVigia(fim,janela&&!!hasMoreAfter&&!loadingAfter,onReachEnd,[messages.length]);
   return <>
-    <div ref={raiz} className={cx("stack",className)} role="log" aria-live={janela?"off":"polite"} aria-busy={(janela&&(loadingBefore||loadingAfter))||undefined} aria-label={label??s.chatLabel}>
+    <div ref={raiz} className={cx("stack",className)} tabIndex={-1} role="log" aria-live={janela?"off":"polite"} aria-busy={(janela&&(loadingBefore||loadingAfter))||undefined} aria-label={label??s.chatLabel}>
       {janela&&hasMoreBefore&&<div ref={topo} className="message-more">{loadingBefore&&<Spinner/>}</div>}
       {messages.map((m,i)=>{
         const lado=m.direction;
@@ -184,6 +210,7 @@ export function MessageList({messages,label,className,hasMoreBefore,hasMoreAfter
       })}
       {janela&&hasMoreAfter&&<div ref={fim} className="message-more">{loadingAfter&&<Spinner/>}</div>}
     </div>
+    {longe&&<div className="message-jump"><IconButton icon="arrow-down" label={s.chatJumpToLatest} variant="secondary" onPress={irParaAUltima}/></div>}
     {janela&&<span className="sr-only" role="status" aria-live="polite">{anuncio}</span>}
   </>;
 }

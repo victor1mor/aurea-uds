@@ -73,7 +73,7 @@ export function AureaProvider({ children, theme, density, brand, defaultTheme, d
         // As frases NÃO dependem do par (tema, densidade), mas moram no mesmo `useMemo` de propósito:
         // um contexto a mais só se paga quando ele muda em outra hora, e este muda junto — é a mesma
         // conta que o cabeçalho deste arquivo já fez para os dois contextos que viraram um.
-        strings: strings ?? defaultStrings,
+        strings: strings ? { ...defaultStrings, ...strings } : defaultStrings,
         fontes: fontFamilies,
         marca: brand ?? null,
         raiz: null,

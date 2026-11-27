@@ -41,6 +41,7 @@
   "dependencies": {
     "engine": null,
     "icons": [
+      "arrow-down",
       "file-text",
       "share-fat"
     ]

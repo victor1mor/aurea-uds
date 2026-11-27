@@ -191,8 +191,11 @@ const folha = criarFolha((t: AureaTokens) => ({
   disco: {
     alignItems: "center", justifyContent: "center", gap: 0,
     // Sem a altura mínima, e com `space05` em cima e embaixo (27/10/2026, a barra na mesma altura — `marcaRedonda`): 56 × 44.
-    width: 56, ...canto(t.size.radiusFull),
-    paddingHorizontal: t.size.space1, paddingVertical: t.size.space05,
+    // O DISCO ALARGA COM O NOME (E15, o lote 117, 27/11/2026 — o Victor: "O disco alarga"): com 56 fixos, o nome cabia em 48
+    // e "Relatórios" saía "Relat…". Agora o disco tem no mínimo os 56 e cresce até o nome caber, com `space2` de cada lado, sem
+    // passar da aba. A barra continua parada: o disco existe em todas as abas, e a largura não depende da escolha.
+    minWidth: 56, maxWidth: "100%", ...canto(t.size.radiusFull),
+    paddingHorizontal: t.size.space2, paddingVertical: t.size.space05,
   },
   // `capsule` (a "A" da bancada, de uma referência de mercado): a moldura do ícone vira a cápsula
   // de 56 × 32 do indicador ativo dela — os mesmos `--bottomnav-bold` e `--bottomnav-ring` do
@@ -661,7 +664,7 @@ export function BottomNav({
               pintaPele && (indicator === "subtle" || indicator === "pill" || expande) && pinta(pele!),
             ]}>
             {disco
-              // O disco do `circle-bold`: 56 de largura em todos os itens, amarelo só no escolhido.
+              // O disco do `circle-bold`: 56 ou mais (do tamanho do nome) em todos os itens, amarelo só no escolhido.
               // É o `.bottom-nav-disc` da web.
               ? <View collapsable={false} style={[s.disco, ativo && !pintaPele && {backgroundColor: t.color.primary},
                   pintaPele && pinta(pele!)]}>{marca}{rotulo}</View>

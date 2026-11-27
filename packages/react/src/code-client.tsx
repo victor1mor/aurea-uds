@@ -140,7 +140,8 @@ const onCopy=(e:React.MouseEvent<HTMLButtonElement>)=>{e.stopPropagation();const
   if(vanilla?.copy){vanilla.copy(e.currentTarget);return}
   // Sem área de transferência (ou sem promessa), não há o que avisar — e não pode quebrar o clique.
   const copia=navigator.clipboard?.writeText(children);if(typeof copia?.then!=="function")return;
-  void copia.then(()=>{setCopiado(true);setTimeout(()=>setCopiado(false),1500)},()=>{})};
+  // O "copiado" fica 2 s (o lote 117, 27/11/2026 — o Victor: "Aprovo 2 segundos"; 3 de 4 referências). Era 1,5 s. O mesmo no `aurea.js`.
+  void copia.then(()=>{setCopiado(true);setTimeout(()=>setCopiado(false),2000)},()=>{})};
 if(filename!=null)return <div className={cx("code-block-wrap","code-block-file",className)} data-aurea-copy-scope>
 <span className="sr-only" role="status" aria-live="polite">{copiado?s.copied:""}</span>
 <div className="code-block-head"><span className="code-block-title">{filename}</span>

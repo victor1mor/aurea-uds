@@ -2255,7 +2255,7 @@
     },
     "AureaProviderProps": {
       "module": "theme",
-      "raw": "{ children: React.ReactNode; theme?: AureaThemeName; density?: AureaDensity; brand?: AureaBrand; defaultTheme?: AureaThemeName; defaultDensity?: AureaDensity; fontFamilies?: AureaFontFamilies; icons?: AureaIconRegistry; strings?: AureaStrings; direction?: \"ltr\" | \"rtl\"; highContrast?: boolean; textSize?: AureaTextSize; onThemeChange?: (t: AureaThemeName) => void; onDensityChange?: (d: AureaDensity) => void; }",
+      "raw": "{ children: React.ReactNode; theme?: AureaThemeName; density?: AureaDensity; brand?: AureaBrand; defaultTheme?: AureaThemeName; defaultDensity?: AureaDensity; fontFamilies?: AureaFontFamilies; icons?: AureaIconRegistry; strings?: Partial<AureaStrings>; direction?: \"ltr\" | \"rtl\"; highContrast?: boolean; textSize?: AureaTextSize; onThemeChange?: (t: AureaThemeName) => void; onDensityChange?: (d: AureaDensity) => void; }",
       "union": null
     },
     "AureaToastType": {
@@ -7567,7 +7567,7 @@
             {
               "name": "strings",
               "optional": true,
-              "type": "AureaStrings",
+              "type": "Partial<AureaStrings>",
               "values": null
             },
             {

@@ -873,7 +873,12 @@ export interface CommandItem{id:string;label:string;icon?:IconName;kbd?:string;r
   /** A linha de baixo do item, apagada e cortada (no `size="lg"`). */
   description?:string;
   /** A cor de categoria do círculo do ícone (no `size="lg"`), como as do `Badge`. Sem ela, o círculo neutro. */
-  tone?:BadgeCategory}
+  tone?:BadgeCategory;
+  /** O item à vista que não se escolhe (o lote 117, 27/11/2026 — o Victor: "Aprovo o desativado"): apagado, com o cursor
+   *  de proibido; nem o clique nem o Enter o executam. As setas param nele, como no item indisponível da `NavList` e na
+   *  opção desativada do `Combobox` (é o motor que decide). A aparência é a do item desativado de todo menu
+   *  (`.menu-item[data-disabled]`). */
+  disabled?:boolean}
 interface GrupoDeComandos{value:string;items:CommandItem[]}
 // `size="lg"` (o site B — a busca nova, aprovada pela bancada em 01/11/2026, o item 2 e o D-2): a janela da largura `lg`
 // (1024), o campo de 52 (era 64 na 0.54.0; o Victor, 03/11/2026, como a referência) com a lupa e o "Esc" dentro, o encaixe `filters` embaixo dele, o título do grupo em mono maiúsculo
@@ -908,14 +913,20 @@ export function CommandPalette({open,onClose,items,placeholder,label,shortcuts=t
   const portal=usePortalContainer();
   const campo=useRef<HTMLInputElement>(null);
   const executa=(item:CommandItem)=>{onClose();item.run()};
+  // O DESATIVADO NÃO REAGE AO MOUSE (o lote 117 — a decisão do Victor de 27/11/2026 diz "não reage ao mouse"): o motor acende
+  // o item que o mouse cruza (o `onMouseMove` da navegação da lista), também o desativado, e o fundo do acendido aparecia.
+  // Aqui o item desativado impede esse passo do motor (`preventBaseUIHandler`, o caminho que o próprio motor oferece). O
+  // teclado continua chegando nele, com o fundo — é por onde quem usa o teclado vê onde está —, e nem o Enter nem o
+  // clique o executam.
+  const semRealceDoMouse=(e:React.MouseEvent&{preventBaseUIHandler?:()=>void})=>e.preventBaseUIHandler?.();
   const linha=(item:CommandItem)=>grande
-  ?<BaseAutocomplete.Item key={item.id} value={item} className="menu-item command-item" onClick={()=>executa(item)}>
+  ?<BaseAutocomplete.Item key={item.id} value={item} className="menu-item command-item" disabled={item.disabled} onClick={item.disabled?undefined:()=>executa(item)} onMouseMove={item.disabled?semRealceDoMouse:undefined}>
     <span className="command-item-tile" data-tone={item.tone}>{item.icon&&<Icon name={item.icon}/>}</span>
     <span className="command-item-text"><span className="command-item-label">{item.label}</span>
       {item.description&&<span className="command-item-description">{item.description}</span>}</span>
     {item.kbd?<Kbd>{item.kbd}</Kbd>:<Kbd className="command-item-enter" aria-hidden="true">↵</Kbd>}
   </BaseAutocomplete.Item>
-  :<BaseAutocomplete.Item key={item.id} value={item} className="menu-item command-item" onClick={()=>executa(item)}>
+  :<BaseAutocomplete.Item key={item.id} value={item} className="menu-item command-item" disabled={item.disabled} onClick={item.disabled?undefined:()=>executa(item)} onMouseMove={item.disabled?semRealceDoMouse:undefined}>
     {item.icon&&<Icon name={item.icon}/>}
     <span className="command-item-label">{item.label}</span>
     {item.kbd&&<Kbd>{item.kbd}</Kbd>}

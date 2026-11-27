@@ -290,6 +290,11 @@ export interface CommandItem {
     description?: string;
     /** A cor de categoria do círculo do ícone (no `size="lg"`), como as do `Badge`. Sem ela, o círculo neutro. */
     tone?: BadgeCategory;
+    /** O item à vista que não se escolhe (o lote 117, 27/11/2026 — o Victor: "Aprovo o desativado"): apagado, com o cursor
+     *  de proibido; nem o clique nem o Enter o executam. As setas param nele, como no item indisponível da `NavList` e na
+     *  opção desativada do `Combobox` (é o motor que decide). A aparência é a do item desativado de todo menu
+     *  (`.menu-item[data-disabled]`). */
+    disabled?: boolean;
 }
 export declare function CommandPalette({ open, onClose, items, placeholder, label, shortcuts, size, filters, preview, footer }: {
     open: boolean;

@@ -225,6 +225,7 @@ export interface AureaStrings {
     chatSave: string;
     chatEdited: string;
     chatForwardedFrom: string;
+    chatJumpToLatest: string;
     qrCode: string;
     chartLabel: string;
     copyCode: string;

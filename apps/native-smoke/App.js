@@ -250,6 +250,7 @@ function Tela({irParaScreen, irParaLote2}) {
       </View>
 
       {/* ── 1 ─────────────────────────────────────────────────────────────── */}
+      <Bloco0850 t={t} />
       <Bloco0430 t={t} />
       <Bloco0401 t={t} />
       <Bloco0320b t={t} />
@@ -1676,6 +1677,33 @@ function Bloco0320({t}) {
 // trás; a cor do escolhido igual à da web; o toque a mais, invisível, da caixa e do rádio (6 em volta, como a referência);
 // o `align` do interruptor; a busca sem `value`; o modo hora do seletor; a letra do amarelo no claro. A tela (`Screen`)
 // mudou só no navegador — no aparelho, a folga tem de ser a de antes (o modo "→ Screen" mede).
+// 0.85.0 (o lote 117, 27/11/2026): a folha de baixo sobe com o teclado e o disco do `circle-bold` alarga com o nome. A
+// bancada mediu no navegador; o teclado de verdade e o nome que cabe só se medem no aparelho.
+function Bloco0850({t}) {
+  const [aberta, setAberta] = React.useState(false);
+  const [barra, setBarra] = React.useState("relatorios");
+  const [nome, setNome] = React.useState("");
+  return (
+    <Bloco t={t} n="0.85.0" titulo="A folha sobe com o teclado; o disco cabe o nome"
+      criterio={"1) Toque em \"Abrir a folha\" e depois no campo dentro dela: o teclado sobe e a FOLHA SOBE JUNTO — o campo "
+        + "fica à vista, acima do teclado, no iPhone e no Android. Feche o teclado: a folha volta para baixo. "
+        + "2) Na barra de baixo (disco amarelo), \"Relatórios\" e \"Favoritos\" aparecem inteiros, sem \"…\". Troque de aba: a "
+        + "barra não anda."}>
+      <Button onPress={() => setAberta(true)}>Abrir a folha</Button>
+      <BottomSheet open={aberta} title="Novo veículo" onClose={() => setAberta(false)}>
+        <Field label="Placa"><Input value={nome} onChangeText={setNome} placeholder="ABC1D23" /></Field>
+        <Button onPress={() => setAberta(false)}>Salvar</Button>
+      </BottomSheet>
+      <BottomNav indicator="circle-bold" label="Barra do bloco 0.85.0" current={barra} items={[
+        {id: "inicio", label: "Início", icon: "squares-four", onPress: () => setBarra("inicio")},
+        {id: "relatorios", label: "Relatórios", icon: "list-bullets", onPress: () => setBarra("relatorios")},
+        {id: "favoritos", label: "Favoritos", icon: "bell", onPress: () => setBarra("favoritos")},
+        {id: "perfil", label: "Perfil", icon: "file-text", onPress: () => setBarra("perfil")},
+      ]} />
+    </Bloco>
+  );
+}
+
 function Bloco0430({t}) {
   const [periodo, setPeriodo] = React.useState("semana");
   const [aba, setAba] = React.useState("resumo");

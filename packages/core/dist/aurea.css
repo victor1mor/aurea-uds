@@ -2722,7 +2722,10 @@ img,svg { display:block; }
    dois começam onde a curva da cápsula já acabou (a 16 da borda o fundo fica 0,11 px acima da base) — a 12 o fio sairia da
    curva. O título do grupo, a marca e o título do painel seguem o mesmo recuo, para a coluna continuar uma só. */
 .sidebar { --sidebar-item-x:var(--space-4); }
-.sidebar-item { display:flex; align-items:center; gap:var(--space-2); width:100%; min-height:var(--control-h-md); padding:var(--space-1) var(--sidebar-item-x, var(--space-3)); border:0; border-radius:calc(var(--radius-card) - var(--space-1)); background:transparent; color:var(--sidebar-foreground); font:inherit; font-size:var(--text-sm); text-align:start; text-decoration:none; cursor:pointer; }@supports (corner-shape: superellipse(2)){.sidebar-item{corner-shape:superellipse(1.65);border-radius:calc(calc(var(--radius-card) - var(--space-1)) * 1.5)}}
+.sidebar-item { display:flex; align-items:center; gap:var(--space-2); width:100%; min-height:var(--control-h-md); padding:var(--space-1) var(--sidebar-item-x, var(--space-3)); border:0; border-radius:var(--radius-control); background:transparent; color:var(--sidebar-foreground); font:inherit; font-size:var(--text-sm); text-align:start; text-decoration:none; cursor:pointer; }@supports (corner-shape: superellipse(2)){.sidebar-item{corner-shape:round}}
+/* A CÁPSULA (o lote 117, 27/11/2026 — o Victor: "Aprovo a cápsula"): o item de UMA linha é cápsula, como era até a
+   0.81.1 (o 18 da conta numa linha de 36). O canto contínuo da 0.82.0 só reconhece cápsula pelo `--radius-control`, e a
+   conta virou canto de superfície (27, ponta de iPhone). A linha ALTA, com a explicação embaixo, fica com a conta. */
 .sidebar-item .icon { flex:none; opacity:.8; }
 /* min-width:0 é o que deixa o ellipsis funcionar dentro do flex; sem ele o nome longo empurra
    o acessório para fora da caixa em vez de cortar. */
@@ -3164,7 +3167,10 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .bottom-nav.bottom-nav-ind-circle-bold .bottom-nav-item { padding:0; }
 /* O disco perdeu a altura mínima e o recheio de cima e de baixo caiu para `--space-05` (27/10/2026, a barra na mesma
    altura — acima): 56 × 44, e a barra fica em 54 como as outras. Era 56 × 48. */
-.bottom-nav-disc { display:flex; flex-direction:column; align-items:center; justify-content:center; inline-size:var(--bottomnav-bold,3.5rem); max-inline-size:100%; padding:var(--space-05) var(--space-1); border-radius:var(--radius-full); }@supports (corner-shape: superellipse(2)){.bottom-nav-disc{corner-shape:round}}
+/* O DISCO ALARGA COM O NOME (E15, o lote 117, 27/11/2026 — o Victor: "O disco alarga"): com 56 fixos o nome cabia em 48,
+   e "Relatórios" saía "Relat…". Agora no mínimo 56, do tamanho do nome com `--space-2` de cada lado, sem passar do item. A
+   barra continua parada: o disco existe em todos os itens. O mesmo no `navigation.tsx`. */
+.bottom-nav-disc { display:flex; flex-direction:column; align-items:center; justify-content:center; min-inline-size:var(--bottomnav-bold,3.5rem); max-inline-size:100%; padding:var(--space-05) var(--space-2); border-radius:var(--radius-full); }@supports (corner-shape: superellipse(2)){.bottom-nav-disc{corner-shape:round}}
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] { color:var(--primary-mark); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .bottom-nav-disc { background:var(--primary); }
 .bottom-nav-ind-circle-bold .bottom-nav-item[aria-current] .icon { opacity:1; }
@@ -3227,7 +3233,8 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    raio de card conserta os dois casos ao mesmo tempo. A conta conserta sempre.
    Escrito como `calc()` de propósito: se alguém mudar o raio do card ou o padding, a linha segue
    sozinha. Número cravado divergiria em silêncio. */
-.nav-list-row { display:flex; align-items:center; gap:var(--space-3); width:100%; min-height:var(--control-h-lg); padding:var(--space-2) var(--space-4); border:0; border-radius:calc(var(--radius-card) - var(--space-1)); background:transparent; color:var(--foreground); font:inherit; font-size:var(--text-sm); text-align:start; text-decoration:none; cursor:pointer; }@supports (corner-shape: superellipse(2)){.nav-list-row{corner-shape:superellipse(1.65);border-radius:calc(calc(var(--radius-card) - var(--space-1)) * 1.5)}}
+.nav-list-row { display:flex; align-items:center; gap:var(--space-3); width:100%; min-height:var(--control-h-lg); padding:var(--space-2) var(--space-4); border:0; border-radius:var(--radius-control); background:transparent; color:var(--foreground); font:inherit; font-size:var(--text-sm); text-align:start; text-decoration:none; cursor:pointer; }@supports (corner-shape: superellipse(2)){.nav-list-row{corner-shape:round}}
+.nav-list-row:has(.nav-list-description) { border-radius:calc(var(--radius-card) - var(--space-1)); }@supports (corner-shape: superellipse(2)){.nav-list-row:has(.nav-list-description){corner-shape:superellipse(1.65);border-radius:calc(calc(var(--radius-card) - var(--space-1)) * 1.5)}}
 .nav-list-row .icon { flex:none; opacity:.8; }
 /* O TEXTO É A ÚNICA TRILHA QUE ENCOLHE, e o par `flex:1` + `min-width:0` é o que faz isso: sem o
    `min-width:0` o conteúdo mínimo do flex é o texto inteiro, e o rótulo longo empurra o valor e a
@@ -3962,7 +3969,8 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
    cartão menos 4) e o conteúdo começava a 8 — dentro da curva. Em 8 de 12 referências o conteúdo começa no fim da curva
    ou depois; com o 18 da Aurea, isso é o 16 (`--space-4`), o mesmo da `Sidebar` desde o 2-A. ListBox, Menu e NavList
    passam ao 16, nos dois lados; o título da seção e a marca do escolhido acompanham. */
-.list-box-item { position:relative; display:flex; align-items:center; gap:var(--space-3); inline-size:100%; min-block-size:var(--control-h-md); padding:calc(var(--space-1) + var(--space-05)) var(--space-4); border-radius:calc(var(--radius-card) - var(--space-1)); color:var(--foreground); font-size:var(--text-sm); cursor:pointer; transition:background var(--duration-fast),transform var(--duration-fast) var(--ease-standard); }@supports (corner-shape: superellipse(2)){.list-box-item{corner-shape:superellipse(1.65);border-radius:calc(calc(var(--radius-card) - var(--space-1)) * 1.5)}}
+.list-box-item { position:relative; display:flex; align-items:center; gap:var(--space-3); inline-size:100%; min-block-size:var(--control-h-md); padding:calc(var(--space-1) + var(--space-05)) var(--space-4); border-radius:var(--radius-control); color:var(--foreground); font-size:var(--text-sm); cursor:pointer; transition:background var(--duration-fast),transform var(--duration-fast) var(--ease-standard); }@supports (corner-shape: superellipse(2)){.list-box-item{corner-shape:round}}
+.list-box-item:has(.list-box-item-description) { border-radius:calc(var(--radius-card) - var(--space-1)); }@supports (corner-shape: superellipse(2)){.list-box-item:has(.list-box-item-description){corner-shape:superellipse(1.65);border-radius:calc(calc(var(--radius-card) - var(--space-1)) * 1.5)}}
 /* O atalho do item (15/10/2026), como o da referência: o `Kbd` na ponta da linha. */
 .list-box-item-kbd { flex:none; margin-inline-start:auto; }
 .list-box-item:has(.list-box-item-indicator) { padding-inline-end:calc(var(--space-4) + var(--icon-sm) + var(--space-1)); }
@@ -4244,7 +4252,11 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .segmented :is(button,a) > .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); flex:none; }
 .segmented-2xl :is(button,a) { min-block-size:var(--space-12); padding-inline:var(--space-4); font-size:var(--text-base); }
 .segmented-2xl :is(button,a) > .icon { inline-size:var(--icon-md); block-size:var(--icon-md); }
-.segmented-wrap { flex-wrap:wrap; border-radius:var(--radius-card); }@supports (corner-shape: superellipse(2)){.segmented-wrap{corner-shape:superellipse(1.65);border-radius:calc(var(--radius-card) * 1.5)}}
+/* O SEGMENTO QUE QUEBRA A LINHA fica com o 22 REDONDO (o lote 117, 27/11/2026, dentro do "Aprovo a cápsula"): numa linha
+   só (44 de altura) o 22 é a cápsula exata; desde a 0.82.0 o canto contínuo o fazia 33 com ponta de iPhone, um retângulo.
+   O `corner-shape:round` escrito aqui tira a regra do conversor (`scripts/canto-continuo.mjs`). Em duas linhas, como era
+   até a 0.81.1. */
+.segmented-wrap { flex-wrap:wrap; border-radius:var(--radius-card); corner-shape:round; }
 .segmented-vertical { display:flex; flex-direction:column; border-radius:var(--radius-card); }@supports (corner-shape: superellipse(2)){.segmented-vertical{corner-shape:superellipse(1.65);border-radius:calc(var(--radius-card) * 1.5)}}
 .segmented-vertical :is(button,a) { inline-size:100%; padding-block:var(--space-2); text-align:center; }
 /* Toggle (Lote 1): pressionado usa o MESMO par de tokens do segmento aceso, logo acima. Um
@@ -4410,10 +4422,15 @@ a.bottom-nav-item:not([aria-current]):hover { color:var(--bn-item-fg); }
 .badge-at-bottom-start { inset-block-end:var(--badge-inset); inset-inline-start:var(--badge-inset); transform:translate(-50%,50%); }
 /* `transform` não espelha sozinho, e `inset-inline-*` sim: em RTL o par sai trocado e o
    contador vai para dentro da caixa. As quatro regras abaixo são o preço disso. */
-.badge-at-top-end:dir(rtl) { transform:translate(-50%,-50%); }
-.badge-at-top-start:dir(rtl) { transform:translate(50%,-50%); }
-.badge-at-bottom-end:dir(rtl) { transform:translate(-50%,50%); }
-.badge-at-bottom-start:dir(rtl) { transform:translate(50%,50%); }
+/* D-01 (o lote 117, 27/11/2026 — o Victor: "Antes da 1.0"): toda regra com `:dir(rtl)` leva a RESERVA `[dir="rtl"]` ao
+   lado, como a da tabela. O empacotador mais comum (o Vite 8) reescreve `:dir(rtl)` como uma lista de idiomas
+   (`:lang(ar)`, `:lang(he)`…): numa página da direita para a esquerda marcada com outro idioma, ou sem idioma, a regra
+   deixava de pegar — o selo entrava 16 na caixa, a seta do campo sumia atrás do texto e a bolinha da chave saía para
+   fora. Quem cobra: `tests/visual/rtl-reserva.spec.ts`, com o CSS passado pelo empacotador. */
+.badge-at-top-end:dir(rtl),[dir="rtl"] .badge-at-top-end { transform:translate(-50%,-50%); }
+.badge-at-top-start:dir(rtl),[dir="rtl"] .badge-at-top-start { transform:translate(50%,-50%); }
+.badge-at-bottom-end:dir(rtl),[dir="rtl"] .badge-at-bottom-end { transform:translate(-50%,50%); }
+.badge-at-bottom-start:dir(rtl),[dir="rtl"] .badge-at-bottom-start { transform:translate(50%,50%); }
 /* ACESSÓRIO SOBRE A MARCA — o badge INVERTE quando o que está debaixo dele é o amarelo.
    Achado pelo Victor em 17/08/2026 na barra inferior, e a pergunta obrigatória do CLAUDE.md
    ("quem mais tem esse problema?") devolveu um defeito ANTIGO e publicado: `.badge-primary`
@@ -5545,6 +5562,11 @@ button.tag-main { cursor:pointer; }
 .message-in > .message-bubble { justify-self:start; border-radius:var(--radius-lg); border-start-start-radius:var(--radius-xs); }@supports (corner-shape: superellipse(2)){.message-in > .message-bubble{corner-shape:superellipse(1.65);border-radius:calc(var(--radius-lg) * 1.5);border-start-start-radius:calc(var(--radius-xs) * 1.5)}}
 .message-out > .message-bubble { justify-self:end; border-radius:var(--radius-lg); border-start-end-radius:var(--radius-xs); background:color-mix(in srgb,var(--primary) 14%,transparent); }@supports (corner-shape: superellipse(2)){.message-out > .message-bubble{corner-shape:superellipse(1.65);border-radius:calc(var(--radius-lg) * 1.5);border-start-end-radius:calc(var(--radius-xs) * 1.5)}}
 .message-day { display:flex; justify-content:center; }
+/* O BOTÃO "IR PARA A ÚLTIMA" (o lote 117, 27/11/2026, a forma aprovada na bancada): redondo, na cor do cartão com a sombra
+   das superfícies que flutuam, no meio do pé da área que rola. A caixa tem altura zero e fica presa ao pé (`sticky`): o
+   botão sobe por cima da conversa sem ocupar lugar, e aparecer ou sumir não mexe nenhuma mensagem. */
+.message-jump { position:sticky; inset-block-end:var(--space-3); z-index:var(--z-sticky); display:flex; justify-content:center; align-items:flex-end; block-size:0; pointer-events:none; }
+.message-jump > .btn { --btn-bg:var(--card); --btn-fg:var(--foreground); box-shadow:var(--shadow-md); pointer-events:auto; }
 .message-forwarded { display:flex; align-items:center; gap:var(--space-1); color:var(--muted-foreground); font-size:var(--text-sm); }
 .message-bubble > .message-forwarded, .message-bubble > .message-quote, .message-bubble > .message-album, .message-bubble > .file-list { margin-block:0 var(--space-2); }
 .message-album { inline-size:min(100%, calc(var(--gallery-min,8rem) * 2 + var(--space-3))); grid-template-columns:repeat(auto-fit,minmax(var(--gallery-min,8rem),1fr)); }
@@ -5863,6 +5885,17 @@ button.tag-main { cursor:pointer; }
 .carousel-slide { flex:0 0 var(--carousel-slide,100%); min-width:0; scroll-snap-align:start; }
 .carousel-controls { display:flex; align-items:center; justify-content:center; gap:var(--space-2); }
 .carousel-dots { display:flex; align-items:center; gap:var(--space-1); }
+/* AS SETAS NOS LADOS DA FOTO (o lote 117, 27/11/2026 — o Victor: "aprovo todos", a forma da direita da bancada; 2 de 3
+   referências): a anterior no início e a próxima no fim, no meio da altura da foto; os pontos ficam embaixo. O carrossel
+   abre um corredor de cada lado, do tamanho da seta, para ela não cobrir a foto. Sem pontos, a fila de baixo some, e a
+   seta fica no meio do carrossel. As propriedades são lógicas: na escrita da direita para a esquerda os lados trocam
+   sozinhos, e o desenho da seta vem da direção do provedor (sem `:dir()`). */
+.carousel:has(> .carousel-controls > .btn) { position:relative; padding-inline:calc(var(--control-h-sm) + var(--space-3)); }
+.carousel-controls > .btn { position:absolute; inset-block-start:calc((100% - var(--space-3) - var(--space-6)) / 2); translate:0 -50%; }
+.carousel-controls > .btn:first-child { inset-inline-start:0; }
+.carousel-controls > .btn:last-child { inset-inline-end:0; }
+.carousel-controls:not(:has(> .carousel-dots)) { display:contents; }
+.carousel-controls:not(:has(> .carousel-dots)) > .btn { inset-block-start:50%; }
 /* 24×24 de ALVO com 8×8 de desenho: abaixo disso é reprovação do WCAG 2.2 AA (2.5.8), e uma fila
    de pontos é onde esse erro nasce. O ponto vem do ::before para não custar um elemento nem uma
    classe a mais — o alvo é o botão inteiro, o desenho é o miolo. */
@@ -6101,7 +6134,8 @@ button.tag-main { cursor:pointer; }
 .menu { transform-origin:var(--transform-origin,center); transition:opacity var(--duration-base) var(--ease-standard),scale var(--duration-base) var(--ease-standard); }
 .menu[data-starting-style],.menu[data-ending-style] { opacity:0; scale:.95; }
 .menu[data-ending-style] { transition-duration:var(--duration-fast); }
-.menu-item { display:flex; align-items:center; gap:10px; width:100%; min-height:var(--control-h-md); padding:0 var(--menu-px,var(--space-4)); border:0; border-radius:calc(var(--radius-card) - var(--space-1)); background:transparent; color:var(--foreground); font:inherit; text-align:start; text-decoration:none; cursor:pointer; }@supports (corner-shape: superellipse(2)){.menu-item{corner-shape:superellipse(1.65);border-radius:calc(calc(var(--radius-card) - var(--space-1)) * 1.5)}}
+.menu-item { display:flex; align-items:center; gap:10px; width:100%; min-height:var(--control-h-md); padding:0 var(--menu-px,var(--space-4)); border:0; border-radius:var(--radius-control); background:transparent; color:var(--foreground); font:inherit; text-align:start; text-decoration:none; cursor:pointer; }@supports (corner-shape: superellipse(2)){.menu-item{corner-shape:round}}
+.menu-item:has(.menu-item-description) { border-radius:calc(var(--radius-card) - var(--space-1)); }@supports (corner-shape: superellipse(2)){.menu-item:has(.menu-item-description){corner-shape:superellipse(1.65);border-radius:calc(calc(var(--radius-card) - var(--space-1)) * 1.5)}}
 /* O ITEM COM EXPLICAÇÃO e o ÍCONE NA PONTA (0.55.0, o Victor, 04/11/2026: "pegue o código" da referência): a anatomia do
    item dela — o nome e, embaixo, a explicação na letra pequena e na cor de apoio; o recheio de 6 em cima e embaixo; o ícone
    da ponta (o "abre fora" de um link) empurrado para o fim. Só com `description` ou `trailingIcon`: sem eles, o item é o
@@ -6226,8 +6260,13 @@ button.tag-main { cursor:pointer; }
 .menubar[data-orientation="vertical"] { flex-direction:column; align-items:stretch; inline-size:max-content; }
 .menubar[data-orientation="vertical"] .menubar-trigger { justify-content:flex-start; }
 .menubar-trigger { display:inline-flex; align-items:center; min-block-size:var(--control-h-sm); padding-inline:var(--space-3); border:0; border-radius:var(--radius-control); background:transparent; color:var(--foreground); font:inherit; font-size:var(--text-sm); font-weight:var(--weight-medium); white-space:nowrap; cursor:pointer; }@supports (corner-shape: superellipse(2)){.menubar-trigger{corner-shape:round}}
-.menubar-trigger:hover { background:var(--surface-hover); }
-.menubar-trigger[data-popup-open] { background:var(--secondary); color:var(--primary); }
+/* O GATILHO ABERTO E O DESATIVADO (o lote 117, 27/11/2026 — o Victor: "Aprovo a barra"; 2 de 2 referências). Aberto, ele
+   fica com o fundo do passar o mouse e a letra na cor do texto: era o `--secondary` com a letra `--primary`, que pintava
+   o amarelo (Gold) e o laranja (Ember) como LETRA no claro, contra a ADR-0083. Desativado, ele aparecia igual aos outros:
+   agora apagado, com o cursor de proibido, e sem fundo ao passar o mouse. */
+.menubar-trigger:hover:not([data-disabled]) { background:var(--surface-hover); }
+.menubar-trigger[data-popup-open] { background:var(--surface-hover); color:var(--foreground); }
+.menubar-trigger[data-disabled] { opacity:var(--opacity-disabled); cursor:not-allowed; }
 .menubar-trigger:focus-visible { outline:var(--focus-width) solid var(--focus-strong); outline-offset:var(--focus-offset); }
 /* Combobox: reaproveita .menu/.menu-item; só dimensionamento e a coluna do check são próprios.
    --anchor-width e --available-height vêm do positioner do Base UI. */
@@ -6304,9 +6343,13 @@ button.tag-main { cursor:pointer; }
 .dropzone { display:flex; flex-direction:column; align-items:center; gap:var(--space-2); padding:var(--space-8) var(--space-6); text-align:center; color:var(--muted-foreground); background:var(--surface-inset); border:1px dashed transparent; border-radius:var(--radius-card); cursor:pointer; transition:border-color var(--duration-fast),background-color var(--duration-fast); }@supports (corner-shape: superellipse(2)){.dropzone{corner-shape:superellipse(1.65);border-radius:calc(var(--radius-card) * 1.5)}}
 .dropzone:hover { border-color:transparent; }
 .dropzone:focus-within { outline:var(--focus-width) solid var(--focus-strong); outline-offset:0; border-color:transparent; }
-.dropzone[data-dragging="true"] { border-style:solid; border-color:transparent; background:var(--surface-2); }
+/* A ÁREA DE SOLTAR (o lote 117, 27/11/2026 — o Victor: "Aprovo a área"; 5 de 6 referências marcam a área ao arrastar):
+   parada, o ícone apagado (era o `--primary`); arrastando um arquivo por cima, o fundo na cor da marca a 16%, sem traço,
+   e o ícone na cor do texto. Só web: o nativo não arrasta arquivo. */
+.dropzone[data-dragging="true"] { border-style:solid; border-color:transparent; background:color-mix(in oklab, var(--primary) 16%, transparent); }
+.dropzone[data-dragging="true"] .dropzone-icon { color:var(--foreground); }
 .dropzone strong { color:var(--foreground); }
-.dropzone-icon { color:var(--primary); }
+.dropzone-icon { color:var(--muted-foreground); }
 .dropzone-hint { font-size:var(--text-xs); }
 /* DESATIVADA (0.80.0, o DS-370: *"Ganha o desativado"*): meio apagada, como todo controle desativado da Aurea, e o cursor
    de proibido. O clique não abre nada porque o campo de dentro leva o `disabled`. */
@@ -7060,8 +7103,8 @@ button.graph-node-body { cursor:pointer; }
    - .map-* e .builder-* são geografia/arte com rotate() fixo — espelhar os
      nós sem as arestas quebraria o desenho;
    - .drawer-left/.drawer-right prometem lado físico no nome (prop side). */
-:dir(rtl) .select { background-position:12px 50%; }
-:dir(rtl) .switch input:checked + .switch-track:after { transform:translateX(calc(-1 * var(--switch-x))); }
+:dir(rtl) .select,[dir="rtl"] .select { background-position:12px 50%; }
+:dir(rtl) .switch input:checked + .switch-track:after,[dir="rtl"] .switch input:checked + .switch-track:after { transform:translateX(calc(-1 * var(--switch-x))); }
 
 /* BARRA DE ROLAGEM. A Aurea ESCONDIA a dela: `.sidebar` e `.toc` tinham `scrollbar-width:none`
    mais `::-webkit-scrollbar{width:0}`. Região que rola sem barra visível não avisa que rola e

@@ -451,6 +451,71 @@ como deveria funcionar"*.
 
 ---
 
+## [0.84.0] — 2026-11-27
+
+**O lote 117: onze itens que o Victor aprovou em 27/11/2026**, seis das medições do lote 113 e da AUD-1 (*"Aprovo a
+cápsula"*, *"Aprovo o desativado"*, *"O disco alarga"*, *"A folha sobe"*, *"Antes da 1.0"*, *"Sim, antes da 1.0"*) e cinco
+da AUD-1, grupo 1 (*"Aprovo a barra"*, *"Aprovo a área"*, *"Aprovo 2 segundos"*, *"aprovo todos"*). Tudo aprovado na
+bancada viva, a de hoje ao lado da nova, Gold e Ember, claro e escuro (*"Pode, aprovado"*).
+
+### ⚠ Pode quebrar a compilação
+
+- **Frase nova no `AureaStrings` da web: `chatJumpToLatest`** (o botão "ir para a última" da `MessageList`). Quem
+  passa a tabela INTEIRA de frases com o tipo `AureaStrings` precisa acrescentar a frase; quem passa só parte
+  (`Partial<AureaStrings>`, o que o `AureaProvider` da web aceita) não muda nada.
+
+### Adicionado
+
+- **`disabled` no item da `CommandPalette`** (`CommandItem`, só web): o item fica à vista, apagado, com o cursor de
+  proibido (a aparência do item desativado de todo menu); nem o clique nem o Enter o executam, e o mouse não o acende. A
+  seta do teclado para nele, como no item indisponível da `NavList` e na opção desativada do `Combobox`. Exemplo novo na
+  página da peça.
+- **O botão "ir para a última" na `MessageList`** (só web): redondo, na cor do cartão com a sombra das superfícies que
+  flutuam, no meio do pé da caixa que rola; aparece só quando a última mensagem sai da caixa por baixo, e leva até ela (de
+  uma vez, para quem pede menos movimento). Não ocupa lugar: aparecer e sumir não mexe nenhuma mensagem. Com a página
+  inteira rolando, não aparece. Exemplo novo na página da peça.
+- **O `AureaProvider` do nativo aceita só parte das frases** (`strings?: Partial<AureaStrings>`, UDS-A2b), como o da web:
+  as que faltam vêm do padrão. Uma frase nova numa versão menor deixa de quebrar o app que passa as frases.
+
+### Mudado
+
+- **O item de uma linha das listas volta à cápsula**: `.menu-item` (menu, busca de comandos, `Combobox`), `.list-box-item`,
+  `.sidebar-item` e `.nav-list-row`. Desde a 0.82.0 o canto contínuo lia o raio deles (`--radius-card` − `--space-1`) como
+  canto de superfície (27, na forma do iPhone). A linha ALTA, com a explicação embaixo, fica como está; a lateral do site,
+  que já pedia cápsula, deixa de herdar a forma do iPhone.
+- **O `SegmentedControl` com `wrap` volta ao 22 redondo**: numa linha só (44 de altura) é a cápsula exata; desde a 0.82.0 o
+  canto contínuo o fazia 33 com a ponta do iPhone, um retângulo (o seletor de tamanho da página do Button, o de densidade
+  da página Density). O conversor do canto contínuo (`scripts/canto-continuo.mjs`) passa a deixar em paz a regra que já
+  escreve `corner-shape`, e o `.segmented-wrap` escreve `corner-shape:round`. Em duas linhas, como até a 0.81.1.
+- **O disco do `BottomNav` `circle-bold` alarga com o nome** (E15, web e nativo): no mínimo 56, com `space2` de cada lado,
+  sem passar da aba. Com 56 fixos, "Relatórios" saía "Relat…". A barra continua parada ao trocar de aba.
+- **A `BottomSheet` do nativo sobe com o teclado**: a folha fica dentro do `KeyboardAvoiding` da Aurea, como a folha do
+  `Combobox`. O teste no aparelho é da sessão do app.
+- **A barra de menus (`Menubar`)**: o gatilho aberto fica com o fundo do passar o mouse e a letra na cor do texto (era o
+  `--secondary` com a letra no amarelo, ou no laranja da Ember, contra a ADR-0083); o desativado fica apagado, com o cursor
+  de proibido e sem fundo ao passar o mouse (não mudava nada na tela).
+- **A área de soltar do `FileInput`**: o ícone parado fica apagado (era o amarelo); arrastando um arquivo por cima, o fundo
+  fica na cor da marca a 16%, sem traço, e o ícone na cor do texto. Só web.
+- **O "copiado" do `CodeBlock` fica 2 segundos** (era 1,5), no React e no `aurea.js`. O "Link copiado" do `Button share`
+  continua 1,5.
+- **As setas do `Carousel` ficam nos lados da foto**, no meio da altura dela; os pontos continuam embaixo. Sem pontos, a
+  seta fica no meio do carrossel.
+
+### Consertado
+
+- **D-01 — as regras da direita para a esquerda com qualquer idioma**: as seis regras com `:dir(rtl)` do `aurea.css` (o
+  selo preso, a seta do `.select`, a chave ligada) levam a reserva `[dir="rtl"]`, como a da tabela. O Vite 8 reescreve
+  `:dir(rtl)` como uma lista de idiomas, e numa página da direita para a esquerda marcada com outro idioma o selo entrava na
+  caixa, a seta sumia atrás do texto e a bolinha da chave saía para fora. Nada muda onde já estava certo. Quem cobra:
+  `tests/visual/rtl-reserva.spec.ts`, com o CSS passado pelo `vite build`.
+
+### As provas
+
+`tests/visual/lote117-listas.spec.ts`, `tests/visual/lote117-pecas.spec.ts`, `tests/visual/rtl-reserva.spec.ts`,
+`tests/unit/lote117-paleta-desativado.test.tsx`, `tests/unit/lote117-copiado.test.tsx` e
+`tests/unit/native-lote117.test.tsx` — cada uma reprovada contra o código de antes. O teste antigo do C-09
+(`consumidores-lote1`) passa a cobrar a cápsula na linha de uma linha e a conta na linha alta.
+
 ## [0.83.0] — 2026-11-26
 
 **Quatro lotes numa versão só** (o Victor, 26/11/2026: *"sim, junte os quatro num pedido só"*): o 108 (a marca e a pessoa no

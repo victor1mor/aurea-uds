@@ -143,16 +143,54 @@ export function MessageList({ messages, label, className, hasMoreBefore, hasMore
         ro.observe(el);
         return () => ro.disconnect();
     }, [janela, medir]);
+    // O BOTÃO "IR PARA A ÚLTIMA" (o lote 117, 27/11/2026 — o Victor: "aprovo todos"; a única referência com conversa o tem):
+    // redondo, no pé da conversa, e só quando a última mensagem saiu da tela por baixo. Vale quando a conversa rola dentro
+    // de uma caixa (a lista de mensagens de um app); com a página inteira rolando não aparece, porque flutuaria sobre a
+    // página toda. Ele não ocupa lugar (a caixa dele tem altura zero e fica presa ao pé da área que rola), então aparecer
+    // e sumir não mexe a conversa. Rolar até o fim é suave, e na hora para quem pede menos movimento.
+    const [longe, setLonge] = React.useState(false);
+    React.useEffect(() => {
+        const el = raiz.current;
+        const itens = el?.querySelectorAll("[data-message-id]");
+        const ultimo = itens?.[itens.length - 1];
+        if (!el || !ultimo || typeof IntersectionObserver === "undefined") {
+            setLonge(false);
+            return;
+        }
+        const sc = rolador(el);
+        if (ehPagina(sc)) {
+            setLonge(false);
+            return;
+        }
+        const obs = new IntersectionObserver(es => {
+            const e = es[es.length - 1];
+            if (!e)
+                return;
+            setLonge(!e.isIntersecting && !!e.rootBounds && e.boundingClientRect.top >= e.rootBounds.bottom);
+        }, { root: sc });
+        obs.observe(ultimo);
+        return () => obs.disconnect();
+    }, [messages]);
+    const irParaAUltima = () => {
+        const el = raiz.current;
+        if (!el)
+            return;
+        const sc = rolador(el);
+        const menos = typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+        sc.scrollTo({ top: sc.scrollHeight, behavior: menos ? "auto" : "smooth" });
+        // O botão some quando a última chega à tela; o foco não fica perdido: vai para a conversa.
+        el.focus({ preventScroll: true });
+    };
     useVigia(topo, janela && !!hasMoreBefore && !loadingBefore, onReachStart, [messages.length]);
     useVigia(fim, janela && !!hasMoreAfter && !loadingAfter, onReachEnd, [messages.length]);
-    return _jsxs(_Fragment, { children: [_jsxs("div", { ref: raiz, className: cx("stack", className), role: "log", "aria-live": janela ? "off" : "polite", "aria-busy": (janela && (loadingBefore || loadingAfter)) || undefined, "aria-label": label ?? s.chatLabel, children: [janela && hasMoreBefore && _jsx("div", { ref: topo, className: "message-more", children: loadingBefore && _jsx(Spinner, {}) }), messages.map((m, i) => {
+    return _jsxs(_Fragment, { children: [_jsxs("div", { ref: raiz, className: cx("stack", className), tabIndex: -1, role: "log", "aria-live": janela ? "off" : "polite", "aria-busy": (janela && (loadingBefore || loadingAfter)) || undefined, "aria-label": label ?? s.chatLabel, children: [janela && hasMoreBefore && _jsx("div", { ref: topo, className: "message-more", children: loadingBefore && _jsx(Spinner, {}) }), messages.map((m, i) => {
                         const lado = m.direction;
                         const midia = (m.attachments ?? []).filter(a => a.kind !== "file" && a.src);
                         const arquivos = (m.attachments ?? []).filter(a => a.kind === "file");
                         const dia = m.day != null && m.day !== messages[i - 1]?.day;
                         return _jsxs(React.Fragment, { children: [dia && _jsx("div", { className: "message-day", children: _jsx(Badge, { children: m.day }) }), _jsxs("div", { className: cx("message", lado === "outgoing" && "message-out", lado === "incoming" && "message-in"), "data-message-id": m.id, children: [lado === "outgoing" ? null : m.avatar ? _jsx(Avatar, { src: m.avatar.src, fallback: m.avatar.fallback }) : _jsx("span", {}), _jsxs("div", { className: "message-bubble", children: [(m.author || m.time || m.edited) && _jsxs("div", { className: "label", children: [_jsx("span", { children: m.author }), (m.time || m.edited) && _jsxs("span", { className: "hint", children: [m.edited && _jsxs(_Fragment, { children: [s.chatEdited, m.time != null && " · "] }), m.time] })] }), m.forwardedFrom != null && _jsxs("div", { className: "message-forwarded", children: [_jsx(Icon, { name: "share-fat", size: "sm" }), _jsxs("span", { children: [s.chatForwardedFrom, " ", m.forwardedFrom] })] }), m.replyTo && _jsx("div", { className: "message-quote", children: _jsxs("span", { className: "message-quote-text", children: [_jsx("span", { className: "message-quote-title", children: m.replyTo.author }), _jsx("span", { className: "message-quote-body", children: m.replyTo.body })] }) }), midia.length > 0 && _jsx(Gallery, { className: "message-album", label: s.chatAttachments, zoom: !onOpenAttachment, ratio: midia.length === 1 ? "4/3" : "1/1", items: midia.map(a => ({ id: a.id, src: a.src, alt: a.alt ?? a.name ?? "", kind: a.kind === "video" ? "video" : "image", duration: a.duration })), onSelect: onOpenAttachment ? (id => { const a = midia.find(x => x.id === id); if (a)
                                                         onOpenAttachment(m, a); }) : undefined }), arquivos.length > 0 && _jsx("ul", { className: "file-list", "aria-label": s.chatAttachments, children: arquivos.map(a => _jsxs("li", { className: "file-item", children: [_jsx(Icon, { name: "file-text" }), a.href ? _jsx("a", { className: "file-name", href: a.href, download: a.name ?? true, children: a.name ?? a.href }) : _jsx("span", { className: "file-name", children: a.name }), a.bytes != null && _jsx("span", { className: "file-size", children: formatSize(a.bytes) })] }, a.id)) }), m.body, m.status && _jsx("div", { className: "message-status", children: _jsxs(Badge, { variant: m.status.variant, children: [_jsx("i", { className: "status-dot" }), m.status.label] }) })] })] })] }, m.id);
-                    }), janela && hasMoreAfter && _jsx("div", { ref: fim, className: "message-more", children: loadingAfter && _jsx(Spinner, {}) })] }), janela && _jsx("span", { className: "sr-only", role: "status", "aria-live": "polite", children: anuncio })] });
+                    }), janela && hasMoreAfter && _jsx("div", { ref: fim, className: "message-more", children: loadingAfter && _jsx(Spinner, {}) })] }), longe && _jsx("div", { className: "message-jump", children: _jsx(IconButton, { icon: "arrow-down", label: s.chatJumpToLatest, variant: "secondary", onPress: irParaAUltima }) }), janela && _jsx("span", { className: "sr-only", role: "status", "aria-live": "polite", children: anuncio })] });
 }
 export function MessageComposer({ onSend, placeholder, label, icon, sendLabel, disabled, className, attach, replyTo, onCancelReply, editing, onCancelEdit }) {
     const s = useAureaStrings();

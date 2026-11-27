@@ -56,7 +56,7 @@ export default {
     direction: "Which way the text reads: ltr or rtl, the same prop as the web. Without it, the device setting (I18nManager.isRTL). The system already mirrors the layout; the provider mirrors the arrows that point one way — the NavList chevron and the submenu arrow — so they point the way the text reads. A provider inside another without direction keeps the outer one.",
     highContrast: "The high-contrast reading mode for the whole app, the web AppShell's highContrast: everything the system's increase-contrast setting does, plus darker supporting text, an outline on cards and buttons, and links always underlined. A provider inside another without it keeps the outer one.",
     textSize: "md (the default) or lg. lg is the large-text reading mode, the web AppShell's textSize: every type step from xs to 2xl goes up 2. Control heights stay: on native the medium control already has the touch target. A provider inside another without it keeps the outer one.",
-    strings: "The sentences the pieces say on their own (a state's alert, the empty face, the spinner's name). English by default; ptBR ships ready.",
+    strings: "The sentences the pieces say on their own (a state's alert, the empty face, the spinner's name). English by default; ptBR ships ready. Pass only the sentences you change: the rest come from the defaults.",
     onThemeChange: "Called when a controlled provider is asked to change theme — the app decides.",
     onDensityChange: "Called when a controlled provider is asked to change density.",
   },
