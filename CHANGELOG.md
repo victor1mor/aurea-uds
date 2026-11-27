@@ -459,6 +459,43 @@ como deveria funcionar"*.
 
 ---
 
+## [0.83.1] — 2026-11-27
+
+**A distribuição** — o lote 112, três dos quatro itens que o Victor aprovou no bloco de decisões de 24/11/2026 ("A
+distribuição" e o SOCK-03). Nenhuma peça muda na tela. O quarto, o CSS compactado, ficou para o lote seguinte (abaixo).
+
+### Corrigido
+
+- **O `Collapsible` desativado volta a ficar no Tab** (web). A ficha promete que o gatilho desativado continua alcançável
+  pelo teclado e não abre. Até a Base UI 1.6.0 era assim; desde a 1.9.0 — a que os apps já recebiam pelo `^1.6.0` — o
+  motor põe o `disabled` nativo no botão, que sai do Tab e não recebe foco. O gatilho agora diz `aria-disabled="true"`,
+  recebe o foco e não abre. A aparência é a mesma (o `data-disabled` não mudou). Prova:
+  `tests/unit/collapsible-desativado-no-tab.test.tsx`, que reprova sem o conserto.
+
+### Mudado
+
+- **As provas rodam na Base UI 1.9.0**, a que os apps recebem, e o `@aurea-uds/react` passa a pedir `^1.9.0` (era
+  `^1.6.0`). Conferido em 27/11/2026: a 1.9.0 (09/10/2026) é a última, sem alerta de segurança na `@base-ui/react` nem na
+  `@base-ui/utils`; as notas da 1.7.0, da 1.8.0 e da 1.9.0 não declaram quebra. O que mudou na marcação das páginas,
+  medido nas 699 que mudaram: os números de identificação gerados; os gatilhos de menu ganham `aria-expanded="false"`; o
+  campo do `Combobox` perde o `type="text"` (é o padrão do navegador); a entrada escondida do motor troca a margem de
+  -1 para 0 (continua recortada, fora da tela). Só o `Collapsible` mudava de comportamento (acima).
+- **O site sai comprimido.** O `no-transform` dos cabeçalhos do site impedia a Cloudflare de comprimir (a documentação
+  dela diz isso), e tudo saía cheio: medido em aureauds.dev, a folha com 1,44 MB e o script das caixas vivas com 1,86 MB.
+  Os arquivos de apoio (`/assets/*`: CSS, JS, desenhos) perdem o `no-transform`; as páginas ficam com ele, porque é o que
+  barra a injeção do script de estatística da Cloudflare, que só acontece em HTML. Prova: `tests/unit/site-comprimido.test.tsx`.
+- **SOCK-03, o tipo de módulo declarado:** `@aurea-uds/core` e `@aurea-uds/tokens` com `"type": "module"` (o
+  `aurea.tokens.native.js` já era escrito com `export`, e sem o campo o Node o lia como CommonJS); `@aurea-uds/fonts` com
+  `"type": "commonjs"` (o `fonts.native.js` é escrito com `require`, que só o empacotador do aparelho lê, e fica assim para
+  não quebrar quem o carrega por `require`). E o `@aurea-uds/core/js` ganha tipos (`dist/aurea.js.d.ts`), como o `./css`.
+
+### Fica para o lote seguinte
+
+- **O CSS compactado.** Medido com a lightningcss 1.33.0 (a última, sem alerta): a folha do core cai de 748 KB para
+  418 KB (comprimida, 181 → 54 KB), mas a ferramenta não deixa a folha igual — sem navegador-alvo, ela APAGA os 6
+  `-webkit-backdrop-filter` (o desfoque do topo no Safari antigo); com o Safari como alvo, ela ACRESCENTA prefixos. Nenhum
+  dos dois é "compactar sem mudar nada". O próximo lote escolhe um jeito que só tira espaço e comentário, com a prova.
+
 ## [0.83.0] — 2026-11-26
 
 ✅ **Publicada em 27/11/2026, entre 08:15 e 08:16 (Brasília, medido no npm: `native` às 08:15, depois `react`,
