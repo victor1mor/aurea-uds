@@ -461,6 +461,9 @@ como deveria funcionar"*.
 
 ## [0.84.0] — 2026-11-27
 
+**Dois lotes numa versão só** (o Victor, 27/11/2026: *"Sim, num pedido"*): o 117 e o 115, cada um aprovado por ele na
+bancada viva.
+
 **O lote 117: onze itens que o Victor aprovou em 27/11/2026**, seis das medições do lote 113 e da AUD-1 (*"Aprovo a
 cápsula"*, *"Aprovo o desativado"*, *"O disco alarga"*, *"A folha sobe"*, *"Antes da 1.0"*, *"Sim, antes da 1.0"*) e cinco
 da AUD-1, grupo 1 (*"Aprovo a barra"*, *"Aprovo a área"*, *"Aprovo 2 segundos"*, *"aprovo todos"*). Tudo aprovado na
@@ -517,12 +520,39 @@ bancada viva, a de hoje ao lado da nova, Gold e Ember, claro e escuro (*"Pode, a
   caixa, a seta sumia atrás do texto e a bolinha da chave saía para fora. Nada muda onde já estava certo. Quem cobra:
   `tests/visual/rtl-reserva.spec.ts`, com o CSS passado pelo `vite build`.
 
+### O lote 115 — a paridade web × nativo
+
+**O lote 115, a paridade web × nativo, primeira parte** — a regra do Victor de 24/11/2026 (o que só um alvo tem vai ao outro,
+antes da 1.0). O inventário tem uns 44 itens; este lote leva as três peças que mais aparecem nos apps. Aprovadas na bancada
+viva, os dois alvos lado a lado, claro e escuro, Gold e Ember (*"Aprovo as três"*, 27/11/2026). Só acrescenta: sem as
+props novas, cada peça sai igual a antes.
+
+#### Adicionado
+
+- **`Alert` do nativo: `appearance="soft"` e `action`**, os da web (a 0.54.0 e a 0.33.0). O `soft` pinta o fundo com a
+  cor do estado a 14%, sem a sombra do cartão, o título em negrito (o tom com 25% da cor do texto) e o corpo a 16 na cor do
+  texto. Na Ember, o cartão de sempre, como na web (o Victor, 02/11/2026: *"Ember no cartão"*). O `action` desce para
+  baixo do texto, na coluna dele, e fica fora do grupo que o leitor de tela lê como um (no iPhone, coisa tocável dentro
+  dele some).
+- **`Combobox` e `MultiCombobox` da web: `description` e `disabled` na opção** (`ComboboxOption`), os do nativo (a R-14). A
+  explicação é a segunda linha do item de menu com explicação (`.menu-item-description`); o nome vai por
+  `aria-labelledby` e a explicação por `aria-describedby`. A busca continua olhando só o `label`.
+- **`Timeline` da web: `icon`, `tone`, `trailing` e `between` no item**, os do nativo (a R-18): a moldura redonda de 40
+  com o glifo de 20 no lugar do ponto, o tom com o vocabulário do `Badge` (`neutral`, `primary`, `info`, `success`,
+  `warning`, `danger`), o que vai à direita do título e o que aconteceu entre um item e o próximo (no último não aparece).
+  Com uma moldura na lista, a coluna do marcador tem 40 em todo item, e o trilho vai ao centro dela, também no `time`. O
+  `icon` da web é NÓ (um `<Icon name="check"/>`), como o `leading` do `Badge`: a `Timeline` é marcação de servidor e não
+  importa o `Icon`. Tipos novos: `TimelineItem`, `TimelineTone`.
+- Os exemplos no site: "Appearance" e "With an action" na página do `Alert` do nativo; "Options with a description" na do
+  `Combobox`; "Icons, value and the time between" e "Tones" na da `Timeline`.
+
 ### As provas
 
 `tests/visual/lote117-listas.spec.ts`, `tests/visual/lote117-pecas.spec.ts`, `tests/visual/rtl-reserva.spec.ts`,
 `tests/unit/lote117-paleta-desativado.test.tsx`, `tests/unit/lote117-copiado.test.tsx` e
 `tests/unit/native-lote117.test.tsx` — cada uma reprovada contra o código de antes. O teste antigo do C-09
 (`consumidores-lote1`) passa a cobrar a cápsula na linha de uma linha e a conta na linha alta.
+
 ## [0.83.1] — 2026-11-27
 
 **A distribuição** — o lote 112, três dos quatro itens que o Victor aprovou no bloco de decisões de 24/11/2026 ("A

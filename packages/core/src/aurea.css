@@ -3182,6 +3182,28 @@ button.tag-main { cursor:pointer; }
 .timeline > li > div { display:flex; flex-direction:column; gap:var(--space-05); min-width:0; }
 .timeline > li > div > p { margin:0; }
 .timeline-dot { position:relative; z-index:1; flex:none; width:var(--space-3); height:var(--space-3); border-radius:var(--radius-full); margin-block-start:var(--space-1); background:var(--primary); box-shadow:none; }
+/* A MOLDURA DO ÍCONE, O VALOR À DIREITA E O "ENTRE" (o lote 115, 27/11/2026 — a paridade com o nativo, R-18 de 02/10/2026,
+   `data.tsx`): a moldura de 40 (`--space-10`) com o glifo de 20 (`--icon-md`), o fundo suave do tom OPACO (os `--<tom>-bg` e o
+   `--muted` já são; o `primary` é o amarelo a 10% misturado com a cor do cartão — no nativo, a moldura "sobre" a `surface1`),
+   para o trilho não aparecer através dele. Com uma moldura na
+   lista, a coluna do marcador tem 40 em todo item: o ponto vai ao centro dela, e o trilho também. O "entre" é a letra
+   pequena e apagada, na coluna do texto, no meio do vão até o item seguinte. */
+.timeline-icon { position:relative; z-index:1; flex:none; display:grid; place-items:center; inline-size:var(--space-10); block-size:var(--space-10);
+  border-radius:var(--radius-full); background:var(--muted);
+  color:var(--muted-foreground); }
+.timeline-icon > .icon,.timeline-icon > svg { --step-icon:var(--icon-md); inline-size:var(--icon-md); block-size:var(--icon-md); }
+.timeline-icon[data-tone="primary"] { background:color-mix(in oklab, var(--primary) 10%, var(--surface-1)); color:var(--primary-emphasis); }
+.timeline-icon[data-tone="info"] { background:var(--info-bg); color:var(--info-400); }
+.timeline-icon[data-tone="success"] { background:var(--success-bg); color:var(--success-400); }
+.timeline-icon[data-tone="warning"] { background:var(--warning-bg); color:var(--warning-400); }
+.timeline-icon[data-tone="danger"] { background:var(--danger-bg); color:var(--danger-400); }
+.timeline-has-icons > li > .timeline-dot { margin-inline:calc((var(--space-10) - var(--space-3)) / 2); }
+.timeline-has-icons > li:not(:last-child)::before { inset-inline-start:calc(var(--space-10) / 2 - var(--border-width) / 2); inset-block-start:0; }
+.timeline > li > div:has(> .timeline-title-row) { flex:1; }
+.timeline-title-row { display:flex; align-items:flex-start; justify-content:space-between; gap:var(--space-2); min-inline-size:0; }
+.timeline-title-row > strong { min-inline-size:0; }
+.timeline-trailing { flex:none; font-weight:var(--weight-semibold); }
+.timeline-between { margin-block-start:calc(var(--space-5) - var(--space-05)); color:var(--muted-foreground); font-size:var(--text-xs); }
 /* ACCORDION (0.32.0) — o da referência, com o realce em CÁPSULA (decisão do Victor, 11/10/2026). Sem
    caixa em volta: um fio de 1 entre os itens, nenhum depois do último. A pergunta: 16 de todos os
    lados, 14 peso médio, a seta de 16 no FIM (esmaecida), que vira −180° ao abrir — o marcador do
@@ -5397,8 +5419,16 @@ button.graph-node-body { cursor:pointer; }
 :is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) .timeline-dot { grid-column:2; grid-row:1; }
 :is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li > div > strong { grid-column:3; grid-row:1; }
 :is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li > div > p { grid-column:3; grid-row:2; }
+:is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li > div > .timeline-title-row { grid-column:3; grid-row:1; }
+:is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li > div > .timeline-between { grid-column:3; }
+:is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li > .timeline-icon { grid-column:2; grid-row:1 / span 2; }
 :is([data-timeline-style="time"] .timeline:not([data-timeline-style]),.timeline[data-timeline-style="time"]) > li:not(:last-child)::before {
   inset-inline-start:calc(var(--space-12) + var(--space-1) + var(--space-3) + var(--space-3) / 2 - var(--border-width) / 2); }
+/* O `time` com moldura (o lote 115): a coluna do marcador tem 40, e o trilho vai ao centro dela. */
+:is([data-timeline-style="time"] .timeline-has-icons:not([data-timeline-style]),.timeline-has-icons[data-timeline-style="time"]) > li {
+  grid-template-columns:calc(var(--space-12) + var(--space-1)) var(--space-10) minmax(0,1fr); }
+:is([data-timeline-style="time"] .timeline-has-icons:not([data-timeline-style]),.timeline-has-icons[data-timeline-style="time"]) > li:not(:last-child)::before {
+  inset-inline-start:calc(var(--space-12) + var(--space-1) + var(--space-3) + var(--space-10) / 2 - var(--border-width) / 2); }
 
 /* 2.11 · O ITEM ATUAL DA BARRA DE BAIXO: o `indicator` escolhe a forma, o `currentStyle` a cor. O "fundo" é o do formato
    — o item inteiro no `pill`, no `subtle` e no `expand`; a marca do ícone no `circle`, no `circle-outline`, no

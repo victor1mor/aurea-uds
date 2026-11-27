@@ -2311,6 +2311,30 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
       {title: "Created", description: "by Curator", time: "09:00"},
       {title: "Shipped", time: "14:20"},
     ]})),
+    // O lote 115 (27/11/2026): `icon`, `tone`, `trailing` e `between`, os do nativo — os mesmos exemplos da página dele.
+    examples: [
+      {
+        title: "Icons, value and the time between",
+        description: "icon puts a glyph in a round frame in place of the dot; trailing goes to the right of the title; between is written beside the line, up to the next event.",
+        code: `<Timeline items={[
+  {title: "Report sent", icon: <Icon name="upload-simple" />, time: "Oct 1", trailing: "$1,240", between: "6 days later"},
+  {title: "Approved", icon: <Icon name="check-circle" />, tone: "success", time: "Oct 7", trailing: <Badge tone="success">Paid</Badge>},
+]} />`,
+        render: () => h("div", {style: {width: "min(28rem, 100%)"}}, h(A.Timeline, {items: [
+          {title: "Report sent", icon: h(A.Icon, {name: "upload-simple"}), time: "Oct 1", trailing: "$1,240", between: "6 days later"},
+          {title: "Approved", icon: h(A.Icon, {name: "check-circle"}), tone: "success", time: "Oct 7", trailing: h(A.Badge, {tone: "success"}, "Paid")},
+        ]})),
+      },
+      {
+        title: "Tones",
+        description: "The colour of the icon's frame, with the Badge's words. Without an icon, tone does nothing.",
+        code: `<Timeline items={[
+${["neutral", "primary", "info", "success", "warning", "danger"].map((v) => `  {title: "tone ${v}", icon: <Icon name="info" />, tone: "${v}"},`).join("\n")}
+]} />`,
+        render: () => h("div", {style: {width: "min(28rem, 100%)"}}, h(A.Timeline, {items: ["neutral", "primary", "info", "success", "warning", "danger"]
+          .map((v) => ({title: `tone ${v}`, icon: h(A.Icon, {name: "info"}), tone: v}))})),
+      },
+    ],
   },
   Tooltip: {
     code: `<Tooltip content="Copy to clipboard" side="top">

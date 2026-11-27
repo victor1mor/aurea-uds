@@ -4297,6 +4297,21 @@
               "values": null
             },
             {
+              "name": "appearance",
+              "optional": true,
+              "type": "\"card\" | \"soft\"",
+              "values": [
+                "card",
+                "soft"
+              ]
+            },
+            {
+              "name": "action",
+              "optional": true,
+              "type": "React.ReactNode",
+              "values": null
+            },
+            {
               "name": "children",
               "optional": true,
               "type": "React.ReactNode",
