@@ -17,6 +17,14 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O registro da 0.83.0 (27/11/2026)
+
+- **A 0.83.0 publicada em 27/11/2026, entre 08:15 e 08:16** (Brasília, medido no npm), pela publicação em etapa, da
+  junção do pedido #171 (`69e8c6a6`). O `released-surface.json` regravado desse commit: nenhum nome novo nem frase nova
+  (162 componentes, como na 0.82.0). O CHANGELOG ([0.83.0] publicada) e o CLAUDE.md (a linha da tabela "O que já saiu" e
+  o item 81 do "O próximo passo"); a release `v0.83.0` no GitHub já existia.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.81.1 e da 0.82.0 (26/11/2026)
 
 - **A 0.81.1 publicada em 25/11/2026, entre 19:21 e 19:22** (Brasília, medido no npm), pela publicação em etapa, da
@@ -452,6 +460,10 @@ como deveria funcionar"*.
 ---
 
 ## [0.83.0] — 2026-11-26
+
+✅ **Publicada em 27/11/2026, entre 08:15 e 08:16 (Brasília, medido no npm: `native` às 08:15, depois `react`,
+`contracts`, `core`, `fonts`, `icons` e `tokens` às 08:16), pela publicação em etapa, da junção do pedido #171**
+(`69e8c6a6`).
 
 **Quatro lotes numa versão só** (o Victor, 26/11/2026: *"sim, junte os quatro num pedido só"*): o 108 (a marca e a pessoa no
 centro da trilha da lateral com painel), o 109 (o vão das abas, a data do site e a hora que se digita), o 110 (nada some no
