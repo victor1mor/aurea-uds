@@ -10,6 +10,14 @@ One-line list items are capsules again; disabled command palette items; a jump-t
 
 [Read full release notes →](https://aureauds.dev/release-v0-84-0.md)
 
+## v0.83.1
+
+November 27, 2026
+
+A disabled Collapsible stays reachable by keyboard again, the tests run on Base UI 1.9.0, and the packages declare their module type.
+
+[Read full release notes →](https://aureauds.dev/release-v0-83-1.md)
+
 ## v0.83.0
 
 November 26, 2026

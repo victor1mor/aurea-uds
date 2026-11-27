@@ -24,6 +24,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "commonjs",
   "files": [
     "dist",
     "files",

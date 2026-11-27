@@ -14,7 +14,7 @@ One-line list items are capsules again; disabled command palette items; a jump-t
 
 ## Changed
 
-- **One-line list items are capsules again**: menu items (including `CommandPalette` and `Combobox`), `ListBox`, `Sidebar` and `NavList`. Since 0.82.0 the continuous corner turned their radius into a surface corner. Rows with a description keep their corner.
+- **One-line list items are capsules again**: menu items (including `CommandPalette` and `Combobox`), `ListBox`, `Sidebar` and `NavList`. Since 0.82.0 the continuous corner turned their radius into a surface corner. Rows with a description keep their corner. A `SegmentedControl` with `wrap` is back to its 22px round corner, a capsule on one line.
 - **The `BottomNav` `circle-bold` disc grows to fit its label**, on web and native: at least 56px, with 8px on each side, never wider than the tab. The bar still does not move when the current tab changes.
 - **Native `BottomSheet` moves up with the keyboard**, so a field inside the sheet stays visible.
 - **`Menubar`**: an open trigger has the hover background and the text color, instead of the brand color as text. A disabled trigger is dimmed, with the not-allowed cursor and no hover background.

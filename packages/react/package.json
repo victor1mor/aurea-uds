@@ -130,7 +130,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@base-ui/react": "^1.6.0"
+    "@base-ui/react": "^1.9.0"
   },
   "peerDependencies": {
     "@codemirror/language": "^6.12.4",

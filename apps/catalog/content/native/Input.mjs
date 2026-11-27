@@ -1,7 +1,7 @@
 // O Input do nativo no site (bloco 1, o grupo 1 — 23/10/2026). Todo valor das props do tipo em exemplo.
 // No React Native o nome do campo vem do `Field` em volta (não há `<label for>`): todo exemplo tem um.
 import {createElement as h, useState} from "react";
-import {Field, Input} from "../../../../packages/native/dist/index.js";
+import {Card, Field, Input} from "../../../../packages/native/dist/index.js";
 import {cada} from "../_eixos.mjs";
 
 const largura = {display: "grid", gap: "var(--space-4)", width: "min(24rem, 100%)"};
@@ -42,6 +42,16 @@ export default {
 </Field>`,
       render: () => h("div", {style: largura}, h(Field, {label: "Email"},
         h(Input, {placeholder: "name@example.com", keyboardType: "email-address", autoCapitalize: "none"}))),
+    },
+    {
+      // O mesmo caso da página da web ("In a card", lote 114 — 27/11/2026).
+      title: "In a card",
+      description: "Inside a Card the field takes the grey fill, so it stays visible on the white of the card.",
+      code: `<Card>
+  <Field label="Project name"><Input variant="secondary" placeholder="Aurea" /></Field>
+</Card>`,
+      render: () => h("div", {style: {width: "min(22rem, 100%)"}},
+        h(Card, null, h(Field, {label: "Project name"}, h(Input, {variant: "secondary", placeholder: "Aurea"})))),
     },
     cada({titulo: "Sizes", descricao: "The touch scale: 40, 48 and 56.",
       valores: ["sm", "md", "lg"], estilo: largura,

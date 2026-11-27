@@ -21,6 +21,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "files": [
     "dist"
   ],
@@ -29,6 +30,9 @@
       "types": "./dist/aurea.css.d.ts",
       "default": "./dist/aurea.css"
     },
-    "./js": "./dist/aurea.js"
+    "./js": {
+      "types": "./dist/aurea.js.d.ts",
+      "default": "./dist/aurea.js"
+    }
   }
 }
