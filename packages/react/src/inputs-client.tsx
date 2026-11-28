@@ -1178,7 +1178,14 @@ return <BaseRadioGroup ref={fila} className={classe} data-segment-style={selecte
 
 // Combobox básico: input + lista filtrável de item único. O filtro é do Base UI
 // (via items + itemToStringLabel). Multi-seleção/async ficam para a Fase 4.
-export interface ComboboxOption{value:string;label:string}
+// `description` e `disabled` (o lote 115, 27/11/2026 — a paridade com o nativo, a regra do Victor de 24/11/2026): a segunda
+// linha embaixo do rótulo, na letra pequena e na cor de apoio (a do item de menu com explicação, `.menu-item-description`),
+// e a opção que não se escolhe. A busca continua olhando só o `label`, como no nativo (`busca.tsx`, R-14).
+export interface ComboboxOption{value:string;label:string;
+  /** Uma segunda linha embaixo do rótulo, apagada ("Pacote de 1 kg"). O leitor de tela a lê como descrição da opção. */
+  description?:string;
+  /** A opção aparece apagada e não se escolhe. */
+  disabled?:boolean}
 // ── AGRUPAMENTO, REPORTADO no merge de 28/08/2026 ───────────────────────────────────────────
 // O `Combobox` de seleção única agrupava na outra linhagem e voltou a não agrupar quando este
 // arquivo entrou inteiro da `main`. A perda foi silenciosa pelo mesmo motivo do `Tabs` e do
@@ -1204,7 +1211,21 @@ const ehAgrupado=(items:ComboboxOption[]|ComboboxOptGroup[]):items is ComboboxOp
 // NADA no DOM quando o item não está escolhido; com um filho só, o texto caía na primeira coluna
 // da grade — a de 16px — e quebrava em duas ou três linhas. O invólucro fica montado sempre, como
 // o `.menu-mark` do `Menu` já faz, e o indicador aparece e some DENTRO dele.
-const renderComboboxItem=(item:ComboboxOption)=><BaseCombobox.Item key={item.value} value={item} className="menu-item combobox-item">
+// Com `description`, o item é o do menu com explicação (`overlays.tsx`): o nome e a explicação em `.menu-item-text`, o nome
+// ligado por `aria-labelledby` e a explicação por `aria-describedby` — sem isso o nome da opção seria as duas linhas coladas.
+// O DESATIVADO NÃO REAGE AO MOUSE (o mesmo conserto do item da `CommandPalette`, lote 117): o motor acende o item que o
+// mouse cruza (o `onMouseMove` da navegação da lista), também o desativado, e o fundo do acendido aparecia. O item desativado
+// impede esse passo do motor (`preventBaseUIHandler`, o caminho que o próprio motor oferece). O teclado continua chegando
+// nele, e ele não se escolhe.
+const semRealceDoMouse=(e:React.MouseEvent&{preventBaseUIHandler?:()=>void})=>e.preventBaseUIHandler?.();
+function ComboboxItemComDescricao({item}:{item:ComboboxOption&{description:string}}){const id=React.useId();
+  return <BaseCombobox.Item value={item} disabled={item.disabled} onMouseMove={item.disabled?semRealceDoMouse:undefined} className="menu-item combobox-item" aria-labelledby={`${id}-l`} aria-describedby={`${id}-d`}>
+  <span className="combobox-check" aria-hidden="true"><BaseCombobox.ItemIndicator><Icon name="check" size="sm"/></BaseCombobox.ItemIndicator></span>
+  <span className="menu-item-text"><span id={`${id}-l`}>{item.label}</span><span id={`${id}-d`} className="menu-item-description">{item.description}</span></span>
+</BaseCombobox.Item>}
+const renderComboboxItem=(item:ComboboxOption)=>item.description!=null&&item.description!==""
+  ?<ComboboxItemComDescricao key={item.value} item={item as ComboboxOption&{description:string}}/>
+  :<BaseCombobox.Item key={item.value} value={item} disabled={item.disabled} onMouseMove={item.disabled?semRealceDoMouse:undefined} className="menu-item combobox-item">
   <span className="combobox-check" aria-hidden="true"><BaseCombobox.ItemIndicator><Icon name="check" size="sm"/></BaseCombobox.ItemIndicator></span>
   <span>{item.label}</span>
 </BaseCombobox.Item>;

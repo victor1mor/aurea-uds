@@ -112,7 +112,8 @@ export function CodeBlock({ children, language = "text", copyable, preview, prev
         const copia = navigator.clipboard?.writeText(children);
         if (typeof copia?.then !== "function")
             return;
-        void copia.then(() => { setCopiado(true); setTimeout(() => setCopiado(false), 1500); }, () => { });
+        // O "copiado" fica 2 s (o lote 117, 27/11/2026 — o Victor: "Aprovo 2 segundos"; 3 de 4 referências). Era 1,5 s. O mesmo no `aurea.js`.
+        void copia.then(() => { setCopiado(true); setTimeout(() => setCopiado(false), 2000); }, () => { });
     };
     if (filename != null)
         return _jsxs("div", { className: cx("code-block-wrap", "code-block-file", className), "data-aurea-copy-scope": true, children: [_jsx("span", { className: "sr-only", role: "status", "aria-live": "polite", children: copiado ? s.copied : "" }), _jsxs("div", { className: "code-block-head", children: [_jsx("span", { className: "code-block-title", children: filename }), _jsxs("button", { type: "button", className: cx("btn btn-secondary copy-code-text", copiado && "is-done"), "data-aurea-copy": true, "data-aurea-copy-done": s.copied, onClick: onCopy, children: [_jsx(Icon, { name: "copy", size: "sm", className: "c-copy" }), _jsx(Icon, { name: "check", size: "sm", className: "c-done" }), _jsx("span", { className: "c-copy", children: s.copy }), _jsx("span", { className: "c-done", children: s.copied })] })] }), pre] });

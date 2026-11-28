@@ -140,6 +140,17 @@ function AbrePaleta() {
       {id: "close", label: "CloseButton", icon: "squares-four", group: "Components", run: fecha},
       {id: "theme", label: "Toggle theme", icon: "moon", kbd: "⌘T", group: "Actions", run: fecha}]}));
 }
+// O item desativado (o lote 117, 27/11/2026): fica à vista, apagado, e nem o clique nem o Enter o executam.
+function AbrePaletaDesativada() {
+  const [open, setOpen] = useState(false);
+  const fecha = () => setOpen(false);
+  return h(Fragment, null,
+    h(A.Button, {leadingIcon: "magnifying-glass", onClick: () => setOpen(true)}, "Search, with a disabled item"),
+    h(A.CommandPalette, {open, onClose: fecha, items: [
+      {id: "new", label: "New document", icon: "file-text", kbd: "N", run: fecha},
+      {id: "delete", label: "Delete", icon: "trash", kbd: "Del", disabled: true, run: fecha},
+      {id: "duplicate", label: "Duplicate", icon: "copy", kbd: "D", run: fecha}]}));
+}
 // A busca grande (o site B, 0.54.0): os mesmos itens com descrição e a cor do círculo, a prévia do ativo e o pé.
 function AbrePaletaGrande() {
   const [open, setOpen] = useState(false);
@@ -861,6 +872,17 @@ export function Actions() {
 ]} preview={(item) => <p>{item.description}</p>} footer={<Badge>Web</Badge>} />`,
         render: () => h(AbrePaletaGrande),
       },
+      {
+        title: "Disabled item",
+        description: "disabled on an item keeps it in the list, dimmed, with the not-allowed cursor: neither a click nor "
+          + "Enter runs it. Use it for a command that exists but does not apply right now.",
+        code: `<CommandPalette open={open} onClose={close} items={[
+  {id: "new", label: "New document", icon: "file-text", kbd: "N", run},
+  {id: "delete", label: "Delete", icon: "trash", kbd: "Del", disabled: true, run},
+  {id: "duplicate", label: "Duplicate", icon: "copy", kbd: "D", run},
+]} />`,
+        render: () => h(AbrePaletaDesativada),
+      },
     ],
   },
   CommandPaletteShell: {
@@ -1387,6 +1409,23 @@ export function Actions() {
       {id: "2", author: "You", time: "09:14", body: "Shipping it.",
         status: {label: "sent", variant: "success"}},
     ]})),
+    examples: [
+      {
+        title: "In a scrolling box",
+        description: "When the conversation scrolls inside a box and the latest message leaves the view, a round button "
+          + "appears at the bottom and takes you back to it. It takes no space, so showing it never moves a message.",
+        code: `{/* A box that scrolls takes the keyboard: tabIndex and a name. */}
+<div role="region" aria-label="Conversation history" tabIndex={0} style={{blockSize: 280, overflow: "auto"}}>
+  <MessageList messages={messages} />
+</div>`,
+        render: () => h("div", {style: {...wide, blockSize: 280, overflow: "auto"}, "data-exemplo": "conversa-rola",
+          role: "region", "aria-label": "Conversation history", tabIndex: 0},
+          h(A.MessageList, {label: "Team conversation", messages: Array.from({length: 12}, (_, i) => ({
+            id: String(i + 1), author: i % 2 ? "You" : "Analyst", time: `09:${String(10 + i).padStart(2, "0")}`,
+            direction: i % 2 ? "outgoing" : "incoming", avatar: i % 2 ? undefined : {fallback: "AN"},
+            body: `Message ${i + 1} of the long thread.`}))})),
+      },
+    ],
   },
   NotificationCenter: {
     code: `<NotificationCenter
@@ -2274,6 +2313,30 @@ toast.promise(send(), {loading: "Sending…", success: "Sent", error: "Could not
       {title: "Created", description: "by Curator", time: "09:00"},
       {title: "Shipped", time: "14:20"},
     ]})),
+    // O lote 115 (27/11/2026): `icon`, `tone`, `trailing` e `between`, os do nativo — os mesmos exemplos da página dele.
+    examples: [
+      {
+        title: "Icons, value and the time between",
+        description: "icon puts a glyph in a round frame in place of the dot; trailing goes to the right of the title; between is written beside the line, up to the next event.",
+        code: `<Timeline items={[
+  {title: "Report sent", icon: <Icon name="upload-simple" />, time: "Oct 1", trailing: "$1,240", between: "6 days later"},
+  {title: "Approved", icon: <Icon name="check-circle" />, tone: "success", time: "Oct 7", trailing: <Badge tone="success">Paid</Badge>},
+]} />`,
+        render: () => h("div", {style: {width: "min(28rem, 100%)"}}, h(A.Timeline, {items: [
+          {title: "Report sent", icon: h(A.Icon, {name: "upload-simple"}), time: "Oct 1", trailing: "$1,240", between: "6 days later"},
+          {title: "Approved", icon: h(A.Icon, {name: "check-circle"}), tone: "success", time: "Oct 7", trailing: h(A.Badge, {tone: "success"}, "Paid")},
+        ]})),
+      },
+      {
+        title: "Tones",
+        description: "The colour of the icon's frame, with the Badge's words. Without an icon, tone does nothing.",
+        code: `<Timeline items={[
+${["neutral", "primary", "info", "success", "warning", "danger"].map((v) => `  {title: "tone ${v}", icon: <Icon name="info" />, tone: "${v}"},`).join("\n")}
+]} />`,
+        render: () => h("div", {style: {width: "fit-content", maxWidth: "min(28rem, 100%)"}}, h(A.Timeline, {items: ["neutral", "primary", "info", "success", "warning", "danger"]
+          .map((v) => ({title: `tone ${v}`, icon: h(A.Icon, {name: "info"}), tone: v}))})),
+      },
+    ],
   },
   Tooltip: {
     code: `<Tooltip content="Copy to clipboard" side="top">

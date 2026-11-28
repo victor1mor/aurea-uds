@@ -2255,7 +2255,7 @@
     },
     "AureaProviderProps": {
       "module": "theme",
-      "raw": "{ children: React.ReactNode; theme?: AureaThemeName; density?: AureaDensity; brand?: AureaBrand; defaultTheme?: AureaThemeName; defaultDensity?: AureaDensity; fontFamilies?: AureaFontFamilies; icons?: AureaIconRegistry; strings?: AureaStrings; direction?: \"ltr\" | \"rtl\"; highContrast?: boolean; textSize?: AureaTextSize; onThemeChange?: (t: AureaThemeName) => void; onDensityChange?: (d: AureaDensity) => void; }",
+      "raw": "{ children: React.ReactNode; theme?: AureaThemeName; density?: AureaDensity; brand?: AureaBrand; defaultTheme?: AureaThemeName; defaultDensity?: AureaDensity; fontFamilies?: AureaFontFamilies; icons?: AureaIconRegistry; strings?: Partial<AureaStrings>; direction?: \"ltr\" | \"rtl\"; highContrast?: boolean; textSize?: AureaTextSize; onThemeChange?: (t: AureaThemeName) => void; onDensityChange?: (d: AureaDensity) => void; }",
       "union": null
     },
     "AureaToastType": {
@@ -4294,6 +4294,21 @@
               "name": "onDismiss",
               "optional": true,
               "type": "() => void",
+              "values": null
+            },
+            {
+              "name": "appearance",
+              "optional": true,
+              "type": "\"card\" | \"soft\"",
+              "values": [
+                "card",
+                "soft"
+              ]
+            },
+            {
+              "name": "action",
+              "optional": true,
+              "type": "React.ReactNode",
               "values": null
             },
             {
@@ -7567,7 +7582,7 @@
             {
               "name": "strings",
               "optional": true,
-              "type": "AureaStrings",
+              "type": "Partial<AureaStrings>",
               "values": null
             },
             {

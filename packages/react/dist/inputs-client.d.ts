@@ -351,6 +351,10 @@ export declare function SegmentedControl({ items, value, onChange, label, fullWi
 export interface ComboboxOption {
     value: string;
     label: string;
+    /** Uma segunda linha embaixo do rótulo, apagada ("Pacote de 1 kg"). O leitor de tela a lê como descrição da opção. */
+    description?: string;
+    /** A opção aparece apagada e não se escolhe. */
+    disabled?: boolean;
 }
 export interface ComboboxOptGroup {
     label: string;

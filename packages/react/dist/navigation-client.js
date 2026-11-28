@@ -549,9 +549,15 @@ export function CommandPalette({ open, onClose, items, placeholder, label, short
     const portal = usePortalContainer();
     const campo = useRef(null);
     const executa = (item) => { onClose(); item.run(); };
+    // O DESATIVADO NÃO REAGE AO MOUSE (o lote 117 — a decisão do Victor de 27/11/2026 diz "não reage ao mouse"): o motor acende
+    // o item que o mouse cruza (o `onMouseMove` da navegação da lista), também o desativado, e o fundo do acendido aparecia.
+    // Aqui o item desativado impede esse passo do motor (`preventBaseUIHandler`, o caminho que o próprio motor oferece). O
+    // teclado continua chegando nele, com o fundo — é por onde quem usa o teclado vê onde está —, e nem o Enter nem o
+    // clique o executam.
+    const semRealceDoMouse = (e) => e.preventBaseUIHandler?.();
     const linha = (item) => grande
-        ? _jsxs(BaseAutocomplete.Item, { value: item, className: "menu-item command-item", onClick: () => executa(item), children: [_jsx("span", { className: "command-item-tile", "data-tone": item.tone, children: item.icon && _jsx(Icon, { name: item.icon }) }), _jsxs("span", { className: "command-item-text", children: [_jsx("span", { className: "command-item-label", children: item.label }), item.description && _jsx("span", { className: "command-item-description", children: item.description })] }), item.kbd ? _jsx(Kbd, { children: item.kbd }) : _jsx(Kbd, { className: "command-item-enter", "aria-hidden": "true", children: "\u21B5" })] }, item.id)
-        : _jsxs(BaseAutocomplete.Item, { value: item, className: "menu-item command-item", onClick: () => executa(item), children: [item.icon && _jsx(Icon, { name: item.icon }), _jsx("span", { className: "command-item-label", children: item.label }), item.kbd && _jsx(Kbd, { children: item.kbd })] }, item.id);
+        ? _jsxs(BaseAutocomplete.Item, { value: item, className: "menu-item command-item", disabled: item.disabled, onClick: item.disabled ? undefined : () => executa(item), onMouseMove: item.disabled ? semRealceDoMouse : undefined, children: [_jsx("span", { className: "command-item-tile", "data-tone": item.tone, children: item.icon && _jsx(Icon, { name: item.icon }) }), _jsxs("span", { className: "command-item-text", children: [_jsx("span", { className: "command-item-label", children: item.label }), item.description && _jsx("span", { className: "command-item-description", children: item.description })] }), item.kbd ? _jsx(Kbd, { children: item.kbd }) : _jsx(Kbd, { className: "command-item-enter", "aria-hidden": "true", children: "\u21B5" })] }, item.id)
+        : _jsxs(BaseAutocomplete.Item, { value: item, className: "menu-item command-item", disabled: item.disabled, onClick: item.disabled ? undefined : () => executa(item), onMouseMove: item.disabled ? semRealceDoMouse : undefined, children: [item.icon && _jsx(Icon, { name: item.icon }), _jsx("span", { className: "command-item-label", children: item.label }), item.kbd && _jsx(Kbd, { children: item.kbd })] }, item.id);
     // A JANELA É A DO MOTOR (14/10/2026), como na paleta de exemplo dele (1.6.0): `Dialog` por fora,
     // `Autocomplete` `inline` por dentro. Até aqui a moldura era uma `div` feita à mão, e o Victor achou no site
     // publicado: o clique no fundo não fechava, e depois dele o foco ia para a página — o Esc, que era escutado

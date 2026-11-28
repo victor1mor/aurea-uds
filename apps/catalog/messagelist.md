@@ -15,6 +15,19 @@ import {MessageList} from "@aurea-uds/react";
 ]} />
 ```
 
+## Examples
+
+### In a scrolling box
+
+When the conversation scrolls inside a box and the latest message leaves the view, a round button appears at the bottom and takes you back to it. It takes no space, so showing it never moves a message.
+
+```tsx
+{/* A box that scrolls takes the keyboard: tabIndex and a name. */}
+<div role="region" aria-label="Conversation history" tabIndex={0} style={{blockSize: 280, overflow: "auto"}}>
+  <MessageList messages={messages} />
+</div>
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

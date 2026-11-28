@@ -124,6 +124,14 @@ export interface AlertProps extends ViewProps {
     title?: React.ReactNode;
     icon?: AureaIcon;
     onDismiss?: () => void;
+    /**
+     * A pele (o lote 115, 27/11/2026, a mesma da web desde a 0.54.0): `card` (o cartão, o padrão) ou `soft` (o fundo da cor
+     * do estado a 14%, sem sombra, o título em negrito e o texto a 16 na cor do texto). Na marca `ember`, o cartão de sempre
+     * — como na web (a decisão do Victor de 02/11/2026: "Ember no cartão").
+     */
+    appearance?: "card" | "soft";
+    /** O botão do aviso ("Atualizar", "Desfazer"): embaixo do texto, na coluna dele, antes do X. Como na web. */
+    action?: React.ReactNode;
     children?: React.ReactNode;
 }
 /**
@@ -141,7 +149,7 @@ export interface AlertProps extends ViewProps {
  *     import InformationFilled from "@aurea-uds/native/icons/info";
  *     const ICONES = criarRegistroDeIcones({"info": InformationFilled, …});
  */
-export declare function Alert({ variant, state, title, icon, onDismiss, children, style, accessibilityLabel, accessibilityHint, ...rest }: AlertProps): React.JSX.Element;
+export declare function Alert({ variant, state, title, icon, onDismiss, appearance, action, children, style, accessibilityLabel, accessibilityHint, ...rest }: AlertProps): React.JSX.Element;
 export interface EmptyStateProps {
     /**
      * O glifo, dentro de uma moldura redonda — R-15, 02/10/2026, escolhida pelo Victor na prancha

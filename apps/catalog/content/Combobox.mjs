@@ -7,6 +7,12 @@ const components = [
   {value: "badge", label: "Badge"},
   {value: "combobox", label: "Combobox"},
 ];
+// O lote 115 (27/11/2026): a opção com explicação e a desativada, como no nativo.
+const plans = [
+  {value: "free", label: "Free", description: "One project, community support"},
+  {value: "team", label: "Team", description: "Unlimited projects, shared billing"},
+  {value: "enterprise", label: "Enterprise", description: "Talk to sales first", disabled: true},
+];
 const people = [
   {value: "messenger", label: "Messenger"},
   {value: "analyst", label: "Analyst"},
@@ -24,7 +30,7 @@ export default {
 
   features: [
     "Base UI underneath: arrows move, Enter picks, Escape closes, and focus returns where it came from.",
-    "Options are DATA ({value, label}) — no children to keep in sync with the filter.",
+    "Options are DATA ({value, label, description?, disabled?}) — no children to keep in sync with the filter.",
     "Typing filters the list; the value is still one option, never free text.",
     "An empty result says so in words, from the i18n dictionary.",
     "disabled goes on the whole control: field and both buttons, never one without the other.",
@@ -61,6 +67,22 @@ export default {
       ].join("\n"),
       render: () => h("div", {style: stack},
         h(Combobox, {label: "Component", placeholder: "Search…", items: components})),
+    },
+    {
+      title: "Options with a description",
+      description: "description puts a second, quieter line under the label, and the screen reader hears it as the option's "
+        + "description; the filter still looks only at the label. disabled shows an option that cannot be picked.",
+      code: [
+        "const plans = [",
+        '  {value: "free", label: "Free", description: "One project, community support"},',
+        '  {value: "team", label: "Team", description: "Unlimited projects, shared billing"},',
+        '  {value: "enterprise", label: "Enterprise", description: "Talk to sales first", disabled: true},',
+        "];",
+        "",
+        '<Combobox label="Plan" placeholder="Search…" items={plans} />',
+      ].join("\n"),
+      render: () => h("div", {style: stack},
+        h(Combobox, {label: "Plan", placeholder: "Search…", items: plans})),
     },
     {
       title: "Inside a Field",

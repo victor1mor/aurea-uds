@@ -152,8 +152,12 @@ export type AureaProviderProps = {
    *
    * A tabela é pequena de propósito, e o `strings.ts` escreve por quê: ela tem o tamanho do que
    * o alvo nativo desenha, não das 200 chaves de 124 componentes da web.
+   *
+   * Basta passar as frases que mudam (UDS-A2b, o lote 117, 27/11/2026 — o Victor: "Sim, antes da 1.0"): as que faltam
+   * vêm do padrão, como na web. Antes era a tabela inteira, e toda frase nova numa versão menor quebrava o app que
+   * passava as frases.
    */
-  strings?: AureaStrings;
+  strings?: Partial<AureaStrings>;
   /**
    * Para que lado a escrita corre (13/11/2026) — o mesmo nome e os mesmos valores do `AureaProvider` da web. Ausente, vale
    * o do aparelho (`I18nManager.isRTL`), como na referência do celular. O sistema já vira a linha inteira na escrita da
@@ -219,7 +223,7 @@ export function AureaProvider({
     // As frases NÃO dependem do par (tema, densidade), mas moram no mesmo `useMemo` de propósito:
     // um contexto a mais só se paga quando ele muda em outra hora, e este muda junto — é a mesma
     // conta que o cabeçalho deste arquivo já fez para os dois contextos que viraram um.
-    strings: strings ?? defaultStrings,
+    strings: strings ? {...defaultStrings, ...strings} : defaultStrings,
     fontes: fontFamilies,
     marca: brand ?? null,
     raiz: null,

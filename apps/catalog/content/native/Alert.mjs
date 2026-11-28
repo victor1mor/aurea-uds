@@ -21,6 +21,8 @@ export default {
     state: "One of the seven universal states. It picks the variant (waiting is info, the rest warning) and writes the sentence; children replace the sentence.",
     icon: "Overrides the glyph. By default it follows the variant, in the filled form; the glyph has to be in the app's icon registry.",
     onDismiss: "Shows the X (the CloseButton, named \"Close\") and is called when it is pressed. The Alert does not hide itself.",
+    appearance: "card is the card surface, the default. soft fills the alert with the state colour at 14%, with no shadow, the title in bold and the body at 16 in the text colour. On the ember brand it stays a card, as on the web.",
+    action: "The alert's button (\"Upgrade\", \"Undo\"): below the text, in its column. It stays outside the group the screen reader reads as one, so it keeps its own stop.",
   },
   examples: [
     {
@@ -32,6 +34,18 @@ export default {
       valores: ["neutral", "info", "success", "warning", "danger"], estilo: largura,
       codigo: v => `<Alert variant="${v}" title="variant ${v}">The message, in context.</Alert>`,
       peca: v => h(Alert, {variant: v, title: `variant ${v}`}, "The message, in context.")}),
+    cada({titulo: "Appearance", descricao: "card is the card surface, the default. soft fills the alert with the state colour at 14%, with no shadow and the body at 16 in the text colour.",
+      valores: ["card", "soft"], estilo: largura,
+      codigo: v => `<Alert variant="info" appearance="${v}" title="appearance ${v}">The message, in context.</Alert>`,
+      peca: v => h(Alert, {variant: "info", appearance: v, title: `appearance ${v}`}, "The message, in context.")}),
+    {
+      title: "With an action",
+      description: "action puts the alert's button below the text, in the same column, before the X.",
+      code: `<Alert title="You have 2 credits left" action={<Button appearance="outline" size="sm">Upgrade</Button>}>
+  Get a paid plan for more credits
+</Alert>`,
+      render: () => h("div", {style: largura}, h(Alert, {title: "You have 2 credits left", action: h(Button, {appearance: "outline", size: "sm"}, "Upgrade")}, "Get a paid plan for more credits")),
+    },
     cada({titulo: "Universal states", descricao: "A state picks the variant and writes the sentence: waiting is info, the rest is a warning.",
       valores: ESTADOS, estilo: largura,
       codigo: v => `<Alert state="${v}" />`,

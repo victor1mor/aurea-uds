@@ -65,7 +65,7 @@
       "name": "controls",
       "type": "boolean",
       "default": "true",
-      "description": "Previous/next arrows. They disable themselves at each end, measured from the scroll position — not from the slide index, which would be wrong whenever more than one slide fits."
+      "description": "Previous/next arrows, beside the slide and centred on its height, with the dots below. They disable themselves at each end, measured from the scroll position — not from the slide index, which would be wrong whenever more than one slide fits."
     },
     {
       "name": "indicators",

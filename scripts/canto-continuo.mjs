@@ -54,6 +54,10 @@ function copia(seletor, corpo) {
     return i < 0 ? null : {prop: d.slice(0, i).trim(), valor: d.slice(i + 1).trim()};
   }).filter((d) => d && RAIO.test(d.prop));
   if (!decls.length) return "";
+  // A REGRA QUE JÁ DIZ A PRÓPRIA FORMA fica como está (o lote 117, 27/11/2026): quem escreve `corner-shape` ao lado do raio
+  // decidiu o canto — é o caso do segmento que quebra a linha (`.segmented-wrap`), que numa linha só é a cápsula de 22 e
+  // não pode virar o canto de superfície de 33.
+  if (dividir(corpo, ";").some((d) => d.slice(0, d.indexOf(":")).trim() === "corner-shape")) return "";
   const valores = decls.map((d) => d.valor.replace(/\s*!important\s*$/, ""));
   if (valores.every((v) => /^(0(px)?|none|unset|initial|revert)$/.test(v))) return "";
   const forte = decls.some((d) => /!important\s*$/.test(d.valor)) ? " !important" : "";

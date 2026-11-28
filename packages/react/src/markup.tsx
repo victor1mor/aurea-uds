@@ -433,7 +433,29 @@ export function DataList({items}:{items:Array<{term:ReactNode;value:ReactNode}>}
 // `default` (o ponto amarelo cheio, o padrão), `ring` (o ponto vazado), `latest` (só o último em destaque), `time` (a hora
 // numa coluna à esquerda) e `contrast` (os pontos na cor do texto). Vai como `data-timeline-style`.
 export type TimelineVariant="default"|"ring"|"latest"|"time"|"contrast";
-export function Timeline({items,variant}:{items:Array<{title:ReactNode;description?:ReactNode;time?:ReactNode}>;variant?:TimelineVariant}){return <ol className="timeline" data-timeline-style={variant}>{items.map((i,n)=><li key={n}><span className="timeline-dot"/><div><strong>{i.title}</strong>{i.description&&<p>{i.description}</p>}{i.time&&<small className="muted">{i.time}</small>}</div></li>)}</ol>}
+// `icon`, `tone`, `trailing` e `between` no item (o lote 115, 27/11/2026 — a paridade com o nativo, a regra do Victor de
+// 24/11/2026; no nativo desde a R-18, 02/10/2026, `data.tsx`): o glifo numa moldura redonda de 40 no lugar do ponto, com o
+// glifo de 20; o tom da moldura com o vocabulário do `Badge`; o que vai à direita do título; e o que aconteceu ENTRE este
+// item e o próximo, ao lado da linha (no último não aparece). Basta um item com `icon` para a coluna do marcador ter 40 —
+// os pontos ficam no centro dela, e o trilho também.
+// O `icon` é NÓ (um `<Icon name="check"/>`), não `IconName`, pela mesma razão do `leading` do `Badge`: este arquivo não
+// importa o `Icon` (ADR-0026). No nativo é o `AureaIcon`; o NOME da prop é o mesmo.
+export type TimelineTone="neutral"|"primary"|"info"|"success"|"warning"|"danger";
+export interface TimelineItem{title:ReactNode;description?:ReactNode;time?:ReactNode;
+  /** O glifo numa moldura redonda de 40, no lugar do ponto (um `<Icon name="check"/>`). */
+  icon?:ReactNode;
+  /** A cor da moldura, com o vocabulário do `Badge`. Sem `icon`, não faz nada. Padrão: `neutral`. */
+  tone?:TimelineTone;
+  /** O que vai à DIREITA do título: um valor, um selo. */
+  trailing?:ReactNode;
+  /** O que aconteceu entre este item e o próximo ("6 dias depois"), ao lado da linha. No último item não aparece. */
+  between?:ReactNode}
+export function Timeline({items,variant}:{items:TimelineItem[];variant?:TimelineVariant}){const comMoldura=items.some(i=>i.icon!=null);
+  return <ol className={cx("timeline",comMoldura&&"timeline-has-icons")} data-timeline-style={variant}>{items.map((i,n)=><li key={n}>
+    {i.icon!=null?<span className="timeline-icon" data-tone={i.tone&&i.tone!=="neutral"?i.tone:undefined} aria-hidden="true">{i.icon}</span>:<span className="timeline-dot"/>}
+    <div>{i.trailing!=null?<span className="timeline-title-row"><strong>{i.title}</strong><span className="timeline-trailing">{i.trailing}</span></span>:<strong>{i.title}</strong>}
+      {i.description&&<p>{i.description}</p>}{i.time&&<small className="muted">{i.time}</small>}
+      {i.between!=null&&n<items.length-1&&<small className="timeline-between">{i.between}</small>}</div></li>)}</ol>}
 // Prose (item L5): UMA LINHA, e é para ser mesmo — quem transforma Markdown em elementos é o
 // consumidor. A trava do item é no CSS, escopada em `.prose`, e há prova dela no `skin.spec`.
 // Segurança, porque é o caminho de uso mais provável: quem entrega HTML de terceiro por

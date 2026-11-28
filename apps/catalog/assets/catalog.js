@@ -89,7 +89,8 @@
     function done() {
       trigger.classList.add("is-done");
       anunciar(trigger.getAttribute("data-aurea-copy-done") || TEXTO.copied);
-      setTimeout(function () { trigger.classList.remove("is-done"); }, 1500);
+      // 2 s (o lote 117, 27/11/2026 — o Victor: "Aprovo 2 segundos"). Era 1,5 s. O mesmo no `code-client.tsx`.
+      setTimeout(function () { trigger.classList.remove("is-done"); }, 2000);
     }
     function select() {
       var range = document.createRange();

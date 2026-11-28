@@ -36,8 +36,9 @@ const escolhida = () => {
 // Desde 03/10/2026 o círculo é um DISCO dentro do item, em todos os itens (a barra parada,
 // `native-bottomnav-parada.test.tsx`): o item não tem mais medida própria quando escolhido, e o
 // disco não é peça flexível — ele mede 56 por `width`, sem `flex` nenhum para o navegador ler mal.
+// ~~56 por `width`~~ → no mínimo 56 (`minWidth`), do tamanho do nome (E15, o lote 117, 27/11/2026). Continua sem `flex`.
 const discos = () => __instancias("View").map((p) => StyleSheet.flatten(p.style) ?? {})
-  .filter((e) => e.width === 56 && e.borderRadius === t.size.radiusFull);
+  .filter((e) => e.minWidth === 56 && e.borderRadius === t.size.radiusFull);
 
 describe("BottomNav circle-bold · o círculo não encolhe no navegador", () => {
   it.each(["full", "content"] as const)("largura %s: um disco de 56 em cada item, amarelo só no escolhido", (width) => {
@@ -51,10 +52,13 @@ describe("BottomNav circle-bold · o círculo não encolhe no navegador", () => 
     expect(e.flex === undefined || e.flex > 0 ? "ok" : `flex: ${e.flex}`).toBe("ok");
   });
   // O segundo defeito da 0.16.1: no `content` o recheio dos lados era `space3`, e dentro dos 56
-  // sobravam 32 para o rótulo — "Avisos" (35) saía "Avi…". O recheio agora é do disco: `space1`.
-  it.each(["full", "content"] as const)("largura %s: o recheio dos lados do disco é space1, e o rótulo cabe", (width) => {
+  // sobravam 32 para o rótulo — "Avisos" (35) saía "Avi…". O recheio agora é do disco: ~~`space1`~~ → `space2`, com o disco
+  // que alarga até o nome caber (E15, o lote 117).
+  it.each(["full", "content"] as const)("largura %s: o recheio dos lados do disco é space2, e o rótulo cabe", (width) => {
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="b" indicator="circle-bold" width={width} /></AureaProvider>);
-    for (const x of discos()) expect(x.paddingHorizontal).toBe(t.size.space1);
+    const d = discos();
+    expect(d).toHaveLength(3);
+    for (const x of d) expect(x.paddingHorizontal).toBe(t.size.space2);
     expect(escolhida().paddingHorizontal).toBe(0);
   });
 });

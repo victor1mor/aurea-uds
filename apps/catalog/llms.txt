@@ -465,6 +465,7 @@ Every page below is Markdown. The whole documentation in one file: https://aurea
 - [Observability · ops](https://aureauds.dev/recipe-observability-ops.md)
 
 ## Releases
+- [v0.84.0](https://aureauds.dev/release-v0-84-0.md): One-line list items are capsules again; native Alert gets soft and action; Combobox options take a description and can be disabled; Timeline items take an icon and a tone; disabled command palette items; a jump-to-latest button in MessageList; carousel arrows beside the slide; the bottom nav disc fits its label; right-to-left rules work with any language.
 - [v0.83.1](https://aureauds.dev/release-v0-83-1.md): A disabled Collapsible stays reachable by keyboard again, the tests run on Base UI 1.9.0, and the packages declare their module type.
 - [v0.83.0](https://aureauds.dev/release-v0-83-0.md): DataGrid runs on TanStack Table 9; nothing disappears in Windows high contrast; Shift-click checks boxes; tabs keep an 8px gap; the sidebar brand and user sit on the icon rail.
 - [v0.82.0](https://aureauds.dev/release-v0-82-0.md): Continuous corners on the web, the collapse button in the top bar, no empty sidebar, bash commands highlighted, and how to keep a currency with its number.
