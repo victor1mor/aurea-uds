@@ -22,7 +22,7 @@
 import * as React from "react";
 import {Animated, Easing, View, type StyleProp, type ViewProps, type ViewStyle} from "react-native";
 import {Button, CloseButton} from "./actions.js";
-import {canto, criarFolha, estadoAcessivel, letraDoToken} from "./estilos.js";
+import {canto, comOpacidade, criarFolha, estadoAcessivel, letraDoToken, misturaNoOklab} from "./estilos.js";
 import {Icon, type IconName, type AureaIcon} from "./icon.js";
 import {IconeEmMoldura} from "./moldura.js";
 import {AnelQueGira} from "./giro.js";
@@ -76,6 +76,17 @@ const folha = criarFolha((t: AureaTokens) => ({
     flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
   },
   corpoDoAlerta: {flex: 1, gap: 2},
+  // `appearance="soft"` (o lote 115, 27/11/2026 — a pele da web desde a 0.54.0): sem a sombra do cartão; o fundo é a cor do
+  // estado a 14%, pintado no componente (depende do tom).
+  alertaSuave: {backgroundColor: "transparent", boxShadow: []},
+  // Com `action`, a moldura quebra a linha: o botão desce para baixo do texto, na coluna dele (o recuo é o ícone + o vão),
+  // como a web no celular. Ele fica FORA do grupo de leitura — coisa tocável dentro de um elemento `accessible` some para
+  // o VoiceOver (o check 43).
+  alertaComAcao: {flexWrap: "wrap"},
+  acaoDoAlerta: {
+    width: "100%", flexDirection: "row", alignItems: "center", gap: t.size.space2,
+    paddingLeft: t.size.iconMd + t.size.space3,
+  },
 
   // ── EmptyState ─────────────────────────────────────────────────────────────────────────────
   vazio: {
@@ -380,6 +391,14 @@ export interface AlertProps extends ViewProps {
   title?: React.ReactNode;
   icon?: AureaIcon;
   onDismiss?: () => void;
+  /**
+   * A pele (o lote 115, 27/11/2026, a mesma da web desde a 0.54.0): `card` (o cartão, o padrão) ou `soft` (o fundo da cor
+   * do estado a 14%, sem sombra, o título em negrito e o texto a 16 na cor do texto). Na marca `ember`, o cartão de sempre
+   * — como na web (a decisão do Victor de 02/11/2026: "Ember no cartão").
+   */
+  appearance?: "card" | "soft";
+  /** O botão do aviso ("Atualizar", "Desfazer"): embaixo do texto, na coluna dele, antes do X. Como na web. */
+  action?: React.ReactNode;
   children?: React.ReactNode;
 }
 
@@ -399,7 +418,7 @@ export interface AlertProps extends ViewProps {
  *     const ICONES = criarRegistroDeIcones({"info": InformationFilled, …});
  */
 export function Alert({
-  variant, state, title, icon, onDismiss, children, style,
+  variant, state, title, icon, onDismiss, appearance, action, children, style,
   // 🔴 ESTES DOIS SAEM DO RESTO DE PROPÓSITO, e é consequência do conserto abaixo: a moldura
   // deixou de ser elemento de acessibilidade, e rótulo em quem não é elemento **não faz nada no
   // iOS**. Eles pousam no GRUPO, que é quem o leitor de tela alcança.
@@ -415,6 +434,10 @@ export function Alert({
     : v === "danger" ? (t.color.danger400 ?? t.color.destructive)
     : v === "neutral" ? t.color.foreground
     : (t.color.info400 ?? t.color.info);
+  // A pele suave (a regra `.alert.alert-soft` da web): o tom a 14% no fundo; o título com 25% da cor do texto (puro, o
+  // azul no claro media 4,07:1 no fundo do tom); o corpo na cor do texto, a 16. Fora da Ember.
+  const suave = appearance === "soft" && t.brand !== "ember";
+  const corDoTituloSuave = suave && v !== "neutral" ? misturaNoOklab(corDoIcone, t.color.foreground, 0.75) : undefined;
 
   return (
     // 🔴 A MOLDURA NÃO É MAIS `accessible` — defeito achado em 17/09/2026 varrendo o pacote
@@ -435,7 +458,8 @@ export function Alert({
       // Android: a região viva é o que faz o leitor falar sem foco, e ela cobre a moldura
       // inteira de propósito — o que muda é o conteúdo, e o "X" some junto quando o aviso fecha.
       accessibilityLiveRegion={v === "danger" ? "assertive" : "polite"}
-      style={[s.alerta, style]}
+      style={[s.alerta, suave && [s.alertaSuave, {backgroundColor: comOpacidade(corDoIcone, 0.14)}],
+        action != null && s.alertaComAcao, style]}
       {...rest}>
       <View
         accessible
@@ -463,16 +487,19 @@ export function Alert({
           {/* 0.32.0: o título é 16 em peso médio, na entrelinha do token (24), e na cor do estado
               (o mesmo par `-400` do ícone); a descrição é 14 (o `xs` do nativo). Era 16 em
               seminegrito, na cor do texto, e a descrição também 16. */}
-          {title != null && <Text size="base" weight={500} tone={v === "neutral" ? undefined : v}>{title}</Text>}
+          {title != null && (suave
+            ? <Text size="base" weight={700} style={corDoTituloSuave ? {color: corDoTituloSuave} : undefined}>{title}</Text>
+            : <Text size="base" weight={500} tone={v === "neutral" ? undefined : v}>{title}</Text>)}
           {children != null
-            ? (typeof children === "string" ? <Text size="xs" tone="muted">{children}</Text> : children)
-            : state ? <Text size="xs" tone="muted">{strings.universalState[state]}</Text> : null}
+            ? (typeof children === "string" ? <Text size={suave ? "base" : "xs"} tone={suave ? undefined : "muted"}>{children}</Text> : children)
+            : state ? <Text size={suave ? "base" : "xs"} tone={suave ? undefined : "muted"}>{strings.universalState[state]}</Text> : null}
         </View>
       </View>
       {/* ⚠ Era `label="Close"` literal, e ficava em inglês num app em português — a tabela de
           frases não tinha `close` até o Lote 5 criá-la para o `Dialog`. Corrigido junto.
           0.32.0: o X é o `CloseButton` (o círculo neutro de 40), como no aviso da referência. */}
       {onDismiss ? <CloseButton label={strings.close} onPress={onDismiss} /> : null}
+      {action != null ? <View style={s.acaoDoAlerta}>{action}</View> : null}
     </View>
   );
 }

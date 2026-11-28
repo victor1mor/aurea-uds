@@ -1,7 +1,7 @@
 {
   "name": "aurea-uds-workspace",
   "private": true,
-  "version": "0.83.0",
+  "version": "0.84.0",
   "description": "Aurea Universal Design System — o repositório dos sete pacotes @aurea-uds/*.",
   "repository": {
     "type": "git",
@@ -38,7 +38,7 @@
     "catalog": "python -m http.server 8081 -d apps/catalog"
   },
   "devDependencies": {
-    "@base-ui/react": "1.6.0",
+    "@base-ui/react": "1.9.0",
     "@codemirror/view": "6.43.6",
     "@playwright/test": "1.61.1",
     "@testing-library/jest-dom": "6.9.1",

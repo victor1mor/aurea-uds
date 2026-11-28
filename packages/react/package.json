@@ -1,6 +1,6 @@
 {
   "name": "@aurea-uds/react",
-  "version": "0.83.0",
+  "version": "0.84.0",
   "description": "The Aurea UDS React components. Import @aurea-uds/fonts/css and @aurea-uds/core/css with them.",
   "keywords": [
     "aurea",
@@ -130,7 +130,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@base-ui/react": "^1.6.0"
+    "@base-ui/react": "^1.9.0"
   },
   "peerDependencies": {
     "@codemirror/language": "^6.12.4",

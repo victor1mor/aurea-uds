@@ -215,12 +215,22 @@ export declare function DataList({ items }: {
     }>;
 }): React.JSX.Element;
 export type TimelineVariant = "default" | "ring" | "latest" | "time" | "contrast";
+export type TimelineTone = "neutral" | "primary" | "info" | "success" | "warning" | "danger";
+export interface TimelineItem {
+    title: ReactNode;
+    description?: ReactNode;
+    time?: ReactNode;
+    /** O glifo numa moldura redonda de 40, no lugar do ponto (um `<Icon name="check"/>`). */
+    icon?: ReactNode;
+    /** A cor da moldura, com o vocabulário do `Badge`. Sem `icon`, não faz nada. Padrão: `neutral`. */
+    tone?: TimelineTone;
+    /** O que vai à DIREITA do título: um valor, um selo. */
+    trailing?: ReactNode;
+    /** O que aconteceu entre este item e o próximo ("6 dias depois"), ao lado da linha. No último item não aparece. */
+    between?: ReactNode;
+}
 export declare function Timeline({ items, variant }: {
-    items: Array<{
-        title: ReactNode;
-        description?: ReactNode;
-        time?: ReactNode;
-    }>;
+    items: TimelineItem[];
     variant?: TimelineVariant;
 }): React.JSX.Element;
 export declare function Prose({ className, ...props }: HTMLAttributes<HTMLDivElement> & RefAttributes<HTMLDivElement>): React.JSX.Element;

@@ -17,6 +17,29 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O site: a lateral (o lote 118, 27/11/2026)
+
+- Só o site; nenhum pacote muda. Cada conserto visto funcionando e aprovado pelo Victor na página de verdade.
+- **O filtro da lateral** (Patterns, Blocks, Releases): fora da página da lista, o link leva à lista já filtrada
+  (`./patterns.html#filtro/alert`) — antes só mudava o fim do endereço, e nada filtrava.
+- **As áreas do site ficam no topo** (*"os itens do topo devem continuar no topo e não ir pra baixo"*): entre 1025 e 1120
+  elas desciam para dentro da lateral; agora, onde as abas não cabem, o topo mostra o botão Menu em toda página, como no
+  Início.
+- **"Tudo alinhado"**: a cápsula do item atual começa onde a chave Web | Native e os outros itens começam (passava 14 e saía
+  2 do painel); troca o *"Fundo cresce p/ esquerda"* de 19/11/2026.
+- **A lateral de Patterns acompanha a página**: um "All patterns" só no alto; o campo de filtro da lateral sai (a busca do
+  meio da lista acha também pelo nome do componente); cada componente com o ícone da ficha na bolinha da cor da família; na
+  página de um padrão, o componente aberto com os padrões dele e o atual marcado; a trilha "Patterns / Alert" leva de volta.
+- Provas: `tests/visual/site-navegacao.spec.ts` e `tests/visual/lote-089.spec.ts`, cada uma reprovada com o site de antes.
+
+### O registro da 0.83.0 (27/11/2026)
+
+- **A 0.83.0 publicada em 27/11/2026, entre 08:15 e 08:16** (Brasília, medido no npm), pela publicação em etapa, da
+  junção do pedido #171 (`69e8c6a6`). O `released-surface.json` regravado desse commit: nenhum nome novo nem frase nova
+  (162 componentes, como na 0.82.0). O CHANGELOG ([0.83.0] publicada) e o CLAUDE.md (a linha da tabela "O que já saiu" e
+  o item 81 do "O próximo passo"); a release `v0.83.0` no GitHub já existia.
+- Não muda nenhum pacote publicado.
+
 ### O registro da 0.81.1 e da 0.82.0 (26/11/2026)
 
 - **A 0.81.1 publicada em 25/11/2026, entre 19:21 e 19:22** (Brasília, medido no npm), pela publicação em etapa, da
@@ -451,7 +474,142 @@ como deveria funcionar"*.
 
 ---
 
+## [0.84.0] — 2026-11-27
+
+**Dois lotes numa versão só** (o Victor, 27/11/2026: *"Sim, num pedido"*): o 117 e o 115, cada um aprovado por ele na
+bancada viva.
+
+**O lote 117: onze itens que o Victor aprovou em 27/11/2026**, seis das medições do lote 113 e da AUD-1 (*"Aprovo a
+cápsula"*, *"Aprovo o desativado"*, *"O disco alarga"*, *"A folha sobe"*, *"Antes da 1.0"*, *"Sim, antes da 1.0"*) e cinco
+da AUD-1, grupo 1 (*"Aprovo a barra"*, *"Aprovo a área"*, *"Aprovo 2 segundos"*, *"aprovo todos"*). Tudo aprovado na
+bancada viva, a de hoje ao lado da nova, Gold e Ember, claro e escuro (*"Pode, aprovado"*).
+
+### ⚠ Pode quebrar a compilação
+
+- **Frase nova no `AureaStrings` da web: `chatJumpToLatest`** (o botão "ir para a última" da `MessageList`). Quem
+  passa a tabela INTEIRA de frases com o tipo `AureaStrings` precisa acrescentar a frase; quem passa só parte
+  (`Partial<AureaStrings>`, o que o `AureaProvider` da web aceita) não muda nada.
+
+### Adicionado
+
+- **`disabled` no item da `CommandPalette`** (`CommandItem`, só web): o item fica à vista, apagado, com o cursor de
+  proibido (a aparência do item desativado de todo menu); nem o clique nem o Enter o executam, e o mouse não o acende. A
+  seta do teclado para nele, como no item indisponível da `NavList` e na opção desativada do `Combobox`. Exemplo novo na
+  página da peça.
+- **O botão "ir para a última" na `MessageList`** (só web): redondo, na cor do cartão com a sombra das superfícies que
+  flutuam, no meio do pé da caixa que rola; aparece só quando a última mensagem sai da caixa por baixo, e leva até ela (de
+  uma vez, para quem pede menos movimento). Não ocupa lugar: aparecer e sumir não mexe nenhuma mensagem. Com a página
+  inteira rolando, não aparece. Exemplo novo na página da peça.
+- **O `AureaProvider` do nativo aceita só parte das frases** (`strings?: Partial<AureaStrings>`, UDS-A2b), como o da web:
+  as que faltam vêm do padrão. Uma frase nova numa versão menor deixa de quebrar o app que passa as frases.
+
+### Mudado
+
+- **O item de uma linha das listas volta à cápsula**: `.menu-item` (menu, busca de comandos, `Combobox`), `.list-box-item`,
+  `.sidebar-item` e `.nav-list-row`. Desde a 0.82.0 o canto contínuo lia o raio deles (`--radius-card` − `--space-1`) como
+  canto de superfície (27, na forma do iPhone). A linha ALTA, com a explicação embaixo, fica como está; a lateral do site,
+  que já pedia cápsula, deixa de herdar a forma do iPhone.
+- **O `SegmentedControl` com `wrap` volta ao 22 redondo**: numa linha só (44 de altura) é a cápsula exata; desde a 0.82.0 o
+  canto contínuo o fazia 33 com a ponta do iPhone, um retângulo (o seletor de tamanho da página do Button, o de densidade
+  da página Density). O conversor do canto contínuo (`scripts/canto-continuo.mjs`) passa a deixar em paz a regra que já
+  escreve `corner-shape`, e o `.segmented-wrap` escreve `corner-shape:round`. Em duas linhas, como até a 0.81.1.
+- **O disco do `BottomNav` `circle-bold` alarga com o nome** (E15, web e nativo): no mínimo 56, com `space2` de cada lado,
+  sem passar da aba. Com 56 fixos, "Relatórios" saía "Relat…". A barra continua parada ao trocar de aba.
+- **A `BottomSheet` do nativo sobe com o teclado**: a folha fica dentro do `KeyboardAvoiding` da Aurea, como a folha do
+  `Combobox`. O teste no aparelho é da sessão do app.
+- **A barra de menus (`Menubar`)**: o gatilho aberto fica com o fundo do passar o mouse e a letra na cor do texto (era o
+  `--secondary` com a letra no amarelo, ou no laranja da Ember, contra a ADR-0083); o desativado fica apagado, com o cursor
+  de proibido e sem fundo ao passar o mouse (não mudava nada na tela).
+- **A área de soltar do `FileInput`**: o ícone parado fica apagado (era o amarelo); arrastando um arquivo por cima, o fundo
+  fica na cor da marca a 16%, sem traço, e o ícone na cor do texto. Só web.
+- **O "copiado" do `CodeBlock` fica 2 segundos** (era 1,5), no React e no `aurea.js`. O "Link copiado" do `Button share`
+  continua 1,5.
+- **As setas do `Carousel` ficam nos lados da foto**, no meio da altura dela; os pontos continuam embaixo. Sem pontos, a
+  seta fica no meio do carrossel.
+
+### Consertado
+
+- **D-01 — as regras da direita para a esquerda com qualquer idioma**: as seis regras com `:dir(rtl)` do `aurea.css` (o
+  selo preso, a seta do `.select`, a chave ligada) levam a reserva `[dir="rtl"]`, como a da tabela. O Vite 8 reescreve
+  `:dir(rtl)` como uma lista de idiomas, e numa página da direita para a esquerda marcada com outro idioma o selo entrava na
+  caixa, a seta sumia atrás do texto e a bolinha da chave saía para fora. Nada muda onde já estava certo. Quem cobra:
+  `tests/visual/rtl-reserva.spec.ts`, com o CSS passado pelo `vite build`.
+
+### O lote 115 — a paridade web × nativo
+
+**O lote 115, a paridade web × nativo, primeira parte** — a regra do Victor de 24/11/2026 (o que só um alvo tem vai ao outro,
+antes da 1.0). O inventário tem uns 44 itens; este lote leva as três peças que mais aparecem nos apps. Aprovadas na bancada
+viva, os dois alvos lado a lado, claro e escuro, Gold e Ember (*"Aprovo as três"*, 27/11/2026). Só acrescenta: sem as
+props novas, cada peça sai igual a antes.
+
+#### Adicionado
+
+- **`Alert` do nativo: `appearance="soft"` e `action`**, os da web (a 0.54.0 e a 0.33.0). O `soft` pinta o fundo com a
+  cor do estado a 14%, sem a sombra do cartão, o título em negrito (o tom com 25% da cor do texto) e o corpo a 16 na cor do
+  texto. Na Ember, o cartão de sempre, como na web (o Victor, 02/11/2026: *"Ember no cartão"*). O `action` desce para
+  baixo do texto, na coluna dele, e fica fora do grupo que o leitor de tela lê como um (no iPhone, coisa tocável dentro
+  dele some).
+- **`Combobox` e `MultiCombobox` da web: `description` e `disabled` na opção** (`ComboboxOption`), os do nativo (a R-14). A
+  explicação é a segunda linha do item de menu com explicação (`.menu-item-description`); o nome vai por
+  `aria-labelledby` e a explicação por `aria-describedby`. A busca continua olhando só o `label`.
+- **`Timeline` da web: `icon`, `tone`, `trailing` e `between` no item**, os do nativo (a R-18): a moldura redonda de 40
+  com o glifo de 20 no lugar do ponto, o tom com o vocabulário do `Badge` (`neutral`, `primary`, `info`, `success`,
+  `warning`, `danger`), o que vai à direita do título e o que aconteceu entre um item e o próximo (no último não aparece).
+  Com uma moldura na lista, a coluna do marcador tem 40 em todo item, e o trilho vai ao centro dela, também no `time`. O
+  `icon` da web é NÓ (um `<Icon name="check"/>`), como o `leading` do `Badge`: a `Timeline` é marcação de servidor e não
+  importa o `Icon`. Tipos novos: `TimelineItem`, `TimelineTone`.
+- Os exemplos no site: "Appearance" e "With an action" na página do `Alert` do nativo; "Options with a description" na do
+  `Combobox`; "Icons, value and the time between" e "Tones" na da `Timeline`.
+
+### As provas
+
+`tests/visual/lote117-listas.spec.ts`, `tests/visual/lote117-pecas.spec.ts`, `tests/visual/rtl-reserva.spec.ts`,
+`tests/unit/lote117-paleta-desativado.test.tsx`, `tests/unit/lote117-copiado.test.tsx` e
+`tests/unit/native-lote117.test.tsx` — cada uma reprovada contra o código de antes. O teste antigo do C-09
+(`consumidores-lote1`) passa a cobrar a cápsula na linha de uma linha e a conta na linha alta.
+
+## [0.83.1] — 2026-11-27
+
+**A distribuição** — o lote 112, três dos quatro itens que o Victor aprovou no bloco de decisões de 24/11/2026 ("A
+distribuição" e o SOCK-03). Nenhuma peça muda na tela. O quarto, o CSS compactado, ficou para o lote seguinte (abaixo).
+
+### Corrigido
+
+- **O `Collapsible` desativado volta a ficar no Tab** (web). A ficha promete que o gatilho desativado continua alcançável
+  pelo teclado e não abre. Até a Base UI 1.6.0 era assim; desde a 1.9.0 — a que os apps já recebiam pelo `^1.6.0` — o
+  motor põe o `disabled` nativo no botão, que sai do Tab e não recebe foco. O gatilho agora diz `aria-disabled="true"`,
+  recebe o foco e não abre. A aparência é a mesma (o `data-disabled` não mudou). Prova:
+  `tests/unit/collapsible-desativado-no-tab.test.tsx`, que reprova sem o conserto.
+
+### Mudado
+
+- **As provas rodam na Base UI 1.9.0**, a que os apps recebem, e o `@aurea-uds/react` passa a pedir `^1.9.0` (era
+  `^1.6.0`). Conferido em 27/11/2026: a 1.9.0 (09/10/2026) é a última, sem alerta de segurança na `@base-ui/react` nem na
+  `@base-ui/utils`; as notas da 1.7.0, da 1.8.0 e da 1.9.0 não declaram quebra. O que mudou na marcação das páginas,
+  medido nas 699 que mudaram: os números de identificação gerados; os gatilhos de menu ganham `aria-expanded="false"`; o
+  campo do `Combobox` perde o `type="text"` (é o padrão do navegador); a entrada escondida do motor troca a margem de
+  -1 para 0 (continua recortada, fora da tela). Só o `Collapsible` mudava de comportamento (acima).
+- **O site sai comprimido.** O `no-transform` dos cabeçalhos do site impedia a Cloudflare de comprimir (a documentação
+  dela diz isso), e tudo saía cheio: medido em aureauds.dev, a folha com 1,44 MB e o script das caixas vivas com 1,86 MB.
+  Os arquivos de apoio (`/assets/*`: CSS, JS, desenhos) perdem o `no-transform`; as páginas ficam com ele, porque é o que
+  barra a injeção do script de estatística da Cloudflare, que só acontece em HTML. Prova: `tests/unit/site-comprimido.test.tsx`.
+- **SOCK-03, o tipo de módulo declarado:** `@aurea-uds/core` e `@aurea-uds/tokens` com `"type": "module"` (o
+  `aurea.tokens.native.js` já era escrito com `export`, e sem o campo o Node o lia como CommonJS); `@aurea-uds/fonts` com
+  `"type": "commonjs"` (o `fonts.native.js` é escrito com `require`, que só o empacotador do aparelho lê, e fica assim para
+  não quebrar quem o carrega por `require`). E o `@aurea-uds/core/js` ganha tipos (`dist/aurea.js.d.ts`), como o `./css`.
+
+### Fica para o lote seguinte
+
+- **O CSS compactado.** Medido com a lightningcss 1.33.0 (a última, sem alerta): a folha do core cai de 748 KB para
+  418 KB (comprimida, 181 → 54 KB), mas a ferramenta não deixa a folha igual — sem navegador-alvo, ela APAGA os 6
+  `-webkit-backdrop-filter` (o desfoque do topo no Safari antigo); com o Safari como alvo, ela ACRESCENTA prefixos. Nenhum
+  dos dois é "compactar sem mudar nada". O próximo lote escolhe um jeito que só tira espaço e comentário, com a prova.
+
 ## [0.83.0] — 2026-11-26
+
+✅ **Publicada em 27/11/2026, entre 08:15 e 08:16 (Brasília, medido no npm: `native` às 08:15, depois `react`,
+`contracts`, `core`, `fonts`, `icons` e `tokens` às 08:16), pela publicação em etapa, da junção do pedido #171**
+(`69e8c6a6`).
 
 **Quatro lotes numa versão só** (o Victor, 26/11/2026: *"sim, junte os quatro num pedido só"*): o 108 (a marca e a pessoa no
 centro da trilha da lateral com painel), o 109 (o vão das abas, a data do site e a hora que se digita), o 110 (nada some no

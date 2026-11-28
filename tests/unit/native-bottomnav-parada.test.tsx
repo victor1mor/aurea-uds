@@ -151,12 +151,14 @@ describe("BottomNav · a altura de referência", () => {
     }
   });
   // ~~space1 em volta~~ → space05 em cima e embaixo, e sem a altura mínima (27/10/2026, a barra na mesma altura — ADR-0084).
-  it("o disco do circle-bold: space05 em cima e embaixo, space1 dos lados, sem vão entre o ícone e o nome", () => {
+  // ~~56 fixos e space1 dos lados~~ → no mínimo 56, do tamanho do nome, com space2 dos lados (E15, o lote 117, 27/11/2026 —
+  // o Victor: "O disco alarga"). A barra continua parada: o disco existe em todas as abas.
+  it("o disco do circle-bold: space05 em cima e embaixo, space2 dos lados, no mínimo 56, sem vão entre o ícone e o nome", () => {
     __limpar();
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" indicator="circle-bold" /></AureaProvider>);
     const discos = __instancias("View").map((p) => (StyleSheet.flatten(p.style as never) ?? {}) as Record<string, number>)
-      .filter((e) => e.width === 56 && e.borderRadius === t.size.radiusFull);
+      .filter((e) => e.minWidth === 56 && e.borderRadius === t.size.radiusFull);
     expect(discos).toHaveLength(3);
-    for (const d of discos) expect([d.paddingVertical, d.paddingHorizontal, d.gap, d.minHeight]).toEqual([t.size.space05, t.size.space1, 0, undefined]);
+    for (const d of discos) expect([d.paddingVertical, d.paddingHorizontal, d.gap, d.minHeight, d.width]).toEqual([t.size.space05, t.size.space2, 0, undefined, undefined]);
   });
 });

@@ -102,15 +102,17 @@ test("Toolbar · o separador é metade da altura do botão, no meio, sem margem 
 const LISTA = `<div class="list-box" role="listbox" aria-label="L">
   <div class="list-box-section" role="group"><div class="list-box-section-title">Grupo A</div>
     <div class="list-box-item" role="option" id="um"><span>Um</span></div>
-    <div class="list-box-item" role="option" id="dois"><span style="display:grid">Dois<small>Com uma descrição embaixo</small></span></div></div>
+    <div class="list-box-item" role="option" id="dois"><span class="list-box-item-text"><span class="list-box-item-label">Dois</span><span class="list-box-item-description">Com uma descrição embaixo</span></span></div></div>
   <div class="list-box-section" role="group" id="b"><div class="list-box-section-title">Grupo B</div>
     <div class="list-box-item" role="option"><span>Três</span></div></div></div>`;
 
-test("ListBox · o canto do item é o do menu (18), também no item de duas linhas; a linha clara entre os grupos", async ({page: p, baseURL}) => {
+// ~~O item de uma linha também com o 18~~ → desde o lote 117 (27/11/2026, o Victor: "Aprovo a cápsula"), o item de UMA linha
+// é cápsula; o de duas linhas (com a explicação, a marcação da peça de verdade) continua com o canto do menu (18).
+test("ListBox · o item de uma linha é cápsula; o de duas linhas, o canto do menu (18); a linha clara entre os grupos", async ({page: p, baseURL}) => {
   await abrir(p, baseURL, "listbox", `<div style="inline-size:280px">${LISTA}</div>`);
   const cantos = await p.evaluate(() => ["#um", "#dois"].map((s) => getComputedStyle(document.querySelector(s)!).borderTopLeftRadius));
   const dezoito = await cantoContinuo(p, 18);
-  expect(cantos).toEqual([dezoito, dezoito]);
+  expect(cantos).toEqual(["999px", dezoito]);
   expect(await alfa(p, `return getComputedStyle(document.querySelector("#b"), "::before").borderTopColor`)).toBeGreaterThan(0);
   await abrir(p, baseURL, "listbox-ember", `<div style="inline-size:280px">${LISTA}</div>`, {marca: "ember"});
   expect(await alfa(p, `return getComputedStyle(document.querySelector("#b"), "::before").borderTopColor`), "na Ember também").toBeGreaterThan(0);

@@ -68,6 +68,7 @@ import {canto, cantosDeCima, criarFolha} from "./estilos.js";
 import {NaSuperficie} from "./superficie.js";
 import {CloseButton, IconButton} from "./actions.js";
 import {RecuoDaFolha} from "./screen.js";
+import {KeyboardAvoiding} from "./inputs.js";
 import {Text} from "./text.js";
 import {useAureaStrings, useTokensDoApp, ForaDaMarca} from "./theme.js";
 import {useReduceMotion, driverNativo} from "./movimento.js";
@@ -499,7 +500,12 @@ export function BottomSheet({
     <ForaDaMarca>
     <Modal visible={open} transparent animationType={reduzir !== false ? "none" : "slide"}
            statusBarTranslucent navigationBarTranslucent onRequestClose={onClose} testID={testID}>
-      <View style={s.fundo}>
+      {/* A FOLHA SOBE COM O TECLADO (o lote 117, 27/11/2026 — o Victor: "A folha sobe"; a referência do celular faz o
+          mesmo). Sem isto, o teclado cobria o campo de dentro: no iOS o `Modal` não afasta nada do teclado, e no Android
+          a janela de ponta a ponta (`navigationBarTranslucent`) não encolhe. O fundo é o `KeyboardAvoiding` daqui (o
+          `KeyboardAvoidingView` do próprio React Native, sem dependência nova): ele encolhe pela altura do teclado, e a
+          folha, encostada embaixo dele, sobe junto. O teste no aparelho é da sessão do app (`apps/native-smoke`). */}
+      <KeyboardAvoiding style={s.fundo}>
         <Pressable style={s.fundoDeToque} onPress={onClose} accessible={false}
                    testID={testID ? `${testID}-fundo` : undefined} />
         <Animated.View
@@ -528,7 +534,7 @@ export function BottomSheet({
               `Combobox` (`screen.tsx`, onde está por que o `SafeAreaView` não servia aqui). */}
           <RecuoDaFolha />
         </Animated.View>
-      </View>
+      </KeyboardAvoiding>
     </Modal>
     </ForaDaMarca>
   );

@@ -23,7 +23,7 @@ import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-run
 import * as React from "react";
 import { Animated, Easing, View } from "react-native";
 import { Button, CloseButton } from "./actions.js";
-import { canto, criarFolha, estadoAcessivel, letraDoToken } from "./estilos.js";
+import { canto, comOpacidade, criarFolha, estadoAcessivel, letraDoToken, misturaNoOklab } from "./estilos.js";
 import { Icon } from "./icon.js";
 import { IconeEmMoldura } from "./moldura.js";
 import { AnelQueGira } from "./giro.js";
@@ -73,6 +73,17 @@ const folha = criarFolha((t) => ({
         flexDirection: "row", alignItems: "flex-start", gap: t.size.space3,
     },
     corpoDoAlerta: { flex: 1, gap: 2 },
+    // `appearance="soft"` (o lote 115, 27/11/2026 — a pele da web desde a 0.54.0): sem a sombra do cartão; o fundo é a cor do
+    // estado a 14%, pintado no componente (depende do tom).
+    alertaSuave: { backgroundColor: "transparent", boxShadow: [] },
+    // Com `action`, a moldura quebra a linha: o botão desce para baixo do texto, na coluna dele (o recuo é o ícone + o vão),
+    // como a web no celular. Ele fica FORA do grupo de leitura — coisa tocável dentro de um elemento `accessible` some para
+    // o VoiceOver (o check 43).
+    alertaComAcao: { flexWrap: "wrap" },
+    acaoDoAlerta: {
+        width: "100%", flexDirection: "row", alignItems: "center", gap: t.size.space2,
+        paddingLeft: t.size.iconMd + t.size.space3,
+    },
     // ── EmptyState ─────────────────────────────────────────────────────────────────────────────
     vazio: {
         alignItems: "center", gap: t.size.space3,
@@ -267,7 +278,7 @@ export const ICONE_DA_VARIANTE = {
  *     import InformationFilled from "@aurea-uds/native/icons/info";
  *     const ICONES = criarRegistroDeIcones({"info": InformationFilled, …});
  */
-export function Alert({ variant, state, title, icon, onDismiss, children, style, 
+export function Alert({ variant, state, title, icon, onDismiss, appearance, action, children, style, 
 // 🔴 ESTES DOIS SAEM DO RESTO DE PROPÓSITO, e é consequência do conserto abaixo: a moldura
 // deixou de ser elemento de acessibilidade, e rótulo em quem não é elemento **não faz nada no
 // iOS**. Eles pousam no GRUPO, que é quem o leitor de tela alcança.
@@ -281,15 +292,22 @@ accessibilityLabel, accessibilityHint, ...rest }) {
             : v === "danger" ? (t.color.danger400 ?? t.color.destructive)
                 : v === "neutral" ? t.color.foreground
                     : (t.color.info400 ?? t.color.info);
+    // A pele suave (a regra `.alert.alert-soft` da web): o tom a 14% no fundo; o título com 25% da cor do texto (puro, o
+    // azul no claro media 4,07:1 no fundo do tom); o corpo na cor do texto, a 16. Fora da Ember.
+    const suave = appearance === "soft" && t.brand !== "ember";
+    const corDoTituloSuave = suave && v !== "neutral" ? misturaNoOklab(corDoIcone, t.color.foreground, 0.75) : undefined;
     return (_jsxs(View
     // Android: a região viva é o que faz o leitor falar sem foco, e ela cobre a moldura
     // inteira de propósito — o que muda é o conteúdo, e o "X" some junto quando o aviso fecha.
     , { 
         // Android: a região viva é o que faz o leitor falar sem foco, e ela cobre a moldura
         // inteira de propósito — o que muda é o conteúdo, e o "X" some junto quando o aviso fecha.
-        accessibilityLiveRegion: v === "danger" ? "assertive" : "polite", style: [s.alerta, style], ...rest, children: [_jsxs(View, { accessible: true, accessibilityLabel: accessibilityLabel, accessibilityHint: accessibilityHint, ...(v === "danger" ? { accessibilityRole: "alert" } : null), style: s.grupoDoAlerta, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], size: "md", color: corDoIcone, weight: icon ? undefined : "fill" }), _jsxs(View, { style: s.corpoDoAlerta, children: [title != null && _jsx(Text, { size: "base", weight: 500, tone: v === "neutral" ? undefined : v, children: title }), children != null
-                                ? (typeof children === "string" ? _jsx(Text, { size: "xs", tone: "muted", children: children }) : children)
-                                : state ? _jsx(Text, { size: "xs", tone: "muted", children: strings.universalState[state] }) : null] })] }), onDismiss ? _jsx(CloseButton, { label: strings.close, onPress: onDismiss }) : null] }));
+        accessibilityLiveRegion: v === "danger" ? "assertive" : "polite", style: [s.alerta, suave && [s.alertaSuave, { backgroundColor: comOpacidade(corDoIcone, 0.14) }],
+            action != null && s.alertaComAcao, style], ...rest, children: [_jsxs(View, { accessible: true, accessibilityLabel: accessibilityLabel, accessibilityHint: accessibilityHint, ...(v === "danger" ? { accessibilityRole: "alert" } : null), style: s.grupoDoAlerta, children: [_jsx(Icon, { name: icon ?? ICONE_DA_VARIANTE[v], size: "md", color: corDoIcone, weight: icon ? undefined : "fill" }), _jsxs(View, { style: s.corpoDoAlerta, children: [title != null && (suave
+                                ? _jsx(Text, { size: "base", weight: 700, style: corDoTituloSuave ? { color: corDoTituloSuave } : undefined, children: title })
+                                : _jsx(Text, { size: "base", weight: 500, tone: v === "neutral" ? undefined : v, children: title })), children != null
+                                ? (typeof children === "string" ? _jsx(Text, { size: suave ? "base" : "xs", tone: suave ? undefined : "muted", children: children }) : children)
+                                : state ? _jsx(Text, { size: suave ? "base" : "xs", tone: suave ? undefined : "muted", children: strings.universalState[state] }) : null] })] }), onDismiss ? _jsx(CloseButton, { label: strings.close, onPress: onDismiss }) : null, action != null ? _jsx(View, { style: s.acaoDoAlerta, children: action }) : null] }));
 }
 /**
  * O nada, dito com jeito.

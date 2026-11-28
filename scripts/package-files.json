@@ -17,6 +17,7 @@
       "dist/aurea.css",
       "dist/aurea.css.d.ts",
       "dist/aurea.js",
+      "dist/aurea.js.d.ts",
       "package.json"
     ],
     "@aurea-uds/fonts": [

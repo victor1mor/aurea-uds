@@ -772,7 +772,20 @@ const ehAgrupado = (items) => items != null && items.length > 0 && typeof items[
 // NADA no DOM quando o item não está escolhido; com um filho só, o texto caía na primeira coluna
 // da grade — a de 16px — e quebrava em duas ou três linhas. O invólucro fica montado sempre, como
 // o `.menu-mark` do `Menu` já faz, e o indicador aparece e some DENTRO dele.
-const renderComboboxItem = (item) => _jsxs(BaseCombobox.Item, { value: item, className: "menu-item combobox-item", children: [_jsx("span", { className: "combobox-check", "aria-hidden": "true", children: _jsx(BaseCombobox.ItemIndicator, { children: _jsx(Icon, { name: "check", size: "sm" }) }) }), _jsx("span", { children: item.label })] }, item.value);
+// Com `description`, o item é o do menu com explicação (`overlays.tsx`): o nome e a explicação em `.menu-item-text`, o nome
+// ligado por `aria-labelledby` e a explicação por `aria-describedby` — sem isso o nome da opção seria as duas linhas coladas.
+// O DESATIVADO NÃO REAGE AO MOUSE (o mesmo conserto do item da `CommandPalette`, lote 117): o motor acende o item que o
+// mouse cruza (o `onMouseMove` da navegação da lista), também o desativado, e o fundo do acendido aparecia. O item desativado
+// impede esse passo do motor (`preventBaseUIHandler`, o caminho que o próprio motor oferece). O teclado continua chegando
+// nele, e ele não se escolhe.
+const semRealceDoMouse = (e) => e.preventBaseUIHandler?.();
+function ComboboxItemComDescricao({ item }) {
+    const id = React.useId();
+    return _jsxs(BaseCombobox.Item, { value: item, disabled: item.disabled, onMouseMove: item.disabled ? semRealceDoMouse : undefined, className: "menu-item combobox-item", "aria-labelledby": `${id}-l`, "aria-describedby": `${id}-d`, children: [_jsx("span", { className: "combobox-check", "aria-hidden": "true", children: _jsx(BaseCombobox.ItemIndicator, { children: _jsx(Icon, { name: "check", size: "sm" }) }) }), _jsxs("span", { className: "menu-item-text", children: [_jsx("span", { id: `${id}-l`, children: item.label }), _jsx("span", { id: `${id}-d`, className: "menu-item-description", children: item.description })] })] });
+}
+const renderComboboxItem = (item) => item.description != null && item.description !== ""
+    ? _jsx(ComboboxItemComDescricao, { item: item }, item.value)
+    : _jsxs(BaseCombobox.Item, { value: item, disabled: item.disabled, onMouseMove: item.disabled ? semRealceDoMouse : undefined, className: "menu-item combobox-item", children: [_jsx("span", { className: "combobox-check", "aria-hidden": "true", children: _jsx(BaseCombobox.ItemIndicator, { children: _jsx(Icon, { name: "check", size: "sm" }) }) }), _jsx("span", { children: item.label })] }, item.value);
 const listaCombobox = (items) => _jsx(BaseCombobox.List, { children: ehAgrupado(items)
         ? (group) => _jsxs(BaseCombobox.Group, { items: group.items, className: "combobox-section", children: [_jsx(BaseCombobox.GroupLabel, { className: "combobox-group-label", children: group.label }), _jsx(BaseCombobox.Collection, { children: renderComboboxItem })] }, group.label)
         : renderComboboxItem });

@@ -41,7 +41,7 @@ describe("BottomNav · a barra mais baixa", () => {
     expect(capsulas).toHaveLength(2);
     for (const c of capsulas) expect(c.marginVertical).toBe(-t.size.space05);
     render(<AureaProvider icons={ICONES}><BottomNav items={ITENS} current="a" indicator="circle-bold" /></AureaProvider>);
-    const discos = estilos().filter((e) => e.width === 56 && e.paddingVertical !== undefined);
+    const discos = estilos().filter((e) => e.minWidth === 56 && e.paddingVertical !== undefined);
     expect(discos.length).toBeGreaterThan(0);
     for (const d of discos) { expect(d.minHeight).toBeUndefined(); expect(d.paddingVertical).toBe(t.size.space05); }
   });

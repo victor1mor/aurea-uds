@@ -242,6 +242,7 @@ Victor a versão mais nova no começo da sessão**: ela é atualizada pela sess�
 | `0.81.0` | O formulário, o interruptor, o nome em inglês e a rodinha com menos movimento: `onCheckedChange` no `Switch` (web e nativo), `name`, `required` e `defaultValue` no `Combobox` e no `MultiCombobox` da web, `useResponsiveValue` (o `useValorResponsivo` fica como apelido), a rodinha e o círculo sem fim que giram devagar com menos movimento, e as Actions da CI nas versões novas com o robô de atualização só para elas — pedido #162. **Publicada em 24/11/2026** (entre 21:57 e 21:58, Brasília, medido no npm), pela publicação em etapa |
 | `0.81.1` | As promessas públicas dizem a verdade (o UDS-A1): o contrato publicado e as descrições dos sete pacotes em inglês, a promessa de acessibilidade que diz o que se mede hoje (`measuredToday` e `knownGaps`) e o `no-gradients` fora do arquivo de tokens; nenhuma peça muda — pedido #164. **Publicada em 25/11/2026** (entre 19:21 e 19:22, Brasília, medido no npm), pela publicação em etapa |
 | `0.82.0` | O lote 106: o canto contínuo na web (onde o navegador desenha o `corner-shape`), o botão de recolher do `AppShell` na barra de cima (a troca da ADR-0056), o `AppShell` sem itens não desenha a lateral (SYL-01), o nome do comando do bash em destaque no `CodeBlock` e a ficha do `KPI` com o espaço que não quebra — pedido #170. **Publicada em 26/11/2026** (entre 18:15 e 18:16, Brasília, medido no npm), pela publicação em etapa |
+| `0.83.0` | Os lotes 108 a 111 numa versão só: a marca e a pessoa no centro da trilha da `Sidebar` com `panel`, as abas a 8 do painel (web e nativo), o `Input type="time"` que só se digita, nada some no alto contraste do Windows, a `DataGrid` na TanStack Table 9 (pode quebrar a compilação) e o Shift+clique na caixinha, no rádio e na chave — pedido #171. **Publicada em 27/11/2026** (entre 08:15 e 08:16, Brasília, medido no npm), pela publicação em etapa |
 O detalhe de cada versão está no [`CHANGELOG.md`](CHANGELOG.md).
 
 **A fila inteira, com a pesquisa de como as referências fazem cada item, está fora do
@@ -1149,6 +1150,18 @@ referências). Peça ao Victor o documento de achados mais novo para conferir se
    (`responsivo.multi-motor.spec.ts`, o `setViewportSize` esgotou o tempo), e o site ficou na versão anterior até as partes
    reprovadas rodarem de novo e o `main` ficar verde. **Publicada em 26/11/2026** (entre 18:15 e 18:16, Brasília, medido
    no npm), pela publicação em etapa, da junção do pedido #170. O registro entrou no lote 110 (a 0.83.0).
+81. **`0.83.0`, os lotes 108 a 111 num pedido só, feita em 26/11/2026** (*"sim, junte os quatro num pedido só"*; cada lote
+   aprovado na bancada viva) — o 108 (a marca e a pessoa no centro da trilha da `Sidebar` com `panel`), o 109 (as abas a 8
+   do painel, web e nativo; o `Input type="time"` que só se digita; o `DatePicker` nos exemplos de data do site), o 110 (as
+   63 reprovações do alto contraste do Windows; sobram 7 conhecidas, que somem também sem o alto contraste) e o 111 (C-14, a
+   `DataGrid` na TanStack Table 9.3.1, igual na tela, e o Shift+clique). ⚠ **As lições:** (1) a 9 mudaria a grade em três
+   pontos sem ninguém pedir (o "selecionar todos" com todas marcadas, o corte em 10 sem `pageSize`, o Shift+clique em
+   faixa) — cada um ficou como na 8, medido na bancada; (2) o campo invisível do Shift+clique cobre o rótulo inteiro da
+   chave, e o `click()` da prova do aviso de cookies no texto foi recusado — a prova passou a clicar pelo mouse, no ponto
+   do texto, como a pessoa faz; (3) o
+   `released-surface.json` foi regravado do commit da 0.82.0, que cobre também a 0.81.1, que tinha ficado sem registro.
+   **Publicada em 27/11/2026** (entre 08:15 e 08:16, Brasília, medido no npm), pela publicação em etapa, da junção do
+   pedido #171. O registro entrou no lote seguinte (o 112, a distribuição).
 
 **Juntar (06/10/2026):** o Victor autorizou a sessão a juntar os pedidos #45, #43 e #44 quando a CI
 de cada um ficasse verde, nessa ordem. Autorização daquela noite, para aqueles pedidos; publicar
@@ -1610,8 +1623,12 @@ sessão não chega à outra; este arquivo chega. O que já estava nas seções a
   (`AUREA_PROVAS=1` no `playwright.config.ts` — spec nova entra sozinha); o job `test` espera o `provas` e reprova se ele
   reprovou, e é por ele que a regra do `main` o cobra. Ficam fora, com o motivo, só as provas do
   `tests/visual/fora-da-ci.ts` (decisões do Victor). No Firefox e no WebKit a CI roda só a varredura do catálogo, a
-  geometria, a direita para a esquerda, a prova do app de cliente e o "menos movimento". A suíte do fim do lote continua
-  (ela mede antes do pedido, e nos três navegadores quando a mudança é de largura).
+  geometria, a direita para a esquerda, a prova do app de cliente e o "menos movimento". ~~A suíte do fim do lote continua
+  (ela mede antes do pedido, e nos três navegadores quando a mudança é de largura).~~ → **A CI PODE SUBSTITUIR A SUÍTE
+  LOCAL DO FIM DO LOTE** (ordem do Victor, 27/11/2026: *"Sim, usar a CI hoje e sempre que quiser"*): o job `provas` da CI
+  roda tudo de `tests/visual/` no Chromium; o repositório é público, e as máquinas padrão do GitHub Actions são grátis em
+  repositório público. O motivo: com várias sessões ao mesmo tempo, a suíte local andou a ~2 testes por minuto (236 de 740
+  em 1h50, o lote 112). Continua: os testes do que mudou rodam aqui, e a bancada e o "pode" vêm antes do git.
 - **Qualidade extrema, sem refazer** (06/10/2026): prazo curto encolhe o ESCOPO, nunca a verificação.
   Se não cabe tudo, dizer quanto cabe, com números, e ele escolhe.
 - **Muitas opções: o esboço vem antes da bancada** (decisão do Victor, 29/10/2026, *"Sim, para explorar"*): quando uma

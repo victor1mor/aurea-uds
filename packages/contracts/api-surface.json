@@ -6,7 +6,7 @@
     "modulos": 40,
     "componentes": 145,
     "hooks": 12,
-    "aliasesLiterais": 119,
+    "aliasesLiterais": 120,
     "propsDistintas": 412
   },
   "aliases": {
@@ -2262,6 +2262,18 @@
         "latest",
         "time",
         "contrast"
+      ]
+    },
+    "TimelineTone": {
+      "module": "markup",
+      "raw": "\"neutral\" | \"primary\" | \"info\" | \"success\" | \"warning\" | \"danger\"",
+      "union": [
+        "neutral",
+        "primary",
+        "info",
+        "success",
+        "warning",
+        "danger"
       ]
     },
     "TypographyType": {
@@ -9802,7 +9814,7 @@
             {
               "name": "items",
               "optional": false,
-              "type": "Array<{ title: ReactNode; description?: ReactNode; time?: ReactNode; }>",
+              "type": "TimelineItem[]",
               "values": null
             },
             {

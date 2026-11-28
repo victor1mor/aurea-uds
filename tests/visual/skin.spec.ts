@@ -2708,7 +2708,10 @@ for (const theme of ["dark", "light"] as const) {
     // 16 desde a 0.74.0: a `ListBox` começa a 16 da borda, como a `Sidebar` (`--space-4`; era 8).
     expect(e.listBox.lados, "16 dos lados").toBe(16);
     // 18 desde a 0.70.0, o canto do item do menu ("B (igual à referência)"): a cápsula virava 24,5 no item de duas linhas.
-    expect(e.listBox.raio, "o item tem o canto do item do menu (18)").toBe(18 * K);
+    // ~~18 × K~~ → a cápsula no item de UMA linha (o lote 117, 27/11/2026 — o Victor: "Aprovo a cápsula"): o canto contínuo
+    // da 0.82.0 lia o 18 como canto de superfície. Numa linha de 36 a cápsula é o mesmo 18 redondo; o item de duas linhas
+    // (com a explicação) continua com a conta, e não vira os 24,5 que a 0.70.0 recusou.
+    expect(e.listBox.raio, "o item de uma linha é cápsula").toBeGreaterThanOrEqual(e.listBox.itemAlt / 2);
     expect(e.listBox.visto, "o visto do escolhido tem 16").toBeCloseTo(16, 0);
     expect(e.select.alt, "o Select mede --control-h-md, como os outros controles")
       .toBe(e.select.controlMd);

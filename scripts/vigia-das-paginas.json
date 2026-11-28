@@ -39,9 +39,9 @@
     "ts:RadioGroup": "bf52f6ea45e660f3"
   },
   "dark-mode": {
-    "ts:AureaProvider": "ad097572574ac140",
+    "ts:AureaProvider": "ad343077d365974d",
     "ts:useTheme": "5d2494b7e1044bad",
-    "pkg:core": "d3ffb7033c64dc05"
+    "pkg:core": "4e7dd7963dba1e8d"
   },
   "density": {
     "css:--control-h-*": "e164de7e0b1b74be",
@@ -57,7 +57,7 @@
     "css:--shadow-sm": "8cfa1e111bdf4a10"
   },
   "frameworks": {
-    "pkg:core": "d3ffb7033c64dc05",
+    "pkg:core": "4e7dd7963dba1e8d",
     "pkg:react": "bbea34297f0e78f8",
     "pkg:native": "6d31dc8bbb4227f6"
   },
@@ -67,7 +67,7 @@
   },
   "introduction": {
     "pkg:react": "bbea34297f0e78f8",
-    "pkg:core": "d3ffb7033c64dc05",
+    "pkg:core": "4e7dd7963dba1e8d",
     "pkg:fonts": "fc077430a51b432a",
     "pkg:icons": "d494420044625115",
     "pkg:tokens": "68e6f15e59bde3d7",
@@ -77,21 +77,21 @@
   "llms-txt": {},
   "migration": {},
   "quick-start": {
-    "ts:AureaProvider": "ad097572574ac140",
+    "ts:AureaProvider": "ad343077d365974d",
     "pkg:react": "bbea34297f0e78f8",
-    "pkg:core": "d3ffb7033c64dc05",
+    "pkg:core": "4e7dd7963dba1e8d",
     "pkg:fonts": "fc077430a51b432a",
     "pkg:native": "6d31dc8bbb4227f6"
   },
   "roadmap": {},
   "rtl": {
-    "ts:AureaProvider": "ad097572574ac140"
+    "ts:AureaProvider": "ad343077d365974d"
   },
   "showcase": {},
   "styling": {
     "css:--fill-*": "a2658d78c94cba5c",
     "css:--field-*": "1d08dd4b126d525e",
-    "pkg:core": "d3ffb7033c64dc05"
+    "pkg:core": "4e7dd7963dba1e8d"
   },
   "theming": {
     "css:--primary*": "1119b90bb2fb317b",
@@ -99,7 +99,7 @@
     "css:--success*": "f07ef43f82cc2564",
     "css:--fill-2-solid": "61c7a75d0c5263b7",
     "pkg:tokens": "68e6f15e59bde3d7",
-    "ts:AureaProvider": "ad097572574ac140"
+    "ts:AureaProvider": "ad343077d365974d"
   },
   "versioning": {}
 }

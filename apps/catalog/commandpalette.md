@@ -32,6 +32,18 @@ size="lg" is the site search: a 1024 window, a 52 field with Esc inside, the fil
 ]} preview={(item) => <p>{item.description}</p>} footer={<Badge>Web</Badge>} />
 ```
 
+### Disabled item
+
+disabled on an item keeps it in the list, dimmed, with the not-allowed cursor: neither a click nor Enter runs it. Use it for a command that exists but does not apply right now.
+
+```tsx
+<CommandPalette open={open} onClose={close} items={[
+  {id: "new", label: "New document", icon: "file-text", kbd: "N", run},
+  {id: "delete", label: "Delete", icon: "trash", kbd: "Del", disabled: true, run},
+  {id: "duplicate", label: "Duplicate", icon: "copy", kbd: "D", run},
+]} />
+```
+
 ## API Reference
 
 | Prop | Type | Default | Description |

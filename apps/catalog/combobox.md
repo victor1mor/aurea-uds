@@ -16,7 +16,7 @@ import {Combobox} from "@aurea-uds/react";
 
 - Base UI underneath: arrows move, Enter picks, Escape closes, and focus returns where it came from.
 
-- Options are DATA ({value, label}) — no children to keep in sync with the filter.
+- Options are DATA ({value, label, description?, disabled?}) — no children to keep in sync with the filter.
 
 - Typing filters the list; the value is still one option, never free text.
 
@@ -38,6 +38,20 @@ const [value, setValue] = useState<ComboboxOption | null>(null);
 <Combobox label="Component" placeholder="Search…" value={value}
   onValueChange={setValue}
   items={[{value: "button", label: "Button"}, {value: "badge", label: "Badge"}]} />
+```
+
+### Options with a description
+
+description puts a second, quieter line under the label, and the screen reader hears it as the option's description; the filter still looks only at the label. disabled shows an option that cannot be picked.
+
+```tsx
+const plans = [
+  {value: "free", label: "Free", description: "One project, community support"},
+  {value: "team", label: "Team", description: "Unlimited projects, shared billing"},
+  {value: "enterprise", label: "Enterprise", description: "Talk to sales first", disabled: true},
+];
+
+<Combobox label="Plan" placeholder="Search…" items={plans} />
 ```
 
 ### Inside a Field
@@ -74,7 +88,7 @@ The field and both buttons go down together — a locked field that still opens 
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `items` | `ComboboxOption[] \| ComboboxOptGroup[]` | — | The options, as data: {value, label} — or groups of them, {label, items}. Grouping is the engine's own shape: the same `items` prop takes either, and the kind is read from the first element. Do not mix flat with grouped. |
+| `items` | `ComboboxOption[] \| ComboboxOptGroup[]` | — | The options, as data: {value, label, description?, disabled?} (description is a second, quieter line under the label, read as the option's description; disabled shows an option that cannot be picked) — or groups of them, {label, items}. Grouping is the engine's own shape: the same `items` prop takes either, and the kind is read from the first element. Do not mix flat with grouped. |
 | `value` | `ComboboxOption \| null` | — | The selected option, or null. |
 | `onValueChange` | `(v) => void` | — | Fires with the chosen option. |
 | `defaultValue` | `ComboboxOption \| null` | — | The option chosen at the start, without state in the app (uncontrolled). Use value + onValueChange to control it instead. |
