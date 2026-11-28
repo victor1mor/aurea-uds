@@ -85,8 +85,70 @@ test("site · o texto do item atual da lateral fica alinhado com os vizinhos", a
     return {atual: texto(cur), vizinho: texto(viz), fundo: Math.round(cur.getBoundingClientRect().left), fundoViz: Math.round(viz.getBoundingClientRect().left), ponto: ponto.content};
   });
   expect(m.atual, JSON.stringify(m)).toBe(m.vizinho);
-  expect(m.fundo, "o fundo do atual começa antes").toBeLessThan(m.fundoViz);
+  // "Tudo alinhado" (o Victor, 27/11/2026, o lote 118): o fundo do atual começa onde o dos vizinhos começa — era 14 antes.
+  expect(m.fundo, "o fundo do atual começa onde o dos vizinhos começa").toBe(m.fundoViz);
   expect(m.ponto, "o ponto continua").not.toBe("none");
+});
+
+// LOTE 118 (o Victor, 27/11/2026, no site no ar: "a caixa do All Components está desalinhada"; na bancada, *"Tudo
+// alinhado"*): a cápsula do item atual do alto da lateral passava 14 à esquerda da chave Web | Native (14 contra 28, a
+// 1280) e 2 para fora do painel. Agora começa onde a chave e os outros itens começam, e o começo de todos fica numa coluna
+// só (em Patterns, o texto do "All patterns" na linha da bolinha de ícone dos componentes). Provado contra o defeito: com o
+// site do `main` em 42594763, a cápsula fica em 14.
+test("site · a cápsula do item atual começa na chave e nos outros itens, e o começo fica numa coluna", async ({page: p, baseURL}) => {
+  await p.setViewportSize({width: 1280, height: 800});
+  for (const pagina of ["components.html", "patterns.html"]) {
+    await p.goto(`${baseURL}/apps/catalog/${pagina}`, {waitUntil: "networkidle"});
+    await expect(p.locator(".site-shell > .sidebar .sidebar-item[aria-current]").first()).toBeVisible();
+    const m = await p.evaluate(() => {
+      const sb = document.querySelector(".site-shell > .sidebar")!;
+      const L = (e: Element) => Math.round(e.getBoundingClientRect().left);
+      // O começo do conteúdo de um item: a bolinha de ícone, se houver; senão, o texto.
+      const comeco = (el: Element) => { const lab = el.querySelector(".sidebar-label")!; const tile = lab.querySelector(".site-item-tile"); if (tile) return L(tile);
+        const tw = document.createTreeWalker(lab, NodeFilter.SHOW_TEXT); let n: Node | null;
+        while ((n = tw.nextNode())) { if (n.textContent?.trim()) { const rg = document.createRange(); rg.selectNodeContents(n); return Math.round(rg.getClientRects()[0].left); } } return -1; };
+      const cur = sb.querySelector(".sidebar-item[aria-current]")!;
+      const chave = sb.querySelector(".site-plataforma");
+      const comum = [...sb.querySelectorAll(".sidebar-item:not([aria-current])")].find((e) => !e.closest(".sidebar-group-list, .sidebar-sub"));
+      return {cur: L(cur), chave: chave ? L(chave) : null, painel: L(sb), comecoCur: comeco(cur),
+        comum: comum ? L(comum) : null, comecoComum: comum ? comeco(comum) : null};
+    });
+    expect(m.cur, `${pagina}: dentro do painel ${JSON.stringify(m)}`).toBeGreaterThanOrEqual(m.painel);
+    if (m.chave != null) expect(m.cur, `${pagina}: na chave`).toBe(m.chave);
+    if (m.comum != null) {
+      expect(m.comum, `${pagina}: a cápsula do atual na dos outros`).toBe(m.cur);
+      expect(m.comecoComum, `${pagina}: o começo do atual na coluna dos outros`).toBe(m.comecoCur);
+    }
+  }
+});
+
+// LOTE 118, "a Lateral que acompanha" (o Victor, 27/11/2026, "ok" à proposta e "Pode, aprovado" olhando): em Patterns, um
+// "All" só no alto; nenhum campo de filtro na lateral (a busca é a do meio da lista); cada componente com o ícone da ficha
+// na bolinha da cor da família; na página de um padrão, o componente dele marcado e aberto, com os padrões dele embaixo e o
+// atual marcado; e a trilha que leva de volta. Provado contra o defeito: com o site do commit fed2d91d, reprova.
+test("site · a lateral de Patterns acompanha a página do padrão", async ({page: p, baseURL}) => {
+  await p.setViewportSize({width: 1280, height: 800});
+  await p.goto(`${baseURL}/apps/catalog/pattern-alert-failure-with-retry.html`, {waitUntil: "networkidle"});
+  const sb = p.locator(".site-shell > .sidebar");
+  await expect(sb.locator("[data-site-filtro-busca]")).toHaveCount(0);
+  const todos = sb.locator(".sidebar-item");
+  await expect(todos.first()).toHaveText(/All patterns/);
+  await expect(sb.locator('.sidebar-item:has-text("All components")')).toHaveCount(0);
+  // Cada componente com a bolinha de ícone.
+  const semIcone = await sb.locator('a[href*="#filtro/"]:not([href$="#filtro/all"])').evaluateAll((els) => els.filter((e) => !e.querySelector(".site-item-tile svg")).length);
+  expect(semIcone).toBe(0);
+  // O Alert aberto, com os seus seis padrões, e o atual marcado.
+  const alert = sb.locator('li:has(> a[href$="#filtro/alert"])');
+  await expect(alert.locator(".sidebar-sub .sidebar-item")).toHaveCount(6);
+  await expect(alert.locator('.sidebar-sub .sidebar-item[aria-current="page"]')).toHaveText("Failure with retry");
+  await expect(sb.locator(".sidebar-sub")).toHaveCount(1);
+  // A trilha leva à lista filtrada no Alert.
+  await p.locator(".intro-trilha a", {hasText: "Alert"}).click();
+  await expect(p).toHaveURL(/\/patterns\.html#filtro\/alert$/);
+  await expect(p.locator('.sidebar a[href="#filtro/alert"]')).toHaveAttribute("aria-current", "true");
+  // A busca do meio acha pelo nome do componente: o grupo do Alert inteiro.
+  await p.locator('.pat-b input').first().fill("alert");
+  await expect.poll(() => p.locator("#pat-alert [data-g1-item]").evaluateAll((els) => els.filter((e) => e.getClientRects().length).length)).toBe(6);
 });
 
 test("site · em 320 o seletor de densidade vira um Select e nada sai cortado; em 1280 continuam os três botões", async ({page: p, baseURL}) => {

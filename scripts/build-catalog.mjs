@@ -1733,8 +1733,13 @@ const menuComponentes = () => [item("All Components", "components.html"),
 // contagem. O filtro é um link com o endereço `#filtro/<valor>`: o script da página (`site-b/js/`) mostra só o grupo
 // escolhido, e sem ele o link não faz nada e a página mostra tudo. Os rótulos dos grupos são os do desenho, que o CSS do
 // site põe em mono maiúsculo nessas áreas (`.site-area-mono`).
-const filtro = (label, valor, conta, extra = {}) => ({id: `#filtro/${valor}`, label, href: `#filtro/${valor}`,
-  badge: h("span", {className: "site-conta"}, String(conta)), ...extra});
+// O filtro só existe na página da LISTA da área (`lista`, ex.: "patterns.html"). Nas outras páginas da área (um padrão, um
+// bloco, uma nota de versão), o link leva à lista já filtrada (`./patterns.html#filtro/alert`) — o lote 118, 27/11/2026: na
+// página de um padrão o link só mudava o `#` do endereço, e nada filtrava. O `id` fica `#filtro/…` (a ordem de leitura
+// descarta os itens que não são página por ele).
+const filtro = (label, valor, conta, lista, aqui) => ({id: `#filtro/${valor}`, label,
+  href: aqui === lista ? `#filtro/${valor}` : `./${lista}#filtro/${valor}`,
+  badge: h("span", {className: "site-conta"}, String(conta))});
 const ancora = (label, id) => ({id: `#${id}`, label, href: `#${id}`});
 const menuHooks = () => {
   const todos = alfabetico(fichas.filter(f => f.kind === "hook"));
@@ -1757,17 +1762,32 @@ const TIPOS_DE_TOKEN = (() => {
   anda(tokensDoc, undefined);
   return Object.entries(conta).sort((a, b) => b[1] - a[1]);
 })();
-const menuTokens = () => [{id: "overview", label: "Overview", items: [item("All Tokens", "tokens.html")]},
-  {id: "by-type", label: "By $type", items: TIPOS_DE_TOKEN.map(([tipo, n]) => filtro(tipo, tipo, n))},
+const menuTokens = (aqui = "tokens.html") => [{id: "overview", label: "Overview", items: [item("All Tokens", "tokens.html")]},
+  {id: "by-type", label: "By $type", items: TIPOS_DE_TOKEN.map(([tipo, n]) => filtro(tipo, tipo, n, "tokens.html", aqui))},
   {id: "on-this-page", label: "On this page", items: [["Color roles", "color-roles"], ["Status scales", "status-scales"], ["Brands", "brands"],
     ["Radius", "radius"], ["Space", "space"], ["Type", "type"], ["Controls and density", "controls"], ["Motion", "motion"], ["Shadow", "shadow"],
     ["Numbers", "numbers"]].map(([l, id]) => ancora(l, id))}];
-const menuPatterns = () => [{id: "overview", label: "Overview", items: [item("All Patterns", "patterns.html")]},
-  {id: "by-component", label: "By component", items: [filtro("All components", "all", patterns.length),
-    ...Object.entries(patternsByComponent).sort((a, b) => a[0].localeCompare(b[0])).map(([cmp, list]) => filtro(cmp, slug(cmp), list.length))]}];
-const menuBlocks = () => [{id: "overview", label: "Overview", items: [item("All Blocks", "blocks.html")]},
-  {id: "by-area", label: "By area", items: [filtro("Every area", "all", blocks.length),
-    ...Object.entries(blocksByCategory).map(([cat, list]) => filtro(cat, slug(cat), list.length))]}];
+// A LATERAL QUE ACOMPANHA (o Victor, 27/11/2026, o lote 118, "ok" à proposta): um "All" só no alto ("All patterns", que
+// era o "All Patterns" do Overview e o "All components" do filtro); e, na página de um padrão, o componente dele marcado,
+// com os padrões dele abertos embaixo e o atual marcado, como a lateral de Components.
+// E cada componente com o ÍCONE DA FICHA dele na bolinha da COR DA FAMÍLIA, como a lateral de Components (o Victor, 27/11/2026:
+// "adicione icone de cores ou icone em cada opção como os sidebar dos outros").
+const comIcone = cmp => {
+  const ficha = fichas.find(f => f.name === cmp);
+  const cat = ficha?.category || "Utilities";
+  return h(Fragment, null, h("span", {className: "site-grupo-tile site-item-tile", "data-cor": corDaFamilia(cat), "aria-hidden": "true"},
+    h(A.Icon, {name: ficha?.icon || ICONE_DA_FAMILIA[cat] || "cube"})), cmp);
+};
+const menuPatterns = (aqui = "patterns.html") => {
+  const doAqui = patterns.find(p => `${p.slug}.html` === aqui);
+  return [filtro("All patterns", "all", patterns.length, "patterns.html", aqui),
+    {id: "by-component", label: "By component", items: Object.entries(patternsByComponent).sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([cmp, list]) => ({...filtro(comIcone(cmp), slug(cmp), list.length, "patterns.html", aqui),
+        ...(doAqui?.component === cmp ? {items: list.map(p => item(p.name, `${p.slug}.html`))} : {})}))}];
+};
+const menuBlocks = (aqui = "blocks.html") => [{id: "overview", label: "Overview", items: [item("All Blocks", "blocks.html")]},
+  {id: "by-area", label: "By area", items: [filtro("Every area", "all", blocks.length, "blocks.html", aqui),
+    ...Object.entries(blocksByCategory).map(([cat, list]) => filtro(cat, slug(cat), list.length, "blocks.html", aqui))]}];
 const archetypeIds = Object.keys(contract.applicationPatterns.archetypes);
 // O padrão de Components (o Victor, 03/11/2026): "All Recipes" sozinho no alto e as receitas num grupo numerado.
 const menuRecipes = () => [item("All Recipes", "recipes.html"),
@@ -1775,7 +1795,7 @@ const menuRecipes = () => [item("All Recipes", "recipes.html"),
     items: archetypeIds.map(id => item(recipeTitle(id), `recipe-${slug(id)}.html`))}];
 // Releases: "All Releases", "Health" e o filtro por mês, da mais nova à mais velha, como no desenho.
 const MESES_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const menuReleases = () => {
+const menuReleases = (aqui = "releases.html") => {
   const porMes = new Map();
   for (const r of releases) { const k = String(r.date).slice(0, 7); porMes.set(k, (porMes.get(k) ?? 0) + 1); }
   // Como o desenho: o número do mês em mono e um ponto de cor antes do nome (as cores de categoria, em ciclo); "··" e o
@@ -1784,9 +1804,9 @@ const menuReleases = () => {
   const mes = (num, cor, nome) => h(Fragment, null, h("span", {className: "site-mes-n", "aria-hidden": "true"}, num),
     h("span", {className: "site-mes-d", "data-cor": cor, "aria-hidden": "true"}), nome);
   return [{id: "overview", label: "Overview", items: [item("All Releases", "releases.html"), item("Health", "saude.html")]},
-    {id: "by-month", label: "By month", items: [filtro(mes("··", "primary", "Every release"), "all", releases.length),
+    {id: "by-month", label: "By month", items: [filtro(mes("··", "primary", "Every release"), "all", releases.length, "releases.html", aqui),
       ...[...porMes].sort((a, b) => b[0].localeCompare(a[0])).map(([k, n], i) =>
-        filtro(mes(k.slice(5, 7), PONTOS[i % PONTOS.length], `${MESES_EN[Number(k.slice(5, 7)) - 1]} ${k.slice(0, 4)}`), k, n))]}];
+        filtro(mes(k.slice(5, 7), PONTOS[i % PONTOS.length], `${MESES_EN[Number(k.slice(5, 7)) - 1]} ${k.slice(0, 4)}`), k, n, "releases.html", aqui))]}];
 };
 // O menu do nativo: as peças do `@aurea-uds/native` que o site mostra, em ordem alfabética, como o dos componentes.
 // No padrão da Docs, como a de Components (o Victor, 01/11/2026: "e o nativo?"): as famílias numeradas, que abrem e fecham.
@@ -1936,7 +1956,7 @@ function shell(activeHref, inner, section = "components") {
       h("main", {id: "main", tabIndex: -1}, node),
       rodapeDoSite(), avisoDeNovaAba())));
   }
-  const menu = (MENUS[section] || menuComponentes)();
+  const menu = (MENUS[section] || menuComponentes)(activeHref || undefined);
   // A CHAVE WEB | NATIVE (bloco 1, o 5-A): a "Tabs em pílula" da referência, na ponta da linha das áreas (medida em
   // 17/10/2026: abas de 24, letra 14, cápsula de 32). Ela leva à MESMA peça do outro lado quando existe; senão, à lista.
   const nomeAqui = activeHref ? activeHref.replace(/^native-/, "").replace(/\.html$/, "") : null;
@@ -1973,9 +1993,6 @@ function shell(activeHref, inner, section = "components") {
         ["start", "components", "native"].includes(section) ? h("div", {className: "site-plataforma"}, chavePlataforma) : null,
         h("div", {className: "site-gaveta-areas"}, h(A.NavList, {"aria-label": "Sections",
           items: areasDoSite.map(a => ({id: a.value, label: a.label, href: a.href, icon: ICONE_DA_AREA[a.value]}))})),
-        section === "patterns" ? h("div", {className: "site-filtro-busca"}, h(A.SearchField, {size: "sm",
-          placeholder: `Filter ${Object.keys(patternsByComponent).length} components`, "aria-label": "Filter components",
-          autoComplete: "off", "data-site-filtro-busca": ""})) : null,
         h(A.Sidebar.Nav, {items: menu, current: activeHref || undefined, label: "Contents"})),
       // O ÍNDICE DO SITE B: o mesmo bloco, com o anel de leitura e o item atual na cápsula levantada (as duas variações do
       // `TableOfContents`, protótipo) e o "Back to top" no pé.
@@ -2311,7 +2328,10 @@ a.related-card:hover { border-color:transparent; }
    trilho sumia na lateral do claro. */
 .site-plataforma { padding-block-end:var(--space-3); --muted:var(--fill-2); }
 .site-gaveta-areas { display:none; padding-block-end:var(--space-3); }
-@media (max-width:79.9375em) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
+/* AS ÁREAS NUNCA ENTRAM NA LATERAL (o Victor, 27/11/2026, o lote 118: "os itens do topo devem continuar no topo e não ir pra
+   baixo"): quando não cabem na pílula (abaixo de 1121), elas vão para o botão Menu do topo, como no Início e no celular
+   (celular.css). A lista .site-gaveta-areas fica sempre escondida. */
+@media (max-width:79.9375em) { .site-areas { display:none; } }
 /* A LATERAL DO SITE B: o nome do grupo numerado, com o ícone numa bolinha na cor da categoria (o desenho aprovado). */
 .site-grupo-num { display:inline-block; inline-size:var(--space-5); margin-inline-end:var(--space-2); text-align:end; vertical-align:middle;
   font-family:var(--font-code); font-size:var(--text-xs); font-weight:var(--weight-medium); color:var(--muted-foreground); }
@@ -2353,6 +2373,9 @@ a.related-card:hover { border-color:transparent; }
   border-radius:var(--radius-full); background:var(--segment); box-shadow:var(--shadow-sm); font-family:var(--font-code); font-size:var(--text-xs);
   color:var(--muted-foreground); }
 .intro-trilha b { color:var(--foreground); font-weight:var(--weight-semibold); }
+/* A trilha que leva de volta (a página de um padrão, o lote 118): o link na cor da trilha, sublinhado com o mouse em cima. */
+.intro-trilha .intro-trilha-link { color:inherit; background:none; text-decoration:none; }
+.intro-trilha .intro-trilha-link:hover { text-decoration:underline; }
 .intro-h1 { margin:var(--space-5) 0 0; font-family:var(--font-heading); font-weight:var(--weight-extrabold); font-size:clamp(var(--text-4xl), 4vw, var(--text-6xl));
   line-height:var(--leading-none); letter-spacing:calc(var(--tracking-tight) * 3); }
 .intro-lede { margin:var(--space-4) 0 0; font-size:var(--text-lg); line-height:var(--leading-relaxed); color:var(--muted-foreground); }
@@ -2505,16 +2528,25 @@ a.related-card:hover { border-color:transparent; }
 /* O ponto do item atual: o recuo sai do item, e não de uma margem negativa — o rótulo corta o que sai dele. */
 .site-shell > .sidebar .sidebar-item[aria-current] { padding-inline-start:calc(var(--space-2) + var(--space-05)); color:var(--foreground); font-weight:var(--weight-semibold); }
 .site-shell > .sidebar .sidebar-item[aria-current] > .sidebar-label::before { margin-inline:0 calc(var(--space-2) + var(--space-05)); }
-/* O TEXTO DO ATUAL NÃO ANDA (o achado 3 do 2-D, o Victor, 19/11/2026: *"Fundo cresce p/ esquerda"*): com o ponto, o texto
-   do item atual ia a 28 e o dos vizinhos ficava a 14. Agora o FUNDO do atual começa 14 antes (a largura cresce o mesmo),
-   o ponto cabe dentro dele, e o texto fica alinhado com os vizinhos. O atual sem ponto (o mês dos Releases) volta ao
-   recuo dos outros. */
-.site-shell > .sidebar .sidebar-item[aria-current]:not(:has(.site-mes-n)) { margin-inline-start:calc(-1 * (var(--space-3) + var(--space-05)));
-  inline-size:calc(100% + var(--space-3) + var(--space-05)); }
+/* O TEXTO DO ATUAL NÃO ANDA, E A CÁPSULA NÃO PASSA DA CHAVE ("Tudo alinhado", o Victor, 27/11/2026, olhando a bancada das
+   três formas — troca o *"Fundo cresce p/ esquerda"* do achado 3 do 2-D, de 19/11/2026): com o ponto, o texto do item
+   atual fica a 28 do começo da cápsula (10 + o ponto de 8 + 10). O fundo que crescia 14 para a esquerda passava da chave
+   Web | Native e do campo de filtro (14 contra 28, a 1280) e saía 2 da borda do painel. Agora a cápsula de todo item
+   começa onde a chave começa, e é o texto dos VIZINHOS que anda 14 (o recuo de 28), para ficar na coluna do atual; o
+   nome do grupo e o botão do grupo numerado andam o mesmo. O mês dos Releases (sem ponto) fica com o recuo de 14. */
+.site-shell > .sidebar .sidebar-item:not([aria-current]):not(:has(.site-mes-n)) { padding-inline-start:calc(2 * (var(--space-3) + var(--space-05))); }
 .site-shell > .sidebar .sidebar-item[aria-current]:has(.site-mes-n) { padding-inline-start:calc(var(--space-3) + var(--space-05)); }
+.site-shell > .sidebar .sidebar-group-toggle { padding-inline-start:calc(var(--space-1) + var(--space-05) + var(--space-3) + var(--space-05)); }
 /* O nome do grupo SEM número (as áreas que não são a Getting Started) começa na linha do texto dos itens, como antes do
    site B (01/11/2026): com a margem de sempre ele ficava 6 à esquerda (medido: 40 contra 46). */
-.site-shell > .sidebar p.sidebar-group-label { margin-inline:calc(var(--space-3) + var(--space-05)); }
+.site-shell > .sidebar p.sidebar-group-label { margin-inline:calc(2 * (var(--space-3) + var(--space-05))) calc(var(--space-3) + var(--space-05)); }
+/* A LATERAL QUE ACOMPANHA (Patterns, o lote 118): os padrões do componente da página abertos embaixo dele, com o recuo da
+   lista de um grupo de Components; e o componente marcado (a letra do texto, forte), sem a cápsula, que é do padrão atual. */
+.site-shell .site-grupo-tile.site-item-tile { inline-size:var(--space-6); block-size:var(--space-6); margin-inline-end:calc(var(--space-2) + var(--space-05)); }
+.site-shell .site-item-tile .icon { inline-size:var(--icon-sm); block-size:var(--icon-sm); }
+/* O recuo dos padrões abertos é a bolinha (24) e o vão dela (10): o texto deles começa onde começa o nome do componente. */
+.site-shell > .sidebar .sidebar-sub { display:grid; gap:var(--space-05); padding-inline-start:calc(var(--space-6) + var(--space-2) + var(--space-05)); }
+.site-shell > .sidebar li:has(> .sidebar-sub .sidebar-item[aria-current]) > .sidebar-item { color:var(--foreground); font-weight:var(--weight-semibold); }
 
 /* O índice: 16 em cima e 12 nos lados e embaixo; a cabeça a 6 dos lados e 8 acima dos itens; os itens de 40, 2 entre eles. */
 .site-shell > .app-shell-aside { padding:var(--space-4) var(--space-3) var(--space-3); gap:var(--space-05); }
@@ -2588,8 +2620,8 @@ a.related-card:hover { border-color:transparent; }
   .site-shell .site-search { inline-size:var(--target-min); padding-inline:0; justify-content:center; gap:0; }
   .site-shell .site-areas .segmented a { padding-inline:calc(var(--space-2) + var(--space-05) / 2); }
 }
-@media (min-width:70.0625em) and (max-width:79.9375em) { .site-areas { display:block; } .site-gaveta-areas { display:none !important; } }
-@media (max-width:70em) { .site-areas { display:none; } .site-gaveta-areas { display:block; } }
+@media (min-width:70.0625em) and (max-width:79.9375em) { .site-areas { display:block; } }
+@media (max-width:70em) { .site-areas { display:none; } }
 /* De 1024 a 1279, sem o índice: a lateral de 248 do desenho e o conteúdo até a borda do bloco. */
 @media (min-width:64em) and (max-width:79.9375em) {
   .site-shell { --docs-sidebar-width:calc(var(--docs-toc-width) + var(--space-2)); }

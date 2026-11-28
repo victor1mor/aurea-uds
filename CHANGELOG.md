@@ -17,6 +17,21 @@ em inglês e ficam como estão: são registro.
 
 ## [Unreleased]
 
+### O site: a lateral (o lote 118, 27/11/2026)
+
+- Só o site; nenhum pacote muda. Cada conserto visto funcionando e aprovado pelo Victor na página de verdade.
+- **O filtro da lateral** (Patterns, Blocks, Releases): fora da página da lista, o link leva à lista já filtrada
+  (`./patterns.html#filtro/alert`) — antes só mudava o fim do endereço, e nada filtrava.
+- **As áreas do site ficam no topo** (*"os itens do topo devem continuar no topo e não ir pra baixo"*): entre 1025 e 1120
+  elas desciam para dentro da lateral; agora, onde as abas não cabem, o topo mostra o botão Menu em toda página, como no
+  Início.
+- **"Tudo alinhado"**: a cápsula do item atual começa onde a chave Web | Native e os outros itens começam (passava 14 e saía
+  2 do painel); troca o *"Fundo cresce p/ esquerda"* de 19/11/2026.
+- **A lateral de Patterns acompanha a página**: um "All patterns" só no alto; o campo de filtro da lateral sai (a busca do
+  meio da lista acha também pelo nome do componente); cada componente com o ícone da ficha na bolinha da cor da família; na
+  página de um padrão, o componente aberto com os padrões dele e o atual marcado; a trilha "Patterns / Alert" leva de volta.
+- Provas: `tests/visual/site-navegacao.spec.ts` e `tests/visual/lote-089.spec.ts`, cada uma reprovada com o site de antes.
+
 ### O registro da 0.83.0 (27/11/2026)
 
 - **A 0.83.0 publicada em 27/11/2026, entre 08:15 e 08:16** (Brasília, medido no npm), pela publicação em etapa, da
