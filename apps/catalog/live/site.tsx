@@ -159,8 +159,9 @@ const NOVA_ABA = {target: "_blank", rel: "noreferrer", "aria-describedby": "site
 // em `em`, como o CSS do site (06/11/2026, o texto a 200%): 1121px = 70.0625em, 768px = 48em
 // Desde o lote 118 (27/11/2026), em toda página: o menu existe enquanto as áreas não cabem na pílula (abaixo de 1121).
 const LARGO = "(min-width: 70.0625em)";
-// Com a lateral à vista (1024 para cima), a lista da área fica nela; o menu só a leva quando a lateral está escondida.
-const COM_LATERAL = "(min-width: 64em)";
+// Com a lateral à vista (a coluna, de 768 para cima), a lista da área fica nela; o menu só a leva quando a lateral está
+// escondida.
+const COM_LATERAL = "(min-width: 48em)";
 const TEMAS_DA_CHAVE = [{value: "light", label: "Light", icon: "sun"}, {value: "dark", label: "Dark", icon: "moon"},
   {value: "system", label: "System", icon: "monitor"}];
 

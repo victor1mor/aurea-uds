@@ -88,17 +88,22 @@ test("abaixo de 1280 o índice sai, e a barra dele também", async ({page}) => {
   }
 });
 
-test("de 768 a 1279 a lateral é coluna, sem o botão da gaveta; de 1280 para cima, o índice é coluna", async ({page}) => {
+// O BOTÃO MENU (o lote 118, 27/11/2026 — o Victor: "os itens do topo devem continuar no topo e não ir pra baixo"): abaixo de
+// 1121, onde as abas das áreas não cabem na pílula, o topo mostra o Menu, que leva às áreas; de 1121 para cima, não. Antes,
+// de 768 a 1120 as áreas desciam para a lateral, e o Menu não aparecia.
+test("de 768 a 1279 a lateral é coluna, sem o botão da gaveta (o Menu só abaixo de 1121); de 1280 para cima, o índice é coluna", async ({page}) => {
   // A 768, 268 (a do desenho); de 1024 a 1279, 248 — a folha do site aperta a coluna (o índice + 8) para o texto caber.
-  for (const [w, largura] of [[768, 268], [1100, 248]]) {
+  for (const [w, largura, menu] of [[768, 268, true], [1100, 248, true], [1121, 248, false]] as const) {
     await abrir(page, w);
     const lateral = await caixa(page, ".app-shell > .sidebar:not(.app-shell-aside)");
     perto(lateral.w, largura, `${w}: a lateral com ${largura}`);
     await expect(page.locator(".topbar .nav-toggle")).toBeHidden();
-    await expect(page.locator(".topbar .site-menu-botao")).toBeHidden();
+    if (menu) await expect(page.locator(".topbar .site-menu-botao"), `${w}: o Menu`).toBeVisible();
+    else await expect(page.locator(".topbar .site-menu-botao"), `${w}: sem o Menu`).toBeHidden();
   }
   await abrir(page, 1280);
   await expect(page.locator(".docs-toc-bar")).toBeHidden();
+  await expect(page.locator(".topbar .site-menu-botao"), "1280: sem o Menu").toBeHidden();
   perto((await caixa(page, ".app-shell-aside")).w, 236, "o índice com 236");
 });
 
